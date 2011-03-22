@@ -1,17 +1,23 @@
 public class DbData
 {
-   final static int NUM_ANSWERS = 3;
+   public final static int NUM_ANSWERS = 3;
    
-   String question_text          = "";
-   String answer_text            = "";
-   String choice_userName        = "";
-   String choice_userImageUrl    = "";
-   int choice_answerNumber       = 0;
-   int numPositiveRatings[];
-   int numTotalChoices[];
+   public int question_id                 = 0;
+   public String question_text            = "";
+   public String answer_text[];
+   public String choice_userName          = "";
+   public String choice_userImageUrl      = "";
+   public int choice_answerNumber         = 0;
+   public int numPositiveRatingsPerAnswer[];
+   public int numTotalChoicesPerAnswer[];
+   public int numTotalChoices             = 0;
    
    public DbData() {
-      numPositiveRatings      = new int[NUM_ANSWERS];
-      numTotalChoices         = new int[NUM_ANSWERS];
+      numPositiveRatingsPerAnswer      = new int[NUM_ANSWERS];
+      numTotalChoicesPerAnswer         = new int[NUM_ANSWERS];
+      answer_text             = new String[NUM_ANSWERS];
+      
+      for(int i = 0; i < NUM_ANSWERS; i++)
+            answer_text[i] = "";
    }
 }

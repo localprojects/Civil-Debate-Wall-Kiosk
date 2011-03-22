@@ -3,12 +3,9 @@ import com.mysql.jdbc.*;
 
 
 MySQL msql;
-
-String question = "";
-String[] answer = {"","",""};
-int totalVotes;
-ArrayList<String> usernames;
 DbData dbData;
+
+//ArrayList<String> usernames;
 
 void setup() { 
   
@@ -17,7 +14,7 @@ void setup() {
 	 
 	 dbData = new DbData();
 	 println(dbData.question_text);
-	 usernames = new ArrayList<String>();
+	 //usernames = new ArrayList<String>();
   
 	  // Database connection  
 	 String user = "vis";
@@ -30,29 +27,24 @@ void setup() {
   		// Fetch Question from DB  
 	    msql.query( "SELECT * FROM vote_question LIMIT 0, 1;" );
 	    while(msql.next()) {           
-	      question = msql.getString("text");    
+	      dbData.question_text = msql.getString("text"); 
+	      dbData.question_id = msql.getInt("id");    
 	    }
 	    
 	  	// Fetch Answers from DB  
-	    msql.query( "SELECT * FROM vote_answer LIMIT 0, 3;" );
+	    msql.query( "SELECT * FROM vote_answer LIMIT 0, 3;");
 	    int answerCount = 0;
-	    while(msql.next()) {           
-	      answer[answerCount] = msql.getString("text");      
+	    while(msql.next() && answerCount < DbData.NUM_ANSWERS) {   
+	      dbData.answer_text[answerCount] = msql.getString("text");      
 	      answerCount += 1;
 	    }
 	  
 	  
 	  	// Fetch Total No. of votes from DB  
-	    msql.query( "SELECT COUNT(*) FROM vote_choice;");
+	    msql.query( "SELECT COUNT(*) FROM vote_choice WHERE question_id = " + dbData.question_id + ";");
 	    while(msql.next()) {           
-	      totalVotes = msql.getInt(1);      
-	    } 
-	    
-	    msql.query( "SELECT username FROM auth_user;");
-	    while(msql.next()) {           
-	      usernames.add(msql.getString("username"));
-	    } 
-	    
+	      dbData.numTotalChoices = msql.getInt(1);      
+	    }
 	 }
   
   /*
@@ -87,16 +79,5 @@ void draw() {
 void load_QA() {
   PFont font = createFont("Arial", 14, true);
   fill(0);
-  text(question, 100, 60);
-  text(answer[0], 100, 160);
-  text(answer[1], 100, 260);  
-  text(answer[2], 100, 360);
-  text("Total Votes: "+totalVotes, 100, 460);   
-  
-  int i = 0;
-  for(String s : usernames)
-  {
-  		text(s, 900, i * 20);
-  		i++;
-  }
+ 
 }  
