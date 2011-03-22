@@ -1,5 +1,6 @@
 import de.bezier.data.sql.*;
 import com.mysql.jdbc.*;
+import processing.core.*;
 
 
 MySQL msql;
@@ -10,28 +11,36 @@ DbQueries dbQueries;
 
 void setup() { 
   
-	size(1024,768);
+	size(1024,768, OPENGL);
 	smooth();
 	 
 	 // Database connection  
 	String user = "vis";
     String pass = "ualize";
     String database = "gdw_dev";
-       //bildwelt?useUnicode=true&characterEncoding=UTF-8
+
+/*
     msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
       
     DbQueries dbQueries = new DbQueries(msql);
 	 
 	dbData = dbQueries.getData();
-	// println(dbData.question_text);
-	 //usernames = new ArrayList<String>();
-  
-	 
-  	
+	
+	print(dbData.toString());
+*/
   	load_QA(); 
+  	World.init(this);
+  	World.generateView(this, dbData);
 } 
  
 void draw() { 
+	background(0);
+	
+	
+	
+	World.draw(this, dbData);
+	
+	//UI.draw(this, dbData);
 	
 }
 

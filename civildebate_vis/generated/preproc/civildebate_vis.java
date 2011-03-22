@@ -3,6 +3,16 @@ import processing.xml.*;
 
 import de.bezier.data.sql.*; 
 import com.mysql.jdbc.*; 
+import processing.core.*; 
+
+import com.mysql.jdbc.profiler.*; 
+import com.mysql.jdbc.integration.jboss.*; 
+import com.mysql.jdbc.jdbc2.optional.*; 
+import com.mysql.jdbc.util.*; 
+import com.mysql.jdbc.integration.c3p0.*; 
+import com.mysql.jdbc.log.*; 
+import org.gjt.mm.mysql.*; 
+import com.mysql.jdbc.*; 
 
 import java.applet.*; 
 import java.awt.Dimension; 
@@ -24,77 +34,45 @@ public class civildebate_vis extends PApplet {
 
 
 
+
 MySQL msql;
 DbData dbData;
+DbQueries dbQueries;
 
 //ArrayList<String> usernames;
 
 public void setup() { 
   
-	 size(1024,768);
-	 smooth();
+	size(1024,768, OPENGL);
+	smooth();
 	 
-	 dbData = new DbData();
-	 println(dbData.question_text);
-	 //usernames = new ArrayList<String>();
-  
-	  // Database connection  
-	 String user = "vis";
-	 String pass = "ualize";
-	 String database = "gdw_dev";
-	  //bildwelt?useUnicode=true&characterEncoding=UTF-8
-	 msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
-	 if (msql.connect()) {
+	 // Database connection  
+	String user = "vis";
+    String pass = "ualize";
+    String database = "gdw_dev";
 
-  		// Fetch Question from DB  
-	    msql.query( "SELECT * FROM vote_question LIMIT 0, 1;" );
-	    while(msql.next()) {           
-	      dbData.question_text = msql.getString("text"); 
-	      dbData.question_id = msql.getInt("id");    
-	    }
-	    
-	  	// Fetch Answers from DB  
-	    msql.query( "SELECT * FROM vote_answer LIMIT 0, 3;");
-	    int answerCount = 0;
-	    while(msql.next() && answerCount < DbData.NUM_ANSWERS) {   
-	      dbData.answer_text[answerCount] = msql.getString("text");      
-	      answerCount += 1;
-	    }
-	  
-	  
-	  	// Fetch Total No. of votes from DB  
-	    msql.query( "SELECT COUNT(*) FROM vote_choice WHERE question_id = " + dbData.question_id + ";");
-	    while(msql.next()) {           
-	      dbData.numTotalChoices = msql.getInt(1);      
-	    }
-	 }
-  
-  /*
-  if (msql.connect()) {
-    ArrayList<PImage> images = new ArrayList<PImage>();	
-    msql.query( "SELECT username, image FROM auth_user a JOIN vote_debatefacebookprofile s on a.id=s.user_id;" );
-    while(msql.next()) {      
-      //println( msql.getString("username"));
-      //println( msql.getString("image"));
-      String imgurl = "http://ec2-75-101-223-231.compute-1.amazonaws.com/main/static/profile_images/" + msql.getString("username") + ".jpg"; 
-      if(msql.getString("image").contains("images")) {
-	  PImage img = loadImage(imgurl);
-	  images.add(img);
-      }      	
-      // http://ec2-75-101-223-231.compute-1.amazonaws.com/main/static/profile_images/<name>/.jpg 		
-    }     
-    int x = 0;
-    for (PImage im : images) {
-      image(im, x, 0);
-      x += 100;
-    }
-  } else println("Connection Failed");
-  */
-  
-  load_QA(); 
+/*
+    msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
+      
+    DbQueries dbQueries = new DbQueries(msql);
+	 
+	dbData = dbQueries.getData();
+	
+	print(dbData.toString());
+*/
+  	load_QA(); 
+  	World.init(this);
+  	World.generateView(this, dbData);
 } 
  
 public void draw() { 
+	background(0);
+	
+	
+	
+	World.draw(this, dbData);
+	
+	//UI.draw(this, dbData);
 	
 }
 
