@@ -1,7 +1,8 @@
 import de.bezier.data.sql.*;
 import com.mysql.jdbc.*;
 import processing.core.*;
-
+import processing.opengl.*;
+import javax.media.opengl.*;
 
 MySQL msql;
 DbData dbData;
@@ -19,18 +20,14 @@ void setup() {
     String pass = "ualize";
     String database = "gdw_dev";
 
-/*
+
     msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
       
-    DbQueries dbQueries = new DbQueries(msql);
-	 
-	dbData = dbQueries.getData();
-	
-	print(dbData.toString());
-*/
-  	load_QA(); 
+    dbQueries = new DbQueries(msql);
+    dbData = dbQueries.getData();
   	World.init(this);
-  	World.generateView(this, dbData);
+  	
+  	newChoice();
 } 
  
 void draw() { 
@@ -42,10 +39,28 @@ void draw() {
 	
 	//UI.draw(this, dbData);
 	
+} 
+
+void mousePressed()
+{
+	println("NEW CHOICE");
+	newChoice();
 }
 
-void load_QA() {
-  PFont font = createFont("Arial", 14, true);
-  fill(0);
- 
-}  
+void keyPressed()
+{
+	println("KEY");
+	
+	if(key == 'n')
+	{
+		println("NEW CHOICE");
+		newChoice();	
+	}	
+}
+
+void newChoice()
+{
+	dbQueries.getNewChoice(dbData);
+	print(dbData.toString());
+	World.generateView(this, dbData);
+}

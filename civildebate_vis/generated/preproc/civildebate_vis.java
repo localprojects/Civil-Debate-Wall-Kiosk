@@ -4,6 +4,8 @@ import processing.xml.*;
 import de.bezier.data.sql.*; 
 import com.mysql.jdbc.*; 
 import processing.core.*; 
+import processing.opengl.*; 
+import javax.media.opengl.*; 
 
 import com.mysql.jdbc.profiler.*; 
 import com.mysql.jdbc.integration.jboss.*; 
@@ -35,6 +37,7 @@ public class civildebate_vis extends PApplet {
 
 
 
+
 MySQL msql;
 DbData dbData;
 DbQueries dbQueries;
@@ -51,18 +54,14 @@ public void setup() {
     String pass = "ualize";
     String database = "gdw_dev";
 
-/*
+
     msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
       
-    DbQueries dbQueries = new DbQueries(msql);
-	 
-	dbData = dbQueries.getData();
-	
-	print(dbData.toString());
-*/
-  	load_QA(); 
+    dbQueries = new DbQueries(msql);
+    dbData = dbQueries.getData();
   	World.init(this);
-  	World.generateView(this, dbData);
+  	
+  	newChoice();
 } 
  
 public void draw() { 
@@ -74,13 +73,31 @@ public void draw() {
 	
 	//UI.draw(this, dbData);
 	
+} 
+
+public void mousePressed()
+{
+	println("NEW CHOICE");
+	newChoice();
 }
 
-public void load_QA() {
-  PFont font = createFont("Arial", 14, true);
-  fill(0);
- 
-}  
+public void keyPressed()
+{
+	println("KEY");
+	
+	if(key == 'n')
+	{
+		println("NEW CHOICE");
+		newChoice();	
+	}	
+}
+
+public void newChoice()
+{
+	dbQueries.getNewChoice(dbData);
+	print(dbData.toString());
+	World.generateView(this, dbData);
+}
     static public void main(String args[]) {
         PApplet.main(new String[] { "--bgcolor=#ECE9D8", "civildebate_vis" });
     }
