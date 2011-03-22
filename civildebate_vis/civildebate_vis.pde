@@ -1,51 +1,59 @@
 import de.bezier.data.sql.*;
 import com.mysql.jdbc.*;
-import java.util.*;
+
 
 MySQL msql;
 
 String question = "";
 String[] answer = {"","",""};
 int totalVotes;
+ArrayList<String> usernames;
+DbData dbData;
 
 void setup() { 
   
-  size(1024,768);
-  smooth();
+	 size(1024,768);
+	 smooth();
+	 
+	 dbData = new DbData();
+	 println(dbData.question_text);
+	 usernames = new ArrayList<String>();
   
-  // Database connection  
-  String user = "vis";
-  String pass = "ualize";
-  String database = "gdw";
-  //bildwelt?useUnicode=true&characterEncoding=UTF-8
-  msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
+	  // Database connection  
+	 String user = "vis";
+	 String pass = "ualize";
+	 String database = "gdw_dev";
+	  //bildwelt?useUnicode=true&characterEncoding=UTF-8
+	 msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
+	 if (msql.connect()) {
 
-  // Fetch Question from DB  
-  if (msql.connect()) {
-    msql.query( "SELECT * FROM vote_question LIMIT 0, 1;" );
-    while(msql.next()) {           
-      question = msql.getString("text");    
-    }
-  } else println("Connection Failed");
-    
-  // Fetch Answers from DB  
-  if (msql.connect()) {
-    msql.query( "SELECT * FROM vote_answer LIMIT 0, 3;" );
-    int answerCount = 0;
-    while(msql.next()) {           
-      answer[answerCount] = msql.getString("text");      
-      answerCount += 1;
-    }
-  } else println("Connection Failed");
-  
-  
-  // Fetch Total No. of votes from DB  
-  if (msql.connect()) {
-    msql.query( "SELECT COUNT(*) FROM vote_choice;");
-    while(msql.next()) {           
-      totalVotes = msql.getInt(1);      
-    }
-  } else println("Connection Failed");  
+  		// Fetch Question from DB  
+	    msql.query( "SELECT * FROM vote_question LIMIT 0, 1;" );
+	    while(msql.next()) {           
+	      question = msql.getString("text");    
+	    }
+	    
+	  	// Fetch Answers from DB  
+	    msql.query( "SELECT * FROM vote_answer LIMIT 0, 3;" );
+	    int answerCount = 0;
+	    while(msql.next()) {           
+	      answer[answerCount] = msql.getString("text");      
+	      answerCount += 1;
+	    }
+	  
+	  
+	  	// Fetch Total No. of votes from DB  
+	    msql.query( "SELECT COUNT(*) FROM vote_choice;");
+	    while(msql.next()) {           
+	      totalVotes = msql.getInt(1);      
+	    } 
+	    
+	    msql.query( "SELECT username FROM auth_user;");
+	    while(msql.next()) {           
+	      usernames.add(msql.getString("username"));
+	    } 
+	    
+	 }
   
   /*
   if (msql.connect()) {
@@ -84,4 +92,11 @@ void load_QA() {
   text(answer[1], 100, 260);  
   text(answer[2], 100, 360);
   text("Total Votes: "+totalVotes, 100, 460);   
+  
+  int i = 0;
+  for(String s : usernames)
+  {
+  		text(s, 900, i * 20);
+  		i++;
+  }
 }  
