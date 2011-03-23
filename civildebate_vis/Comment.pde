@@ -42,7 +42,7 @@ class Comment {
     text(comment_text, popup_x+123, popup_y+45, 385, 565);  
     textFont(font_comment_sub, 15);    
     text("* "+rank+"TH MOST CONSTRUCTIVE * out of "+totalVotes+" total votes", popup_x+123, comment_y - 67, 385, 165);  
-    
+    image(star,
   }
 }
     
