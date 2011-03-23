@@ -2,15 +2,11 @@ import de.bezier.data.sql.*;
 import com.mysql.jdbc.*;
 import java.util.*;
 
-
 public class DbQueries
 {
-   public static int NUM_ANSWERS = 3;
-   
-   public MySQL msql;
-   
-   public DbQueries(MySQL _msql)
-   {
+   public static int NUM_ANSWERS = 3;   
+   public MySQL msql;   
+   public DbQueries(MySQL _msql) {
       msql = _msql;
    }
    
@@ -55,11 +51,9 @@ public class DbQueries
       
       for(int i = 0; i < NUM_ANSWERS; i++)
       {
-         int curAnswerNum = i + 1;
-         
+         int curAnswerNum = i + 1;        
          if(curAnswerNum == dbData.choice_answer_number)
-            continue;
-         
+            continue;         
          msql.query("select count(*) from vote_rating r JOIN (auth_user u, vote_choice c, vote_answer a) on " +
                "(r.user_id = u.id and u.id = c.user_id and c.answer_id = a.id) " +
                "where r.choice_id = "+curChoice+" and rating =  1 and c.question_id = "+ dbData.question_id +" and a.number = "+curAnswerNum+";");
@@ -74,10 +68,8 @@ public class DbQueries
    }
    
    public DbData getData()
-   {
-      
-      DbData dbData = new DbData();
-      
+   {      
+      DbData dbData = new DbData();      
       if (msql.connect()) {
 
         // Fetch Question from DB  
@@ -94,8 +86,7 @@ public class DbQueries
               dbData.answer_text[answerCount] = msql.getString("text");      
               answerCount += 1;
          }
-       
-       
+              
         // Fetch Total No. of votes from DB  
          msql.query( "SELECT COUNT(*) FROM vote_choice WHERE question_id = " + dbData.question_id + ";");
          while(msql.next()) {           
@@ -104,8 +95,7 @@ public class DbQueries
          
          for(int i = 0; i < NUM_ANSWERS; i++)
          {
-            int curAnswerNum = i + 1;
-            
+            int curAnswerNum = i + 1;            
             msql.query("select count(*) from vote_choice c JOIN vote_answer a ON c.answer_id = a.id where c.question_id = "+dbData.question_id+" and a.number = "+curAnswerNum+";");
             while(msql.next()) {
                try {
@@ -126,9 +116,6 @@ public class DbQueries
          }    
     
      }
-      
-      
-      
-      return dbData;
+     return dbData;
    }
 }

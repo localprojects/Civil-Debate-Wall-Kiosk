@@ -1,48 +1,48 @@
-class Comment { 
-  
-  void show() { 
-    
-    int comment_x = 350;
-    int comment_y = 500;
+import processing.core.*;
+import processing.opengl.*;
+import javax.media.opengl.*;
+
+public class Comment { 
+
+  public void show(PApplet canvas, DbData data) { 
+
+    canvas.noTint();
+    canvas.camera(width/2.0, height/2.0, (height/2.0) / tan(PI*60.0 / 360.0), width/2.0, height/2.0, 0, 0, 1, 0);
+
+    int comment_x = 550;
+    int comment_y = 600;
     int popup_width = 555;
     int popup_heigth = 145;
-
     int rank = 6;
-    int totalVotes = 352;
-    String comment_text = "We all share this planet. If we have the resources to help those in need, why should the US come first?"; // 36 char/line 30 px/line
-   
-    int no_of_lines = comment_text.length()/36;
-    println(no_of_lines);
-    
+    int no_of_lines = dbData.choice_comment_text.length()/36;
     if(no_of_lines >= 2) {
       popup_heigth = popup_heigth + (no_of_lines - 1) * 30;
     }  
+
+    canvas.noStroke();
+    if(dbData.choice_answer_number == 1) fill(139,173,240); // Blue
+    if(dbData.choice_answer_number == 2) fill(116,217,116); // Green
+    if(dbData.choice_answer_number == 3) fill(252,139,124); // Red
     
-    noStroke();
-    fill(252,139,124);
-    
-    beginShape(TRIANGLES); // h = 37
-    vertex(comment_x - 25, comment_y - 37);
-    vertex(comment_x, comment_y - 37);
-    vertex(comment_x, comment_y);
-    endShape();
-    
-    
+    canvas.beginShape(TRIANGLES); // h = 37
+    canvas.vertex(comment_x - 25, comment_y - 37);
+    canvas.vertex(comment_x, comment_y - 37);
+    canvas.vertex(comment_x, comment_y);
+    canvas.endShape();
+
     int popup_x = comment_x - (popup_width/2) + 50;
     int popup_y = comment_y - 37 - popup_heigth;
 
-    rect(popup_x,popup_y,popup_width,popup_heigth);
-    
-    image(photo, popup_x+20, popup_y+20);
+    canvas.rect(popup_x,popup_y,popup_width,popup_heigth);
+    canvas.image(photo, popup_x+20, popup_y+20);
 
     fill(0);
-    textFont(font_questionOfTheWeek, 14);    
-    text("Jenna Smith voted for C and said:", popup_x+123, popup_y+20, 280, 65);
-    textFont(font_comment, 24);    
-    text(comment_text, popup_x+123, popup_y+45, 385, 565);  
-    textFont(font_comment_sub, 15);    
-    text("* "+rank+"TH MOST CONSTRUCTIVE * out of "+totalVotes+" total votes", popup_x+123, comment_y - 67, 385, 165);  
-    image(star,
+    canvas.textFont(font_questionOfTheWeek, 14);    
+    canvas.text(dbData.choice_user_firstName+" "+dbData.choice_user_lastName+" voted for C and said:", popup_x+123, popup_y+20, 280, 65);
+    canvas.textFont(font_comment, 24);    
+    canvas.text(dbData.choice_comment_text, popup_x+123, popup_y+45, 385, 565);  
+    canvas.textFont(font_comment_sub, 15);    
+    canvas.text("* "+rank+"TH MOST CONSTRUCTIVE * out of "+dbData.numTotalChoices+" total votes", popup_x+123, comment_y - 67, 385, 165);
   }
 }
-    
+
