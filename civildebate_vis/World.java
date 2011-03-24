@@ -101,6 +101,30 @@ public class World
            
             }
       }
+      
+      // now random BG people
+      ArrayList<PImage> pics = new ArrayList<PImage>();
+      for(ArrayList<PImage> list : silhouettes.values())
+      {
+         pics.addAll(list);
+      }
+      
+      Collections.shuffle(pics);
+      
+      for(int i = 0; i < 30; i++)
+      {
+         PImage img = pics.get(i % pics.size());
+         float ratio = (float)img.height/(float)img.width;
+         Shape s = new Shape(new PVector(
+               canvas.random(-1024, 2048), 
+               650,
+               canvas.random(-500, -2000)), 
+               img, i, ratio);
+         s.bg = true;
+         shapes.get(colormap[i%3]).add(s);
+      }
+
+      
    }
    
    public static void draw(PApplet canvas, DbData data, HashMap<String, PVector> coordinates)
@@ -128,7 +152,7 @@ public class World
          float ratio = shape.ratio;
          canvas.pushMatrix();     
          canvas.beginShape(canvas.QUADS);   
-            int brightness = (int)shape.origin.z/4+100;
+            int brightness = !shape.bg ? (int)shape.origin.z/4+100 : (int)canvas.map(shape.origin.z, -500, -2000, 20, 5);
             canvas.tint(brightness);
             canvas.texture(shape.texture);        
             canvas.vertex(shape.origin.x + shape.texture.width/2 * SCALE, shape.origin.y + shape.texture.height/2 * SCALE, shape.origin.z, 0, 1);    

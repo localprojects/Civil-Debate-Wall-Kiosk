@@ -6,6 +6,7 @@ public class Shape
    public PImage texture;
    public int answer;
    public float ratio;
+   public boolean bg = false;
    
    public Shape(PVector _origin, PImage _texture, int _answer, float _ratio)
    {
