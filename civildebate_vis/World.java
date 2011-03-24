@@ -9,7 +9,8 @@ public class World
 {
    public static HashMap<String, ArrayList<PImage>> silhouettes;
    public static HashMap<String, ArrayList<Shape>> shapes;
-   static String colormap[] = {"Red", "Green", "Blue"}; 
+   public static float SCALE = 1.0f;
+   static String colormap[] = {"Blue", "Green", "Red"}; 
    static int NUM_ANSWERS = 3;
    
    static class ZComparator implements Comparator<Shape>
@@ -49,7 +50,7 @@ public class World
       for(Entry<String, ArrayList<PImage>> e : silhouettes.entrySet())
       {
          //File root = new File("../..");
-         File f = new File("data/Silhouettes/" + e.getKey());
+         File f = new File(canvas.dataPath("") + "/Silhouettes/" + e.getKey());
         //         File f = new File("."); 
           //       canvas.println(f.getAbsolutePath()); 
          canvas.println(f.getAbsolutePath() + " -- " + f.isDirectory());       
@@ -64,10 +65,9 @@ public class World
       }  
    }
    
-   public static void generateView(PApplet canvas, DbData data)
+   public static void generateView(PApplet canvas, DbData data, HashMap<String, PVector> coordinates)
    {
-      int active = 0; //RED
-      int total[] = {0, 10, 4};
+      int active = data.choice_answer_number - 1; //RED
       for(int i = 0; i < NUM_ANSWERS; i++)
       {
             ArrayList<PImage> pics = silhouettes.get(colormap[i] + "/Androgynous");
@@ -80,16 +80,30 @@ public class World
             // TODO still faking it a bit
             for(int n = 0; n < data.numTotalChoicesPerAnswer[i] + 5; n++)
             {
-               Shape s = new Shape(new PVector(canvas.random((i-1)*300 + 350, (i-1)*300 + 700), 650, canvas.random(-400, 0)), 
-                     pics.get(n % pics.size()),
-                     i);
+               PImage img = pics.get(n % pics.size());
+               
+               float ratio = (float)img.height/(float)img.width;
+               canvas.println(ratio);
+               Shape s = new Shape(new PVector(
+                                          canvas.random((i-1)*350 + (i==active ? 450 : 350), (i-1)*350 + (i==active ? 550 : 650)), 
+                                          650,
+                                          canvas.random((i==active ? -100 : -400), 0)), 
+                                  img, i, ratio);
                shapes.get(colormap[i]).add(s);
+               
+               if(i == active)
+               {
+                   PVector o = PVector.add(s.origin, new PVector(-s.texture.width/2*SCALE, -s.texture.height/2*SCALE, .0f));
+                   coordinates.put("bubbleOrigin", o);
+                   break;
+               }
+               
            
             }
       }
    }
    
-   public static void draw(PApplet canvas, DbData data)
+   public static void draw(PApplet canvas, DbData data, HashMap<String, PVector> coordinates)
    {
       float aspect = (canvas.width)/(canvas.height);
       //canvas.perspective(canvas.PI/2.0f, (int)(canvas.width/canvas.height), 1.0f, 100000.0f) ; 
@@ -99,7 +113,7 @@ public class World
      // canvas.camera(canvas.width/2.0, canvas.height/2.0, (canvas.height/2.0), canvas.width/2.0, canvas.height/2.0, 0, 0, 1, 0);
       canvas.color(255);
       canvas.textureMode(PApplet.NORMALIZED);
-      float ratio = 2.85f;  
+       
       ArrayList<Shape> allShapes = new ArrayList<Shape> ();    
       for(int i = 0; i < NUM_ANSWERS; i++)
       {
@@ -110,26 +124,31 @@ public class World
       Collections.sort(allShapes, new ZComparator()); 
       canvas.noStroke();  
       for(Shape shape : allShapes)
-      {
-         //canvas.println(shape.origin.z);       
+      {   
+         float ratio = shape.ratio;
          canvas.pushMatrix();     
          canvas.beginShape(canvas.QUADS);   
-            //canvas.colorMode(canvas.HSB);
             int brightness = (int)shape.origin.z/4+100;
-            //canvas.tint(shape.answer == 0 ? brightness : 0, shape.answer == 1 ? brightness : 0, shape.answer == 2 ? brightness : 0 );
             canvas.tint(brightness);
-            //canvas.colorMode(canvas.RGB);  
             canvas.texture(shape.texture);        
-            canvas.normal(.0f, .0f, 1.0f);
-            canvas.vertex(shape.origin.x + 50, shape.origin.y + 50 * ratio, shape.origin.z, 0, 1);    
-            canvas.normal(.0f, .0f, 1.0f);
-            canvas.vertex(shape.origin.x + 50, shape.origin.y - 50 * ratio, shape.origin.z, 0, 0);
-            canvas.normal(.0f, .0f, 1.0f);
-            canvas.vertex(shape.origin.x - 50, shape.origin.y - 50 * ratio, shape.origin.z, 1, 0);
-            canvas.normal(.0f, .0f, 1.0f);
-            canvas.vertex(shape.origin.x - 50, shape.origin.y + 50 * ratio, shape.origin.z, 1, 1);
+            canvas.vertex(shape.origin.x + shape.texture.width/2 * SCALE, shape.origin.y + shape.texture.height/2 * SCALE, shape.origin.z, 0, 1);    
+            canvas.vertex(shape.origin.x + shape.texture.width/2 * SCALE, shape.origin.y - shape.texture.height/2 * SCALE, shape.origin.z, 0, 0);           
+            canvas.vertex(shape.origin.x - shape.texture.width/2 * SCALE, shape.origin.y - shape.texture.height/2 * SCALE, shape.origin.z, 1, 0);
+            canvas.vertex(shape.origin.x - shape.texture.width/2 * SCALE, shape.origin.y + shape.texture.height/2 * SCALE, shape.origin.z, 1, 1);
          canvas.endShape();   
+         
          canvas.popMatrix();
       }
+      
+      canvas.fill(200);
+      PVector o = coordinates.get("bubbleOrigin");
+      
+      canvas.beginShape(canvas.QUADS);
+         canvas.vertex(o.x-10,o.y-10,o.z);
+         canvas.vertex(o.x-10,o.y+10,o.z);
+         canvas.vertex(o.x+10,o.y+10,o.z);
+         canvas.vertex(o.x+10,o.y-10,o.z);
+      canvas.endShape(); 
+      
    }
 }
