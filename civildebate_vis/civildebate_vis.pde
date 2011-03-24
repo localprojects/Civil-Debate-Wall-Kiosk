@@ -3,6 +3,7 @@ import com.mysql.jdbc.*;
 import processing.core.*;
 import processing.opengl.*;
 import javax.media.opengl.*;
+import java.util.*;
 
 MySQL msql;
 DbData dbData;
@@ -22,13 +23,16 @@ PFont font_comment;
 PFont font_comment_sub;
 PFont font_vote_count;
 PFont font_idea_constructive;
+HashMap<String, PVector> coordinates;
 
 //ArrayList<String> usernames;
 
 void setup() { 
   size(1024,768, OPENGL);
   smooth();
-  frameRate(1);
+  frameRate(10);
+  
+  coordinates = new HashMap<String, PVector>();
   
   logo = loadImage("logo.png");
   a = loadImage("a.png");
@@ -64,10 +68,11 @@ void setup() {
  
 void draw() { 
   background(0);
-  World.draw(this, dbData);
+  World.draw(this, dbData, coordinates);
+ // comment.show(this, dbData);
   ui.display(this, dbData);	
   graph.plot(this, dbData);
-  comment.show(this, dbData);
+ 
 } 
 
 void mousePressed() {
@@ -86,5 +91,5 @@ void keyPressed() {
 void newChoice() {       
   dbQueries.getNewChoice(dbData);
   print(dbData.toString());
-  World.generateView(this, dbData);
+  World.generateView(this, dbData, coordinates);
 }
