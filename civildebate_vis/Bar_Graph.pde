@@ -62,8 +62,10 @@ public void plot(PApplet canvas, DbData data) {
 
   // Total votes text
   fill(255);
-  canvas.textFont(font_vote_count, 22);        
-  canvas.text(total+" total votes", 895, bar_y + 19);
+  canvas.textAlign(RIGHT);
+  canvas.textFont(font_vote_count);       
+  canvas.text(total+" total votes", 1012, bar_y + 19);
+  canvas.textAlign(LEFT);
  }
 }
 

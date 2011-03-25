@@ -21,6 +21,7 @@ PFont font_questionOfTheWeek;
 PFont font_answer;
 PFont font_comment;
 PFont font_comment_sub;
+PFont font_comment_header;
 PFont font_vote_count;
 PFont font_idea_constructive;
 HashMap<String, PVector> coordinates;
@@ -41,13 +42,14 @@ void setup() {
   photo = loadImage("photo.png");
   star = loadImage("star.png");
    
-  font_question = createFont("Georgia", 28, true);
-  font_questionOfTheWeek = createFont("ArialMT", 14, true); 
+  font_question = createFont("Georgia Bold", 28, true);
+  font_questionOfTheWeek = createFont("ITCFranklinGothicStd-BkCp", 17, true); 
   font_answer = createFont("Georgia", 17, true); 
-  font_comment = createFont("Georgia", 24, true);
-  font_comment_sub = createFont("ArialMT", 15, true);           
-  font_vote_count = createFont("ArialMT", 22, true);
-  font_idea_constructive = createFont("ArialMT", 20, true);
+  font_comment = createFont("Georgia Italic", 24, true);
+  font_comment_sub = createFont("ITCFranklinGothicStd-BkCp", 15, true);  
+  font_comment_header = createFont("ITCFranklinGothicStd-BkCp", 17, true);  
+  font_vote_count = createFont("ITCFranklinGothicStd-BkCp", 26, true);
+  font_idea_constructive = createFont("ITCFranklinGothicStd-BkCp", 20, true);
 
   // Database connection  
   String user = "vis";
@@ -59,8 +61,8 @@ void setup() {
   dbQueries = new DbQueries(msql);
   dbData = dbQueries.getData();
   ui = new UI();
-  comment = new Comment();
   graph = new Bar_Graph();
+  comment = new Comment();
   World.init(this);
   newChoice();
   
@@ -69,9 +71,9 @@ void setup() {
 void draw() { 
   background(0);
   World.draw(this, dbData, coordinates);
- // comment.show(this, dbData);
   ui.display(this, dbData);	
   graph.plot(this, dbData);
+  comment.show(this, dbData,coordinates);
  
 } 
 
@@ -90,6 +92,6 @@ void keyPressed() {
 
 void newChoice() {       
   dbQueries.getNewChoice(dbData);
-  print(dbData.toString());
+  //print(dbData.toString());
   World.generateView(this, dbData, coordinates);
 }

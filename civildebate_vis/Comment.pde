@@ -22,7 +22,7 @@ public class Comment {
     int rank = 6;
     int no_of_lines = dbData.choice_comment_text.length()/36;
     if(no_of_lines >= 2) {
-      popup_heigth = popup_heigth + (no_of_lines - 1) * 40;
+      popup_heigth = popup_heigth + (no_of_lines - 1) * 35;
     }  
 
     canvas.noStroke();
@@ -47,11 +47,11 @@ public class Comment {
     canvas.image(photo, popup_x+20, popup_y+20);
 
     fill(0);
-    canvas.textFont(font_questionOfTheWeek, 14);    
-    canvas.text(dbData.choice_user_firstName+" "+dbData.choice_user_lastName+" voted for C and said:", popup_x+123, popup_y+20, 280, 65);
-    canvas.textFont(font_comment, 24);    
+    canvas.textFont(font_comment_header);    
+    canvas.text(dbData.choice_user_firstName+" "+dbData.choice_user_lastName+" voted for C and said:", popup_x+123, popup_y+20, 425, 65);
+    canvas.textFont(font_comment);    
     canvas.text(dbData.choice_comment_text, popup_x+123, popup_y+45, 385, 565);  
-    canvas.textFont(font_comment_sub, 15);    
+    canvas.textFont(font_comment_sub);    
     canvas.text("* "+rank+"TH MOST CONSTRUCTIVE * out of "+dbData.numTotalChoices+" total votes", popup_x+123, comment_y - 67, 385, 165);
   }
 }

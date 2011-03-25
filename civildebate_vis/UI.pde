@@ -19,8 +19,8 @@ public class UI {
     
     // Question   
     fill(255,255,255);
-    canvas.textFont(font_questionOfTheWeek, 14);
-    canvas.text("Question of the week:", 10, 15);
+    canvas.textFont(font_questionOfTheWeek);
+    canvas.text("Question of the week:", 10, 18);
  
     fill(255,226,138); // Yellow
     canvas.textFont(font_question, 28);
