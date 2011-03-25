@@ -25,25 +25,7 @@ public class UI {
     fill(255,226,138); // Yellow
     canvas.textFont(font_question, 28);
     canvas.text("Do you think the U.S. is morally obligated to provide foreign aid to developing nations?", 10, 32, 675, 150);    
-    
-/*
-    if(selected == 1) {
-      img_b = 10;
-      img_a = img_b + 350;
-      img_c = img_b + 686;
-    }  
-    else {
-      img_a = 10;
-        if(selected == 3) {
-          img_b = img_a + 686;
-          img_c = img_a + 350;
-        } 
-        else if(selected == 2) {      
-          img_b = img_a + 350;
-          img_c = img_a + 686;
-        }    
-    } 
-*/         
+         
     img_a = 10;
     img_b = img_a + 350;
     img_c = img_a + 686;
@@ -73,9 +55,7 @@ public class UI {
     canvas.text(dbData.answer_text[2], img_c + 35, 133, 280, 65);
     fill(166,91,81);
     canvas.textFont(font_vote_count, 22);        
-    canvas.text(dbData.numTotalChoicesPerAnswer[1]+" votes", img_c + 35, 222);
-    
-    
+    canvas.text(dbData.numTotalChoicesPerAnswer[1]+" votes", img_c + 35, 222);  
     
   }
 }

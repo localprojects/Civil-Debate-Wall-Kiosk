@@ -4,6 +4,7 @@ import processing.core.*;
 import processing.opengl.*;
 import javax.media.opengl.*;
 import java.util.*;
+import de.looksgood.ani.*;
 
 MySQL msql;
 DbData dbData;
@@ -11,6 +12,15 @@ DbQueries dbQueries;
 UI ui;
 Comment comment;
 Bar_Graph graph;
+
+Ani one_aAni;
+Ani one_bAni;
+Ani one_cAni;
+Ani f_inAni;
+Ani f_in_1Ani;
+Ani f_in_2Ani;
+
+int timer = 0;
 
 PImage logo;
 PImage a,b,c;
@@ -31,8 +41,8 @@ HashMap<String, PVector> coordinates;
 void setup() { 
   size(1024,768, OPENGL);
   smooth();
-  frameRate(10);
-  
+  //frameRate(10);
+  Ani.init(this);
   coordinates = new HashMap<String, PVector>();
   
   logo = loadImage("logo.png");
@@ -64,34 +74,47 @@ void setup() {
   graph = new Bar_Graph();
   comment = new Comment();
   World.init(this);
-  newChoice();
+
+  background(0);
   
+  newChoice();   
+  World.draw(this, dbData, coordinates);
+  ui.display(this, dbData);
+  comment.ani_1(this);
+  graph.ani(this);
 } 
  
 void draw() { 
+  
   background(0);
-  World.draw(this, dbData, coordinates);
-  ui.display(this, dbData);	
-  graph.plot(this, dbData);
-  comment.show(this, dbData,coordinates);
- 
+  
+  timer += 1;  
+  if(timer == 40) {
+    comment.ani_o(this);
+    graph.anio(this); 
+  }
+  if(timer == 50) {    
+    reload();
+    timer = 0; 
+  }  
+  
+ World.draw(this, dbData, coordinates);
+ ui.display(this, dbData); 
+ graph.plot(this, dbData); 
+ comment.show(this, dbData,coordinates);
 } 
 
+void reload() {
+  newChoice();   
+  comment.ani_1(this);
+  graph.ani(this); 
+}    
+  
 void mousePressed() {
-  println("NEW CHOICE");
-  newChoice();
-}
-
-void keyPressed() {
-  println("KEY");	
-  if(key == 'n') {
-    println("NEW CHOICE");
-    newChoice();	
-  }	
+  reload();
 }
 
 void newChoice() {       
   dbQueries.getNewChoice(dbData);
-  //print(dbData.toString());
   World.generateView(this, dbData, coordinates);
 }

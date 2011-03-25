@@ -9,7 +9,7 @@ public class World
 {
    public static HashMap<String, ArrayList<PImage>> silhouettes;
    public static HashMap<String, ArrayList<Shape>> shapes;
-   public static float SCALE = 1.0f;
+   public static float SCALE = 0.8f;
    static String colormap[] = {"Blue", "Green", "Red"}; 
    static int NUM_ANSWERS = 3;
    
@@ -53,7 +53,7 @@ public class World
          File f = new File(canvas.dataPath("") + "/Silhouettes/" + e.getKey());
         //         File f = new File("."); 
           //       canvas.println(f.getAbsolutePath()); 
-         canvas.println(f.getAbsolutePath() + " -- " + f.isDirectory());       
+         //canvas.println(f.getAbsolutePath() + " -- " + f.isDirectory());       
          File files[] = f.listFiles();       
          int i = 0;        
          for(File file : files)
@@ -83,10 +83,10 @@ public class World
                PImage img = pics.get(n % pics.size());
                
                float ratio = (float)img.height/(float)img.width;
-               canvas.println(ratio);
+               //canvas.println(ratio);
                Shape s = new Shape(new PVector(
                                           canvas.random((i-1)*350 + (i==active ? 450 : 350), (i-1)*350 + (i==active ? 550 : 650)), 
-                                          650,
+                                          680,
                                           canvas.random((i==active ? -100 : -400), 0)), 
                                   img, i, ratio);
                shapes.get(colormap[i]).add(s);
@@ -166,13 +166,13 @@ public class World
       
       canvas.fill(200);
       PVector o = coordinates.get("bubbleOrigin");
-      
+ /*     
       canvas.beginShape(canvas.QUADS);
          canvas.vertex(o.x-10,o.y-10,o.z);
          canvas.vertex(o.x-10,o.y+10,o.z);
          canvas.vertex(o.x+10,o.y+10,o.z);
          canvas.vertex(o.x+10,o.y-10,o.z);
       canvas.endShape(); 
-      
+   */   
    }
 }
