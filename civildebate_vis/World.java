@@ -78,16 +78,29 @@ public class World
 
             Collections.shuffle(pics);
             // TODO still faking it a bit
-            for(int n = 0; n < data.numTotalChoicesPerAnswer[i] + 5; n++)
+            for(int n = 0; n < data.numPositiveRatingsPerAnswer[i] + 1; n++)
             {
-               PImage img = pics.get(n % pics.size());
+               PImage img;
+               if(i != active)
+                  img = pics.get(n % pics.size());
+               else {
+                  String genderKey = "/Androgynous";
+                  if(data.choice_user_gender.equals("male"))
+                     genderKey = "/Men";
+                  else if(data.choice_user_gender.equals("female"))
+                     genderKey = "/Women";
+                  
+                  ArrayList<PImage> genderpics = silhouettes.get(colormap[i] + genderKey);
+                  img = genderpics.get(n % genderpics.size());
+               }
+                  
                
                float ratio = (float)img.height/(float)img.width;
                //canvas.println(ratio);
                Shape s = new Shape(new PVector(
                                           canvas.random((i-1)*350 + (i==active ? 450 : 350), (i-1)*350 + (i==active ? 550 : 650)), 
-                                          680,
-                                          canvas.random((i==active ? -100 : -400), 0)), 
+                                          650,
+                                          canvas.random((i==active ? -5 : -200), 0)), 
                                   img, i, ratio);
                shapes.get(colormap[i]).add(s);
                
@@ -117,7 +130,7 @@ public class World
          float ratio = (float)img.height/(float)img.width;
          Shape s = new Shape(new PVector(
                canvas.random(-1024, 2048), 
-               650,
+               640,
                canvas.random(-500, -2000)), 
                img, i, ratio);
          s.bg = true;
@@ -130,11 +143,11 @@ public class World
    public static void draw(PApplet canvas, DbData data, HashMap<String, PVector> coordinates)
    {
       float aspect = (canvas.width)/(canvas.height);
-      //canvas.perspective(canvas.PI/2.0f, (int)(canvas.width/canvas.height), 1.0f, 100000.0f) ; 
-     //canvas.camera(.0f, 10.0f, 300.0f,
-      //               .0f, .0f, .0f,
-     //                .0f, 1.0f, .0f);
-     // canvas.camera(canvas.width/2.0, canvas.height/2.0, (canvas.height/2.0), canvas.width/2.0, canvas.height/2.0, 0, 0, 1, 0);
+    //  canvas.perspective(canvas.PI/2.0f, (int)(canvas.width/canvas.height), 1.0f, 100000.0f) ; 
+    // canvas.camera((canvas.width/2.0f), -(canvas.height)/2.0f, 700.0f,
+     //      (canvas.width/2.0f), -(canvas.height)/2.0f, .0f,
+      //               .0f, 1.0f, .0f);
+      //canvas.camera(canvas.width/2.0f, canvas.height/2.0f+200.0f, (canvas.height/2.0f), canvas.width/2.0f, canvas.height/2.0f, 0.0f, 0.0f, 1.0f, 0.0f);
       canvas.color(255);
       canvas.textureMode(PApplet.NORMALIZED);
        
@@ -146,7 +159,8 @@ public class World
       }
       
       Collections.sort(allShapes, new ZComparator()); 
-      canvas.noStroke();  
+      //canvas.stroke(230);
+      canvas.noStroke();
       for(Shape shape : allShapes)
       {   
          float ratio = shape.ratio;
@@ -155,10 +169,11 @@ public class World
             int brightness = !shape.bg ? (int)shape.origin.z/4+100 : (int)canvas.map(shape.origin.z, -500, -2000, 20, 5);
             canvas.tint(brightness);
             canvas.texture(shape.texture);        
-            canvas.vertex(shape.origin.x + shape.texture.width/2 * SCALE, shape.origin.y + shape.texture.height/2 * SCALE, shape.origin.z, 0, 1);    
-            canvas.vertex(shape.origin.x + shape.texture.width/2 * SCALE, shape.origin.y - shape.texture.height/2 * SCALE, shape.origin.z, 0, 0);           
-            canvas.vertex(shape.origin.x - shape.texture.width/2 * SCALE, shape.origin.y - shape.texture.height/2 * SCALE, shape.origin.z, 1, 0);
-            canvas.vertex(shape.origin.x - shape.texture.width/2 * SCALE, shape.origin.y + shape.texture.height/2 * SCALE, shape.origin.z, 1, 1);
+            float sz = SCALE*(1.0f-(-shape.origin.z/2000.0f));
+            canvas.vertex(shape.origin.x + shape.texture.width/2 * sz, shape.origin.y + shape.texture.height/2 * sz, shape.origin.z, 0, 1);    
+            canvas.vertex(shape.origin.x + shape.texture.width/2 * sz, shape.origin.y - shape.texture.height/2 * sz, shape.origin.z, 0, 0);           
+            canvas.vertex(shape.origin.x - shape.texture.width/2 * sz, shape.origin.y - shape.texture.height/2 * sz, shape.origin.z, 1, 0);
+            canvas.vertex(shape.origin.x - shape.texture.width/2 * sz, shape.origin.y + shape.texture.height/2 * sz, shape.origin.z, 1, 1);
          canvas.endShape();   
          
          canvas.popMatrix();

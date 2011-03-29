@@ -1,6 +1,10 @@
+
+
 import de.bezier.data.sql.*;
 import com.mysql.jdbc.*;
 import java.util.*;
+import processing.core.*;
+import org.json.*;
 
 public class DbQueries
 {
@@ -9,8 +13,9 @@ public class DbQueries
    public DbQueries(MySQL _msql) {
       msql = _msql;
    }   
-   public void getNewChoice(DbData dbData)
+   public void getNewChoice(PApplet canvas, DbData dbData)
    {
+      /*
       ArrayList<Integer> allChoices = new ArrayList<Integer>(); 
       msql.query( "SELECT id FROM vote_choice WHERE question_id = " + dbData.question_id + ";");
       while(msql.next()) {
@@ -64,11 +69,42 @@ public class DbQueries
             }
          }
       }
+      */
+      try {
+         String request = "http://ec2-75-101-223-231.compute-1.amazonaws.com/main/vote/vis_choice/"+dbData.question_id+"/";
+         JSONObject json = new JSONObject(canvas.join(canvas.loadStrings(request), ""));
+         
+         dbData.choice_user_firstName = json.getString("user_firstname");
+         dbData.choice_user_lastName = json.getString("user_lastname");
+         dbData.choice_user_gender = json.getString("user_gender");
+         dbData.choice_answer_id = json.getInt("answer_id");
+         dbData.choice_answer_number = json.getInt("answer_number");
+         dbData.choice_comment_text = json.getString("answer_comment_text");
+         dbData.choice_constructiveness_rank = json.getInt("constructiveness_rank");
+         
+         dbData.choice_user_imageUrl = null;
+         try {
+            dbData.choice_user_imageUrl = json.getString("user_imgurl");
+         } catch(Exception e) {
+            canvas.println("no image for user " + dbData.choice_user_firstName + " " + dbData.choice_user_lastName);
+         }
+         
+         JSONArray positivePerAnswer = json.getJSONArray("positive_ratings_per_answer");
+         
+         for(int i = 0; i < positivePerAnswer.length(); i++)
+         {
+            dbData.numPositiveRatingsPerAnswer[i] = positivePerAnswer.getInt(i);
+         }
+      } catch (Exception e) {
+         canvas.println(e.toString());
+      }
    }
    
-   public DbData getData()
+   public DbData getData(PApplet canvas)
    {      
-      DbData dbData = new DbData();      
+      DbData dbData = new DbData();    
+      
+      /*
       if (msql.connect()) {
 
         // Fetch Question from DB  
@@ -104,17 +140,36 @@ public class DbQueries
                }
             }
          }
-         
-         msql.query("select count(*) from vote_choice where question_id = "+dbData.question_id+";");
-         while(msql.next()) {
-            try {
-               dbData.numTotalChoices = msql.getInt(1);
-            } catch(Exception e) {
-               e.printStackTrace();
-            }
-         }    
+          
     
      }
+     */
+      
+      try {
+         String request = "http://ec2-75-101-223-231.compute-1.amazonaws.com/main/vote/vis_data/";
+         JSONObject json = new JSONObject(canvas.join(canvas.loadStrings(request), ""));
+         JSONObject question = json.getJSONObject("question");
+         JSONArray answers = json.getJSONArray("answers");
+         int totalvotes = json.getInt("totalvotes");
+         
+         dbData.question_text = question.getString("text"); 
+         dbData.question_id = question.getInt("id");
+         
+         
+         for(int i = 0; i < answers.length(); i++)
+         {
+            JSONObject answer = answers.getJSONObject(i);
+            dbData.answer_text[i] = answer.getString("text");
+            dbData.numTotalChoicesPerAnswer[i] = answer.getInt("numchoices");
+         }
+         
+         dbData.numTotalChoices = totalvotes;
+      }
+      catch (JSONException e) {
+         canvas.println(e.toString());
+      }
+      
+      
      return dbData;
    }
 }

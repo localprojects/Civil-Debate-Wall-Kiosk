@@ -68,7 +68,7 @@ public class Comment {
     for(int countRcSent = 0; countRcSent <= lineNo; countRcSent++) canvas.text(rsentence[countRcSent], popup_x+123, popup_y+65+(countRcSent * 30));   
     
     canvas.textFont(font_comment_sub);    
-    canvas.text("* "+rank+"TH MOST CONSTRUCTIVE * out of "+dbData.numTotalChoices+" total votes", popup_x+123, comment_y - 67, 385, 165);
+    canvas.text("* "+data.choice_constructiveness_rank+"TH MOST CONSTRUCTIVE * out of "+dbData.numTotalChoices+" total votes", popup_x+123, comment_y - 67, 385, 165);
   }
   
   

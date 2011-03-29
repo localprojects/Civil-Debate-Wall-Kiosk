@@ -11,9 +11,11 @@ public class DbData
    public String choice_user_firstName = "";
    public String choice_user_lastName = "";
    public String choice_user_imageUrl = "";
+   public String choice_user_gender = "";
    
    public int choice_answer_id = 0;
    public int choice_answer_number = 0;
+   public int choice_constructiveness_rank = 0;
    public String choice_comment_text = "";
    
    public int numPositiveRatingsPerAnswer[];

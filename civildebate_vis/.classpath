@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="/Users/holz/Documents/Processing/uf_civildebate/Trunk/civildebate_vis/code/mysql-connector-java-3.1.14-bin.jar"/>
 	<classpathentry kind="con" path="/org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/JVM 1.6 dp"/>
 	<classpathentry kind="src" path="generated/preproc"/>
+	<classpathentry kind="lib" path="/Users/holz/Documents/Processing/libraries/json/library/json.jar"/>
 	<classpathentry kind="output" path="generated/compiler"/>
 </classpath>

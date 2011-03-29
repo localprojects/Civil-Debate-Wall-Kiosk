@@ -5,6 +5,7 @@ import processing.opengl.*;
 import javax.media.opengl.*;
 import java.util.*;
 import de.looksgood.ani.*;
+import org.json.*;
 
 int startingTime;
 boolean loadOnce = true;
@@ -37,6 +38,8 @@ PFont font_vote_count;
 PFont font_idea_constructive;
 HashMap<String, PVector> coordinates;
 
+final static String HOST = "http://ec2-75-101-223-231.compute-1.amazonaws.com";
+
 //ArrayList<String> usernames;
 
 void setup() { 
@@ -66,14 +69,14 @@ void setup() {
   font_idea_constructive = createFont("ITCFranklinGothicStd-BkCp", 20, true);
 
   // Database connection  
-  String user = "vis";
-  String pass = "ualize";
-  String database = "gdw_dev";
+  //String user = "vis";
+  //String pass = "ualize";
+  //String database = "gdw_dev";
 
-  msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
+  //msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
       
   dbQueries = new DbQueries(msql);
-  dbData = dbQueries.getData();
+  dbData = dbQueries.getData(this);
   ui = new UI();
   graph = new Bar_Graph();
   comment = new Comment();
@@ -120,9 +123,13 @@ void mousePressed() {
 }
 
 void newChoice() {       
-  dbQueries.getNewChoice(dbData);
+  dbData = dbQueries.getData(this);
+  dbQueries.getNewChoice(this, dbData);
   World.generateView(this, dbData, coordinates);
   
-  photo = loadImage("http://ec2-75-101-223-231.compute-1.amazonaws.com/main/media/profile_images_large/contactsures.jpg");
+  if(dbData.choice_user_imageUrl != null && dbData.choice_user_imageUrl != "null")
+  	photo = loadImage(HOST + dbData.choice_user_imageUrl);
+  else
+  	photo = loadImage(HOST + "/main/media/profile_images_large/contactsures.jpg");
   photo.resize(83, (83 * photo.height)/photo.width);
 }
