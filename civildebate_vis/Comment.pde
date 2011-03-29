@@ -10,6 +10,7 @@ public class Comment {
   public int lineNo; 
   String blank = "";
   int f_in_2, f_in_3;  
+  String selectedAns = "";
     
   public void show(PApplet canvas, DbData data, HashMap<String, PVector> coordinates) { 
     
@@ -21,16 +22,24 @@ public class Comment {
     int comment_y = int(v1.y)+5;
     int popup_x = 500;
     int popup_y = 500;
-    int popup_width = 585;
+    int popup_width = 595;
     int popup_heigth = 145;
     int rank = 6;
     if(lineNo >= 2) popup_heigth = popup_heigth + ((lineNo - 1) * 31);
    
     canvas.noStroke();
-    if(dbData.choice_answer_number == 1) fill(139,173,240,f_in_2); // Blue
-    if(dbData.choice_answer_number == 2) fill(116,217,116,f_in_2); // Green
-    if(dbData.choice_answer_number == 3) fill(252,139,124,f_in_2); // Red
-    
+    if(dbData.choice_answer_number == 1) {
+      fill(139,173,240,f_in_2); // Blue
+      selectedAns = "A";
+    }
+    if(dbData.choice_answer_number == 2) {
+      fill(116,217,116,f_in_2); // Green
+      selectedAns = "B";
+    }
+    if(dbData.choice_answer_number == 3) {
+      fill(252,139,124,f_in_2); // Red
+      selectedAns = "C";
+    }
     canvas.beginShape(TRIANGLES); // h = 37
     canvas.vertex(comment_x - 25, comment_y - 37);
     canvas.vertex(comment_x, comment_y - 37);
@@ -51,7 +60,7 @@ public class Comment {
     fill(0,0,0,f_in_2);
     canvas.textFont(font_comment_header);    
     //canvas.text(dbData.choice_user_firstName+" "+dbData.choice_user_lastName+" voted for C and said:", popup_x+123, popup_y+20, 425, 65);
-    canvas.text(dbData.choice_user_firstName+" "+dbData.choice_user_lastName+" voted for "+dbData.choice_answer_id+" and said:", popup_x+123, popup_y+20, 425, 65);
+    canvas.text(dbData.choice_user_firstName+" "+dbData.choice_user_lastName+" voted for "+selectedAns+" and said:", popup_x+123, popup_y+20, 425, 65);
     
     
     canvas.textFont(font_comment); 
@@ -65,7 +74,11 @@ public class Comment {
   
   public String[] wordWrap (String s, int maxWidth) { 
    
-    String sentence[] = {"","","","","","","","","","","","","","","","","","",""};
+    String sentence[] = {"","","","","","","",
+                         "","","","","","","",
+                         "","","","","","","",
+                         "","","","","","","",
+                         "","","","",""};
     float w = 0; 
     int i = 0;
      lineNo = 0; 

@@ -6,6 +6,9 @@ import javax.media.opengl.*;
 import java.util.*;
 import de.looksgood.ani.*;
 
+int startingTime;
+boolean loadOnce = true;
+
 MySQL msql;
 DbData dbData;
 DbQueries dbQueries;
@@ -19,8 +22,6 @@ Ani one_cAni;
 Ani f_inAni;
 Ani f_in_1Ani;
 Ani f_in_2Ani;
-
-int timer = 0;
 
 PImage logo;
 PImage a,b,c;
@@ -40,6 +41,9 @@ HashMap<String, PVector> coordinates;
 
 void setup() { 
   size(1024,768, OPENGL);
+  
+  startingTime = millis();
+  
   smooth();
   //frameRate(10);
   Ani.init(this);
@@ -49,7 +53,7 @@ void setup() {
   a = loadImage("a.png");
   b = loadImage("b.png");
   c = loadImage("c.png");
-  photo = loadImage("photo.png");
+  
   star = loadImage("star.png");
    
   font_question = createFont("Georgia Bold", 28, true);
@@ -64,7 +68,7 @@ void setup() {
   // Database connection  
   String user = "vis";
   String pass = "ualize";
-  String database = "gdw";
+  String database = "gdw_dev";
 
   msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
       
@@ -88,20 +92,21 @@ void draw() {
   
   background(0);
   
-  timer += 1;  
-  if(timer == 40) {
-    comment.ani_o(this);
+  if (millis() - startingTime > 8000 && loadOnce == true) {
+      comment.ani_o(this);
     graph.anio(this); 
+    loadOnce = false;
   }
-  if(timer == 50) {    
-    reload();
-    timer = 0; 
-  }  
   
- World.draw(this, dbData, coordinates);
- ui.display(this, dbData); 
- graph.plot(this, dbData); 
- comment.show(this, dbData,coordinates);
+  if (millis() - startingTime > 10000) {
+    reload();
+    loadOnce = true;
+    startingTime = millis();
+  }
+  World.draw(this, dbData, coordinates);
+  ui.display(this, dbData); 
+  graph.plot(this, dbData); 
+  comment.show(this, dbData,coordinates);
 } 
 
 void reload() {
@@ -117,4 +122,7 @@ void mousePressed() {
 void newChoice() {       
   dbQueries.getNewChoice(dbData);
   World.generateView(this, dbData, coordinates);
+  
+  photo = loadImage("http://ec2-75-101-223-231.compute-1.amazonaws.com/main/media/profile_images_large/contactsures.jpg");
+  photo.resize(83, (83 * photo.height)/photo.width);
 }

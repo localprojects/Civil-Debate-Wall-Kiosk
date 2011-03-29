@@ -34,7 +34,7 @@ public class UI {
     canvas.image(a, img_a, 128);
     fill(139,173,240); // Blue
     canvas.textFont(font_answer, 17);        
-    canvas.text(dbData.answer_text[0], img_a + 35, 133, 280, 65);  
+    canvas.text(dbData.answer_text[2], img_a + 35, 133, 280, 65);  
     fill(87,109,150);
     canvas.textFont(font_vote_count, 22);        
     canvas.text(dbData.numTotalChoicesPerAnswer[0]+" votes", img_a + 35, 222); 
@@ -52,7 +52,7 @@ public class UI {
     canvas.image(c, img_c, 128);
     fill(252,139,124); // Red 
     canvas.textFont(font_answer, 17);   
-    canvas.text(dbData.answer_text[2], img_c + 35, 133, 280, 65);
+    canvas.text(dbData.answer_text[0], img_c + 35, 133, 280, 65);
     fill(166,91,81);
     canvas.textFont(font_vote_count, 22);        
     canvas.text(dbData.numTotalChoicesPerAnswer[2]+" votes", img_c + 35, 222);  
