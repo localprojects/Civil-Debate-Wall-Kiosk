@@ -9,7 +9,7 @@ public class Comment {
   String rsentence[] = {"","","","","","","","","","","","","","","","","","",""};
   public int lineNo; 
   String blank = "";
-  int f_in_2, f_in_3;  
+  int f_in_2, f_in_3,popup_heigth;  
   String selectedAns = "";
     
   public void show(PApplet canvas, DbData data, HashMap<String, PVector> coordinates) { 
@@ -23,7 +23,8 @@ public class Comment {
     int popup_x = 500;
     int popup_y = 500;
     int popup_width = 595;
-    int popup_heigth = 145;
+    if(photo.height > 105) popup_heigth = photo.height + 40;
+    else popup_heigth = 145;
     int rank = 6;
     if(lineNo >= 2) popup_heigth = popup_heigth + ((lineNo - 1) * 31);
    
