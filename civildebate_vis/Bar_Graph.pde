@@ -82,6 +82,23 @@ public class Bar_Graph {
     canvas.textFont(font_vote_count);       
     canvas.text(total+" total votes", 1005, bar_y + 18);
     canvas.textAlign(LEFT);
+    
+    //Visit us at label
+    
+    fill (255, 226, 138);
+    beginShape();
+    vertex(12, 739);
+    vertex(15, 749);
+    vertex(12, 759);
+    vertex(224, 759);
+    vertex(221, 749);
+    vertex(224, 739);
+    endShape(CLOSE);
+    fill(0);
+    canvas.textFont(font_comment_sub);       
+    canvas.text(" Cast your vote at GreatCivilDebate.com", 21, 753);
+
+
    }
    
     public void ani(PApplet canvas) {  
