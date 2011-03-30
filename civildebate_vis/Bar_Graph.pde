@@ -58,8 +58,8 @@ public class Bar_Graph {
           triangle((x_b + (i_b / 2 - 7)), bar_y + 19, (x_b + (i_b / 2 + 7)), bar_y + 19, (x_b + i_b /2), bar_y + 33);  
         }
         canvas.textFont(font_idea_constructive);        
-        canvas.text(dbData.numPositiveRatingsPerAnswer[1]+" found "+dbData.choice_user_firstName+"'s", (x_b+(i_b/2))-25 , bar_y + 55);
-        canvas.text("idea constructive", (x_b+(i_b/2))-25, bar_y + 80);
+        canvas.text(dbData.numPositiveRatingsPerAnswer[1]+" found "+dbData.choice_user_firstName+"'s", (x_b+(i_b/2))-15 , bar_y + 55);
+        canvas.text("idea constructive", (x_b+(i_b/2))-15, bar_y + 80);
     }
     
     if(dbData.choice_answer_number != 3 && one_c > 1) {
@@ -70,8 +70,8 @@ public class Bar_Graph {
           triangle((x_c + (i_c / 2 - 7)), bar_y + 19, (x_c + (i_c / 2 + 7)), bar_y + 19, (x_c + i_c /2), bar_y + 33);  
         }
         canvas.textFont(font_idea_constructive);        
-        canvas.text(dbData.numPositiveRatingsPerAnswer[2]+" found "+dbData.choice_user_firstName+"'s", (x_c+(i_c/2))-25 , bar_y + 55);
-        canvas.text("idea constructive", (x_c+(i_c/2))-25, bar_y + 80);
+        canvas.text(dbData.numPositiveRatingsPerAnswer[2]+" found "+dbData.choice_user_firstName+"'s", (x_c+(i_c/2))-15 , bar_y + 55);
+        canvas.text("idea constructive", (x_c+(i_c/2))-15, bar_y + 80);
     }
   
     // Total votes text
@@ -93,7 +93,11 @@ public class Bar_Graph {
        i_a = (dbData.numPositiveRatingsPerAnswer[0] * p_a) / total - dbData.numTotalChoicesPerAnswer[0];
        i_b = (dbData.numPositiveRatingsPerAnswer[1] * p_b) / total - dbData.numTotalChoicesPerAnswer[1];
        i_c = (dbData.numPositiveRatingsPerAnswer[2] * p_c) / total - dbData.numTotalChoicesPerAnswer[2]; //dbData.numTotalChoicesPerAnswer[2];
-   
+      
+       if(i_a > 0 && i_a < 15) i_a = 16;
+       if(i_b > 0 && i_b < 15) i_b = 16;
+       if(i_c > 0 && i_c < 15) i_c = 16;
+       
        one_aAni = new Ani(this, 2.0, "one_a", i_a, Ani.EXPO_IN_OUT);
        one_bAni = new Ani(this, 2.0, "one_b", i_b, Ani.EXPO_IN_OUT);
        one_cAni = new Ani(this, 2.0, "one_c", i_c, Ani.EXPO_IN_OUT); 

@@ -87,6 +87,7 @@ void setup() {
   newChoice();   
   World.draw(this, dbData, coordinates);
   ui.display(this, dbData);
+  comment.wrap_text(this);
   comment.ani_1(this);
   graph.ani(this);
 } 
@@ -115,6 +116,7 @@ void draw() {
 void reload() {
   newChoice();   
   comment.ani_1(this);
+  comment.wrap_text(this);
   graph.ani(this); 
 }    
   
@@ -130,6 +132,6 @@ void newChoice() {
   if(dbData.choice_user_imageUrl != null && dbData.choice_user_imageUrl != "null")
   	photo = loadImage(HOST + dbData.choice_user_imageUrl);
   else
-  	photo = loadImage(HOST + "/main/media/profile_images_large/contactsures.jpg");
+  	photo = loadImage(HOST + "/main/media/profile_images/contactsures.jpg");
   photo.resize(83, (83 * photo.height)/photo.width);
 }
