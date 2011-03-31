@@ -38,6 +38,11 @@ PFont font_vote_count;
 PFont font_idea_constructive;
 HashMap<String, PVector> coordinates;
 
+int roundTimer = 0;
+
+final static int ROUNDTIME = 10000;
+int last = 0;
+
 final static String HOST = "http://ec2-75-101-223-231.compute-1.amazonaws.com";
 
 //ArrayList<String> usernames;
@@ -46,6 +51,7 @@ void setup() {
   size(1024,768, OPENGL);
   
   startingTime = millis();
+  last = startingTime;
   
   smooth();
   //frameRate(10);
@@ -85,7 +91,7 @@ void setup() {
   background(0);
   
   newChoice();   
-  World.draw(this, dbData, coordinates);
+ // World.draw(this, dbData, coordinates);
   ui.display(this, dbData);
   comment.wrap_text(this);
   comment.ani_1(this);
@@ -96,18 +102,24 @@ void draw() {
   
   background(0);
   
+  int now = millis();
+  int dt = now - last;
+  last = now;
+  
+  roundTimer += dt;
+  
   if (millis() - startingTime > 8000 && loadOnce == true) {
       comment.ani_o(this);
     graph.anio(this); 
     loadOnce = false;
   }
   
-  if (millis() - startingTime > 10000) {
+  if (millis() - startingTime > ROUNDTIME) {
     reload();
     loadOnce = true;
     startingTime = millis();
   }
-  World.draw(this, dbData, coordinates);
+  World.draw(this, dbData, coordinates, roundTimer);
   ui.display(this, dbData); 
   graph.plot(this, dbData); 
   comment.show(this, dbData,coordinates);
@@ -124,7 +136,8 @@ void mousePressed() {
   reload();
 }
 
-void newChoice() {       
+void newChoice() {   
+  roundTimer = 0;  
   dbData = dbQueries.getData(this);
   dbQueries.getNewChoice(this, dbData);
   World.generateView(this, dbData, coordinates);

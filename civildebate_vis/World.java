@@ -140,7 +140,7 @@ public class World
       
    }
    
-   public static void draw(PApplet canvas, DbData data, HashMap<String, PVector> coordinates)
+   public static void draw(PApplet canvas, DbData data, HashMap<String, PVector> coordinates, int roundTimer)
    {
       float aspect = (canvas.width)/(canvas.height);
     //  canvas.perspective(canvas.PI/2.0f, (int)(canvas.width/canvas.height), 1.0f, 100000.0f) ; 
@@ -167,7 +167,13 @@ public class World
          canvas.pushMatrix();     
          canvas.beginShape(canvas.QUADS);   
             int brightness = !shape.bg ? (int)shape.origin.z/4+100 : (int)canvas.map(shape.origin.z, -500, -2000, 20, 5);
-            canvas.tint(brightness);
+            int alphaVal = 0;
+            if(roundTimer < 4000)              
+            { alphaVal= (int)canvas.map(roundTimer, 0, 4000, 0, 255); }
+            else 
+            { alphaVal= (int)canvas.map(roundTimer, 8000, 10000, 255, 0); }
+            canvas.tint(brightness, alphaVal);
+            
             canvas.texture(shape.texture);        
             float sz = SCALE*(1.0f-(-shape.origin.z/2000.0f));
             canvas.vertex(shape.origin.x + shape.texture.width/2 * sz, shape.origin.y + shape.texture.height/2 * sz, shape.origin.z, 0, 1);    
