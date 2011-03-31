@@ -31,28 +31,28 @@ public class UI {
     img_c = img_a + 686;
 
     // A
-    canvas.image(a, img_a, 128);
+    canvas.image(a, img_a, 108);
     fill(139,173,240); // Blue
     canvas.textFont(font_answer, 17);        
-    canvas.text(dbData.answer_text[0], img_a + 35, 133, 280, 65);  
+    canvas.text(dbData.answer_text[0], img_a + 35, 113, 280, 85);  
     fill(87,109,150);
     canvas.textFont(font_vote_count, 22);        
     canvas.text(dbData.numTotalChoicesPerAnswer[0]+" votes", img_a + 35, 222); 
  
      // B
-    canvas.image(b, img_b, 128);
+    canvas.image(b, img_b, 108);
     fill(116,217,116); // Green
     canvas.textFont(font_answer, 17);    
-    canvas.text(dbData.answer_text[1], img_b + 35, 133, 280, 65);
+    canvas.text(dbData.answer_text[1], img_b + 35, 113, 280, 85);
     fill(69,130,69);
     canvas.textFont(font_vote_count, 22);        
     canvas.text(dbData.numTotalChoicesPerAnswer[1]+" votes", img_b + 35, 222); 
    
     // C
-    canvas.image(c, img_c, 128);
+    canvas.image(c, img_c, 108);
     fill(252,139,124); // Red 
     canvas.textFont(font_answer, 17);   
-    canvas.text(dbData.answer_text[2], img_c + 35, 133, 280, 65);
+    canvas.text(dbData.answer_text[2], img_c + 35, 113, 280, 85);
     fill(166,91,81);
     canvas.textFont(font_vote_count, 22);        
     canvas.text(dbData.numTotalChoicesPerAnswer[2]+" votes", img_c + 35, 222);  

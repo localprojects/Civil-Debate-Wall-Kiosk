@@ -114,7 +114,7 @@ void draw() {
   
   roundTimer += dt;
   
-  if (millis() - startingTime > 8000 && loadOnce == true) {
+  if (millis() - startingTime > ROUNDTIME-3000 && loadOnce == true) {
       comment.ani_o(this);
     graph.anio(this); 
     loadOnce = false;
