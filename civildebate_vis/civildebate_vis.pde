@@ -172,6 +172,6 @@ void newChoice() {
   if(dbData.choice_user_imageUrl != null && dbData.choice_user_imageUrl != "null")
   	photo = loadImage(HOST + dbData.choice_user_imageUrl);
   else
-  	photo = loadImage(HOST + "/main/media/profile_images/contactsures.jpg");
+  	photo = loadImage(HOST + "/dev/media/profile_images/avatar.gif");
   photo.resize(83, (83 * photo.height)/photo.width);
 }
