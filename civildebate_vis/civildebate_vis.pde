@@ -6,6 +6,9 @@ import javax.media.opengl.*;
 import java.util.*;
 import de.looksgood.ani.*;
 import org.json.*;
+import fullscreen.*; 
+
+FullScreen fs; 
 //import simpleML.*;
 
 int startingTime;
@@ -102,6 +105,11 @@ void setup() {
   comment.wrap_text(this);
   comment.ani_1(this);
   graph.ani(this);
+  
+  fs = new FullScreen(this); 
+  //fs.enter(); 
+  
+  
 } 
  
 void draw() { 
