@@ -13,7 +13,7 @@ public class DbQueries
    public DbQueries(MySQL _msql) {
       msql = _msql;
    }   
-   public void getNewChoice(PApplet canvas, DbData dbData)
+   public void getNewChoice(PApplet canvas, DbData dbData, ArrayList<DbData> cachedData)
    {
       /*
       ArrayList<Integer> allChoices = new ArrayList<Integer>(); 
@@ -71,7 +71,7 @@ public class DbQueries
       }
       */
       try {
-         String request = "http://ec2-75-101-223-231.compute-1.amazonaws.com/main/vote/vis_choice/"+dbData.question_id+"/";
+         String request = "http://ec2-75-101-223-231.compute-1.amazonaws.com/dev/vote/vis_choice/"+dbData.question_id+"/";
          JSONObject json = new JSONObject(canvas.join(canvas.loadStrings(request), ""));
          
          dbData.choice_user_firstName = json.getString("user_firstname");
@@ -97,10 +97,12 @@ public class DbQueries
          }
       } catch (Exception e) {
          canvas.println(e.toString());
+         Collections.shuffle(cachedData);
+         dbData = cachedData.get(0);
       }
    }
    
-   public DbData getData(PApplet canvas)
+   public DbData getData(PApplet canvas, ArrayList<DbData> cachedData)
    {      
       DbData dbData = new DbData();    
       
@@ -146,7 +148,7 @@ public class DbQueries
      */
       
       try {
-         String request = "http://ec2-75-101-223-231.compute-1.amazonaws.com/main/vote/vis_data/";
+         String request = "http://ec2-75-101-223-231.compute-1.amazonaws.com/dev/vote/vis_data/";
          JSONObject json = new JSONObject(canvas.join(canvas.loadStrings(request), ""));
          JSONObject question = json.getJSONObject("question");
          JSONArray answers = json.getJSONArray("answers");
@@ -167,6 +169,8 @@ public class DbQueries
       }
       catch (JSONException e) {
          canvas.println(e.toString());
+         Collections.shuffle(cachedData);
+         dbData = cachedData.get(0);
       }
       
       

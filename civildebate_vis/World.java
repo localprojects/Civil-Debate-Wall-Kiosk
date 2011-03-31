@@ -1,6 +1,7 @@
 import processing.core.*;
 import processing.opengl.PGraphicsOpenGL;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.*;
 import java.util.Map.Entry;
 import javax.media.opengl.GL;
@@ -23,6 +24,12 @@ public class World
             return 1;
          else
             return 0;
+      }
+   }
+   
+   class PNGFilter implements FilenameFilter {
+      public boolean accept(File dir, String name) {
+          return (name.endsWith(".png"));
       }
    }
    
@@ -54,7 +61,7 @@ public class World
         //         File f = new File("."); 
           //       canvas.println(f.getAbsolutePath()); 
          //canvas.println(f.getAbsolutePath() + " -- " + f.isDirectory());       
-         File files[] = f.listFiles();       
+         File files[] = f.listFiles(new PNGFilter())      
          int i = 0;        
          for(File file : files)
          {

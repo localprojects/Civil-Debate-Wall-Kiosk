@@ -6,12 +6,14 @@ import javax.media.opengl.*;
 import java.util.*;
 import de.looksgood.ani.*;
 import org.json.*;
+//import simpleML.*;
 
 int startingTime;
 boolean loadOnce = true;
 
 MySQL msql;
 DbData dbData;
+ArrayList<DbData> cachedData;
 DbQueries dbQueries;
 UI ui;
 Comment comment;
@@ -38,6 +40,8 @@ PFont font_vote_count;
 PFont font_idea_constructive;
 HashMap<String, PVector> coordinates;
 
+//HTMLRequest dataRequest, choiceRequest;
+
 int roundTimer = 0;
 
 final static int ROUNDTIME = 10000;
@@ -57,6 +61,8 @@ void setup() {
   //frameRate(10);
   Ani.init(this);
   coordinates = new HashMap<String, PVector>();
+  
+  cachedData = new ArrayList<DbData>();
   
   logo = loadImage("logo.png");
   a = loadImage("a.png");
@@ -82,7 +88,7 @@ void setup() {
   //msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
       
   dbQueries = new DbQueries(msql);
-  dbData = dbQueries.getData(this);
+  dbData = dbQueries.getData(this, cachedData);
   ui = new UI();
   graph = new Bar_Graph();
   comment = new Comment();
@@ -138,8 +144,21 @@ void mousePressed() {
 
 void newChoice() {   
   roundTimer = 0;  
-  dbData = dbQueries.getData(this);
-  dbQueries.getNewChoice(this, dbData);
+  
+ // dataRequest = new HTMLRequest(this,"http://ec2-75-101-223-231.compute-1.amazonaws.com/main/vote/vis_data/");
+ // dataRequest.makeRequest();
+  
+  dbData = dbQueries.getData(this, cachedData);
+  dbQueries.getNewChoice(this, dbData, cachedData);
+  
+  cachedData.add(dbData);
+  
+  if(cachedData.size() > 10)
+  {
+  	Collections.shuffle(cachedData);
+  	cachedData.remove(0);
+  }
+  
   World.generateView(this, dbData, coordinates);
   
   if(dbData.choice_user_imageUrl != null && dbData.choice_user_imageUrl != "null")
