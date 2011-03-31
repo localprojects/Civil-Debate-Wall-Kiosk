@@ -97,8 +97,8 @@ public class DbQueries
          }
       } catch (Exception e) {
          canvas.println(e.toString());
-         Collections.shuffle(cachedData);
-         dbData = cachedData.get(0);
+    //     Collections.shuffle(cachedData);
+   //      dbData = cachedData.get(0);
       }
    }
    
@@ -169,8 +169,8 @@ public class DbQueries
       }
       catch (JSONException e) {
          canvas.println(e.toString());
-         Collections.shuffle(cachedData);
-         dbData = cachedData.get(0);
+   //      Collections.shuffle(cachedData);
+    //     dbData = cachedData.get(0);
       }
       
       

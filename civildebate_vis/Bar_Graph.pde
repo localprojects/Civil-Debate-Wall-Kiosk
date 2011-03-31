@@ -80,7 +80,7 @@ public class Bar_Graph {
     fill(255);
     canvas.textAlign(RIGHT);
     canvas.textFont(font_vote_count);       
-    canvas.text(total+" total votes", 1005, bar_y + 18);
+    canvas.text(dbData.numTotalChoices+" total votes", 1005, bar_y + 18);
     canvas.textAlign(LEFT);
     
     //Visit us at label
@@ -107,9 +107,9 @@ public class Bar_Graph {
        one_c = 0;
        f_in_1 = 0;
      
-       i_a = (dbData.numPositiveRatingsPerAnswer[0] * p_a) / total - dbData.numTotalChoicesPerAnswer[0];
-       i_b = (dbData.numPositiveRatingsPerAnswer[1] * p_b) / total - dbData.numTotalChoicesPerAnswer[1];
-       i_c = (dbData.numPositiveRatingsPerAnswer[2] * p_c) / total - dbData.numTotalChoicesPerAnswer[2]; //dbData.numTotalChoicesPerAnswer[2];
+       i_a = (dbData.numPositiveRatingsPerAnswer[0] * p_a) / dbData.numTotalChoices - dbData.numTotalChoicesPerAnswer[0];
+       i_b = (dbData.numPositiveRatingsPerAnswer[1] * p_b) / dbData.numTotalChoices - dbData.numTotalChoicesPerAnswer[1];
+       i_c = (dbData.numPositiveRatingsPerAnswer[2] * p_c) / dbData.numTotalChoices - dbData.numTotalChoicesPerAnswer[2]; //dbData.numTotalChoicesPerAnswer[2];
       
        if(i_a > 0 && i_a < 15) i_a = 16;
        if(i_b > 0 && i_b < 15) i_b = 16;
