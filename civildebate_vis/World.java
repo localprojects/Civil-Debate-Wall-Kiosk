@@ -27,7 +27,7 @@ public class World
       }
    }
    
-   class PNGFilter implements FilenameFilter {
+   static class PNGFilter implements FilenameFilter {
       public boolean accept(File dir, String name) {
           return (name.endsWith(".png"));
       }
@@ -61,7 +61,7 @@ public class World
         //         File f = new File("."); 
           //       canvas.println(f.getAbsolutePath()); 
          //canvas.println(f.getAbsolutePath() + " -- " + f.isDirectory());       
-         File files[] = f.listFiles(new PNGFilter())      
+         File files[] = f.listFiles(new PNGFilter());    
          int i = 0;        
          for(File file : files)
          {
