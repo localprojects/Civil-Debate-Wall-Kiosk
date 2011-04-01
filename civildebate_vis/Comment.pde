@@ -27,11 +27,11 @@ public class Comment {
     int comment_y = int(v1.y)+5;
     int popup_x = 500;
     int popup_y = 500;
-    int popup_width = 595;
+    int popup_width = 625;
     if(photo.height > 105) popup_heigth = photo.height + 40;
     else popup_heigth = 145;
     int rank = 6;
-    if(lineNo >= 2) popup_heigth = popup_heigth + ((lineNo - 1) * 31);
+    if(lineNo >= 2) popup_heigth = popup_heigth + ((lineNo - 1) * 27);
    
     canvas.noStroke();
     if(dbData.choice_answer_number == 1) {
@@ -71,7 +71,7 @@ public class Comment {
     
     
     canvas.textFont(font_comment); 
-    for(int countRcSent = 0; countRcSent <= lineNo; countRcSent++) canvas.text(rsentence[countRcSent], popup_x+123, popup_y+65+(countRcSent * 30));   
+    for(int countRcSent = 0; countRcSent <= lineNo; countRcSent++) canvas.text(rsentence[countRcSent], popup_x+123, popup_y+65+(countRcSent * 27));   
     
     canvas.textFont(font_comment_sub);    
     canvas.text("* "+(data.choice_constructiveness_rank+1)+getOrdinalFor(data.choice_constructiveness_rank+1)+" MOST CONSTRUCTIVE * out of "+dbData.numTotalChoices+" total votes", popup_x+123, comment_y - 67, 385, 165);
@@ -83,7 +83,7 @@ public class Comment {
   
   public void wrap_text(PApplet canvas) { 
   
-    rsentence = wordWrap(dbData.choice_comment_text, 40); 
+    rsentence = wordWrap(dbData.choice_comment_text, 50); 
   }  
   
   public String[] wordWrap (String s, int maxWidth) { 

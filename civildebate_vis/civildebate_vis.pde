@@ -77,7 +77,7 @@ void setup() {
   font_question = createFont("Georgia Bold", 28, true);
   font_questionOfTheWeek = createFont("ITCFranklinGothicStd-BkCp", 17, true); 
   font_answer = createFont("Georgia", 17, true); 
-  font_comment = createFont("Georgia Italic", 24, true);
+  font_comment = createFont("Georgia Italic", 20, true);
   font_comment_sub = createFont("ITCFranklinGothicStd-BkCp", 15, true);  
   font_comment_header = createFont("ITCFranklinGothicStd-BkCp", 17, true);  
   font_vote_count = createFont("ITCFranklinGothicStd-BkCp", 26, true);
@@ -106,23 +106,21 @@ void setup() {
   comment.ani_1(this);
   graph.ani(this);
   
-  fs = new FullScreen(this); 
-  //fs.enter(); 
-  
+   
   
 } 
  
 void draw() { 
   
   background(0);
-  
+  println(frameRate);
   int now = millis();
   int dt = now - last;
   last = now;
   
   roundTimer += dt;
   
-  if (millis() - startingTime > ROUNDTIME-3000 && loadOnce == true) {
+  if (millis() - startingTime > ROUNDTIME-2000 && loadOnce == true) {
       comment.ani_o(this);
     graph.anio(this); 
     loadOnce = false;
