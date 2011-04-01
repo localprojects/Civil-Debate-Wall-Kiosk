@@ -176,7 +176,7 @@ public class World
             int brightness = !shape.bg ? (int)shape.origin.z/4+100 : (int)canvas.map(shape.origin.z, -500, -2000, 20, 5);
             int alphaVal = 0;
             if(roundTimer < 4000)              
-            { alphaVal= (int)canvas.map(roundTimer, 0, 4000, 0, 255); }
+            { alphaVal= (int)canvas.map(roundTimer, 0, 2000, 0, 255); }
             else 
             { alphaVal= (int)canvas.map(roundTimer, 8000, 10000, 255, 0); }
             canvas.tint(brightness, alphaVal);

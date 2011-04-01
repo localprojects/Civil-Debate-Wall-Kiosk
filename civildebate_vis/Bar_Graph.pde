@@ -96,7 +96,7 @@ public class Bar_Graph {
     endShape(CLOSE);
     fill(0);
     canvas.textFont(font_comment_sub);       
-    canvas.text(" Cast your vote at GreatCivilDebate.com", 21, 753);
+    canvas.text(" Cast your vote at CivilDebateWall.com", 24, 753);
 
 
    }
