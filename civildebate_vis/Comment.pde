@@ -105,7 +105,7 @@ public class Comment {
     
     // ----------------------------
     
-    println(s);
+    //println(s);
     
     if(s.length() > 30) {
      
@@ -135,11 +135,11 @@ public class Comment {
       s = newS1+" "+newS2;      
     }  
     
-    println("space1 = "+space1);
-    println("space2 = "+space2);  
+    //println("space1 = "+space1);
+    //println("space2 = "+space2);  
      
-    println("newS1 = "+newS1);
-    println("newS2 = "+newS2);  
+    //println("newS1 = "+newS1);
+    //println("newS2 = "+newS2);  
     }  
     
     

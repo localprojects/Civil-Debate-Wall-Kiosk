@@ -113,7 +113,7 @@ void setup() {
 void draw() { 
   
   background(0);
-  println(frameRate);
+  //println(frameRate);
   int now = millis();
   int dt = now - last;
   last = now;
