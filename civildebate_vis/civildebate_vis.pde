@@ -67,7 +67,7 @@ void setup() {
   
   cachedData = new ArrayList<DbData>();
   
-  logo = loadImage("logo.png");
+  logo = loadImage("logo.jpg");
   a = loadImage("a.png");
   b = loadImage("b.png");
   c = loadImage("c.png");
