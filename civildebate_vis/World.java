@@ -178,7 +178,7 @@ public class World
             if(roundTimer < 2000)              
             { alphaVal= (int)canvas.map(roundTimer, 0, 2000, 0, 255); }
             else 
-            { alphaVal= (int)canvas.map(roundTimer, 13000, 15000, 255, 0); }
+            { alphaVal= (int)canvas.map(roundTimer, 15000, 16000, 255, 0); }
             canvas.tint(brightness, alphaVal);
             
             canvas.texture(shape.texture);        
