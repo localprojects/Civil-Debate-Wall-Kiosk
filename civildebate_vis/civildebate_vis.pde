@@ -47,7 +47,7 @@ HashMap<String, PVector> coordinates;
 
 int roundTimer = 0;
 
-final static int ROUNDTIME = 10000;
+final static int ROUNDTIME = 15000;
 int last = 0;
 
 final static String HOST = "http://ec2-75-101-223-231.compute-1.amazonaws.com";
