@@ -105,9 +105,6 @@ void setup() {
   comment.wrap_text(this);
   comment.ani_1(this);
   graph.ani(this);
-  
-   
-  
 } 
  
 void draw() { 
@@ -121,13 +118,13 @@ void draw() {
   roundTimer += dt;
   
   if (millis() - startingTime > ROUNDTIME-2000 && loadOnce == true) {
-      comment.ani_o(this);
+    comment.ani_o(this);
     graph.anio(this); 
     loadOnce = false;
   }
   
   if (millis() - startingTime > ROUNDTIME) {
-    reload();
+    reload();    
     loadOnce = true;
     startingTime = millis();
   }
@@ -135,10 +132,17 @@ void draw() {
   ui.display(this, dbData); 
   graph.plot(this, dbData); 
   comment.show(this, dbData,coordinates);
+  
+  
 } 
 
 void reload() {
-  newChoice();   
+  
+  String request = "http://www.civildebatewall.com/vote/vis_data/";         
+  
+  if(loadStrings(request) == null) newChoiceWoInternet();
+  else newChoice();   
+  
   comment.ani_1(this);
   comment.wrap_text(this);
   graph.ani(this); 
@@ -147,6 +151,12 @@ void reload() {
 void mousePressed() {
   reload();
 }
+
+void newChoiceWoInternet() {
+  roundTimer = 0;  
+  World.generateView(this, dbData, coordinates);
+  photo = loadImage("avatar_new.gif");
+}  
 
 void newChoice() {   
   roundTimer = 0;  

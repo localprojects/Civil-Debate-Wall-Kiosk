@@ -71,7 +71,7 @@ public class DbQueries
       }
       */
       try {
-         String request = "http://ec2-75-101-223-231.compute-1.amazonaws.com/dev/vote/vis_choice/"+dbData.question_id+"/";
+         String request = "http://www.civildebatewall.com/vote/vis_choice/"+dbData.question_id+"/";
          JSONObject json = new JSONObject(canvas.join(canvas.loadStrings(request), ""));
          
          dbData.choice_user_firstName = json.getString("user_firstname");
@@ -148,7 +148,7 @@ public class DbQueries
      */
       
       try {
-         String request = "http://ec2-75-101-223-231.compute-1.amazonaws.com/dev/vote/vis_data/";
+         String request = "http://www.civildebatewall.com/vote/vis_data/";
          JSONObject json = new JSONObject(canvas.join(canvas.loadStrings(request), ""));
          JSONObject question = json.getJSONObject("question");
          JSONArray answers = json.getJSONArray("answers");
