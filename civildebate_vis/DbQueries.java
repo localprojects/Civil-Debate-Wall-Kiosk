@@ -13,7 +13,7 @@ public class DbQueries
    public DbQueries(MySQL _msql) {
       msql = _msql;
    }   
-   public void getNewChoice(PApplet canvas, DbData dbData, ArrayList<DbData> cachedData)
+   public void getNewChoice(PApplet canvas, DbData dbData, ArrayList<DbData> cachedData, String[] jsondata)
    {
       /*
       ArrayList<Integer> allChoices = new ArrayList<Integer>(); 
@@ -72,7 +72,7 @@ public class DbQueries
       */
       try {
          String request = "http://www.civildebatewall.com/vote/vis_choice/"+dbData.question_id+"/";
-         JSONObject json = new JSONObject(canvas.join(canvas.loadStrings(request), ""));
+         JSONObject json = new JSONObject(canvas.join(jsondata, ""));
          
          dbData.choice_user_firstName = json.getString("user_firstname");
          dbData.choice_user_lastName = json.getString("user_lastname");
@@ -102,7 +102,7 @@ public class DbQueries
       }
    }
    
-   public DbData getData(PApplet canvas, ArrayList<DbData> cachedData)
+   public DbData getData(PApplet canvas, ArrayList<DbData> cachedData, String[] jsondata)
    {      
       DbData dbData = new DbData();    
       
@@ -149,7 +149,7 @@ public class DbQueries
       
       try {
          String request = "http://www.civildebatewall.com/vote/vis_data/";
-         JSONObject json = new JSONObject(canvas.join(canvas.loadStrings(request), ""));
+         JSONObject json = new JSONObject(canvas.join(jsondata, ""));
          JSONObject question = json.getJSONObject("question");
          JSONArray answers = json.getJSONArray("answers");
          int totalvotes = json.getInt("totalvotes");

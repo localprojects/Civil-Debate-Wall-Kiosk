@@ -50,7 +50,10 @@ int roundTimer = 0;
 final static int ROUNDTIME = 15000;
 int last = 0;
 
-final static String HOST = "http://ec2-75-101-223-231.compute-1.amazonaws.com";
+final static String HOST = "http://www.civildebatewall.com/";
+
+String request = "http://www.civildebatewall.com/vote/vis_data/";  
+String requestChoice = "http://www.civildebatewall.com/vote/vis_choice/"; 
 
 //ArrayList<String> usernames;
 
@@ -90,8 +93,15 @@ void setup() {
 
   //msql = new MySQL( this, "ec2-75-101-223-231.compute-1.amazonaws.com:3306", database, user, pass );
       
+  String[] jsondata = loadStrings(request);
+  
+  if(jsondata == null) {
+    exit();
+    return; 
+  }
+  
   dbQueries = new DbQueries(msql);
-  dbData = dbQueries.getData(this, cachedData);
+  dbData = dbQueries.getData(this, cachedData, jsondata);
   ui = new UI();
   graph = new Bar_Graph();
   comment = new Comment();
@@ -99,7 +109,7 @@ void setup() {
 
   background(0);
   
-  newChoice();   
+  newChoice(jsondata, loadStrings(requestChoice + dbData.question_id));   
  // World.draw(this, dbData, coordinates);
   ui.display(this, dbData);
   comment.wrap_text(this);
@@ -138,10 +148,22 @@ void draw() {
 
 void reload() {
   
-  String request = "http://www.civildebatewall.com/vote/vis_data/";         
+     
   
-  if(loadStrings(request) == null) newChoiceWoInternet();
-  else newChoice();   
+  String[] jsondata = loadStrings(request);
+  String[] jsondataChoice = loadStrings(requestChoice + dbData.question_id);
+  
+  if(jsondata == null || jsondataChoice == null) 
+  {
+    println("request failed. falling back to cached data.");
+    newChoiceWoInternet();
+  }
+  else 
+  {
+    println("requesting new data...");
+    newChoice(jsondata, jsondataChoice);
+  }
+    
   
   comment.ani_1(this);
   comment.wrap_text(this);
@@ -158,14 +180,14 @@ void newChoiceWoInternet() {
   photo = loadImage("avatar_new.gif");
 }  
 
-void newChoice() {   
+void newChoice(String[] jsondata, String[] jsondataChoice) {   
   roundTimer = 0;  
   
  // dataRequest = new HTMLRequest(this,"http://ec2-75-101-223-231.compute-1.amazonaws.com/main/vote/vis_data/");
  // dataRequest.makeRequest();
   
-  dbData = dbQueries.getData(this, cachedData);
-  dbQueries.getNewChoice(this, dbData, cachedData);
+  dbData = dbQueries.getData(this, cachedData, jsondata);
+  dbQueries.getNewChoice(this, dbData, cachedData, jsondataChoice);
   
   cachedData.add(dbData);
   
