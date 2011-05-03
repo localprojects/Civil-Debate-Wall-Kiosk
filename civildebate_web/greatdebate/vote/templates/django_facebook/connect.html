@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+
+{% load vote_extras %}
+
+{% block javascript %}
+
+// the following adds CSRF tokens to ajax requests, to satisfy django
+
+$('html').ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        // Only send the token to relative URLs i.e. locally.
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
+
+
+
+// called when the user has submitted the choice
+function submitFormCallback(content)
+{
+    // load rating page into main div
+    $(".question_all").html(content);
+    
+    // register actions for rating buttons
+    $("#agreebutton,#disagreebutton").click(function(event){
+        event.preventDefault();
+        
+        var data = {};
+        data.choice_id = $(this).closest(".rate_choice_container").find("input[name=choice_id]").val();
+        data.rating = $(this).attr('id') == ("agreebutton") ? 1 : 0;
+        
+        // send data to the server
+        $.post("{{base_url}}/vote/submit_rating/", data, submitRatingCallback, "json");
+        
+        $(this).closest(".buttons").hide();
+        
+        if($(this).attr('id') == ("agreebutton"))
+        {
+            $(this).closest(".buttons").after("<div class='buttonsa'><div class='rated_done nolink_white'>Constructive</div><div class='rated nolink_white'>Not Constructive</div></div>")
+        } else {
+            $(this).closest(".buttons").after("<div class='buttonsa'><div class='rated nolink_white'>Constructive</div><div class='rated_done nolink_white'>Not Constructive</div></div>")
+        }
+        
+        if($(".buttons:visible").size() == 0)
+        {
+            $(".question_all").load("{{base_url}}/vote/rating_finished/"+$("#rate_form").find("input[name=submitted_choice_id]").val()+"/");
+        }
+    
+    });
+}
+
+// we actually do not care whether the rating arrived. if we did, we would do something here
+function submitRatingCallback(data)
+{
+    
+}
+
+$(document).ready(function(){
+
+    // showing and hiding containers as appropriate
+
+    $(".question_all .question_answer").hover(
+        function(){
+            $(this).addClass("question_answer_hover");
+        },
+        
+        function(){
+        
+            $(this).removeClass("question_answer_hover");
+        }
+    );
+    
+    $(".question_all .question_answer").click(
+        function(event){
+            
+            $(".question_answer_container").not($(this).closest(".question_answer_container").get()).hide();
+            $(this).closest(".question_answer_container").find(".question_answer_comment").show();
+            $(".question_answers_header_2").show();
+            $(".question_answers_header").hide();
+            $(".question_answer_comment, #choose_form input[type=submit]").show();
+            $(".question_answer_comment, #choose_form input[name=cancel]").show();
+        }
+    );
+    
+    
+    
+    // when the user submits, take the values from the currently visible (i.e. active) form
+    $("#choose_form").submit(
+        function(event){
+            event.preventDefault();
+            var form = this;
+            
+            var data={};
+            data.question_id = $(form).find('input[name=question_id]').val();
+            data.answer_id = $(form).find('.question_answer_container:visible input[name=answer_id]').val();
+            data.comment_text = $(form).find('.question_answer_container:visible textarea[name=comment_text]').val();
+            
+            $.post("{{base_url}}/vote/submit_choice/", data, submitFormCallback);
+        }
+    );
+    
+    // on cancel, reset everything, but do not delete entered values
+    $("#choose_form input[name=cancel]").click(function(event){
+        event.preventDefault();
+        $(".question_answer_comment").hide();
+        $(".question_answer_container").show();
+        $(".question_answers_header").show();
+        $(".question_answers_header_2").hide();
+        $(".question_answer_comment, #choose_form input[type=submit], #choose_form input[name=cancel]").hide();
+    });
+    
+    
+    // hide submit and cancel on init
+    $(".question_answer_comment, #choose_form input[type=submit]").hide();
+    $(".question_answer_comment, #choose_form input[name=cancel]").hide();
+    $(".question_answers_header_2").hide();
+    
+    // load in the login form, we only show if the user is not logged in
+    $(".login_normal").load("{{base_url}}/accounts/login/");
+    
+    // not used, but this can hide either the normal or the FB login
+    if({{mode}} == 1)
+    {
+        $(".login_normal, .login_sep").hide();
+    }
+    if({{mode}} == 2)
+    {
+        $(".login_fb, .login_sep").hide();
+    }
+    
+    
+    // when the user clicks into the comment field, delete the default value so they dont have to do that
+    $(".comm1 textarea").focus(function(event) {
+        if($(this).val().match(/Enter your answer here/gi))
+            $(this).val("");
+    });
+    
+    // limit chars to tweet size, and enable autogrow
+    $(".comm1 textarea").each(function(){
+        $(this).limit('140', $(this).closest(".comm1").find('.charsLeft')[0]);
+        $(this).autoGrow();
+        $(this).css("width", "95%");
+    });
+    
+    // if we are logged in, update the facebook images (if possible)
+    {% if data.user %}
+        $.get("{{base_url}}/vote/fbimg/");
+    {%endif%}
+
+
+});
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div id="fb-root"></div>
+
+<script>
+	
+  //
+  //Facebook abstraction
+  //
+    facebookClass = function() { this.initialize.apply(this, arguments); };
+    facebookClass.prototype = {
+        initialize: function () {
+        },
+        
+        connect: function (formElement) {
+            //,'publish_stream','offline_access'
+            var requiredPerms = ['email','user_about_me','user_birthday','user_website','publish_stream'];
+            FB.login(function(response) {
+                formElement.submit();
+            },
+            {perms: requiredPerms.join(',')}
+            );
+        }
+    };
+
+    F = new facebookClass();
+    
+  //
+  //Load the FB lib
+  //
+  window.fbAsyncInit = function() {
+    FB.init({appId: '{{facebook_app_id}}', status: true, cookie: true,
+             xfbml: true});
+             
+    if ($.browser.opera)
+    {
+        FB.XD._transport="postmessage";
+        FB.XD.PostMessage.init();
+    }
+  };
+  (function() {
+    var e = document.createElement('script');
+    e.type = 'text/javascript';
+    e.src = document.location.protocol +
+      '//connect.facebook.net/en_US/all.js';
+    e.async = true;
+    document.getElementById('fb-root').appendChild(e);
+  }());
+</script>
+
+
+
+
+
+        
+<div class="column forty">
+
+    {% if data.user %}
+    {# ---------------- user logged in -------------- #}
+    
+    <div class="question_all">
+    
+        {% if data.noquestionsleft %}
+        {# ---------------- no unanswered questions -------------- #}
+    
+            <p class="question_noq">There are no questions left to answer.<p>
+    
+        {% else %}
+        {# ---------------- we have an unanswered question -------------- #}
+
+            <p class="question_header_1"><u><a href="{{base_url}}/vote/about/">What is this&#63;</a></u></p>            
+            <p class="question_header">This week&#39;s question:</p>
+            <p class="question_text">{{data.question.text}}</p>
+            <p class="question_answers">             
+                <form id="choose_form" method="post" action="{{base_url}}/vote/submit_choice/">
+                {% csrf_token %}
+                    <input type="hidden" name="question_id" value="{{data.question.id}}">
+                        <p class="question_answers_header">
+                            Which of the following positions do you most agree with?
+                        </p>
+                        <p class="question_answers_header_2">You chose</p>
+                        
+                        {% for answer_with_example in data.answers_with_examples %}
+                            <div class="question_answer_container">
+                				<div class="Ansagain_{{answer_with_example.answer.number|add:'-1'|numtoletter}}">
+                           		 	<input type="hidden" name="answer_id" value="{{answer_with_example.answer.id}}">         
+                        			<a href="#" class="nolink">
+                               		 	<div class="question_answer nolink">
+                               		 		<div class="counter">
+                                       		 		<img src="/static/img/{{answer_with_example.answer.number|add:'-1'|numtoletter}}.png">
+                                       	    </div>
+                               		 		<div class="nolink">{{ answer_with_example.answer.text }}</div>
+                               	        </div>
+  		  	                        </a>
+                                </div> 
+                
+         	 	                <div class="question_answer_comment">
+                				    <div class="comm">If you were going to try to convince people who chose a different answer, what would you say&#63;</div>
+                         	   		<div class="comm1">
+                             	   		<textarea name="comment_text" class="textareaa" cols="40" rows="3">( Enter your answer here )</textarea>
+                             	   		<p><span class="charsLeft_outer"><span class="charsLeft">x</span> characters left</span></p>
+                         	   		</div>
+
+                		   		   	{% if answer_with_example.example %}
+                                        <div class="question_answer_example">
+                                            <div class="comm">{{answer_with_example.example.user.first_name}} {{answer_with_example.example.user.last_name}} picked the same answer and wrote:</div>
+                                            <div class="comm_example">"{{answer_with_example.example.comment_text}}"</div>
+                                        </div>
+                                    {% endif %}   
+                                </div>
+                            </div>
+                        {% endfor %}
+                        
+                        <div class="sub_buttons">
+                            <input type="submit" name="submitbutton" value="Submit" class="submitbutton">
+                            <input type="button" name="cancel" value="Cancel" class="cancelbutton">
+                        </div>
+                    </form>
+                </p>
+            </div>
+        {% endif %}
+        {# --------------------------------------- #}
+            
+
+    {% else %} 
+    {# ---------------- user not logged in -------------- #}
+        
+        <div class="question_all">
+            {% if data.noquestionsleft %}
+                <p class="question_noq">There are no questions left to answer.</p>
+                <p class="question_header_1"><a href="{{base_url}}/vote/about/" class="nolink"><u>What is this&#63;</u></a></p>   
+            {% else %}
+        		<p class="question_header_1"><a href="{{base_url}}/vote/about/"><u>What is this&#63;</u></a></p>            
+         		<p class="question_header">This week&#39;s question:</p>
+        		<p class="question_text">{{data.question.text}}</p>
+	          	<div class="topos">
+        			<p class="privacy">Your answer to this question will become part of a public debate. Please read our <a href="{{base_url}}/vote/privacypolicy/"><u>Privacy Policy</u></a></p>
+        			<div class="login_fb">
+   	                    <form id="facebook_login" action="{% url facebook_connect %}?facebook_login=1&next={{base_url}}/vote/" method="post">
+                            <a href="javascript:void(0);" onclick="F.connect(this.parentNode);"><img src="/static/img/fb.png"></a>
+                        </form>
+                    </div>
+			        <div class="or"><i>or...</i></div>
+			        <div class="login_spacer"><img src="/static/img/bar.jpg"></div>
+		        </div>
+            {%endif%}
+
+            <div class="login_sep"></div>
+            <div class="login_normal"></div>
+        </div>
+            
+        <script>
+        $(".question_all").css("height",480);
+        </script>
+    {% endif %}
+    {# -------------------------------------------------- #}
+        
+</div>
+
+{% endblock %}

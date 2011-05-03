@@ -1,0 +1,76 @@
+{% load i18n %}
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xml:lang="en" lang="en">
+
+<head>
+    <link rel="stylesheet" href="{{base_url}}/media/css/greatdebate_base.css">
+    <script type="text/javascript" src="/static/js/jquery-1.5.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.limit-1.2.source.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.autogrowtextarea.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.enumerable.js"></script>
+    <script type="text/javascript" src="/static/js/raphael.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tufte-graph.js"></script>
+    
+    {%block js_external%}{%endblock%}
+    
+    <script type="text/javascript">
+    {% block javascript %}{% endblock %}
+    </script>
+    
+    
+    
+    
+    <title>{% block title %}The Great Civil Debate{% endblock %}</title>
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-22697662-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>    
+    
+</head>
+
+<body>
+<div id="outer">
+    <div id="header">
+        {% block header %}
+	<a href="{{base_url}}/vote/">
+	<img src="/static/img/header_new.jpg" border="1">
+	</a>
+        {% endblock %}
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <div id="footer">
+        {% block footer %}
+	<a href="{{base_url}}/vote/" class="nolink">{% trans "Home" %}</a> | 
+
+	{% if user.is_authenticated %}
+	{% trans "Logged in" %}: {{ user.first_name }} {{ user.last_name }} ({{user.username}})
+	(<a href="{% url auth_logout %}" class="nolink">{% trans "Log out" %}</a> | 
+	<a href="{% url auth_password_change %}" class="nolink">{% trans "Change password" %}</a>)
+	{% else %}
+	<a href="{{base_url}}/vote/" class="nolink">{% trans "Log in" %}</a>
+	{% endif %}
+	<p><a href="{{base_url}}/vote/about/" class="nolink">What is this?</a> | <a href="{{base_url}}/vote/privacypolicy/" class="nolink">Site Policies</a> | <a href="http://bit.ly/gD3Vm2" target="_blank" class="nolink">Feedback Form</a></p>
+	
+	{% endblock %}
+    </div>
+</div>
+</body>
+
+</html>

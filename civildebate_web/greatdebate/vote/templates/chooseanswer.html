@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="title">
+The Great Civil Debate
+</div>
+
+<div class="question_all">
+
+<p class="question_header">The question: {{ data.user.debatefacebookprofile.facebook_name }}:</p>
+
+<p class="question_text">{{data.question.text}}</p>
+<p class="question_answers">             
+    <form id="choose_submit" method="post" action="/vote/choose_answer/">
+    <input type="hidden" name="question_id" value="{{data.question.id}}">
+    
+    <p class="question_answers_header">
+    Which position do you most agree with? Click to make your choice.
+    </p>
+
+    <ol>
+        {% for answer in data.question.answer_set.all %}
+        
+        <input type="hidden" name="answer_id" value="{{answer.id}}">
+        <div class="question_answer">
+        <li></li>
+        <div>{{ answer.text }}</div>
+        </div>
+        {% endfor %}
+    </ol>
+    
+    </form>
+</p>
+
+</div>
+
+{% endblock %}
