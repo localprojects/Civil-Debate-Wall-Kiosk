@@ -1,0 +1,815 @@
+body {
+    color: #333333;    
+    background-position: center;
+	background-color: gray;	
+}
+div#outer {
+    width: 480px;
+    background-color:#FFFFFF;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;    
+    margin-top: -10px;
+    padding: 0px;
+    border-style: solid;
+    border-width: 1px;
+}
+div#header {
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+}
+div#footer {
+    font-family: "Verdana", sans-serif;
+    font-size: 11px;
+    line-height:1.5em;
+    padding-bottom: 10px;
+	padding-top: 20px;
+    text-align: left;
+    margin-left: 17px;
+    
+}
+h1 {
+    font-size: x-large;
+    font-weight: bold;
+    margin-top: 50px;
+}
+.question_everywhere {
+	color: #333333;
+    background-color: #FFE28A;
+	margin-left: 17px;
+	margin-right: 17px;
+}
+.privacy {
+    font-size: 14px;
+	font-family: "Verdana", serif;
+    color: #333333;
+    margin-left:17px;
+    margin-right:17px;
+}
+
+.login_type_form
+{
+    width: 200px;
+}
+
+.form_input_email {
+    border: 1px solid #333333;
+	color: #333333;
+	margin-left:17px;
+	margin-right: auto;
+	margin-top: -5px;
+	width: 200px;
+	height: 25px;
+	padding-left: 10px;
+	padding-top: 3px;
+}
+.form_input_password {
+    border: 1px solid #333333;
+	color: #333333;
+	margin-left:17px;
+	margin-right: auto;
+	margin-top: 0px;
+	width: 200px;
+	height: 25px;
+	padding-left: 10px;
+	padding-top: 3px;
+}
+.form_input_submit {
+	border: 0px;
+   	background-color: #333333;
+	font-family: "Verdana", serif;
+	color: #ffffff;
+	margin-left:17px;
+	margin-right: auto;
+	margin-top: 0px;
+	height: 25px;
+	padding-left: 10px;
+	padding-right: 10px;
+	cursor: hand;
+	cursor: pointer;
+}
+.form_input_register {
+	border: 0px;
+    font-size: 12px;
+	font-family: "Verdana", serif;
+   	background-color: #333333;
+	color: #ffffff;
+	margin-left:17px;
+	margin-right: 17px;
+	margin-top: -5px;	
+	width: 120px;
+	padding-left: 10px; 
+	padding-right: 10px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+.newreg {
+	margin-left:17px;
+    font-size: 14px;
+	font-family: "Verdana", serif;
+}
+.topos {
+	position:relative;
+}
+.or {
+	position: absolute;
+	top: 80px;
+	left: 290px;
+    font-size: 32px;
+	font-family: "Georgia", serif;
+	color: #333333;
+}
+.login_fb {
+	position: absolute;
+	top: 120px;
+	left: 290px;
+}
+.login_spacer {
+	position: absolute;
+	top: 50px;
+	left: 255px;
+}
+.forgot {
+	margin-left:17px;
+    font-size: 10px;
+	font-family: "Verdana", serif;
+	color: #333333;
+}
+.forgot:a {
+    text-decoration: none;
+    color:#333333;
+}
+.question_headera {
+	margin-left: -100px;
+}
+.text {
+    font-size: medium;
+}
+.question_all {
+    width: 480px;
+    padding: 0px;
+	margin-top: -10px;
+}
+.question_all .question_header {
+	font-family: "Verdana", sans-serif;
+    font-size: 19px;
+    margin-left:17px;
+	margin-top: -10px;
+}
+.question_all .question_header_new {
+	font-family: "Verdana", sans-serif;
+    font-size: 14px;
+    margin-left:17px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.question_all .question_noq {
+	font-family: "Verdana", sans-serif;
+    font-size: 19px;
+    margin-left:17px;
+	margin-right: 17px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	text-align:center;
+}
+
+.question_all .question_header_1 {
+    font-size: 13px;
+	font-family: "Verdana", sans-serif;
+	padding: 0px;
+    text-align:right;
+	margin-right:17px;
+}
+.question_all .question_header_1, a:link {
+    text-decoration: none;
+    color:#333333;	
+}
+.question_text {
+    font-size: 32px;
+	font-family: "Georgia", serif;
+    color: #333333;
+    background-color: #FFE28A;
+    margin-left:17px;
+    margin-right:17px;
+	margin-top: -10px;
+}
+.question_all .question_text {
+    font-size: x-large;
+    padding-left: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 15px;
+}
+.question_all .question_answers_header, .question_all .question_answers_header_2 {
+	font-family: "Verdana", sans-serif;
+	font-size: 14px;
+	margin-left:17px;
+	margin-right:17px;
+	margin-bottom:-10px;
+}
+.question_all .question_answer_container {
+    float: left;
+    width:  100%;
+}
+
+.question_all .question_answer {   
+    margin: 17px 17px 17px 17px;
+    padding: 10px 15px 10px 15px;
+    position: relative;
+}
+.question_all .question_answer .counter {
+    margin-left: -20px;
+    margin-top: 1px;
+    padding: 0px;
+    position: absolute;
+}
+.question_all .question_answer div {
+    font-size: 20px;
+    font-family: "Georgia", serif;
+    margin-left: 18px;
+}
+.Ans_A {
+	background-color: #ABC7FF;
+	margin: 17px 17px 17px 17px;
+}
+.Ans_B {
+	background-color: #ABFFAB;
+	margin: 17px 17px 17px 17px;
+}
+.Ans_C {
+	background-color: #FFB4AB;
+	margin: 17px 17px 17px 17px;
+}
+.Ans_A:hover {
+	background-color: #CCDDFF;
+}
+.Ans_B:hover {
+	background-color: #DDFFDD;
+}
+.Ans_C:hover {
+	background-color: #FFD9D5;
+}
+.Ansagain_A {
+	background-color: #ABC7FF;
+	margin: 17px 17px 17px 17px;
+}
+.Ansagain_B {
+	background-color: #ABFFAB;
+	margin: 17px 17px 17px 17px;
+}
+.Ansagain_C {
+	background-color: #FFB4AB;
+	margin: 17px 17px 17px 17px;
+}
+.Ansagain_padded {
+	padding-bottom: 10px;
+}
+
+.question_all .comm {
+	font-family: "Verdana", sans-serif;
+	font-size:14px;
+	margin-left: 17px;
+	margin-right: 17px;
+	margin-top: 20px;
+}
+.charsLeft_outer {
+	font-family: "Verdana", sans-serif;
+	font-size:12px;
+}
+.comm_example {
+    font-size: 20px;
+    font-family: "Georgia", serif;
+	font-style:italic;
+    margin-left: 50px;
+	margin-right: 50px;
+	margin-top: 5px;
+	margin-bottom: 15px;
+}
+.question_all .comm1 {
+	margin-left: 17px;
+	margin-rigth: 17px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.question_all .sub_buttons {
+	margin-left: 17px;
+	font-family: "Verdana", sans-serif;
+	font-size: 5px;
+}
+.question_all .question_answer_comment p {
+    font-size: medium;
+}
+.question_all .question_answer_container_A {
+    float: left;
+    margin-left:17px;
+	margin-right:17px;
+	margin-bottom:17px;
+	background-color: #ABC7FF;
+	padding: 5px;
+}
+.question_all .question_answer_container_B {
+    float: left;
+    margin-left:17px;
+	margin-right:17px;
+	margin-bottom:17px;
+	background-color: #ABFFAB;
+	padding: 5px;
+}
+.question_all .question_answer_container_C {
+    float: left;
+    margin-left:17px;
+	margin-right:17px;
+	margin-bottom:17px;
+	background-color: #FFB4AB;
+	padding: 5px;
+}
+.question_all .rate_choice_container {
+    
+    z-index: 0;
+    float: left;
+    position: static;
+	background-color: #ffffff;
+    margin-left:17px;
+	margin-right:17px;
+	margin-bottom:17px;
+}
+.question_answera {
+
+}
+.question_all .rate_choice_author {
+    position: absolute;
+    font-size: small;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 0;
+    margin-top: 12px;
+    padding: 5px;
+    width: 80px;
+}
+.question_all .rate_choice_comment {
+    float: right;
+    font-size: small;
+    font-style: italic;
+    margin-left: 10px;
+    right: 0;
+    width: 334px;
+}
+
+.imagec {
+	padding-left: 5px;
+	padding-top: 5px;
+
+}
+
+.imagetextc {
+    font-size: 20px;
+    font-family: "Georgia", serif;
+	color: #333333;
+	position: relative;
+    margin-left: 40px;
+    margin-right: 17px;
+    margin-top: -30px;
+	 margin-bottom: 15px;
+}
+
+.answer_selected {
+    font-size: 20px;
+    font-family: "Georgia", serif;
+	color: #333333;
+	position: relative;
+	padding: 1px 17px 1px 17px;
+}
+.inside {
+	background-color: #ffffff;
+	margin: 1px 10px 5px 10px;
+	padding-top:5px;
+	padding-bottom: 10px;
+	line-height: 1.5em;
+}
+.rate_c {
+	width: 200px:
+	margin-left: 20px;
+	margin-right: 5px;
+	position: relative;
+}
+.rate_img {
+	padding-left: 17px;
+	padding-top: 17px;
+}
+.rate_names {
+	position: relative;
+	font-size: 13px;
+	font-family: "Verdana", sans-serif;    
+    margin-right: 17px;    
+	top: 0px;
+	left: 20px;
+}
+
+.rate_comms {
+	position: relative;
+	margin-right: 75px;
+	margin-bottom: 10px;
+	margin-top: 7px;
+	font-size: 18px;
+    font-family: "Georgia", serif;
+	width: 100px:
+	top: 0px;
+	left: 40px;
+}
+.rate_names_1 {
+	position: relative;
+	font-size: 13px;
+	font-family: "Verdana", sans-serif;
+    margin-left: 80px;
+    margin-right: 17px;
+    margin-top: -53px;
+}
+
+.rate_comms_1 {
+	position: relative;
+	margin-right: 95px;
+	margin-bottom: 10px;
+	margin-top: 7px;
+	font-size: 18px;
+    font-family: "Georgia", serif;
+	width: 100px:
+	top: 0px;
+	left: 80px;
+}
+img {
+    border-style: none;
+}
+.fbdata {
+    float: left;
+    font-size: small;
+    margin: 20px;
+}
+.fbdata .fbname {
+    float: right;
+    line-height: 4em;
+    margin-left: 20px;
+}
+.finallyy {
+	margin-left: 17px;
+	margin-right: 17px;
+	font-family: "Verdana", sans-serif;
+	font-size:14px;
+}
+.submitbutton {
+    border: 0px;
+    background: #333333;
+    color: #FFFFFF;
+    padding: 5px 10px 5px 10px;
+    margin-right:10px;
+	cursor: hand;
+	cursor: pointer;
+}
+.cancelbutton {
+    border: 0px;
+    background: #333333;
+    color: #FFFFFF;
+    padding: 5px 10px 5px 10px;
+    margin-right:10px;
+	cursor: hand;
+	cursor: pointer;
+}
+.textareaa {
+    border: 1px solid #333333;
+    font-family: "Verdana", sans-serif;
+	font-size:14px;
+	width: 445px;
+}
+.buttons {
+    float:left;
+    width:380px;
+    margin-left:17px;
+}
+.buttonsa {
+    float:left;
+    width:380px;
+    margin-left:17px;
+}
+.button {
+	background-color: #333333;
+    border: 0px;
+    margin: 10px 10px 10px 0px;
+    padding: 5px 10px 5px 10px;
+    float: left;
+    text-align: center;
+    font-family: "Verdana", sans-serif;
+	font-size:12px;
+}
+.rated {
+	background-color: #333333;
+    border: 0px;
+    margin: 10px 10px 10px 0px;
+    padding: 5px 10px 5px 10px;
+    float: left;
+    text-align: center;
+    font-family: "Verdana", sans-serif;
+	font-size:12px;
+}
+.rated_done {
+	background-color: #cccccc;
+    border: 0px;
+    margin: 10px 10px 10px 0px;
+    padding: 5px 10px 5px 10px;
+    float: left;
+    text-align: center;
+    font-family: "Verdana", sans-serif;
+	font-size:12px;
+}
+.b_spacer {
+	margin-right:380px;
+}
+.b_spacer_before {
+	margin-right:17px;
+}
+.nolink_white, a:link {
+    text-decoration: none;
+    color:#FFFFFF;
+}
+.nolink_white:hover{
+    text-decoration: none;
+    color:#FFFFFF;
+}
+.nolink, a:link {
+    text-decoration: none;
+    color:#333333;
+}
+.nolink:hover {
+    text-decoration: none;
+    color:#333333;
+}
+.p_header {
+    font-family: "Verdana", sans-serif;
+	font-size:22px;
+	color: #333333;
+	margin-left:17px;
+	margin-right:17px;
+}
+.p_content {
+    font-family: "Verdana", sans-serif;
+	font-size:12px;
+	color: #333333;
+	margin-left:17px;
+	margin-right:17px;
+	line-height: 1.5em;
+}
+.r_header {
+    font-family: "Verdana", sans-serif;
+	font-size:22px;
+	color: #333333;
+	margin-left:17px;
+	margin-right:17px;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+.post_to_wall {
+	margin-top:10px;
+	margin-bottom:0px;
+	position: relative;
+    font-family: "Verdana", sans-serif;
+	font-size:14px;
+}
+.post_to_wall_container {
+	
+	width: 446px;
+	padding-bottom: 10px;
+	
+}
+.post_to_wall_container_sub {
+	margin-right: 10px;
+	margin-bottom: 10px;
+	width: 406px;
+	background-color: #ffffff;		
+	padding: 10px;
+	top: 10px;
+	left: 10px;
+	position: relative;
+}
+.post_button {
+	background-color: #333333;
+    border: 0px;
+	margin-top: 10px;    
+    padding: 5px 10px 5px 10px;
+    width: 240px;
+    text-align: center;
+    font-family: "Verdana", sans-serif;
+	font-size:12px;
+}
+.post_content {
+	font-size: 20px;
+    font-family: "Georgia", serif;
+	font-style:italic;
+}
+
+#p_content input[type="text"], #p_content input[type="password"] {
+    border: 1px solid #333333;
+	color: #333333;
+	width: 200px;
+	height: 25px;
+	padding-left: 10px;
+}
+.login_error {
+	margin-left:17px;
+    font-family: "Verdana", sans-serif;
+	font-size:12px;
+
+}
+
+#tuftevis {
+    margin-left:17px;
+    width:50px;
+    height:320px;
+    float:left;
+	
+}
+#w_img {
+   
+	margin-left: 5px;
+}
+.leg_h {
+
+    font-family: "Verdana", sans-serif;
+	font-size:18px;
+	margin-left: 0px;
+	margin-right: 20px;
+	margin-top:0px;
+}
+.group {
+position:relative;
+left: 37px;
+top:-30px
+
+
+
+}
+
+.leg_c {
+	
+    font-family: "Georgia", serif;
+	font-size:14px;	
+	line-height: 1.5em;
+	margin: -20px 60px -15px 0px;
+}
+
+#bar_graph {
+
+
+}
+
+
+dl#csschart dd{
+	
+	position:relative;
+	left:-20px;
+	display:inline;
+	float:left;	
+	width:50px;
+	height:300px;		
+	} 
+dl#csschart span{
+	position:absolute;
+	display:block;
+	width:50px;	
+	left:0px
+	top:0px;
+	z-index:1;
+	color:#555;
+	text-decoration:none;
+	} 		
+dl#csschart span b{
+
+	} 		
+
+/* default column styling */		
+
+	dl#csschart span{
+		height:50%;
+		background:url(/static/img/red.png) repeat-y;
+		} 
+
+
+dl#csschart .sub{
+	margin-left:-50px;
+	
+}
+dl#csschart .subsub{
+	margin-left:-50px;
+	
+}
+dl#csschart .sub span{
+	background:url(/static/img/green.png) repeat-y;
+}
+dl#csschart .subsub span{
+	background:url(/static/img/blue.png) repeat-y;
+}
+
+    dl#csschart .p0 span{height:0%}
+	dl#csschart .p1 span{height:1%}
+	dl#csschart .p2 span{height:2%}
+	dl#csschart .p3 span{height:3%}
+	dl#csschart .p4 span{height:4%}
+	dl#csschart .p5 span{height:5%}
+	dl#csschart .p6 span{height:6%}
+	dl#csschart .p7 span{height:7%}
+	dl#csschart .p8 span{height:8%}
+	dl#csschart .p9 span{height:9%}
+	dl#csschart .p10 span{height:10%}
+	dl#csschart .p11 span{height:11%}
+	dl#csschart .p12 span{height:12%}
+	dl#csschart .p13 span{height:13%}
+	dl#csschart .p14 span{height:14%}
+	dl#csschart .p15 span{height:15%}
+	dl#csschart .p16 span{height:16%}
+	dl#csschart .p17 span{height:17%}
+	dl#csschart .p18 span{height:18%}
+	dl#csschart .p19 span{height:19%}
+	dl#csschart .p20 span{height:20%}
+	dl#csschart .p21 span{height:21%}
+	dl#csschart .p22 span{height:22%}
+	dl#csschart .p23 span{height:23%}
+	dl#csschart .p24 span{height:24%}
+	dl#csschart .p25 span{height:25%}
+	dl#csschart .p26 span{height:26%}
+	dl#csschart .p27 span{height:27%}
+	dl#csschart .p28 span{height:28%}
+	dl#csschart .p29 span{height:29%}
+	dl#csschart .p30 span{height:30%}
+	dl#csschart .p31 span{height:31%}
+	dl#csschart .p32 span{height:32%}
+	dl#csschart .p33 span{height:33%}
+	dl#csschart .p34 span{height:34%}
+	dl#csschart .p35 span{height:35%}
+	dl#csschart .p36 span{height:36%}
+	dl#csschart .p37 span{height:37%}
+	dl#csschart .p38 span{height:38%}
+	dl#csschart .p39 span{height:39%}
+	dl#csschart .p40 span{height:40%}
+	dl#csschart .p41 span{height:41%}
+	dl#csschart .p42 span{height:42%}
+	dl#csschart .p43 span{height:43%}
+	dl#csschart .p44 span{height:44%}
+	dl#csschart .p45 span{height:45%}
+	dl#csschart .p46 span{height:46%}
+	dl#csschart .p47 span{height:47%}
+	dl#csschart .p48 span{height:48%}
+	dl#csschart .p49 span{height:49%}
+	dl#csschart .p50 span{height:50%}
+	dl#csschart .p51 span{height:51%}
+	dl#csschart .p52 span{height:52%}
+	dl#csschart .p53 span{height:53%}
+	dl#csschart .p54 span{height:54%}
+	dl#csschart .p55 span{height:55%}
+	dl#csschart .p56 span{height:56%}
+	dl#csschart .p57 span{height:57%}
+	dl#csschart .p58 span{height:58%}
+	dl#csschart .p59 span{height:59%}
+	dl#csschart .p60 span{height:60%}
+	dl#csschart .p61 span{height:61%}
+	dl#csschart .p62 span{height:62%}
+	dl#csschart .p63 span{height:63%}
+	dl#csschart .p64 span{height:64%}
+	dl#csschart .p65 span{height:65%}
+	dl#csschart .p66 span{height:66%}
+	dl#csschart .p67 span{height:67%}
+	dl#csschart .p68 span{height:68%}
+	dl#csschart .p69 span{height:69%}
+	dl#csschart .p70 span{height:70%}
+	dl#csschart .p71 span{height:71%}
+	dl#csschart .p72 span{height:72%}
+	dl#csschart .p73 span{height:73%}
+	dl#csschart .p74 span{height:74%}
+	dl#csschart .p75 span{height:75%}
+	dl#csschart .p76 span{height:76%}
+	dl#csschart .p77 span{height:77%}
+	dl#csschart .p78 span{height:78%}
+	dl#csschart .p79 span{height:79%}
+	dl#csschart .p80 span{height:80%}
+	dl#csschart .p81 span{height:81%}
+	dl#csschart .p82 span{height:82%}
+	dl#csschart .p83 span{height:83%}
+	dl#csschart .p84 span{height:84%}
+	dl#csschart .p85 span{height:85%}
+	dl#csschart .p86 span{height:86%}
+	dl#csschart .p87 span{height:87%}
+	dl#csschart .p88 span{height:88%}
+	dl#csschart .p89 span{height:89%}
+	dl#csschart .p90 span{height:90%}
+	dl#csschart .p91 span{height:91%}
+	dl#csschart .p92 span{height:92%}
+	dl#csschart .p93 span{height:93%}
+	dl#csschart .p94 span{height:94%}
+	dl#csschart .p95 span{height:95%}
+	dl#csschart .p96 span{height:96%}
+	dl#csschart .p97 span{height:97%}
+	dl#csschart .p98 span{height:98%}
+	dl#csschart .p99 span{height:99%}
+	dl#csschart .p100 span{height:100%}
+
+
+
+
+* { outline:none; }

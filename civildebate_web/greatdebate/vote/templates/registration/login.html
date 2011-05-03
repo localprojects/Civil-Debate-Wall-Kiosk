@@ -1,0 +1,59 @@
+
+{% load i18n %}
+
+
+<form id="login_form" method="post" action="{{base_url}}/accounts/login/">
+ {% csrf_token %}
+  
+
+<p class="p_content"><b>Returning users, Sign in</b></p>
+     {%if error%}<p class="login_error">{{error}}</p>{%endif%}
+	<p><input type="text" name="email" value="email" class="form_input_email"></p>
+    <p><input type="password" name="password" value="password" class="form_input_password"></p>
+
+
+  <p><input type="submit" value="{% trans 'Sign in' %}" class="form_input_submit" /></p>
+  <input type="hidden" name="next" value="{{base_url}}/vote/" />
+</form>
+
+<script>
+
+$("#login_form").submit(
+    function(event){
+        event.preventDefault();
+        
+        var form = this;
+            
+        var data={};
+        data.email = $(form).find('input[name=email]').val();
+        data.password = $(form).find('input[name=password]').val();
+        data.next = $(form).find('input[name=next]').val();
+        
+        $.post("{{base_url}}/accounts/login/", data, function(content){ 
+        
+            if ( $(content).find(".question_all").size() > 0)
+            {
+                window.location.href = "{{base_url}}/vote/";
+            }
+            else
+            {
+                $(".login_normal").html(content); 
+            }
+        });
+    }
+);
+
+    $(".form_input_email").focus(function(event) {
+        if($(this).val().match(/^email$/gi))
+            $(this).val("");
+    });
+
+
+</script>
+
+<p class="forgot">{% trans "Forgot password" %}? <a href="{% url auth_password_reset %}"><u>{% trans "Reset it" %}</u></a>!</p>
+<p class="newreg">{% trans "Dont have an account yet" %}?</p> <a href="{% url registration_register %}"><div class="form_input_register">Create an account</div></a>
+
+
+
+

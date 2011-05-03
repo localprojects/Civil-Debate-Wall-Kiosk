@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block javascript %}
+
+
+{% endblock %}
+
+{% block content %}
+
+<div id="fb-root"></div>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script>
+  FB.init({
+    appId  : '{{facebook_app_id}}',
+    status : true, // check login status
+    cookie : true, // enable cookies to allow the server to access the session
+    xfbml  : true  // parse XFBML
+  });
+  
+  FB.getLoginStatus(function(response) {
+    if (response.session) {
+        FB.logout(function(response){
+            window.location.href="{{base_url}}/vote/";
+        });
+    } else {
+        window.location.href="{{base_url}}/vote/";
+    }
+  });
+  
+  
+</script>
+
+<center><p class="p_content">{% trans "Logging out... Please wait." %}</p></center>
+{% endblock %}

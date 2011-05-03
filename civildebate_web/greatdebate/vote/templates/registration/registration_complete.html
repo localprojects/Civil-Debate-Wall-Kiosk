@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{%block javascript%}
+
+$(document).ready(function(){
+    window.location.href="{{base_url}}/vote/";
+});
+
+{%endblock%}
+
+{% block content %}
+<p class="p_header">Registeration Successful.</p>
+<p class="p_content">You are now registered.</p> 
+<!--
+<br/>An activation email has been sent to your e-mail address. 
+<br/>Please follow the instructions in the e-mail to confirm your registration.
+<br/>Once confirmed, you can login with your username and password.
+-->
+<p class="p_content">
+<br/>You are now logged in. You are being redirected to the main page.
+</p>
+<p class="p_content">
+<a href="{{base_url}}/vote/">Back to main page</a>.
+</p>
+{% endblock %}

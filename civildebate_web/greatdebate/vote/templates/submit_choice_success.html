@@ -1,0 +1,65 @@
+{% load vote_extras %}
+
+
+{% if response.choices_to_rate %}
+<p class="question_header_1"><a href="{{base_url}}/vote/about/" class="nolink"><u>What is this&#63;</u></a></p> 
+<p class="question_header">This week&#39;s question:</p>
+<p class="question_text">{{response.choice.question.text}}</p>
+<div class="finallyy">Finally, here are a few things others said to try to convince you of their view. Take a moment and rate whether you think these arguments are constructive or not:</div>
+
+<p class="question_answers">             
+    <form id="rate_form" method="post" action="{{base_url}}/vote/submit_rating/">
+    <input type="hidden" name="submitted_choice_id" value="{{response.choice.id}}">
+    {% csrf_token %}
+    {% regroup response.choices_to_rate by answer as answers %}
+    
+
+
+        {% for answer in answers %}
+        <div class="question_answer_container_{{answer.grouper.number|add:'-1'|numtoletter}}">
+        	<input type="hidden" name="answer_id" value="{{answer.grouper.id}}">
+      
+        		<div class="question_answera">
+            		<div class="imagec"><img src="/static/img/{{answer.grouper.number|add:'-1'|numtoletter}}.png"></div>
+            		<div class="imagetextc">{{ answer.grouper.text }}</div>
+        		</div>
+         
+            {% for item in answer.list%}
+            
+            <div class="rate_choice_container">
+            
+                <input type="hidden" name="choice_id" value="{{item.id}}">
+                
+
+                <div class="rate_c">
+                    <div class="rate_img">
+                    {%if item.user.debatefacebookprofile.image %}
+                        <img src="{{item.user.debatefacebookprofile.image.url}}">
+                    {%else%}
+                        <img src="http://ec2-75-101-223-231.compute-1.amazonaws.com/main/media/profile_images/avatar.gif">
+                    {%endif%}
+                    </div>
+					<div class="rate_names_1">{{item.user.first_name}} {{item.user.last_name}} wrote:</div>
+					<div class="rate_comms_1"><i>"{{item.comment_text|nobadwords|max32}}"</i></div>
+				</div>
+                
+                <div class="buttons">
+                    <a href="#"><div class="agreebutton button nolink_white" id="agreebutton">Constructive</div></a>
+                    <a href="#"><div class="disagreebutton button nolink_white" id="disagreebutton">Not Constructive</div></a>
+                </div>
+            </div>
+            {%endfor%}
+
+      </div>
+      {% endfor %}
+
+
+
+    </form>
+</p>
+
+{% else %}
+
+<p class"p_content">Thank you for your opinion.</p>
+
+{% endif %}
