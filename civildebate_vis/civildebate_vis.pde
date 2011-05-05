@@ -111,10 +111,11 @@ void setup() {
   
   newChoice(jsondata, loadStrings(requestChoice + dbData.question_id));   
  // World.draw(this, dbData, coordinates);
+  graph.ani(this);
   ui.display(this, dbData);
   comment.wrap_text(this);
   comment.ani_1(this);
-  graph.ani(this);
+  
 } 
  
 void draw() { 
