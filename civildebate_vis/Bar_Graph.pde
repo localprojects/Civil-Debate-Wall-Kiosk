@@ -15,7 +15,7 @@ public class Bar_Graph {
     int bar_x = 12;
     int bar_y = 239;
     
-    
+    println(dbData.numPositiveRatingsPerAnswer[0]+" "+dbData.numPositiveRatingsPerAnswer[1]+" "+dbData.numPositiveRatingsPerAnswer[2]);
     
     
     p_a = (dbData.numTotalChoicesPerAnswer[0] * 880)/ total;
@@ -38,7 +38,7 @@ public class Bar_Graph {
     rect(x_c, bar_y, p_c, 19);
     
     //println(dbData.numPositiveRatingsPerAnswer[0]+" "+dbData.numPositiveRatingsPerAnswer[1]+" "+dbData.numPositiveRatingsPerAnswer[2]);  
-    if(dbData.choice_answer_number != 1 && one_a > 1) { 
+    if(dbData.choice_answer_number != 1 && one_a > 1) { //  
         fill (139, 173, 240); //BLUE     
         rect(bar_x, 244, one_a, 14);
         fill (139, 173, 240, f_in_1); //BLUE fade in
@@ -50,7 +50,7 @@ public class Bar_Graph {
         canvas.text("idea constructive", (bar_x+(i_a/2))-15, bar_y + 80);
     }  
     
-    if(dbData.choice_answer_number != 2 && one_b > 1) {
+    if(dbData.choice_answer_number != 2 && one_b > 1) { // && one_b > 1
         fill (116, 217, 116);//GREEN
         rect(x_b, 244, one_b, 14);
         fill (116, 217, 116, f_in_1);//GREEN fade in
@@ -62,7 +62,7 @@ public class Bar_Graph {
         canvas.text("idea constructive", (x_b+(i_b/2))-15, bar_y + 80);
     }
     
-    if(dbData.choice_answer_number != 3 && one_c > 1) {
+    if(dbData.choice_answer_number != 3 && one_c > 1) { // && one_c > 1
         fill (252, 139, 124);//RED
         rect(x_c, 244, one_c, 14);
         fill (252, 139, 124, f_in_1);//RED fade in
@@ -107,9 +107,11 @@ public class Bar_Graph {
        one_c = 0;
        f_in_1 = 0;
      
-       i_a = (dbData.numPositiveRatingsPerAnswer[0] * p_a) / dbData.numTotalChoices - dbData.numTotalChoicesPerAnswer[0];
-       i_b = (dbData.numPositiveRatingsPerAnswer[1] * p_b) / dbData.numTotalChoices - dbData.numTotalChoicesPerAnswer[1];
-       i_c = (dbData.numPositiveRatingsPerAnswer[2] * p_c) / dbData.numTotalChoices - dbData.numTotalChoicesPerAnswer[2]; //dbData.numTotalChoicesPerAnswer[2];
+       i_a = (dbData.numPositiveRatingsPerAnswer[0] * p_a) / dbData.numTotalChoices; // - dbData.numTotalChoicesPerAnswer[0]);
+       i_b = (dbData.numPositiveRatingsPerAnswer[1] * p_b) / dbData.numTotalChoices; // - dbData.numTotalChoicesPerAnswer[1]);
+       i_c = (dbData.numPositiveRatingsPerAnswer[2] * p_c) / dbData.numTotalChoices; // - dbData.numTotalChoicesPerAnswer[2]); //dbData.numTotalChoicesPerAnswer[2];
+      
+       println("i = "+i_a+" "+i_b+" "+i_c); 
       
        if(i_a > 0 && i_a < 15) i_a = 16;
        if(i_b > 0 && i_b < 15) i_b = 16;
