@@ -1,4 +1,5 @@
 import TUIO.*;
+import java.util.*;
 TuioProcessing tuioClient;
 
  int ht = 1350
@@ -18,7 +19,7 @@ DbQueries dbQueries;
 
 String request = "http://ec2-75-101-223-231.compute-1.amazonaws.com/main/twilio/allChoices/";
 String request_latest = "http://ec2-75-101-223-231.compute-1.amazonaws.com/main/twilio/latestChoice/";
-String image_path = "C:/Users/QA/Desktop/New folder/gdw_005/gdw_005/data/";
+String image_path = "data/";
 
 PFont fontSlide;
 
@@ -34,9 +35,7 @@ float table_size = 760;
 float scale_factor = 1;
 PFont font;
 // -----
-PImage slide1;
-PImage slide2;
-PImage slide3;
+PImage slide[];
 PImage sil;
 PImage just_captured;
 
@@ -44,6 +43,9 @@ float touchX = 0.0;
 float touchMiniX = 0.0;
 int selectedSlide = 0;
 int touchPrev = 0;
+
+PVector lastPos;
+int dragging = -1;
 
 // global for big slide
 boolean turnRight = false;
@@ -67,9 +69,14 @@ Ani aniX;
 PImage vote_1, vote_2, vote_3, vote_4, vote_5;
 PImage vote_1_small, vote_2_small, vote_3_small, vote_4_small, vote_5_small;
 PImage sticker, scoreboard_circle, base;
+
+HashMap<String, PImage> images;
      
 PFont font_25;
 PFont font_12, font_18, font_15;
+
+PVector iconCoords[] = new PVector[5];
+PVector draggedIconPos[] = new PVector[5];
 
 void setup()
 {
@@ -79,6 +86,18 @@ void setup()
   loop();
   frameRate(30);
   
+  slide = new PImage[3];
+  lastPos = new PVector(0,0);
+  images = new HashMap<String, PImage>();
+  
+  iconCoords[0] = new PVector(130, 1215);
+  iconCoords[1] = new PVector(250, 1215);
+  iconCoords[2] = new PVector(390, 1215);
+  iconCoords[3] = new PVector(510, 1215);
+  iconCoords[4] = new PVector(630, 1215);
+  
+  for(int i =0; i < 5; i++)
+    draggedIconPos[i] = new PVector(0,0);
  
       vote_1 = loadImage("vote_1.png");
      
@@ -127,7 +146,7 @@ void setup()
   hint(ENABLE_NATIVE_FONTS);
   font = createFont("Arial", 18);
   scale_factor = height/table_size;
-  tuioClient  = new TuioProcessing(this);
+  tuioClient  = new TuioProcessing(this, 3334);
 
   prevPic = dbData.id[picIncrement-1];
   nextPic = dbData.id[picIncrement+1];
@@ -143,14 +162,14 @@ void setup()
   File image3 = new File(image_path + nextPic+".png");
   image3_exists = image3.exists();  
 
-  if(image1_exists == true) slide1 = loadImage(prevPic+".png");
-  else slide1 = loadImage("avatar.png");
+  if(image1_exists == true) slide[0] = loadImage(prevPic+".png");
+  else slide[0] = loadImage("avatar.png");
 
-  if(image2_exists == true) slide2 = loadImage(currentPic+".png");
-  else slide2 = loadImage("avatar.png");
+  if(image2_exists == true) slide[1] = loadImage(currentPic+".png");
+  else slide[1] = loadImage("avatar.png");
 
-  if(image3_exists == true) slide3 = loadImage(nextPic+".png");
-  else slide3 = loadImage("avatar.png");
+  if(image3_exists == true) slide[2] = loadImage(nextPic+".png");
+  else slide[2] = loadImage("avatar.png");
   
 
   fontSlide = loadFont("Serif-28.vlw");
@@ -169,20 +188,20 @@ void load_image() {
     File image1a = new File(image_path + prevPic+".png");
     image1_exists = image1a.exists();
     if(currentPic != picLowerLimit) {
-      if(image1_exists == true) slide1 = loadImage(prevPic+".png");
-      else slide1 = loadImage("avatar.png");
+      if(image1_exists == true) slide[0] = loadImage(prevPic+".png");
+      else slide[0] = loadImage("avatar.png");
     }
 
     File image2a = new File(image_path + currentPic+".png");
     image2_exists = image2a.exists();
-    if(image2_exists == true) slide2 = loadImage(currentPic+".png");
-    else slide2 = loadImage("avatar.png");
+    if(image2_exists == true) slide[1] = loadImage(currentPic+".png");
+    else slide[1] = loadImage("avatar.png");
 
     File image3a = new File(image_path + nextPic+".png");
     image3_exists = image3a.exists();  
     if(currentPic != picUpperLimit) {
-      if(image3_exists == true) slide3 = loadImage(nextPic+".png");
-      else slide3 = loadImage("avatar.png");
+      if(image3_exists == true) slide[2] = loadImage(nextPic+".png");
+      else slide[2] = loadImage("avatar.png");
     }
   
 }  
@@ -270,59 +289,60 @@ void draw()
     turnLeft = false;
     picIncrement += 1;
     currentPic = dbData.id[picIncrement];
-    prevPic = dbData.id[picIncrement-1];
-    nextPic = dbData.id[picIncrement+1];
+    
+    for(int i = -1; i < 2; i++)
+    { 
 
-    File image1 = new File(image_path + prevPic+".png");
-    image1_exists = image1.exists();
-    if(currentPic != picLowerLimit) {
-      if(image1_exists == true) slide1 = loadImage(prevPic+".png");
-      else slide1 = loadImage("avatar.png");
+      int num = picIncrement+i;
+      
+      if(images.containsKey(dbData.id[num]))
+        slide[i] = images.get(dbData.id[num]);
+      else
+      {
+        File image1 = new File(image_path + dbData.id[num]+".png");
+        boolean exists = image1.exists();
+        if( (i == -1 && currentPic != picLowerLimit) || (i == 1 && currentPic != picUpperLimit) || i ==0) 
+        {
+          if(exists == true) slide[i+1] = loadImage(dbData.id[num]+".png");
+          else slide[i+1] = loadImage("avatar.png");
+          images.put(""+prevPic, slide[i+1]);
+        }
+      }
+      
     }
-
-    File image2 = new File(image_path + currentPic+".png");
-    image2_exists = image2.exists();
-    if(image2_exists == true) slide2 = loadImage(currentPic+".png");
-    else slide2 = loadImage("avatar.png");
-
-    File image3 = new File(image_path + nextPic+".png");
-    image3_exists = image3.exists();  
-    if(currentPic != picUpperLimit) {
-      if(image3_exists == true) slide3 = loadImage(nextPic+".png");
-      else slide3 = loadImage("avatar.png");
-    }
+    
     touchX = 0;
+    
   }  
 
   else if(turnRight == true && picIncrement > 0) {
 
     turnRight = false;
     picIncrement -= 1;
-
     currentPic = dbData.id[picIncrement];
+    
+    for(int i = -1; i < 2; i++)
+    { 
 
-    if(picIncrement > 0) prevPic = dbData.id[picIncrement-1];
-    else prevPic = 0;
-    nextPic = dbData.id[picIncrement+1];
-
-    File image1 = new File(image_path + prevPic+".png");
-    image1_exists = image1.exists();
-    if(currentPic != picLowerLimit) {
-      if(image1_exists == true) slide1 = loadImage(prevPic+".png");
-      else slide1 = loadImage("avatar.png");
+      int num = picIncrement+i;
+      if(num < 0) num = 0;
+      
+      if(images.containsKey(dbData.id[num]))
+        slide[i] = images.get(dbData.id[num]);
+      else
+      {
+        File image1 = new File(image_path + dbData.id[num]+".png");
+        boolean exists = image1.exists();
+        if( (i == -1 && currentPic != picLowerLimit) || (i == 1 && currentPic != picUpperLimit) || i ==0) 
+        {
+          if(exists == true) slide[i+1] = loadImage(dbData.id[num]+".png");
+          else slide[i+1] = loadImage("avatar.png");
+          images.put(""+prevPic, slide[i+1]);
+        }
+      }
+      
     }
 
-    File image2 = new File(image_path + currentPic+".png");
-    image2_exists = image2.exists();
-    if(image2_exists == true) slide2 = loadImage(currentPic+".png");
-    else slide2 = loadImage("avatar.png");
-
-    File image3 = new File(image_path + nextPic+".png");
-    image3_exists = image3.exists();  
-    if(currentPic != picUpperLimit) {
-      if(image3_exists == true) slide3 = loadImage(nextPic+".png");
-      else slide3 = loadImage("avatar.png");
-    }
     touchX = 0;
   }     
 
@@ -345,21 +365,21 @@ void draw()
   
   if(currentPic != picLowerLimit) {
     //tint(205,112,84,185);
-    image(slide1,touchX-768,200,768,1166);
-    filter(GRAY);
+    image(slide[0],touchX-768,200,768,1166);
+   // filter(GRAY);
     noTint();
     text("\""+txt_display[0]+"\"",touchX-768+50,40, 650, 170);
   }
   //tint(205,112,84,185);
-  image(slide2,touchX,200,768,1166);
-  filter(GRAY);
+  image(slide[1],touchX,200,768,1166);
+ // filter(GRAY);
   noTint();
   text("\""+txt_display[1]+"\"",touchX+50,40, 650, 170);
   //text("The question concerns a 'thorough education', yet both the 'yes' and the 'no' answers concern preparation for jobs. Not the same thing!",touchX+50,40, 650, 170);
 
   if(currentPic != picUpperLimit) {
     tint(205,112,84,185);
-    image(slide3,touchX+768,200,768,1166);
+    image(slide[2],touchX+768,200,768,1166);
     noTint();
     text("\""+txt_display[2]+"\"",touchX+768+50,40, 650, 170);
   }
@@ -372,16 +392,30 @@ void draw()
       fill(25);
       rect(0, (ht -135), 768, 150);
 
-//vote_1 = loadImage("vote_1.png");
-      image(vote_1, 160, (ht -125));
-      //vote_2 = loadImage("vote_2.png");
-      image(vote_2, 274, (ht -110));
-     // vote_3 = loadImage("vote_3.png");
-      image(vote_3, 408, (ht -116));
-    //  vote_4 = loadImage("vote_4.png");
-      image(vote_4,  535, (ht -102));
-     // vote_5 = loadImage("vote_5.png");
-      image(vote_5, 637, (ht -114));
+      if(dragging == 0)
+        image(vote_1, draggedIconPos[0].x, draggedIconPos[0].y);
+      else
+        image(vote_1, 160, (ht -125));
+
+      if(dragging == 1)
+        image(vote_2, draggedIconPos[1].x, draggedIconPos[1].y);
+      else
+        image(vote_2, 274, (ht -110));
+
+      if(dragging == 2)
+        image(vote_3, draggedIconPos[2].x, draggedIconPos[2].y);
+      else
+        image(vote_3, 408, (ht -116));
+
+      if(dragging == 3)
+        image(vote_4, draggedIconPos[3].x, draggedIconPos[3].y);
+      else
+        image(vote_4,  535, (ht -102));
+
+      if(dragging == 4)
+        image(vote_5, draggedIconPos[4].x, draggedIconPos[4].y);
+      else
+        image(vote_5, 637, (ht -114));
 
       textFont(font_25); 
       String s = "Drag a sticker to vote";
@@ -472,6 +506,13 @@ void draw()
     }
 
   }
+  
+  
+  // draw debug info
+  color(255, 0, 0);
+  ellipseMode(CENTER);
+  ellipse(lastPos.x, lastPos.y, 20, 20);
+  
 }
 
 
@@ -502,6 +543,16 @@ void addTuioCursor(TuioCursor tcur) {
   
   if(show_video == false) {
     touchPrev = tcur.getScreenX(width);
+    
+    lastPos.x = tcur.getScreenX(width);
+    lastPos.y = tcur.getScreenY(height);
+    
+    int icon = insideIcon(lastPos);
+    
+    if(icon != -1)
+    {
+       startDrag(icon); 
+    }
   }
   else {
     
@@ -536,11 +587,21 @@ void addTuioCursor(TuioCursor tcur) {
 }
 
 void updateTuioCursor (TuioCursor tcur) {
-  if(show_video == false) {
+  if(show_video == false && dragging == -1) {
     int diff;   
     diff = tcur.getScreenX(width) - touchPrev;
     touchX = diff;   
   }
+  
+  lastPos.x = tcur.getScreenX(width);
+  lastPos.y = tcur.getScreenY(height);
+  
+  if(dragging != -1)
+  {
+     draggedIconPos[dragging] = lastPos; 
+  }
+  
+ // println(lastPos.x + " / " + lastPos.y);
 }
 
 void removeTuioCursor(TuioCursor tcur) {
@@ -559,9 +620,42 @@ void removeTuioCursor(TuioCursor tcur) {
     }
   }
   
+  if(dragging != -1)
+    stopDrag(dragging);
+  
+  lastPos.x = 0;
+  lastPos.y = 0;
+  
 }
 
 void refresh(TuioTime bundleTime) { 
   redraw();
+}
+
+int insideIcon(PVector pos)
+{
+  
+   for(int i = 0; i < 5; i++)
+  {
+     PVector c1 = iconCoords[i];
+     PVector c2 = ( i < 4 ? iconCoords[i+1] : new PVector(width, 1215) );
+     
+     if(pos.x > c1.x && pos.x < c2.x && pos.y > c1.y && pos.y < height)
+     {
+        return i; 
+     }
+  } 
+  
+  return -1;
+}
+
+void startDrag(int icon)
+{
+   dragging = icon; 
+}
+
+void stopDrag(int icon)
+{
+   dragging = -1; 
 }
 
