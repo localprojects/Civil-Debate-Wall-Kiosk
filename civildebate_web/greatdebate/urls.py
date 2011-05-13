@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     
     # vote is the main app
     url(r'^vote/', include('greatdebate.vote.urls')),
+    url(r'^twilio/', include('greatdebate.twilio.urls')),
     url(r'^$', include('greatdebate.vote.urls')),
     
     # forwarding to custom login functions
