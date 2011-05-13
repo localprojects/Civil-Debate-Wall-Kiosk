@@ -629,6 +629,7 @@ def vis_choice(request, question_id):
     data["answer_comment_text"] = nobadwords(choice.comment_text)
     
     positive = Rating.objects.filter(choice=choice, rating=1)
+    data["positive_ratings"] = len(positive)
     
     # count the positive ratings the choice got. for each answer, select only those ratings that have been made by a user who chose this
     # answer to the question. for each such rating, increase the count for the rating for the current answer by 1
@@ -638,7 +639,7 @@ def vis_choice(request, question_id):
         positive_per_answer.append(0)
         for r in positive:
             if len(Choice.objects.filter(answer=a, user=r.user)) > 0:
-               positive_per_answer[i] = positive_per_answer[i] + 1
+               positive_per_answer[a.number-1] = positive_per_answer[a.number-1] + 1
         i = i + 1
     
     data["positive_ratings_per_answer"] = positive_per_answer 
