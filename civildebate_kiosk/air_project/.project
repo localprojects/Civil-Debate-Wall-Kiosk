@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Civil Debate Wall</name>
+	<name>CivilDebateWall</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -15,9 +15,15 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>com.adobe.ac.pmd.eclipse.flexpmdbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>com.adobe.flexbuilder.project.apollonature</nature>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
+		<nature>com.adobe.ac.pmd.eclipse.flexpmdnature</nature>
 	</natures>
 </projectDescription>

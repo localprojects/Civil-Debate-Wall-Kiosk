@@ -53,7 +53,7 @@ package  {
 			photoBooth.y = 150;
 			addChild(photoBooth);
 			
-			
+
 			// header
 			var header:Sprite = new Sprite();
 			header.graphics.beginFill(0x97999b);
@@ -95,6 +95,12 @@ package  {
 			counter.x = stageWidth - 258;
 			counter.y = 12;
 			header.addChild(counter);			
+			
+			
+			
+			
+			
+			
 			
 
 			// footer
