@@ -15,6 +15,10 @@ package  {
 	import net.localprojects.Assets;
 	import net.localprojects.FixedLabel;
 	import net.localprojects.PortraitCamera;
+	import net.localprojects.TextBoxLayoutFormat;
+	
+	import flash.text.engine.FontWeight;
+	import flashx.textLayout.formats.TextAlign;
 	
 	
 	[SWF(width="540", height="960", backgroundColor="0x2f3439", frameRate="60")]
@@ -51,11 +55,46 @@ package  {
 			
 			
 			// header
-			var header:Shape = new Shape();
+			var header:Sprite = new Sprite();
 			header.graphics.beginFill(0x97999b);
-			header.graphics.drawRect(0, 0, Main.stageWidth, 60);
+			header.graphics.drawRect(0, 0, Main.stageWidth, 50);
 			header.graphics.endFill();
 			addChild(header);
+
+			// header title text
+			var format:TextBoxLayoutFormat = new TextBoxLayoutFormat();
+			format.boundingWidth = 250;
+			format.boundingHeight = 20;
+			format.fontFamily = "Helvetica";
+			format.fontSize = 14;
+			format.color = 0xffffff;
+			format.fontWeight = FontWeight.BOLD;
+			format.showSpriteBackground = false;			
+			
+			var title:FixedLabel = new FixedLabel("GREAT CIVIL DEBATE WALL", format);
+			title.x = 15;
+			title.y = 18;
+			header.addChild(title);			
+			
+			// header vote counter
+			format.fontSize = 10;
+			format.boundingWidth = 50;
+			format.boundingHeight = 25;			
+			
+			var counterLabel:FixedLabel = new FixedLabel("TOTAL\nVOTES", format);
+			counterLabel.x = stageWidth - 50;
+			counterLabel.y = 14;
+			header.addChild(counterLabel);
+			
+			format.fontSize = 25;
+			format.boundingWidth = 200;
+			format.boundingHeight = 25;
+			format.textAlign = TextAlign.RIGHT;
+			
+			var counter:FixedLabel = new FixedLabel("#,###", format);
+			counter.x = stageWidth - 258;
+			counter.y = 12;
+			header.addChild(counter);			
 			
 
 			// footer
@@ -65,58 +104,7 @@ package  {
 			footer.graphics.endFill();
 			addChild(footer);
 			
-			
-			
-			var label:FixedLabel = new FixedLabel("testing");
-			label.x = 0;
-			label.y = 0;
-			addChild(label);
-			
-			graphics.beginFill(0xff0000);
-			graphics.drawRect(0, 0, 20, 20);
-			graphics.endFill();					
-			
-			
-			// using the new FTE (Flash Text Engine) API
-			// http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3/WS6C0BB8ED-2805-467a-9C71-F9D757F33FB6.html			
-//			var factory:StringTextLineFactory = new StringTextLineFactory();
-//			factory.compositionBounds = new Rectangle( 100, 100, 200, 130 );
-//			var format2:TextLayoutFormat = new TextLayoutFormat();
-//			format2.fontFamily = "Helvetica, Arial, _sans";
-//			format2.fontSize = 20;
-//			format2.color = 0xff0000;
-//			format2.textAlpha = 1;
-//			
-//			factory.spanFormat = format2;
-//			factory.text = "The quick brown fox jumped over the lazy dog.";
-//			factory.createTextLines(useTextLines);
-//			factory.compositionBounds = new Rectangle( 0, 0, stageWidth, 130 );			
-//			
-//			factory.createTextLines(useTextLines);
-			
-			
-			
-//				var bounds:Rectangle = new Rectangle(10, 10, this.width, this.height);
-//				
-//				var paragraphFormat:ParagraphFormat = new ParagraphFormat();
-//				paragraphFormat.direction = Direction.LTR;
-//				
-//				var characterFormat:CharacterFormat = new CharacterFormat();
-//				characterFormat.fontSize = 18;
-//				
-//				// for embedding
-//				//characterFormat.fontFamily = AFont.NAME;
-//				//characterFormat.fontLookup = flash.text.engine.FontLookup.EMBEDDED_CFF;
-//				//characterFormat.renderingMode = flash.text.engine.RenderingMode.CFF;
-//				
-//				
-//				StringTextLineFactory.createTextLinesFromString(addTextLineToContainer, "copy goes here", bounds, characterFormat, paragraphFormat);
-//			
-//			
 
-			
-			
-			
 			// Set up some placeholder menus
 //			var mainMenu:NativeMenuItem = new NativeMenuItem("CDB");
 //			var menu:NativeMenu = new NativeMenu();
