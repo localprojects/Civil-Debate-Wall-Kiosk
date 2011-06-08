@@ -30,7 +30,7 @@
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
-      <libraryPathEntry kind="3" linkType="1" path="libraries/MinimalComps_0_9_10.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="1" linkType="1" path="libraries"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>

@@ -137,7 +137,7 @@
          <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/air/applicationupdater.swc</path-element>
          <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/air/applicationupdater_ui.swc</path-element>
          <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/air/servicemonitor.swc</path-element>
-         <path-element>/Users/Mika/Documents/Local Projects/Civil Debate Wall/Code/uf_civildebate/Trunk/civildebate_kiosk/air_project/libraries/MinimalComps_0_9_10.swc</path-element>
+         <path-element>/Users/Mika/Documents/Local Projects/Civil Debate Wall/Code/uf_civildebate/Trunk/civildebate_kiosk/air_project/libraries</path-element>
       </library-path>
       <!-- compiler.locale: specifies the locale for internationalization-->
       <locale>
