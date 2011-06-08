@@ -55,6 +55,11 @@ package net.localprojects {
 			update();
 		}
 		
+		public function setText(text:String):void {
+			factory.text = text;
+			update();
+		}
+		
 		public function update():void {
 			graphics.clear();
 			
