@@ -10,15 +10,22 @@ package  {
 	import flash.display.StageQuality;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
+	import flash.text.engine.FontWeight;
+	
+	import flashx.textLayout.formats.TextAlign;
 	
 	import net.localprojects.Assets;
 	import net.localprojects.FixedLabel;
 	import net.localprojects.PortraitCamera;
 	import net.localprojects.TextBoxLayoutFormat;
+	import net.localprojects.pages.AttractLoop;
+	import net.localprojects.pages.HomePage;
+	import net.localprojects.pages.Page;
 	
-	import flash.text.engine.FontWeight;
-	import flashx.textLayout.formats.TextAlign;
+	import org.hamcrest.mxml.object.Null;
+
 	
 	
 	[SWF(width="540", height="960", backgroundColor="0x2f3439", frameRate="60")]
@@ -27,12 +34,24 @@ package  {
 		private var photoBooth:PortraitCamera;
 		
 		// some globals
+		public static var mainRef:Main;
 		public static var stageRef:Stage;
 		public static var stageWidth:Number;
-		public static var stageHeight:Number;		
+		public static var stageHeight:Number;
+		public static var mouseX:int;
+		public static var mouseY:int;		
+		
+		
+		
+		// page management
+		private var pages:Array = new Array();
+		public var activePage:String;
+		
 		
 		public function Main() {
 
+			mainRef = this;
+			
 			// set up stage
 			this.stage.quality = StageQuality.BEST;
 			this.stage.scaleMode = StageScaleMode.NO_SCALE;			
@@ -46,12 +65,6 @@ package  {
 			graphics.beginFill(0xffffff);
 			graphics.drawRect(0, 0, stageWidth, stageHeight);
 			graphics.endFill();
-			
-			
-			photoBooth = new PortraitCamera();
-			photoBooth.x = (stageWidth - photoBooth.width) / 2;
-			photoBooth.y = 150;
-			addChild(photoBooth);
 			
 
 			// header
@@ -93,22 +106,33 @@ package  {
 			
 			var counter:FixedLabel = new FixedLabel("#,###", format);
 			counter.x = stageWidth - 258;
-			counter.y = 12;
+			counter.y = 14;
 			header.addChild(counter);			
 			
-			
-			
-			
-			
-			
-			
-
 			// footer
 			var footer:Shape = new Shape();
 			footer.graphics.beginFill(0x97999b);
 			footer.graphics.drawRect(0, Main.stageHeight - 60, Main.stageWidth, 60);
 			footer.graphics.endFill();
 			addChild(footer);
+			
+			// views
+			pages = [
+				new AttractLoop(),
+				new HomePage()
+			];
+			
+			// start on attract page
+			goToPage("attract");
+			
+			
+			
+			
+//			photoBooth = new PortraitCamera();
+//			photoBooth.x = (stageWidth - photoBooth.width) / 2;
+//			photoBooth.y = 150;
+//			addChild(photoBooth);
+						
 			
 
 			// Set up some placeholder menus
@@ -125,28 +149,51 @@ package  {
 //			}
 			
 			
-			addEventListener(Event.ENTER_FRAME, firstFrame);
+			addEventListener(Event.ENTER_FRAME, update);			
+			
+			
 		}
 		
-
-				
+		
 
 		
-		public function firstFrame(e:Event):void {
-//			removeEventListener(Event.ENTER_FRAME, firstFrame);			
-//			trace("first frame");
-//
-//			// fill out the stage
-//			this.graphics.beginFill(0xff0000);
-//			this.graphics.drawRect(0, 0, appWidth, appHeight);
-//			this.graphics.endFill();			
-//			
+		
+		public function goToPage(targetName:String):void {
+			// todo tweening and other nice things
 			
-			addEventListener(Event.ENTER_FRAME, update);			
-		}		
+			for (var i:int = 0; i < pages.length; i++) {
+				
+				// remove any existing pages (better to show / hide)
+				
+				// not the one, remove it
+				
+				if (this.contains(pages[i]) && (pages[i].name !== targetName)) {
+					this.removeChild(pages[i]);
+				}
+				
+				
+				if (pages[i].name == targetName) {
+					this.addChild(pages[i]);
+				}
+				
+			}
+			
+			// add the one we want
+			
+			
+			
+			
+			// hide everything
+			
+		}
+
+
 		
 		public function update(e:Event):void {
-	
+			
+			Main.mouseX = this.mouseX;
+			Main.mouseY = this.mouseY;
+			trace(Main.mouseX);			
 		}
 		
 	}

@@ -20,7 +20,7 @@ package net.localprojects {
 	
 	import mx.utils.Base64Encoder;
 	
-
+	
 	// TODO easier to use face detection for the shutter? Detect face and then "3 2 1"?
 	public class PortraitCamera extends Sprite {
 		
