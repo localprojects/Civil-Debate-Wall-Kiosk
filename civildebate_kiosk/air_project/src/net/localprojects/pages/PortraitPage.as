@@ -12,6 +12,7 @@ package net.localprojects.pages {
 		private var photoBooth:PortraitCamera;
 		private var shutterButton:PushButton;		
 		private var countdown:Countdown;
+
 		
 		public function PortraitPage() {
 			super();
@@ -22,6 +23,8 @@ package net.localprojects.pages {
 			photoBooth.x = (Main.stageWidth - photoBooth.width) / 2;
 			photoBooth.y = 150;
 			addChild(photoBooth);
+
+
 			
 			// shutter button
 			shutterButton = new PushButton(this, 0, 0, "SHUTTER", onShutter);

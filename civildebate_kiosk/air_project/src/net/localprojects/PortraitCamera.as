@@ -10,6 +10,8 @@ package net.localprojects {
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.media.Camera;
 	import flash.media.Video;
 	import flash.net.URLLoader;
@@ -18,6 +20,8 @@ package net.localprojects {
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	import flash.utils.ByteArray;
+	
+	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	
 	import mx.utils.Base64Encoder;
 	
@@ -32,6 +36,9 @@ package net.localprojects {
 		private var cameraHeight:int;
 		private var cropWidth:int;
 		private var cropHeight:int;
+		
+		private var faceZone:Bitmap;
+		private var faceDetector:FaceDetector;		
 		
 		
 		// supported image upload file types (store a local mirror?)
@@ -48,6 +55,11 @@ package net.localprojects {
 			cropWidth = 450;
 			cropHeight = 600;
 			
+			
+			// face detector
+			faceDetector = new FaceDetector(cropWidth, cropHeight);			
+			faceDetector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, detectionHandler);
+			
 			trace("attaching camera");
 			camera = Camera.getCamera();
 			camera.setMode(cameraWidth, cameraHeight, 30);
@@ -60,8 +72,32 @@ package net.localprojects {
 			
 			// add the overlay
 			Assets.cameraSilhouette.alpha = 0.5;
-			addChild(Assets.cameraSilhouette);		
+			addChild(Assets.cameraSilhouette);
+			
+//			faceZone = new Bitmap(new BitmapData(240, 288, false));
+//			faceZone.x = 0;
+//			faceZone.y = 300;			
+//			addChild(faceZone);
 		}
+		
+		private function detectionHandler(e:ObjectDetectorEvent):void {
+			trace("got face event in camera");
+
+				
+				for (var i:int = 0; i < e.rects.length; i++) {
+					
+					var r:Rectangle = e.rects[i];
+					
+					trace(r);
+//					
+//					this.graphics.beginFill(0xff0000);
+//					this.graphics.drawRect(r.x * 8, r.y * 8, r.width * 8, r.height * 8);
+//					this.graphics.endFill();
+				}
+				
+						
+		}
+
 		
 		
 		public function activateCamera():void {
@@ -87,6 +123,15 @@ package net.localprojects {
 			matrix.translate(cameraWidth - ((cameraWidth - cropWidth) / 2), 0);
 			
 			videoBitmap.bitmapData.draw(video, matrix);
+			
+			// take the face selection
+
+			// copy rectangle?
+			// var faceSourceRect:Rectangle = new Rectangle(96, 31, 240, 288);
+			//faceZone.bitmapData.copyPixels(videoBitmap.bitmapData, faceSourceRect, new Point(0, 0));
+			
+			// detect faces
+			// faceDetector.processBitmap(faceZone);			
 		}
 		
 
