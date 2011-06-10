@@ -3,6 +3,7 @@ package net.localprojects.pages {
 	
 	import flash.display.Bitmap;
 	import flash.events.Event;
+	import net.localprojects.Utilities;
 	
 	public class ReviewOpinionPage extends Page	{
 		
@@ -45,6 +46,11 @@ package net.localprojects.pages {
 		}
 		
 		private function onSave(e:Event):void {
+			
+			
+			
+			Utilities.saveImageToDisk(photo, "bla");
+			
 			Main.state.setView(Main.resultsPage);
 		}
 		
