@@ -8,7 +8,10 @@ package  {
 	import flashx.textLayout.formats.*;
 	
 	import net.localprojects.*;
-	import net.localprojects.pages.*;	
+	import net.localprojects.pages.*;
+	
+	import org.velluminous.keyboard.AlphabeticKeyboard;
+	import org.velluminous.keyboard.KeyButtonEvent;
 
 	[SWF(width="540", height="960", backgroundColor="0x2f3439", frameRate="60")]
 	public class Main extends Sprite {		
@@ -127,8 +130,20 @@ package  {
 //			}
 			
 			
-			addEventListener(Event.ENTER_FRAME, update);			
+			addEventListener(Event.ENTER_FRAME, update);		
 			
+			
+			
+			var keyboard:AlphabeticKeyboard = new AlphabeticKeyboard();
+			keyboard.addEventListener(KeyButtonEvent.RELEASE, onKeyUp);
+			keyboard.scaleX = .5;
+			keyboard.scaleY = .5;			
+			addChild(keyboard);
+		}
+		
+		private function onKeyUp(e:KeyButtonEvent):void {
+			trace("up!");
+			trace(e.data);
 			
 		}
 		
