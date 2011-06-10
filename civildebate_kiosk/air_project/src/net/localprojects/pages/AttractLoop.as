@@ -18,7 +18,6 @@ package net.localprojects.pages {
 			button.y = Main.stageHeight - 150;						
 		}
 		
-		
 		private function onTouch(e:Event):void {
 			// todo go to view
 			trace("touching to start");

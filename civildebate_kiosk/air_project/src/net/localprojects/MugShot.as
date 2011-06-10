@@ -1,6 +1,9 @@
 package net.localprojects {
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
+	import flash.geom.PerspectiveProjection;
+	import flash.geom.Point;
+	
 	
 	
 	public class MugShot extends Sprite	{
@@ -11,16 +14,15 @@ package net.localprojects {
 		public function MugShot() {
 			super();
 			
-			w = 235;
-			h = 350;
+			w = 220;
+			h = 330;
 			
 			var matrix:Matrix = new Matrix();
-			matrix.translate(Assets.obama.width - ((Assets.obama.width - w) / 2), 0);						
-			matrix.scale(.5, .5); // flip horizontally
+			matrix.translate(w * .5, h * .5);						
 			
 			
-			this.graphics.beginBitmapFill(Assets.obama.bitmapData, matrix);
-			this.graphics.drawRect(0, 0, w, h);
+			this.graphics.beginBitmapFill(Assets.silhouette.bitmapData, matrix);
+			this.graphics.drawRect(w / -2, h / -2, w, h);
 			this.graphics.endFill();
 			
 		}

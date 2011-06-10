@@ -8,13 +8,14 @@ package net.localprojects {
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.geom.Matrix;
 	import flash.media.Camera;
 	import flash.media.Video;
 	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
-	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLVariables;
 	import flash.utils.ByteArray;
 	
@@ -32,10 +33,12 @@ package net.localprojects {
 		private var cropWidth:int;
 		private var cropHeight:int;
 		
+		
 		// supported image upload file types (store a local mirror?)
 		private const JPG:String = "jpg";
-		private const PNG:String = "png";		
+		private const PNG:String = "png";
 		
+
 		public function PortraitCamera() {
 			super();
 			
@@ -45,7 +48,7 @@ package net.localprojects {
 			cropWidth = 450;
 			cropHeight = 600;
 			
-			// set up the camera
+			trace("attaching camera");
 			camera = Camera.getCamera();
 			camera.setMode(cameraWidth, cameraHeight, 30);
 			
@@ -56,14 +59,26 @@ package net.localprojects {
 			addChild(videoBitmap);
 			
 			// add the overlay
-			Assets.cameraSilhouette.alpha = 0.5;			
-			addChild(Assets.cameraSilhouette);
-			
-			// add the shutter button
-			var shutter:PushButton = new PushButton(this, 0, 0, "SHUTTER", onShutter);
-			shutter.x = (cropWidth - shutter.width) / 2;
-			shutter.y = cropHeight - 40;
+			Assets.cameraSilhouette.alpha = 0.5;
+			addChild(Assets.cameraSilhouette);		
 		}
+		
+		
+		public function activateCamera():void {
+			video.addEventListener(Event.ENTER_FRAME, onVideoFrame);			
+		}
+
+		
+		public function deactivateCamera():void {
+			this.video.removeEventListener(Event.ENTER_FRAME, onVideoFrame);
+		}
+		
+		
+		public function takePhoto():Bitmap {
+			// make a copy of the current video pixels
+			return new Bitmap(videoBitmap.bitmapData.clone());
+		}		
+		
 		
 		private function onVideoFrame(e:Event):void {
 			// copy a crop into the video bitmap
@@ -72,15 +87,6 @@ package net.localprojects {
 			matrix.translate(cameraWidth - ((cameraWidth - cropWidth) / 2), 0);
 			
 			videoBitmap.bitmapData.draw(video, matrix);
-		}
-		
-		private function onShutter(e:Event):void {
-			// detach the camera
-			this.video.removeEventListener(Event.ENTER_FRAME, onVideoFrame);
-			video.attachCamera(null);
-			
-			// TODO review this first
-			// upload(videoBitmap.bitmapData);
 		}
 		
 
@@ -108,7 +114,6 @@ package net.localprojects {
 					trace("error! fell through upload image format switch case");
 					break;
 			}
-			
 			
 			// convert binary ByteArray to plain-text, for transmission in POST data
 			var encoder:Base64Encoder = new Base64Encoder();
