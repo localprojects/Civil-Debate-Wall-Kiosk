@@ -42,7 +42,6 @@ package net.localprojects {
 		private static const EXT_PNG:String = ".png";		
 		
 		
-		
 		public static function getNewImageFile(ext:String):File {
 			//Create a new unique filename based on date/time
 			var fileName:String = "image"+getNowTimestamp()+ext;
