@@ -11,7 +11,7 @@ package net.localprojects.pages {
 		private var saveButton:PushButton;			
 		
 		public function ReviewOpinionPage()	{
-			super();	
+			super();
 
 			this.setTitle("This week's debate:\n[voting topic]"); 
 			this.setPlaceholderText("Review Opinion Page");					
