@@ -1,57 +1,42 @@
 package  {
-	import flash.desktop.NativeApplication;
-	import flash.display.DisplayObject;
-	import flash.display.NativeMenu;
-	import flash.display.NativeMenuItem;
-	import flash.display.NativeWindow;
-	import flash.display.Shape;
-	import flash.display.Sprite;
-	import flash.display.Stage;
-	import flash.display.StageQuality;
-	import flash.display.StageScaleMode;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.geom.Rectangle;
-	import flash.text.engine.FontWeight;
+	import flash.desktop.*;
+	import flash.display.*;
+	import flash.events.*;
+	import flash.geom.*;
+	import flash.text.engine.*;
 	
-	import flashx.textLayout.formats.TextAlign;
+	import flashx.textLayout.formats.*;
 	
-	import net.localprojects.Assets;
-	import net.localprojects.FixedLabel;
-	import net.localprojects.PortraitCamera;
-	import net.localprojects.TextBoxLayoutFormat;
-	import net.localprojects.pages.AttractLoop;
-	import net.localprojects.pages.HomePage;
-	import net.localprojects.pages.Page;
-	
-	import org.hamcrest.mxml.object.Null;
+	import net.localprojects.*;
+	import net.localprojects.pages.*;	
 
-	
-	
 	[SWF(width="540", height="960", backgroundColor="0x2f3439", frameRate="60")]
-	public class Main extends Sprite {
-		
-		private var photoBooth:PortraitCamera;
-		
+	public class Main extends Sprite {		
 		// some globals
 		public static var mainRef:Main;
 		public static var stageRef:Stage;
 		public static var stageWidth:Number;
 		public static var stageHeight:Number;
 		public static var mouseX:int;
-		public static var mouseY:int;		
+		public static var mouseY:int;
 		
+		// pages (move to view class)
+		public static var homePage:Page;
+		public static var portraitPage:Page;
+		public static var reviewOpinionPage:Page;
+		public static var resultsPage:Page;		
 		
+		// kiosk state
+		public static var state:State;
 		
 		// page management
-		private var pages:Array = new Array();
+		public var pages:Array = new Array();
 		public var activePage:String;
-		
 		
 		public function Main() {
 
 			mainRef = this;
-			
+		
 			// set up stage
 			this.stage.quality = StageQuality.BEST;
 			this.stage.scaleMode = StageScaleMode.NO_SCALE;			
@@ -66,7 +51,6 @@ package  {
 			graphics.drawRect(0, 0, stageWidth, stageHeight);
 			graphics.endFill();
 			
-
 			// header
 			var header:Sprite = new Sprite();
 			header.graphics.beginFill(0x97999b);
@@ -116,23 +100,17 @@ package  {
 			footer.graphics.endFill();
 			addChild(footer);
 			
-			// views
-			pages = [
-				new AttractLoop(),
-				new HomePage()
-			];
 			
-			// start on attract page
-			goToPage("attract");
+			homePage = new HomePage();
+			portraitPage  = new PortraitPage();
+			reviewOpinionPage = new ReviewOpinionPage();
+			resultsPage = new ResultsPage;
 			
 			
-			
-			
-//			photoBooth = new PortraitCamera();
-//			photoBooth.x = (stageWidth - photoBooth.width) / 2;
-//			photoBooth.y = 150;
-//			addChild(photoBooth);
-						
+			// set initial view
+			state = new State();	
+			state.addEventListener(State.VIEW_CHANGE, onViewChange);			
+			state.setView(new HomePage());
 			
 
 			// Set up some placeholder menus
@@ -154,46 +132,23 @@ package  {
 			
 		}
 		
-		
-
-		
-		
-		public function goToPage(targetName:String):void {
-			// todo tweening and other nice things
+		// create views class!!!
+		private function onViewChange(e:Event):void {
+			trace("view changed");
 			
-			for (var i:int = 0; i < pages.length; i++) {
-				
-				// remove any existing pages (better to show / hide)
-				
-				// not the one, remove it
-				
-				if (this.contains(pages[i]) && (pages[i].name !== targetName)) {
-					this.removeChild(pages[i]);
-				}
-				
-				
-				if (pages[i].name == targetName) {
-					this.addChild(pages[i]);
-				}
-				
+			// clear everything
+			if ((state.getLastView() != null) && contains(state.getLastView())) {
+				removeChild(state.getLastView());
 			}
 			
-			// add the one we want
-			
-			
-			
-			
-			// hide everything
-			
+			addChild(state.getView());
 		}
 
 
-		
 		public function update(e:Event):void {
-			
 			Main.mouseX = this.mouseX;
 			Main.mouseY = this.mouseY;
-			trace(Main.mouseX);			
+			//trace(Main.mouseX);			
 		}
 		
 	}

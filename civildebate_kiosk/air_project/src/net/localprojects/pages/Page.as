@@ -27,9 +27,9 @@ package net.localprojects.pages {
 		
 			var format:TextBoxLayoutFormat = new TextBoxLayoutFormat();
 			format.boundingWidth = Main.stageWidth;
-			format.boundingHeight = 20;
+			format.boundingHeight = 35;
 			format.fontFamily = "Helvetica";
-			format.fontSize = 20;
+			format.fontSize = 16;
 			format.color = 0x97999b;
 			format.fontWeight = FontWeight.BOLD;
 			format.textAlign = TextAlign.CENTER;
@@ -46,7 +46,7 @@ package net.localprojects.pages {
 				titleText.update();
 			}
 			
-			titleText.y = 80;
+			titleText.y = 75;
 		}
 		
 		public function setPlaceholderText(text:String):void {
@@ -71,7 +71,7 @@ package net.localprojects.pages {
 				placeholderText.update();
 			}
 			
-			placeholderText.y = Main.stageHeight / 2;			
+			placeholderText.y = Main.stageHeight * 0.7;			
 		}
 		
 		
