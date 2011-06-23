@@ -1,15 +1,12 @@
 package net.localprojects {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
-	import flash.geom.Matrix;
-	import flash.geom.Transform;
-	import flash.filesystem.File;
-	import flash.filesystem.FileStream;
-	import flash.filesystem.FileMode;
+	import flash.filesystem.*;
+	import flash.geom.*;
 	import flash.utils.ByteArray;
 	
 	import mx.graphics.codec.JPEGEncoder;
-	import mx.graphics.codec.PNGEncoder;	
+	import mx.graphics.codec.PNGEncoder;
 	
 	public class Utilities {
 		public function Utilities()	{
@@ -122,6 +119,11 @@ package net.localprojects {
 				}
 			}
 			
-			
+		
+		// returns a point at the center of a rectangle
+		public static function centerPoint(rect:Rectangle):Point {
+			return new Point(rect.x + (rect.width / 2), rect.y + (rect.height / 2));
+		}
+		
 		}
 	}
