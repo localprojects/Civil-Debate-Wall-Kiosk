@@ -1,6 +1,7 @@
 package net.localprojects.pages {
 	import flash.display.Sprite;
 	import flash.text.engine.FontWeight;
+	
 	import net.localprojects.FixedLabel;
 	import net.localprojects.TextBoxLayoutFormat;
 
@@ -11,7 +12,7 @@ package net.localprojects.pages {
 		
 		private var titleText:FixedLabel;
 		private var placeholderText:FixedLabel;
-		
+		public var blocks:Array;
 		
 		
 		import flashx.textLayout.formats.TextAlign;		
@@ -20,6 +21,7 @@ package net.localprojects.pages {
 		
 		public function Page() {
 			super();
+			blocks = new Array();
 			titleText = null;	
 		}
 		

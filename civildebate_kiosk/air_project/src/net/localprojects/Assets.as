@@ -4,7 +4,7 @@ package net.localprojects {
 
 	public final class Assets	{
 		
-		// or run "python embedgen.py "kitten.jpg" | pbcopy" from the desktop
+		// To generate embed code, run "python embedgen.py "kitten.jpg" | pbcopy" from /meta/embed_generator
 		[Embed(source = "../assets/cameraSilhouette.png")] private static const cameraSilhouetteClass:Class;
 		public static const cameraSilhouette:Bitmap = new cameraSilhouetteClass() as Bitmap;
 
@@ -17,17 +17,22 @@ package net.localprojects {
 		[Embed(source = "../assets/graphics/bigButton.png")] private static const bigButtonClass:Class;
 		public static const bigButtonBackground:Bitmap = new bigButtonClass() as Bitmap;
 		
+		[Embed(source = "../assets/graphics/headerBackground.png")] private static const headerBackgroundClass:Class;
+		public static const headerBackground:Bitmap = new headerBackgroundClass() as Bitmap;
+
+		[Embed(source = "../assets/graphics/debateThumbnail.png")] private static const debateThumbnailClass:Class;
+		public static const debateThumbnail:Bitmap = new debateThumbnailClass() as Bitmap;
+		
 		
 		// fonts
 //		[Embed(source='../assets/fonts/RockwBol.ps', fontName="Rockwell-Bold", mimeType='application/x-font')]
 //		public static const buttonFont:Class;
 //		public static const BUTTON_FONT:String = "Rockwell-Bold";
 		
+		// TODO put multiple fonts / weights in one swf?
+		// See FLA project in /meta/font_embedding
 		[Embed(source="../assets/fonts/rockwell.swf", symbol="RockwellBold")]
 		public static const buttonFont:Class;
-		public static const BUTTON_FONT:String = "Rockwell";		
-		
-		//private var AssetClass:Class;
-
+		public static const BUTTON_FONT:String = "Rockwell";
 	}
 }

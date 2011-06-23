@@ -8,12 +8,13 @@ package  {
 	import flashx.textLayout.formats.*;
 	
 	import net.localprojects.*;
+	import net.localprojects.blocks.*;
 	import net.localprojects.pages.*;
 	
 	import org.velluminous.keyboard.AlphabeticKeyboard;
 	import org.velluminous.keyboard.KeyButtonEvent;
 
-	[SWF(width="1080", height="1920", backgroundColor="0x2f3439", frameRate="60")]
+	[SWF(width="1080", height="1920", frameRate="60")]
 	public class Main extends Sprite {		
 		// some globals
 		public static var mainRef:Main;
@@ -29,6 +30,10 @@ package  {
 		public static var reviewOpinionPage:Page;
 		public static var resultsPage:Page;		
 		
+		// blocks (move to view class)
+		public static var header:Header = new Header();
+		public static var debatePicker:DebatePicker = new DebatePicker();		
+		
 		// kiosk state
 		public static var state:State;
 		
@@ -37,72 +42,28 @@ package  {
 		public var activePage:String;
 		
 		public function Main() {
-
-			mainRef = this;
+			init();
+		}
 		
+		private function init():void {
+			mainRef = this;
+			
 			// set up stage
 			this.stage.quality = StageQuality.BEST;
 			this.stage.scaleMode = StageScaleMode.EXACT_FIT;			
-			
 			
 			// set the globals
 			stageWidth= this.stage.stageWidth;
 			stageHeight = this.stage.stageHeight;
 			stageRef = this.stage;
-
+			
 			// background fill
 			graphics.beginFill(0x000000);
-			graphics.drawRect(0, 0, stageWidth, stageHeight);
+			graphics.drawRect(0, 0, 1080, 1920);
 			graphics.endFill();
 			
-			// header
-			var header:Sprite = new Sprite();
-			header.graphics.beginFill(0x97999b);
-			header.graphics.drawRect(0, 0, Main.stageWidth, 50);
-			header.graphics.endFill();
-			addChild(header);
+			
 
-			// header title text
-			var format:TextBoxLayoutFormat = new TextBoxLayoutFormat();
-			format.boundingWidth = 250;
-			format.boundingHeight = 20;
-			format.fontFamily = "Helvetica";
-			format.fontSize = 14;
-			format.color = 0xffffff;
-			format.fontWeight = FontWeight.BOLD;
-			format.showSpriteBackground = false;
-			
-			var title:FixedLabel = new FixedLabel("GREAT CIVIL DEBATE WALL", format);
-			title.x = 15;
-			title.y = 18;
-			header.addChild(title);
-			
-			// header vote counter
-			format.fontSize = 10;
-			format.boundingWidth = 50;
-			format.boundingHeight = 25;			
-			
-			var counterLabel:FixedLabel = new FixedLabel("TOTAL\nVOTES", format);
-			counterLabel.x = stageWidth - 50;
-			counterLabel.y = 14;
-			header.addChild(counterLabel);
-			
-			format.fontSize = 25;
-			format.boundingWidth = 200;
-			format.boundingHeight = 25;
-			format.textAlign = TextAlign.RIGHT;
-			
-			var counter:FixedLabel = new FixedLabel("#,###", format);
-			counter.x = stageWidth - 258;
-			counter.y = 14;
-			header.addChild(counter);			
-			
-			// footer
-			var footer:Shape = new Shape();
-			footer.graphics.beginFill(0x97999b);
-			footer.graphics.drawRect(0, Main.stageHeight - 60, Main.stageWidth, 60);
-			footer.graphics.endFill();
-			addChild(footer);
 			
 			homePage = new HomePage();
 			portraitPage  = new PortraitPage();
@@ -118,30 +79,30 @@ package  {
 			stage.nativeWindow.width = 540;
 			stage.nativeWindow.height = 960;
 			
-
+			
 			// Set up some placeholder menus
-//			var mainMenu:NativeMenuItem = new NativeMenuItem("CDB");
-//			var menu:NativeMenu = new NativeMenu();
-//			menu.addItem(mainMenu);
-//			
-//			if (NativeApplication.supportsMenu)	{
-//				NativeApplication.nativeApplication.menu = menu;
-//			} 
-//			else if (NativeWindow.supportsMenu) {
-//				// TODO TEST ON WINDOWS
-//				stage.nativeWindow.menu = menu;
-//			}
+			//			var mainMenu:NativeMenuItem = new NativeMenuItem("CDB");
+			//			var menu:NativeMenu = new NativeMenu();
+			//			menu.addItem(mainMenu);
+			//			
+			//			if (NativeApplication.supportsMenu)	{
+			//				NativeApplication.nativeApplication.menu = menu;
+			//			} 
+			//			else if (NativeWindow.supportsMenu) {
+			//				// TODO TEST ON WINDOWS
+			//				stage.nativeWindow.menu = menu;
+			//			}
 			
 			
 			addEventListener(Event.ENTER_FRAME, update);		
 			
 			
 			
-//			var keyboard:AlphabeticKeyboard = new AlphabeticKeyboard();
-//			keyboard.addEventListener(KeyButtonEvent.RELEASE, onKeyUp);
-//			keyboard.scaleX = .5;
-//			keyboard.scaleY = .5;			
-//			addChild(keyboard);
+			//			var keyboard:AlphabeticKeyboard = new AlphabeticKeyboard();
+			//			keyboard.addEventListener(KeyButtonEvent.RELEASE, onKeyUp);
+			//			keyboard.scaleX = .5;
+			//			keyboard.scaleY = .5;			
+			//			addChild(keyboard);			
 		}
 		
 		private function onKeyUp(e:KeyButtonEvent):void {
