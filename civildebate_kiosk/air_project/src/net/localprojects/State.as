@@ -1,12 +1,12 @@
 package net.localprojects {
 	
+	import com.bit101.components.PushButton;
+	
 	import flash.display.Bitmap;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
-	import net.localprojects.pages.Page;
-	
-	import com.bit101.components.PushButton;	
+	import net.localprojects.pages.Page;	
 	
 	public class State extends EventDispatcher	{
 		
@@ -14,6 +14,7 @@ package net.localprojects {
 		private var lastView:Page; // previous view
 		private var photo:Bitmap; // user portrait
 		private var phoneNumber:int;
+		private var debates:Array;
 		
 		public static const VIEW_CHANGE:String = "viewChange";
 		
@@ -25,6 +26,9 @@ package net.localprojects {
 			lastView = null;			
 			photo = null;
 			phoneNumber = 0;
+			
+			
+			
 			
 			// also
 			// activity timer?
