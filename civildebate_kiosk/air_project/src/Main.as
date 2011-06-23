@@ -13,7 +13,7 @@ package  {
 	import org.velluminous.keyboard.AlphabeticKeyboard;
 	import org.velluminous.keyboard.KeyButtonEvent;
 
-	[SWF(width="540", height="960", backgroundColor="0x2f3439", frameRate="60")]
+	[SWF(width="1080", height="1920", backgroundColor="0x2f3439", frameRate="60")]
 	public class Main extends Sprite {		
 		// some globals
 		public static var mainRef:Main;
@@ -42,15 +42,16 @@ package  {
 		
 			// set up stage
 			this.stage.quality = StageQuality.BEST;
-			this.stage.scaleMode = StageScaleMode.NO_SCALE;			
+			this.stage.scaleMode = StageScaleMode.EXACT_FIT;			
+			
 			
 			// set the globals
 			stageWidth= this.stage.stageWidth;
 			stageHeight = this.stage.stageHeight;
-			stageRef = this.stage;			
+			stageRef = this.stage;
 
 			// background fill
-			graphics.beginFill(0xffffff);
+			graphics.beginFill(0x000000);
 			graphics.drawRect(0, 0, stageWidth, stageHeight);
 			graphics.endFill();
 			
@@ -69,12 +70,12 @@ package  {
 			format.fontSize = 14;
 			format.color = 0xffffff;
 			format.fontWeight = FontWeight.BOLD;
-			format.showSpriteBackground = false;			
+			format.showSpriteBackground = false;
 			
 			var title:FixedLabel = new FixedLabel("GREAT CIVIL DEBATE WALL", format);
 			title.x = 15;
 			title.y = 18;
-			header.addChild(title);			
+			header.addChild(title);
 			
 			// header vote counter
 			format.fontSize = 10;
@@ -103,17 +104,19 @@ package  {
 			footer.graphics.endFill();
 			addChild(footer);
 			
-			
 			homePage = new HomePage();
 			portraitPage  = new PortraitPage();
 			reviewOpinionPage = new ReviewOpinionPage();
 			resultsPage = new ResultsPage;
 			
-			
 			// set initial view
 			state = new State();	
 			state.addEventListener(State.VIEW_CHANGE, onViewChange);			
 			state.setView(new HomePage());
+			
+			// temporarily squish screen for laptop development (half size)
+			stage.nativeWindow.width = 540;
+			stage.nativeWindow.height = 960;
 			
 
 			// Set up some placeholder menus
@@ -134,17 +137,16 @@ package  {
 			
 			
 			
-			var keyboard:AlphabeticKeyboard = new AlphabeticKeyboard();
-			keyboard.addEventListener(KeyButtonEvent.RELEASE, onKeyUp);
-			keyboard.scaleX = .5;
-			keyboard.scaleY = .5;			
-			addChild(keyboard);
+//			var keyboard:AlphabeticKeyboard = new AlphabeticKeyboard();
+//			keyboard.addEventListener(KeyButtonEvent.RELEASE, onKeyUp);
+//			keyboard.scaleX = .5;
+//			keyboard.scaleY = .5;			
+//			addChild(keyboard);
 		}
 		
 		private function onKeyUp(e:KeyButtonEvent):void {
 			trace("up!");
 			trace(e.data);
-			
 		}
 		
 		// create views class!!!

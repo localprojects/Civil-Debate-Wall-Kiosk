@@ -5,6 +5,7 @@ package net.localprojects.pages {
 	import flash.events.Event;
 	import flash.geom.PerspectiveProjection;
 	import flash.geom.Point;
+	import net.localprojects.ui.BigButton;
 	
 	import net.localprojects.MugShot;
 	
@@ -29,11 +30,7 @@ package net.localprojects.pages {
 			var nextButton:PushButton = new PushButton(this, 0, 0, "NEXT QUESTION", null);
 			nextButton.x = Main.stageWidth - (nextButton.width + 20);
 			nextButton.y = 76;
-			
 
-			
-			
-			
 			
 			shot1 = new MugShot();
 			
@@ -80,10 +77,23 @@ package net.localprojects.pages {
 			rightVote.x = (Main.stageWidth * .75) - (rightVote.width / 2);
 			rightVote.y = 500;			
 						
-			
-			
-				
+							
 			this.addEventListener(Event.ENTER_FRAME, update);
+			
+
+			// temp buttons
+			var replayButton:BigButton = new BigButton("Replay Debate");
+			replayButton.x = 531;
+			replayButton.y = 1550;
+			addChild(replayButton);			
+			
+			var opinionButton:BigButton = new BigButton("Add Your Opinion");
+			opinionButton.x = 29;
+			opinionButton.y = 1550;			
+			addChild(opinionButton);
+			
+
+
 			
 		}
 		
