@@ -32,7 +32,8 @@ package  {
 		
 		// blocks (move to view class)
 		public static var header:Header = new Header();
-		public static var debatePicker:DebatePicker = new DebatePicker();		
+		public static var debatePicker:DebatePicker = new DebatePicker();
+		public static var question:Question = new Question();
 		
 		// kiosk state
 		public static var state:State;
@@ -95,9 +96,7 @@ package  {
 			
 			
 			addEventListener(Event.ENTER_FRAME, update);		
-			
-			
-			
+
 			//			var keyboard:AlphabeticKeyboard = new AlphabeticKeyboard();
 			//			keyboard.addEventListener(KeyButtonEvent.RELEASE, onKeyUp);
 			//			keyboard.scaleX = .5;
