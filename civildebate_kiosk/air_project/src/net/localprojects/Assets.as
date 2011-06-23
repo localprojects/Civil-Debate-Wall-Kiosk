@@ -12,7 +12,22 @@ package net.localprojects {
 		public static const obama:Bitmap = new obamaClass() as Bitmap;
 		
 		[Embed(source = "../assets/silhouette.jpg")] private static const silhouetteClass:Class;
-		public static const silhouette:Bitmap = new silhouetteClass() as Bitmap;		
+		public static const silhouette:Bitmap = new silhouetteClass() as Bitmap;
 		
+		[Embed(source = "../assets/graphics/bigButton.png")] private static const bigButtonClass:Class;
+		public static const bigButtonBackground:Bitmap = new bigButtonClass() as Bitmap;
+		
+		
+		// fonts
+//		[Embed(source='../assets/fonts/RockwBol.ps', fontName="Rockwell-Bold", mimeType='application/x-font')]
+//		public static const buttonFont:Class;
+//		public static const BUTTON_FONT:String = "Rockwell-Bold";
+		
+		[Embed(source="../assets/fonts/rockwell.swf", symbol="RockwellBold")]
+		public static const buttonFont:Class;
+		public static const BUTTON_FONT:String = "Rockwell";		
+		
+		//private var AssetClass:Class;
+
 	}
 }
