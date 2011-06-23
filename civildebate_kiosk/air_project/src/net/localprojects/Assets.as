@@ -1,6 +1,6 @@
 package net.localprojects {
 	
-	import flash.display.Bitmap;
+	import flash.display.*;
 
 	public final class Assets	{
 		
@@ -23,6 +23,9 @@ package net.localprojects {
 		[Embed(source = "../assets/graphics/debateThumbnail.png")] private static const debateThumbnailClass:Class;
 		public static const debateThumbnail:Bitmap = new debateThumbnailClass() as Bitmap;
 		
+		[Embed(source = "../assets/graphics/triangleMask.svg")] private static const triangleMaskClass:Class;
+		public static const triangleMask:Sprite = new triangleMaskClass() as Sprite;
+		
 		
 		// fonts
 //		[Embed(source='../assets/fonts/RockwBol.ps', fontName="Rockwell-Bold", mimeType='application/x-font')]
@@ -31,8 +34,7 @@ package net.localprojects {
 		
 		// TODO put multiple fonts / weights in one swf?
 		// See FLA project in /meta/font_embedding
-		[Embed(source="../assets/fonts/rockwell.swf", symbol="RockwellBold")]
-		public static const buttonFont:Class;
+		[Embed(source="../assets/assets.swf", symbol="RockwellBold")] public static const buttonFont:Class;
 		public static const BUTTON_FONT:String = "Rockwell";
 	}
 }
