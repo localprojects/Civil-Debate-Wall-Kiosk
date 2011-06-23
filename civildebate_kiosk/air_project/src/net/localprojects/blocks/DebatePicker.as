@@ -1,6 +1,8 @@
 package net.localprojects.blocks {
 	import flash.display.Sprite;
 	import flash.events.*;
+	import flash.geom.*;
+	import flash.utils.*;
 	
 	import net.localprojects.Assets;
 	import net.localprojects.ui.DebateThumbnail;
@@ -43,28 +45,67 @@ package net.localprojects.blocks {
 			addChild(debateHolder);
 			
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
 			this.x = 0;
 			this.y = 1720;	
 		}
 		
+		// scroll physics
+		private var vx:Number = 0;
+		private var friction:Number = 0.9;
+		private var vxThreshold:Number = 0;
+		private var mouseDown:Boolean = false;
+		
 		private function onMouseDown(e:MouseEvent):void {
 			Main.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			Main.stageRef.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			
-			lastMouseX = Main.stageRef.mouseX;
+			mouseDown = true;
+			
+			lastMouseX = Main.mouseX;
+			vx = 0;
 		}
 		
 		private function onMouseMove(e:MouseEvent):void {
 			// scroll the strip
-			// TODO add inertia and limit bounding
-			debateHolder.x += Main.stageRef.mouseX - lastMouseX;
-			lastMouseX = Main.stageRef.mouseX;
+			// TODO add limit bounding
+			debateHolder.x += Main.mouseX - lastMouseX;
+			vx = Main.mouseX - lastMouseX; // TODO average multiple recent velocities instead of the latest? Depends on touch screen. 
+			lastMouseX = Main.mouseX;
+			
+		}
+		
+		private function onEnterFrame(e:Event):void {
+			if (!mouseDown && (Math.abs(vx) > vxThreshold)) {
+				debateHolder.x += vx;
+				vx *= friction;
+			}
 		}
 		
 		private function onMouseUp(e:MouseEvent):void {
 			Main.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			Main.stageRef.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
+			Main.stageRef.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			
+			mouseDown = false;
+			
+			
+			
+			// are we clicking on a thumbnail? or just scrolling?
+			var objects:Array = this.getObjectsUnderPoint(new Point(Main.mouseX, Main.mouseY));
+			for (var i:int = 0; i < objects.length; i++) {
+				//trace(objects[i].toString());	
+				
+				// TODO figure out if we should interpret a click or a scroll (does the touchscreen do this for us?)
+				// kind of gross, use introspection to find out what's under the mouse instead of adding listeners to the thumbnails, need to block event bubbling instead?
+				if (getQualifiedClassName(objects[i]).indexOf("DebateThumbnail") != -1) {
+					trace("clicked thumbnail!");
+				}
+				
+			}
+			
+			
+			
 		}
 		
 	}

@@ -86,7 +86,7 @@ package net.localprojects.ui {
 		private function onMouseUp(e:MouseEvent):void {
 			// fire event
 			Main.stageRef.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
-			TweenMax.to(button, 0.2, {x: 0, y: 0, ease:Strong.easeOut});
+			TweenMax.to(button, 0.1, {x: 0, y: 0, ease:Strong.easeOut});
 		}
 		
 		

@@ -34,6 +34,7 @@ package  {
 		public static var header:Header = new Header();
 		public static var debatePicker:DebatePicker = new DebatePicker();
 		public static var question:Question = new Question();
+		public static var faceOff:FaceOff = new FaceOff();
 		
 		// kiosk state
 		public static var state:State;

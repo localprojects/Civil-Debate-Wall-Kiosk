@@ -8,7 +8,7 @@ package net.localprojects {
 		[Embed(source = "../assets/cameraSilhouette.png")] private static const cameraSilhouetteClass:Class;
 		public static const cameraSilhouette:Bitmap = new cameraSilhouetteClass() as Bitmap;
 
-		[Embed(source = "../assets/obama.jpg")] private static const obamaClass:Class;
+		[Embed(source = "../assets/graphics/obama.png")] private static const obamaClass:Class;
 		public static const obama:Bitmap = new obamaClass() as Bitmap;
 		
 		[Embed(source = "../assets/silhouette.jpg")] private static const silhouetteClass:Class;
@@ -23,8 +23,11 @@ package net.localprojects {
 		[Embed(source = "../assets/graphics/debateThumbnail.png")] private static const debateThumbnailClass:Class;
 		public static const debateThumbnail:Bitmap = new debateThumbnailClass() as Bitmap;
 		
-		[Embed(source = "../assets/graphics/triangleMask.svg")] private static const triangleMaskClass:Class;
-		public static const triangleMask:Sprite = new triangleMaskClass() as Sprite;
+		[Embed(source = "../assets/graphics/triangleMask.svg")]
+		public static const triangleMaskClass:Class;
+
+		
+		
 		
 		
 		// fonts
