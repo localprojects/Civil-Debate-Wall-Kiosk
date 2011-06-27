@@ -44,6 +44,7 @@ package  {
 		public var activePage:String;
 		
 		public function Main() {
+			// Github!
 			init();
 		}
 		
