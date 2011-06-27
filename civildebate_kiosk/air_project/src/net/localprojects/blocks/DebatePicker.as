@@ -72,11 +72,23 @@ package net.localprojects.blocks {
 			// TODO add limit bounding
 			debateHolder.x += Main.mouseX - lastMouseX;
 			vx = Main.mouseX - lastMouseX; // TODO average multiple recent velocities instead of the latest? Depends on touch screen. 
-			lastMouseX = Main.mouseX;
-			
+			lastMouseX = Main.mouseX;	
 		}
 		
 		private function onEnterFrame(e:Event):void {
+			// check bounds
+			if (debateHolder.x > 0) {
+				debateHolder.x = 0;
+				vx = 0;
+				trace("left limit");				
+			}
+			else if (debateHolder.x < ((debateHolder.width - Main.stageWidth) * -1)) {
+				debateHolder.x = (debateHolder.width - Main.stageWidth) * -1;
+				vx = 0;
+				trace("right limit");				
+			}
+			
+			// inertia
 			if (!mouseDown && (Math.abs(vx) > vxThreshold)) {
 				debateHolder.x += vx;
 				vx *= friction;
@@ -89,17 +101,17 @@ package net.localprojects.blocks {
 			
 			mouseDown = false;
 			
-			
-			
+
 			// are we clicking on a thumbnail? or just scrolling?
 			var objects:Array = this.getObjectsUnderPoint(new Point(Main.mouseX, Main.mouseY));
 			for (var i:int = 0; i < objects.length; i++) {
 				//trace(objects[i].toString());	
 				
-				// TODO figure out if we should interpret a click or a scroll (does the touchscreen do this for us?)
+				
 				// kind of gross, use introspection to find out what's under the mouse instead of adding listeners to the thumbnails, need to block event bubbling instead?
-				if (getQualifiedClassName(objects[i]).indexOf("DebateThumbnail") != -1) {
+				if (objects[i] is DebateThumbnail) {
 					trace("clicked thumbnail!");
+					// TODO figure out if we should interpret a click or a scroll (does the touchscreen do this for us?)					
 				}
 				
 			}
