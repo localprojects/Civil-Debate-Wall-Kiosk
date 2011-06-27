@@ -137,7 +137,7 @@
          <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/air/applicationupdater.swc</path-element>
          <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/air/applicationupdater_ui.swc</path-element>
          <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/air/servicemonitor.swc</path-element>
-         <path-element>/Users/Mika/Code/CivilDebateWall/lp-cdw/civildebate_kiosk/air_project/libraries</path-element>
+         <path-element>/Users/Mika/Code/Civil_Debate_Wall/uf_civildebate/Trunk/civildebate_kiosk/air_project/libraries</path-element>
          <path-element>/Applications/Adobe Flash Builder 4.5/eclipse/plugins/com.adobe.flexbuilder.flexunit_4.5.0.308971/flexunitframework/libs/version4libs/Common</path-element>
          <path-element>/Applications/Adobe Flash Builder 4.5/eclipse/plugins/com.adobe.flexbuilder.flexunit_4.5.0.308971/flexunitframework/libs/version4libs/ASProject</path-element>
          <path-element>/Applications/Adobe Flash Builder 4.5/eclipse/plugins/com.adobe.flexbuilder.flexunit_4.5.0.308971/flexunitframework/libs/version4libs/ASProject_Extended</path-element>
@@ -217,7 +217,7 @@
       <show-unused-type-selector-warnings>true</show-unused-type-selector-warnings>
       <!-- compiler.source-path: list of path elements that form the roots of ActionScript class hierarchies-->
       <source-path>
-         <path-element>/Users/Mika/Code/CivilDebateWall/lp-cdw/civildebate_kiosk/air_project/src</path-element>
+         <path-element>/Users/Mika/Code/Civil_Debate_Wall/uf_civildebate/Trunk/civildebate_kiosk/air_project/src</path-element>
       </source-path>
       <!-- compiler.strict: runs the AS3 compiler in strict error checking mode.-->
       <strict>true</strict>
