@@ -64,18 +64,16 @@ package  {
 			graphics.drawRect(0, 0, 1080, 1920);
 			graphics.endFill();
 			
-			
 
-			
 			homePage = new HomePage();
-			portraitPage  = new PortraitPage();
+			portraitPage  = new PhotoBooth();
 			reviewOpinionPage = new ReviewOpinionPage();
 			resultsPage = new ResultsPage;
 			
 			// set initial view
 			state = new State();	
 			state.addEventListener(State.VIEW_CHANGE, onViewChange);			
-			state.setView(new HomePage());
+			state.setView(new PhotoBooth());
 			
 			// temporarily squish screen for laptop development (half size)
 			stage.nativeWindow.width = 540;

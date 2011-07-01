@@ -15,45 +15,26 @@ package net.localprojects {
 		private var detector:ObjectDetector;
 		private var options:ObjectDetectorOptions;		
 		private var detectionMap:BitmapData;
-		private var drawMatrix:Matrix;
-		private var scaleFactor:int = 4;
-		
-		private var sourceWidth:int = 640;
-		private var sourceHeight:int = 480;
 			
-		public function FaceDetector(_sourceWidth:int, _sourceHeight:int) {
+		public function FaceDetector() {
 			super();
-			sourceWidth = _sourceWidth;
-			sourceHeight = _sourceHeight;			
 			
 			detector = new ObjectDetector();
-			
 			var options:ObjectDetectorOptions = new ObjectDetectorOptions();
 			options.min_size  = 30;
 			detector.options = options;
 			detector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, detectionHandler);
-			
-			detectionMap = new BitmapData(sourceWidth / scaleFactor, sourceHeight / scaleFactor, false, 0 );
-			drawMatrix = new Matrix(1 / scaleFactor, 0, 0, 1 / scaleFactor);			
 		}
 		
 		private function detectionHandler(e:ObjectDetectorEvent):void {
 			// compensate for scale, and then forward the event
-			if (e.rects.length > 0) {				
-				for (var i:int = 0; i < e.rects.length; i++) {
-					e.rects[i].x *= scaleFactor;
-					e.rects[i].y *= scaleFactor;				
-					e.rects[i].width *= scaleFactor;
-					e.rects[i].height *= scaleFactor;
-				}			
-				
+			if (e.rects.length > 0) {
 				this.dispatchEvent(e);
 			}
 		}
 		
 		public function processBitmap(photo:Bitmap):void {
-			detectionMap.draw(photo.bitmapData, drawMatrix, null, "normal", null, true);
-			detector.detect(detectionMap);		
+			detector.detect(photo.bitmapData);		
 		}
 		
 		

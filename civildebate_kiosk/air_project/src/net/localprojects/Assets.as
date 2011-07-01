@@ -26,10 +26,16 @@ package net.localprojects {
 		[Embed(source = "../assets/graphics/triangleMask.svg")]
 		public static const triangleMaskClass:Class;
 
+		[Embed(source = "../assets/graphics/portraitOverlay.png")] private static const portraitOverlayClass:Class;
+		public static const portraitOverlay:Bitmap = new portraitOverlayClass() as Bitmap;
 		
+		[Embed(source="../assets/shaders/portraitBlur.pbj", mimeType="application/octet-stream")]
+		public static const PortraitBlurFilter:Class;
 		
+		[Embed(source = "../assets/graphics/portraitBlurMask.png")] private static const portraitBlurMaskClass:Class;
+		public static const portraitBlurMask:Bitmap = new portraitBlurMaskClass() as Bitmap;		
 		
-		
+
 		// fonts
 //		[Embed(source='../assets/fonts/RockwBol.ps', fontName="Rockwell-Bold", mimeType='application/x-font')]
 //		public static const buttonFont:Class;
