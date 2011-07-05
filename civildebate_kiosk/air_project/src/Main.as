@@ -1,9 +1,12 @@
 package  {
+	import com.bit101.components.FPSMeter;
+	
 	import flash.desktop.*;
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.*;
 	import flash.text.engine.*;
+	import flash.ui.*;
 	
 	import flashx.textLayout.formats.*;
 	
@@ -76,8 +79,10 @@ package  {
 			state.setView(new PhotoBooth());
 			
 			// temporarily squish screen for laptop development (half size)
-			stage.nativeWindow.width = 540;
-			stage.nativeWindow.height = 960;
+			//stage.nativeWindow.width = 540;
+			//stage.nativeWindow.height = 960;
+		//	stage.nativeWindow.width = 1080;
+		//	stage.nativeWindow.height = 1920;			
 			
 			
 			// Set up some placeholder menus
@@ -101,6 +106,34 @@ package  {
 			//			keyboard.scaleX = .5;
 			//			keyboard.scaleY = .5;			
 			//			addChild(keyboard);			
+			
+			
+			
+			
+			// Show FPS
+			var fpsBackground:Shape = new Shape();
+			fpsBackground.graphics.beginFill(0);
+			fpsBackground.graphics.drawRect(stage.stageWidth - 100, stage.stageHeight - 50, 100, 50);
+			fpsBackground.graphics.endFill();
+			addChild(fpsBackground);
+			
+			var fps:FPSMeter = new FPSMeter(this, (stage.stageWidth - 100) + 5, (stage.stageHeight - 50) + 5);
+			fps.scaleX = 2;
+			fps.scaleY = 2;
+			
+			
+			// set up a full screen option in the context menu
+			var myContextMenu:ContextMenu = new ContextMenu();
+			var item:ContextMenuItem = new ContextMenuItem("Toggle Full Screen");
+			myContextMenu.customItems.push(item);
+			item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onFullScreenContextMenuSelect);
+			contextMenu = myContextMenu;
+			
+			
+//			this.rotation = -90;
+//			this.y = 1920;
+//			this.width = 1080;
+			
 		}
 		
 		private function onKeyUp(e:KeyButtonEvent):void {
@@ -126,6 +159,19 @@ package  {
 			Main.mouseY = this.mouseY;
 			//trace(Main.mouseX);			
 		}
+		
+		private function onFullScreenContextMenuSelect(e:Event):void {
+			toggleFullScreen();
+		}
+		
+		private function toggleFullScreen():void {
+			if (stage.displayState == StageDisplayState.NORMAL) {
+				stage.displayState = StageDisplayState.FULL_SCREEN;
+			}
+			else {
+				stage.displayState = StageDisplayState.NORMAL;
+			}
+		}		
 		
 	}
 }

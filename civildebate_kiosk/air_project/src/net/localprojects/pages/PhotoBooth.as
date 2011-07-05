@@ -27,6 +27,9 @@ package net.localprojects.pages {
 			shutterButton.x = (Main.stageWidth - shutterButton.width) / 2;
 			shutterButton.y = Main.stageHeight * .75;		
 			
+			shutterButton.scaleX = 2;
+			shutterButton.scaleY = 2;			
+			
 			countdown = new Countdown();
 			addChild(countdown);
 			countdown.x = Main.stageWidth * .5;
