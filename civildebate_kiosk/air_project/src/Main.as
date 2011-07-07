@@ -12,7 +12,9 @@ package  {
 	
 	import net.localprojects.*;
 	import net.localprojects.blocks.*;
+	import net.localprojects.events.*;
 	import net.localprojects.pages.*;
+	import net.localprojects.utilities.InactivityTimer;
 	
 	import org.velluminous.keyboard.AlphabeticKeyboard;
 	import org.velluminous.keyboard.KeyButtonEvent;
@@ -26,18 +28,19 @@ package  {
 		public static var stageHeight:Number;
 		public static var mouseX:int;
 		public static var mouseY:int;
+
+		// blocks (move to view class)
+		public static var header:Header;
+		public static var debatePicker:DebatePicker;
+		public static var question:Question;
+		public static var faceOff:FaceOff;		
 		
 		// pages (move to view class)
 		public static var homePage:Page;
 		public static var portraitPage:Page;
 		public static var reviewOpinionPage:Page;
 		public static var resultsPage:Page;		
-		
-		// blocks (move to view class)
-		public static var header:Header = new Header();
-		public static var debatePicker:DebatePicker = new DebatePicker();
-		public static var question:Question = new Question();
-		public static var faceOff:FaceOff = new FaceOff();
+		public static var stancePage:Page;
 		
 		// kiosk state
 		public static var state:State;
@@ -45,6 +48,9 @@ package  {
 		// page management
 		public var pages:Array = new Array();
 		public var activePage:String;
+		
+		// utilities
+		private var inactivityTimer:InactivityTimer;
 		
 		public function Main() {
 			init();
@@ -63,28 +69,34 @@ package  {
 			stageRef = this.stage;
 			
 			// background fill
-			graphics.beginFill(0x000000);
+			graphics.beginFill(0xcccccc);
 			graphics.drawRect(0, 0, 1080, 1920);
 			graphics.endFill();
 			
 
-			homePage = new HomePage();
-			portraitPage  = new PhotoBooth();
-			reviewOpinionPage = new ReviewOpinionPage();
-			resultsPage = new ResultsPage;
+			// set up the blocks
+			header = new Header();
+			debatePicker = new DebatePicker();
+			question = new Question();
+			faceOff = new FaceOff();		
+			
+			// set up the pages
+			homePage = new HomePage();		
+			stancePage = new StancePage();			
+			
 			
 			// set initial view
 			state = new State();	
 			state.addEventListener(State.VIEW_CHANGE, onViewChange);			
-			state.setView(new PhotoBooth());
+			state.setView(stancePage);
+			
+			
 			
 			// temporarily squish screen for laptop development (half size)
-			//stage.nativeWindow.width = 540;
-			//stage.nativeWindow.height = 960;
-		//	stage.nativeWindow.width = 1080;
-		//	stage.nativeWindow.height = 1920;			
+			stage.nativeWindow.width = 540;
+			stage.nativeWindow.height = 960;			
 			
-			
+
 			// Set up some placeholder menus
 			//			var mainMenu:NativeMenuItem = new NativeMenuItem("CDB");
 			//			var menu:NativeMenu = new NativeMenu();
@@ -129,11 +141,13 @@ package  {
 			item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onFullScreenContextMenuSelect);
 			contextMenu = myContextMenu;
 			
-			
-//			this.rotation = -90;
-//			this.y = 1920;
-//			this.width = 1080;
-			
+			// Inactivity timer
+			inactivityTimer = new InactivityTimer(30);
+			inactivityTimer.addEventListener(InactivityEvent.INACTIVE, onInactive);
+		}
+		
+		private function onInactive(e:InactivityEvent):void {
+			trace("Inactive from stage! TK overlay");
 		}
 		
 		private function onKeyUp(e:KeyButtonEvent):void {

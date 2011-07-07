@@ -33,17 +33,35 @@ package net.localprojects {
 		public static const PortraitBlurFilter:Class;
 		
 		[Embed(source = "../assets/graphics/portraitBlurMask.png")] private static const portraitBlurMaskClass:Class;
-		public static const portraitBlurMask:Bitmap = new portraitBlurMaskClass() as Bitmap;		
+		public static const portraitBlurMask:Bitmap = new portraitBlurMaskClass() as Bitmap;
 		
+		
+		
+		
+		
+		
+		
+		[Embed(source = "../assets/graphics/samplePortrait.png")] private static const samplePortraitClass:Class;
+		public static const samplePortrait:Bitmap = new samplePortraitClass() as Bitmap;
 
-		// fonts
-//		[Embed(source='../assets/fonts/RockwBol.ps', fontName="Rockwell-Bold", mimeType='application/x-font')]
-//		public static const buttonFont:Class;
-//		public static const BUTTON_FONT:String = "Rockwell-Bold";
+		[Embed(source = "../assets/graphics/dashedDivider.png")] private static const dashedDividerClass:Class;
+		public static function getDashedDivider():Bitmap { return new dashedDividerClass() as Bitmap; };
 		
-		// TODO put multiple fonts / weights in one swf?
-		// See FLA project in /meta/font_embedding
-		[Embed(source="../assets/assets.swf", symbol="RockwellBold")] public static const buttonFont:Class;
-		public static const BUTTON_FONT:String = "Rockwell";
+		[Embed(source = "../assets/graphics/buttonBackground.png")] private static const buttonBackgroundClass:Class;
+		public static function buttonBackground():Bitmap { return new buttonBackgroundClass() as Bitmap; };
+		
+		
+		
+		
+		// fonts
+		[Embed(source="../assets/fonts/rockwell.swf", symbol="RockwellRegular")] public static const Font:Class;
+		[Embed(source="../assets/fonts/rockwell.swf", symbol="RockwellBold")] public static const FontBold:Class;
+		public static const FONT_REGULAR:String = "Rockwell";
+		
+		[Embed(source="../assets/fonts/rockwell.swf", symbol="RockwellExtraBold")] public static const FontExtraBold:Class;		
+		public static const FONT_EXTRA_BOLD:String = "Rockwell Extra Bold";
+		
+		[Embed(source="../assets/fonts/rockwell.swf", symbol="RockwellLight")] public static const FontLight:Class;		
+		public static const FONT_LIGHT:String = "Rockwell Light";		
 	}
 }

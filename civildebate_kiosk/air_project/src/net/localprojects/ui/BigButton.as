@@ -40,13 +40,14 @@ package net.localprojects.ui {
 			
 			// create the actual button panel
 			button = new Sprite();
-			button.graphics.beginBitmapFill(Assets.bigButtonBackground.bitmapData);
-			button.graphics.drawRect(0, 0, buttonWidth, buttonHeight);
-			button.graphics.endFill();
+			
+			// background image
+			button.addChild(Assets.buttonBackground());
 				
 			// create the button text format
 			var textFormat:TextFormat = new TextFormat();
-			textFormat.font =  Assets.BUTTON_FONT;
+			textFormat.bold = true;
+			textFormat.font =  Assets.FONT_REGULAR;
 			textFormat.align = TextFormatAlign.CENTER;
 			textFormat.size = 36;
 			
@@ -74,19 +75,19 @@ package net.localprojects.ui {
 			
 			button.mask = buttonMask;
 			
-			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			
+			addEventListener	(MouseEvent.MOUSE_DOWN, onMouseDown);
 		}
 		
 		private function onMouseDown(e:MouseEvent):void {
-			TweenMax.to(button, 0.2, {x: -29, y: 36, ease:Strong.easeOut});
-			Main.stageRef.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, true);			
+			TweenMax.to(button, 0.25, {x: -26, y: 32, ease:Strong.easeOut, colorMatrixFilter:{saturation: 0}});
+			Main.stageRef.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, true);
 		}
+		
 		
 		private function onMouseUp(e:MouseEvent):void {
 			// fire event
 			Main.stageRef.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
-			TweenMax.to(button, 0.1, {x: 0, y: 0, ease:Strong.easeOut});
+			TweenMax.to(button, 0.1, {x: 0, y: 0, ease:Strong.easeOut, colorMatrixFilter:{saturation: 1}});
 		}
 		
 		

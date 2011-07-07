@@ -43,7 +43,7 @@ package net.localprojects.elements {
 			
 			// add name text
 			var textFormat:TextFormat = new TextFormat();
-			textFormat.font =  Assets.BUTTON_FONT;
+			textFormat.font =  Assets.FONT_REGULAR;
 			textFormat.align = TextFormatAlign.LEFT;
 			textFormat.size = 28;
 			
@@ -65,7 +65,7 @@ package net.localprojects.elements {
 			
 			// add statement text
 			textFormat = new TextFormat();
-			textFormat.font =  Assets.BUTTON_FONT;
+			textFormat.font =  Assets.FONT_REGULAR;
 			textFormat.align = TextFormatAlign.LEFT;
 			textFormat.size = 24;
 			
