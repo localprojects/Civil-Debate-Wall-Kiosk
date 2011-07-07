@@ -10,15 +10,12 @@ package net.localprojects.blocks {
 		}
 		
 		private function init():void {
-			// background
-			this.graphics.beginFill(0x000000);
-			this.graphics.drawRect(0, 0, 1080, 130);
-			this.graphics.endFill();
 			
 			// text
 			// TODO get this from the state and move to update function
 			var textFormat:TextFormat = new TextFormat();
-			textFormat.font =  Assets.BUTTON_FONT;
+			textFormat.bold = true;
+			textFormat.font =  Assets.FONT_REGULAR;
 			textFormat.align = TextFormatAlign.CENTER;
 			textFormat.size = 36;
 			
@@ -31,16 +28,16 @@ package net.localprojects.blocks {
 			questionText.mouseEnabled = false;			
 			questionText.gridFitType = GridFitType.NONE;
 			questionText.antiAliasType = AntiAliasType.NORMAL;
-			questionText.textColor = 0xffffff;
+			questionText.textColor = 0x414042;
 			questionText.width = 1080;
 			questionText.wordWrap = true;
 			questionText.text = "\u201C Do you feel our public education provides our children with a very thorough education? \u201D";
-			questionText.y = ((height - questionText.height) / 2) + 6;			
+			//questionText.y = ((height - questionText.height) / 2) + 6;			
 			
 			addChild(questionText);	
 			
 			this.x = 0;
-			this.y = 115;
+			this.y = 140;
 		}
 	}
 }

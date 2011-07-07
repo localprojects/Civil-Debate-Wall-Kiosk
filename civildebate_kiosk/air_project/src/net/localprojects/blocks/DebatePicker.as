@@ -33,7 +33,6 @@ package net.localprojects.blocks {
 			for(var i:int = 0; i < 50; i++) {
 				var tempDebateThumbnail:DebateThumbnail = new DebateThumbnail();
 				tempDebateThumbnail.x = padding + ((tempDebateThumbnail.width + padding) * i);
-				trace(tempDebateThumbnail.x);
 				debateHolder.addChild(tempDebateThumbnail);
 			}
 			

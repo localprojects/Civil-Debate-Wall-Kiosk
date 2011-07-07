@@ -14,16 +14,18 @@ package net.localprojects.blocks {
 		}
 		
 		private function init():void {
-			// background
-			graphics.beginBitmapFill(Assets.headerBackground.bitmapData);
-			graphics.drawRect(0, 0, 1080, 115);
-			graphics.endFill();
+			// background			
+			addChild(Assets.headerBackground);
+			Assets.headerBackground.x = 30;
+			Assets.headerBackground.y = 30;			
 			
 			// text
 			var textFormat:TextFormat = new TextFormat();
-			textFormat.font =  Assets.BUTTON_FONT;
+			textFormat.bold = true;			
+			textFormat.font =  Assets.FONT_REGULAR;
 			textFormat.align = TextFormatAlign.CENTER;
 			textFormat.size = 36;
+			
 			
 			// button label
 			var title:TextField = new TextField();
@@ -38,8 +40,8 @@ package net.localprojects.blocks {
 			title.antiAliasType = AntiAliasType.NORMAL;
 			title.textColor = 0xffffff;
 			title.text = "The Great Civil Debate Wall".toUpperCase();
-			title.x = (width - title.width) / 2;
-			title.y = ((height - title.height) / 2) + 6;
+			title.x = Assets.headerBackground.x + (width - title.width) / 2;
+			title.y = Assets.headerBackground.y + ((height - title.height) / 2) + 2;
 			
 			addChild(title);
 		}
