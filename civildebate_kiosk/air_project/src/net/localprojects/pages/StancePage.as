@@ -40,9 +40,6 @@ package net.localprojects.pages {
 			addOpinionButton.y = 1469;
 			addChild(addOpinionButton);
 			
-			
-
-
 			// put everything on the page
 			for (var i:int = 0; i < blocks.length; i++) {
 				addChild(blocks[i]);
@@ -52,6 +49,15 @@ package net.localprojects.pages {
 			blockLabel.x = 100;
 			blockLabel.y = 300;
 			addChild(blockLabel);
+			
+			var iconButton:IconButton = new IconButton(121, 110, "STATS", 22, 0x007cff, Assets.statsIcon());
+			iconButton.x = 100;
+			iconButton.y = 914;	
+			addChild(iconButton);
+			
+			
+			
+			
 			
 		}
 	}
