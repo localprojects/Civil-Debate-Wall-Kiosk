@@ -56,6 +56,10 @@ package net.localprojects {
 		[Embed(source = "../assets/graphics/likeIcon.png")] private static const likeIconClass:Class;
 		public static function likeIcon():Bitmap { return new likeIconClass() as Bitmap; };
 		
+		[Embed(source = "../assets/graphics/quotation.svg")] private static const quotationClass:Class;
+		public static function quotation():Sprite { return new quotationClass() as Sprite; };
+		
+		
 		
 		
 		

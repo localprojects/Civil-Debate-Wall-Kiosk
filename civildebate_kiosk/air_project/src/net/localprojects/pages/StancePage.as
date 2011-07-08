@@ -1,10 +1,14 @@
 package net.localprojects.pages {
 	
 	import flash.display.Bitmap;
+	import flash.display.Sprite;
 	
 	import net.localprojects.*;
 	import net.localprojects.elements.BlockLabel;
+	import net.localprojects.elements.BlockParagraph;
 	import net.localprojects.ui.*;
+	
+	import com.greensock.*;
 	
 	public class StancePage extends Page {
 		
@@ -37,7 +41,7 @@ package net.localprojects.pages {
 			
 			var addOpinionButton:BigButton = new BigButton("Add Your Opinion");
 			addOpinionButton.x = 438;
-			addOpinionButton.y = 1469;
+			addOpinionButton.y = 1500;
 			addChild(addOpinionButton);
 			
 			// put everything on the page
@@ -45,15 +49,71 @@ package net.localprojects.pages {
 				addChild(blocks[i]);
 			}
 			
-			var blockLabel:BlockLabel = new BlockLabel();
-			blockLabel.x = 100;
-			blockLabel.y = 300;
-			addChild(blockLabel);
+			// TODO block Label (single line block label)
+			// TODO block graph class (multi line block label)
 			
-			var iconButton:IconButton = new IconButton(121, 110, "STATS", 22, 0x007cff, Assets.statsIcon());
-			iconButton.x = 100;
-			iconButton.y = 914;	
-			addChild(iconButton);
+			var opinion:String = "Our performance in education has been behind many countries and our youths are going to be unable to compete for jobs in the global market.";
+			//opinion = "MMMMMM MMMMMM MM MM MMM MMMM WWWWW WMWWWMWM  MMMMMMMMW WMMMWMWMWM MMMMMMMMMMMMM MMMMMMWMW MWMWMWMW WMWMWMW WMMWWWMMMMMMM MWMWMWMWM MWWWWWMMMMM MMEMEM MEMEME ME".toLowerCase()
+				
+			var opinionGraph:BlockParagraph = new BlockParagraph(915, opinion, 43, 0x009bff);
+			opinionGraph.x = 100;
+			opinionGraph.y = 1170;
+			addChild(opinionGraph);
+			
+			var statsButton:IconButton = new IconButton(121, 110, "STATS", 22, 0x007cff, Assets.statsIcon());
+			statsButton.x = 100;
+			statsButton.y = 914;	
+			addChild(statsButton);
+			
+			var debateMeButton:IconButton = new IconButton(121, 115, "DEBATE ME!", 16, 0x007cff, null, true);
+			debateMeButton.x = 844;
+			debateMeButton.y = 874;	
+			addChild(debateMeButton);			
+			
+			var likeButton:CounterButton = new CounterButton(121, 110, "LIKE", 22, 0x007cff, Assets.likeIcon(), false, 1);
+			likeButton.x = 721;
+			likeButton.y = 1023;
+			addChild(likeButton);
+			
+			
+			var debateButton:BlockButton = new BlockButton(370, 63, "8 people debated this statement", 22, 0x007dff, true);
+			debateButton.x = 586;
+			debateButton.y = opinionGraph.y + opinionGraph.height;
+			addChild(debateButton);
+			
+			
+			// TODO pass in optional padding
+			var answerLabel:BlockLabel = new BlockLabel("YES!", 100, 0xffffff, 0x009bff);
+			answerLabel.x = 274;
+			answerLabel.y = 240;
+			addChild(answerLabel);			
+			
+			var nameLabel:BlockLabel = new BlockLabel("Carrie Ann Says:", 55, 0xffffff, 0x009bff);
+			nameLabel.x = 274;
+			nameLabel.y = 400;
+			addChild(nameLabel);
+			
+			
+//			var leftQuote:BlockLabel = new BlockLabel("\u201CTEST", 200, 0x00b9ff, 0x000000, false);
+//			leftQuote.x = 100;
+//			leftQuote.y = 100;
+//			addChild(leftQuote);
+			
+			
+			var leftQuotationMark:Sprite = Assets.quotation();
+			TweenMax.to(leftQuotationMark, 0, {colorMatrixFilter:{colorize: 0x009bff, amount: 1}});			
+			leftQuotationMark.x = 100;
+			leftQuotationMark.y = 515;
+			addChild(leftQuotationMark);
+			
+			
+			var rightQuotationMark:Sprite = Assets.quotation();
+			TweenMax.to(rightQuotationMark, 0, {colorMatrixFilter:{colorize: 0x009bff, amount: 1}});
+			rightQuotationMark.rotation = 180;
+			rightQuotationMark.x = 842;
+			rightQuotationMark.y = 1730;
+			addChild(rightQuotationMark);			
+			
 			
 			
 			

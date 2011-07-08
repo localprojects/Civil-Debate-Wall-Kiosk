@@ -6,13 +6,13 @@ package net.localprojects.ui {
 	
 	public class IconButton extends Sprite {
 
-		private var _buttonWidth:Number;
-		private var _buttonHeight:Number;
-		private var _labelText:String;
-		private var _labelSize:Number;
-		private var _backgroundColor:uint;
-		private var _icon:Bitmap;
-		private var _tail:Boolean;
+		protected var _buttonWidth:Number;
+		protected var _buttonHeight:Number;
+		protected var _labelText:String;
+		protected var _labelSize:Number;
+		protected var _backgroundColor:uint;
+		protected var _icon:Bitmap;
+		protected var _tail:Boolean;
 		
 		public function IconButton(buttonWidth:Number, buttonHeight:Number, labelText:String, labelSize:Number, backgroundColor:uint, icon:Bitmap = null, tail:Boolean = false) {
 			super();
@@ -32,9 +32,12 @@ package net.localprojects.ui {
 			this.addEventListener(MouseEvent.CLICK, onClick);
 		}
 		
-		private function draw():void {
+		
+		
+		protected function draw():void {
 			// draw stuff
-			
+			this.graphics.clear();
+
 			var lineThickness:Number = 4;
 			
 			// base rectangles
@@ -47,8 +50,8 @@ package net.localprojects.ui {
 			
 			// tail
 			if (_tail) {
-				var tailWidth:Number = 30;
-				var tailHeight:Number = 40;			
+				var tailWidth:Number = 25;
+				var tailHeight:Number = 30;			
 				
 				var outlinedTail:Shape = new Shape();
 				
@@ -102,7 +105,7 @@ package net.localprojects.ui {
 			labelField.autoSize = TextFieldAutoSize.CENTER;
 			labelField.text = _labelText;
 			labelField.x = (_buttonWidth / 2) - (labelField.width / 2);
-			labelField.y = (_buttonHeight / 2) - (labelField.width / 2);			
+			labelField.y = (_buttonHeight / 2) - (labelField.height / 2);			
 			
 			addChild(labelField);
 			
@@ -117,20 +120,26 @@ package net.localprojects.ui {
 			}
 		}
 		
+		protected function update():void {
+			
+		}
 		
-		private function onClick(e:MouseEvent):void {
+		
+		protected function onClick(e:MouseEvent):void {
 			trace("clicked");
 		}
 		
 		
 		// getters and setters
+		// TODO make the graphics update accordingly
 		public function get buttonWidth():Number {
 			return _buttonWidth;
 		}
 		
 		public function set buttonWidth(value:Number):void {
 			_buttonWidth = value;
-			draw();
+			update();
+			// TODO REDRAW, DELETE CHILDREN?
 		}
 		
 		public function get buttonHeight():Number	{
@@ -139,7 +148,8 @@ package net.localprojects.ui {
 		
 		public function set buttonHeight(value:Number):void	{
 			_buttonHeight = value;
-			draw();
+			update();
+			// TODO REDRAW, DELETE CHILDREN?			
 		}
 		
 		public function get labelText():String {
@@ -148,7 +158,7 @@ package net.localprojects.ui {
 		
 		public function set labelText(value:String):void {
 			_labelText = value;
-			draw();
+			update();
 		}
 		
 		public function get labelSize():Number {
@@ -157,7 +167,7 @@ package net.localprojects.ui {
 		
 		public function set labelSize(value:Number):void {
 			_labelSize = value;
-			draw();			
+			update();			
 		}
 		
 		public function get backgroundColor():uint {
@@ -166,7 +176,7 @@ package net.localprojects.ui {
 		
 		public function set backgroundColor(value:uint):void {
 			_backgroundColor = value;
-			draw();			
+			update();			
 		}
 		
 		public function get icon():Bitmap {
@@ -175,7 +185,7 @@ package net.localprojects.ui {
 		
 		public function set icon(value:Bitmap):void {
 			_icon = value;
-			draw();			
+			update();			
 		}
 		
 		public function get tail():Boolean {
@@ -184,7 +194,7 @@ package net.localprojects.ui {
 		
 		public function set tail(value:Boolean):void {
 			_tail = value;
-			draw();			
+			update();			
 		}		
 		
 	}
