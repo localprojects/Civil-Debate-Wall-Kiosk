@@ -6,68 +6,86 @@ package net.localprojects.elements {
 	
 	import net.localprojects.*;
 	
+	// multi-line block text
 	public class BlockLabel extends Sprite {
 		
-		private var content:String = "Our performance in education has been behind many countries and our youths are going to be unable to compete for jobs in the global market."; 
-		private var backgroundColor:uint = 0x00b9ff;
-		private var vpadding:Number = 28;
-		private var hpadding:Number = 40;
-		private var textWidth:Number = 915 - (hpadding * 2);
+		private var _text:String;
+		private var _textSize:Number;
+		private var _textColor:uint;		
+		private var _backgroundColor:uint;
+		private var _showBackground:Boolean;		
 		
-		private var leading:Number = 5;
+		private var textField:TextField;
+		private var vPadding:Number;
+		private var hPadding:Number;		
+		private var leading:Number;
 		
-		public function BlockLabel() {
-			super();
+		public function BlockLabel(text:String, textSize:Number, textColor:uint, backgroundColor:uint, showBackground:Boolean = true) {
+			vPadding = 28;
+			hPadding = 40;
 			
+			_text = text;
+			_textSize = textSize;
+			_textColor = textColor;
+			_backgroundColor = backgroundColor;
+			_showBackground = showBackground;
+			
+			init();
+		}
+		
+		private function init():void {
 			// set up the text format
 			var textFormat:TextFormat = new TextFormat();			
-			textFormat.bold = false;
+			textFormat.bold = true;
 			textFormat.font =  Assets.FONT_REGULAR;
 			textFormat.align = TextFormatAlign.LEFT;
-			textFormat.size = 43;
-			
+			textFormat.size = _textSize;
 			textFormat.leading = leading;
 			
-			// this is just to make sure line breaks are calculated reasonably
-			// since Flash doesn't have line height control (just leading), there's no way
-			// to center text vertically on its background. To get around this, we place the text on manually
-			// drawn background shapes
+			textField = new TextField();
+			textField.defaultTextFormat = textFormat;
+			textField.embedFonts = true;
+			textField.selectable = false;
+			textField.cacheAsBitmap = false;
+			textField.mouseEnabled = false;
+			textField.gridFitType = GridFitType.NONE;
+			textField.antiAliasType = AntiAliasType.ADVANCED;
+			textField.textColor = _textColor;
+			//textField.width = 1080;
+			textField.autoSize = TextFieldAutoSize.LEFT;
 			
-			var tempTextField:TextField = new TextField();
-			tempTextField.defaultTextFormat = textFormat;
-			tempTextField.embedFonts = true;
-			tempTextField.selectable = false;
-			tempTextField.multiline = true;
-			tempTextField.cacheAsBitmap = false;
-			tempTextField.mouseEnabled = false;
-			tempTextField.gridFitType = GridFitType.NONE;
-			tempTextField.antiAliasType = AntiAliasType.ADVANCED;
-			tempTextField.textColor = 0xffffff;
-			tempTextField.width = textWidth;
-			tempTextField.autoSize = TextFieldAutoSize.LEFT;
-			tempTextField.wordWrap = true;
-			tempTextField.text = content;
-			
+			textField.text = _text;
 			
 			//draw the background
-			var yPos:Number = 0;			
-			for (var i:int = 0; i < tempTextField.numLines; i++) {
-				this.graphics.beginFill(backgroundColor);				
+			if (_showBackground) {
+				var background:Shape = new Shape();
 				
-				var metrics:TextLineMetrics = tempTextField.getLineMetrics(i);				
-				this.graphics.drawRect(0 - hpadding, yPos - vpadding, metrics.width + hpadding, metrics.height + vpadding);
-				yPos += metrics.height;
+				background.graphics.beginFill(_backgroundColor);								
+				background.graphics.drawRect(0 - hPadding, 0 - vPadding, textField.width + hPadding, textField.height + vPadding);
+				background.graphics.endFill();				
 				
+				// compensate for negative origin
+				background.x = hPadding;
+				background.y = vPadding;
+				addChild(background);
 				
-				this.graphics.endFill();				
-			}	
+				textField.x = hPadding / 2;
+				textField.y = vPadding / 2;
+			}
 			
-			tempTextField.x = -hpadding / 2;
-			tempTextField.y = -vpadding / 2;			
-			addChild(tempTextField);			
+			addChild(textField);			
+			
+			//			this.graphics.beginFill(0xff0000);
+			//			this.graphics.drawRect(0, 0, width, height);
+			//			this.graphics.endFill();
 			
 			this.cacheAsBitmap = true;
+			
+			
+			
 		}
+		
+		// TODO getters and setters
 		
 		
 		
