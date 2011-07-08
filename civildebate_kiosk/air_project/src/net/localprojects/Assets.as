@@ -50,6 +50,13 @@ package net.localprojects {
 		[Embed(source = "../assets/graphics/buttonBackground.png")] private static const buttonBackgroundClass:Class;
 		public static function buttonBackground():Bitmap { return new buttonBackgroundClass() as Bitmap; };
 		
+		[Embed(source = "../assets/graphics/statsIcon.png")] private static const statsIconClass:Class;
+		public static function statsIcon():Bitmap { return new statsIconClass() as Bitmap; };
+
+		[Embed(source = "../assets/graphics/likeIcon.png")] private static const likeIconClass:Class;
+		public static function likeIcon():Bitmap { return new likeIconClass() as Bitmap; };
+		
+		
 		
 		
 		
