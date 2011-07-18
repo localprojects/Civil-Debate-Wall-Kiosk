@@ -28,8 +28,6 @@ package net.localprojects {
 			phoneNumber = 0;
 			
 			
-			
-			
 			// also
 			// activity timer?
 		}

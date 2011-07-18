@@ -4,7 +4,6 @@ package net.localprojects.pages {
 	
 	import flash.display.*;
 	import flash.events.*;
-
 	
 	import net.localprojects.*;
 	import net.localprojects.blocks.*;
@@ -19,10 +18,17 @@ package net.localprojects.pages {
 		}
 		
 		private function init():void {
-			blocks.push(Main.header);
-			blocks.push(Main.debatePicker);
-			blocks.push(Main.question);
-			blocks.push(Main.faceOff);
+			// todo use global blocks
+//			blocks.push(Main.header);
+//			blocks.push(Main.debatePicker);
+//			blocks.push(Main.question);
+//			blocks.push(Main.faceOff);
+			
+			
+			Main.viewManager.setBlocks(Main.viewManager.header,
+																 Main.viewManager.debatePicker,
+																 Main.viewManager.question,
+																 Main.viewManager.faceOff);
 			
 			
 			this.name = "home"; // how we find it
@@ -30,9 +36,6 @@ package net.localprojects.pages {
 //			this.setPlaceholderText("Home Page");
 			
 			// put everything on the page
-			for (var i:int = 0; i < blocks.length; i++) {
-				addChild(blocks[i]);
-			}
 			
 			// temp buttons
 			var replayButton:BigButton = new BigButton("Replay Debate");
@@ -42,7 +45,7 @@ package net.localprojects.pages {
 			
 			var opinionButton:BigButton = new BigButton("Add Your Opinion");
 			opinionButton.x = 29;
-			opinionButton.y = 1550;			
+			opinionButton.y = 1550;		
 			addChild(opinionButton);
 
 		}		

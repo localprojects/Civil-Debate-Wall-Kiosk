@@ -1,14 +1,15 @@
 package net.localprojects.pages {
 	
+	import com.greensock.*;
+	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	
 	import net.localprojects.*;
 	import net.localprojects.elements.BlockLabel;
 	import net.localprojects.elements.BlockParagraph;
 	import net.localprojects.ui.*;
-	
-	import com.greensock.*;
 	
 	public class StancePage extends Page {
 		
@@ -19,9 +20,16 @@ package net.localprojects.pages {
 		}
 		
 		private function init():void {
-			blocks.push(Main.header);
-			blocks.push(Main.debatePicker);
-			blocks.push(Main.question);	
+			// TODO global blocks array? easier transitions for just showing / hiding them?
+//			blocks.push(Main.header);
+//			blocks.push(Main.debatePicker);
+//			blocks.push(Main.question);
+			
+			trace("View Manager: " + Main.viewManager);
+			
+//			Main.viewManager.setBlocks(Main.viewManager.header,
+//																 Main.viewManager.debatePicker,
+//																 Main.viewManager.question);			
 			
 			
 			// put in the background portrait (TODO move to block)
@@ -43,7 +51,8 @@ package net.localprojects.pages {
 			addOpinionButton.x = 438;
 			addOpinionButton.y = 1500;
 			addChild(addOpinionButton);
-			
+			addOpinionButton.addEventListener(MouseEvent.MOUSE_UP, onAddOpinionButton);
+						
 			// put everything on the page
 			for (var i:int = 0; i < blocks.length; i++) {
 				addChild(blocks[i]);
@@ -112,13 +121,13 @@ package net.localprojects.pages {
 			rightQuotationMark.rotation = 180;
 			rightQuotationMark.x = 842;
 			rightQuotationMark.y = 1730;
-			addChild(rightQuotationMark);			
+			addChild(rightQuotationMark);
+		}
+		
+		private function onAddOpinionButton(e:MouseEvent):void {
+			trace("stance page got opinion button");
 			
-			
-			
-			
-			
-			
+			Main.state.setView(Main.viewManager.answerPage);			
 		}
 	}
 }

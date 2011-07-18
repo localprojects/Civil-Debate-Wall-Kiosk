@@ -13,7 +13,7 @@ package net.localprojects {
 		private var _brightness:Number = 1; // TODO range?
 		private var _saturation:Number = 1; // TODO range?
 		private var _blur:Number = 0; // TODO range?
-		private var blurFilter:BlurFilter; // TODO range?		
+		private var blurFilter:BlurFilter; // TODO range?
 		
 		public function SpritePlus() {
 			super();

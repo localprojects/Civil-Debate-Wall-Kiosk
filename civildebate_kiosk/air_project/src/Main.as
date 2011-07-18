@@ -21,6 +21,7 @@ package  {
 
 	[SWF(width="1080", height="1920", frameRate="60")]
 	public class Main extends Sprite {		
+		
 		// some globals
 		public static var mainRef:Main;
 		public static var stageRef:Stage;
@@ -29,25 +30,14 @@ package  {
 		public static var mouseX:int;
 		public static var mouseY:int;
 
-		// blocks (move to view class)
-		public static var header:Header;
-		public static var debatePicker:DebatePicker;
-		public static var question:Question;
-		public static var faceOff:FaceOff;		
 		
-		// pages (move to view class)
-		public static var homePage:Page;
-		public static var portraitPage:Page;
-		public static var reviewOpinionPage:Page;
-		public static var resultsPage:Page;		
-		public static var stancePage:Page;
+		public static var state:State = new State();		
+		public static var viewManager:ViewManager = new ViewManager();		
 		
-		// kiosk state
-		public static var state:State;
 		
-		// page management
-		public var pages:Array = new Array();
-		public var activePage:String;
+		
+
+		
 		
 		// utilities
 		private var inactivityTimer:InactivityTimer;
@@ -74,21 +64,14 @@ package  {
 			graphics.endFill();
 			
 
-			// set up the blocks
-			header = new Header();
-			debatePicker = new DebatePicker();
-			question = new Question();
-			faceOff = new FaceOff();		
+//						
+//			state = new State();
+//			viewManager = new ViewManager();			
 			
-			// set up the pages
-			homePage = new HomePage();		
-			stancePage = new StancePage();			
+			viewManager.init();
 			
-			
-			// set initial view
-			state = new State();	
-			state.addEventListener(State.VIEW_CHANGE, onViewChange);			
-			state.setView(stancePage);
+				
+			state.setView(viewManager.answerPage);
 			
 			
 			
@@ -154,24 +137,10 @@ package  {
 			trace("up!");
 			trace(e.data);
 		}
-		
-		// create views class!!!
-		private function onViewChange(e:Event):void {
-			trace("view changed");
-			
-			// clear everything
-			if ((state.getLastView() != null) && contains(state.getLastView())) {
-				removeChild(state.getLastView());
-			}
-			
-			addChild(state.getView());
-		}
-
 
 		public function update(e:Event):void {
 			Main.mouseX = this.mouseX;
 			Main.mouseY = this.mouseY;
-			//trace(Main.mouseX);			
 		}
 		
 		private function onFullScreenContextMenuSelect(e:Event):void {
