@@ -45,7 +45,7 @@ package net.localprojects {
 		public static const samplePortrait:Bitmap = new samplePortraitClass() as Bitmap;
 
 		[Embed(source = "../assets/graphics/dashedDivider.png")] private static const dashedDividerClass:Class;
-		public static function getDashedDivider():Bitmap { return new dashedDividerClass() as Bitmap; };
+		public static function dashedDivider():Bitmap { return new dashedDividerClass() as Bitmap; };
 		
 		[Embed(source = "../assets/graphics/buttonBackground.png")] private static const buttonBackgroundClass:Class;
 		public static function buttonBackground():Bitmap { return new buttonBackgroundClass() as Bitmap; };
@@ -58,6 +58,29 @@ package net.localprojects {
 		
 		[Embed(source = "../assets/graphics/quotation.svg")] private static const quotationClass:Class;
 		public static function quotation():Sprite { return new quotationClass() as Sprite; };
+		
+		
+				
+		
+		
+		
+		[Embed(source = "../assets/graphics/samplePortrait1.png")] private static const samplePortrait1Class:Class;
+		public static function samplePortrait1():Bitmap { return new samplePortrait1Class() as Bitmap; };
+
+		[Embed(source = "../assets/graphics/samplePortrait2.png")] private static const samplePortrait2Class:Class;
+		public static function samplePortrait2():Bitmap { return new samplePortrait2Class() as Bitmap; };
+
+		[Embed(source = "../assets/graphics/samplePortrait3.png")] private static const samplePortrait3Class:Class;
+		public static function samplePortrait3():Bitmap { return new samplePortrait3Class() as Bitmap; };
+
+		[Embed(source = "../assets/graphics/samplePortrait4.png")] private static const samplePortrait4Class:Class;
+		public static function samplePortrait4():Bitmap { return new samplePortrait4Class() as Bitmap; };
+
+		[Embed(source = "../assets/graphics/samplePortrait5.png")] private static const samplePortrait5Class:Class;
+		public static function samplePortrait5():Bitmap { return new samplePortrait5Class() as Bitmap; };
+		
+		[Embed(source = "../assets/graphics/answerBackground.png")] private static const answerBackgroundClass:Class;
+		public static function answerBackground():Bitmap { return new answerBackgroundClass() as Bitmap; };
 		
 		
 		

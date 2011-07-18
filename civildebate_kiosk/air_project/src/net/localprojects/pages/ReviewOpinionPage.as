@@ -47,10 +47,8 @@ package net.localprojects.pages {
 		
 		private function onSave(e:Event):void {
 			
-			
-			
+
 			Utilities.saveImageToDisk(photo, "bla");
-			
 			Main.state.setView(Main.resultsPage);
 		}
 		

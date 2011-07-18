@@ -4,6 +4,7 @@ package net.localprojects.ui {
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.*;
 	
@@ -75,19 +76,28 @@ package net.localprojects.ui {
 			
 			button.mask = buttonMask;
 			
-			addEventListener	(MouseEvent.MOUSE_DOWN, onMouseDown);
+			enable();
 		}
 		
 		private function onMouseDown(e:MouseEvent):void {
-			TweenMax.to(button, 0.25, {x: -26, y: 32, ease:Strong.easeOut, colorMatrixFilter:{saturation: 0}});
-			Main.stageRef.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, true);
+			disable();
+			Main.stageRef.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
 		
+		public function disable():void {
+			TweenMax.to(button, 0.25, {x: -26, y: 32, ease:Strong.easeOut, colorMatrixFilter:{saturation: 0}});
+			removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);			
+		}
 		
-		private function onMouseUp(e:MouseEvent):void {
-			// fire event
-			Main.stageRef.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
+		public function enable():void {
 			TweenMax.to(button, 0.1, {x: 0, y: 0, ease:Strong.easeOut, colorMatrixFilter:{saturation: 1}});
+			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);			
+		}
+		
+
+		private function onMouseUp(e:MouseEvent):void {
+			Main.stageRef.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
+			dispatchEvent(e);	
 		}
 		
 		

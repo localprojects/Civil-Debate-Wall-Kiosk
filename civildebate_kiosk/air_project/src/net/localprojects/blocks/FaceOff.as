@@ -8,7 +8,7 @@ package net.localprojects.blocks {
 	import net.localprojects.*;
 	import net.localprojects.elements.*;
 	
-	public class FaceOff extends Sprite	{
+	public class FaceOff extends Block	{
 		
 		private var leftFace:Face;
 		private var rightFace:Face;

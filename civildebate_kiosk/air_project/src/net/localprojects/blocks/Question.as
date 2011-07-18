@@ -3,7 +3,7 @@ package net.localprojects.blocks {
 	import flash.text.*;	
 	import net.localprojects.Assets;
 	
-	public class Question extends Sprite {
+	public class Question extends Block {
 		public function Question() {
 			super();
 			init();

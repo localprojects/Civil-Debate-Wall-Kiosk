@@ -5,12 +5,12 @@ package net.localprojects.blocks {
 	import flash.utils.*;
 	
 	import net.localprojects.Assets;
-	import net.localprojects.ui.DebateThumbnail;
+	import net.localprojects.ui.ThumbnailButton;
 	
-	public class DebatePicker extends Sprite {
+	public class DebatePicker extends Block {
 		
 		private var debateHolder:Sprite = new Sprite();
-		private	var padding:int = 84;
+		private	var padding:int = 0;
 		private var lastMouseX:int;		
 		
 		public function DebatePicker() {
@@ -19,25 +19,24 @@ package net.localprojects.blocks {
 		
 		private function init():void {
 			
-			// background
-			graphics.beginFill(0x000000);
-			graphics.drawRect(0, 0, 1080, 200);
-			graphics.endFill();
-			
-			// strip
-			graphics.beginFill(0x292829);
-			graphics.drawRect(0, 30, 1080, 140);
+			// strip (catches mouse events.. TODO make it bigger?)
+			graphics.beginFill(0xffffff);
+			graphics.drawRect(0, 0, 1080, 141);
 			
 			// fill it with debate thumbnails			
 			// TODO build this from the state and move to update function
 			for(var i:int = 0; i < 50; i++) {
-				var tempDebateThumbnail:DebateThumbnail = new DebateThumbnail();
+				var tempDebateThumbnail:ThumbnailButton = new ThumbnailButton();
 				tempDebateThumbnail.x = padding + ((tempDebateThumbnail.width + padding) * i);
+				tempDebateThumbnail.y = 0;			
+				tempDebateThumbnail.active = false;
 				debateHolder.addChild(tempDebateThumbnail);
+				
+				
 			}
 			
 			// center the debate holder
-			debateHolder.y = 54;
+			debateHolder.y = 0;
 			debateHolder.x = (1080 - debateHolder.width) / 2;
 			
 			
@@ -47,7 +46,7 @@ package net.localprojects.blocks {
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
 			this.x = 0;
-			this.y = 1720;	
+			this.y = 1748;	
 		}
 		
 		// scroll physics
@@ -108,7 +107,7 @@ package net.localprojects.blocks {
 				
 				
 				// kind of gross, use introspection to find out what's under the mouse instead of adding listeners to the thumbnails, need to block event bubbling instead?
-				if (objects[i] is DebateThumbnail) {
+				if (objects[i] is ThumbnailButton) {
 					trace("clicked thumbnail!");
 					// TODO figure out if we should interpret a click or a scroll (does the touchscreen do this for us?)					
 				}

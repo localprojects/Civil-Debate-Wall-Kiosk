@@ -4,7 +4,7 @@ package net.localprojects.blocks {
 	
 	import net.localprojects.Assets;
 	
-	public class Header	extends Sprite {
+	public class Header	extends Block {
 		
 		// blocks are chunks of a view shared across pages, put blocks together to make a page
 		

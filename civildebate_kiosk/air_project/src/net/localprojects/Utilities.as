@@ -1,8 +1,10 @@
 package net.localprojects {
 	import flash.display.Bitmap;
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.filesystem.*;
 	import flash.geom.*;
+	import flash.utils.*;
 	import flash.utils.ByteArray;
 	
 	import mx.graphics.codec.JPEGEncoder;
@@ -118,11 +120,29 @@ package net.localprojects {
 					trace(e.message);
 				}
 			}
+		
+		
+		public static function arrayContains(needle:Object, haystack:Array):Boolean {
+			return (haystack.indexOf(needle) > -1);
+		}
 			
+		public static function centerWithin(a:DisplayObject, b:DisplayObject):void {
+			a.x = (b.width / 2) - (a.width / 2);
+			a.y = (b.height / 2) - (a.height / 2);			
+		}
 		
 		// returns a point at the center of a rectangle
 		public static function centerPoint(rect:Rectangle):Point {
 			return new Point(rect.x + (rect.width / 2), rect.y + (rect.height / 2));
+		}
+		
+		public static function randRange(low:int, high:int):int {
+			return Math.floor(Math.random() * (high - low + 1) + low);			
+		}		
+		
+		public static function getClassName(o:Object):String {
+			var fullClassName:String = getQualifiedClassName(o);
+			return fullClassName.slice(fullClassName.lastIndexOf("::") + 2);			
 		}
 		
 		}
