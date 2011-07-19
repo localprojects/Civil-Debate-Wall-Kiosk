@@ -3,33 +3,30 @@ import datetime
 import json
 from web.contrib.webpy_mongodb_sessions.session import MongoStore
 from web.contrib.webpy_mongodb_sessions import users
-
 from pymongo.connection import Connection
 from pymongo import json_util
 from pymongo.son_manipulator import AutoReference, NamespaceInjector
-
 from pymongo.objectid import ObjectId
-
 import base64
-import Image
-import web.contrib.cropresize
+from PIL import Image
+import web.contrib.cropresize as cropresize
 
 urls = (
 		'/test', 'test',
 		
 		'/debates/add', 'add_debate',
 		'/debates/list', 'list_debates',
-		'/debates/get', 'get_debate',		
+		'/debates/get', 'get_debate',
+		'/debates/update', 'update_debate',
+		'/debates/remove', 'remove_debate',
+		'/debates/like', 'like_debate',			
 
-		
 		'/users/add', 'add_user',
 		'/users/list', 'list_users',
 		'/users/get', 'get_user',
 		'/users/remove', 'remove_user',
 		'/users/update', 'update_user',
 		'/users/add-image', 'add_user_image',		
-
-		
 		
 		'/questions/list', 'list_questions',
 		'/questions/add', 'add_question',
@@ -85,8 +82,8 @@ class add_debate:
 		i = web.input()
 		
 		# pull out references to the debate author and question to which he / she is responding
-		author = db.users.find_one(ObjectId(i.authorId))
-		question = db.questions.find_one(ObjectId(i.questionId))
+		author = db.users.find_one(ObjectId(i.author))
+		question = db.questions.find_one(ObjectId(i.question))
 		
 		debate = {'author': author, 
 							'question': question,
@@ -105,11 +102,67 @@ class list_debates:
 		set_api_headers()
 		return json.dumps(list(db.debates.find()), default=json_util.default, sort_keys=False, indent=2)
 		
+		
 class get_debate:
 	def POST(self):
 		set_api_headers()
 		i = web.input()
-		return json.dumps(db.debates.find_one(ObjectId(i.id)), default=json_util.default, sort_keys = False, indent = 2)
+		
+		if 'id' in i:		
+			return json.dumps(db.debates.find_one(ObjectId(i.id)), default=json_util.default, sort_keys=False, indent=2)
+		else:
+			return 'No debate ID specified'
+
+class update_debate:
+	def POST(self):
+		set_api_headers()
+		i = web.input()
+			
+		if 'id' in i:
+			debate = db.debates.find_one(ObjectId(i.id))			
+			
+			if 'origin' in i: debate['origin'] = i.origin
+			if 'likes' in i: debate['likes'] = i.likes
+			if 'stance' in i: debate['stance'] = i.stance
+			if 'question' in i: debate['question'] = i.question
+			if 'author' in i: debate['author'] = db.users.find_one(ObjectId(i.author))
+			if 'opinion' in i: debate['opinion'] = i.opinion
+			if 'question' in i: debate['question'] = db.questions.find_one(ObjectId(i.question))		
+			# TODO comments
+			
+			debate['modified'] = datetime.datetime.utcnow()		
+			
+			return db.debates.save(debate)
+		
+		else:
+			return 'No debate ID specified'
+
+
+class remove_debate:
+	def POST(self):
+		set_api_headers()
+		i = web.input()
+		
+		if 'id' in i:
+			return db.debates.remove(ObjectId(i.id))
+		else:
+			return 'No debate ID specified'
+
+
+class like_debate:
+	def POST(self):
+		set_api_headers()
+		i = web.input()
+
+		if 'id' in i:
+			debate = db.debates.find_one(ObjectId(i.id))
+			debate['likes'] = debate['likes'] + 1
+			debate['modified'] = datetime.datetime.utcnow()
+			db.debates.save(debate)
+			return 'Likes: ' + str(debate['likes'])
+		else:
+			return 'No debate ID specified'
+
 
 
 # USERS
@@ -132,6 +185,7 @@ class get_user:
 		set_api_headers()
 		i = web.input()
 		return json.dumps(db.users.find_one(ObjectId(i.id)), default=json_util.default, sort_keys = False, indent = 2)
+
 
 class add_user_image:
 	def POST(self):
@@ -157,28 +211,32 @@ class add_user_image:
 
 		#todo pass in face data? crop more intelligently?
 		#make a thumbnail	
-		im = Image.open(f);
-		thumbnail_image = cropresize.crop_resize(im, 71, 96);
+		im = Image.open('static/' + original_filename);
+		thumbnail_image = cropresize.crop_resize(im, (71, 96));
 		thumbnail_image.save('static/' + thumbnail_filename, 'JPEG', quality = 100)
-		
+
 		# updated the user's database entry, so we know where the files live
 		user['photos'].append({
 			'originalUrl': original_filename,
+			'thumbnailUrl': thumbnail_filename,
 			'created':  datetime.datetime.utcnow()
 		})
 		
 		return db.users.save(user)
+		
 		
 class list_users:
 	def GET(self):
 		set_api_headers()
 		return json.dumps(list(db.users.find()), default=json_util.default, sort_keys=False, indent=2)
 
+
 class remove_user:
 	def POST(self):
 		set_api_headers()
 		i = web.input()
 		return db.users.remove(ObjectId(i.id))
+
 
 class update_user:
 	def POST(self):
@@ -192,12 +250,14 @@ class update_user:
 		return db.users.save(user)
 
 
+
 # QUESTIONS
 class list_questions:
 	def GET(self):
 		set_api_headers()
 		#return db.questions.find()
 		return json.dumps(list(db.questions.find()), default=json_util.default, sort_keys = False, indent = 2)
+
 
 class add_question:
 	def POST(self):
@@ -211,6 +271,7 @@ class add_question:
 								'created': datetime.datetime.utcnow()}
 
 		return db.questions.save(question)
+
 
 class get_question:
 	def POST(self):
