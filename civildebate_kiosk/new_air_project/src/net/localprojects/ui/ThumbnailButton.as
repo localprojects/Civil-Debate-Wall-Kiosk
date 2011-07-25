@@ -1,9 +1,8 @@
 package net.localprojects.ui {
 	import com.greensock.*;
 	
-	import flash.display.Bitmap;
-	import flash.display.Shape;
-	import flash.display.Sprite;
+	import flash.display.*;
+	import flash.text.*;
 	
 	import net.localprojects.*;
 	import net.localprojects.Assets;
@@ -13,6 +12,9 @@ package net.localprojects.ui {
 		private var roundedPortrait:Sprite;
 		private var portrait:Bitmap;
 		private var _active:Boolean;
+		private var textField:TextField;
+		
+		private var textBackground:Sprite;
 		
 		public function ThumbnailButton(image:Bitmap, stance:String) {
 			_active = false;
@@ -21,51 +23,76 @@ package net.localprojects.ui {
 			this.graphics.drawRect(0, 0, 173, 141);
 			this.graphics.endFill();
 			
-			// tandem yes / no for now
-			
-			if (stance == 'yes') {
-				// top line
-				this.graphics.beginFill(Assets.COLOR_YES_LIGHT);
-				this.graphics.drawRect(2, 4, 169, 5);			
-				this.graphics.endFill();
-				
-				// bottom line
-				this.graphics.beginFill(Assets.COLOR_YES_LIGHT);
-				this.graphics.drawRect(2, 132, 169, 5);			
-				this.graphics.endFill();
-			}
-			else if (stance == 'no') {
-				// top line
-				this.graphics.beginFill(Assets.COLOR_NO_LIGHT);
-				this.graphics.drawRect(2, 4, 169, 5);			
-				this.graphics.endFill();
-				
-				// bottom line
-				this.graphics.beginFill(Assets.COLOR_NO_LIGHT);
-				this.graphics.drawRect(2, 132, 169, 5);
-				this.graphics.endFill();				
-			}
-			else {
-				trace('unknown stance "' + stance + '"');
-			}
-			
+
 			portrait = image;
-			
 			roundedPortrait = new Sprite();
 			roundedPortrait.graphics.beginBitmapFill(portrait.bitmapData, null, false, true);
 			roundedPortrait.graphics.drawRoundRect(0, 0, portrait.width - 1, portrait.height - 1, 15, 15);
-			roundedPortrait.graphics.endFill();
-			
+			roundedPortrait.graphics.endFill();			
 			roundedPortrait.cacheAsBitmap = false;
 			this.cacheAsBitmap = false;
 			Utilities.centerWithin(roundedPortrait, this);			
 			
-			addChild(roundedPortrait);
+			//  the text
+			var textFormat:TextFormat = new TextFormat();			
+			textFormat.bold = false;
+			textFormat.font =  Assets.FONT_REGULAR;
+			textFormat.align = TextFormatAlign.LEFT;
+			textFormat.size = 13;
 			
-			// TODO text overlay
+			textField = new TextField();
+			textField.defaultTextFormat = textFormat;
+			textField.embedFonts = true;
+			textField.selectable = false;
+			textField.cacheAsBitmap = false;
+			textField.mouseEnabled = false;
+			textField.gridFitType = GridFitType.NONE;
+			textField.antiAliasType = AntiAliasType.ADVANCED;
+			textField.textColor = 0xffffff;
+			textField.autoSize = TextFieldAutoSize.CENTER;
+			textField.x = roundedPortrait.x;
+			textField.y = 88;
+			textField.width = portrait.width;
 			
 			
+			var tempColor:uint;
+			if (stance == 'yes') {
+				tempColor = Assets.COLOR_YES_LIGHT;
+				textField.text = 'YES!';
+			}
+			else if (stance == 'no') {
+				tempColor = Assets.COLOR_NO_LIGHT;				
+				textField.text = 'NO!';				
+			}
+			else {
+				trace('unknown stance "' + stance + '"');
+			}			
 			
+				// top line
+				this.graphics.beginFill(tempColor);
+				this.graphics.drawRect(2, 4, 169, 5);			
+				this.graphics.endFill();
+				
+				// bottom line
+				this.graphics.beginFill(tempColor);
+				this.graphics.drawRect(2, 132, 169, 5);			
+				this.graphics.endFill();
+				
+				// text overlay			
+				textBackground = new Sprite();
+				textBackground.graphics.beginFill(tempColor);
+				textBackground.graphics.drawRect(0, 0, portrait.width, 24);
+				textBackground.graphics.endFill();
+				textBackground.x = roundedPortrait.x;
+				textBackground.y = 85;
+				
+
+				
+				addChild(textField);				
+
+				addChild(roundedPortrait);
+				addChild(textBackground);
+				addChild(textField);
 		}
 		
 	
