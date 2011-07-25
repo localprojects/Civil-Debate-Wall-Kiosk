@@ -36,16 +36,16 @@ package net.localprojects.pages {
 			addChild(Assets.samplePortrait);
 			
 			// dashed lines
-			var topDashedLine:Bitmap = Assets.getDashedDivider();
-			topDashedLine.x = 30;
-			topDashedLine.y = 263;
+//			var topDashedLine:Bitmap = Assets.getDashedDivider();
+//			topDashedLine.x = 30;
+//			topDashedLine.y = 263;
+//			
+//			var bottomDashedLine:Bitmap = Assets.getDashedDivider();
+//			bottomDashedLine.x = 30;
+//			bottomDashedLine.y = 467;
 			
-			var bottomDashedLine:Bitmap = Assets.getDashedDivider();
-			bottomDashedLine.x = 30;
-			bottomDashedLine.y = 467;
-			
-			addChild(topDashedLine);
-			addChild(bottomDashedLine);
+//			addChild(topDashedLine);
+//			addChild(bottomDashedLine);
 			
 			var addOpinionButton:BigButton = new BigButton("Add Your Opinion");
 			addOpinionButton.x = 438;
