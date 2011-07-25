@@ -35,6 +35,11 @@ package net.localprojects {
 			database.addEventListener(LoaderEvent.COMPLETE, onDatabaseLoaded);			
 			database.load();
 			
+			// background
+			graphics.beginFill(0x000000);
+			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			graphics.endFill();
+			
 			// set up gui overlay
 			dashboard = new Dashboard(this.stage, 5, 5);
 			dashboard.scaleX = 2;
@@ -67,9 +72,7 @@ package net.localprojects {
 		
 		private function onDatabaseLoaded(e:LoaderEvent):void {
 			trace("database loaded");
-			
 
-			
 			// draw basic layout, wrap this up later
 			portrait = new Portrait();			
 			portrait.setImage(database.users[database.debates[database.activeDebate].author._id.$oid].portrait);
@@ -113,7 +116,7 @@ package net.localprojects {
 			rightQuote = new QuotationMark();
 			rightQuote.setStyle(QuotationMark.CLOSING);
 			rightQuote.x = 842;
-			rightQuote.y = 1718;
+			rightQuote.y = 1643;
 			rightQuote.setColor(Assets.COLOR_YES_LIGHT);
 			addChild(rightQuote);
 			
