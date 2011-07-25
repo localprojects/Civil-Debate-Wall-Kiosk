@@ -7,14 +7,14 @@ package net.localprojects {
 	import flash.events.*;
 	import flash.net.*;	
 
-	public class CivilDebateWall extends Sprite {
+	public class CDW extends Sprite {
 
 		
 
 		public static var database:Database;
+		public static var dashboard:Dashboard;
 		
-		
-		public function CivilDebateWall() {
+		public function CDW() {
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 
@@ -27,11 +27,15 @@ package net.localprojects {
 			stage.nativeWindow.width = 540;
 			stage.nativeWindow.height = 960;
 			
-			
 			// load the wall state
 			database = new Database();
 			database.addEventListener(LoaderEvent.COMPLETE, onDatabaseLoaded);			
 			database.load();
+			
+			// set up gui overlay
+			dashboard = new Dashboard(this.stage, 5, 5);
+			dashboard.scaleX = 2;
+			dashboard.scaleY = 2;
 		}
 		
 		private function onDatabaseLoaded(e:LoaderEvent):void {

@@ -46,7 +46,7 @@ package net.localprojects {
 		}
 		
 		private function onAllDebatessLoaded(e:Event):void {
-			trace("Loaded debates list from server");			
+			CDW.dashboard.log("Loaded debates list from server");			
 			var debateList:* = JSON.decode(e.target.data);
 			
 			for each (var debate:* in debateList) {
@@ -64,7 +64,7 @@ package net.localprojects {
 		}		
 		
 		private function onAllQuestionsLoaded(e:Event):void {
-			trace("Loaded question list from server");			
+			CDW.dashboard.log("Loaded question list from server");			
 			var questionList:* = JSON.decode(e.target.data);
 			
 			for each (var question:* in questionList) {
@@ -84,7 +84,7 @@ package net.localprojects {
 		public function onAllUsersLoaded(e:Event):void {
 			// receives a JSON object of all users from the database,
 			// starts download and caching user images
-			trace("Loaded user list from server");
+			CDW.dashboard.log("Loaded user list from server");
 			
 			var response:* = JSON.decode(e.target.data);
 			
@@ -124,7 +124,7 @@ package net.localprojects {
 		
 		
 		private function completeHandler(event:LoaderEvent):void {
-			trace(event.target + " is complete!");
+			CDW.dashboard.log(event.target + " is complete!");
 			
 			// pull out the bitmaps
 			for each (var user:* in users) {
@@ -140,12 +140,12 @@ package net.localprojects {
 		
 		
 		private function progressHandler(event:LoaderEvent):void {
-			trace("progress: " + event.target.progress);
+			CDW.dashboard.log("progress: " + event.target.progress);
 		}
 		
 
 		private function errorHandler(event:LoaderEvent):void {
-			trace("error occured with " + event.target + ": " + event.text);
+			CDW.dashboard.log("error occured with " + event.target + ": " + event.text);
 		}				
 		
 	}
