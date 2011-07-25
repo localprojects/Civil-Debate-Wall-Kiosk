@@ -11,6 +11,7 @@ package net.localprojects {
 			this.width = 400;
 			this.height = 300;
 			this.hasMinimizeButton = true;
+			this.minimized = true;
 			logBox = new TextArea(this, 5, 5, "Dashboard ready");
 			logBox.width = this.width - 10;
 		}
@@ -18,6 +19,6 @@ package net.localprojects {
 		// logs a single line of text to the window
 		public function log(s:String):void {
 			logBox.text = s + "\n" + logBox.text;
-		}		
+		}
 	}
 }
