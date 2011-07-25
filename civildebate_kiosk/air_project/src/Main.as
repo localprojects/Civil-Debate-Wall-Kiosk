@@ -30,14 +30,8 @@ package  {
 		public static var mouseX:int;
 		public static var mouseY:int;
 
-		
-		public static var state:State = new State();		
-		public static var viewManager:ViewManager = new ViewManager();		
-		
-		
-		
-
-		
+		public static var state:State = new State();
+		public static var viewManager:ViewManager = new ViewManager();
 		
 		// utilities
 		private var inactivityTimer:InactivityTimer;
@@ -65,13 +59,13 @@ package  {
 			
 
 //						
-//			state = new State();
-//			viewManager = new ViewManager();			
+		state = new State();
+		viewManager = new ViewManager();			
 			
 			viewManager.init();
 			
 				
-			state.setView(viewManager.answerPage);
+			state.setView(viewManager.portraitPage);
 			
 			
 			
