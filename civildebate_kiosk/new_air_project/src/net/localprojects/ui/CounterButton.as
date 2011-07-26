@@ -2,7 +2,7 @@ package net.localprojects.ui {
 	import flash.display.Bitmap;
 	import flash.text.*;
 	import net.localprojects.Assets;
-	import flash.events.MouseEvent;
+	import flash.events.MouseEvent;	
 
 	public class CounterButton extends IconButton	{
 		

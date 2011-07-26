@@ -7,10 +7,11 @@ package net.localprojects.ui {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.*;
+	import net.localprojects.blocks.Block;
 	
 	import net.localprojects.*;
 	
-	public class BigButton extends Sprite	{
+	public class BigButton extends Block	{
 		
 		private var labelText:TextField;
 		private var label:String;

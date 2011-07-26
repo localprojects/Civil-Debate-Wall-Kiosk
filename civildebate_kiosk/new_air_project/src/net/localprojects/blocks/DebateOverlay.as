@@ -4,17 +4,18 @@ package net.localprojects.blocks
 	import net.localprojects.*;
 	import flash.text.*;
 	
-	public class Header extends Block	{
+	public class DebateOverlay extends Block	{
 		
-		public function Header()	{
+		public function DebateOverlay()	{
 			super();
 			init();
 		}
 		
 		public function init():void {
-			// background			
-			var background:Bitmap = Assets.getHeaderBackground();
-			addChild(background);			
+			this.graphics.beginFill(0xff0000);
+			this.graphics.drawRect(0, 0, 1022, 807);
+			this.graphics.endFill();
+			
 			
 			// text
 			var textFormat:TextFormat = new TextFormat();
@@ -34,12 +35,14 @@ package net.localprojects.blocks
 			title.gridFitType = GridFitType.NONE;
 			title.antiAliasType = AntiAliasType.NORMAL;
 			title.textColor = 0xffffff;
-			title.text = "The Great Civil Debate Wall".toUpperCase();
-			title.x = background.x + (width - title.width) / 2;
-			title.y = background.y + ((height - title.height) / 2) + 2;
+			title.text = "Debate overlay";
+			addChild(title);			
+			Utilities.centerWithin(title, this);
 			
-			addChild(title);
+			
+			
+			
 		}
-			
+		
 	}
 }

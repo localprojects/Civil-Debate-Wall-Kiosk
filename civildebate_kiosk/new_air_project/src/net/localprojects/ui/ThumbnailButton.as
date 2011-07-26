@@ -6,8 +6,9 @@ package net.localprojects.ui {
 	
 	import net.localprojects.*;
 	import net.localprojects.Assets;
+	import net.localprojects.blocks.Block;	
 	
-	public class ThumbnailButton extends Sprite	{
+	public class ThumbnailButton extends Block	{
 	
 		private var roundedPortrait:Sprite;
 		private var portrait:Bitmap;
@@ -23,7 +24,9 @@ package net.localprojects.ui {
 			this.graphics.drawRect(0, 0, 173, 141);
 			this.graphics.endFill();
 			
-
+			
+			
+			
 			portrait = image;
 			roundedPortrait = new Sprite();
 			roundedPortrait.graphics.beginBitmapFill(portrait.bitmapData, null, false, true);
@@ -32,6 +35,8 @@ package net.localprojects.ui {
 			roundedPortrait.cacheAsBitmap = false;
 			this.cacheAsBitmap = false;
 			Utilities.centerWithin(roundedPortrait, this);			
+			
+
 			
 			//  the text
 			var textFormat:TextFormat = new TextFormat();			
@@ -51,9 +56,8 @@ package net.localprojects.ui {
 			textField.textColor = 0xffffff;
 			textField.autoSize = TextFieldAutoSize.CENTER;
 			textField.x = roundedPortrait.x;
-			textField.y = 88;
+			textField.y = 89;
 			textField.width = portrait.width;
-			
 			
 			var tempColor:uint;
 			if (stance == 'yes') {
@@ -68,31 +72,29 @@ package net.localprojects.ui {
 				trace('unknown stance "' + stance + '"');
 			}			
 			
-				// top line
-				this.graphics.beginFill(tempColor);
-				this.graphics.drawRect(2, 4, 169, 5);			
-				this.graphics.endFill();
-				
-				// bottom line
-				this.graphics.beginFill(tempColor);
-				this.graphics.drawRect(2, 132, 169, 5);			
-				this.graphics.endFill();
-				
-				// text overlay			
-				textBackground = new Sprite();
-				textBackground.graphics.beginFill(tempColor);
-				textBackground.graphics.drawRect(0, 0, portrait.width, 24);
-				textBackground.graphics.endFill();
-				textBackground.x = roundedPortrait.x;
-				textBackground.y = 85;
-				
+			// top line
+			this.graphics.beginFill(tempColor);
+			this.graphics.drawRect(2, 4, 169, 5);			
+			this.graphics.endFill();
+			
+			// bottom line
+			this.graphics.beginFill(tempColor);
+			this.graphics.drawRect(2, 132, 169, 5);			
+			this.graphics.endFill();			
+
+			// text background			
+			textBackground = new Sprite();
+			textBackground.graphics.beginFill(tempColor);
+			textBackground.graphics.drawRect(0, 0, portrait.width, 24);
+			textBackground.graphics.endFill();
+			textBackground.x = roundedPortrait.x;
+			textBackground.y = 85;						
 
 				
-				addChild(textField);				
 
 				addChild(roundedPortrait);
 				addChild(textBackground);
-				addChild(textField);
+			addChild(textField);
 		}
 		
 	

@@ -2,7 +2,7 @@ package net.localprojects.blocks {
 	import flash.display.*;
 	import net.localprojects.*;
 	
-	public class Portrait extends Sprite implements IBlock {
+	public class Portrait extends Block {
 		
 		private var image:Bitmap;
 		

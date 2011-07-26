@@ -10,12 +10,11 @@ package net.localprojects.blocks {
 	import net.localprojects.*;
 	import net.localprojects.ui.*;
 	
-	public class DebatePicker extends Sprite implements IBlock {
+	public class DebatePicker extends Block {
 		
 		private var debateHolder:Sprite = new Sprite();
 		private	var padding:int = 0;
-		private var lastMouseX:int;		
-		
+		private var lastMouseX:int;
 		
 		public function DebatePicker() {
 			super();
@@ -59,7 +58,7 @@ package net.localprojects.blocks {
 				debateHolder.addChild(debateThumbnail);
 				i++;
 			}
-		}		
+		}
 		
 		// scroll physics
 		private var vx:Number = 0;
