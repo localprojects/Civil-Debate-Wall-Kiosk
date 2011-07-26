@@ -162,5 +162,23 @@ package net.localprojects {
 			return sum / a.length;
 		}
 		
+		
+		// adapted from http://stackoverflow.com/questions/5350907/merging-objects-in-as3
+		// if both objects have the same field, object 2 overrides object 1 
+		public static function mergeObjects(o1:Object, o2:Object):Object {
+			var o:Object = {};
+			
+			for(var p1:String in o1)	{
+				o[p1] = o1[p1];								
+			}
+			
+			for(var p2:String in o2)	{
+				// overwrite with o2
+				o[p2] = o2[p2];				
+			}
+			
+			return o;
 		}
+
 	}
+}

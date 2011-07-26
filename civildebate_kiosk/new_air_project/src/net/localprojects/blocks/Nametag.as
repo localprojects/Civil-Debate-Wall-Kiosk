@@ -4,7 +4,7 @@ package net.localprojects.blocks {
 	import net.localprojects.Assets;
 	import net.localprojects.elements.*;
 	
-	public class Nametag extends Block {
+	public class Nametag extends BlockBase {
 		
 		private var blockLabel:BlockLabel;
 		

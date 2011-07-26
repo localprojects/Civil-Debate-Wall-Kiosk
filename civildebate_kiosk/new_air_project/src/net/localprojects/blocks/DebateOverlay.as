@@ -4,7 +4,7 @@ package net.localprojects.blocks
 	import net.localprojects.*;
 	import flash.text.*;
 	
-	public class DebateOverlay extends Block	{
+	public class DebateOverlay extends BlockBase	{
 		
 		public function DebateOverlay()	{
 			super();
@@ -38,10 +38,6 @@ package net.localprojects.blocks
 			title.text = "Debate overlay";
 			addChild(title);			
 			Utilities.centerWithin(title, this);
-			
-			
-			
-			
 		}
 		
 	}

@@ -11,20 +11,21 @@ package net.localprojects {
 		
 		public function Dashboard(parent:DisplayObjectContainer=null, xpos:Number=0, ypos:Number=0, title:String="Dashboard")	{
 			super(parent, xpos, ypos, title);
-			this.width = 400;
-			this.height = 300;
+			this.width = 250;
+			this.height = 150;
 			this.hasMinimizeButton = true;
 			this.minimized = true;
 			logBox = new TextArea(this, 5, 5, "Dashboard ready");
 			logBox.width = this.width - 10;
-			logBox.height = 50;
+			logBox.height = 90;
 			
 			
 			viewChooser = new ComboBox(this, 5, 100, 'View');
 			viewChooser.addItem('Home');
-			viewChooser.addItem('Debate Overlay');		
+			viewChooser.addItem('Debate Overlay');
+			viewChooser.addItem('Pick Stance');			
 			viewChooser.addEventListener(Event.SELECT, onViewSelect);
-			
+			viewChooser.width = this.width - 10;			
 		}
 		
 		// logs a single line of text to the window
@@ -36,7 +37,8 @@ package net.localprojects {
 			var selection:String = e.target.selectedItem;
 			
 			if (selection == 'Home') CDW.ref.homeView();
-			if (selection == 'Debate Overlay') CDW.ref.debateOverlayView();			
+			if (selection == 'Debate Overlay') CDW.ref.debateOverlayView();
+			if (selection == 'Pick Stance') CDW.ref.pickStanceView();			
 			
 			
 		}

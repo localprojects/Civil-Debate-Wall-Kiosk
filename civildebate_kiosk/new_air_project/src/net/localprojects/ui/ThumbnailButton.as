@@ -6,9 +6,9 @@ package net.localprojects.ui {
 	
 	import net.localprojects.*;
 	import net.localprojects.Assets;
-	import net.localprojects.blocks.Block;	
+	import net.localprojects.blocks.BlockBase;	
 	
-	public class ThumbnailButton extends Block	{
+	public class ThumbnailButton extends BlockBase	{
 	
 		private var roundedPortrait:Sprite;
 		private var portrait:Bitmap;
@@ -110,13 +110,13 @@ package net.localprojects.ui {
 			}
 		}
 		
-		public function get active():Boolean {
-			return _active;
-		}
-		
-		public function set active(b:Boolean):void {
-			_active = b;	
-			update();			
-		}		
+//		public function get active():Boolean {
+//			return _active;
+//		}
+//		
+//		public function set active(b:Boolean):void {
+//			_active = b;	
+//			update();			
+//		}		
 	}
 }

@@ -7,7 +7,7 @@ package net.localprojects.blocks
 	
 	import net.localprojects.*;
 	
-	public class QuotationMark extends Block	{
+	public class QuotationMark extends BlockBase	{
 		
 		public static const OPENING:String = "opening";
 		public static const CLOSING:String = "closing";

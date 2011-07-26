@@ -4,7 +4,7 @@ package net.localprojects.blocks {
 	
 	import net.localprojects.Assets;
 	
-	public class Question extends Block {
+	public class Question extends BlockBase {
 		
 		private var questionText:TextField;
 		

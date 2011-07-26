@@ -1,6 +1,7 @@
 package net.localprojects {
 
 	import com.greensock.*;
+	import com.greensock.easing.*;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.events.TweenEvent;
 	
@@ -80,215 +81,197 @@ package net.localprojects {
 			
 			
 			// draw basic layout, wrap this up later
-			portrait = new Portrait();			
-			portrait.setImage(database.users[database.debates[database.activeDebate].author._id.$oid].portrait);
-			portrait.visible = false;
-			addChild(portrait);			
+			portrait = new Portrait();
+			portrait.setDefaultTweenIn(1, {alpha: 1});
+			portrait.setDefaultTweenOut(1, {alpha: 0});			
+			addChild(portrait);
 			
 			header = new Header();
-			header.setTarget(30, 30);
-			header.visible = false;			
+			header.setDefaultTweenIn(1, {x: 30, y: 30});
+			header.setDefaultTweenOut(1, {x: 30, y: -header.height});
 			addChild(header);
 			
-			
 			divider = new Divider();
-			divider.setTarget(30, 250);
-			divider.visible = false;			
+			divider.setDefaultTweenIn(1, {x: 30, y: 250});
+			divider.setDefaultTweenOut(1, {x: -divider.width, y: 250});			
 			addChild(divider);
-						
-			
-			
 			
 			question = new Question();
-			question.setTarget(30, 140);
-			question.setText(database.questions[database.activeQuestion].question);
-			question.visible = false;			
+			question.setDefaultTweenIn(1, {x: 30, y: 140});
+			question.setDefaultTweenOut(1, {x: -question.width, y: 140});
+			question.setText(database.questions[database.activeQuestion].question); // TODO abstract out these ridiculous traverals...			
 			addChild(question);
 						
-			
-			
-			
 			stance = new Stance();
-			stance.setTarget(275, 280);
+			stance.setDefaultTweenIn(1, {x: 275, y: 280});
+			stance.setDefaultTweenOut(1, {x: -stance.width, y: 280});			
 			stance.setText(database.debates[database.activeDebate].stance);
-			stance.visible = false;
 			addChild(stance);			
 
 			nametag = new Nametag();
-			nametag.setTarget(275, 410);
+			nametag.setDefaultTweenIn(1, {x: 275, y: 410});
 			nametag.setText(database.debates[database.activeDebate].author.firstName);
-			nametag.visible = false;
 			addChild(nametag);
 			
 			leftQuote = new QuotationMark();
+			leftQuote.setDefaultTweenIn(1, {x: 100, y: 545});
+			leftQuote.setDefaultTweenOut(1, {x: -leftQuote.width, y: 545});	
 			leftQuote.setStyle(QuotationMark.OPENING);
-			leftQuote.setTarget(100, 545);
 			leftQuote.setColor(Assets.COLOR_YES_LIGHT);
-			leftQuote.visible = false;
 			addChild(leftQuote);
 			
 			rightQuote = new QuotationMark();
+			rightQuote.setDefaultTweenIn(1, {x: 842, y: 1643});
+			rightQuote.setDefaultTweenOut(1, {x: stage.stageWidth, y: 1643});				
 			rightQuote.setStyle(QuotationMark.CLOSING);
-			rightQuote.setTarget(842, 1643);
 			rightQuote.setColor(Assets.COLOR_YES_LIGHT);
-			rightQuote.visible = false;
 			addChild(rightQuote);
 			
 			opinion = new Opinion();
-			opinion.setTarget(100, 1095);
+			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});
+			opinion.setDefaultTweenOut(1, {x: -opinion.width, y: 1095});			
 			opinion.setText(database.debates[database.activeDebate].opinion);
-			opinion.visible = false;
 			addChild(opinion);
 			
 			bigButton = new BigButton('Add Your Opinion');
-			bigButton.setTarget(438, 1470);
-			bigButton.visible = false;
+			bigButton.setDefaultTweenIn(1, {x: 438, y: 1470});
+			bigButton.setDefaultTweenOut(1, {x: 438, y: 1470}); // TODO need to subclass and override tweenout and in methods because of weird animation???
 			addChild(bigButton);
 			
 			statsButton = new IconButton(120, 110, 'STATS', 20, Assets.COLOR_YES_DARK, Assets.statsIcon());
-			statsButton.setTarget(100, 1375);
-			statsButton.visible = false;
+			statsButton.setDefaultTweenIn(1, {x: 100, y: 1375});
+			statsButton.setDefaultTweenOut(1, {x: -statsButton.width, y: 1375});			
 			addChild(statsButton);
 			
 			likeButton = new CounterButton(120, 110, 'LIKE', 20, Assets.COLOR_YES_DARK, Assets.likeIcon());
-			likeButton.setTarget(720, 955);
-			likeButton.visible = false;
+			likeButton.setDefaultTweenIn(1, {x: 720, y: 955});
+			likeButton.setDefaultTweenOut(1, {x: stage.stageWidth, y: 955});			
 			addChild(likeButton);
 			
 			debateButton = new IconButton(150, 130, 'Let\u0027s Debate', 15, Assets.COLOR_YES_DARK, null, true);
-			debateButton.setTarget(842, 807);
-			debateButton.visible = false;
+			debateButton.setDefaultTweenIn(1, {x: 842, y: 807});
+			debateButton.setDefaultTweenOut(1, {x: stage.stageWidth, y: 807});
 			addChild(debateButton);
 			
 			viewDebateButton = new BlockButton(370, 63, '8 People Debated This', 25, Assets.COLOR_YES_DARK, true);
-			viewDebateButton.setTarget(590, 1375);
-			viewDebateButton.visible = false;
+			viewDebateButton.setDefaultTweenIn(1, {x: 590, y: 1375});
+			viewDebateButton.setDefaultTweenOut(1, {x: stage.stageWidth, y: 1375});			
 			addChild(viewDebateButton)
+
+			debateOverlay = new DebateOverlay();
+			debateOverlay.setDefaultTweenIn(1, {x: 30, y: 813});
+			debateOverlay.setDefaultTweenOut(1, {x: 30, y: stage.stageHeight});			
+			addChild(debateOverlay);			
 			
 			debatePicker = new DebatePicker();
-			debatePicker.setTarget(0, 1748);
-			debatePicker.update(); // syncs with DB
-			debatePicker.visible = false;
+			debatePicker.setDefaultTweenIn(1, {x: 0, y: 1748});
+			debatePicker.setDefaultTweenOut(1, {x: 0, y: stage.stageHeight});			
+			debatePicker.update(); // syncs with state
 			addChild(debatePicker);
-			
-			debateOverlay = new DebateOverlay();
-			debateOverlay.setTarget(30, 813);
-			debateOverlay.visible = false;
-			addChild(debateOverlay);
-			
 			
 			// set view
 			//homeView();
 			
 		}
-		
-		
-		
-		
-		
-
-
 
 		
-		// load the views
-		private function visify(e:Block):void {
-			trace(e);
-			e.visible = true;
+		
+		
+		// marks all FIRST LEVEL blocks as inactive
+		private function markAllInactive():void {
+			for (var i:int = 0; i < this.numChildren; i++) {
+				if ((this.getChildAt(i) is BlockBase) && (this.getChildAt(i).visible)) {
+					(this.getChildAt(i) as BlockBase).active = false;
+				}
+			}
 		}
 		
-		private function invisify(e:Block):void {
-			trace(e);
-			e.visible = false;
+		private function tweenOutInactive():void {
+			for (var i:int = 0; i < this.numChildren; i++) {
+				if ((this.getChildAt(i) is BlockBase) && !(this.getChildAt(i) as BlockBase).active) {
+					(this.getChildAt(i) as BlockBase).tweenOut();
+				}
+			}			
 		}
 		
+		public function homeView(...args):void {
+			markAllInactive();
+			
+			// mutations
+			portrait.setImage(database.users[database.debates[database.activeDebate].author._id.$oid].portrait);
+			
+			// set behaviors
+			viewDebateButton.setOnClick(debateOverlayView);	
+			bigButton.setOnClick(pickStanceView);			
+			
+			// active blocks
+			portrait.tweenIn();
+			header.tweenIn();
+			divider.tweenIn();
+			question.tweenIn();
+			stance.tweenIn();
+			nametag.tweenIn();
+			leftQuote.tweenIn();
+			rightQuote.tweenIn();
+			opinion.tweenIn();
+			bigButton.tweenIn();
+			statsButton.tweenIn();
+			likeButton.tweenIn();
+			debateButton.tweenIn();
+			viewDebateButton.tweenIn();
+			debatePicker.tweenIn();
+			
+			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
+			debateOverlay.tweenOut(1, {y: -debateOverlay.height}); // should overidden animations get re-positioned to their canonical 'out' location?
 
-		// TweenMax.fromTo?		
+			// clean up the old based on what's not active
+			tweenOutInactive();
+		}
 
 		
-		public function homeView():void {
+		public function debateOverlayView(...args):void {
+			markAllInactive();			
 			
+			// mutations
+			portrait.setImage(database.users[database.debates[database.activeDebate].author._id.$oid].portrait);
 			
-			viewDebateButton.addEventListener(MouseEvent.CLICK, onViewDebateButtonClick);	
+			// set behaviors
+			viewDebateButton.setOnClick(homeView);
 			
 			// on
-			TweenMax.to(portrait, 1, {onInit: visify, onInitParams: [portrait], x: portrait.targetX, y: portrait.targetY});
-			TweenMax.to(header, 1, {onInit: visify, onInitParams: [header], x: header.targetX, y: header.targetY});
-			TweenMax.to(divider, 1, {onInit: visify, onInitParams: [divider], x: divider.targetX, y: divider.targetY});
-			TweenMax.to(question, 1, {onInit: visify, onInitParams: [question], x: question.targetX, y: question.targetY});
-			TweenMax.to(stance, 1, {onInit: visify, onInitParams: [stance], x: stance.targetX, y: stance.targetY});
-			TweenMax.to(nametag, 1, {onInit: visify, onInitParams: [nametag], x: nametag.targetX, y: nametag.targetY});
-			TweenMax.to(leftQuote, 1, {onInit: visify, onInitParams: [leftQuote], x: leftQuote.targetX, y: leftQuote.targetY});
-			TweenMax.to(rightQuote, 1, {onInit: visify, onInitParams: [rightQuote], x: rightQuote.targetX, y: rightQuote.targetY});
-			TweenMax.to(opinion, 1, {onInit: visify, onInitParams: [opinion], x: opinion.targetX, y: opinion.targetY});
-			TweenMax.to(bigButton, 1, {onInit: visify, onInitParams: [bigButton], x: bigButton.targetX, y: bigButton.targetY});
-			TweenMax.to(statsButton, 1, {onInit: visify, onInitParams: [statsButton], x: statsButton.targetX, y: statsButton.targetY});
-			TweenMax.to(likeButton, 1, {onInit: visify, onInitParams: [likeButton], x: likeButton.targetX, y: likeButton.targetY});
-			TweenMax.to(debateButton, 1, {onInit: visify, onInitParams: [debateButton], x: debateButton.targetX, y: debateButton.targetY, scaleX: 1, scaleY: 1});
-			TweenMax.to(viewDebateButton, 1, {onInit: visify, onInitParams: [viewDebateButton], x: viewDebateButton.targetX, y: viewDebateButton.targetY});
-			TweenMax.to(debatePicker, 1, {onInit: visify, onInitParams: [debatePicker], x: debatePicker.targetX, y: debatePicker.targetY});
+			portrait.tweenIn();
+			header.tweenIn();
+			divider.tweenIn();
+			question.tweenIn();
+			stance.tweenIn();
+			nametag.tweenIn(1, {x: 590, y: 690});
+			opinion.tweenIn(1, {y: 410});
+			bigButton.tweenIn();
+			statsButton.tweenIn(1, {x: -statsButton.width});
+			likeButton.tweenIn(1, {x: stage.stageWidth});
+			debateButton.tweenIn(1, {y: 660, scaleX: 0.75, scaleY: 0.75});
+			viewDebateButton.tweenIn(1, {y: 1650});
+			debatePicker.tweenIn();
 			
-			// off
-			TweenMax.to(debateOverlay, 1, {onComplete: invisify, onCompleteParams: [debateOverlay], x: debateOverlay.targetX, y: 1920});	
-		}
-		
-		private function onViewDebateButtonClick(e:MouseEvent):void {
-			debateOverlayView();
-		}		
-		
-		private function onCloseDebateButtonClick(e:MouseEvent):void {
-			homeView();
-		}				
-		
-		public function debateOverlayView():void {
-			
-			
-			// TODO pass click function into button object instead, so we can null or change the action easily...
-			viewDebateButton.removeEventListener(MouseEvent.CLICK, onViewDebateButtonClick);
-			viewDebateButton.addEventListener(MouseEvent.CLICK, onCloseDebateButtonClick);			
-			
-			
-			// on
-			TweenMax.to(portrait, 1, {onInit: visify, onInitParams: [portrait], x: portrait.targetX, y: portrait.targetY});
-			TweenMax.to(header, 1, {onInit: visify, onInitParams: [header], x: header.targetX, y: header.targetY});
-			TweenMax.to(divider, 1, {onInit: visify, onInitParams: [divider], x: divider.targetX, y: divider.targetY});
-			TweenMax.to(question, 1, {onInit: visify, onInitParams: [question], x: question.targetX, y: question.targetY});
-			TweenMax.to(stance, 1, {onInit: visify, onInitParams: [stance], x: stance.targetX, y: stance.targetY});
-			TweenMax.to(nametag, 1, {onInit: visify, onInitParams: [nametag], x: 590, y: 690});
-			TweenMax.to(leftQuote, 1, {onInit: visify, onInitParams: [leftQuote], x: -leftQuote.width, y: leftQuote.targetY});
-			TweenMax.to(rightQuote, 1, {onInit: visify, onInitParams: [rightQuote], x: stage.stageWidth, y: rightQuote.targetY});
-			TweenMax.to(opinion, 1, {onInit: visify, onInitParams: [opinion], x: opinion.targetX, y: 410});
-			TweenMax.to(bigButton, 1, {onInit: visify, onInitParams: [bigButton], x: bigButton.targetX, y: bigButton.targetY});
-			TweenMax.to(statsButton, 1, {onInit: visify, onInitParams: [statsButton], x: statsButton.targetX, y: statsButton.targetY});
-			TweenMax.to(likeButton, 1, {onInit: visify, onInitParams: [likeButton], x: likeButton.targetX, y: likeButton.targetY});
-			TweenMax.to(debateButton, 1, {onInit: visify, onInitParams: [debateButton], x: debateButton.targetX, y: 660, scaleX: 0.75, scaleY: 0.75});
-			TweenMax.to(viewDebateButton, 1, {onInit: visify, onInitParams: [viewDebateButton], x: viewDebateButton.targetX, y: 1650});
-			TweenMax.to(debatePicker, 1, {onInit: visify, onInitParams: [debatePicker], x: debatePicker.targetX, y: debatePicker.targetY});
-			
-			TweenMax.to(debateOverlay, 1, {onInit: visify, onInitParams: [debateOverlay], x: debateOverlay.targetX, y: debateOverlay.targetY});			
-		}
-		
-		
-		public function pickStanceView():void {
-			
+			debateOverlay.tweenIn();
 
-			// on
-			TweenMax.to(portrait, 1, {onInit: visify, onInitParams: [portrait], x: portrait.targetX, y: portrait.targetY});
-			TweenMax.to(header, 1, {onInit: visify, onInitParams: [header], x: header.targetX, y: header.targetY});
-			TweenMax.to(divider, 1, {onInit: visify, onInitParams: [divider], x: divider.targetX, y: divider.targetY});
-			TweenMax.to(question, 1, {onInit: visify, onInitParams: [question], x: question.targetX, y: question.targetY});
-			TweenMax.to(stance, 1, {onInit: visify, onInitParams: [stance], x: stance.targetX, y: stance.targetY});
-			TweenMax.to(nametag, 1, {onInit: visify, onInitParams: [nametag], x: 590, y: 690});
-			TweenMax.to(leftQuote, 1, {onInit: visify, onInitParams: [leftQuote], x: -leftQuote.width, y: leftQuote.targetY});
-			TweenMax.to(rightQuote, 1, {onInit: visify, onInitParams: [rightQuote], x: stage.stageWidth, y: rightQuote.targetY});
-			TweenMax.to(opinion, 1, {onInit: visify, onInitParams: [opinion], x: opinion.targetX, y: 410});
-			TweenMax.to(bigButton, 1, {onInit: visify, onInitParams: [bigButton], x: bigButton.targetX, y: bigButton.targetY});
-			TweenMax.to(statsButton, 1, {onInit: visify, onInitParams: [statsButton], x: statsButton.targetX, y: statsButton.targetY});
-			TweenMax.to(likeButton, 1, {onInit: visify, onInitParams: [likeButton], x: likeButton.targetX, y: likeButton.targetY});
-			TweenMax.to(debateButton, 1, {onInit: visify, onInitParams: [debateButton], x: debateButton.targetX, y: 660, scaleX: 0.75, scaleY: 0.75});
-			TweenMax.to(viewDebateButton, 1, {onInit: visify, onInitParams: [viewDebateButton], x: viewDebateButton.targetX, y: 1650});
-			TweenMax.to(debatePicker, 1, {onInit: visify, onInitParams: [debatePicker], x: debatePicker.targetX, y: debatePicker.targetY});
+			tweenOutInactive();			
+		}
+		
+		
+		public function pickStanceView(...args):void {
+			// mutations
+			portrait.setImage(Assets.portraitPlaceholder);
 			
-			TweenMax.to(debateOverlay, 1, {onInit: visify, onInitParams: [debateOverlay], x: debateOverlay.targetX, y: debateOverlay.targetY});			
+			// set behaviors
+			// TK
+			
+			// on
+//			TweenMax.to(portrait, 1, {ease: Quart.easeOut, onInit: visify, onInitParams: [portrait], x: portrait.inx, y: portrait.iny});
+//
+//			TweenMax.to(debatePicker, 1, {ease: Quart.easeOut, onInit: visify, onInitParams: [debatePicker], x: debatePicker.inx, y: 1920});
+//			
+//			TweenMax.to(debateOverlay, 1, {ease: Quart.easeOut, onComplete: invisify, onCompleteParams: [debateOverlay], x: debateOverlay.inx, y: 1920});			
 		}		
 		
 		
