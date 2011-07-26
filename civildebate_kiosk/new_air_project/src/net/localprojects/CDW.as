@@ -18,6 +18,8 @@ package net.localprojects {
 		public static var ref:CDW;
 		public static var database:Database;
 		public static var dashboard:Dashboard;
+		public static var settings:Object;
+		
 		
 		public function CDW() {
 			ref = this;
@@ -32,6 +34,9 @@ package net.localprojects {
 			// temporarily squish screen for laptop development (half size)
 			stage.nativeWindow.width = 540;
 			stage.nativeWindow.height = 960;
+			
+			// load settings from a local JSON file
+			settings = Settings.load();
 			
 			// load the wall state
 			database = new Database();
@@ -110,6 +115,7 @@ package net.localprojects {
 
 			nametag = new Nametag();
 			nametag.setDefaultTweenIn(1, {x: 275, y: 410});
+			nametag.setDefaultTweenOut(1, {x: stage.stageWidth, y: 410});			
 			nametag.setText(database.debates[database.activeDebate].author.firstName);
 			addChild(nametag);
 			
@@ -260,6 +266,8 @@ package net.localprojects {
 		
 		
 		public function pickStanceView(...args):void {
+			markAllInactive();				
+			
 			// mutations
 			portrait.setImage(Assets.portraitPlaceholder);
 			
@@ -267,11 +275,9 @@ package net.localprojects {
 			// TK
 			
 			// on
-//			TweenMax.to(portrait, 1, {ease: Quart.easeOut, onInit: visify, onInitParams: [portrait], x: portrait.inx, y: portrait.iny});
-//
-//			TweenMax.to(debatePicker, 1, {ease: Quart.easeOut, onInit: visify, onInitParams: [debatePicker], x: debatePicker.inx, y: 1920});
-//			
-//			TweenMax.to(debateOverlay, 1, {ease: Quart.easeOut, onComplete: invisify, onCompleteParams: [debateOverlay], x: debateOverlay.inx, y: 1920});			
+			portrait.tweenIn();
+			
+			tweenOutInactive();				
 		}		
 		
 		
