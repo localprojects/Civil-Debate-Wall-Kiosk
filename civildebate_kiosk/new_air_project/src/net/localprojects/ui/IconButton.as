@@ -3,8 +3,9 @@ package net.localprojects.ui {
 	import flash.events.MouseEvent;
 	import net.localprojects.*;
 	import flash.text.*;
+	import net.localprojects.blocks.Block;
 	
-	public class IconButton extends Sprite {
+	public class IconButton extends Block {
 
 		protected var _buttonWidth:Number;
 		protected var _buttonHeight:Number;

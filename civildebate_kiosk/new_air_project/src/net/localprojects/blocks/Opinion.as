@@ -4,7 +4,7 @@ package net.localprojects.blocks {
 	import net.localprojects.Assets;
 	import net.localprojects.elements.*;
 	
-	public class Opinion extends Sprite implements IBlock {
+	public class Opinion extends Block {
 		
 		private var blockParagraph:BlockParagraph;
 		

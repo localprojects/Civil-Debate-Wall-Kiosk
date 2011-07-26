@@ -4,7 +4,7 @@ package net.localprojects.blocks {
 	
 	import net.localprojects.Assets;
 	
-	public class Question extends Sprite implements IBlock {
+	public class Question extends Block {
 		
 		private var questionText:TextField;
 		

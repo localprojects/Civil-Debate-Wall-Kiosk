@@ -1,10 +1,13 @@
 package net.localprojects {
 	import com.bit101.components.*;
+	
 	import flash.display.DisplayObjectContainer;
+	import flash.events.Event;
 	
 	public class Dashboard extends Window	{
 		
-		private var logBox:TextArea;		
+		private var logBox:TextArea;
+		private var viewChooser:ComboBox;
 		
 		public function Dashboard(parent:DisplayObjectContainer=null, xpos:Number=0, ypos:Number=0, title:String="Dashboard")	{
 			super(parent, xpos, ypos, title);
@@ -14,11 +17,30 @@ package net.localprojects {
 			this.minimized = true;
 			logBox = new TextArea(this, 5, 5, "Dashboard ready");
 			logBox.width = this.width - 10;
+			logBox.height = 50;
+			
+			
+			viewChooser = new ComboBox(this, 5, 100, 'View');
+			viewChooser.addItem('Home');
+			viewChooser.addItem('Debate Overlay');		
+			viewChooser.addEventListener(Event.SELECT, onViewSelect);
+			
 		}
 		
 		// logs a single line of text to the window
 		public function log(s:String):void {
 			logBox.text = s + "\n" + logBox.text;
 		}
+		
+		private function onViewSelect(e:Event):void {
+			var selection:String = e.target.selectedItem;
+			
+			if (selection == 'Home') CDW.ref.homeView();
+			if (selection == 'Debate Overlay') CDW.ref.debateOverlayView();			
+			
+			
+		}
+		
+		
 	}
 }

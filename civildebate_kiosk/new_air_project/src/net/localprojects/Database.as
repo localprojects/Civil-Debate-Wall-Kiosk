@@ -22,10 +22,12 @@ package net.localprojects {
 		public const BASE_PATH:String = 'http://ec2-50-19-25-31.compute-1.amazonaws.com'
 		
 			
+			
 		// todo, just use debate list with automatic python dereferencing!?
 		public var activeQuestion:String = '4e2755b50f2e420354000001';
 		public var activeDebate:String = '4e2756a20f2e420341000000';			
-			
+	
+		
 		
 		public var questions:Array = [];
 		public var users:Array = [];

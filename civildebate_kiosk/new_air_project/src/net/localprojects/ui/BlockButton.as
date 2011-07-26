@@ -2,8 +2,9 @@ package net.localprojects.ui {
 	import flash.display.Sprite;
 	import flash.text.*;
 	import net.localprojects.Assets;
+	import net.localprojects.blocks.Block;
 	
-	public class BlockButton extends Sprite	{
+	public class BlockButton extends Block	{
 
 		protected var _buttonWidth:Number;
 		protected var _buttonHeight:Number;
