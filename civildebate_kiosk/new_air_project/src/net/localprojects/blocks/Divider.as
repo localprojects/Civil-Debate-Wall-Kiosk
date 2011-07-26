@@ -3,7 +3,7 @@ package net.localprojects.blocks {
 	import flash.geom.Point;
 	import net.localprojects.*;
 	
-	public class Divider extends Block {
+	public class Divider extends BlockBase {
 
 		public function Divider() {
 			super();

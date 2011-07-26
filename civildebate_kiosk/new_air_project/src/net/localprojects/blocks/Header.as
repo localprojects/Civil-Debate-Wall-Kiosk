@@ -4,7 +4,7 @@ package net.localprojects.blocks
 	import net.localprojects.*;
 	import flash.text.*;
 	
-	public class Header extends Block	{
+	public class Header extends BlockBase	{
 		
 		public function Header()	{
 			super();

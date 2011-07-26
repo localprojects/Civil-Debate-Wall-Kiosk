@@ -7,11 +7,11 @@ package net.localprojects.ui {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.*;
-	import net.localprojects.blocks.Block;
+	
 	
 	import net.localprojects.*;
 	
-	public class BigButton extends Block	{
+	public class BigButton extends ButtonBase	{
 		
 		private var labelText:TextField;
 		private var label:String;
@@ -97,8 +97,7 @@ package net.localprojects.ui {
 		
 
 		private function onMouseUp(e:MouseEvent):void {
-			CDW.ref.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
-			dispatchEvent(e);	
+			CDW.ref.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);	
 		}
 		
 		

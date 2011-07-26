@@ -2,9 +2,9 @@ package net.localprojects.ui {
 	import flash.display.Sprite;
 	import flash.text.*;
 	import net.localprojects.Assets;
-	import net.localprojects.blocks.Block;
 	
-	public class BlockButton extends Block	{
+	
+	public class BlockButton extends ButtonBase	{
 
 		protected var _buttonWidth:Number;
 		protected var _buttonHeight:Number;
@@ -15,6 +15,8 @@ package net.localprojects.ui {
 		
 		// TODO arrow...
 		public function BlockButton(buttonWidth:Number, buttonHeight:Number, labelText:String, labelSize:Number, backgroundColor:uint, arrow:Boolean) {
+			super();
+			
 			_buttonWidth = buttonWidth;
 			_buttonHeight = buttonHeight;
 			_labelText = labelText;

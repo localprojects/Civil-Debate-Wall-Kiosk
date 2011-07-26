@@ -2,7 +2,7 @@ package net.localprojects.blocks {
 	import flash.display.*;
 	import net.localprojects.*;
 	
-	public class Portrait extends Block {
+	public class Portrait extends BlockBase {
 		
 		private var image:Bitmap;
 		

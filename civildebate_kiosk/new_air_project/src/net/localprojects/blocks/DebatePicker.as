@@ -10,7 +10,7 @@ package net.localprojects.blocks {
 	import net.localprojects.*;
 	import net.localprojects.ui.*;
 	
-	public class DebatePicker extends Block {
+	public class DebatePicker extends BlockBase {
 		
 		private var debateHolder:Sprite = new Sprite();
 		private	var padding:int = 0;

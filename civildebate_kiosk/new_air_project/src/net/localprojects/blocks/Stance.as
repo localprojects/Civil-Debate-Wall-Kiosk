@@ -4,7 +4,7 @@ package net.localprojects.blocks {
 	import net.localprojects.Assets;
 	import net.localprojects.elements.*;
 	
-	public class Stance extends Block {
+	public class Stance extends BlockBase {
 		
 		private var blockLabel:BlockLabel;
 		
