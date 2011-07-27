@@ -5,9 +5,10 @@ package net.localprojects.elements {
 	import flash.text.*;
 	
 	import net.localprojects.*;
+	import net.localprojects.blocks.*;	
 	
 	// multi-line block text
-	public class BlockLabel extends Sprite {
+	public class BlockLabel extends BlockBase {
 		
 		private var _text:String;
 		private var _textSize:Number;
