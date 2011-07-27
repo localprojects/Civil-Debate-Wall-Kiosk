@@ -6,9 +6,9 @@ package net.localprojects.ui {
 	
 	import net.localprojects.*;
 	import net.localprojects.Assets;
-	import net.localprojects.blocks.BlockBase;	
+	import net.localprojects.blocks.BlockBase;
 	
-	public class ThumbnailButton extends BlockBase	{
+	public class ThumbnailButton extends BlockBase {
 	
 		private var roundedPortrait:Sprite;
 		private var portrait:Bitmap;
@@ -95,6 +95,10 @@ package net.localprojects.ui {
 				addChild(roundedPortrait);
 				addChild(textBackground);
 			addChild(textField);
+			
+			
+			// override blockbase hiding behavior
+			visible = true;
 		}
 		
 	

@@ -23,7 +23,6 @@ package net.localprojects.blocks {
 		public function BlockBase() {
 			super();
 			
-			
 			// set some default parameters, can be overriden
 			defaultTweenVars = {ease: Quart.easeOut};
 			defaultTweenInVars = Utilities.mergeObjects(defaultTweenVars, {onInit: beforeTweenIn});

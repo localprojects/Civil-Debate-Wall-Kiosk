@@ -62,6 +62,7 @@ package net.localprojects {
 		private var divider:Divider;
 		private var answerPrompt:BlockLabel;
 		private var smsDisclaimer:BlockParagraph;
+		private var portraitOutline:PortraitOutline;
 		
 		// single copy, changes
 		private var question:Question;
@@ -78,8 +79,11 @@ package net.localprojects {
 		private var debateOverlay:DebateOverlay;
 		private var yesButton:BlockButton;
 		private var noButton:BlockButton;
-		
-		
+		private var backButton:BlockButton;
+		private var smsInstructions:BlockParagraph;
+		private var characterLimit:BlockLabel;
+		private var photoBoothInstructions:BlockParagraph;
+		private var countdown:Countdown;
 		
 		// multiples of these
 		private var nametag:Nametag;
@@ -95,6 +99,11 @@ package net.localprojects {
 			portrait.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(portrait);
 			
+			portraitOutline = new PortraitOutline();
+			portraitOutline.setDefaultTweenIn(1, {alpha: 1});
+			portraitOutline.setDefaultTweenOut(1, {alpha: 0});			
+			addChild(portraitOutline);
+			
 			header = new Header();
 			header.setDefaultTweenIn(1, {x: 30, y: 30});
 			header.setDefaultTweenOut(1, {x: 30, y: -header.height});
@@ -108,7 +117,7 @@ package net.localprojects {
 			question = new Question();
 			question.setDefaultTweenIn(1, {x: 30, y: 140});
 			question.setDefaultTweenOut(1, {x: -question.width, y: 140});
-			question.setText(database.questions[database.activeQuestion].question); // TODO abstract out these ridiculous traverals...			
+			question.setText(database.questions[database.activeQuestion].question); // TODO abstract out these ridiculous traversals...
 			addChild(question);
 						
 			stance = new Stance();
@@ -179,7 +188,6 @@ package net.localprojects {
 			debatePicker.update(); // syncs with state
 			addChild(debatePicker);
 			
-			
 			answerPrompt = new BlockLabel('Your Answer / Please Select One:', 20, 0xffffff, Assets.COLOR_INSTRUCTION_BACKGROUND, false, true);
 			answerPrompt.setDefaultTweenIn(1, {x: 650, y: 1245});
 			answerPrompt.setDefaultTweenOut(1, {x: stage.stageWidth, y: 1245});					
@@ -201,9 +209,36 @@ package net.localprojects {
 			smsDisclaimer.setDefaultTweenOut(1, {x: 100, y: stage.stageHeight});
 			addChild(smsDisclaimer);
 			
+			backButton = new BlockButton(135, 63, 'BACK', 25, Assets.COLOR_YES_DARK, true);
+			backButton.setDefaultTweenIn(1, {x: 101, y: 1003});
+			backButton.setDefaultTweenOut(1, {x: -backButton.width, y: 1003});			
+			addChild(backButton);
+			
+			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + settings.phoneNumber + ' with your statement.'; 	
+			smsInstructions = new BlockParagraph(915, smsInstructionText, 30, Assets.COLOR_YES_LIGHT, false);
+			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
+			smsInstructions.setDefaultTweenOut(1, {x: stage.stageWidth, y: 1096});
+			addChild(smsInstructions);			
+			
+			characterLimit = new BlockLabel('Use no more than ' + settings.characterLimit + ' characters', 20, 0xffffff, Assets.COLOR_YES_MEDIUM);
+			characterLimit.setDefaultTweenIn(1, {x: 648, y: 1246});
+			characterLimit.setDefaultTweenOut(1, {x: stage.stageWidth, y: 1246});
+			addChild(characterLimit);
+			
+			var photoBoothInstructionText:String = 'Thank you! Please align yourself with the silhouette in\norder to accurately take your photo for the debate.';
+			photoBoothInstructions = new BlockParagraph(880, photoBoothInstructionText, 30, Assets.COLOR_YES_LIGHT, false);
+			photoBoothInstructions.setDefaultTweenIn(1, {x: 100, y: 1096});
+			photoBoothInstructions.setDefaultTweenOut(1, {x: stage.stageWidth, y: 1096});
+			addChild(photoBoothInstructions);
+			
+			countdown = new Countdown(5);
+			countdown.setDefaultTweenIn(1, {x: 470, y: 1496});
+			countdown.setDefaultTweenOut(1, {x: 470, y: stage.stageHeight});
+			addChild(countdown);
+			
+			
 			// set view
 			homeView();
-			
 		}
 
 		
@@ -253,6 +288,10 @@ package net.localprojects {
 			viewDebateButton.tweenIn();
 			debatePicker.tweenIn();
 			
+			//temp
+			countdown.tweenIn();
+			countdown.start();
+			
 			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
 			debateOverlay.tweenOut(1, {y: -debateOverlay.height}); // should overidden animations get re-positioned to their canonical 'out' location?
 
@@ -289,16 +328,29 @@ package net.localprojects {
 
 			tweenOutInactive();			
 		}
+
+		// move to control class?
+		private function onYesButton(e:MouseEvent):void {
+			database.userStance = 'yes';
+			textPromptView();
+		}
+		
+		private function onNoButton(e:MouseEvent):void {
+			database.userStance = 'no';
+			textPromptView();			
+		}
 		
 		
 		public function pickStanceView(...args):void {
-			markAllInactive();				
+			markAllInactive();		
 			
 			// mutations
 			portrait.setImage(Assets.portraitPlaceholder);
 			
 			// set behaviors
 			// TK
+			yesButton.setOnClick(onYesButton);
+			noButton.setOnClick(onNoButton);			
 			
 			// on
 			portrait.tweenIn();
@@ -312,11 +364,55 @@ package net.localprojects {
 			smsDisclaimer.tweenIn();
 			
 			
-			tweenOutInactive();				
-		}		
+			tweenOutInactive();		// disable behaviors as well?		
+		}
 		
 		
+		public function textPromptView(...args):void {
+			markAllInactive();
+			
+			// mutations
+			// Mutate according to stance state
+			
+			// behaviors
+			// start polling web? TODO
+			backButton.setOnClick(pickStanceView); // TODO do we need the back button
+			
+			// blocks
+			portrait.tweenIn();
+			header.tweenIn();
+			divider.tweenIn();
+			question.tweenIn();
+			bigButton.tweenIn();
+			yesButton.tweenIn();
+			noButton.tweenIn();
+			stance.tweenIn();
+			backButton.tweenIn();
+			smsInstructions.tweenIn();
+			characterLimit.tweenIn();
+			
+			tweenOutInactive();			
+		}
 		
+		
+		public function photoBoothView(...args):void {
+			markAllInactive();
+			
+			// mutations
+			
+			
+			
+			// behaviors
+			
+			// blocks
+			portrait.tweenIn();
+			header.tweenIn();
+			divider.tweenIn();
+			question.tweenIn();
+			portraitOutline.tweenIn();
+			
+			tweenOutInactive();			
+		}
 		
 		
 		
