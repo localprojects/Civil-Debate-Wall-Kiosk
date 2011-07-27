@@ -1,4 +1,9 @@
-package net.localprojects.blocks {
+package net.localprojects.ui {
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
+	
+	import flash.display.Bitmap;
+	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -9,11 +14,8 @@ package net.localprojects.blocks {
 	
 	import net.localprojects.Assets;
 	import net.localprojects.Utilities;
-	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
-	import flash.display.DisplayObject;
 	
-	public class Countdown extends BlockBase {
+	public class Countdown extends ButtonBase {
 		
 		// time keeping
 		private var duration:Number;		
@@ -30,6 +32,7 @@ package net.localprojects.blocks {
 		private var background:Shape;
 		private var ringColor:uint;
 		private var backgroundColor:uint;
+		private var icon:Bitmap;
 		
 		// constructor
 		public function Countdown(timerDuration:Number) {
@@ -37,7 +40,7 @@ package net.localprojects.blocks {
 			super();
 			init();
 		}
-				
+
 		private function init():void {
 			// set up timer
 			timer = new Timer(1000, duration);
@@ -55,6 +58,14 @@ package net.localprojects.blocks {
 			addChild(progressRing);
 			ringColor = Assets.COLOR_YES_LIGHT;
 			drawRing();
+			
+			// set up the wrapper, allows rotation around center
+			countTextWrapper = new Sprite();
+			countTextWrapper.x = width / 2;
+			countTextWrapper.y = height / 2;
+//			countTextWrapper.alpha = 0;
+//			countTextWrapper.scaleX = 0;
+//			countTextWrapper.scaleY = 0;			
 			
 			// set up the text
 			var textFormat:TextFormat = new TextFormat();
@@ -77,28 +88,21 @@ package net.localprojects.blocks {
 			countText.wordWrap = false;
 			countText.text = duration.toString();
 			countText.x = -width / 4;
-			countText.y = -38;
+			countText.y = -42;
+			countText.visible = false;
 			
-			countTextWrapper = new Sprite();
 			countTextWrapper.addChild(countText);
-			countTextWrapper.x = width / 2;
-			countTextWrapper.y = height / 2;
-			countTextWrapper.alpha = 0;
-			countTextWrapper.scaleX = 0;
-			countTextWrapper.scaleY = 0;			
 			
+			// set up the icon
+			icon = Assets.getCameraIcon();
+			icon.x = -icon.width / 2;
+			icon.y = (-icon.height / 2) - 3;			
+			
+			countTextWrapper.addChild(icon);
+				
 			addChild(countTextWrapper);
 		}		
-		
-		// via http://forums.greensock.com/viewtopic.php?f=1&t=3176
-		private function getRotationChange(mc:DisplayObject, newRotation:Number, clockwise:Boolean):String {
-			var dif:Number = newRotation - mc.rotation;
-			if (Boolean(dif > 0) != clockwise) {
-				dif += (clockwise) ? 360 : -360;
-			}
-			return String(dif);
-		}		
-		
+				
 		// run the timer
 		public function start():void {
 			timer.reset();
@@ -107,7 +111,7 @@ package net.localprojects.blocks {
 			startTime = getTimer();
 			countText.text = duration.toString();
 			
-			TweenMax.to(countTextWrapper, 0.25, {ease: Quart.easeInOut, alpha: 1, rotation: 360, scaleX: 1, scaleY: 1});
+			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countTextWrapper, 180, true), scaleX: 0, scaleY: 0, onComplete: onSecondTweenComplete});			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}		
 		
@@ -119,6 +123,8 @@ package net.localprojects.blocks {
 		
 		private function onSecondTweenComplete():void {
 			// update the count, then bring back the text
+			icon.visible = false;
+			countText.visible = true;
 			countText.text = (duration - timer.currentCount).toString();
 			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 1, scaleY: 1});			
 		}
@@ -126,15 +132,31 @@ package net.localprojects.blocks {
 		private function onTimerComplete(e:TimerEvent):void {
 			// timer's complete, forward the event
 			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			TweenMax.to(countTextWrapper, 0.25, {ease: Quart.easeInOut, alpha: 0, rotation: 360, scaleX: 0, scaleY: 0});
+			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation: 360, scaleX: 0, scaleY: 0, onComplete: onFinalTweenComplete});
 			this.dispatchEvent(e);
+						
 		}		
+		
+		private function onFinalTweenComplete():void {
+			icon.visible = true;
+			countText.visible = false;
+			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 1, scaleY: 1});	
+		}
 		
 		// trace progress along the outer circle
 		private function onEnterFrame(e:Event):void {
 			progress = (getTimer() - startTime) / (duration * 1000);
 			drawRing();
 		}
+		
+		// helper for directional rotation via http://forums.greensock.com/viewtopic.php?f=1&t=3176
+		private function getRotationChange(mc:DisplayObject, newRotation:Number, clockwise:Boolean):String {
+			var dif:Number = newRotation - mc.rotation;
+			if (Boolean(dif > 0) != clockwise) {
+				dif += (clockwise) ? 360 : -360;
+			}
+			return String(dif);
+		}			
 		
 		// drawing
 		private function drawBackground():void {

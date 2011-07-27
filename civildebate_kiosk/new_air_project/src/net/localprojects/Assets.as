@@ -36,6 +36,10 @@ package net.localprojects
 		public static function getPortraitOutline():Bitmap { return new portraitOutlineClass() as Bitmap; };
 		public static const portraitOutline:Bitmap = getPortraitOutline();
 		
+		[Embed(source = '/assets/graphics/cameraIcon.png')] private static const cameraIconClass:Class;
+		public static function getCameraIcon():Bitmap { return new cameraIconClass() as Bitmap; };
+		public static const cameraIcon:Bitmap = getCameraIcon();
+		
 		
 		// Fonts
 		[Embed(source='/assets/fonts/rockwell.swf', symbol='RockwellRegular')] public static const Font:Class;
