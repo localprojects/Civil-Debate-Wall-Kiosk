@@ -1,4 +1,6 @@
 {
 	"phoneNumber": "(352) 578-2609",
-	"characterLimit": 140
+	"characterLimit": 140,
+	"halfSize": true,
+	"startFullScreen": false
 }
