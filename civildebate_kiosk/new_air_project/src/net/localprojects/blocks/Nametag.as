@@ -4,6 +4,7 @@ package net.localprojects.blocks {
 	import net.localprojects.Assets;
 	import net.localprojects.elements.*;
 	
+	// TODO extends block label instead
 	public class Nametag extends BlockBase {
 		
 		private var blockLabel:BlockLabel;
@@ -15,6 +16,7 @@ package net.localprojects.blocks {
 		
 		public function init():void {
 			blockLabel = new BlockLabel("", 35, 0xffffff, Assets.COLOR_YES_MEDIUM, true);
+			blockLabel.visible = true;
 			addChild(blockLabel);
 		}
 		

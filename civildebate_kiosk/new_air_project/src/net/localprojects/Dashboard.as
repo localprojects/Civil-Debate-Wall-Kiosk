@@ -23,7 +23,12 @@ package net.localprojects {
 			viewChooser = new ComboBox(this, 5, 100, 'View');
 			viewChooser.addItem('Home');
 			viewChooser.addItem('Debate Overlay');
-			viewChooser.addItem('Pick Stance');			
+			viewChooser.addItem('Pick Stance');	
+			viewChooser.addItem('SMS Prompt');
+			viewChooser.addItem('Photo Booth');			
+			
+			
+			
 			viewChooser.addEventListener(Event.SELECT, onViewSelect);
 			viewChooser.width = this.width - 10;			
 		}
@@ -39,6 +44,10 @@ package net.localprojects {
 			if (selection == 'Home') CDW.ref.homeView();
 			if (selection == 'Debate Overlay') CDW.ref.debateOverlayView();
 			if (selection == 'Pick Stance') CDW.ref.pickStanceView();			
+			if (selection == 'SMS Prompt') CDW.ref.textPromptView();
+			if (selection == 'Photo Booth') CDW.ref.photoBoothView();			
+			
+
 			
 			
 		}

@@ -6,6 +6,7 @@ package net.localprojects.blocks {
 	
 	public class Stance extends BlockBase {
 		
+		// TODO extends block label instead?
 		private var blockLabel:BlockLabel;
 		
 		public function Stance() {
@@ -14,13 +15,14 @@ package net.localprojects.blocks {
 		}
 		
 		public function init():void {
-			blockLabel = new BlockLabel("", 85, 0xffffff, Assets.COLOR_YES_LIGHT);
+			blockLabel = new BlockLabel('', 85, 0xffffff, Assets.COLOR_YES_LIGHT);
+			blockLabel.visible = true;			
 			addChild(blockLabel);
 		}
 		
 		
 		public function setText(s:String):void {
-			blockLabel.setText(s.toUpperCase() + "!");
+			blockLabel.setText(s.toUpperCase() + '!');
 		}		
 
 	}
