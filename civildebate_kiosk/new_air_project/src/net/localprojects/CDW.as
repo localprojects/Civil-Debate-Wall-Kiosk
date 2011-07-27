@@ -8,6 +8,7 @@ package net.localprojects {
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
+	import flash.ui.Mouse;
 	
 	import net.localprojects.blocks.*;
 	import net.localprojects.elements.BlockLabel;
@@ -288,15 +289,18 @@ package net.localprojects {
 			viewDebateButton.tweenIn();
 			debatePicker.tweenIn();
 			
-			//temp
-			countdown.tweenIn();
-			countdown.start();
+			countdown.tweenIn();	
+			countdown.setOnClick(onCameraClick);
 			
 			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
 			debateOverlay.tweenOut(1, {y: -debateOverlay.height}); // should overidden animations get re-positioned to their canonical 'out' location?
 
 			// clean up the old based on what's not active
 			tweenOutInactive();
+		}
+		
+		private function onCameraClick(e:MouseEvent):void {
+			countdown.start()
 		}
 
 		
@@ -410,6 +414,7 @@ package net.localprojects {
 			divider.tweenIn();
 			question.tweenIn();
 			portraitOutline.tweenIn();
+			countdown.tweenIn();			
 			
 			tweenOutInactive();			
 		}
