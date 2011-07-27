@@ -289,25 +289,24 @@ package net.localprojects {
 			cameraBitmap = new Bitmap();
 			addChild(cameraBitmap);
 			
-			var faceDetector:FaceDetector = new FaceDetector();
-			faceDetector.addEventListener(ObjectDetectorEvent.FACE_FOUND, onFaceFound);
-				
-				
-			
-			
-			
-			
+			faceDetector= new FaceDetector();
+			faceDetector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onFaceFound);
+
 			
 		}
 		
 		public var cameraBitmap:Bitmap;		
-
+		public var faceDetector:FaceDetector;
+		
 		private function onFaceFound(e:ObjectDetectorEvent):void {
+			trace("Face!");
+			trace(e.target.faceRect);
 			
 		}
 		
 		private function onNewFrame(e:CameraFeedEvent):void {
 			cameraBitmap.bitmapData = Utilities.scaleToFit(e.target.frame, 200, 200);
+			faceDetector.processBitmap(cameraBitmap.bitmapData);
 		}
 		
 		
