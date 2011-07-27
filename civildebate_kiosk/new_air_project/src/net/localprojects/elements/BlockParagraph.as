@@ -5,9 +5,10 @@ package net.localprojects.elements {
 	import flash.text.*;
 	
 	import net.localprojects.*;
+	import net.localprojects.blocks.BlockBase;	
 	
 	// multi-line block text
-	public class BlockParagraph extends Sprite {
+	public class BlockParagraph extends BlockBase {
 		
 		private var _textWidth:Number;
 		private var _text:String;

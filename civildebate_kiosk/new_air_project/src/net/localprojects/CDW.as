@@ -10,6 +10,8 @@ package net.localprojects {
 	import flash.net.*;
 	
 	import net.localprojects.blocks.*;
+	import net.localprojects.elements.BlockLabel;
+	import net.localprojects.elements.BlockParagraph;
 	import net.localprojects.ui.*;
 
 
@@ -58,6 +60,8 @@ package net.localprojects {
 		// single copy, never changes
 		private var header:Header;
 		private var divider:Divider;
+		private var answerPrompt:BlockLabel;
+		private var smsDisclaimer:BlockParagraph;
 		
 		// single copy, changes
 		private var question:Question;
@@ -72,6 +76,9 @@ package net.localprojects {
 		private var viewDebateButton:BlockButton; // TODO class wrap?		
 		private var debatePicker:DebatePicker;
 		private var debateOverlay:DebateOverlay;
+		private var yesButton:BlockButton;
+		private var noButton:BlockButton;
+		
 		
 		
 		// multiples of these
@@ -79,11 +86,8 @@ package net.localprojects {
 		private var opinion:Opinion;
 		
 		
-		
 		private function onDatabaseLoaded(e:LoaderEvent):void {
 			trace("database loaded");
-
-			
 			
 			// draw basic layout, wrap this up later
 			portrait = new Portrait();
@@ -175,8 +179,30 @@ package net.localprojects {
 			debatePicker.update(); // syncs with state
 			addChild(debatePicker);
 			
+			
+			answerPrompt = new BlockLabel('Your Answer / Please Select One:', 20, 0xffffff, Assets.COLOR_INSTRUCTION_BACKGROUND, false, true);
+			answerPrompt.setDefaultTweenIn(1, {x: 650, y: 1245});
+			answerPrompt.setDefaultTweenOut(1, {x: stage.stageWidth, y: 1245});					
+			addChild(answerPrompt);
+			
+			yesButton = new BlockButton(215, 100, 'YES!', 50, Assets.COLOR_YES_LIGHT, false);
+			yesButton.setDefaultTweenIn(1, {x: 447, y: 1340});
+			yesButton.setDefaultTweenOut(1, {x: 447, y: stage.stageHeight});
+			addChild(yesButton);
+			
+			noButton = new BlockButton(185, 100, 'NO!', 50, Assets.COLOR_NO_LIGHT, false);			
+			noButton.setDefaultTweenIn(1.2, {x: 677, y: 1340});
+			noButton.setDefaultTweenOut(1.2, {x: 677, y: stage.stageHeight});
+			addChild(noButton);
+			
+			var smsDisclaimerText:String = 'You will receive an SMS notifying you of any future opponents \nwho would like to enter into a debate with you based on your opinion. \nYou can opt out at any time by replying STOP.';
+			smsDisclaimer = new BlockParagraph(872, smsDisclaimerText, 25, Assets.COLOR_INSTRUCTION_BACKGROUND, false);
+			smsDisclaimer.setDefaultTweenIn(1, {x: 100, y: 1625});
+			smsDisclaimer.setDefaultTweenOut(1, {x: 100, y: stage.stageHeight});
+			addChild(smsDisclaimer);
+			
 			// set view
-			//homeView();
+			homeView();
 			
 		}
 
@@ -276,6 +302,15 @@ package net.localprojects {
 			
 			// on
 			portrait.tweenIn();
+			header.tweenIn();
+			divider.tweenIn();
+			question.tweenIn();
+			bigButton.tweenIn();
+			answerPrompt.tweenIn();
+			yesButton.tweenIn();
+			noButton.tweenIn();
+			smsDisclaimer.tweenIn();
+			
 			
 			tweenOutInactive();				
 		}		
