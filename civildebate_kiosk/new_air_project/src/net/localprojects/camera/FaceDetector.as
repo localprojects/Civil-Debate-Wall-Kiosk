@@ -1,15 +1,16 @@
-package net.localprojects {
+package net.localprojects.camera {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.events.EventDispatcher;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
-	iimport net.localprojects.Utilities;
+	import net.localprojects.Utilities;
 	
 	import jp.maaash.ObjectDetection.ObjectDetector;
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	import jp.maaash.ObjectDetection.ObjectDetectorOptions;
 	import flash.geom.Point;
+	import net.localprojects.CDW;
 	
 	// Adapted from Mario Klingemann's code
 	// http://www.quasimondo.com/archives/000687.php
@@ -39,8 +40,8 @@ package net.localprojects {
 			
 			faceRect = new Rectangle();
 			
-			maxSourceWidth = 50;
-			maxSourceHeight = 50;
+			maxSourceWidth = 200;
+			maxSourceHeight = 200;
 		}
 		
 		private function detectionHandler(e:ObjectDetectorEvent):void {
@@ -70,9 +71,12 @@ package net.localprojects {
 				}
 				
 				this.dispatchEvent(e);
+				
+				CDW.dashboard.log("Face detected");
 			}
 			else {
 				// no faces found... increment timer for back-up button?
+				CDW.dashboard.log("---------");
 			}
 		}
 		
