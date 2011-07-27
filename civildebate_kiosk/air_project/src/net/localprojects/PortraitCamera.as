@@ -31,7 +31,7 @@ package net.localprojects {
 		private var videoBitmap:BitmapPlus = new BitmapPlus(new BitmapData(cropWidth, cropHeight, true, 0));
 		private var portraitBitmap:Bitmap = new Bitmap(new BitmapData(cropWidth, cropHeight, true, 0)); // holds the image for storage / upload
 		private var blurBitmap:BitmapPlus = new BitmapPlus(new BitmapData(cropWidth, cropHeight, true, 0));
-		private var maskBitmap:Bitmap = new Bitmap(new BitmapData(Assets.portraitBlurMask.bitmapData.width, Assets.portraitBlurMask.bitmapData.height, true, 0));
+		private var maskBitmap:Bitmap = Assets.
 
 		// container for blur
 		private var maskContianer:Sprite = new Sprite();
@@ -271,7 +271,6 @@ package net.localprojects {
 			variables.format = format;
 			variables.image = encoder.toString();
 			request.data = variables;
-			
 			
 			trace(request);
 			trace("sending");

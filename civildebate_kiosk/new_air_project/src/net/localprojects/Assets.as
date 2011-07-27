@@ -40,6 +40,10 @@ package net.localprojects
 		public static function getCameraIcon():Bitmap { return new cameraIconClass() as Bitmap; };
 		public static const cameraIcon:Bitmap = getCameraIcon();
 		
+		[Embed(source = '/assets/graphics/portraitMask.png')] private static const portraitMaskClass:Class;
+		public static function getPortraitMask():Bitmap { return new portraitMaskClass() as Bitmap; };
+		public static const portraitMask:Bitmap = getPortraitMask();
+		
 		
 		// Fonts
 		[Embed(source='/assets/fonts/rockwell.swf', symbol='RockwellRegular')] public static const Font:Class;

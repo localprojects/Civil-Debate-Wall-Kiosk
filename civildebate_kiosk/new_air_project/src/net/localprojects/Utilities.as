@@ -1,7 +1,5 @@
 package net.localprojects {
-	import flash.display.Bitmap;
-	import flash.display.DisplayObject;
-	import flash.display.Sprite;
+	import flash.display.*;
 	import flash.filesystem.*;
 	import flash.geom.*;
 	import flash.utils.*;
@@ -179,6 +177,21 @@ package net.localprojects {
 			
 			return o;
 		}
+		
+		
+		// scales down a bitmap data object so it fits with the width and height specified
+		public static function scaleToFit(b:BitmapData, maxWidth:int, maxHeight:int):BitmapData {
+			var widthRatio:Number = maxWidth / b.width;
+			var heightRatio:Number = maxHeight / b.height;
+			var scaleRatio:Number = Math.min(widthRatio, heightRatio);
+			
+			var matrix:Matrix = new Matrix();
+			matrix.scale(scaleRatio, scaleRatio);
+			
+			var o:BitmapData = new BitmapData(b.width * scaleRatio, b.height * scaleRatio);
+			o.draw(b, matrix);
+			return o;
+		}		
 
 	}
 }
