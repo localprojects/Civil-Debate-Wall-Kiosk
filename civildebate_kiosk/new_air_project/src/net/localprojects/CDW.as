@@ -11,11 +11,13 @@ package net.localprojects {
 	import flash.net.*;
 	import flash.ui.*;
 	
+	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
+	
 	import net.localprojects.blocks.*;
+	import net.localprojects.camera.*;
 	import net.localprojects.elements.BlockLabel;
 	import net.localprojects.elements.BlockParagraph;
 	import net.localprojects.ui.*;
-
 
 	public class CDW extends Sprite {
 		
@@ -54,7 +56,7 @@ package net.localprojects {
 			database.load();
 			
 			// background
-			graphics.beginFill(0x000000);
+			graphics.beginFill(0xffffff);
 			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 			graphics.endFill();
 			
@@ -260,7 +262,8 @@ package net.localprojects {
 			
 			
 			// set view
-			homeView();
+			//homeView();
+
 			
 			// FPS meter
 			var fps:FPSMeter = new FPSMeter(this, stage.stageWidth - 50, 0);		
@@ -271,9 +274,41 @@ package net.localprojects {
 				fps.x = stage.stageWidth - 100;
 				fps.y = -5;	
 			}
+			
+			
+			
+			
+			
+			
+			
+			
+			var cameraFeed:ICameraFeed = new WebcamFeed();
+			cameraFeed.start();
+			cameraFeed.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onNewFrame);
+			
+			cameraBitmap = new Bitmap();
+			addChild(cameraBitmap);
+			
+			var faceDetector:FaceDetector = new FaceDetector();
+			faceDetector.addEventListener(ObjectDetectorEvent.FACE_FOUND, onFaceFound);
+				
+				
+			
+			
+			
+			
+			
 		}
-
 		
+		public var cameraBitmap:Bitmap;		
+
+		private function onFaceFound(e:ObjectDetectorEvent):void {
+			
+		}
+		
+		private function onNewFrame(e:CameraFeedEvent):void {
+			cameraBitmap.bitmapData = Utilities.scaleToFit(e.target.frame, 200, 200);
+		}
 		
 		
 		// marks all FIRST LEVEL blocks as inactive

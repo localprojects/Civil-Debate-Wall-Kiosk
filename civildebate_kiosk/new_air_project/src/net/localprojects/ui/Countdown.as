@@ -54,6 +54,7 @@ package net.localprojects.ui {
 			drawBackground();
 			
 			// set up the progress ring
+			progress = 0;
 			progressRing = new Shape();
 			addChild(progressRing);
 			ringColor = Assets.COLOR_YES_LIGHT;
@@ -132,6 +133,7 @@ package net.localprojects.ui {
 		private function onTimerComplete(e:TimerEvent):void {
 			// timer's complete, forward the event
 			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
 			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation: 360, scaleX: 0, scaleY: 0, onComplete: onFinalTweenComplete});
 			this.dispatchEvent(e);
 						
@@ -140,7 +142,10 @@ package net.localprojects.ui {
 		private function onFinalTweenComplete():void {
 			icon.visible = true;
 			countText.visible = false;
-			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 1, scaleY: 1});	
+			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 1, scaleY: 1});
+			
+			progress = 0;
+			drawRing();			
 		}
 		
 		// trace progress along the outer circle
