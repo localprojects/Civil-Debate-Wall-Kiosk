@@ -1,5 +1,6 @@
 package net.localprojects {
 
+	import com.bit101.components.FPSMeter;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.events.LoaderEvent;
@@ -8,7 +9,7 @@ package net.localprojects {
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
-	import flash.ui.Mouse;
+	import flash.ui.*;
 	
 	import net.localprojects.blocks.*;
 	import net.localprojects.elements.BlockLabel;
@@ -30,16 +31,22 @@ package net.localprojects {
 		}
 
 		private function onAddedToStage(event:Event):void {
+			// load settings from a local JSON file
+			settings = Settings.load();
+			
 			// set up the stage
 			stage.quality = StageQuality.BEST;
 			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			
 			// temporarily squish screen for laptop development (half size)
-			stage.nativeWindow.width = 540;
-			stage.nativeWindow.height = 960;
-			
-			// load settings from a local JSON file
-			settings = Settings.load();
+			if (settings.halfSize) {
+				stage.nativeWindow.width = 540;
+				stage.nativeWindow.height = 960;
+			}
+			else {
+				stage.nativeWindow.width = 1080;
+				stage.nativeWindow.height = 1920;				
+			}
 			
 			// load the wall state
 			database = new Database();
@@ -53,8 +60,22 @@ package net.localprojects {
 			
 			// set up gui overlay
 			dashboard = new Dashboard(this.stage, 5, 5);
-			dashboard.scaleX = 2;
-			dashboard.scaleY = 2;
+			
+			if (settings.halfSize) {			
+				dashboard.scaleX = 2;
+				dashboard.scaleY = 2;
+			}
+			
+			// set up a full screen option in the context menu
+			var myContextMenu:ContextMenu = new ContextMenu();
+			var item:ContextMenuItem = new ContextMenuItem("Toggle Full Screen");
+			myContextMenu.customItems.push(item);
+			item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onFullScreenContextMenuSelect);
+			contextMenu = myContextMenu;
+			
+			if (settings.startFullScreen) {
+				toggleFullScreen();
+			}
 		}
 		
 		
@@ -240,6 +261,16 @@ package net.localprojects {
 			
 			// set view
 			homeView();
+			
+			// FPS meter
+			var fps:FPSMeter = new FPSMeter(this, stage.stageWidth - 50, 0);		
+			
+			if (settings.halfSize) {
+				fps.scaleX = 2;
+				fps.scaleY = 2;			
+				fps.x = stage.stageWidth - 100;
+				fps.y = -5;	
+			}
 		}
 
 		
@@ -289,8 +320,7 @@ package net.localprojects {
 			viewDebateButton.tweenIn();
 			debatePicker.tweenIn();
 			
-			countdown.tweenIn();	
-			countdown.setOnClick(onCameraClick);
+
 			
 			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
 			debateOverlay.tweenOut(1, {y: -debateOverlay.height}); // should overidden animations get re-positioned to their canonical 'out' location?
@@ -299,9 +329,6 @@ package net.localprojects {
 			tweenOutInactive();
 		}
 		
-		private function onCameraClick(e:MouseEvent):void {
-			countdown.start()
-		}
 
 		
 		public function debateOverlayView(...args):void {
@@ -407,22 +434,41 @@ package net.localprojects {
 			
 			
 			// behaviors
+			countdown.setOnClick(onCameraClick);
+			
 			
 			// blocks
 			portrait.tweenIn();
 			header.tweenIn();
 			divider.tweenIn();
 			question.tweenIn();
+			stance.tweenIn();			
 			portraitOutline.tweenIn();
 			countdown.tweenIn();			
 			
 			tweenOutInactive();			
 		}
 		
+		private function onCameraClick(e:MouseEvent):void {
+			countdown.start()
+		}
+		
+		
 		
 		
 
-
+		private function onFullScreenContextMenuSelect(e:Event):void {
+			toggleFullScreen();
+		}
+		
+		private function toggleFullScreen():void {
+			if (stage.displayState == StageDisplayState.NORMAL) {
+				stage.displayState = StageDisplayState.FULL_SCREEN;
+			}
+			else {
+				stage.displayState = StageDisplayState.NORMAL;
+			}
+		}		
 		
 		
 		

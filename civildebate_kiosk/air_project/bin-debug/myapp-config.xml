@@ -56,7 +56,7 @@
       </extensions>
       <!-- compiler.external-library-path: list of SWC files or directories to compile against but to omit from linking-->
       <external-library-path>
-         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/air/airglobal.swc</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.1/frameworks/libs/air/airglobal.swc</path-element>
       </external-library-path>
       <fonts>
          <!-- compiler.fonts.advanced-anti-aliasing: enables advanced anti-aliasing for embedded fonts, which provides greater clarity for small fonts.-->
@@ -129,19 +129,19 @@
       <keep-generated-actionscript>false</keep-generated-actionscript>
       <!-- compiler.library-path: list of SWC files or directories that contain SWC files-->
       <library-path>
-         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/textLayout.swc</path-element>
-         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/osmf.swc</path-element>
-         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/authoringsupport.swc</path-element>
-         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/core.swc</path-element>
-         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/air/aircore.swc</path-element>
-         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/air/applicationupdater.swc</path-element>
-         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/air/applicationupdater_ui.swc</path-element>
-         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.0/frameworks/libs/air/servicemonitor.swc</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.1/frameworks/libs/textLayout.swc</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.1/frameworks/libs/osmf.swc</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.1/frameworks/libs/authoringsupport.swc</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.1/frameworks/libs/core.swc</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.1/frameworks/libs/air/aircore.swc</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.1/frameworks/libs/air/applicationupdater.swc</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.1/frameworks/libs/air/applicationupdater_ui.swc</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/sdks/4.5.1/frameworks/libs/air/servicemonitor.swc</path-element>
          <path-element>/Users/Mika/Code/CivilDebateWall/lp-cdw/civildebate_kiosk/air_project/libraries</path-element>
-         <path-element>/Applications/Adobe Flash Builder 4.5/eclipse/plugins/com.adobe.flexbuilder.flexunit_4.5.0.308971/flexunitframework/libs/version4libs/Common</path-element>
-         <path-element>/Applications/Adobe Flash Builder 4.5/eclipse/plugins/com.adobe.flexbuilder.flexunit_4.5.0.308971/flexunitframework/libs/version4libs/ASProject</path-element>
-         <path-element>/Applications/Adobe Flash Builder 4.5/eclipse/plugins/com.adobe.flexbuilder.flexunit_4.5.0.308971/flexunitframework/libs/version4libs/ASProject_Extended</path-element>
-         <path-element>/Applications/Adobe Flash Builder 4.5/eclipse/plugins/com.adobe.flexbuilder.flexunit_4.5.0.308971/flexunitframework/locale/version4locale</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/eclipse/plugins/com.adobe.flexbuilder.flexunit_4.5.1.313231/flexunitframework/libs/version4libs/Common</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/eclipse/plugins/com.adobe.flexbuilder.flexunit_4.5.1.313231/flexunitframework/libs/version4libs/ASProject</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/eclipse/plugins/com.adobe.flexbuilder.flexunit_4.5.1.313231/flexunitframework/libs/version4libs/ASProject_Extended</path-element>
+         <path-element>/Applications/Adobe Flash Builder 4.5/eclipse/plugins/com.adobe.flexbuilder.flexunit_4.5.1.313231/flexunitframework/locale/version4locale</path-element>
       </library-path>
       <!-- compiler.locale: specifies the locale for internationalization-->
       <locale>
