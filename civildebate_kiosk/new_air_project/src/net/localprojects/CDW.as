@@ -306,7 +306,7 @@ package net.localprojects {
 		
 		private function onNewFrame(e:CameraFeedEvent):void {
 			cameraBitmap.bitmapData = Utilities.scaleToFit(e.target.frame, 200, 200);
-			faceDetector.processBitmap(cameraBitmap.bitmapData);
+			//faceDetector.processBitmap(cameraBitmap.bitmapData);
 		}
 		
 		
