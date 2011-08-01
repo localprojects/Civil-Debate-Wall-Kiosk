@@ -28,9 +28,11 @@ package net.localprojects {
 			viewChooser.addItem('Photo Booth');
 			viewChooser.addItem('Name Entry');
 			viewChooser.addItem('Verify Opinion');
-			viewChooser.addItem('Edit Opinion');			
+			viewChooser.addItem('Edit Opinion');	
+			viewChooser.addItem('Stats Overlay');
+			viewChooser.addItem('Inactivity Overlay');
 			
-			
+			viewChooser.numVisibleItems = viewChooser.items.length;
 			
 			viewChooser.addEventListener(Event.SELECT, onViewSelect);
 			viewChooser.width = this.width - 10;			
@@ -44,14 +46,16 @@ package net.localprojects {
 		private function onViewSelect(e:Event):void {
 			var selection:String = e.target.selectedItem;
 			
-			if (selection == 'Home') CDW.ref.homeView();
-			if (selection == 'Debate Overlay') CDW.ref.debateOverlayView();
-			if (selection == 'Pick Stance') CDW.ref.pickStanceView();			
-			if (selection == 'SMS Prompt') CDW.ref.textPromptView();
-			if (selection == 'Photo Booth') CDW.ref.photoBoothView();
-			if (selection == 'Name Entry') CDW.ref.nameEntryView();			
-			if (selection == 'Verify Opinion') CDW.ref.verifyOpinionView();
-			if (selection == 'Edit Opinion') CDW.ref.editOpinionView();			
+			if (selection == 'Home') CDW.view.homeView();
+			if (selection == 'Debate Overlay') CDW.view.debateOverlayView();
+			if (selection == 'Pick Stance') CDW.view.pickStanceView();			
+			if (selection == 'SMS Prompt') CDW.view.textPromptView();
+			if (selection == 'Photo Booth') CDW.view.photoBoothView();
+			if (selection == 'Name Entry') CDW.view.nameEntryView();			
+			if (selection == 'Verify Opinion') CDW.view.verifyOpinionView();
+			if (selection == 'Edit Opinion') CDW.view.editOpinionView();			
+			if (selection == 'Stats Overlay') CDW.view.statsView();
+			if (selection == 'Inactivity Overlay') CDW.view.inactivityView();						
 			
 
 			

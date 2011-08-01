@@ -5,7 +5,7 @@ package net.localprojects.ui {
 	import flash.text.*;
 	import net.localprojects.blocks.BlockBase;
 	
-	public class IconButton extends BlockBase {
+	public class IconButton extends ButtonBase {
 
 		protected var _buttonWidth:Number;
 		protected var _buttonHeight:Number;
@@ -126,9 +126,7 @@ package net.localprojects.ui {
 		}
 		
 		
-		protected function onClick(e:MouseEvent):void {
-			trace("clicked");
-		}
+
 		
 		
 		// getters and setters
