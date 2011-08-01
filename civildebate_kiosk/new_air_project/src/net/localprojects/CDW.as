@@ -87,6 +87,8 @@ package net.localprojects {
 		private var answerPrompt:BlockLabel;
 		private var smsDisclaimer:BlockParagraph;
 		private var portraitOutline:PortraitOutline;
+		private var portraitCamera:PortraitCamera;
+		private var nameEntryInstructions:BlockLabel;
 		
 		// single copy, changes
 		private var question:Question;
@@ -122,6 +124,12 @@ package net.localprojects {
 			portrait.setDefaultTweenIn(1, {alpha: 1});
 			portrait.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(portrait);
+			
+			portraitCamera = new PortraitCamera();
+			portraitCamera.setDefaultTweenIn(1, {alpha: 1});
+			portraitCamera.setDefaultTweenOut(1, {alpha: 0});
+			addChild(portraitCamera);
+						
 			
 			portraitOutline = new PortraitOutline();
 			portraitOutline.setDefaultTweenIn(1, {alpha: 1});
@@ -261,6 +269,12 @@ package net.localprojects {
 			addChild(countdown);
 			
 			
+			nameEntryInstructions = new BlockLabel('Type in your name', 20, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
+			nameEntryInstructions.setDefaultTweenIn(1, {x: 100, y: 1096});
+			nameEntryInstructions.setDefaultTweenOut(1, {x: -nameEntryInstructions.width, y: 1096});
+			addChild(nameEntryInstructions);
+			
+
 			// set view
 			//homeView();
 
@@ -282,33 +296,10 @@ package net.localprojects {
 			
 			
 			
-			var cameraFeed:ICameraFeed = new WebcamFeed();
-			cameraFeed.start();
-			cameraFeed.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onNewFrame);
-			
-			cameraBitmap = new Bitmap();
-			addChild(cameraBitmap);
-			
-			faceDetector= new FaceDetector();
-			faceDetector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onFaceFound);
 
 			
 		}
-		
-		public var cameraBitmap:Bitmap;		
-		public var faceDetector:FaceDetector;
-		
-		private function onFaceFound(e:ObjectDetectorEvent):void {
-			trace("Face!");
-			trace(e.target.faceRect);
-			
-		}
-		
-		private function onNewFrame(e:CameraFeedEvent):void {
-			cameraBitmap.bitmapData = Utilities.scaleToFit(e.target.frame, 200, 200);
-			//faceDetector.processBitmap(cameraBitmap.bitmapData);
-		}
-		
+
 		
 		// marks all FIRST LEVEL blocks as inactive
 		private function markAllInactive():void {
@@ -465,31 +456,60 @@ package net.localprojects {
 			
 			// mutations
 			
-			
-			
 			// behaviors
 			countdown.setOnClick(onCameraClick);
-			
+			countdown.setOnFinish(onCountdownFinish);
 			
 			// blocks
-			portrait.tweenIn();
+			//portrait.tweenIn(); // do we need this?
+			portraitCamera.tweenIn();
 			header.tweenIn();
 			divider.tweenIn();
 			question.tweenIn();
-			stance.tweenIn();			
+			stance.tweenIn();
 			portraitOutline.tweenIn();
+			photoBoothInstructions.tweenIn();			
 			countdown.tweenIn();			
-			
-			tweenOutInactive();			
+
+			tweenOutInactive();
 		}
 		
 		private function onCameraClick(e:MouseEvent):void {
 			countdown.start()
 		}
 		
+		private function onCountdownFinish(e:Event):void {
+			portraitCamera.takePhoto();
+			// go to new view
+			nameEntryView();
+		}
 		
-		
-		
+		public function nameEntryView(...args):void {
+			markAllInactive();
+			
+			// mutations
+			portrait.setImage(Assets.portraitPlaceholder); // TODO use latest photo
+			
+			// behaviors
+			
+			// blocks
+			portrait.tweenIn();			
+			header.tweenIn();
+			divider.tweenIn();
+			question.tweenIn();
+			stance.tweenIn();
+			nameEntryInstructions.tweenIn();
+
+			
+			tweenOutInactive();			
+		}
+			
+			
+			
+			
+			
+			
+			
 
 		private function onFullScreenContextMenuSelect(e:Event):void {
 			toggleFullScreen();

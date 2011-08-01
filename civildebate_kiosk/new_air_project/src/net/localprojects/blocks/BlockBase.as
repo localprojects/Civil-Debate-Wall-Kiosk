@@ -1,4 +1,5 @@
 package net.localprojects.blocks {
+
 	import com.greensock.*;
 	import com.greensock.data.TweenMaxVars;
 	import com.greensock.easing.*;
@@ -49,11 +50,11 @@ package net.localprojects.blocks {
 		
 		// A little tweening abstraction... sets overridable default parameters
 		// manages visibility / invisibility
-		private function beforeTweenIn():void {
+		protected function beforeTweenIn():void {
 			this.visible = true;
 		}
 		
-		private function afterTweenOut():void {
+		protected function afterTweenOut():void {
 			this.visible = false;
 			
 			// restore position so overriden out tweens restart from their canonical location
@@ -97,9 +98,8 @@ package net.localprojects.blocks {
 			}
 			
 			TweenMax.to(this, duration, params);
-			active = true;
+			active = false; // TODO WHY WAS THIS TRUE?
 		}		
-
-
+		
 	}
 }

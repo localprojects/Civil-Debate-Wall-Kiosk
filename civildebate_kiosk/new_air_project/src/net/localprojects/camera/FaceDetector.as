@@ -72,11 +72,11 @@ package net.localprojects.camera {
 				
 				this.dispatchEvent(e);
 				
-				CDW.dashboard.log("Face detected");
+				//CDW.dashboard.log("Face detected");
 			}
 			else {
 				// no faces found... increment timer for back-up button?
-				CDW.dashboard.log("---------");
+				//CDW.dashboard.log("---------");
 			}
 		}
 		

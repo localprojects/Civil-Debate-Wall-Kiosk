@@ -34,6 +34,9 @@ package net.localprojects.ui {
 		private var backgroundColor:uint;
 		private var icon:Bitmap;
 		
+		// events
+		public var onCountdownFinish:Function;	
+		
 		// constructor
 		public function Countdown(timerDuration:Number) {
 			duration = timerDuration;
@@ -136,7 +139,9 @@ package net.localprojects.ui {
 			
 			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation: 360, scaleX: 0, scaleY: 0, onComplete: onFinalTweenComplete});
 			this.dispatchEvent(e);
-						
+			
+			// call the function
+			onCountdownFinish(e);
 		}		
 		
 		private function onFinalTweenComplete():void {
@@ -203,5 +208,15 @@ package net.localprojects.ui {
 			ringColor = c;
 			drawRing();
 		}
+		
+		// extra events		
+		public function setOnFinish(f:Function):void {
+			onCountdownFinish = f;			
+		}		
+		
+		
+		
+		
+		
 	}
 }
