@@ -18,7 +18,6 @@ package net.localprojects.camera {
 		private var cameraWidth:int;
 		private var cameraHeight:int;
 
-
 		
 		private var camera:Camera;
 		private var video:Video;
@@ -58,7 +57,7 @@ package net.localprojects.camera {
 		
 		public function pause():void {
 			video.removeEventListener(Event.ENTER_FRAME, onVideoFrame);
-		}		
+		}
 		
 		private function onVideoFrame(e:Event):void {
 			// draw the frame into a bitmap

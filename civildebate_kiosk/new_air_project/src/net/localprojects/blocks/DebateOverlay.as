@@ -16,7 +16,6 @@ package net.localprojects.blocks
 			this.graphics.drawRect(0, 0, 1022, 807);
 			this.graphics.endFill();
 			
-			
 			// text
 			var textFormat:TextFormat = new TextFormat();
 			textFormat.bold = true;			
