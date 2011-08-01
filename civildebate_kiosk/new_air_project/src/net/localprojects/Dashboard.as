@@ -25,7 +25,10 @@ package net.localprojects {
 			viewChooser.addItem('Debate Overlay');
 			viewChooser.addItem('Pick Stance');	
 			viewChooser.addItem('SMS Prompt');
-			viewChooser.addItem('Photo Booth');			
+			viewChooser.addItem('Photo Booth');
+			viewChooser.addItem('Name Entry');
+			viewChooser.addItem('Verify Opinion');
+			viewChooser.addItem('Edit Opinion');			
 			
 			
 			
@@ -45,7 +48,10 @@ package net.localprojects {
 			if (selection == 'Debate Overlay') CDW.ref.debateOverlayView();
 			if (selection == 'Pick Stance') CDW.ref.pickStanceView();			
 			if (selection == 'SMS Prompt') CDW.ref.textPromptView();
-			if (selection == 'Photo Booth') CDW.ref.photoBoothView();			
+			if (selection == 'Photo Booth') CDW.ref.photoBoothView();
+			if (selection == 'Name Entry') CDW.ref.nameEntryView();			
+			if (selection == 'Verify Opinion') CDW.ref.verifyOpinionView();
+			if (selection == 'Edit Opinion') CDW.ref.editOpinionView();			
 			
 
 			

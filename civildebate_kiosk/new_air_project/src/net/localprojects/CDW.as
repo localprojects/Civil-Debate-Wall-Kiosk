@@ -15,8 +15,7 @@ package net.localprojects {
 	
 	import net.localprojects.blocks.*;
 	import net.localprojects.camera.*;
-	import net.localprojects.elements.BlockLabel;
-	import net.localprojects.elements.BlockParagraph;
+	import net.localprojects.elements.*;
 	import net.localprojects.ui.*;
 
 	public class CDW extends Sprite {
@@ -89,6 +88,12 @@ package net.localprojects {
 		private var portraitOutline:PortraitOutline;
 		private var portraitCamera:PortraitCamera;
 		private var nameEntryInstructions:BlockLabel;
+		private var nameEntryField:TextEntryField;		
+		private var saveButton:BlockButton;
+		private var retakePhotoButton:BlockButton;
+		private var editTextButton:BlockButton;
+		private var cancelButton:BlockButton;		
+		private var editTextInstructions:BlockLabel;
 		
 		// single copy, changes
 		private var question:Question;
@@ -112,8 +117,8 @@ package net.localprojects {
 		private var countdown:Countdown;
 		
 		// multiples of these
-		private var nametag:Nametag;
-		private var opinion:Opinion;
+		private var nametag:BlockLabel;
+		private var opinion:BlockParagraph;
 		
 		
 		private function onDatabaseLoaded(e:LoaderEvent):void {
@@ -158,7 +163,7 @@ package net.localprojects {
 			stance.setText(database.debates[database.activeDebate].stance);
 			addChild(stance);			
 
-			nametag = new Nametag();
+			nametag = new BlockLabel('Name', 40, 0xffffff, Assets.COLOR_YES_MEDIUM, false, true);
 			nametag.setDefaultTweenIn(1, {x: 275, y: 410});
 			nametag.setDefaultTweenOut(1, {x: stage.stageWidth, y: 410});			
 			nametag.setText(database.debates[database.activeDebate].author.firstName);
@@ -178,9 +183,11 @@ package net.localprojects {
 			rightQuote.setColor(Assets.COLOR_YES_LIGHT);
 			addChild(rightQuote);
 			
-			opinion = new Opinion();
+			
+			opinion = new BlockParagraph(915, 'Opinion goes here', 40, Assets.COLOR_YES_LIGHT, true); 
 			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});
-			opinion.setDefaultTweenOut(1, {x: -opinion.width, y: 1095});			
+			opinion.setDefaultTweenOut(1, {x: -opinion.width, y: 1095});
+			
 			opinion.setText(database.debates[database.activeDebate].opinion);
 			addChild(opinion);
 			
@@ -270,11 +277,46 @@ package net.localprojects {
 			
 			
 			nameEntryInstructions = new BlockLabel('Type in your name', 20, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
-			nameEntryInstructions.setDefaultTweenIn(1, {x: 100, y: 1096});
+			nameEntryInstructions.setDefaultTweenIn(1, {x: 101, y: 1003});
 			nameEntryInstructions.setDefaultTweenOut(1, {x: -nameEntryInstructions.width, y: 1096});
 			addChild(nameEntryInstructions);
 			
+			// TODO fix the text entry field
+			nameEntryField = new TextEntryField('              ', 30, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
+			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1096});
+			nameEntryField.setDefaultTweenOut(1, {x: -nameEntryField.width, y: 1196});
+			addChild(nameEntryField);			
 
+			saveButton = new BlockButton(335, 63, 'SAVE AND CONTINUE', 20, Assets.COLOR_YES_DARK, false);
+			saveButton.setDefaultTweenIn(1, {x: 308, y: 1200});
+			saveButton.setDefaultTweenOut(1, {x: -saveButton.width, y: 1200});
+			addChild(saveButton);
+			
+			
+		
+	
+			retakePhotoButton = new BlockButton(270, 63, 'RETAKE PHOTO', 20, Assets.COLOR_YES_DARK, false);
+			retakePhotoButton.setDefaultTweenIn(1, {x: 101, y: 1003});
+			retakePhotoButton.setDefaultTweenOut(1, {x: -retakePhotoButton.width, y: 1003});
+			addChild(retakePhotoButton);
+			
+			editTextButton = new BlockButton(200, 63, 'EDIT TEXT', 20, Assets.COLOR_YES_DARK, false);
+			editTextButton.setDefaultTweenIn(1, {x: 386, y: 1003});
+			editTextButton.setDefaultTweenOut(1, {x: stage.stageWidth, y: 1003});
+			addChild(editTextButton);
+			
+			cancelButton = new BlockButton(171, 63, 'CANCEL', 20, Assets.COLOR_YES_DARK, false);
+			cancelButton.setDefaultTweenIn(1, {x: 789, y: 1376});
+			cancelButton.setDefaultTweenOut(1, {x: stage.stageWidth, y: 1376});
+			addChild(cancelButton);			
+			
+			
+			editTextInstructions = new BlockLabel('EDITING TEXT...', 20, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
+			editTextInstructions.setDefaultTweenIn(1, {x: 386, y: 1096});
+			editTextInstructions.setDefaultTweenOut(1, {x: -editTextInstructions.width, y: 1096});
+			addChild(editTextInstructions);			
+			
+			
 			// set view
 			//homeView();
 
@@ -480,6 +522,9 @@ package net.localprojects {
 		
 		private function onCountdownFinish(e:Event):void {
 			portraitCamera.takePhoto();
+			
+			// TODO save and upload photo
+			
 			// go to new view
 			nameEntryView();
 		}
@@ -491,6 +536,8 @@ package net.localprojects {
 			portrait.setImage(Assets.portraitPlaceholder); // TODO use latest photo
 			
 			// behaviors
+			saveButton.setOnClick(onSaveName);
+			
 			
 			// blocks
 			portrait.tweenIn();			
@@ -499,17 +546,114 @@ package net.localprojects {
 			question.tweenIn();
 			stance.tweenIn();
 			nameEntryInstructions.tweenIn();
-
+			nameEntryField.tweenIn();
+			saveButton.tweenIn();
+			
+			tweenOutInactive();
+		}
+		
+		private function onSaveName(e:Event):void {
+			// TODO input validation
+			
+			// TODO save name to disk
+			
+			// Go to verification view
+			verifyOpinionView();
+			
+		}
+		
+		
+		
+		public function verifyOpinionView(...args):void {
+			markAllInactive();
+			
+			// mutations:
+			// portrair photo
+			// submit button text
+			// opinoin text
+			// name
+			// stance
+			
+		
+			// behaviors:
+			retakePhotoButton.setOnClick(onRetakePhoto);
+			editTextButton.setOnClick(onEditText);
+			cancelButton.setOnClick(onCancel);
+			bigButton.setOnClick(onSubmitOpinion);
+			
+			
+			// blocks:
+			leftQuote.tweenIn();
+			rightQuote.tweenIn();			
+			portrait.tweenIn();			
+			header.tweenIn();
+			divider.tweenIn();
+			question.tweenIn();
+			stance.tweenIn();
+			bigButton.tweenIn();
+			nametag.tweenIn();
+			opinion.tweenIn();
+			retakePhotoButton.tweenIn();
+			editTextButton.tweenIn();
+			cancelButton.tweenIn();			
+						
+			tweenOutInactive();
+		}
+		
+		private function onRetakePhoto(e:Event):void {
+			photoBoothView();
+		}
+		
+		private function onEditText(e:Event):void {
+			// TODO
+			editOpinionView();
+		}		
+		
+		private function onCancel(e:Event):void {
+			homeView();
+		}
+		
+		private function onSubmitOpinion(e:Event):void {
+			// TODO validate opinion
+			
+			// TODO upload opinion
+			
+			
+		}
+		
+		
+		
+		public function editOpinionView(...args):void {
+			markAllInactive();
+			
+			// mutations
+			
+			// behaviors
+			saveButton.setOnClick(onSaveOpinionEdit);
+			
+			//blocks
+			leftQuote.tweenIn();	
+			portrait.tweenIn();	
+			header.tweenIn();
+			divider.tweenIn();
+			question.tweenIn();
+			stance.tweenIn();
+			nametag.tweenIn();
+			opinion.tweenIn();
+			saveButton.tweenIn();
+			editTextInstructions.tweenIn();
+			// keyboard
 			
 			tweenOutInactive();			
 		}
-			
-			
-			
-			
-			
-			
-			
+		
+		private function onSaveOpinionEdit(e:Event):void {
+			// TODO validate opinion
+			verifyOpinionView();
+		}
+		
+
+	
 
 		private function onFullScreenContextMenuSelect(e:Event):void {
 			toggleFullScreen();
