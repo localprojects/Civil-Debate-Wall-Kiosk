@@ -5,12 +5,12 @@ package net.localprojects.ui {
 	
 	public class ButtonBase extends BlockBase {
 		
-		public var onClick:Function;
+		protected var onClick:Function;
 		
 		// enable / disable?
 		
 		
-		private function defaultOnClick(e:MouseEvent):void {
+		protected function defaultOnClick(e:MouseEvent):void {
 			trace("default button click, nothing to do");
 		}
 		

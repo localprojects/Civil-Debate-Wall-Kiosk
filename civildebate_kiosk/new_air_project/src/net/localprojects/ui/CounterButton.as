@@ -43,10 +43,10 @@ package net.localprojects.ui {
 		}
 		
 		
-		override protected function onClick(e:MouseEvent):void {
-			super.onClick(e);
-			count++;
-		}		
+//		override protected function onClick(e:MouseEvent):void {
+//			super.onClick(e);
+//			count++;
+//		}		
 		
 		
 		// TODO make the graphics update accordingly		

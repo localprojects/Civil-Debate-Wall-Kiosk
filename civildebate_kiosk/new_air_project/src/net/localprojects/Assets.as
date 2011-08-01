@@ -45,6 +45,9 @@ package net.localprojects
 		public static const portraitMask:Bitmap = getPortraitMask();
 		
 		
+		public static function getStatsUnderlay():Bitmap { return new Bitmap(new BitmapData(1080, 1920, false, 0xffffff)); };
+		public static const statsUnderlay:Bitmap = getStatsUnderlay();
+		
 		// Fonts
 		[Embed(source='/assets/fonts/rockwell.swf', symbol='RockwellRegular')] public static const Font:Class;
 		[Embed(source='/assets/fonts/rockwell.swf', symbol='RockwellBold')] public static const FontBold:Class;
@@ -64,7 +67,8 @@ package net.localprojects
 		public static const COLOR_NO_LIGHT:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the design template!
 		public static const COLOR_NO_MEDIUM:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the designtemplate!
 		public static const COLOR_NO_DARK:uint = Utilities.color(255, 60, 0);
-		public static const COLOR_INSTRUCTION_BACKGROUND:uint = Utilities.color(77, 77, 79);		
+		public static const COLOR_INSTRUCTION_DARK:uint = Utilities.color(77, 77, 79);
+		public static const COLOR_INSTRUCTION_MEDIUM:uint = Utilities.color(147, 149, 152); 
 		
 	}
 }
