@@ -7,39 +7,51 @@ package net.localprojects.keyboard {
 	import flash.events.MouseEvent;
 	import flash.ui.Mouse;
 	
+	import net.localprojects.blocks.BlockBase;
 	
-	public class Keyboard extends Sprite {
+	
+	public class Keyboard extends BlockBase {
 		
-		private var w:Number = 1080;
-		private var h:Number = 358;		
+	
 		private var keys:Array;
 		private var shift:Boolean;
+		private var marginTopBottom:Number = 22;
+		private var marginLeftRight:Number = 140;		
 		
 		
 		public function Keyboard() {
 			super();
 			
+			// background
+			this.graphics.beginFill(0xffffff);
+			this.graphics.drawRect(0, 0, 1080, 358);
+			this.graphics.endFill();
+			
+			
 			shift = false;
 			
 			// extra white space describes how many multiples of the keywidth it should be
 			var layout:Array = [
+				['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-'],
 				['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
 				['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-				['z', 'x', 'c', 'v', 'b', 'n', 'm'],
+				['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.'],
 				[' SHIFT ', '   SPACE   ', ' DELETE ']
 			];
 
 			keys = [];
 			
 			// find key width, it's the width of the keyboard divided by the longest row of keys
-			var keyWidth:Number = w / maxLength(layout);
+			var keyWidth:Number = (width - (marginLeftRight * 2)) / maxLength(layout);
 			
 			// key height is the height of the keyboard divided by the number of rows 
-			var keyHeight:Number = h / layout.length;			
+			var keyHeight:Number = (height  - (marginTopBottom * 2)) / layout.length;			
 			
 			// make the keys
 			for (var row:int = 0; row < layout.length; row++) {
-				var xPos:Number = (w - (getRowGridCount(layout[row]) * keyWidth)) / 2;
+				var xPos:Number = (width - (getRowGridCount(layout[row]) * keyWidth)) / 2;
+				
+				if (row == 3) xPos += (keyWidth / 2);
 				
 				for (var col:int = 0; col < layout[row].length; col++) {
 					var letter:String = layout[row][col];
@@ -47,7 +59,10 @@ package net.localprojects.keyboard {
 					var key:Key = new Key(letter, keyWidth * widthFactor, keyHeight);
 					
 					key.x = xPos;
-					key.y = row * keyHeight;
+					
+					key.y = marginTopBottom + row * keyHeight;
+					
+					trace(key.y);
 					
 					// accuumulate width
 					xPos += key.width;
@@ -117,10 +132,6 @@ package net.localprojects.keyboard {
 					lowerCase();
 				}
 			}
-			
-			
-
-			
 		}
 		
 		// returns the number of 'cells' a row of keys takes up

@@ -8,14 +8,17 @@ package net.localprojects {
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
-	import flash.ui.*;
+	
 	
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	
 	import net.localprojects.blocks.*;
 	import net.localprojects.camera.*;
 	import net.localprojects.elements.*;
+	import net.localprojects.keyboard.*;
 	import net.localprojects.ui.*;
+	
+
 	public class View extends Sprite {
 		
 		// single copy, never changes
@@ -35,7 +38,7 @@ package net.localprojects {
 		private var inactivityOverlay:InactivityOverlay;
 		private var inactivityInstructions:BlockLabel;
 		private var continueButton:BlockButton;
-		private var restartButton:BlockButton;			
+		private var restartButton:BlockButton;
 		
 		// single copy, changes
 		private var question:Question;
@@ -58,6 +61,7 @@ package net.localprojects {
 		private var photoBoothInstructions:BlockParagraph;
 		private var countdown:Countdown;
 		private var stats:Stats;
+		private var keyboard:Keyboard;
 		
 		// multiples of these
 		private var nametag:BlockLabel;
@@ -262,6 +266,11 @@ package net.localprojects {
 			editTextInstructions.setDefaultTweenOut(1, {x: -editTextInstructions.width, y: 1096});
 			addChild(editTextInstructions);			
 			
+			keyboard = new Keyboard();
+			keyboard.setDefaultTweenIn(1, {x: 0, y: stageHeight - keyboard.height});
+			keyboard.setDefaultTweenOut(1, {x: 0, y: stageHeight});
+			addChild(keyboard);
+			
 			stats = new Stats();
 			stats.setDefaultTweenIn(1, {x: 30, y: 264});
 			stats.setDefaultTweenOut(1, {x: 30, y: stageHeight});
@@ -286,7 +295,7 @@ package net.localprojects {
 			restartButton = new BlockButton(461, 120, 'RESTART!', 50, Assets.COLOR_INSTRUCTION_MEDIUM, false);
 			restartButton.setDefaultTweenIn(1, {x: 443, y: 1116});
 			restartButton.setDefaultTweenOut(1, {x: stageWidth, y: 1116});					
-			addChild(restartButton);			
+			addChild(restartButton);	
 		}
 		
 		
@@ -473,6 +482,7 @@ package net.localprojects {
 			nameEntryInstructions.tweenIn();
 			nameEntryField.tweenIn();
 			saveButton.tweenIn();
+			keyboard.tweenIn();
 			
 			tweenOutInactive();
 		}
@@ -562,7 +572,7 @@ package net.localprojects {
 			opinion.tweenIn();
 			saveButton.tweenIn();
 			editTextInstructions.tweenIn();
-			// keyboard
+			keyboard.tweenIn();
 			
 			tweenOutInactive();			
 		}

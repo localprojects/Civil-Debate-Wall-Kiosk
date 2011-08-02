@@ -36,6 +36,8 @@ package net.localprojects.keyboard {
 		private function init():void {
 			padding = 8;
 			
+			if (letter == 'SPACE') letter = ' ';
+			
 			// draw backboard / hit area
 			this.graphics.beginFill(Utilities.randRange(0, int.MAX_VALUE), 0);
 			this.graphics.drawRect(0, 0, keyWidth, keyHeight);
@@ -67,12 +69,16 @@ package net.localprojects.keyboard {
 			textField.selectable = false;
 			textField.cacheAsBitmap = true;
 			textField.mouseEnabled = false;
+			
 			textField.gridFitType = GridFitType.NONE;
 			textField.antiAliasType = AntiAliasType.ADVANCED;
 			textField.textColor = Assets.COLOR_YES_LIGHT;
 			textField.width = width;
-			//textField.autoSize = TextFieldAutoSize.LEFT;
+			textField.autoSize = TextFieldAutoSize.CENTER;
 			textField.text = letter;
+			textField.height = height;
+//			textField.backgroundColor = 0xff0000;
+//			textField.background = true;
 			textField.y = height / 2 - 10;
 			addChild(textField);					
 			
