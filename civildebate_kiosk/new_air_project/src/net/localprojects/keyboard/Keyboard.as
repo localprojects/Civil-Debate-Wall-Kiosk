@@ -141,17 +141,24 @@ package net.localprojects.keyboard {
 					lowerCase();					
 				}
 			}
+			else if (e.target.letter == 'DELETE') {
+				// backspace
+				if (this.stage.focus is TextField) {
+					var tf:TextField = this.stage.focus as TextField;
+					tf.text = tf.text.substring(0, tf.selectionBeginIndex - 1) + tf.text.substring(tf.selectionEndIndex);
+					tf.setSelection(tf.selectionBeginIndex - 1, tf.selectionBeginIndex - 1);
+				}
+			}
 			else {
 				
-				// TODO SEND KEYBOARD EVENT
+				// sending a keyboard event is just ignored by the text input fields
 				// via http://www.kirupa.com/forum/showthread.php?312829-Onscreen-Keyboard-how-to-send-event
 				if (this.stage.focus is TextField) {
 					var tf:TextField = this.stage.focus as TextField;
 					tf.text = tf.text.substring(0, tf.selectionBeginIndex) + e.target.letter + tf.text.substring(tf.selectionEndIndex);
 					tf.setSelection(tf.selectionBeginIndex + 1, tf.selectionBeginIndex + 1);
 				}
-				
-				
+
 				
 				// unstick the shift button if we're shifted if we're shifted
 				if (shift) {
