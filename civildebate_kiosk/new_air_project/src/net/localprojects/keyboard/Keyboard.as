@@ -2,11 +2,15 @@ package net.localprojects.keyboard {
 	
 	import com.adobe.utils.StringUtil;
 	
+	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Mouse;
+	import flash.text.TextField;
 	
+	import net.localprojects.CDW;
 	import net.localprojects.blocks.BlockBase;
 	
 	
@@ -15,8 +19,9 @@ package net.localprojects.keyboard {
 	
 		private var keys:Array;
 		private var shift:Boolean;
-		private var marginTopBottom:Number = 22;
-		private var marginLeftRight:Number = 140;		
+		private var marginTopBottom:Number = 40;
+		private var marginLeftRight:Number = 140;
+		public var target:InteractiveObject;	
 		
 		
 		public function Keyboard() {
@@ -32,11 +37,15 @@ package net.localprojects.keyboard {
 			
 			// extra white space describes how many multiples of the keywidth it should be
 			var layout:Array = [
-				['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-'],
-				['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-				['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-				['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.'],
-				[' SHIFT ', '   SPACE   ', ' DELETE ']
+//				['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-'],
+//				['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+//				['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+//				['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.'],
+//				[' SHIFT ', '   SPACE   ', ' DELETE ']
+					['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+					['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+					['z', 'x', 'c', 'v', 'b', 'n', 'm'],
+					[' SHIFT ', '   SPACE   ', ' DELETE ']				
 			];
 
 			keys = [];
@@ -51,7 +60,7 @@ package net.localprojects.keyboard {
 			for (var row:int = 0; row < layout.length; row++) {
 				var xPos:Number = (width - (getRowGridCount(layout[row]) * keyWidth)) / 2;
 				
-				if (row == 3) xPos += (keyWidth / 2);
+				//if (row == 3) xPos += (keyWidth / 2);
 				
 				for (var col:int = 0; col < layout[row].length; col++) {
 					var letter:String = layout[row][col];
@@ -67,10 +76,14 @@ package net.localprojects.keyboard {
 					// accuumulate width
 					xPos += key.width;
 					
+					// events inside the key
 					key.addEventListener(MouseEvent.MOUSE_DOWN, key.onMouseDown);
 					key.addEventListener(MouseEvent.MOUSE_UP, key.onMouseUp);
 					key.addEventListener(MouseEvent.MOUSE_OVER, key.onMouseOver);
 					key.addEventListener(MouseEvent.MOUSE_OUT, key.onMouseOut);
+					
+					// events global to the keyboard
+					key.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);					
 					key.addEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
 										
 					
@@ -81,10 +94,11 @@ package net.localprojects.keyboard {
 			}
 
 			
-			trace(keys);
+
 			
 		}
 		
+
 		
 		
 		private function upperCase():void {
@@ -103,9 +117,16 @@ package net.localprojects.keyboard {
 			}			
 		}
 		
+		private function onMouseDown(e:MouseEvent):void {
+			// make sure the text ends up where we want it
+			stage.focus = target;
+		}
+		
 		
 		
 		private function onKeyPressed(e:MouseEvent):void {
+			
+			
 			trace(e.target.letter);
 			
 			if (e.target.letter == 'SHIFT') {
@@ -123,6 +144,14 @@ package net.localprojects.keyboard {
 			else {
 				
 				// TODO SEND KEYBOARD EVENT
+				// via http://www.kirupa.com/forum/showthread.php?312829-Onscreen-Keyboard-how-to-send-event
+				if (this.stage.focus is TextField) {
+					var tf:TextField = this.stage.focus as TextField;
+					tf.text = tf.text.substring(0, tf.selectionBeginIndex) + e.target.letter + tf.text.substring(tf.selectionEndIndex);
+					tf.setSelection(tf.selectionBeginIndex + 1, tf.selectionBeginIndex + 1);
+				}
+				
+				
 				
 				// unstick the shift button if we're shifted if we're shifted
 				if (shift) {

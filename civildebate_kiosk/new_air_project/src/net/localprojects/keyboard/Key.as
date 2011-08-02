@@ -3,6 +3,7 @@ package net.localprojects.keyboard {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
+	
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -20,6 +21,7 @@ package net.localprojects.keyboard {
 		private var keyCap:Shape;
 		private var textField:TextField;
 		public var active:Boolean; // for toggles, like shift
+		
 		
 		public function Key(_letter:String, w:Number, h:Number)	{
 			super();
@@ -99,6 +101,8 @@ package net.localprojects.keyboard {
 		}
 		
 		public function onMouseUp(e:MouseEvent):void {
+
+			
 			
 			if(!active && letter == 'SHIFT') {
 				active = true;

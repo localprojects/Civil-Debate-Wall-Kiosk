@@ -17,7 +17,7 @@ package net.localprojects.ui {
 		private var _showBackground:Boolean;		
 		private var _bold:Boolean;
 		
-		private var textField:TextField;
+		public var textField:TextField;
 		private var vPadding:Number;
 		private var hPadding:Number;
 		private var leading:Number;
@@ -54,11 +54,13 @@ package net.localprojects.ui {
 			textField.embedFonts = true;
 			textField.selectable = true;
 			textField.cacheAsBitmap = false;
-			textField.mouseEnabled = false;
+			textField.mouseEnabled = true;
 			textField.gridFitType = GridFitType.NONE;
 			textField.antiAliasType = AntiAliasType.ADVANCED;
 			textField.textColor = _textColor;
 			
+			textField.setSelection(0,0);
+
 			//textField.width = 1080;
 			textField.autoSize = TextFieldAutoSize.LEFT;
 			
@@ -69,10 +71,15 @@ package net.localprojects.ui {
 			drawBackground();
 			
 			addChild(textField);			
+			textField.focusRect = false;
+			
 
 			
 			this.cacheAsBitmap = true;
 		}
+		
+		// TODO prevent drag selections without clobbering the cursor
+		
 		
 		private function drawBackground():void {
 			background.graphics.clear();
@@ -95,6 +102,11 @@ package net.localprojects.ui {
 		public function setText(s:String):void {
 			textField.text = s;
 			drawBackground();
+		}
+		
+		override protected function afterTweenIn():void {
+			stage.focus = textField;
+			
 		}
 		
 		

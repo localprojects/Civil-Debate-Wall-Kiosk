@@ -469,9 +469,11 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(Assets.portraitPlaceholder); // TODO use latest photo
+			keyboard.target = nameEntryField.textField;
 			
 			// behaviors
 			saveButton.setOnClick(onSaveName);
+			
 			
 			// blocks
 			portrait.tweenIn();			
