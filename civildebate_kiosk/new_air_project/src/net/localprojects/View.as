@@ -157,9 +157,9 @@ package net.localprojects {
 			likeButton.setDefaultTweenOut(1, {x: stageWidth, y: 955});			
 			addChild(likeButton);
 			
-			debateButton = new IconButton(150, 130, 'Let\u0027s Debate', 15, Assets.COLOR_YES_DARK, null, true);
-			debateButton.setDefaultTweenIn(1, {x: 842, y: 807});
-			debateButton.setDefaultTweenOut(1, {x: stageWidth, y: 807});
+			debateButton = new IconButton(150, 130, 'Let\u0027s\nDebate', 15, Assets.COLOR_YES_DARK, null, true);
+			debateButton.setDefaultTweenIn(1, {x: 842, y: 807, scaleX: 1, scaleY: 1});
+			debateButton.setDefaultTweenOut(1, {x: stageWidth, y: 807, scaleX: 1, scaleY: 1});
 			addChild(debateButton);
 			
 			viewDebateButton = new BlockButton(370, 63, '8 People Debated This', 25, Assets.COLOR_YES_DARK, true);
@@ -400,6 +400,7 @@ package net.localprojects {
 			
 			// behaviors
 			backButton.setOnClick(pickStanceView); // TODO do we need the back button?
+			portrait.setImage(Assets.portraitPlaceholder);
 			// start polling web? TODO
 			
 			// blocks

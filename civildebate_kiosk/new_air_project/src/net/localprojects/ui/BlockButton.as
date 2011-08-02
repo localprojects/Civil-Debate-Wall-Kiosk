@@ -3,7 +3,6 @@ package net.localprojects.ui {
 	import flash.text.*;
 	import net.localprojects.Assets;
 	
-	
 	public class BlockButton extends ButtonBase	{
 
 		protected var _buttonWidth:Number;
@@ -23,11 +22,9 @@ package net.localprojects.ui {
 			_labelSize = labelSize;
 			_backgroundColor = backgroundColor;
 			_arrow = arrow;
-
 						
 			init();
-			draw();			
-	
+			draw();
 		}
 		
 		private function init():void {
@@ -56,7 +53,7 @@ package net.localprojects.ui {
 			addChild(labelField);			
 		}
 		
-		private function draw():void {
+		override protected function draw():void {
 			this.graphics.beginFill(_backgroundColor);
 			this.graphics.lineStyle(4, 0xffffff);
 			this.graphics.drawRect(0, 0, _buttonWidth, _buttonHeight);

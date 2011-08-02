@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/nycvic5/!svn/ver/165/flex/VIC_TABLE/src/org/velluminous/keyboard
+END
+AlphabeticKeyboard.as
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/nycvic5/!svn/ver/156/flex/VIC_TABLE/src/org/velluminous/keyboard/AlphabeticKeyboard.as
+END
+KeyButtonCollection.as
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/nycvic5/!svn/ver/7/flex/VIC_TABLE/src/org/velluminous/keyboard/KeyButtonCollection.as
+END
+CombinedKeyboard.as
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/nycvic5/!svn/ver/135/flex/VIC_TABLE/src/org/velluminous/keyboard/CombinedKeyboard.as
+END
+NumericKeyboard.as
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/nycvic5/!svn/ver/7/flex/VIC_TABLE/src/org/velluminous/keyboard/NumericKeyboard.as
+END
+SMSKeyboard.as
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/nycvic5/!svn/ver/159/flex/VIC_TABLE/src/org/velluminous/keyboard/SMSKeyboard.as
+END
+KeyButton.as
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/nycvic5/!svn/ver/7/flex/VIC_TABLE/src/org/velluminous/keyboard/KeyButton.as
+END
+SMSContainer.as
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/nycvic5/!svn/ver/165/flex/VIC_TABLE/src/org/velluminous/keyboard/SMSContainer.as
+END
+KeyButtonEvent.as
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/nycvic5/!svn/ver/7/flex/VIC_TABLE/src/org/velluminous/keyboard/KeyButtonEvent.as
+END

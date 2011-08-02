@@ -26,7 +26,7 @@ package net.localprojects.blocks {
 			
 			// set some default parameters, can be overriden
 			defaultTweenVars = {ease: Quart.easeOut};
-			defaultTweenInVars = Utilities.mergeObjects(defaultTweenVars, {onInit: beforeTweenIn});
+			defaultTweenInVars = Utilities.mergeObjects(defaultTweenVars, {onInit: beforeTweenIn, onComplete: afterTweenIn});
 			defaultTweenOutVars = Utilities.mergeObjects(defaultTweenVars, {onComplete: afterTweenOut});
 			defaultDuration = 1;
 			defaultInDuration = defaultDuration;
@@ -53,6 +53,11 @@ package net.localprojects.blocks {
 		protected function beforeTweenIn():void {
 			this.visible = true;
 		}
+		
+		protected function afterTweenIn():void {
+			
+						
+		}		
 		
 		protected function afterTweenOut():void {
 			this.visible = false;

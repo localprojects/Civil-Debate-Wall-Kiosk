@@ -4,19 +4,20 @@ package net.localprojects {
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.events.LoaderEvent;
-	import com.greensock.events.TweenEvent;
 	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
-	import flash.ui.*;
-	
-	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
+	import flash.ui.ContextMenu;
+	import flash.ui.ContextMenuItem;
 	
 	import net.localprojects.blocks.*;
 	import net.localprojects.camera.*;
 	import net.localprojects.elements.*;
 	import net.localprojects.ui.*;
+	import net.localprojects.keyboard.*;
+	
+	
 
 	public class CDW extends Sprite {
 		
@@ -25,6 +26,7 @@ package net.localprojects {
 		public static var dashboard:Dashboard;
 		public static var settings:Object;
 		public static var view:View;
+		public static var testOverlay:Bitmap;
 		
 		
 		public function CDW() {
@@ -59,6 +61,8 @@ package net.localprojects {
 			graphics.beginFill(0xffffff);
 			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 			graphics.endFill();
+			
+
 			
 			// set up gui overlay
 			dashboard = new Dashboard(this.stage, 5, 5);
@@ -101,6 +105,18 @@ package net.localprojects {
 				fps.x = stage.stageWidth - 100;
 				fps.y = -5;	
 			}
+			
+			// set up test overlay
+			testOverlay = new Bitmap(new BitmapData(1080, 1920));
+			testOverlay.visible = false;
+			testOverlay.alpha = 0.5;		
+			addChild(testOverlay);			
+			
+			
+			// test keyboard
+			var keyboard:Keyboard = new Keyboard();
+			
+			addChild(keyboard);
 
 		}
 
@@ -115,7 +131,9 @@ package net.localprojects {
 			else {
 				stage.displayState = StageDisplayState.NORMAL;
 			}
-		}		
+		}
+		
+		
 		
 	}
 }

@@ -35,7 +35,7 @@ package net.localprojects.ui {
 		
 		
 		
-		protected function draw():void {
+		override protected function draw():void {
 			// draw stuff
 			this.graphics.clear();
 
