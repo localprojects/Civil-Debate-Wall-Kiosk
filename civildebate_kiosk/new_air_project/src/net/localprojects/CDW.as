@@ -17,8 +17,6 @@ package net.localprojects {
 	import net.localprojects.ui.*;
 	import net.localprojects.keyboard.*;
 	
-	
-
 	public class CDW extends Sprite {
 		
 		public static var ref:CDW;
@@ -112,11 +110,7 @@ package net.localprojects {
 			testOverlay.alpha = 0.5;		
 			addChild(testOverlay);			
 			
-			
-			// test keyboard
-			var keyboard:Keyboard = new Keyboard();
-			
-			addChild(keyboard);
+
 
 		}
 
