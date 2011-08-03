@@ -12,6 +12,7 @@ package net.localprojects.keyboard {
 	
 	import net.localprojects.CDW;
 	import net.localprojects.blocks.BlockBase;
+	import net.localprojects.Assets;
 	
 	
 	public class Keyboard extends BlockBase {
@@ -126,6 +127,8 @@ package net.localprojects.keyboard {
 		
 		private function onKeyPressed(e:MouseEvent):void {
 			
+			
+			Assets.clickSound.play();
 			
 			trace(e.target.letter);
 			

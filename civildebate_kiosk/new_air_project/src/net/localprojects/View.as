@@ -240,13 +240,13 @@ package net.localprojects {
 			countdown.setDefaultTweenOut(1, {x: 470, y: stageHeight});
 			addChild(countdown);
 			
-			nameEntryInstructions = new BlockLabel('Type in your name', 20, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
+			nameEntryInstructions = new BlockLabel('TYPE IN YOUR NAME', 20, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
 			nameEntryInstructions.setDefaultTweenIn(1, {x: 101, y: 1003});
 			nameEntryInstructions.setDefaultTweenOut(1, {x: -nameEntryInstructions.width, y: 1096});
 			addChild(nameEntryInstructions);
 			
 			// TODO fix the text entry field
-			nameEntryField = new BlockInputLabel('              ', 30, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
+			nameEntryField = new BlockInputLabel('', 30, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
 			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1096});
 			nameEntryField.setDefaultTweenOut(1, {x: -nameEntryField.width, y: 1196});
 			addChild(nameEntryField);			
