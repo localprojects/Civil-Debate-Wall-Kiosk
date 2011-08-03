@@ -82,11 +82,7 @@ package net.localprojects {
 		
 		private function onViewSelect(e:Event):void {
 			var selection:String = e.target.selectedItem;
-			
-			
-			
-			
-			
+
 			if (selection == 'Home') CDW.view.homeView();
 			if (selection == 'Debate Overlay') CDW.view.debateOverlayView();
 			if (selection == 'Pick Stance') CDW.view.pickStanceView();
