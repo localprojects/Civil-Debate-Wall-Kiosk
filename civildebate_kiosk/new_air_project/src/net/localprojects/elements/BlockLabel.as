@@ -1,33 +1,40 @@
 package net.localprojects.elements {
 	import com.bit101.components.Text;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
+	
+	
 	
 	import flash.display.*;
 	import flash.text.*;
 	
 	import net.localprojects.*;
-	import net.localprojects.blocks.*;	
+	import net.localprojects.blocks.*;
 	
 	// multi-line block text
 	public class BlockLabel extends BlockBase {
 		
-		private var _text:String;
-		private var _textSize:Number;
-		private var _textColor:uint;		
-		private var _backgroundColor:uint;
-		private var _showBackground:Boolean;		
-		private var _bold:Boolean;
+		protected var _text:String;
+		protected var _textSize:Number;
+		protected var _textColor:uint;		
+		protected var _backgroundColor:uint;
+		protected var _showBackground:Boolean;		
+		protected var _bold:Boolean;
 		
-		private var textField:TextField;
-		private var vPadding:Number;
-		private var hPadding:Number;
-		private var leading:Number;
-		private var background:Shape;
+		protected var textField:TextField;
+		protected var topPadding:Number;
+		protected var bottomPadding:Number;		
+		protected var leftPadding:Number;
+		protected var rightPadding:Number;		
+		protected var background:Shape;
 		
 		
 		
 		public function BlockLabel(text:String, textSize:Number, textColor:uint, backgroundColor:uint, bold:Boolean = false, showBackground:Boolean = true) {
-			vPadding = 28;
-			hPadding = 40;
+			topPadding = 28;
+			bottomPadding = 28;
+			leftPadding = 40;
+			rightPadding = 40;
 			
 			_text = text;
 			_bold = bold;
@@ -46,7 +53,7 @@ package net.localprojects.elements {
 			textFormat.font =  Assets.FONT_REGULAR;
 			textFormat.align = TextFormatAlign.LEFT;
 			textFormat.size = _textSize;
-			textFormat.leading = leading;
+			textFormat.leading = -0.25;
 			
 			textField = new TextField();
 			textField.defaultTextFormat = textFormat;
@@ -68,38 +75,62 @@ package net.localprojects.elements {
 			
 			addChild(textField);			
 			
-			//			this.graphics.beginFill(0xff0000);
-			//			this.graphics.drawRect(0, 0, width, height);
-			//			this.graphics.endFill();
+			// this.graphics.beginFill(0xff0000);
+			// this.graphics.drawRect(0, 0, width, height);
+			// this.graphics.endFill();
 			
 			this.cacheAsBitmap = true;
-			
-			
-			
 		}
 		
-		private function drawBackground():void {
+		
+
+		
+		public function setPadding(top:Number, right:Number, bottom:Number, left:Number):void {
+			topPadding = top;
+			rightPadding = right;
+			bottomPadding = bottom;
+			leftPadding = left;
+			drawBackground();
+		}		
+		
+		
+		
+		protected function drawBackground():void {
 			background.graphics.clear();
-			//draw the background
 			
+			//draw the background
 			if (_showBackground) {
 				background.graphics.beginFill(_backgroundColor);								
-				background.graphics.drawRect(0 - hPadding, 0 - vPadding, textField.width + hPadding, textField.height + vPadding);
+				background.graphics.drawRect(0, 0, textField.width + leftPadding + rightPadding, textField.height + topPadding + bottomPadding);
 				background.graphics.endFill();				
 				
-				// compensate for negative origin
-				background.x = hPadding;
-				background.y = vPadding;
-				
-				textField.x = hPadding / 2;
-				textField.y = vPadding / 2;
+				textField.x = leftPadding;
+				textField.y = topPadding;
 			}			
 		}
 		
+		
+		private var newText:String;
 		public function setText(s:String):void {
-			textField.text = s;
-			drawBackground();
+			if (s != textField.text) {
+				// add tween
+				// TODO tween background
+				// TODO crossfade text
+				newText = s;
+				TweenMax.to(textField, 0.2, {alpha: 0, ease: Quart.easeOut, onComplete: afterFade});
+			}
 		}
+			
+		
+		public function afterFade():void {
+			textField.text = newText;				
+			drawBackground();				
+			TweenMax.to(textField, 0.5, {alpha: 1, ease: Quart.easeIn});
+		}
+			
+			
+			
+		
 		
 
 		// TODO getters and setters

@@ -9,7 +9,6 @@ package net.localprojects {
 	import flash.events.*;
 	import flash.net.*;
 	
-	
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	
 	import net.localprojects.blocks.*;
@@ -29,7 +28,7 @@ package net.localprojects {
 		private var portraitOutline:PortraitOutline;
 		private var portraitCamera:PortraitCamera;
 		private var nameEntryInstructions:BlockLabel;
-		private var nameEntryField:TextEntryField;		
+		private var nameEntryField:BlockInputLabel;		
 		private var saveButton:BlockButton;
 		private var retakePhotoButton:BlockButton;
 		private var editTextButton:BlockButton;
@@ -39,10 +38,10 @@ package net.localprojects {
 		private var inactivityInstructions:BlockLabel;
 		private var continueButton:BlockButton;
 		private var restartButton:BlockButton;
+		private var flashOverlay:FlashOverlay;
 		
 		// single copy, changes
 		private var question:Question;
-		private var stance:Stance;
 		private var leftQuote:QuotationMark;
 		private var rightQuote:QuotationMark;		
 		private var portrait:Portrait; // TODO fading
@@ -64,8 +63,10 @@ package net.localprojects {
 		private var keyboard:Keyboard;
 		
 		// multiples of these
+		private var stance:Stance;		
 		private var nametag:BlockLabel;
-		private var opinion:BlockParagraph;		
+		private var opinion:BlockParagraph;
+		private var byline:BlockLabel;
 		
 		// convenience
 		private var stageWidth:Number;
@@ -109,22 +110,29 @@ package net.localprojects {
 			addChild(divider);
 			
 			question = new Question();
-			question.setDefaultTweenIn(1, {x: 30, y: 140});
-			question.setDefaultTweenOut(1, {x: -question.width, y: 140});
+			question.setDefaultTweenIn(1, {x: 30, y: 132});
+			question.setDefaultTweenOut(1, {x: -question.width, y: 132});
 			question.setText(CDW.database.questions[CDW.database.activeQuestion].question); // TODO abstract out these ridiculous traversals...
 			addChild(question);
 			
 			stance = new Stance();
+			stance.setText(CDW.database.debates[CDW.database.activeDebate].stance);			
 			stance.setDefaultTweenIn(1, {x: 275, y: 280});
-			stance.setDefaultTweenOut(1, {x: -stance.width, y: 280});			
-			stance.setText(CDW.database.debates[CDW.database.activeDebate].stance);
+			stance.setDefaultTweenOut(1, {x: -280, y: 280});			
+			
 			addChild(stance);			
 
-			nametag = new BlockLabel('Name', 40, 0xffffff, Assets.COLOR_YES_MEDIUM, false, true);
+			nametag = new BlockLabel('Name', 50, 0xffffff, Assets.COLOR_YES_MEDIUM, true, true);
+			nametag.setPadding(26, 28, 20, 30);
 			nametag.setDefaultTweenIn(1, {x: 275, y: 410});
-			nametag.setDefaultTweenOut(1, {x: stageWidth, y: 410});			
-			nametag.setText(CDW.database.debates[CDW.database.activeDebate].author.firstName);
+			nametag.setDefaultTweenOut(1, {x: stageWidth, y: 410});
 			addChild(nametag);
+			
+			byline = new BlockLabel('Byline', 22, 0xffffff, Assets.COLOR_YES_MEDIUM, false, true);
+			byline.setPadding(18, 32, 16, 32);
+			byline.setDefaultTweenIn(1, {x: 586, y: 694});
+			byline.setDefaultTweenOut(1, {x: -500, y: 694});			
+			addChild(byline);
 			
 			leftQuote = new QuotationMark();
 			leftQuote.setDefaultTweenIn(1, {x: 100, y: 545});
@@ -134,13 +142,13 @@ package net.localprojects {
 			addChild(leftQuote);
 			
 			rightQuote = new QuotationMark();
-			rightQuote.setDefaultTweenIn(1, {x: 842, y: 1643});
+			rightQuote.setDefaultTweenIn(1, {x: 720, y: 1635});
 			rightQuote.setDefaultTweenOut(1, {x: stageWidth, y: 1643});				
 			rightQuote.setStyle(QuotationMark.CLOSING);
 			rightQuote.setColor(Assets.COLOR_YES_LIGHT);
 			addChild(rightQuote);
 			
-			opinion = new BlockParagraph(915, 'Opinion goes here', 40, Assets.COLOR_YES_LIGHT, true); 
+			opinion = new BlockParagraph(915, 'Opinion goes here', 44, Assets.COLOR_YES_LIGHT, false); 
 			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});
 			opinion.setDefaultTweenOut(1, {x: -opinion.width, y: 1095});
 			opinion.setText(CDW.database.debates[CDW.database.activeDebate].opinion);
@@ -161,7 +169,7 @@ package net.localprojects {
 			likeButton.setDefaultTweenOut(1, {x: stageWidth, y: 955});			
 			addChild(likeButton);
 			
-			debateButton = new IconButton(150, 130, 'Let\u0027s\nDebate', 15, Assets.COLOR_YES_DARK, null, true);
+			debateButton = new IconButton(150, 130, 'Let\u0027s\nDebate', 20, Assets.COLOR_YES_DARK, null, true);
 			debateButton.setDefaultTweenIn(1, {x: 842, y: 807, scaleX: 1, scaleY: 1});
 			debateButton.setDefaultTweenOut(1, {x: stageWidth, y: 807, scaleX: 1, scaleY: 1});
 			addChild(debateButton);
@@ -182,17 +190,18 @@ package net.localprojects {
 			debatePicker.update(); // syncs with state, TODO same for stats
 			addChild(debatePicker);
 			
-			answerPrompt = new BlockLabel('Your Answer / Please Select One:', 20, 0xffffff, Assets.COLOR_INSTRUCTION_DARK, false, true);
+			answerPrompt = new BlockLabel('Your Answer / Please Select One :', 19, 0xffffff, Assets.COLOR_INSTRUCTION_DARK, false, true);
+			answerPrompt.setPadding(20, 30, 18, 32);
 			answerPrompt.setDefaultTweenIn(1, {x: 650, y: 1245});
 			answerPrompt.setDefaultTweenOut(1, {x: stageWidth, y: 1245});					
 			addChild(answerPrompt);
 			
-			yesButton = new BlockButton(215, 100, 'YES!', 50, Assets.COLOR_YES_LIGHT, false);
+			yesButton = new BlockButton(215, 100, 'YES!', 80, Assets.COLOR_YES_LIGHT, false, false);
 			yesButton.setDefaultTweenIn(1, {x: 447, y: 1340});
 			yesButton.setDefaultTweenOut(1, {x: 447, y: stageHeight});
 			addChild(yesButton);
 			
-			noButton = new BlockButton(185, 100, 'NO!', 50, Assets.COLOR_NO_LIGHT, false);			
+			noButton = new BlockButton(185, 100, 'NO!', 80, Assets.COLOR_NO_LIGHT, false, false);			
 			noButton.setDefaultTweenIn(1.2, {x: 677, y: 1340});
 			noButton.setDefaultTweenOut(1.2, {x: 677, y: stageHeight});
 			addChild(noButton);
@@ -209,12 +218,13 @@ package net.localprojects {
 			addChild(backButton);
 			
 			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + CDW.settings.phoneNumber + ' with your statement.'; 	
-			smsInstructions = new BlockParagraph(915, smsInstructionText, 30, Assets.COLOR_YES_LIGHT, false);
+			smsInstructions = new BlockParagraph(915, smsInstructionText, 33, Assets.COLOR_YES_LIGHT, false);
 			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
 			smsInstructions.setDefaultTweenOut(1, {x: stageWidth, y: 1096});
 			addChild(smsInstructions);			
 			
 			characterLimit = new BlockLabel('Use no more than ' + CDW.settings.characterLimit + ' characters', 20, 0xffffff, Assets.COLOR_YES_MEDIUM);
+			characterLimit.setPadding(20, 30, 18, 32);
 			characterLimit.setDefaultTweenIn(1, {x: 648, y: 1246});
 			characterLimit.setDefaultTweenOut(1, {x: stageWidth, y: 1246});
 			addChild(characterLimit);
@@ -226,7 +236,7 @@ package net.localprojects {
 			addChild(photoBoothInstructions);
 			
 			countdown = new Countdown(5);
-			countdown.setDefaultTweenIn(1, {x: 470, y: 1496});
+			countdown.setDefaultTweenIn(1, {x: 470, y: 1470});
 			countdown.setDefaultTweenOut(1, {x: 470, y: stageHeight});
 			addChild(countdown);
 			
@@ -236,7 +246,7 @@ package net.localprojects {
 			addChild(nameEntryInstructions);
 			
 			// TODO fix the text entry field
-			nameEntryField = new TextEntryField('              ', 30, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
+			nameEntryField = new BlockInputLabel('              ', 30, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
 			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1096});
 			nameEntryField.setDefaultTweenOut(1, {x: -nameEntryField.width, y: 1196});
 			addChild(nameEntryField);			
@@ -295,7 +305,13 @@ package net.localprojects {
 			restartButton = new BlockButton(461, 120, 'RESTART!', 50, Assets.COLOR_INSTRUCTION_MEDIUM, false);
 			restartButton.setDefaultTweenIn(1, {x: 443, y: 1116});
 			restartButton.setDefaultTweenOut(1, {x: stageWidth, y: 1116});					
-			addChild(restartButton);	
+			addChild(restartButton);
+			
+			flashOverlay = new FlashOverlay();
+			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut});
+			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
+			addChild(flashOverlay);
+			
 		}
 		
 		
@@ -304,6 +320,7 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.database.activeDebate].author._id.$oid].portrait);
+			nametag.setText(CDW.database.debates[CDW.database.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.database.activeDebate].author.lastName + ' Says :');
 			
 			// behaviors
 			viewDebateButton.setOnClick(debateOverlayView);	
@@ -343,6 +360,7 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.database.activeDebate].author._id.$oid].portrait);
+			byline.setText('Said by ' + CDW.database.debates[CDW.database.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.database.activeDebate].author.lastName);			
 			
 			// behaviors
 			viewDebateButton.setOnClick(homeView);
@@ -353,9 +371,9 @@ package net.localprojects {
 			divider.tweenIn();
 			question.tweenIn();
 			stance.tweenIn();
-			nametag.tweenIn(1, {x: 590, y: 690});
+			byline.tweenIn();
 			opinion.tweenIn(1, {y: 410});
-			debateButton.tweenIn(1, {y: 660, scaleX: 0.75, scaleY: 0.75});
+			debateButton.tweenIn(1, {x: 916, y: 660, scaleX: 0.75, scaleY: 0.75});
 			viewDebateButton.tweenIn(1, {y: 1650});
 			debatePicker.tweenIn();
 			debateOverlay.tweenIn();			
@@ -424,6 +442,7 @@ package net.localprojects {
 			backButton.tweenIn();
 			smsInstructions.tweenIn();
 			characterLimit.tweenIn();
+			smsDisclaimer.tweenIn();
 			
 			tweenOutInactive();			
 		}
@@ -458,35 +477,42 @@ package net.localprojects {
 		private function onCountdownFinish(e:Event):void {
 			portraitCamera.takePhoto();
 			
-			// TODO save and upload photo
+			flashOverlay.tweenIn(-1, {onComplete: onFlashOn});
+		}
+		
+		private function onFlashOn():void {
+			// TODO take, save and upload photo
 			
 			nameEntryView();
+			flashOverlay.tweenOut();
 		}
+	
 		
 		
 		public function nameEntryView(...args):void {
 			markAllInactive();
+			flashOverlay.active = true; // needs to tween out itself
 			
 			// mutations
-			portrait.setImage(Assets.portraitPlaceholder); // TODO use latest photo
-			keyboard.target = nameEntryField.textField;
+			portrait.setImage(Assets.portraitPlaceholder, true); // TODO use latest photo
+			keyboard.target = nameEntryField.getTextField();
 			
 			// behaviors
 			saveButton.setOnClick(onSaveName);
 			
 			
-			// blocks
-			portrait.tweenIn();			
-			header.tweenIn();
-			divider.tweenIn();
-			question.tweenIn();
-			stance.tweenIn();
-			nameEntryInstructions.tweenIn();
-			nameEntryField.tweenIn();
-			saveButton.tweenIn();
-			keyboard.tweenIn();
+			// blocks, no delay since it needs to happen during the flash!
+			portrait.tweenIn(0);			
+			header.tweenIn(0);
+			divider.tweenIn(0);
+			question.tweenIn(0);
+			stance.tweenIn(0);
+			nameEntryInstructions.tweenIn(-1, {delay: 1});
+			nameEntryField.tweenIn(-1, {delay: 1});
+			saveButton.tweenIn(-1, {delay: 1});
+			keyboard.tweenIn(-1, {delay: 1});
 			
-			tweenOutInactive();
+			tweenOutInactive(true);
 		}
 		
 		private function onSaveName(e:Event):void {
@@ -647,10 +673,18 @@ package net.localprojects {
 			}
 		}
 		
-		private function tweenOutInactive():void {
+		
+		private function tweenOutInactive(instant:Boolean = false):void {
 			for (var i:int = 0; i < this.numChildren; i++) {
 				if ((this.getChildAt(i) is BlockBase) && !(this.getChildAt(i) as BlockBase).active) {
-					(this.getChildAt(i) as BlockBase).tweenOut();
+					
+					if (instant) {
+						// no animation!
+						(this.getChildAt(i) as BlockBase).tweenOut(0);
+					}
+					else {
+						(this.getChildAt(i) as BlockBase).tweenOut();						
+					}
 				}
 			}			
 		}		

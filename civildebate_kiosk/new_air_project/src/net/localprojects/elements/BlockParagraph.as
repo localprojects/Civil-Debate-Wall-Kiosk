@@ -17,17 +17,25 @@ package net.localprojects.elements {
 		private var _bold:Boolean;
 		
 		private var textField:TextField;
-		private var vPadding:Number;
-		private var hPadding:Number;		
+		private var paddingTop:Number;
+		private var paddingRight:Number;
+		private var paddingBottom:Number;
+		private var paddingLeft:Number;	
+		
+
 		private var leading:Number;
 		private var background:Shape;
 		
 		public function BlockParagraph(textWidth:Number, text:String, textSize:Number, backgroundColor:uint, bold:Boolean = false) {
-			vPadding = 28;
-			hPadding = 40;
+
 			leading = 5;			
 			
-			_textWidth = textWidth - hPadding;
+			paddingTop = 17;
+			paddingRight = 30;
+			paddingBottom = 25;
+			paddingLeft = 30;			
+			
+			_textWidth = textWidth - (paddingLeft + paddingRight);
 			_text = text;
 			_textSize = textSize;
 			_bold = bold;
@@ -70,19 +78,10 @@ package net.localprojects.elements {
 			
 			drawBackground();
 			
-			// compensate for negative origin
-			background.x = hPadding;
-			background.y = vPadding;
 			addChild(background);
-			
-			textField.x = hPadding / 2;
-			textField.y = vPadding / 2;			
 			addChild(textField);			
 			
-//			this.graphics.beginFill(0xff0000);
-//			this.graphics.drawRect(0, 0, width, height);
-//			this.graphics.endFill();
-			
+
 			this.cacheAsBitmap = true;
 		}
 		
@@ -94,11 +93,19 @@ package net.localprojects.elements {
 				var metrics:TextLineMetrics = textField.getLineMetrics(i);				
 				
 				background.graphics.beginFill(_backgroundColor);								
-				background.graphics.drawRect(0 - hPadding, yPos - vPadding, metrics.width + hPadding, metrics.height + vPadding);
+				background.graphics.drawRect(0 - paddingLeft, yPos - paddingTop, metrics.width + paddingLeft + paddingRight, metrics.height + paddingTop + paddingBottom);
 				background.graphics.endFill();				
 				
 				yPos += metrics.height;				
 			}	
+			
+			
+			//background
+			background.x = paddingLeft;
+			background.y = paddingTop;
+			
+			textField.x =  paddingLeft;
+			textField.y =  paddingTop;			
 		}
 		
 		public function setText(s:String):void {

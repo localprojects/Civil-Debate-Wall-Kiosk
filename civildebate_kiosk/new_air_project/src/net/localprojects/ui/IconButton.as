@@ -39,13 +39,13 @@ package net.localprojects.ui {
 			// draw stuff
 			this.graphics.clear();
 
-			var lineThickness:Number = 4;
+			var lineThickness:Number = 6;
 			
 			// base rectangles
 			var roundRect:Shape = new Shape();
 			roundRect.graphics.beginFill(_backgroundColor);
 			roundRect.graphics.lineStyle(lineThickness, 0xffffff);
-			roundRect.graphics.drawRoundRect(0, 0, _buttonWidth, _buttonHeight, 8, 8);
+			roundRect.graphics.drawRoundRect(0, 0, _buttonWidth, _buttonHeight, 22, 22);
 			roundRect.graphics.endFill();			
 			addChild(roundRect);			
 			
