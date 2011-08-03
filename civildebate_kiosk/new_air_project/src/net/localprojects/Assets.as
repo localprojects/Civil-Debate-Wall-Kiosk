@@ -66,7 +66,7 @@ package net.localprojects
 		public static const clickSound:Sound = getClickSound();
 		clickSound.play(); // play it at startup so it's in RAM
 		
- // git fix
+ 
 
 		// Colors
 		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 185, 255);
