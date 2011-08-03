@@ -10,26 +10,24 @@ package net.localprojects.elements {
 	// multi-line block text
 	public class BlockParagraph extends BlockBase {
 		
-		private var _textWidth:Number;
-		private var _text:String;
-		private var _textSize:Number;
-		private var _backgroundColor:uint;
-		private var _bold:Boolean;
+		protected var _textWidth:Number;
+		protected var _text:String;
+		protected var _textSize:Number;
+		protected var _backgroundColor:uint;
+		protected var _bold:Boolean;
 		
-		private var textField:TextField;
-		private var paddingTop:Number;
-		private var paddingRight:Number;
-		private var paddingBottom:Number;
-		private var paddingLeft:Number;	
+		protected var textField:TextField;
+		protected var paddingTop:Number;
+		protected var paddingRight:Number;
+		protected var paddingBottom:Number;
+		protected var paddingLeft:Number;	
 		
 
-		private var leading:Number;
-		private var background:Shape;
+		protected var leading:Number;
+		protected var background:Shape;
 		
 		public function BlockParagraph(textWidth:Number, text:String, textSize:Number, backgroundColor:uint, bold:Boolean = false) {
-
 			leading = 5;			
-			
 			paddingTop = 17;
 			paddingRight = 30;
 			paddingBottom = 25;
@@ -85,7 +83,7 @@ package net.localprojects.elements {
 			this.cacheAsBitmap = true;
 		}
 		
-		private function drawBackground():void {
+		protected function drawBackground():void {
 			background.graphics.clear();
 			
 			var yPos:Number = 0;			
@@ -114,9 +112,6 @@ package net.localprojects.elements {
 		}		
 	
 		// TODO getters and setters
-		
-		
-		
-		
+
 	}
 }
