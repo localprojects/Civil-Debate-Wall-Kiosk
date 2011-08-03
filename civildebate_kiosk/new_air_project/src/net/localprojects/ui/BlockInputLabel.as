@@ -14,7 +14,7 @@ package net.localprojects.ui {
 	
 	public class BlockInputLabel extends BlockLabel {
 		
-		private var minWidth:Number = 0; // how wide should the feel be if there's nothing in it?
+		private var minWidth:Number = 0; // how wide should the field be if there's nothing in it?
 		private var minHeight:Number = 0;
 		private var lastText:String = '';
 		
@@ -35,7 +35,7 @@ package net.localprojects.ui {
 			
 			// find minimum dimensions
 			textField.text =  'Height Test'; // test character
-			minHeight = textField.height + topPadding + bottomPadding;
+			minHeight = textField.height + paddingTop + paddingBottom;
 
 			textField.text = _text;
 			
@@ -82,8 +82,8 @@ package net.localprojects.ui {
 			//draw the background
 			if (_showBackground) {
 				
-				var backgroundWidth:Number = Math.max(minWidth, textField.width + leftPadding + rightPadding);
-				var backgroundHeight:Number = Math.max(minHeight, textField.height + topPadding + bottomPadding);
+				var backgroundWidth:Number = Math.max(minWidth, textField.width + paddingLeft + paddingRight);
+				var backgroundHeight:Number = Math.max(minHeight, textField.height + paddingTop + paddingBottom);
 				
 				
 				
@@ -91,8 +91,8 @@ package net.localprojects.ui {
 				background.graphics.drawRect(0, 0, backgroundWidth, backgroundHeight);
 				background.graphics.endFill();				
 				
-				textField.x = leftPadding;
-				textField.y = topPadding;
+				textField.x = paddingLeft;
+				textField.y = paddingTop;
 			}			
 		}		
 		

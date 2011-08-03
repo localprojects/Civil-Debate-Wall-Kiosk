@@ -61,6 +61,7 @@ package net.localprojects {
 		private var countdown:Countdown;
 		private var stats:Stats;
 		private var keyboard:Keyboard;
+		private var editOpinion:BlockInputParagraph;		
 		
 		// multiples of these
 		private var stance:Stance;		
@@ -153,6 +154,12 @@ package net.localprojects {
 			opinion.setDefaultTweenOut(1, {x: -opinion.width, y: 1095});
 			opinion.setText(CDW.database.debates[CDW.database.activeDebate].opinion);
 			addChild(opinion);
+			
+			editOpinion = new BlockInputParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false);
+			editOpinion.setDefaultTweenIn(1, {x: 100, y: 1095});
+			editOpinion.setDefaultTweenOut(1, {x: -editOpinion.width, y: 1095});
+			editOpinion.setText(CDW.database.debates[CDW.database.activeDebate].opinion);			
+			addChild(editOpinion);
 			
 			bigButton = new BigButton('Add Your Opinion');
 			bigButton.setDefaultTweenIn(1, {x: 438, y: 1470});
@@ -597,7 +604,9 @@ package net.localprojects {
 			question.tweenIn();
 			stance.tweenIn();
 			nametag.tweenIn();
-			opinion.tweenIn();
+			
+			//opinion.tweenIn(); // TODO fade this out?
+			editOpinion.tweenIn();
 			saveButton.tweenIn();
 			editTextInstructions.tweenIn();
 			keyboard.tweenIn();

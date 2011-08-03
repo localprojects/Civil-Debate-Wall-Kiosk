@@ -22,19 +22,19 @@ package net.localprojects.elements {
 		protected var _bold:Boolean;
 		
 		protected var textField:TextField;
-		protected var topPadding:Number;
-		protected var bottomPadding:Number;		
-		protected var leftPadding:Number;
-		protected var rightPadding:Number;		
+		protected var paddingTop:Number;
+		protected var paddingBottom:Number;		
+		protected var paddingLeft:Number;
+		protected var paddingRight:Number;		
 		protected var background:Shape;
 		
 		
 		
 		public function BlockLabel(text:String, textSize:Number, textColor:uint, backgroundColor:uint, bold:Boolean = false, showBackground:Boolean = true) {
-			topPadding = 28;
-			bottomPadding = 28;
-			leftPadding = 40;
-			rightPadding = 40;
+			paddingTop = 28;
+			paddingBottom = 28;
+			paddingLeft = 40;
+			paddingRight = 40;
 			
 			_text = text;
 			_bold = bold;
@@ -86,10 +86,10 @@ package net.localprojects.elements {
 
 		
 		public function setPadding(top:Number, right:Number, bottom:Number, left:Number):void {
-			topPadding = top;
-			rightPadding = right;
-			bottomPadding = bottom;
-			leftPadding = left;
+			paddingTop = top;
+			paddingRight = right;
+			paddingBottom = bottom;
+			paddingLeft = left;
 			drawBackground();
 		}		
 		
@@ -101,11 +101,11 @@ package net.localprojects.elements {
 			//draw the background
 			if (_showBackground) {
 				background.graphics.beginFill(_backgroundColor);								
-				background.graphics.drawRect(0, 0, textField.width + leftPadding + rightPadding, textField.height + topPadding + bottomPadding);
+				background.graphics.drawRect(0, 0, textField.width + paddingLeft + paddingRight, textField.height + paddingTop + paddingBottom);
 				background.graphics.endFill();				
 				
-				textField.x = leftPadding;
-				textField.y = topPadding;
+				textField.x = paddingLeft;
+				textField.y = paddingTop;
 			}			
 		}
 		
