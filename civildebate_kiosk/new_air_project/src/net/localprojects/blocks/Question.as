@@ -21,7 +21,9 @@ package net.localprojects.blocks {
 			textFormat.bold = true;
 			textFormat.font =  Assets.FONT_REGULAR;
 			textFormat.align = TextFormatAlign.CENTER;
-			textFormat.size = 36;
+			textFormat.size = 37;
+			textFormat.letterSpacing = -0.25;
+			textFormat.leading = 4;
 			
 			questionText = new TextField();
 			questionText.defaultTextFormat = textFormat;

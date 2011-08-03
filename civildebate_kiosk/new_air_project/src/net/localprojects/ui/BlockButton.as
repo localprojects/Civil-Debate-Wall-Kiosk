@@ -1,6 +1,7 @@
 package net.localprojects.ui {
 	import flash.display.Sprite;
 	import flash.text.*;
+	
 	import net.localprojects.Assets;
 	
 	public class BlockButton extends ButtonBase	{
@@ -10,10 +11,11 @@ package net.localprojects.ui {
 		protected var _labelText:String;
 		protected var _labelSize:Number;
 		protected var _backgroundColor:uint;
-		protected var _arrow:Boolean;		
+		protected var _arrow:Boolean;
+		protected var _bold:Boolean;
 		
 		// TODO arrow...
-		public function BlockButton(buttonWidth:Number, buttonHeight:Number, labelText:String, labelSize:Number, backgroundColor:uint, arrow:Boolean) {
+		public function BlockButton(buttonWidth:Number, buttonHeight:Number, labelText:String, labelSize:Number, backgroundColor:uint, arrow:Boolean, bold:Boolean = false) {
 			super();
 			
 			_buttonWidth = buttonWidth;
@@ -22,6 +24,7 @@ package net.localprojects.ui {
 			_labelSize = labelSize;
 			_backgroundColor = backgroundColor;
 			_arrow = arrow;
+			_bold = bold;
 						
 			init();
 			draw();
@@ -30,8 +33,8 @@ package net.localprojects.ui {
 		private function init():void {
 			// label
 			// set up the text format
-			var textFormat:TextFormat = new TextFormat();			
-			textFormat.bold = true;
+			var textFormat:TextFormat = new TextFormat();
+			textFormat.bold = _bold;
 			textFormat.font =  Assets.FONT_REGULAR;
 			textFormat.align = TextFormatAlign.CENTER;
 			textFormat.size = _labelSize;
@@ -48,14 +51,14 @@ package net.localprojects.ui {
 			labelField.autoSize = TextFieldAutoSize.CENTER;
 			labelField.text = _labelText;
 			labelField.x = (_buttonWidth / 2) - (labelField.width / 2);
-			labelField.y = (_buttonHeight / 2) - (labelField.height / 2);			
+			labelField.y = (_buttonHeight / 2) - (labelField.height / 2);
 			
 			addChild(labelField);			
 		}
 		
 		override protected function draw():void {
 			this.graphics.beginFill(_backgroundColor);
-			this.graphics.lineStyle(4, 0xffffff);
+			this.graphics.lineStyle(6, 0xffffff);
 			this.graphics.drawRect(0, 0, _buttonWidth, _buttonHeight);
 			this.graphics.endFill();
 		}

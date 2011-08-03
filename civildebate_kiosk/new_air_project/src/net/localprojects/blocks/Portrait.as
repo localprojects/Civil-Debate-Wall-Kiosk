@@ -1,10 +1,15 @@
 package net.localprojects.blocks {
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
+	
 	import flash.display.*;
+	
 	import net.localprojects.*;
 	
 	public class Portrait extends BlockBase {
 		
-		private var image:Bitmap;
+		private var currentImage:Bitmap;
+		private var lastImage:Bitmap; // double buffer for the crossfade
 		
 		public function Portrait() {
 			super();
@@ -12,16 +17,32 @@ package net.localprojects.blocks {
 		}
 		
 		private function init():void {
-			image = new Bitmap(Assets.portraitPlaceholder.bitmapData);
-			addChild(image);
+			currentImage = new Bitmap(Assets.portraitPlaceholder.bitmapData);
+			addChild(currentImage);
 		}
 		
-		public function setImage(i:Bitmap):void {
-			// todo: copy this instead?
-			// why do we have to add and remove the child?
-			removeChild(image);
-			image = new Bitmap(i.bitmapData);
-			addChild(image);
+		public function setImage(i:Bitmap, instant:Boolean = false):void {
+			
+			if (instant) {
+				removeChild(currentImage);
+				currentImage = new Bitmap(i.bitmapData);				
+				addChild(currentImage);		
+			}
+			else {
+				// swaps images so we get a nice crossfade
+				lastImage = new Bitmap(currentImage.bitmapData);
+				
+				removeChild(currentImage);
+				currentImage = new Bitmap(i.bitmapData);
+				addChild(currentImage);			
+				
+				addChild(lastImage);
+				TweenMax.to(lastImage, 0.5, {alpha: 0, ease: Quart.easeInOut, onComplete: onFadeOut});
+			}
+		}
+		
+		private function onFadeOut():void {
+			removeChild(lastImage);
 		}
 	}
 }

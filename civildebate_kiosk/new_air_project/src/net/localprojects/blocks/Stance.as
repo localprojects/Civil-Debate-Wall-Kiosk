@@ -15,7 +15,10 @@ package net.localprojects.blocks {
 		}
 		
 		public function init():void {
-			blockLabel = new BlockLabel('', 85, 0xffffff, Assets.COLOR_YES_LIGHT);
+			blockLabel = new BlockLabel('', 98, 0xffffff, Assets.COLOR_YES_LIGHT);
+			blockLabel.setPadding(7, 24, -2, 28);
+			
+			
 			blockLabel.visible = true;			
 			addChild(blockLabel);
 		}
