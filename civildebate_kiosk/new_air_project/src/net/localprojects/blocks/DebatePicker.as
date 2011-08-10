@@ -48,7 +48,7 @@ package net.localprojects.blocks {
 				debateThumbnail.y = 0;
 				
 				// todo diff updates
-				if (CDW.database.activeDebate == debate._id.$oid) {
+				if (CDW.state.activeDebate == debate._id.$oid) {
 					debateThumbnail.active = true;
 				}
 				else {
@@ -87,7 +87,7 @@ package net.localprojects.blocks {
 			if (mouseDown) {
 				// scroll the strip
 				debateHolder.x += this.stage.mouseX - lastMouseX;
-				vx = this.stage.mouseX - lastMouseX; // TODO average multiple recent velocities instead of the latest? Depends on touch screen.
+				vx = this.stage.mouseX - lastMouseX;
 				
 				vxSamples.unshift(vx);
 				

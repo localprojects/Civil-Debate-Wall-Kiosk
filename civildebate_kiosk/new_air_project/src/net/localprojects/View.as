@@ -113,11 +113,11 @@ package net.localprojects {
 			question = new Question();
 			question.setDefaultTweenIn(1, {x: 30, y: 132});
 			question.setDefaultTweenOut(1, {x: -question.width, y: 132});
-			question.setText(CDW.database.questions[CDW.database.activeQuestion].question); // TODO abstract out these ridiculous traversals...
+			question.setText(CDW.database.questions[CDW.state.activeQuestion].question); // TODO abstract out these ridiculous traversals...
 			addChild(question);
 			
 			stance = new Stance();
-			stance.setText(CDW.database.debates[CDW.database.activeDebate].stance);			
+			stance.setText(CDW.database.debates[CDW.state.activeDebate].stance);			
 			stance.setDefaultTweenIn(1, {x: 275, y: 280});
 			stance.setDefaultTweenOut(1, {x: -280, y: 280});			
 			
@@ -152,13 +152,13 @@ package net.localprojects {
 			opinion = new BlockParagraph(915, 'Opinion goes here', 44, Assets.COLOR_YES_LIGHT, false); 
 			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});
 			opinion.setDefaultTweenOut(1, {x: -opinion.width, y: 1095});
-			opinion.setText(CDW.database.debates[CDW.database.activeDebate].opinion);
+			opinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);
 			addChild(opinion);
 			
 			editOpinion = new BlockInputParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false);
 			editOpinion.setDefaultTweenIn(1, {x: 100, y: 1095});
 			editOpinion.setDefaultTweenOut(1, {x: -editOpinion.width, y: 1095});
-			editOpinion.setText(CDW.database.debates[CDW.database.activeDebate].opinion);			
+			editOpinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);			
 			addChild(editOpinion);
 			
 			bigButton = new BigButton('Add Your Opinion');
@@ -168,7 +168,7 @@ package net.localprojects {
 			
 			statsButton = new IconButton(120, 110, 'STATS', 20, Assets.COLOR_YES_DARK, Assets.statsIcon());
 			statsButton.setDefaultTweenIn(1, {x: 100, y: 1375});
-			statsButton.setDefaultTweenOut(1, {x: -statsButton.width, y: 1375});			
+			statsButton.setDefaultTweenOut(1, {x: -statsButton.width, y: 1375});
 			addChild(statsButton);
 			
 			likeButton = new CounterButton(120, 110, 'LIKE', 20, Assets.COLOR_YES_DARK, Assets.likeIcon());
@@ -184,7 +184,7 @@ package net.localprojects {
 			viewDebateButton = new BlockButton(370, 63, '8 People Debated This', 25, Assets.COLOR_YES_DARK, true);
 			viewDebateButton.setDefaultTweenIn(1, {x: 590, y: 1375});
 			viewDebateButton.setDefaultTweenOut(1, {x: stageWidth, y: 1375});			
-			addChild(viewDebateButton)
+			addChild(viewDebateButton);
 			
 			debateOverlay = new DebateOverlay();
 			debateOverlay.setDefaultTweenIn(1, {x: 30, y: 813});
@@ -326,8 +326,8 @@ package net.localprojects {
 			markAllInactive();
 			
 			// mutations
-			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.database.activeDebate].author._id.$oid].portrait);
-			nametag.setText(CDW.database.debates[CDW.database.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.database.activeDebate].author.lastName + ' Says :');
+			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
+			nametag.setText(CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName + ' Says :');
 			
 			// behaviors
 			viewDebateButton.setOnClick(debateOverlayView);	
@@ -366,8 +366,8 @@ package net.localprojects {
 			markAllInactive();			
 			
 			// mutations
-			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.database.activeDebate].author._id.$oid].portrait);
-			byline.setText('Said by ' + CDW.database.debates[CDW.database.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.database.activeDebate].author.lastName);			
+			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
+			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName);			
 			
 			// behaviors
 			viewDebateButton.setOnClick(homeView);
@@ -391,12 +391,12 @@ package net.localprojects {
 		
 		// move to control class?
 		private function onYesButton(e:MouseEvent):void {
-			CDW.database.userStance = 'yes';
+			CDW.state.userStance = 'yes';
 			textPromptView();
 		}
 		
 		private function onNoButton(e:MouseEvent):void {
-			CDW.database.userStance = 'no';
+			CDW.state.userStance = 'no';
 			textPromptView();			
 		}
 		
@@ -489,11 +489,9 @@ package net.localprojects {
 		
 		private function onFlashOn():void {
 			// TODO take, save and upload photo
-			
 			nameEntryView();
 			flashOverlay.tweenOut();
 		}
-	
 		
 		
 		public function nameEntryView(...args):void {
@@ -642,7 +640,7 @@ package net.localprojects {
 		
 		private function onStatsClose(e:Event):void {
 			// restore portrait
-			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.database.activeDebate].author._id.$oid].portrait);
+			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
 			
 			stats.tweenOut();
 		}

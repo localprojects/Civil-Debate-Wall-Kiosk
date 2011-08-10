@@ -26,7 +26,7 @@ package net.localprojects.blocks {
 		
 		public function setText(s:String):void {
 			blockLabel.setText(s.toUpperCase() + '!');
-		}		
+		}
 
 	}
 }
