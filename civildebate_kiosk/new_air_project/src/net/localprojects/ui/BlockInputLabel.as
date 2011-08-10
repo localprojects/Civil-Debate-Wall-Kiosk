@@ -39,7 +39,7 @@ package net.localprojects.ui {
 
 			textField.text = _text;
 			
-			minWidth = 100;
+			minWidth = 103;
 			
 			lastText = textField.text;
 			
@@ -51,15 +51,12 @@ package net.localprojects.ui {
 		}
 		
 		private function onEnterFrame(e:Event):void {
-			trace('f');
-			if(textField.text != lastText) {
+			if (textField.text != lastText) {
 				// changed, redraw background
-				trace("text changed");
 				drawBackground();
 			}
 			
 			lastText = textField.text;
-			
 		}
 
 		override protected function afterTweenIn():void {
@@ -81,10 +78,8 @@ package net.localprojects.ui {
 			
 			//draw the background
 			if (_showBackground) {
-				
 				var backgroundWidth:Number = Math.max(minWidth, textField.width + paddingLeft + paddingRight);
 				var backgroundHeight:Number = Math.max(minHeight, textField.height + paddingTop + paddingBottom);
-				
 				
 				
 				background.graphics.beginFill(_backgroundColor);								

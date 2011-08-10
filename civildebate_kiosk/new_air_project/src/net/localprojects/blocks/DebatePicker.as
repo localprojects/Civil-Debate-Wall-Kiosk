@@ -66,11 +66,12 @@ package net.localprojects.blocks {
 		private var vxThreshold:Number = 0.5;
 		private var mouseDown:Boolean = false;
 		private var vxSamples:Array = [];
-		private var vxSampleDepth:int = 7; // average the last five mouse velocities
+		private var vxSampleDepth:int = 5; // average the last five mouse velocities
 		private var avx:Number = 0; // average velocity over sample depth
 		
+		
+		
 		private function onMouseDown(e:MouseEvent):void {
-			CDW.ref.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			CDW.ref.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			
 			mouseDown = true;
@@ -78,27 +79,27 @@ package net.localprojects.blocks {
 			vx = 0;
 			vxSamples = []; // clear history
 		}
-		
-		private function onMouseMove(e:MouseEvent):void {
-			// scroll the strip
-			debateHolder.x += this.stage.mouseX - lastMouseX;
-			vx = this.stage.mouseX - lastMouseX; // TODO average multiple recent velocities instead of the latest? Depends on touch screen.
-			
-			
-			
-			vxSamples.unshift(vx);
-			
-			while (vxSamples.length > vxSampleDepth) {
-				vxSamples.pop();
-			}
-			
-			lastMouseX = this.stage.mouseX;	
-		}
+
 		
 		private function onEnterFrame(e:Event):void {
-			// check bounds
+			// calculate physics
+			// (previously in mouseMoved)
+			if (mouseDown) {
+				// scroll the strip
+				debateHolder.x += this.stage.mouseX - lastMouseX;
+				vx = this.stage.mouseX - lastMouseX; // TODO average multiple recent velocities instead of the latest? Depends on touch screen.
+				
+				vxSamples.unshift(vx);
+				
+				while (vxSamples.length > vxSampleDepth) {
+					vxSamples.pop();
+				}
+				
+				lastMouseX = this.stage.mouseX;	
+			}			
 			
 			
+			// check bounds			
 			if(debateHolder.width < this.width) {
 				// smaller than the holder
 				if (debateHolder.x < 0) {
@@ -128,8 +129,6 @@ package net.localprojects.blocks {
 			if (!mouseDown && (Math.abs(avx) > vxThreshold)) {
 				debateHolder.x += avx;
 				avx *= friction;
-				
-
 			}
 			
 			if(mouseDown) {
@@ -139,23 +138,15 @@ package net.localprojects.blocks {
 		}
 		
 		private function onMouseUp(e:MouseEvent):void {
-			CDW.ref.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			CDW.ref.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			
-			// remove the last two because of the bogus youch screen mouser up events
-			vxSamples.pop();
-			vxSamples.pop();
 			
 			//CDW.dashboard.log(vxSamples.toString());
 			
 			// take the average vx
 			avx = Utilities.averageArray(vxSamples);
-			
-			
-			
-			
 
-			//trace("Last velocity: " + vx +  "\tAverage Velocity: " + avx); 
+			trace("Last velocity: " + vx +  "\tAverage Velocity: " + avx); 
 			
 			mouseDown = false;
 			

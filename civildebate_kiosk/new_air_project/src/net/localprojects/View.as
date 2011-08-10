@@ -592,6 +592,7 @@ package net.localprojects {
 			markAllInactive();
 			
 			// mutations
+			keyboard.target = editOpinion.getTextField();			
 			
 			// behaviors
 			saveButton.setOnClick(onSaveOpinionEdit);

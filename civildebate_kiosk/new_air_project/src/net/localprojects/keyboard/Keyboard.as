@@ -1,33 +1,32 @@
 package net.localprojects.keyboard {
 	
 	import com.adobe.utils.StringUtil;
-	
 	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-	import flash.ui.Mouse;
 	import flash.text.TextField;
-	
+	import flash.ui.Mouse;
+	import net.localprojects.Assets;
 	import net.localprojects.CDW;
 	import net.localprojects.blocks.BlockBase;
-	import net.localprojects.Assets;
 	
 	
 	public class Keyboard extends BlockBase {
 		
-	
 		private var keys:Array;
 		private var shift:Boolean;
 		private var marginTopBottom:Number = 40;
 		private var marginLeftRight:Number = 140;
-		public var target:InteractiveObject;	
-		
+		public var target:InteractiveObject;
 		
 		public function Keyboard() {
 			super();
-			
+			init();
+		}
+		
+		private function init():void {
 			// background
 			this.graphics.beginFill(0xffffff);
 			this.graphics.drawRect(0, 0, 1080, 358);
@@ -94,13 +93,14 @@ package net.localprojects.keyboard {
 				}
 			}
 
-			
-
+			// customize certain keys
+			keys['DELETE'].repeats = true;
+		
 			
 		}
 		
 
-		
+
 		
 		private function upperCase():void {
 			for each (var key:Key in keys) {
@@ -124,13 +124,8 @@ package net.localprojects.keyboard {
 		}
 		
 		
-		
 		private function onKeyPressed(e:MouseEvent):void {
-			
-			
 			Assets.clickSound.play();
-			
-			trace(e.target.letter);
 			
 			if (e.target.letter == 'SHIFT') {
 				shift = e.target.active;
@@ -149,7 +144,7 @@ package net.localprojects.keyboard {
 				if (this.stage.focus is TextField) {
 					var tf:TextField = this.stage.focus as TextField;
 					tf.text = tf.text.substring(0, tf.selectionBeginIndex - 1) + tf.text.substring(tf.selectionEndIndex);
-					tf.setSelection(tf.selectionBeginIndex - 1, tf.selectionBeginIndex - 1);
+					tf.setSelection(tf.selectionBeginIndex, tf.selectionBeginIndex);
 				}
 			}
 			else {
@@ -158,8 +153,13 @@ package net.localprojects.keyboard {
 				// via http://www.kirupa.com/forum/showthread.php?312829-Onscreen-Keyboard-how-to-send-event
 				if (this.stage.focus is TextField) {
 					var tf:TextField = this.stage.focus as TextField;
-					tf.text = tf.text.substring(0, tf.selectionBeginIndex) + e.target.letter + tf.text.substring(tf.selectionEndIndex);
-					tf.setSelection(tf.selectionBeginIndex + 1, tf.selectionBeginIndex + 1);
+					
+					// watch character limit since appending to the string
+					// directly bypasses the flash-native max character checks
+					if (tf.text.length < tf.maxChars) {					
+						tf.text = tf.text.substring(0, tf.selectionBeginIndex) + e.target.letter + tf.text.substring(tf.selectionEndIndex);
+						tf.setSelection(tf.selectionBeginIndex + 1, tf.selectionBeginIndex + 1);
+					}
 				}
 
 				
