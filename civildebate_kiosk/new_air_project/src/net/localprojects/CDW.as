@@ -11,17 +11,20 @@ package net.localprojects {
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
+	
+	
 	import net.localprojects.blocks.*;
 	import net.localprojects.camera.*;
 	import net.localprojects.elements.*;
-	import net.localprojects.ui.*;
 	import net.localprojects.keyboard.*;
+	import net.localprojects.ui.*;
 	
 	public class CDW extends Sprite {
 		
 		public static var ref:CDW;
 		public static var database:Database;
 		public static var dashboard:Dashboard;
+		public static var state:State;
 		public static var settings:Object;
 		public static var view:View;
 		public static var testOverlay:Bitmap;
@@ -49,6 +52,9 @@ package net.localprojects {
 				stage.nativeWindow.width = 1080;
 				stage.nativeWindow.height = 1920;				
 			}
+			
+			// create local state
+			state = new State();
 			
 			// load the wall state
 			database = new Database();

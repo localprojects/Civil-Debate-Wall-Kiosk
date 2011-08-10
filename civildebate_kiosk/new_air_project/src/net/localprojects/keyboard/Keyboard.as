@@ -152,13 +152,13 @@ package net.localprojects.keyboard {
 				// sending a keyboard event is just ignored by the text input fields
 				// via http://www.kirupa.com/forum/showthread.php?312829-Onscreen-Keyboard-how-to-send-event
 				if (this.stage.focus is TextField) {
-					var tf:TextField = this.stage.focus as TextField;
+					var tf1:TextField = this.stage.focus as TextField;
 					
 					// watch character limit since appending to the string
 					// directly bypasses the flash-native max character checks
-					if (tf.text.length < tf.maxChars) {					
-						tf.text = tf.text.substring(0, tf.selectionBeginIndex) + e.target.letter + tf.text.substring(tf.selectionEndIndex);
-						tf.setSelection(tf.selectionBeginIndex + 1, tf.selectionBeginIndex + 1);
+					if (tf1.text.length < tf1.maxChars) {					
+						tf1.text = tf1.text.substring(0, tf1.selectionBeginIndex) + e.target.letter + tf1.text.substring(tf1.selectionEndIndex);
+						tf1.setSelection(tf1.selectionBeginIndex + 1, tf1.selectionBeginIndex + 1);
 					}
 				}
 

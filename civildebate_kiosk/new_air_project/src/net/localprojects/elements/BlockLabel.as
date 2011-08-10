@@ -100,14 +100,19 @@ package net.localprojects.elements {
 			
 			//draw the background
 			if (_showBackground) {
-				background.graphics.beginFill(_backgroundColor);								
+				background.graphics.beginFill(0xffffff); // white fill for manipulation by tweenmax				
 				background.graphics.drawRect(0, 0, textField.width + paddingLeft + paddingRight, textField.height + paddingTop + paddingBottom);
 				background.graphics.endFill();				
 				
 				textField.x = paddingLeft;
 				textField.y = paddingTop;
+				
+				// actual color is set by tweenmax
+				TweenMax.to(background, 0, {colorTransform: {tint: _backgroundColor, tintAmount: 1}});
 			}			
 		}
+		
+		
 		
 		
 		private var newText:String;
@@ -127,12 +132,15 @@ package net.localprojects.elements {
 			drawBackground();				
 			TweenMax.to(textField, 0.5, {alpha: 1, ease: Quart.easeIn});
 		}
-			
-			
+		
+		// tweens to a new color
+		public function setBackgroundColor(c:uint):void {
+			_backgroundColor = c;
+			TweenMax.to(background, 1, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
+		}
 			
 		
 		
-
 		// TODO getters and setters
 		
 		

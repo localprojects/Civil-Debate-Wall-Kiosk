@@ -21,17 +21,9 @@ package net.localprojects {
 		
 		public const BASE_PATH:String = 'http://ec2-50-19-25-31.compute-1.amazonaws.com'
 		
-			
-			
+
 		// todo, just use debate list with automatic python dereferencing!?
-		public var activeQuestion:String = '4e2755b50f2e420354000001';
-		public var activeDebate:String = '4e2756a20f2e420341000000';			
-		public var userStance:String = 'yes';
-		
-	
-		
-		
-		
+
 		public var questions:Array = [];
 		public var users:Array = [];
 		public var debates:Array = [];			
@@ -52,11 +44,11 @@ package net.localprojects {
 			var urlRequest:URLRequest = new URLRequest(BASE_PATH + "/debates/list");
 			var urlLoader:URLLoader = new URLLoader();
 			urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
-			urlLoader.addEventListener(Event.COMPLETE, onAllDebatessLoaded);  
+			urlLoader.addEventListener(Event.COMPLETE, onAllDebatesLoaded);  
 			urlLoader.load(urlRequest);			
 		}
 		
-		private function onAllDebatessLoaded(e:Event):void {
+		private function onAllDebatesLoaded(e:Event):void {
 			CDW.dashboard.log("Loaded debates list from server");			
 			var debateList:* = JSON.decode(e.target.data);
 			
