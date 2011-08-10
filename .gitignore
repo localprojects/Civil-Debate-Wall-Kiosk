@@ -1,0 +1,6 @@
+.DS_Store
+*.pyc
+.pydevproject
+.project
+*.sqlite3
+cdw-weblog
