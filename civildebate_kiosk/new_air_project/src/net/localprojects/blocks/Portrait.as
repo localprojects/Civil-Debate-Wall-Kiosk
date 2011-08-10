@@ -42,7 +42,10 @@ package net.localprojects.blocks {
 		}
 		
 		private function onFadeOut():void {
-			removeChild(lastImage);
+			
+			if (contains(lastImage)) {
+				removeChild(lastImage);
+			}
 		}
 	}
 }

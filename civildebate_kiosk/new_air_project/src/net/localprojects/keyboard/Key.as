@@ -3,15 +3,16 @@ package net.localprojects.keyboard {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
-	
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.text.*;
+	import flash.utils.Timer;
 	
 	import net.localprojects.Assets;
-	import net.localprojects.Utilities;
-		
+	import net.localprojects.Utilities;	
+	
 	
 	public class Key extends Sprite {
 		private var keyWidth:Number;
@@ -21,7 +22,15 @@ package net.localprojects.keyboard {
 		private var keyCap:Shape;
 		private var textField:TextField;
 		public var active:Boolean; // for toggles, like shift
+		public var repeats:Boolean;
 		
+		// how long until we start repeating
+		private var repeatDelay:int;
+		private var repeatDelayTimer:Timer;
+		
+		// how long between repeats
+		private var repeatInterval:int;
+		private var repeatIntervalTimer:Timer;		
 		
 		public function Key(_letter:String, w:Number, h:Number)	{
 			super();
@@ -36,6 +45,17 @@ package net.localprojects.keyboard {
 		}
 		
 		private function init():void {
+			repeats = false;
+			repeatDelay = 500;
+			repeatInterval = 100;
+			
+			// repeat delay timer
+			repeatDelayTimer = new Timer(repeatDelay, 1);
+			repeatDelayTimer.addEventListener(TimerEvent.TIMER, onRepeatTimer);
+			
+			repeatIntervalTimer = new Timer(repeatInterval);
+			repeatIntervalTimer.addEventListener(TimerEvent.TIMER, onRepeatIntervalTimer);			
+			
 			padding = 8;
 			
 			if (letter == 'SPACE') letter = ' ';
@@ -87,34 +107,47 @@ package net.localprojects.keyboard {
 			
 		}
 		
+		private function onRepeatTimer(e:TimerEvent):void {
+			repeatIntervalTimer.reset();			
+			repeatIntervalTimer.start();
+		}
+		
+		private function onRepeatIntervalTimer(e:TimerEvent):void {
+			if (repeats) {
+				this.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP, true, false, 0, 0, null, false, false, false, true, 0, true));
+			}
+		}		
+		
 		public function setLetter(s:String):void {
 			letter = s;
 			textField.text = letter;
 		}
-
 		
 		public function onMouseDown(e:MouseEvent):void {
-			
+			// start repeat timer
+			repeatDelayTimer.reset();
+			repeatDelayTimer.start();
 			
 			TweenMax.to(keyCap, 0, {alpha: 1});
 			TweenMax.to(textField, 0, {textColor: 0xffffff});
 		}
 		
 		public function onMouseUp(e:MouseEvent):void {
-
-			
-			
-			if(!active && letter == 'SHIFT') {
-				active = true;
+			// using the command key to tag repeat keystrokes
+			// sloppy
+			if (!e.commandKey) {
+				repeatDelayTimer.stop();
+				repeatIntervalTimer.stop();
+				
+				if (!active && letter == 'SHIFT') {
+					active = true;
+				}
+				else {
+					active = false;
+					TweenMax.to(keyCap, 0.2, {alpha: 0, ease: Quart.easeOut});
+					TweenMax.to(textField, 0, {textColor: Assets.COLOR_YES_LIGHT});
+				}
 			}
-			else {
-				active = false;
-				TweenMax.to(keyCap, 0.2, {alpha: 0, ease: Quart.easeOut});
-				TweenMax.to(textField, 0, {textColor: Assets.COLOR_YES_LIGHT});
-			}
-
-			
-			
 		}
 		
 		
@@ -123,6 +156,8 @@ package net.localprojects.keyboard {
 		public function onMouseOver(e:MouseEvent):void {
 			// are we dragging over?
 			if (e.buttonDown) {
+				repeatDelayTimer.reset();
+				repeatDelayTimer.start();				
 				TweenMax.to(keyCap, 0, {alpha: 1});
 				TweenMax.to(textField, 0, {textColor: 0xffffff});				
 			}
@@ -130,6 +165,8 @@ package net.localprojects.keyboard {
 		
 		public function onMouseOut(e:MouseEvent):void {
 			if (e.buttonDown) {
+				repeatDelayTimer.stop();
+				repeatIntervalTimer.stop();				
 				TweenMax.to(keyCap, 0, {alpha: 0});
 				TweenMax.to(textField, 0, {textColor: Assets.COLOR_YES_LIGHT});
 			}
