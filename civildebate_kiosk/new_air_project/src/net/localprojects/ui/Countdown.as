@@ -2,18 +2,12 @@ package net.localprojects.ui {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
-	import flash.display.Bitmap;
-	import flash.display.DisplayObject;
-	import flash.display.Shape;
-	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.events.TimerEvent;
+	import flash.display.*;
+	import flash.events.*;
 	import flash.text.*;
-	import flash.utils.Timer;
-	import flash.utils.getTimer;
+	import flash.utils.*;
 	
-	import net.localprojects.Assets;
-	import net.localprojects.Utilities;
+	import net.localprojects.*;
 	
 	public class Countdown extends ButtonBase {
 		
@@ -188,7 +182,7 @@ package net.localprojects.ui {
 			// TODO optimize by not clearing buffer? or taking bigger steps?
 			for (var i:int = 0; i < 360; i++)	{
 				var rad:Number = (i - 90) * Math.PI / 180;
-				if (i > highlightDegrees) progressRing.graphics.lineStyle(lineWeight, Assets.COLOR_YES_LIGHT);
+				if (i > highlightDegrees) progressRing.graphics.lineStyle(lineWeight, ringColor);
 				progressRing.graphics.lineTo(Math.cos(rad) * radius, Math.sin(rad) * radius);
 			}
 			
@@ -210,7 +204,20 @@ package net.localprojects.ui {
 		// extra events		
 		public function setOnFinish(f:Function):void {
 			onCountdownFinish = f;			
-		}		
+		}
+		
+		
+		// override default fade out behavior
+		override protected function onMouseDown(e:MouseEvent):void {
+			CDW.ref.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			//TweenMax.to(background, 0, {colorTransform: {tint: _backgroundColor, tintAmount: 0.2}});
+		}
+		
+		override protected function onMouseUp(e:MouseEvent):void {
+			CDW.ref.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
+			//TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
+			onClick(e);
+		}				
 		
 		
 		

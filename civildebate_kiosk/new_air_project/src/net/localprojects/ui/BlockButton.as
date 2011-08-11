@@ -1,12 +1,11 @@
 package net.localprojects.ui {
 	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
 	
 	import flash.display.Sprite;
 	import flash.text.*;
 	
-	import net.localprojects.Assets;
-	import com.greensock.TweenMax;
-	import com.greensock.easing.*;	
+	import net.localprojects.Assets;	
 	
 	public class BlockButton extends ButtonBase	{
 
@@ -77,6 +76,12 @@ package net.localprojects.ui {
 			this.graphics.drawRect(0, 0, _buttonWidth, _buttonHeight);
 			this.graphics.endFill();
 		}
+		
+		public function setBackgroundColor(c:uint):void {
+			_backgroundColor = c;
+			TweenMax.to(background, 0.5, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
+		}
+		
 		
 		
 		

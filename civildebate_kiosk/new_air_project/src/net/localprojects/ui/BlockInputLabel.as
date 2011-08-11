@@ -89,8 +89,12 @@ package net.localprojects.ui {
 				textField.x = paddingLeft;
 				textField.y = paddingTop;
 			}			
-		}		
+		}
 		
+//		public function setBackgroundColor(c:uint):void {
+//			
+//		}
+//		
 
 		
 

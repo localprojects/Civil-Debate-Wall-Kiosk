@@ -1,5 +1,6 @@
 package net.localprojects.blocks {
 	
+	import com.adobe.images.JPGEncoder;
 	import com.greensock.events.TweenEvent;
 	
 	import flash.display.*;
@@ -7,14 +8,21 @@ package net.localprojects.blocks {
 	
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	
+	
+	import mx.utils.Base64Encoder;
+	
 	import net.localprojects.Utilities;
 	import net.localprojects.camera.*;
+	import flash.utils.ByteArray;
+	import com.adobe.images.*;
+	import net.localprojects.CDW;
+	
 	
 	
 	public class PortraitCamera extends BlockBase {
 		
 		private var cameraFeed:ICameraFeed;
-		private var cameraBitmap:Bitmap;		
+		public var cameraBitmap:Bitmap;		
 		private var faceDetector:FaceDetector;
 
 		public function PortraitCamera() {
@@ -58,12 +66,30 @@ package net.localprojects.blocks {
 		}
 		
 		private function onNewFrame(e:CameraFeedEvent):void {
-			cameraBitmap.bitmapData = Utilities.scaleToFill(e.target.frame, 1080, 1920);
+			//cameraBitmap.bitmapData = Utilities.scaleToFill(e.target.frame, 1080, 1920);
+			cameraBitmap.bitmapData = e.target.frame;			
 			//faceDetector.processBitmap(cameraBitmap.bitmapData);
 		}
 		
+		
+
+		
 		public function takePhoto():void {
 			trace("taking photo");
+			
+			
+			// movie this to view.as?
+			// if webcam only, just save that
+			
+			
+			
+//			cameraBitmap.bitmapData = Utilities.scaleToFill(cameraBitmap.bitmapData, 100, 100);			
+//			var jpgEncoder:JPGEncoder = new JPGEncoder(98);
+//			var byteArray:ByteArray = jpgEncoder.encode(cameraBitmap.bitmapData);		
+//			var encoder:Base64Encoder = new Base64Encoder();
+//			encoder.encodeBytes(byteArray);			
+//			trace(encoder.toString());
+			
 		}
 				
 	}

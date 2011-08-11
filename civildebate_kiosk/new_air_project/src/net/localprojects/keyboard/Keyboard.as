@@ -1,6 +1,7 @@
 package net.localprojects.keyboard {
 	
 	import com.adobe.utils.StringUtil;
+	
 	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -8,6 +9,7 @@ package net.localprojects.keyboard {
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.ui.Mouse;
+	
 	import net.localprojects.Assets;
 	import net.localprojects.CDW;
 	import net.localprojects.blocks.BlockBase;
@@ -206,6 +208,12 @@ package net.localprojects.keyboard {
 			if (spaceCount == 0) spaceCount = 1;
 			
 			return spaceCount;
+		}
+		
+		public function setColor(c:uint):void {
+			for each (var key:Key in keys) {
+				key.setColor(c);
+			}
 		}
 		
 		
