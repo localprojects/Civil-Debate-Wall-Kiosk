@@ -17,12 +17,14 @@ package net.localprojects.camera {
 		
 		private var cameraWidth:int;
 		private var cameraHeight:int;
+		private var undersampleFactor:int;
 
 		
 		private var camera:Camera;
 		private var video:Video;
 		public var frame:BitmapData;
 		private var targetFrameRate:int;
+		private var matrix:Matrix;
 		
 		
 		public function WebcamFeed() {
@@ -31,14 +33,21 @@ package net.localprojects.camera {
 		}
 		
 		private function init():void {
-			cameraWidth = 1024;
-			cameraHeight = 768;
+			undersampleFactor = 2; // increase this to improve performance at the expense of quality
+			
+			cameraWidth = 1920 / undersampleFactor;
+			cameraHeight = 1080 / undersampleFactor;
 			video = new Video(cameraWidth, cameraHeight);
-			frame = new BitmapData(cameraWidth, cameraHeight, false);
+			frame = new BitmapData(1080, 1920, false);
 			targetFrameRate = 30;
 			
 			camera = Camera.getCamera();
 			camera.setMode(cameraWidth, cameraHeight, targetFrameRate);
+			
+			matrix = new Matrix();
+			matrix.scale(undersampleFactor, undersampleFactor);
+			matrix.rotate(Utilities.degToRad(-90));
+			matrix.ty = 1920;
 		}
 		
 		public function start():void {
@@ -61,7 +70,7 @@ package net.localprojects.camera {
 		
 		private function onVideoFrame(e:Event):void {
 			// draw the frame into a bitmap
-			frame.draw(video);
+			frame.draw(video, matrix);
 			this.dispatchEvent(new CameraFeedEvent(CameraFeedEvent.NEW_FRAME_EVENT));
 		}
 	}

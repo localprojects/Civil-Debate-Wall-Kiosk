@@ -23,6 +23,7 @@ package net.localprojects.keyboard {
 		private var textField:TextField;
 		public var active:Boolean; // for toggles, like shift
 		public var repeats:Boolean;
+		public var color:uint;
 		
 		// how long until we start repeating
 		private var repeatDelay:int;
@@ -59,24 +60,13 @@ package net.localprojects.keyboard {
 			padding = 8;
 			
 			if (letter == 'SPACE') letter = ' ';
-			
-			// draw backboard / hit area
-			this.graphics.beginFill(Utilities.randRange(0, int.MAX_VALUE), 0);
-			this.graphics.drawRect(0, 0, keyWidth, keyHeight);
-			this.graphics.endFill();
-
-			this.graphics.lineStyle(2, Assets.COLOR_YES_LIGHT);
-			this.graphics.drawRoundRect(padding, padding, keyWidth - padding * 2, keyHeight - padding * 2, 15, 15);			
-			
-			
-			// activity overlay
+						
+			// prep activity overlay
 			keyCap = new Shape();
-			keyCap.graphics.beginFill(Assets.COLOR_YES_LIGHT);
-			keyCap.graphics.lineStyle(2, Assets.COLOR_YES_LIGHT);
-			keyCap.graphics.drawRoundRect(padding, padding, keyWidth - padding * 2, keyHeight - padding * 2, 15, 15);			
-			keyCap.graphics.endFill();
 			keyCap.alpha = 0;
 			addChild(keyCap);
+			
+			draw();			
 			
 			// text label
 			var textFormat:TextFormat = new TextFormat();			
@@ -94,7 +84,7 @@ package net.localprojects.keyboard {
 			
 			textField.gridFitType = GridFitType.NONE;
 			textField.antiAliasType = AntiAliasType.ADVANCED;
-			textField.textColor = Assets.COLOR_YES_LIGHT;
+			textField.textColor = color;
 			textField.width = width;
 			textField.autoSize = TextFieldAutoSize.CENTER;
 			textField.text = letter;
@@ -102,9 +92,26 @@ package net.localprojects.keyboard {
 //			textField.backgroundColor = 0xff0000;
 //			textField.background = true;
 			textField.y = height / 2 - 10;
-			addChild(textField);					
+			addChild(textField);
 			
 			
+		}
+		
+		private function draw():void {
+			// draw backboard / hit area
+			this.graphics.clear();
+			this.graphics.beginFill(Utilities.randRange(0, int.MAX_VALUE), 0);
+			this.graphics.drawRect(0, 0, keyWidth, keyHeight);
+			this.graphics.endFill();
+			
+			this.graphics.lineStyle(2, color);
+			this.graphics.drawRoundRect(padding, padding, keyWidth - padding * 2, keyHeight - padding * 2, 15, 15);
+			
+			keyCap.graphics.clear();
+			keyCap.graphics.beginFill(color);
+			keyCap.graphics.lineStyle(2, color);
+			keyCap.graphics.drawRoundRect(padding, padding, keyWidth - padding * 2, keyHeight - padding * 2, 15, 15);			
+			keyCap.graphics.endFill();
 		}
 		
 		private function onRepeatTimer(e:TimerEvent):void {
@@ -145,12 +152,16 @@ package net.localprojects.keyboard {
 				else {
 					active = false;
 					TweenMax.to(keyCap, 0.2, {alpha: 0, ease: Quart.easeOut});
-					TweenMax.to(textField, 0, {textColor: Assets.COLOR_YES_LIGHT});
+					TweenMax.to(textField, 0, {textColor: color});
 				}
 			}
 		}
 		
-		
+		public function setColor(c:uint):void {
+			color = c;
+			textField.textColor = color;
+			draw(); // redraw
+		}
 		
 		
 		public function onMouseOver(e:MouseEvent):void {
@@ -168,7 +179,7 @@ package net.localprojects.keyboard {
 				repeatDelayTimer.stop();
 				repeatIntervalTimer.stop();				
 				TweenMax.to(keyCap, 0, {alpha: 0});
-				TweenMax.to(textField, 0, {textColor: Assets.COLOR_YES_LIGHT});
+				TweenMax.to(textField, 0, {textColor: color});
 			}
 		}
 		

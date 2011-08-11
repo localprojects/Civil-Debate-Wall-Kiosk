@@ -29,7 +29,7 @@ package net.localprojects {
 		private var portraitCamera:PortraitCamera;
 		private var nameEntryInstructions:BlockLabel;
 		private var nameEntryField:BlockInputLabel;		
-		private var saveButton:BlockButton;
+		private var saveButton:BlockButton;		
 		private var retakePhotoButton:BlockButton;
 		private var editTextButton:BlockButton;
 		private var cancelButton:BlockButton;		
@@ -39,6 +39,7 @@ package net.localprojects {
 		private var continueButton:BlockButton;
 		private var restartButton:BlockButton;
 		private var flashOverlay:FlashOverlay;
+		private var skipTextButton:BlockButton;		
 		
 		// single copy, changes
 		private var question:Question;
@@ -212,6 +213,12 @@ package net.localprojects {
 			noButton.setDefaultTweenOut(1.2, {x: 677, y: stageHeight});
 			addChild(noButton);
 			
+			// Temp debug button so we don't have to SMS every time
+			skipTextButton = new BlockButton(200, 100, 'SIMULATE SMS', 20, Assets.COLOR_INSTRUCTION_DARK, false, false);
+			skipTextButton.setDefaultTweenIn(1, {x: (stageWidth - 200) / 2, y: 500});
+			skipTextButton.setDefaultTweenOut(1, {x: stageWidth, y: 500});
+			addChild(skipTextButton);
+			
 			var smsDisclaimerText:String = 'You will receive an SMS notifying you of any future opponents \nwho would like to enter into a debate with you based on your opinion. \nYou can opt out at any time by replying STOP.';
 			smsDisclaimer = new BlockParagraph(872, smsDisclaimerText, 25, Assets.COLOR_INSTRUCTION_DARK, false);
 			smsDisclaimer.setDefaultTweenIn(1, {x: 100, y: 1625});
@@ -278,7 +285,7 @@ package net.localprojects {
 			addChild(cancelButton);			
 			
 			editTextInstructions = new BlockLabel('EDITING TEXT...', 20, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
-			editTextInstructions.setDefaultTweenIn(1, {x: 386, y: 1096});
+			editTextInstructions.setDefaultTweenIn(1, {x: 386, y: 1003});
 			editTextInstructions.setDefaultTweenOut(1, {x: -editTextInstructions.width, y: 1096});
 			addChild(editTextInstructions);			
 			
@@ -329,6 +336,8 @@ package net.localprojects {
 			nametag.setText(CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName + ' Says :');
 			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance);
 			
+			
+			
 			// behaviors
 			viewDebateButton.setOnClick(debateOverlayView);	
 			bigButton.setOnClick(pickStanceView);			
@@ -359,6 +368,8 @@ package net.localprojects {
 			
 			// clean up the old based on what's not active
 			tweenOutInactive();
+			
+			
 		}
 		
 		
@@ -407,6 +418,9 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(Assets.portraitPlaceholder);
+			noButton.setBackgroundColor(Assets.COLOR_NO_LIGHT);
+			yesButton.setBackgroundColor(Assets.COLOR_YES_LIGHT);			
+			
 			
 			// behaviors
 			yesButton.setOnClick(onYesButton);
@@ -431,16 +445,26 @@ package net.localprojects {
 			markAllInactive();
 			
 			// mutations
-			// TODO Mutate according to stance state
-			
+			if (CDW.state.userStance == 'yes') {
+				smsInstructions.setBackgroundColor(Assets.COLOR_YES_LIGHT);
+				characterLimit.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
+				backButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				noButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_MEDIUM);
+			}
+			else {
+				smsInstructions.setBackgroundColor(Assets.COLOR_NO_LIGHT);
+				characterLimit.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
+				backButton.setBackgroundColor(Assets.COLOR_NO_DARK);				
+				yesButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_MEDIUM);
+			}
+
 			// behaviors
 			backButton.setOnClick(pickStanceView); // TODO do we need the back button?
 			portrait.setImage(Assets.portraitPlaceholder);
-			stance.setStance(CDW.state.userStance);
-			CDW.state.userStance == 'yes' ? smsInstructions.setBackgroundColor(Assets.COLOR_YES_LIGHT) : smsInstructions.setBackgroundColor(Assets.COLOR_NO_LIGHT);
-			CDW.state.userStance == 'yes' ? characterLimit.setBackgroundColor(Assets.COLOR_YES_MEDIUM) : characterLimit.setBackgroundColor(Assets.COLOR_NO_MEDIUM);			
 			yesButton.setOnClick(null);
 			noButton.setOnClick(null);
+			skipTextButton.setOnClick(simulateSMS);
+
 			
 			// start polling web? TODO
 			
@@ -452,13 +476,24 @@ package net.localprojects {
 			bigButton.tweenIn();
 			yesButton.tweenIn();
 			noButton.tweenIn();
-			stance.tweenIn();
 			backButton.tweenIn();
 			smsInstructions.tweenIn();
 			characterLimit.tweenIn();
 			smsDisclaimer.tweenIn();
+			skipTextButton.tweenIn(); // TEMP for debug, TODO put on setting switch
 			
 			tweenOutInactive();
+		}
+		
+		public function simulateSMS(e:Event):void {
+			// Normally, once we have the phone number we would create a user on the server and get a unique ID back
+			// this is useful for creating photo filenames
+			CDW.state.userID = '4e44264d0f2e4226b1000000';
+			CDW.state.userPhoneNumber = '8477073052';
+			CDW.state.userOpinion = Utilities.dummyText(100);
+			
+			// For debug
+			photoBoothView();
 		}
 		
 		
@@ -466,6 +501,17 @@ package net.localprojects {
 			markAllInactive();
 			
 			// mutations
+			stance.setStance(CDW.state.userStance);
+			if (CDW.state.userStance == 'yes') {
+				countdown.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
+				countdown.setRingColor(Assets.COLOR_YES_LIGHT);
+				photoBoothInstructions.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
+			}
+			else {
+				countdown.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
+				countdown.setRingColor(Assets.COLOR_NO_LIGHT);
+				photoBoothInstructions.setBackgroundColor(Assets.COLOR_NO_MEDIUM);				
+			}
 			
 			// behaviors
 			countdown.setOnClick(onCameraClick);
@@ -489,13 +535,29 @@ package net.localprojects {
 		}
 		
 		private function onCountdownFinish(e:Event):void {
-			portraitCamera.takePhoto();
+			flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
 			
-			flashOverlay.tweenIn(-1, {onComplete: onFlashOn});
+			// image is held in RAM for now, in case it's edited later
+			
+			//portraitCamera.takePhoto();
+			
+			// Do this in portrait camera instead?
+			if (CDW.settings.webcamOnly) {
+				// nothing to see here...
+			}
+			else {
+				// using SLR
+				// TODO
+			}			
+			
+			
 		}
 		
 		private function onFlashOn():void {
-			// TODO take, save and upload photo
+			// set photo
+			
+			
+			
 			nameEntryView();
 			flashOverlay.tweenOut();
 		}
@@ -506,12 +568,25 @@ package net.localprojects {
 			flashOverlay.active = true; // needs to tween out itself
 			
 			// mutations
-			portrait.setImage(Assets.portraitPlaceholder, true); // TODO use latest photo
+			stance.setStance(CDW.state.userStance);
+			if (CDW.state.userStance == 'yes') {
+				nameEntryInstructions.setBackgroundColor(Assets.COLOR_YES_LIGHT);
+				saveButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				keyboard.setColor(Assets.COLOR_YES_LIGHT);
+				nameEntryField.setBackgroundColor(Assets.COLOR_YES_LIGHT);
+			}
+			else {
+				nameEntryInstructions.setBackgroundColor(Assets.COLOR_NO_LIGHT);
+				saveButton.setBackgroundColor(Assets.COLOR_NO_DARK);
+				keyboard.setColor(Assets.COLOR_NO_LIGHT);				
+				nameEntryField.setBackgroundColor(Assets.COLOR_NO_LIGHT);				
+			}
+			
+			portrait.setImage(portraitCamera.cameraBitmap, true);
 			keyboard.target = nameEntryField.getTextField();
 			
 			// behaviors
 			saveButton.setOnClick(onSaveName);
-			
 			
 			// blocks, no delay since it needs to happen during the flash!
 			portrait.tweenIn(0);			
@@ -531,6 +606,7 @@ package net.localprojects {
 			// TODO input validation
 			
 			// TODO save name to disk
+			CDW.state.userName = nameEntryField.getTextField().text;
 			
 			verifyOpinionView();
 		}
@@ -540,10 +616,33 @@ package net.localprojects {
 			markAllInactive();
 			
 			// mutations
-			// portrair photo
+			portrait.setImage(portraitCamera.cameraBitmap, true);
 			// submit button text
 			// opinoin text
-			// name
+			
+			//bigButton.setText('SUBMIT THIS DEBATE');
+			nametag.setText(CDW.state.userName, true);
+			opinion.setText(CDW.state.userOpinion);
+			
+			if (CDW.state.userStance == 'yes') {
+				nametag.setBackgroundColor(Assets.COLOR_YES_MEDIUM); // make instant?
+				opinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);	
+				retakePhotoButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				editTextButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				cancelButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				leftQuote.setColor(Assets.COLOR_YES_LIGHT);
+				rightQuote.setColor(Assets.COLOR_YES_LIGHT);				
+			}
+			else {
+				nametag.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
+				opinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);
+				retakePhotoButton.setBackgroundColor(Assets.COLOR_NO_DARK);
+				editTextButton.setBackgroundColor(Assets.COLOR_NO_DARK);
+				cancelButton.setBackgroundColor(Assets.COLOR_NO_DARK);
+				leftQuote.setColor(Assets.COLOR_NO_LIGHT);
+				rightQuote.setColor(Assets.COLOR_NO_LIGHT);				
+			}
+			
 			// stance
 			
 			
@@ -576,7 +675,6 @@ package net.localprojects {
 		}
 		
 		private function onEditText(e:Event):void {
-			// TODO
 			editOpinionView();
 		}		
 		
@@ -585,10 +683,19 @@ package net.localprojects {
 		}
 		
 		private function onSubmitOpinion(e:Event):void {
-			// TODO validate opinion
+			trace("Submitting opinion!");
+			// Syncs state up to the cloud
+			
+			// save the image to disk
+			// TODO handle overwrites?
+			var imageName:String = Utilities.saveImageToDisk(portraitCamera.cameraBitmap, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
 			
 			// TODO upload opinion
-			// TODO go to what you just submitted
+			
+			// refresh db
+			
+			
+			// TODO go home and see what you just submitted
 			homeView();
 		}
 		
@@ -597,13 +704,28 @@ package net.localprojects {
 			markAllInactive();
 			
 			// mutations
-			keyboard.target = editOpinion.getTextField();			
+			editOpinion.setText(CDW.state.userOpinion);
+			
+			keyboard.target = editOpinion.getTextField();
+			
+			if (CDW.state.userStance == 'yes') {
+				editTextInstructions.setBackgroundColor(Assets.COLOR_YES_DARK);
+				saveButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				editOpinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);
+			}
+			else {
+				editTextInstructions.setBackgroundColor(Assets.COLOR_NO_DARK);
+				saveButton.setBackgroundColor(Assets.COLOR_NO_DARK);
+				editOpinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);				
+			}
+			
 			
 			// behaviors
 			saveButton.setOnClick(onSaveOpinionEdit);
 			
 			//blocks
 			leftQuote.tweenIn();	
+			rightQuote.tweenIn(); // stays under keyboard		
 			portrait.tweenIn();	
 			header.tweenIn();
 			divider.tweenIn();
@@ -613,7 +735,7 @@ package net.localprojects {
 			
 			//opinion.tweenIn(); // TODO fade this out?
 			editOpinion.tweenIn();
-			saveButton.tweenIn();
+			saveButton.tweenIn(-1, {y: editOpinion.y + editOpinion.height + 30});
 			editTextInstructions.tweenIn();
 			keyboard.tweenIn();
 			
@@ -621,7 +743,10 @@ package net.localprojects {
 		}
 		
 		private function onSaveOpinionEdit(e:Event):void {
-			// TODO validate opinion
+			// TODO validate opinion edit
+			
+			CDW.state.userOpinion = editOpinion.getTextField().text;
+			
 			verifyOpinionView();
 		}
 		

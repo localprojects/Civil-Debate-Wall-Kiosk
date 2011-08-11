@@ -96,7 +96,7 @@ package net.localprojects {
 			for each (var user:* in response) {
 				trace(user.firstName);
 				
-				if (user.photos.length > 0) {
+				if ((user.photos != undefined) && (user.photos.length > 0)) {
 					user.hasPhoto = true;
 					
 					var thumbnailUrlRequest:URLRequest = new URLRequest(BASE_PATH + '/static/' + user.photos[user.photos.length - 1].thumbnailUrl);
