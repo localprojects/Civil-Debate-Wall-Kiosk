@@ -161,9 +161,9 @@ package net.localprojects {
 			editOpinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);			
 			addChild(editOpinion);
 			
-			bigButton = new BigButton('Add Your Opinion');
-			bigButton.setDefaultTweenIn(1, {x: 438, y: 1470});
-			bigButton.setDefaultTweenOut(1, {x: 438, y: 1470}); // TODO need to subclass and override tweenout and in methods because of weird animation???
+			bigButton = new BigButton('ADD YOUR OPINION');
+			bigButton.setDefaultTweenIn(1, {x: 438, y: 1470, alpha: 1});
+			bigButton.setDefaultTweenOut(1, {x: 438, y: 1470, alpha: 0}); // TODO need to subclass and override tweenout and in methods because of weird animation???
 			addChild(bigButton);
 			
 			statsButton = new IconButton(120, 110, 'STATS', 20, Assets.COLOR_YES_DARK, Assets.statsIcon());
@@ -617,12 +617,12 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(portraitCamera.cameraBitmap, true);
-			// submit button text
-			// opinoin text
-			
-			//bigButton.setText('SUBMIT THIS DEBATE');
+			bigButton.setText('SUBMIT THIS DEBATE');
+			bigButton.enable();
 			nametag.setText(CDW.state.userName, true);
 			opinion.setText(CDW.state.userOpinion);
+			
+			
 			
 			if (CDW.state.userStance == 'yes') {
 				nametag.setBackgroundColor(Assets.COLOR_YES_MEDIUM); // make instant?

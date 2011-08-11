@@ -2,5 +2,7 @@
 	"phoneNumber": "(352) 578-2609",
 	"characterLimit": 140,
 	"halfSize": true,
-	"startFullScreen": false
+	"startFullScreen": false,
+	"webcamOnly": true,
+	"imagePath": "/Users/Mika/Desktop/CDWImages/"
 }

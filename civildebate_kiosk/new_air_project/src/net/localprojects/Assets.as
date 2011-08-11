@@ -6,10 +6,37 @@ package net.localprojects
 	public final class Assets	{
 		// Graphics
 		[Embed(source = '/assets/graphics/bigButton.png')] private static const bigButtonClass:Class;
-		public static function bigButton():Bitmap { return new bigButtonClass() as Bitmap; };
+		public static function getBigButton():Bitmap { return new bigButtonClass() as Bitmap; };
+		public static const bigButton:Bitmap = getBigButton();		
+		
+		[Embed(source = '/assets/graphics/leftButtonEdge.png')] private static const leftButtonEdgeClass:Class;
+		public static function getLeftButtonEdge():Bitmap { return new leftButtonEdgeClass() as Bitmap; };
+		public static const leftButtonEdge:Bitmap = getLeftButtonEdge();		
+		
+		[Embed(source = '/assets/graphics/leftEdgeMask.png')] private static const leftEdgeMaskClass:Class;
+		public static function getLeftEdgeMask():Bitmap { return new leftEdgeMaskClass() as Bitmap; };
+		public static const leftEdgeMask:Bitmap = getLeftEdgeMask();
 
+		[Embed(source = '/assets/graphics/bottomEdgeMask.png')] private static const bottomEdgeMaskClass:Class;
+		public static function getBottomEdgeMask():Bitmap { return new bottomEdgeMaskClass() as Bitmap; };
+		public static const bottomEdgeMask:Bitmap = getBottomEdgeMask();
+		
+		
+		[Embed(source = '/assets/graphics/leftButtonTile.png')] private static const leftButtonTileClass:Class;
+		public static function getLeftButtonTile():Bitmap { return new leftButtonTileClass() as Bitmap; };
+		public static const leftButtonTile:Bitmap = getLeftButtonTile();
+		
+		[Embed(source = '/assets/graphics/bottomButtonTile.png')] private static const bottomButtonTileClass:Class;
+		public static function getBottomButtonTile():Bitmap { return new bottomButtonTileClass() as Bitmap; };
+		public static const bottomButtonTile:Bitmap = getBottomButtonTile();
+
+		
+		
+		
+		
 		[Embed(source = '/assets/graphics/buttonBackground.png')] private static const buttonBackgroundClass:Class;
-		public static function buttonBackground():Bitmap { return new buttonBackgroundClass() as Bitmap; };
+		public static function getButtonBackground():Bitmap { return new buttonBackgroundClass() as Bitmap; };
+		public static const buttonBackground:Bitmap = getButtonBackground();		
 
 		[Embed(source = '/assets/graphics/divider.png')] private static const dividerClass:Class;
 		public static function getDivider():Bitmap { return new dividerClass() as Bitmap; };
