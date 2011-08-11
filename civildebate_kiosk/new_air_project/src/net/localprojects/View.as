@@ -176,7 +176,7 @@ package net.localprojects {
 			likeButton.setDefaultTweenOut(1, {x: stageWidth, y: 955});			
 			addChild(likeButton);
 			
-			debateButton = new IconButton(150, 130, 'Let\u0027s\nDebate', 20, Assets.COLOR_YES_DARK, null, true);
+			debateButton = new IconButton(145, 130, 'LET\u0027S\nDEBATE', 20, Assets.COLOR_YES_DARK, null, true);
 			debateButton.setDefaultTweenIn(1, {x: 842, y: 807, scaleX: 1, scaleY: 1});
 			debateButton.setDefaultTweenOut(1, {x: stageWidth, y: 807, scaleX: 1, scaleY: 1});
 			addChild(debateButton);
@@ -621,7 +621,6 @@ package net.localprojects {
 			bigButton.enable();
 			nametag.setText(CDW.state.userName, true);
 			opinion.setText(CDW.state.userOpinion);
-			
 			
 			
 			if (CDW.state.userStance == 'yes') {
