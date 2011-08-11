@@ -11,7 +11,6 @@ package net.localprojects.ui {
 		protected var _buttonHeight:Number;
 		protected var _labelText:String;
 		protected var _labelSize:Number;
-		protected var _backgroundColor:uint;
 		protected var _icon:Bitmap;
 		protected var _tail:Boolean;
 		

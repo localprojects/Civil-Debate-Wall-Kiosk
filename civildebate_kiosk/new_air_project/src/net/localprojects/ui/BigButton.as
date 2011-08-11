@@ -80,25 +80,24 @@ package net.localprojects.ui {
 			enable();
 		}
 		
-		private function onMouseDown(e:MouseEvent):void {
+		override protected function onMouseDown(e:MouseEvent):void {
+			super.onMouseDown(e);
 			disable();
-			CDW.ref.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
 		
-		public function disable():void {
+		// move to parent?
+		override public function disable():void {
+			super.disable();
 			TweenMax.to(button, 0.25, {x: -26, y: 32, ease:Strong.easeOut, colorMatrixFilter:{saturation: 0}});
-			removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);			
+						
 		}
 		
-		public function enable():void {
+		override public function enable():void {
+			super.enable();
 			TweenMax.to(button, 0.1, {x: 0, y: 0, ease:Strong.easeOut, colorMatrixFilter:{saturation: 1}});
-			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);			
+						
 		}
-		
 
-		private function onMouseUp(e:MouseEvent):void {
-			CDW.ref.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);	
-		}
 		
 		
 		

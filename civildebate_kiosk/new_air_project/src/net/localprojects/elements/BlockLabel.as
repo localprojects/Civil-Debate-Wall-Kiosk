@@ -3,9 +3,8 @@ package net.localprojects.elements {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
-	
-	
 	import flash.display.*;
+	import flash.geom.Rectangle;
 	import flash.text.*;
 	
 	import net.localprojects.*;
@@ -108,35 +107,59 @@ package net.localprojects.elements {
 				textField.y = paddingTop;
 				
 				// actual color is set by tweenmax
-				TweenMax.to(background, 0, {colorTransform: {tint: _backgroundColor, tintAmount: 1}});
+				TweenMax.to(background, 0, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
 			}			
 		}
+		
+		private function getBackgroundWidth(s:String):Number {
+			var oldString:String = textField.text;
+			textField.text = s; // temporarily measure with new string
+			var newWidth:Number = textField.width + paddingLeft + paddingRight;
+			textField.text = oldString; // reset string
+			return newWidth;
+		}
+		
+		private function getBackgroundDimensions(s:String):Rectangle {
+			var oldString:String = textField.text;
+			textField.text = s; // temporarily measure with new string
+			var newDimensions:Rectangle = new Rectangle(0, 0, textField.width + paddingLeft + paddingRight, textField.height + paddingTop + paddingBottom);  
+			textField.text = oldString; // reset string
+			return newDimensions;
+		}
+				
 		
 		
 		
 		
 		private var newText:String;
-		public function setText(s:String):void {
+		private var instant:Boolean;
+		public function setText(s:String, instant:Boolean = false):void {
 			if (s != textField.text) {
-				// add tween
-				// TODO tween background
 				// TODO crossfade text
 				newText = s;
-				TweenMax.to(textField, 0.2, {alpha: 0, ease: Quart.easeOut, onComplete: afterFade});
+				instant = instant;
+				
+				var textOutDuration:Number = instant ? 0 : 0.1;
+				var backgroundDuration:Number = instant ? 0 : 0.2;				
+				
+
+				TweenMax.to(textField, textOutDuration, {alpha: 0, ease: Quart.easeOut, onComplete: afterFade});
+				TweenMax.to(background, backgroundDuration, {width: getBackgroundDimensions(newText).width, height: getBackgroundDimensions(newText).height, ease: Quart.easeIn});
 			}
 		}
 			
 		
 		public function afterFade():void {
 			textField.text = newText;				
-			drawBackground();				
-			TweenMax.to(textField, 0.5, {alpha: 1, ease: Quart.easeIn});
+			//drawBackground();				
+			var textInDuration:Number = instant ? 0 : 0.1;
+			TweenMax.to(textField, textInDuration, {alpha: 1, ease: Quart.easeIn});
 		}
 		
 		// tweens to a new color
 		public function setBackgroundColor(c:uint):void {
 			_backgroundColor = c;
-			TweenMax.to(background, 1, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
+			TweenMax.to(background, 0.5, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
 		}
 			
 		

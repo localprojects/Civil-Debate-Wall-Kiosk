@@ -29,7 +29,6 @@ package net.localprojects.ui {
 		
 		// graphics
 		private var progressRing:Shape;
-		private var background:Shape;
 		private var ringColor:uint;
 		private var backgroundColor:uint;
 		private var icon:Bitmap;
@@ -50,8 +49,7 @@ package net.localprojects.ui {
 			timer.addEventListener(TimerEvent.TIMER, onTimerSecond);
 			timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
 			
-			// inner circle background
-			background = new Shape();		
+			// inner circle background		
 			addChild(background);
 			backgroundColor = Assets.COLOR_YES_MEDIUM;
 			drawBackground();

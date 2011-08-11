@@ -23,6 +23,20 @@ package net.localprojects.blocks {
 			addChild(blockLabel);
 		}
 		
+		public function setStance(s:String):void {
+			if (s == 'yes') {
+				setText(s);
+				blockLabel.setBackgroundColor(Assets.COLOR_YES_LIGHT);
+			}
+			else if (s == 'no') {
+				setText(s);
+				blockLabel.setBackgroundColor(Assets.COLOR_NO_LIGHT);				
+			}
+			else {
+				'Unsupported stance "' + s + '"';
+			}
+		}
+		
 		
 		public function setText(s:String):void {
 			blockLabel.setText(s.toUpperCase() + '!');
