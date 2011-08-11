@@ -131,13 +131,13 @@ package net.localprojects.ui {
 		private function onEnterFrame(e:Event):void {
 			// barber pole animation			
 			
-			leftEdgeMatrix.tx += 1;
+			leftEdgeMatrix.tx -= 1;
 			
 			leftButtonEdge.graphics.beginBitmapFill(Assets.leftButtonTile.bitmapData, leftEdgeMatrix);
 			leftButtonEdge.graphics.drawRect(0, 0, 35, 141);
 			leftButtonEdge.graphics.endFill();
 			
-			bottomEdgeMatrix.ty -= 1;
+			bottomEdgeMatrix.ty += 1;
 			
 			bottomButtonEdge.graphics.beginBitmapFill(Assets.bottomButtonTile.bitmapData, bottomEdgeMatrix);
 			bottomButtonEdge.graphics.drawRect(0, 0, 521, 42);
