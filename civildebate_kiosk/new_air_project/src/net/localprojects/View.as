@@ -119,8 +119,7 @@ package net.localprojects {
 			stance = new Stance();
 			stance.setText(CDW.database.debates[CDW.state.activeDebate].stance);			
 			stance.setDefaultTweenIn(1, {x: 275, y: 280});
-			stance.setDefaultTweenOut(1, {x: -280, y: 280});			
-			
+			stance.setDefaultTweenOut(1, {x: -280, y: 280});						
 			addChild(stance);			
 
 			nametag = new BlockLabel('Name', 50, 0xffffff, Assets.COLOR_YES_MEDIUM, true, true);
@@ -328,6 +327,7 @@ package net.localprojects {
 			// mutations
 			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
 			nametag.setText(CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName + ' Says :');
+			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance);
 			
 			// behaviors
 			viewDebateButton.setOnClick(debateOverlayView);	
@@ -396,6 +396,7 @@ package net.localprojects {
 		}
 		
 		private function onNoButton(e:MouseEvent):void {
+			trace("no button");
 			CDW.state.userStance = 'no';
 			textPromptView();			
 		}
@@ -435,6 +436,12 @@ package net.localprojects {
 			// behaviors
 			backButton.setOnClick(pickStanceView); // TODO do we need the back button?
 			portrait.setImage(Assets.portraitPlaceholder);
+			stance.setStance(CDW.state.userStance);
+			CDW.state.userStance == 'yes' ? smsInstructions.setBackgroundColor(Assets.COLOR_YES_LIGHT) : smsInstructions.setBackgroundColor(Assets.COLOR_NO_LIGHT);
+			CDW.state.userStance == 'yes' ? characterLimit.setBackgroundColor(Assets.COLOR_YES_MEDIUM) : characterLimit.setBackgroundColor(Assets.COLOR_NO_MEDIUM);			
+			yesButton.setOnClick(null);
+			noButton.setOnClick(null);
+			
 			// start polling web? TODO
 			
 			// blocks
@@ -451,7 +458,7 @@ package net.localprojects {
 			characterLimit.tweenIn();
 			smsDisclaimer.tweenIn();
 			
-			tweenOutInactive();			
+			tweenOutInactive();
 		}
 		
 		

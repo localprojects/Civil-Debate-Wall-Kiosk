@@ -5,7 +5,9 @@ package net.localprojects.elements {
 	import flash.text.*;
 	
 	import net.localprojects.*;
-	import net.localprojects.blocks.BlockBase;	
+	import net.localprojects.blocks.BlockBase;
+	import com.greensock.*;
+	import com.greensock.easing.*;
 	
 	// multi-line block text
 	public class BlockParagraph extends BlockBase {
@@ -90,9 +92,12 @@ package net.localprojects.elements {
 			for (var i:int = 0; i < textField.numLines; i++) {
 				var metrics:TextLineMetrics = textField.getLineMetrics(i);				
 				
-				background.graphics.beginFill(_backgroundColor);								
+				background.graphics.beginFill(0xffffff); // white fill for manipulation by tweenmax												
 				background.graphics.drawRect(0 - paddingLeft, yPos - paddingTop, metrics.width + paddingLeft + paddingRight, metrics.height + paddingTop + paddingBottom);
-				background.graphics.endFill();				
+				background.graphics.endFill();
+				
+				// actual color is set by tweenmax
+				TweenMax.to(background, 0, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
 				
 				yPos += metrics.height;				
 			}	
@@ -109,7 +114,12 @@ package net.localprojects.elements {
 		public function setText(s:String):void {
 			textField.text = s;
 			drawBackground();
-		}		
+		}
+		
+		public function setBackgroundColor(c:uint):void {
+			_backgroundColor = c;
+			TweenMax.to(background, 0, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
+		}
 	
 		// TODO getters and setters
 

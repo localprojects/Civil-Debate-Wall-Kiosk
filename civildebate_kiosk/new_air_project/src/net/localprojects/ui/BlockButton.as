@@ -1,8 +1,12 @@
 package net.localprojects.ui {
+	import com.greensock.TweenMax;
+	
 	import flash.display.Sprite;
 	import flash.text.*;
 	
 	import net.localprojects.Assets;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;	
 	
 	public class BlockButton extends ButtonBase	{
 
@@ -10,7 +14,6 @@ package net.localprojects.ui {
 		protected var _buttonHeight:Number;
 		protected var _labelText:String;
 		protected var _labelSize:Number;
-		protected var _backgroundColor:uint;
 		protected var _arrow:Boolean;
 		protected var _bold:Boolean;
 		
@@ -53,11 +56,23 @@ package net.localprojects.ui {
 			labelField.x = (_buttonWidth / 2) - (labelField.width / 2);
 			labelField.y = (_buttonHeight / 2) - (labelField.height / 2);
 			
-			addChild(labelField);			
+			addChild(background);
+			addChild(labelField);
+			
+			
 		}
 		
 		override protected function draw():void {
-			this.graphics.beginFill(_backgroundColor);
+
+			// draw the background
+			background.graphics.clear();
+			background.graphics.beginFill(0xffffff);
+			background.graphics.drawRect(0, 0, _buttonWidth, _buttonHeight);
+			background.graphics.endFill();
+			TweenMax.to(background, 0, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
+			
+			// draw the outline
+			this.graphics.clear();
 			this.graphics.lineStyle(6, 0xffffff);
 			this.graphics.drawRect(0, 0, _buttonWidth, _buttonHeight);
 			this.graphics.endFill();

@@ -113,11 +113,8 @@ package net.localprojects {
 			// set up test overlay
 			testOverlay = new Bitmap(new BitmapData(1080, 1920));
 			testOverlay.visible = false;
-			testOverlay.alpha = 0.5;		
-			addChild(testOverlay);			
-			
-
-
+			testOverlay.alpha = 0.5;
+			addChild(testOverlay);
 		}
 
 		private function onFullScreenContextMenuSelect(e:Event):void {
