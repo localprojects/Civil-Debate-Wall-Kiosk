@@ -10,6 +10,7 @@ package net.localprojects {
 		public var userOpinion:String = 'Opinion';
 		public var userPhoneNumber:String = '##########';
 		public var userID:String = '';
+		public var latestSMSID:String = '';
 		
 		public function State()	{
 		
