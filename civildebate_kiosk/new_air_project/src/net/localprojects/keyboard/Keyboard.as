@@ -127,7 +127,7 @@ package net.localprojects.keyboard {
 		
 		
 		private function onKeyPressed(e:MouseEvent):void {
-			Assets.clickSound.play();
+			//Assets.clickSound.play();
 			
 			if (e.target.letter == 'SHIFT') {
 				shift = e.target.active;
