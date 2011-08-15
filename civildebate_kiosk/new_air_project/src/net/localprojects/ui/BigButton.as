@@ -25,9 +25,7 @@ package net.localprojects.ui {
 		private var buttonMask:Shape;
 		private var topPanel:Sprite;
 		
-		
-		
-		
+
 		private var leftButtonEdge:Sprite;
 		private var leftEdgeMatrix:Matrix;
 		
@@ -131,17 +129,18 @@ package net.localprojects.ui {
 		private function onEnterFrame(e:Event):void {
 			// barber pole animation			
 			
-			leftEdgeMatrix.tx -= 1;
-			
-			leftButtonEdge.graphics.beginBitmapFill(Assets.leftButtonTile.bitmapData, leftEdgeMatrix);
-			leftButtonEdge.graphics.drawRect(0, 0, 35, 141);
-			leftButtonEdge.graphics.endFill();
-			
-			bottomEdgeMatrix.ty += 1;
-			
-			bottomButtonEdge.graphics.beginBitmapFill(Assets.bottomButtonTile.bitmapData, bottomEdgeMatrix);
-			bottomButtonEdge.graphics.drawRect(0, 0, 521, 42);
-			bottomButtonEdge.graphics.endFill();			
+			// disabled temporarily for performance investigation
+//			leftEdgeMatrix.tx -= 1;
+//			
+//			leftButtonEdge.graphics.beginBitmapFill(Assets.leftButtonTile.bitmapData, leftEdgeMatrix);
+//			leftButtonEdge.graphics.drawRect(0, 0, 35, 141);
+//			leftButtonEdge.graphics.endFill();
+//			
+//			bottomEdgeMatrix.ty += 1;
+//			
+//			bottomButtonEdge.graphics.beginBitmapFill(Assets.bottomButtonTile.bitmapData, bottomEdgeMatrix);
+//			bottomButtonEdge.graphics.drawRect(0, 0, 521, 42);
+//			bottomButtonEdge.graphics.endFill();			
 		}
 		
 		

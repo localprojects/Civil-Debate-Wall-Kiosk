@@ -49,7 +49,8 @@ package net.localprojects {
 		private var bigButton:BigButton;		
 		private var statsButton:IconButton;
 		private var likeButton:CounterButton;
-		private var debateButton:IconButton;
+		private var debateButton:BalloonButton;
+		private var flagButton:IconButton;
 		private var viewDebateButton:BlockButton;		
 		private var debatePicker:DebatePicker;
 		private var debateOverlay:DebateOverlay;
@@ -112,20 +113,20 @@ package net.localprojects {
 			addChild(divider);
 			
 			question = new Question();
-			question.setDefaultTweenIn(1, {x: 30, y: 132});
-			question.setDefaultTweenOut(1, {x: -question.width, y: 132});
+			question.setDefaultTweenIn(1, {x: 30, y: 126});
+			question.setDefaultTweenOut(1, {x: -question.width});
 			question.setText(CDW.database.questions[CDW.state.activeQuestion].question); // TODO abstract out these ridiculous traversals...
 			addChild(question);
 			
 			stance = new Stance();
 			stance.setText(CDW.database.debates[CDW.state.activeDebate].stance);			
-			stance.setDefaultTweenIn(1, {x: 275, y: 280});
+			stance.setDefaultTweenIn(1, {x: 235, y: 280});
 			stance.setDefaultTweenOut(1, {x: -280, y: 280});						
 			addChild(stance);			
 
 			nametag = new BlockLabel('Name', 50, 0xffffff, Assets.COLOR_YES_MEDIUM, true, true);
 			nametag.setPadding(26, 28, 20, 30);
-			nametag.setDefaultTweenIn(1, {x: 275, y: 410});
+			nametag.setDefaultTweenIn(1, {x: 235, y: 410});
 			nametag.setDefaultTweenOut(1, {x: stageWidth, y: 410});
 			addChild(nametag);
 			
@@ -136,15 +137,15 @@ package net.localprojects {
 			addChild(byline);
 			
 			leftQuote = new QuotationMark();
-			leftQuote.setDefaultTweenIn(1, {x: 100, y: 545});
-			leftQuote.setDefaultTweenOut(1, {x: -leftQuote.width, y: 545});	
+			leftQuote.setDefaultTweenIn(1, {x: 114, y: 545});
+			leftQuote.setDefaultTweenOut(1, {x: -leftQuote.width});	
 			leftQuote.setStyle(QuotationMark.OPENING);
 			leftQuote.setColor(Assets.COLOR_YES_LIGHT);
 			addChild(leftQuote);
 			
 			rightQuote = new QuotationMark();
-			rightQuote.setDefaultTweenIn(1, {x: 720, y: 1635});
-			rightQuote.setDefaultTweenOut(1, {x: stageWidth, y: 1643});				
+			rightQuote.setDefaultTweenIn(1, {x: 660, y: 1639});
+			rightQuote.setDefaultTweenOut(1, {x: stageWidth});				
 			rightQuote.setStyle(QuotationMark.CLOSING);
 			rightQuote.setColor(Assets.COLOR_YES_LIGHT);
 			addChild(rightQuote);
@@ -162,29 +163,38 @@ package net.localprojects {
 			addChild(editOpinion);
 			
 			bigButton = new BigButton('ADD YOUR OPINION');
-			bigButton.setDefaultTweenIn(1, {x: 438, y: 1470, alpha: 1});
-			bigButton.setDefaultTweenOut(1, {x: 438, y: 1470, alpha: 0}); // TODO need to subclass and override tweenout and in methods because of weird animation???
+			bigButton.setDefaultTweenIn(1, {x: 455, y: 1470, alpha: 1});
+			bigButton.setDefaultTweenOut(1, {x: 455, y: 1470, alpha: 0}); // TODO need to subclass and override tweenout and in methods because of weird animation???
 			addChild(bigButton);
 			
-			statsButton = new IconButton(120, 110, 'STATS', 20, Assets.COLOR_YES_DARK, Assets.statsIcon());
-			statsButton.setDefaultTweenIn(1, {x: 100, y: 1375});
-			statsButton.setDefaultTweenOut(1, {x: -statsButton.width, y: 1375});
+			statsButton = new IconButton(111, 55, 'Stats', 20, Assets.COLOR_YES_DARK, Assets.statsIcon);
+			statsButton.setDefaultTweenIn(1, {x: 104, y: 1379});
+			statsButton.setDefaultTweenOut(1, {x: -statsButton.width});
 			addChild(statsButton);
 			
-			likeButton = new CounterButton(120, 110, 'LIKE', 20, Assets.COLOR_YES_DARK, Assets.likeIcon());
-			likeButton.setDefaultTweenIn(1, {x: 720, y: 955});
-			likeButton.setDefaultTweenOut(1, {x: stageWidth, y: 955});			
+			likeButton = new CounterButton(111, 55, 'Like', 20, Assets.COLOR_YES_DARK, 0);
+			likeButton.setDefaultTweenIn(1, {x: 238, y: 1379});
+			likeButton.setDefaultTweenOut(1, {x: -likeButton.width});			
 			addChild(likeButton);
+				
+			viewDebateButton = new BlockButton(517, 55, 'TBD', 20, Assets.COLOR_YES_DARK, false);
+			viewDebateButton.setDefaultTweenIn(1, {x: 373, y: 1379});
+			viewDebateButton.setDefaultTweenOut(1, {x: stageWidth});			
+			addChild(viewDebateButton);
 			
-			debateButton = new IconButton(145, 130, 'LET\u0027S\nDEBATE', 20, Assets.COLOR_YES_DARK, null, true);
-			debateButton.setDefaultTweenIn(1, {x: 842, y: 807, scaleX: 1, scaleY: 1});
-			debateButton.setDefaultTweenOut(1, {x: stageWidth, y: 807, scaleX: 1, scaleY: 1});
+			flagButton = new IconButton(59, 55, '', 20, Assets.COLOR_YES_DARK, Assets.flagIcon);
+			flagButton.setDefaultTweenIn(1, {x: 914, y: 1379});
+			flagButton.setDefaultTweenOut(1, {x: stageWidth});
+			addChild(flagButton);			
+			
+			
+			
+			debateButton = new BalloonButton(145, 130, 'LET\u0027S\nDEBATE !', 20, Assets.COLOR_YES_DARK, false, true);
+			debateButton.setDefaultTweenIn(1, {x: 828, y: 901, scaleX: 1, scaleY: 1});
+			debateButton.setDefaultTweenOut(1, {x: stageWidth, y: 901, scaleX: 1, scaleY: 1});
 			addChild(debateButton);
 			
-			viewDebateButton = new BlockButton(370, 63, '8 People Debated This', 25, Assets.COLOR_YES_DARK, true);
-			viewDebateButton.setDefaultTweenIn(1, {x: 590, y: 1375});
-			viewDebateButton.setDefaultTweenOut(1, {x: stageWidth, y: 1375});			
-			addChild(viewDebateButton);
+
 			
 			debateOverlay = new DebateOverlay();
 			debateOverlay.setDefaultTweenIn(1, {x: 30, y: 813});
@@ -330,12 +340,36 @@ package net.localprojects {
 		
 		public function homeView(...args):void {
 			markAllInactive();
+
 			
 			// mutations
 			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
 			nametag.setText(CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName + ' Says :');
 			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance);
+			opinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);
 			
+			if (CDW.database.debates[CDW.state.activeDebate].stance == 'yes') {
+				leftQuote.setColor(Assets.COLOR_YES_LIGHT);
+				rightQuote.setColor(Assets.COLOR_YES_LIGHT);				
+				nametag.setBackgroundColor(Assets.COLOR_YES_DARK);
+				debateButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				opinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);
+				statsButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				likeButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				viewDebateButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				flagButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+			}
+			else {
+				leftQuote.setColor(Assets.COLOR_NO_LIGHT);
+				rightQuote.setColor(Assets.COLOR_NO_LIGHT);				
+				nametag.setBackgroundColor(Assets.COLOR_NO_DARK);
+				debateButton.setBackgroundColor(Assets.COLOR_NO_DARK);
+				opinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);
+				statsButton.setBackgroundColor(Assets.COLOR_NO_DARK);
+				likeButton.setBackgroundColor(Assets.COLOR_NO_DARK);
+				viewDebateButton.setBackgroundColor(Assets.COLOR_NO_DARK);
+				flagButton.setBackgroundColor(Assets.COLOR_NO_DARK);			
+			}			
 			
 			
 			// behaviors
@@ -358,6 +392,7 @@ package net.localprojects {
 			statsButton.tweenIn();
 			likeButton.tweenIn();
 			debateButton.tweenIn();
+			flagButton.tweenIn();
 			viewDebateButton.tweenIn();
 			debatePicker.tweenIn();
 			
@@ -516,6 +551,7 @@ package net.localprojects {
 			// behaviors
 			countdown.setOnClick(onCameraClick);
 			countdown.setOnFinish(onCountdownFinish);
+			portraitCamera.setOnFaceShutter(onCameraClick);
 			
 			// blocks
 			portraitCamera.tweenIn();
@@ -529,9 +565,13 @@ package net.localprojects {
 			
 			tweenOutInactive();
 		}
+
 		
-		private function onCameraClick(e:MouseEvent):void {
-			countdown.start()
+		private function onCameraClick(e:Event):void {
+			if (!countdown.isCountingDown()) {
+				portraitCamera.detectFaces = false; // turn off face detection
+				countdown.start()
+			}
 		}
 		
 		private function onCountdownFinish(e:Event):void {

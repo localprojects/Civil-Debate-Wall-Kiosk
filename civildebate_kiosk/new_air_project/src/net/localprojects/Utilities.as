@@ -224,6 +224,16 @@ package net.localprojects {
 			return a[randRange(0, a.length)];
 		}
 		
+		// very crude implementation, but works in our case
+		public static function plural(word:String, count:Number):String {
+			if (count != 1) {
+				return word + 's';
+			}
+			else {
+				return word;
+			}
+		}
+		
 
 		
 		public static function dummyText(characters:int):String {
