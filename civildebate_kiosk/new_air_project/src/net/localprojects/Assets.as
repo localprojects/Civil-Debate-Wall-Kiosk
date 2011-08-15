@@ -89,13 +89,6 @@ package net.localprojects
 		[Embed(source='/assets/fonts/rockwell.swf', symbol='RockwellLight')] public static const FontLight:Class;		
 		public static const FONT_LIGHT:String = 'Rockwell Light';				
 
-		
-		// Sounds
-		[Embed(source='/assets/sounds/click.mp3')] public  static const clickSoundClass:Class;
-		public static function getClickSound():Sound { return new clickSoundClass() as Sound; }
-		public static const clickSound:Sound = getClickSound();
-		clickSound.play(); // play it at startup so it's in RAM 
-
 
 		// Colors
 		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 185, 255);
