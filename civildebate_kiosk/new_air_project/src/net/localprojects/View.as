@@ -1,10 +1,11 @@
 package net.localprojects {
+	import com.adobe.serialization.json.*;
 	import com.bit101.components.FPSMeter;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.events.TweenEvent;
-	import com.adobe.serialization.json.*;
+	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
@@ -178,7 +179,7 @@ package net.localprojects {
 			likeButton.setDefaultTweenOut(1, {x: -likeButton.width});			
 			addChild(likeButton);
 				
-			viewDebateButton = new BlockButton(517, 55, 'TBD', 20, Assets.COLOR_YES_DARK, false);
+			viewDebateButton = new BlockButton(517, 55, '"The reality is that a decision…" +8 other responses', 20, Assets.COLOR_YES_DARK, false);
 			viewDebateButton.setDefaultTweenIn(1, {x: 373, y: 1379});
 			viewDebateButton.setDefaultTweenOut(1, {x: stageWidth});			
 			addChild(viewDebateButton);
@@ -348,6 +349,7 @@ package net.localprojects {
 			nametag.setText(CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName + ' Says :');
 			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance);
 			opinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);
+			bigButton.setText('ADD YOUR OPINION');			
 			
 			if (CDW.database.debates[CDW.state.activeDebate].stance == 'yes') {
 				leftQuote.setColor(Assets.COLOR_YES_LIGHT);
@@ -378,6 +380,7 @@ package net.localprojects {
 			bigButton.setOnClick(pickStanceView);			
 			statsButton.setOnClick(statsView);
 			debateButton.setOnClick(pickStanceView);
+			likeButton.setOnClick(incrementLikes);
 			
 			// blocks
 			portrait.tweenIn();
@@ -406,6 +409,10 @@ package net.localprojects {
 			tweenOutInactive();
 			
 			
+		}
+		
+		private function incrementLikes(e:Event):void {
+			likeButton.count++;
 		}
 		
 		
@@ -789,7 +796,8 @@ package net.localprojects {
 			
 			// save the image to disk
 			// TODO handle overwrites?
-			var imageName:String = Utilities.saveImageToDisk(portraitCamera.cameraBitmap, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
+			// TEMP OFF FOR DEMO
+			//var imageName:String = Utilities.saveImageToDisk(portraitCamera.cameraBitmap, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
 			
 			// TODO upload opinion
 			

@@ -87,7 +87,7 @@ package net.localprojects.ui {
 			countText.width = width / 2;
 			countText.wordWrap = false;
 			countText.text = duration.toString();
-			countText.x = -width / 4;
+			countText.x = (-width / 4) - 3;
 			countText.y = -42;
 			countText.visible = false;
 			
