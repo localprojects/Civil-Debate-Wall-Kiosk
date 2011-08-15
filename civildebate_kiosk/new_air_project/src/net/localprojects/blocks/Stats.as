@@ -12,10 +12,12 @@ package net.localprojects.blocks {
 		}
 		
 		private function init():void {
-			this.graphics.beginFill(0xff0000);
+			this.graphics.beginFill(0xffffff);
 			this.graphics.drawRect(0, 0, 1022, 1626);
 			this.graphics.endFill();
-			1827
+//			
+			
+			this.addChild(Assets.statsPlaceholder);
 			
 			// no animation for this at the moment
 			// TODO put it in the parent block instead?

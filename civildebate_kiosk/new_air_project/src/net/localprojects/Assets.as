@@ -107,5 +107,14 @@ package net.localprojects
 		public static const COLOR_INSTRUCTION_DARK:uint = Utilities.color(77, 77, 79);
 		public static const COLOR_INSTRUCTION_MEDIUM:uint = Utilities.color(147, 149, 152); 
 		
+		
+		// Temp
+		[Embed(source = '/assets/graphics/statsPlaceholder.png')] private static const statsPlaceholderClass:Class;
+		public static function getStatsPlaceholder():Bitmap { return new statsPlaceholderClass() as Bitmap; };
+		public static const statsPlaceholder:Bitmap = getStatsPlaceholder();
+		
+		[Embed(source = '/assets/graphics/commentsPlaceholder.png')] private static const commentsPlaceholderClass:Class;
+		public static function getCommentsPlaceholder():Bitmap { return new commentsPlaceholderClass() as Bitmap; };
+		public static const commentsPlaceholder:Bitmap = getCommentsPlaceholder();
 	}
 }
