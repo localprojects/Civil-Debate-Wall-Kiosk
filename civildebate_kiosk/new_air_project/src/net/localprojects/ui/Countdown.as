@@ -36,6 +36,10 @@ package net.localprojects.ui {
 			super();
 			init();
 		}
+		
+		public function isCountingDown():Boolean {
+			return timer.running;
+		}
 
 		private function init():void {
 			// set up timer

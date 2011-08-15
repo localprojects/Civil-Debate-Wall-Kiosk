@@ -13,6 +13,7 @@ package net.localprojects.blocks {
 	
 	public class BlockBase extends Sprite {
 		
+		
 		private var defaultTweenVars:Object;
 		private var defaultTweenInVars:Object;
 		private var defaultTweenOutVars:Object;
@@ -27,13 +28,15 @@ package net.localprojects.blocks {
 			// set some default parameters, can be overriden
 			defaultTweenVars = {};
 			defaultTweenInVars = Utilities.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenIn, onComplete: afterTweenIn});
-			defaultTweenOutVars = Utilities.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onComplete: afterTweenOut});
+			defaultTweenOutVars = Utilities.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenOut, onComplete: afterTweenOut});
 			defaultDuration = 1;
 			defaultInDuration = defaultDuration;
 			defaultOutDuration = defaultDuration;
 			active = false;
 			
 			visible = false;
+			
+			
 		}
 		
 		// TODO add duration control?
@@ -56,8 +59,11 @@ package net.localprojects.blocks {
 		
 		protected function afterTweenIn():void {
 			
-						
 		}		
+		
+		protected function beforeTweenOut():void {
+			
+		}
 		
 		protected function afterTweenOut():void {
 			this.visible = false;

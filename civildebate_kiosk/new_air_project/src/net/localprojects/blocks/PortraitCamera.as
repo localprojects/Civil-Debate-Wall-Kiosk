@@ -1,21 +1,21 @@
 package net.localprojects.blocks {
 	
+	import com.adobe.images.*;
 	import com.adobe.images.JPGEncoder;
 	import com.greensock.events.TweenEvent;
 	
 	import flash.display.*;
 	import flash.events.*;
+	import flash.utils.ByteArray;
+	import flash.utils.Timer;
 	
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	
-	
 	import mx.utils.Base64Encoder;
 	
+	import net.localprojects.CDW;
 	import net.localprojects.Utilities;
 	import net.localprojects.camera.*;
-	import flash.utils.ByteArray;
-	import com.adobe.images.*;
-	import net.localprojects.CDW;
 	
 	
 	
@@ -24,7 +24,15 @@ package net.localprojects.blocks {
 		private var cameraFeed:ICameraFeed;
 		public var cameraBitmap:Bitmap;		
 		private var faceDetector:FaceDetector;
+		
+		private var faceCounter:int; // counts how many faces were found within an interval
+		private var facePersistenceTimer:Timer;
+		private var faceCountThreshold:int; // how many we need to find within interval in order to fire shutter
+		
+		public var detectFaces:Boolean;
 
+		private var onFaceShutter:Function;
+		
 		public function PortraitCamera() {
 			super();
 			init();
@@ -41,7 +49,16 @@ package net.localprojects.blocks {
 			faceDetector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onFaceFound);
 			
 			cameraFeed.start(); // TODO better not to leave it on?
-			cameraFeed.pause();						
+			cameraFeed.pause();			
+			
+			faceCounter = 0;
+			
+			// go by frames instead?
+			facePersistenceTimer = new Timer(3000, 0);
+			facePersistenceTimer.stop();
+			facePersistenceTimer.addEventListener(TimerEvent.TIMER, onFacePersistenceTimerComplete);
+			
+			faceCountThreshold = 10;
 		}
 
 		
@@ -49,6 +66,28 @@ package net.localprojects.blocks {
 			trace("Face!");
 			trace(e.target.faceRect);
 			
+			if(!facePersistenceTimer.running) {
+				facePersistenceTimer.reset();
+				facePersistenceTimer.start();
+			}
+			else {
+				trace("Found " + faceCounter + " faces");
+				faceCounter++;
+			}
+			
+			
+		}
+		
+		private function onFacePersistenceTimerComplete(e:TimerEvent):void {
+			trace("Found " + faceCounter + " faces in last five seconds");
+			
+			// if enough, take the picture....
+			if (faceCounter > faceCountThreshold) {
+				onFaceShutter(new Event("FaceShutter"));
+			}
+			
+			facePersistenceTimer.stop();
+			faceCounter = 0;
 		}
 		
 		override protected function beforeTweenIn():void {
@@ -56,6 +95,16 @@ package net.localprojects.blocks {
 			// Automatically start webcam capture
 			cameraFeed.play();
 			trace("playing camera")
+		}
+		
+		override protected function afterTweenIn():void {
+			super.afterTweenIn();
+			detectFaces = true;
+		}
+		
+		override protected function beforeTweenOut():void {
+			super.beforeTweenOut();
+			detectFaces = false;
 		}
 		
 		override protected function afterTweenOut():void {
@@ -67,11 +116,18 @@ package net.localprojects.blocks {
 		
 		private function onNewFrame(e:CameraFeedEvent):void {
 			//cameraBitmap.bitmapData = Utilities.scaleToFill(e.target.frame, 1080, 1920);
-			cameraBitmap.bitmapData = e.target.frame;			
-			//faceDetector.processBitmap(cameraBitmap.bitmapData);
+			cameraBitmap.bitmapData = e.target.frame;
+			
+			// only run face detection if we're tweened in
+			// so the transitions won't stutter
+			if (detectFaces) {			
+				faceDetector.processBitmap(cameraBitmap.bitmapData);
+			}
 		}
 		
-		
+		public function setOnFaceShutter(f:Function):void {
+			onFaceShutter = f;
+		}
 
 		
 		public function takePhoto():void {

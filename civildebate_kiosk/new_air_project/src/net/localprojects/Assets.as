@@ -30,8 +30,13 @@ package net.localprojects
 		public static function getBottomButtonTile():Bitmap { return new bottomButtonTileClass() as Bitmap; };
 		public static const bottomButtonTile:Bitmap = getBottomButtonTile();
 
+		[Embed(source = '/assets/graphics/flagIcon.png')] private static const flagIconClass:Class;
+		public static function getFlagIcon():Bitmap { return new flagIconClass() as Bitmap; };
+		public static const flagIcon:Bitmap = getFlagIcon();		
 		
-		
+		[Embed(source = '/assets/graphics/statsIcon.png')] private static const statsIconClass:Class;
+		public static function getStatsIcon():Bitmap { return new statsIconClass() as Bitmap; };
+		public static const statsIcon:Bitmap = getStatsIcon();		
 		
 		
 		[Embed(source = '/assets/graphics/buttonBackground.png')] private static const buttonBackgroundClass:Class;
@@ -52,10 +57,7 @@ package net.localprojects
 		
 		[Embed(source = '/assets/graphics/answerBackground.png')] private static const answerBackgroundClass:Class;
 		public static function answerBackground():Bitmap { return new answerBackgroundClass() as Bitmap; };		
-		
-		[Embed(source = '/assets/graphics/statsIcon.png')] private static const statsIconClass:Class;
-		public static function statsIcon():Bitmap { return new statsIconClass() as Bitmap; };
-		
+
 		[Embed(source = '/assets/graphics/portraitPlaceholder.png')] private static const portraitPlaceholderClass:Class;
 		public static function getPortraitPlaceholder():Bitmap { return new portraitPlaceholderClass() as Bitmap; };		
 		public static const portraitPlaceholder:Bitmap = getPortraitPlaceholder();

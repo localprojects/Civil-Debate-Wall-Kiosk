@@ -2,23 +2,30 @@ package net.localprojects.ui {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.text.*;
 	
-	import net.localprojects.Assets;	
+	import net.localprojects.Assets;
 	
 	public class BlockButton extends ButtonBase	{
 
+		protected var labelField:TextField;		
 		protected var _buttonWidth:Number;
 		protected var _buttonHeight:Number;
 		protected var _labelText:String;
 		protected var _labelSize:Number;
 		protected var _arrow:Boolean;
 		protected var _bold:Boolean;
+		protected var outline:Shape;
+		
+		
+		protected var strokeWeight:Number;
 		
 		// TODO arrow...
 		public function BlockButton(buttonWidth:Number, buttonHeight:Number, labelText:String, labelSize:Number, backgroundColor:uint, arrow:Boolean, bold:Boolean = false) {
 			super();
+			outline = new Shape();
 			
 			_buttonWidth = buttonWidth;
 			_buttonHeight = buttonHeight;
@@ -33,6 +40,8 @@ package net.localprojects.ui {
 		}
 		
 		private function init():void {
+			strokeWeight = 4;
+			
 			// label
 			// set up the text format
 			var textFormat:TextFormat = new TextFormat();
@@ -40,8 +49,9 @@ package net.localprojects.ui {
 			textFormat.font =  Assets.FONT_REGULAR;
 			textFormat.align = TextFormatAlign.CENTER;
 			textFormat.size = _labelSize;
+			textFormat.leading = 5;
 			
-			var labelField:TextField = new TextField();
+			labelField = new TextField();
 			labelField.defaultTextFormat = textFormat;
 			labelField.embedFonts = true;
 			labelField.selectable = false;
@@ -56,9 +66,8 @@ package net.localprojects.ui {
 			labelField.y = (_buttonHeight / 2) - (labelField.height / 2);
 			
 			addChild(background);
+			addChild(outline);
 			addChild(labelField);
-			
-			
 		}
 		
 		override protected function draw():void {
@@ -71,10 +80,10 @@ package net.localprojects.ui {
 			TweenMax.to(background, 0, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
 			
 			// draw the outline
-			this.graphics.clear();
-			this.graphics.lineStyle(6, 0xffffff);
-			this.graphics.drawRect(0, 0, _buttonWidth, _buttonHeight);
-			this.graphics.endFill();
+			outline.graphics.clear();
+			outline.graphics.lineStyle(strokeWeight, 0xffffff);
+			outline.graphics.drawRect(0, 0, _buttonWidth, _buttonHeight);
+			outline.graphics.endFill();
 		}
 		
 		public function setBackgroundColor(c:uint):void {
