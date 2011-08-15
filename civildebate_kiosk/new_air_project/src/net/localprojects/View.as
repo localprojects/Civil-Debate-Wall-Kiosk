@@ -340,9 +340,13 @@ package net.localprojects {
 		}
 		
 		
+
+		
 		public function homeView(...args):void {
 			markAllInactive();
 
+			
+			
 			
 			// mutations
 			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
@@ -381,6 +385,7 @@ package net.localprojects {
 			statsButton.setOnClick(statsView);
 			debateButton.setOnClick(pickStanceView);
 			likeButton.setOnClick(incrementLikes);
+			flagButton.setOnClick(incrementFlags);
 			
 			// blocks
 			portrait.tweenIn();
@@ -408,12 +413,39 @@ package net.localprojects {
 			// clean up the old based on what's not active
 			tweenOutInactive();
 			
-			
+			if (CDW.database.debates[CDW.state.activeDebate].stance == 'yes') {			
+				setTestOverlay(TestAssets.CDW_08_15_11_Kiosk_Design);
+			}
+			else {
+				setTestOverlay(TestAssets.CDW_08_15_11_Kiosk_Design3);				
+			}
 		}
 		
 		private function incrementLikes(e:Event):void {
-			likeButton.count++;
+			Utilities.postRequest('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/debates/like', {'id': CDW.state.activeDebate, 'count': likeButton.count}, onLikePosted);
 		}
+		
+		private function onLikePosted(response:Object):void {
+			trace('bumping likes');
+			likeButton.count = parseInt(response.toString());
+		}
+		
+		private function incrementFlags(e:Event):void {
+			Utilities.postRequest('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/debates/flag', {'id': CDW.state.activeDebate, 'count': likeButton.count}, onFlagPosted);
+		}
+		
+		private function onFlagPosted(response:Object):void {
+			trace('bumping flags to  ' + response.toString());
+		}		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		public function debateOverlayView(...args):void {
@@ -486,7 +518,8 @@ package net.localprojects {
 		
 		
 		
-		private var smsCheckTimer:Timer
+		
+		private var smsCheckTimer:Timer;
 		
 		public function textPromptView(...args):void {
 			markAllInactive();
@@ -512,7 +545,6 @@ package net.localprojects {
 			noButton.setOnClick(null);
 			skipTextButton.setOnClick(simulateSMS);
 
-		
 				
 			// start polling to see if the user has sent their opinion yet
 			CDW.state.latestSMSID = null;
@@ -520,7 +552,7 @@ package net.localprojects {
 			smsCheckTimer.addEventListener(TimerEvent.TIMER, onSmsCheckTimer);
 			smsCheckTimer.start();
 			
-				
+			
 			// blocks
 			portrait.tweenIn();
 			header.tweenIn();
@@ -539,7 +571,6 @@ package net.localprojects {
 		}
 		
 
-		
 		private function onSmsCheckTimer(e:TimerEvent):void {
 			trace("checking for SMS received");
 			
@@ -553,8 +584,9 @@ package net.localprojects {
 		private function onSMSCheckResponse(e:Event):void {
 			trace('check sms response received');
 						
+			
+			
 			var response:* = JSON.decode(e.target.data);			
-
 			
 			// first time? save the id so we can compare
 			if (CDW.state.latestSMSID == null) {
@@ -564,30 +596,24 @@ package net.localprojects {
 				smsCheckTimer.start();				
 			}
 			else {
-				if (CDW.state.latestSMSID == response['_id']['$oid']) {
-					trace('no new sms, keep trying');
-					smsCheckTimer.reset();
-					smsCheckTimer.start();					
-				}
-				else {
+				if (CDW.state.latestSMSID != response['_id']['$oid']) {
 					trace("NEW SMS!!!");
+					// TODO make sure it was sent to the screen't phone number
 					CDW.state.userID = '4e44264d0f2e4226b1000000'; // TODO create user once we have #
 					CDW.state.userPhoneNumber = response['From'];					
 					CDW.state.userOpinion = response['Body'];
-					
-					// For debug
-					photoBoothView();					
+					photoBoothView();		
+				}
+				else {
+					// For debug								
+					trace('no new sms, keep trying');
+					smsCheckTimer.reset();
+					smsCheckTimer.start();			
 				}				
 			}
-			
-			// is it new?
-			
-
-			
-		}		
+		}
 		
 		public function simulateSMS(e:Event):void {
-			
 			smsCheckTimer.stop();			
 			
 			// Normally, once we have the phone number we would create a user on the server and get a unique ID back
@@ -599,6 +625,14 @@ package net.localprojects {
 			// For debug
 			photoBoothView();
 		}
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		public function photoBoothView(...args):void {
@@ -797,9 +831,11 @@ package net.localprojects {
 			// save the image to disk
 			// TODO handle overwrites?
 			// TEMP OFF FOR DEMO
-			//var imageName:String = Utilities.saveImageToDisk(portraitCamera.cameraBitmap, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
+			var imageName:String = Utilities.saveImageToDisk(portraitCamera.cameraBitmap, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
 			
 			// TODO upload opinion
+			
+			
 			
 			// refresh db
 			
@@ -911,9 +947,18 @@ package net.localprojects {
 			restartButton.tweenOut();			
 		}
 		
+
+		private function setTestOverlay(b:Bitmap):void {
+			CDW.testOverlay.bitmapData = b.bitmapData.clone();						
+		}
+		
 		
 		// View utilities
 		private function markAllInactive():void {
+			// other housekeeping, TODO break this into its own function?
+			if(smsCheckTimer != null) smsCheckTimer.stop();					
+			
+			
 			// marks all FIRST LEVEL blocks as inactive
 			for (var i:int = 0; i < this.numChildren; i++) {
 				if ((this.getChildAt(i) is BlockBase) && (this.getChildAt(i).visible)) {
@@ -923,7 +968,8 @@ package net.localprojects {
 		}
 		
 		
-		private function tweenOutInactive(instant:Boolean = false):void {
+		private function tweenOutInactive(instant:Boolean = false):void {	
+			
 			for (var i:int = 0; i < this.numChildren; i++) {
 				if ((this.getChildAt(i) is BlockBase) && !(this.getChildAt(i) as BlockBase).active) {
 					
