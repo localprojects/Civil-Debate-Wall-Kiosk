@@ -25,22 +25,6 @@ package net.localprojects {
 			logBox.width = this.width - 10;
 			logBox.height = 90;
 			
-			
-			// overlays jonathan's designs over a view so we can compare
-			testImages = new Array(
-				TestAssets.CDW_072611_Design_Final,
-				TestAssets.CDW_072611_Design_Final3,
-				TestAssets.CDW_072611_Design_Final4,
-				TestAssets.CDW_072611_Design_Final5,
-				TestAssets.CDW_072611_Design_Final6,
-				TestAssets.CDW_072611_Design_Final7,
-				TestAssets.CDW_072611_Design_Final8,
-				TestAssets.CDW_072611_Design_Final8, // null...
-				TestAssets.CDW_072611_Design_Final15,
-				TestAssets.CDW_072611_Design_Final14
-			);
-			
-			
 			testOverlayCheckbox = new CheckBox(this, 5, 103, 'Show test overlay', onOverlayToggle);
 			
 			overlaySlider = new Slider("horizontal", this, 120, 103, onOverlaySlider);
@@ -76,7 +60,6 @@ package net.localprojects {
 		}
 		
 		private function onOverlayToggle(e:Event):void {
-			CDW.testOverlay.bitmapData = testImages[viewChooser.selectedIndex].bitmapData.clone();			
 			CDW.testOverlay.visible = testOverlayCheckbox.selected;
 		}
 		

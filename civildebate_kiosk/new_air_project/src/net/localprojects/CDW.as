@@ -92,6 +92,11 @@ package net.localprojects {
 		private function onDatabaseLoaded(e:LoaderEvent):void {
 			trace("database loaded");
 			
+			// set up test overlay
+			testOverlay = new Bitmap(new BitmapData(1080, 1920));
+			testOverlay.visible = false;
+			testOverlay.alpha = 0.5;			
+			
 			// create the view, this is where
 			// all of the visuals come from
 			view = new View();
@@ -110,10 +115,7 @@ package net.localprojects {
 				fps.y = -5;	
 			}
 			
-			// set up test overlay
-			testOverlay = new Bitmap(new BitmapData(1080, 1920));
-			testOverlay.visible = false;
-			testOverlay.alpha = 0.5;
+			// Add test overlay
 			addChild(testOverlay);
 		}
 
