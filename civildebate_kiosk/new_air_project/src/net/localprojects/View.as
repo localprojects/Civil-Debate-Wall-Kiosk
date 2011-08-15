@@ -4,10 +4,11 @@ package net.localprojects {
 	import com.greensock.easing.*;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.events.TweenEvent;
-	
+	import com.adobe.serialization.json.*;
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
+	import flash.utils.Timer;
 	
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	
@@ -476,6 +477,10 @@ package net.localprojects {
 		}
 		
 		
+		
+		
+		private var smsCheckTimer:Timer
+		
 		public function textPromptView(...args):void {
 			markAllInactive();
 			
@@ -500,9 +505,15 @@ package net.localprojects {
 			noButton.setOnClick(null);
 			skipTextButton.setOnClick(simulateSMS);
 
+		
+				
+			// start polling to see if the user has sent their opinion yet
+			CDW.state.latestSMSID = null;
+			smsCheckTimer = new Timer(1000);
+			smsCheckTimer.addEventListener(TimerEvent.TIMER, onSmsCheckTimer);
+			smsCheckTimer.start();
 			
-			// start polling web? TODO
-			
+				
 			// blocks
 			portrait.tweenIn();
 			header.tweenIn();
@@ -520,7 +531,58 @@ package net.localprojects {
 			tweenOutInactive();
 		}
 		
+
+		
+		private function onSmsCheckTimer(e:TimerEvent):void {
+			trace("checking for SMS received");
+			
+			var latestMessageLoader:URLLoader = new URLLoader();
+			latestMessageLoader.addEventListener(Event.COMPLETE, onSMSCheckResponse);
+			latestMessageLoader.load(new URLRequest("http://ec2-50-19-25-31.compute-1.amazonaws.com/api/sms/latest"));			
+
+			smsCheckTimer.stop();
+		}
+		
+		private function onSMSCheckResponse(e:Event):void {
+			trace('check sms response received');
+						
+			var response:* = JSON.decode(e.target.data);			
+
+			
+			// first time? save the id so we can compare
+			if (CDW.state.latestSMSID == null) {
+				trace(" first time, setting id");
+				CDW.state.latestSMSID = response['_id']['$oid'];
+				smsCheckTimer.reset();
+				smsCheckTimer.start();				
+			}
+			else {
+				if (CDW.state.latestSMSID == response['_id']['$oid']) {
+					trace('no new sms, keep trying');
+					smsCheckTimer.reset();
+					smsCheckTimer.start();					
+				}
+				else {
+					trace("NEW SMS!!!");
+					CDW.state.userID = '4e44264d0f2e4226b1000000'; // TODO create user once we have #
+					CDW.state.userPhoneNumber = response['From'];					
+					CDW.state.userOpinion = response['Body'];
+					
+					// For debug
+					photoBoothView();					
+				}				
+			}
+			
+			// is it new?
+			
+
+			
+		}		
+		
 		public function simulateSMS(e:Event):void {
+			
+			smsCheckTimer.stop();			
+			
 			// Normally, once we have the phone number we would create a user on the server and get a unique ID back
 			// this is useful for creating photo filenames
 			CDW.state.userID = '4e44264d0f2e4226b1000000';
