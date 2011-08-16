@@ -10,6 +10,8 @@ package net.localprojects {
 	import flash.events.*;
 	import flash.net.*;
 	import flash.utils.Timer;
+	import flash.ui.MultitouchInputMode;
+	import flash.ui.Multitouch;	
 	
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	
@@ -85,7 +87,11 @@ package net.localprojects {
 		private function init():void {
 			// for convenience
 			stageWidth = CDW.ref.stage.stageWidth;
-			stageHeight = CDW.ref.stage.stageHeight;			
+			stageHeight = CDW.ref.stage.stageHeight;
+			
+			// Work around for lack of mouse-down events
+			// http://forums.adobe.com/message/2794098?tstart=0
+			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;			
 			
 			// dump everything with just a single instanceon the stage,
 			// they'll get tweened in and out as necessary
@@ -242,7 +248,7 @@ package net.localprojects {
 			backButton.setDefaultTweenOut(1, {x: -backButton.width, y: 1003});			
 			addChild(backButton);
 			
-			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + CDW.settings.phoneNumber + ' with your statement.'; 	
+			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
 			smsInstructions = new BlockParagraph(915, smsInstructionText, 33, Assets.COLOR_YES_LIGHT, false);
 			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
 			smsInstructions.setDefaultTweenOut(1, {x: stageWidth, y: 1096});
@@ -345,6 +351,8 @@ package net.localprojects {
 		public function homeView(...args):void {
 			markAllInactive();
 
+			
+			CDW.inactivityTimer.disarm();
 			
 			
 			
@@ -453,6 +461,9 @@ package net.localprojects {
 		public function debateOverlayView(...args):void {
 			markAllInactive();			
 			
+			// services
+			CDW.inactivityTimer.disarm();
+			
 			// mutations
 			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
 			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName);			
@@ -493,6 +504,8 @@ package net.localprojects {
 		public function pickStanceView(...args):void {
 			markAllInactive();		
 			
+			CDW.inactivityTimer.arm();
+			
 			// mutations
 			portrait.setImage(Assets.portraitPlaceholder);
 			noButton.setBackgroundColor(Assets.COLOR_NO_LIGHT);
@@ -525,6 +538,8 @@ package net.localprojects {
 		
 		public function textPromptView(...args):void {
 			markAllInactive();
+			
+			CDW.inactivityTimer.arm();
 			
 			// mutations
 			if (CDW.state.userStance == 'yes') {
@@ -599,12 +614,33 @@ package net.localprojects {
 			}
 			else {
 				if (CDW.state.latestSMSID != response['_id']['$oid']) {
-					trace("NEW SMS!!!");
-					// TODO make sure it was sent to the screen't phone number
-					CDW.state.userID = '4e44264d0f2e4226b1000000'; // TODO create user once we have #
-					CDW.state.userPhoneNumber = response['From'];					
-					CDW.state.userOpinion = response['Body'];
-					photoBoothView();		
+					
+					
+					// make sure it was sent to this screen's phone number					
+					if (response['To'] == CDW.settings.phoneNumber) {
+						trace("NEW SMS!!!");
+						
+						// write some stuff down	
+						CDW.state.userPhoneNumber = '  ' + response['From'].substr(1); // strip the plus // TODO what a mess, store the full number without the plus or the leading space....
+						CDW.state.userOpinion = response['Body'];
+						
+						// see if the user exists
+						trace( CDW.state.userPhoneNumber);
+						Utilities.postRequest('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/users/exists', {'phoneNumber': CDW.state.userPhoneNumber}, onUserCheck); 
+						
+						// do we have a user already?
+						// CDW.state.userID = '4e44264d0f2e4226b1000000'; // TODO create user once we have #	
+						photoBoothView();												
+						
+					}
+					else {
+						// not for this screen!
+						trace("not for this screen");
+						CDW.state.latestSMSID = response['_id']['$oid'];
+						smsCheckTimer.reset();
+						smsCheckTimer.start();						
+					}
+			
 				}
 				else {
 					// For debug								
@@ -613,6 +649,32 @@ package net.localprojects {
 					smsCheckTimer.start();			
 				}				
 			}
+		}
+		
+		private function onUserCheck(response:Object):void {
+			// create the user if they don't already exist
+			trace("User check:" );
+			trace(response);
+			
+			
+			if (response != null) {
+				trace("users exists");
+				
+				// populate as much as we can
+				CDW.state.userName = response['firstName'] + response['lastName'];
+				CDW.state.userID = response['_id'];
+				
+				// TODO get image location
+				// STOPPED HERE
+				
+				
+				
+			}
+			else {
+				trace("user does not exist");
+				// TODO create user
+			}
+			
 		}
 		
 		public function simulateSMS(e:Event):void {
@@ -639,6 +701,8 @@ package net.localprojects {
 		
 		public function photoBoothView(...args):void {
 			markAllInactive();
+			
+			CDW.inactivityTimer.arm();
 			
 			// mutations
 			stance.setStance(CDW.state.userStance);
@@ -712,6 +776,9 @@ package net.localprojects {
 			markAllInactive();
 			flashOverlay.active = true; // needs to tween out itself
 			
+			CDW.inactivityTimer.arm();
+			
+			
 			// mutations
 			stance.setStance(CDW.state.userStance);
 			if (CDW.state.userStance == 'yes') {
@@ -759,6 +826,8 @@ package net.localprojects {
 		
 		public function verifyOpinionView(...args):void {
 			markAllInactive();
+			
+			CDW.inactivityTimer.arm();
 			
 			// mutations
 			portrait.setImage(portraitCamera.cameraBitmap, true);
@@ -839,6 +908,9 @@ package net.localprojects {
 			
 			
 			
+			
+			
+			
 			// refresh db
 			
 			
@@ -849,6 +921,8 @@ package net.localprojects {
 		
 		public function editOpinionView(...args):void {
 			markAllInactive();
+			
+			CDW.inactivityTimer.arm();
 			
 			// mutations
 			editOpinion.setText(CDW.state.userOpinion);
@@ -901,6 +975,8 @@ package net.localprojects {
 		public function statsView(...args):void {
 			//markAllInactive();
 			
+			CDW.inactivityTimer.disarm();
+			
 			// mutations
 			portrait.setImage(Assets.statsUnderlay);
 			
@@ -926,6 +1002,8 @@ package net.localprojects {
 		
 		public function inactivityView(...args):void {
 			// mutations
+			
+			CDW.inactivityTimer.disarm();
 			
 			// behaviors
 			continueButton.setOnClick(onContinue);
