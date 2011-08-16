@@ -3,7 +3,7 @@ package net.localprojects.ui {
 	import com.greensock.easing.*;
 	
 	import flash.display.Sprite;
-	import flash.events.MouseEvent;
+	import flash.events.*;
 	
 	import net.localprojects.CDW;
 	import net.localprojects.blocks.BlockBase;
@@ -28,6 +28,7 @@ package net.localprojects.ui {
 			background = new Sprite();
 			onClick = defaultOnClick;
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			this.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
 			//this.addEventListener(MouseEvent.CLICK, onClick);
 		}
 		
@@ -63,10 +64,12 @@ package net.localprojects.ui {
 		
 		public function enable():void {
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			this.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
 		}
 		
 		public function disable():void {
 			this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			this.removeEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
 		}
 		
 		public function setMode(buttonMode:String):void {

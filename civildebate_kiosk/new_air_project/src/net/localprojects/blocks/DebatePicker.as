@@ -35,6 +35,7 @@ package net.localprojects.blocks {
 			addChild(debateHolder);
 			
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			this.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		

@@ -245,6 +245,12 @@ package net.localprojects {
 		import flash.net.*;
 		
 		
+		public static function formatPhoneNumber(s:String):String {
+			// remove country code
+			s = s.replace('+1', '');
+			
+			return '(' + s.substr(0, 3) + ') ' + s.substr(3, 6) + '-' + s.substr(6);
+		}
 
 		
 		public static function postRequest(url:String, payload:Object, callback:Function):void {

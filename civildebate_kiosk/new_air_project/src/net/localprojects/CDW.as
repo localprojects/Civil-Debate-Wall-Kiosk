@@ -11,8 +11,6 @@ package net.localprojects {
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	
-	
-	
 	import net.localprojects.blocks.*;
 	import net.localprojects.camera.*;
 	import net.localprojects.elements.*;
@@ -28,6 +26,7 @@ package net.localprojects {
 		public static var settings:Object;
 		public static var view:View;
 		public static var testOverlay:Bitmap;
+		public static var inactivityTimer:InactivityTimer;
 		
 		
 		public function CDW() {
@@ -86,6 +85,15 @@ package net.localprojects {
 			if (settings.startFullScreen) {
 				toggleFullScreen();
 			}
+			
+			// inactivity timer
+			inactivityTimer = new InactivityTimer(stage, 5);
+			inactivityTimer.addEventListener(InactivityEvent.INACTIVE, onInactive);
+		}
+		
+		private function onInactive(e:InactivityEvent):void {
+			trace("inactive!");
+			view.inactivityView();
 		}
 		
 		

@@ -5,14 +5,15 @@ package net.localprojects.keyboard {
 	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.events.MouseEvent;
+	import flash.events.*;
 	import flash.text.TextField;
 	import flash.ui.Mouse;
 	
 	import net.localprojects.Assets;
 	import net.localprojects.CDW;
 	import net.localprojects.blocks.BlockBase;
+	
+	
 	
 	
 	public class Keyboard extends BlockBase {
@@ -80,12 +81,14 @@ package net.localprojects.keyboard {
 					
 					// events inside the key
 					key.addEventListener(MouseEvent.MOUSE_DOWN, key.onMouseDown);
+					key.addEventListener(TouchEvent.TOUCH_BEGIN, key.onMouseDown);
 					key.addEventListener(MouseEvent.MOUSE_UP, key.onMouseUp);
 					key.addEventListener(MouseEvent.MOUSE_OVER, key.onMouseOver);
 					key.addEventListener(MouseEvent.MOUSE_OUT, key.onMouseOut);
 					
 					// events global to the keyboard
-					key.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);					
+					key.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+					key.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);					
 					key.addEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
 										
 					
