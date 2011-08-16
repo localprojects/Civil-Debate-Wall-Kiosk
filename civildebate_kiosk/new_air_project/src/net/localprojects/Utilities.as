@@ -1,4 +1,6 @@
 package net.localprojects {
+	import cmodule.aircall.CLibInit;
+	
 	import flash.display.*;
 	import flash.events.Event;
 	import flash.filesystem.*;
@@ -12,6 +14,7 @@ package net.localprojects {
 	import org.osmf.media.LoadableElementBase;
 	
 	public class Utilities {
+
 		public function Utilities()	{
 		}
 		
@@ -76,33 +79,26 @@ package net.localprojects {
 
 		
 		
+		// faster jpeg encoding
+		// via http://segfaultlabs.com/devlogs/alchemy-asynchronous-jpeg-encoding-2		
+		/// init alchemy object
+				
+		
+		
 		public static function saveImageToDisk(bitmap:Bitmap, path:String, name:String):String {
 			var file:File = new File(path + name);
 			
 			trace("Saving image to " + file.nativePath);
-				
-			//Bytearray of the final image
-			var imgByteArray:ByteArray;
-				
-			//extension to save the file
-			var ext:String;
-				
-			// temporarily always use jpeg
-			var format:uint = FORMAT_JPEG;
 			
+			var targetBytes:ByteArray = new ByteArray();
+			var sourceBytes:ByteArray = bitmap.bitmapData.getPixels(bitmap.bitmapData.rect);			
+			sourceBytes.position = 0; 			
 			
-			switch (format) {
-				case FORMAT_JPEG:
-					ext = ".jpg";
-					var jpgenc:JPEGEncoder = new JPEGEncoder(80);
-					imgByteArray = jpgenc.encode(bitmap.bitmapData);
-					break;
-				case FORMAT_PNG:
-					ext = ".png";
-					var pngenc:PNGEncoder = new PNGEncoder();
-					imgByteArray = pngenc.encode(bitmap.bitmapData);
-					break;
-			}
+			var jpeginit:CLibInit = new CLibInit(); // get library			
+			var jpeglib:Object = jpeginit.init(); // initialize library exported class to an object					
+			
+
+			jpeglib.encode(sourceBytes, targetBytes, bitmap.bitmapData.width, bitmap.bitmapData.height, 80);
 				
 			
 				//Use a FileStream to save the bytearray as bytes to the new file
@@ -111,7 +107,7 @@ package net.localprojects {
 					//open file in write mode
 					fs.open(file, FileMode.WRITE);
 					//write bytes from the byte array
-					fs.writeBytes(imgByteArray);
+					fs.writeBytes(targetBytes);
 					//close the file
 					fs.close();
 				} catch(e:Error) {
