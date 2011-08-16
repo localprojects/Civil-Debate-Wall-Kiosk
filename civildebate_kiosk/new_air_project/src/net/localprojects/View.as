@@ -829,6 +829,9 @@ package net.localprojects {
 			trace(r);
 		}
 		
+		
+		
+		
 		public function verifyOpinionView(...args):void {
 			markAllInactive();
 			
@@ -912,14 +915,22 @@ package net.localprojects {
 			// only if the image is fresh!
 			var imageName:String = Utilities.saveImageToDisk(portraitCamera.cameraBitmap, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
 			
-			// TODO upload opinion
+			// upload opinion
 			
-			//Utilities.postRequest(
 			
+			
+						
+			
+			var payload:Object = {'author': CDW.state.userID, 'question': CDW.state.activeQuestion, 'opinion': CDW.state.userOpinion, 'stance': CDW.state.userStance, 'origin': 'kiosk'};
+			Utilities.postRequest('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/debates/add', payload, onDebateUploaded);
 
-			// refresh db
+			// refresh db?
+		}
+		
+		private function onDebateUploaded(r:Object):void {
+			trace("debate uploaded");
 			
-			// TODO go home and see what you just submitted
+			// go home and see what you just submitted			
 			homeView();
 		}
 		
