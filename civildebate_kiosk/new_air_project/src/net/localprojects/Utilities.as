@@ -9,6 +9,8 @@ package net.localprojects {
 	import mx.graphics.codec.JPEGEncoder;
 	import mx.graphics.codec.PNGEncoder;
 	
+	import org.osmf.media.LoadableElementBase;
+	
 	public class Utilities {
 		public function Utilities()	{
 		}
@@ -56,7 +58,7 @@ package net.localprojects {
 			
 			
 			//verify that the file really does not exist
-			if (file.exists){
+			if (file.exists) {
 				//if exists , tries to get a new one using recursion
 				return getNewImageFile(ext);
 			}
@@ -70,9 +72,8 @@ package net.localprojects {
 			var d:Date = new Date();
 			var tstamp:String = d.getFullYear().toString()+d.getMonth()+d.getDate()+d.getHours()+d.getMinutes()+d.getSeconds()+d.getMilliseconds();
 			return 	tstamp;			
-		}		
-		
-		
+		}
+
 		
 		
 		public static function saveImageToDisk(bitmap:Bitmap, path:String, name:String):String {
@@ -119,6 +120,31 @@ package net.localprojects {
 				
 				return name;
 			}
+		
+		
+		
+		
+		//var imageClip:MovieClip = new MovieClip();
+		private var imageLoader:Loader = new Loader();
+		private var loadedBitmap:Bitmap = new Bitmap();
+		
+		
+				
+		// loads a bitmap, passes it to the callback
+		public static function loadImageFromDisk(path:String, callback:Function):void {
+			trace("loading");
+			var file:File = new File(path);
+			
+			var imageLoader:Loader = new Loader();
+			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
+				trace("loaded");			
+				callback(imageLoader.content as Bitmap);
+			});
+			
+			imageLoader.load(new URLRequest(file.url));
+		}
+		
+		
 		
 		
 		// a la processing
@@ -243,7 +269,7 @@ package net.localprojects {
 		
 
 		import flash.net.*;
-		
+		import com.adobe.serialization.json.*;		
 		
 		public static function formatPhoneNumber(s:String):String {
 			// remove country code
@@ -252,6 +278,11 @@ package net.localprojects {
 			return '(' + s.substr(0, 3) + ') ' + s.substr(3, 6) + '-' + s.substr(6);
 		}
 
+		
+		// like post request, but automatically digests JSON
+		public static function postRequestJSON(url:String, payload:Object, callback:Function):void {
+			postRequest(url, payload, function(r:Object):void { callback(JSON.decode(r.toString()))	}); 
+		}		
 		
 		public static function postRequest(url:String, payload:Object, callback:Function):void {
 			var loader:URLLoader = new URLLoader()
