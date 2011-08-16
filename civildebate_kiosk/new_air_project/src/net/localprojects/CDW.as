@@ -87,7 +87,7 @@ package net.localprojects {
 			}
 			
 			// inactivity timer
-			inactivityTimer = new InactivityTimer(stage, 5);
+			inactivityTimer = new InactivityTimer(stage, 30);
 			inactivityTimer.addEventListener(InactivityEvent.INACTIVE, onInactive);
 		}
 		

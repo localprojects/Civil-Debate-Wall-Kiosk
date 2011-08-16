@@ -9,9 +9,9 @@ package net.localprojects {
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
-	import flash.utils.Timer;
+	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
-	import flash.ui.Multitouch;	
+	import flash.utils.Timer;
 	
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	
@@ -195,14 +195,10 @@ package net.localprojects {
 			flagButton.setDefaultTweenOut(1, {x: stageWidth});
 			addChild(flagButton);			
 			
-			
-			
 			debateButton = new BalloonButton(145, 130, 'LET\u0027S\nDEBATE !', 20, Assets.COLOR_YES_DARK, false, true);
 			debateButton.setDefaultTweenIn(1, {x: 828, y: 901, scaleX: 1, scaleY: 1});
 			debateButton.setDefaultTweenOut(1, {x: stageWidth, y: 901, scaleX: 1, scaleY: 1});
 			addChild(debateButton);
-			
-
 			
 			debateOverlay = new DebateOverlay();
 			debateOverlay.setDefaultTweenIn(1, {x: 30, y: 813});
@@ -342,7 +338,6 @@ package net.localprojects {
 			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut});
 			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
 			addChild(flashOverlay);
-			
 		}
 		
 		
@@ -354,14 +349,17 @@ package net.localprojects {
 			
 			CDW.inactivityTimer.disarm();
 			
-			
-			
 			// mutations
 			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
 			nametag.setText(CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName + ' Says :');
 			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance);
 			opinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);
-			bigButton.setText('ADD YOUR OPINION');			
+			bigButton.setText('ADD YOUR OPINION');
+			viewDebateButton.setLabel('"The reality is that a decision…" +8 other responses');
+			
+			// Reset user info
+			CDW.state.clearUser();
+			
 			
 			if (CDW.database.debates[CDW.state.activeDebate].stance == 'yes') {
 				leftQuote.setColor(Assets.COLOR_YES_LIGHT);
@@ -467,6 +465,9 @@ package net.localprojects {
 			// mutations
 			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
 			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName);			
+			viewDebateButton.setLabel('BACK TO HOME SCREEN');
+			
+			
 			
 			// behaviors
 			viewDebateButton.setOnClick(homeView);
@@ -501,6 +502,15 @@ package net.localprojects {
 		}
 		
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		public function pickStanceView(...args):void {
 			markAllInactive();		
 			
@@ -529,6 +539,12 @@ package net.localprojects {
 			
 			tweenOutInactive();	// TODO disable behaviors as well? or let them ride? implications for mid-tween events		
 		}
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -590,7 +606,6 @@ package net.localprojects {
 
 		private function onSmsCheckTimer(e:TimerEvent):void {
 			trace("checking for SMS received");
-			
 			var latestMessageLoader:URLLoader = new URLLoader();
 			latestMessageLoader.addEventListener(Event.COMPLETE, onSMSCheckResponse);
 			latestMessageLoader.load(new URLRequest("http://ec2-50-19-25-31.compute-1.amazonaws.com/api/sms/latest"));			
@@ -598,11 +613,9 @@ package net.localprojects {
 			smsCheckTimer.stop();
 		}
 		
+		
 		private function onSMSCheckResponse(e:Event):void {
 			trace('check sms response received');
-						
-			
-			
 			var response:* = JSON.decode(e.target.data);			
 			
 			// first time? save the id so we can compare
@@ -610,91 +623,75 @@ package net.localprojects {
 				trace(" first time, setting id");
 				CDW.state.latestSMSID = response['_id']['$oid'];
 				smsCheckTimer.reset();
-				smsCheckTimer.start();				
+				smsCheckTimer.start();
+			}
+			else if (CDW.state.latestSMSID != response['_id']['$oid'] &&
+							(response['To'] == CDW.settings.phoneNumber)) {
+
+				trace("NEW SMS!!! from number:" + CDW.state.userPhoneNumber);
+						
+				// write some stuff down	
+				CDW.state.userPhoneNumber = response['From'];
+				CDW.state.userOpinion = response['Body'];						
+						
+				// create or find the user
+				Utilities.postRequestJSON('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser); 
 			}
 			else {
-				if (CDW.state.latestSMSID != response['_id']['$oid']) {
-					
-					
-					// make sure it was sent to this screen's phone number					
-					if (response['To'] == CDW.settings.phoneNumber) {
-						trace("NEW SMS!!!");
-						
-						// write some stuff down	
-						CDW.state.userPhoneNumber = '  ' + response['From'].substr(1); // strip the plus // TODO what a mess, store the full number without the plus or the leading space....
-						CDW.state.userOpinion = response['Body'];
-						
-						// see if the user exists
-						trace( CDW.state.userPhoneNumber);
-						Utilities.postRequest('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/users/exists', {'phoneNumber': CDW.state.userPhoneNumber}, onUserCheck); 
-						
-						// do we have a user already?
-						// CDW.state.userID = '4e44264d0f2e4226b1000000'; // TODO create user once we have #	
-						photoBoothView();												
-						
-					}
-					else {
-						// not for this screen!
-						trace("not for this screen");
-						CDW.state.latestSMSID = response['_id']['$oid'];
-						smsCheckTimer.reset();
-						smsCheckTimer.start();						
-					}
+				// For debug								
+				trace('no new sms, keep trying');
+				CDW.state.latestSMSID = response['_id']['$oid'];					
+				smsCheckTimer.reset();
+				smsCheckTimer.start();			
+			}			
+		}
+		
+		private function onAddOrUpdateUser(user:Object):void {
+			trace('User added or updated');
+
+			CDW.state.userID = user['_id']['$oid'];
 			
+			// does the user have a photo?
+			if (user['photo'] == null) {
+				// no photo
+				trace("no photo! go take one!");
+				photoBoothView();
+			}
+			else {
+				// have a photo, load it
+				Utilities.loadImageFromDisk(CDW.settings.imagePath + CDW.state.userID + '-full.jpg', onUserImageLoaded);
+				
+				//how about a name?
+				if (user['firstName'] == null) {
+					// go get a name
+					nameEntryView();
 				}
 				else {
-					// For debug								
-					trace('no new sms, keep trying');
-					smsCheckTimer.reset();
-					smsCheckTimer.start();			
-				}				
+					// you have a name and a photo! go to review page
+					CDW.state.userName = user['firstName'];
+					
+					verifyOpinionView();
+				}
 			}
 		}
 		
-		private function onUserCheck(response:Object):void {
-			// create the user if they don't already exist
-			trace("User check:" );
-			trace(response);
-			
-			
-			if (response != null) {
-				trace("users exists");
-				
-				// populate as much as we can
-				CDW.state.userName = response['firstName'] + response['lastName'];
-				CDW.state.userID = response['_id'];
-				
-				// TODO get image location
-				// STOPPED HERE
-				
-				
-				
-			}
-			else {
-				trace("user does not exist");
-				// TODO create user
-			}
-			
+		
+		private function onUserImageLoaded(b:Bitmap):void {
+			CDW.state.userImage = b;
+			portrait.setImage(CDW.state.userImage);
 		}
 		
 		public function simulateSMS(e:Event):void {
 			smsCheckTimer.stop();			
 			
-			// Normally, once we have the phone number we would create a user on the server and get a unique ID back
-			// this is useful for creating photo filenames
-			CDW.state.userID = '4e44264d0f2e4226b1000000';
-			CDW.state.userPhoneNumber = '8477073052';
-			CDW.state.userOpinion = Utilities.dummyText(100);
+			// write some stuff down	
+			CDW.state.userPhoneNumber = '+1555' + Utilities.randRange(1000000, 9999999).toString();
+			CDW.state.userOpinion = Utilities.dummyText(100);						
 			
-			// For debug
-			photoBoothView();
+			// create or find the user
+			Utilities.postRequestJSON('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser);			
 		}
-		
-		
-		
-		
-		
-		
+
 		
 		
 		
@@ -748,26 +745,27 @@ package net.localprojects {
 			
 			// image is held in RAM for now, in case it's edited later
 			
-			//portraitCamera.takePhoto();
-			
 			// Do this in portrait camera instead?
 			if (CDW.settings.webcamOnly) {
 				// nothing to see here...
+				CDW.state.userImage = portraitCamera.cameraBitmap;				
 			}
 			else {
 				// using SLR
 				// TODO
-			}			
+			}
 			
 			
 		}
 		
 		private function onFlashOn():void {
-			// set photo
-			
-			
-			
-			nameEntryView();
+			// skip name entry if we already have it
+			if(CDW.state.userName == '') {			
+				nameEntryView();
+			}
+			else {
+				verifyOpinionView();
+			}
 			flashOverlay.tweenOut();
 		}
 		
@@ -794,7 +792,7 @@ package net.localprojects {
 				nameEntryField.setBackgroundColor(Assets.COLOR_NO_LIGHT);				
 			}
 			
-			portrait.setImage(portraitCamera.cameraBitmap, true);
+			portrait.setImage(CDW.state.userImage, true);
 			keyboard.target = nameEntryField.getTextField();
 			
 			// behaviors
@@ -817,12 +815,19 @@ package net.localprojects {
 		private function onSaveName(e:Event):void {
 			// TODO input validation
 			
-			// TODO save name to disk
+			// Save name to RAM
 			CDW.state.userName = nameEntryField.getTextField().text;
+			
+			// Update the name on the server
+			Utilities.postRequest('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/users/add-or-update', {'id': CDW.state.userID, 'firstName': CDW.state.userName}, onNameUpdated);
 			
 			verifyOpinionView();
 		}
 		
+		private function onNameUpdated(r:Object):void {
+			trace("Name updated on server");
+			trace(r);
+		}
 		
 		public function verifyOpinionView(...args):void {
 			markAllInactive();
@@ -830,10 +835,10 @@ package net.localprojects {
 			CDW.inactivityTimer.arm();
 			
 			// mutations
-			portrait.setImage(portraitCamera.cameraBitmap, true);
+			portrait.setImage(CDW.state.userImage, true);
 			bigButton.setText('SUBMIT THIS DEBATE');
 			bigButton.enable();
-			nametag.setText(CDW.state.userName, true);
+			nametag.setText(CDW.state.userName + 'Says:', true);
 			opinion.setText(CDW.state.userOpinion);
 			
 			
@@ -902,17 +907,17 @@ package net.localprojects {
 			// save the image to disk
 			// TODO handle overwrites?
 			// TEMP OFF FOR DEMO
+			
+			
+			// only if the image is fresh!
 			var imageName:String = Utilities.saveImageToDisk(portraitCamera.cameraBitmap, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
 			
 			// TODO upload opinion
 			
+			//Utilities.postRequest(
 			
-			
-			
-			
-			
+
 			// refresh db
-			
 			
 			// TODO go home and see what you just submitted
 			homeView();
@@ -1002,12 +1007,16 @@ package net.localprojects {
 		
 		public function inactivityView(...args):void {
 			// mutations
-			
+			if (portraitCamera.active) portraitCamera.detectFaces = false;			
 			CDW.inactivityTimer.disarm();
+			
+			
 			
 			// behaviors
 			continueButton.setOnClick(onContinue);
 			restartButton.setOnClick(onRestart);
+			
+			
 			
 			// blocks
 			inactivityOverlay.tweenIn();
@@ -1024,13 +1033,14 @@ package net.localprojects {
 			inactivityOverlay.tweenOut();
 			inactivityInstructions.tweenOut();
 			continueButton.tweenOut();
-			restartButton.tweenOut();			
+			restartButton.tweenOut();
+			if (portraitCamera.active) portraitCamera.detectFaces = true;			
 		}
 		
 
 		private function setTestOverlay(b:Bitmap):void {
 			CDW.testOverlay.bitmapData = b.bitmapData.clone();						
-		}
+		}	
 		
 		
 		// View utilities

@@ -4,13 +4,15 @@ package net.localprojects.ui {
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.text.*;
 	
 	import net.localprojects.Assets;
 	
 	public class BlockButton extends ButtonBase	{
 
-		protected var labelField:TextField;		
+		protected var labelFieldA:TextField;
+		protected var labelFieldB:TextField;
 		protected var _buttonWidth:Number;
 		protected var _buttonHeight:Number;
 		protected var _labelText:String;
@@ -39,9 +41,8 @@ package net.localprojects.ui {
 			draw();
 		}
 		
-		private function init():void {
-			strokeWeight = 4;
-			
+		
+		private function generateLabel(text:String):TextField {
 			// label
 			// set up the text format
 			var textFormat:TextFormat = new TextFormat();
@@ -51,7 +52,7 @@ package net.localprojects.ui {
 			textFormat.size = _labelSize;
 			textFormat.leading = 5;
 			
-			labelField = new TextField();
+			var labelField:TextField = new TextField();
 			labelField.defaultTextFormat = textFormat;
 			labelField.embedFonts = true;
 			labelField.selectable = false;
@@ -61,13 +62,38 @@ package net.localprojects.ui {
 			labelField.textColor = 0xffffff;
 			labelField.width = _buttonWidth;
 			labelField.autoSize = TextFieldAutoSize.CENTER;
-			labelField.text = _labelText;
+			labelField.text = text;
 			labelField.x = (_buttonWidth / 2) - (labelField.width / 2);
-			labelField.y = (_buttonHeight / 2) - (labelField.height / 2);
+			labelField.y = (_buttonHeight / 2) - (labelField.height / 2);			
+			
+			return labelField;
+		}
+		
+		private var newLabel:TextField;
+		override public function setLabel(text:String):void {
+			_labelText = text;
+			newLabel = generateLabel(_labelText);
+			newLabel.alpha = 0;
+			addChild(newLabel);
+			
+			TweenMax.to(labelFieldA, 0.2, {alpha: 0, ease: Quart.easeIn});
+			TweenMax.to(newLabel, 0.2, {alpha: 1, ease: Quart.easeOut, onComplete: onSetLabelComplete});
+		}
+		
+		private function onSetLabelComplete():void {
+			labelFieldA = newLabel;
+		}
+		
+		
+		private function init():void {
+			strokeWeight = 4;
+			
+			labelFieldA = generateLabel(_labelText);
+
 			
 			addChild(background);
 			addChild(outline);
-			addChild(labelField);
+			addChild(labelFieldA);
 		}
 		
 		override protected function draw():void {

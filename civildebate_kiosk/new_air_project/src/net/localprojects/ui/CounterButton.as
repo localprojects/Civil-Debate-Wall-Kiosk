@@ -21,7 +21,7 @@ package net.localprojects.ui {
 
 		
 		private function updateLabel():void {
-			labelField.text = _count + ' ' + Utilities.plural(_baseLabel, _count);			
+			setLabel(_count + ' ' + Utilities.plural(_baseLabel, _count));			
 		}
 		
 		

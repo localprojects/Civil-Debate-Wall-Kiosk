@@ -20,12 +20,12 @@ package net.localprojects.ui {
 			// fit the icon
 			var iconPadding:Number = 9;
 			
-			if (labelField.text.length > 0) {
-				_icon.x = (buttonWidth - (_icon.width + iconPadding + labelField.width)) / 2;
-				_icon.y = labelField.y + 2;
+			if (labelFieldA.text.length > 0) {
+				_icon.x = (buttonWidth - (_icon.width + iconPadding + labelFieldA.width)) / 2;
+				_icon.y = labelFieldA.y + 2;
 				
 				// reposition text
-				labelField.x = _icon.x + _icon.width + iconPadding;			
+				labelFieldA.x = _icon.x + _icon.width + iconPadding;			
 			}
 			else {
 				_icon.x = (buttonWidth - _icon.width) / 2;
