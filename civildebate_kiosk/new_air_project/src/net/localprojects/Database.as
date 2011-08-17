@@ -49,6 +49,7 @@ package net.localprojects {
 			trace('Debates Loaded, getting portrait images');
 						
 			for each (var debate:Object in r) {
+				
 				// Store the debates in an id-keyed array					
 				var debateID:String = debate['_id']['$oid'];
 				debates[debateID] = debate;
@@ -81,6 +82,13 @@ package net.localprojects {
 				portraits[id] = (LoaderMax.getContent(id) as ContentDisplay).rawContent;
 			}
 
+			// set active debate to first in list
+			// set the active debate to the first one
+			for (var debateID:String in debates) {			
+				CDW.state.setActiveDebate(debateID);
+				break;
+			}
+			
 			// ready to start
 			this.dispatchEvent(new Event(Event.COMPLETE));
 		}
@@ -114,7 +122,42 @@ package net.localprojects {
 		
 		public function cloneDebateAuthorPortrait(debateID:String):Bitmap {
 			return new Bitmap(portraits[getDebateAuthor(debateID)].bitmapData.clone());; 
+		}
+		
+		
+		public function getNextDebate():String {
+			var grabNext:Boolean;
+			
+			// walk the object
+			for (var debateID:String in debates) {
+				
+				if (grabNext) {
+					return debateID;
+				}
+				
+				if (debateID == CDW.state.activeDebate) {
+					grabNext = true;
+				}
+			}
+			
+			return null;
 		}		
+		
+		public function getPreviousDebate():String {
+			var lastID:String = null;
+			
+			// walk the object
+			for (var debateID:String in debates) {
+				if (debateID == CDW.state.activeDebate) {
+					return lastID;
+				}
+				else {
+					lastID = debateID;
+				}
+			}
+			
+			return null;
+		}
 		
 	}
 }

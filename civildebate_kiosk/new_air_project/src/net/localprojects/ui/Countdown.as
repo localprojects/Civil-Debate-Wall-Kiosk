@@ -195,7 +195,7 @@ package net.localprojects.ui {
 		}		
 		
 		// mutations
-		public function setBackgroundColor(c:uint):void {
+		override public function setBackgroundColor(c:uint):void {
 			backgroundColor = c;
 			drawBackground();
 		}		

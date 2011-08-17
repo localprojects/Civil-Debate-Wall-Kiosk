@@ -119,7 +119,7 @@ package net.localprojects.ui {
 		
 		
 		// pass through to the label
-		public function setText(s:String, instant:Boolean = false):void {
+		override public function setText(s:String, instant:Boolean = false):void {
 			labelText.setText(s, instant);
 			
 			Utilities.centerWithin(labelText, topPanel);			

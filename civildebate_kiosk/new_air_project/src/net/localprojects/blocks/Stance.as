@@ -38,7 +38,8 @@ package net.localprojects.blocks {
 		}
 		
 		
-		public function setText(s:String):void {
+		override public function setText(s:String, instant:Boolean = false):void {
+			// TODO IMPLEMENT INSTANT?
 			blockLabel.setText(s.toUpperCase() + '!');
 		}
 

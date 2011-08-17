@@ -1,13 +1,13 @@
 package net.localprojects.elements {
 	import com.bit101.components.Text;
+	import com.greensock.*;
+	import com.greensock.easing.*;
 	
 	import flash.display.*;
 	import flash.text.*;
 	
 	import net.localprojects.*;
 	import net.localprojects.blocks.BlockBase;
-	import com.greensock.*;
-	import com.greensock.easing.*;
 	
 	// multi-line block text
 	public class BlockParagraph extends BlockBase {
@@ -111,12 +111,12 @@ package net.localprojects.elements {
 			textField.y =  paddingTop;			
 		}
 		
-		public function setText(s:String):void {
+		override public function setText(s:String, instant:Boolean = false):void {
 			textField.text = s;
 			drawBackground();
 		}
 		
-		public function setBackgroundColor(c:uint):void {
+		override public function setBackgroundColor(c:uint):void {
 			_backgroundColor = c;
 			TweenMax.to(background, 0, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
 		}
