@@ -97,10 +97,8 @@ package net.localprojects {
 			var jpeginit:CLibInit = new CLibInit(); // get library			
 			var jpeglib:Object = jpeginit.init(); // initialize library exported class to an object					
 			
-
 			jpeglib.encode(sourceBytes, targetBytes, bitmap.bitmapData.width, bitmap.bitmapData.height, 80);
-				
-			
+
 				//Use a FileStream to save the bytearray as bytes to the new file
 				var fs:FileStream = new FileStream();
 				try {
@@ -121,8 +119,8 @@ package net.localprojects {
 		
 		
 		//var imageClip:MovieClip = new MovieClip();
-		private var imageLoader:Loader = new Loader();
-		private var loadedBitmap:Bitmap = new Bitmap();
+		//private var imageLoader:Loader = new Loader();
+		//private var loadedBitmap:Bitmap = new Bitmap();
 		
 		
 				
@@ -133,13 +131,31 @@ package net.localprojects {
 			
 			var imageLoader:Loader = new Loader();
 			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
-				trace("loaded");			
 				callback(imageLoader.content as Bitmap);
 			});
 			
 			imageLoader.load(new URLRequest(file.url));
 		}
 		
+		
+		// loads a bitmap, passes it to the callback
+		// USE LOADER MAX AGAIN INSTEAD PASSING IN FILE URL?
+		public static function loadImageFromDiskToTarget(path:String, target:Bitmap, onComplete:Function):void {
+			trace("loading");
+			var file:File = new File(path);
+			
+			var imageLoader:Loader = new Loader();
+			var thisTarget:Bitmap = target;
+
+			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
+				thisTarget = imageLoader.content as Bitmap;
+				onComplete();
+			});
+			
+			trace(file.url);
+			imageLoader.load(new URLRequest(file.url));
+		}
+				
 		
 		
 		
