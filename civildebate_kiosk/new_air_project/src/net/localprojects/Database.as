@@ -119,6 +119,18 @@ package net.localprojects {
 			return portraits[getDebateAuthor(debateID)]; 
 		}
 		
+		public function getDebateAuthorName(debateID:String):String {
+			return debates[debateID]['author']['firstName']; 
+		}		
+		
+		public function getOpinion(debateID:String):String {
+			return debates[debateID]['opinion'];
+		}
+		
+		public function getStance(debateID:String):String {
+			return debates[debateID]['stance'];
+		}
+		
 		
 		public function cloneDebateAuthorPortrait(debateID:String):Bitmap {
 			return new Bitmap(portraits[getDebateAuthor(debateID)].bitmapData.clone());; 

@@ -112,7 +112,7 @@ package net.localprojects.ui {
 			outline.graphics.endFill();
 		}
 		
-		override public function setBackgroundColor(c:uint):void {
+		override public function setBackgroundColor(c:uint, instant:Boolean = false):void {
 			_backgroundColor = c;
 			TweenMax.to(background, 0.5, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
 		}

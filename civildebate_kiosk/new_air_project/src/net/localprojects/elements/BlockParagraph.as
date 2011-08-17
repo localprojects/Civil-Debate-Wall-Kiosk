@@ -116,7 +116,7 @@ package net.localprojects.elements {
 			drawBackground();
 		}
 		
-		override public function setBackgroundColor(c:uint):void {
+		override public function setBackgroundColor(c:uint, instant:Boolean = false):void {
 			_backgroundColor = c;
 			TweenMax.to(background, 0, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
 		}
