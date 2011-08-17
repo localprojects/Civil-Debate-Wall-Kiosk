@@ -428,7 +428,7 @@ package net.localprojects {
 		}
 		
 		private function incrementLikes(e:Event):void {
-			Utilities.postRequest('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/debates/like', {'id': CDW.state.activeDebate, 'count': likeButton.count}, onLikePosted);
+			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/like', {'id': CDW.state.activeDebate, 'count': likeButton.count}, onLikePosted);
 		}
 		
 		private function onLikePosted(response:Object):void {
@@ -437,7 +437,7 @@ package net.localprojects {
 		}
 		
 		private function incrementFlags(e:Event):void {
-			Utilities.postRequest('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/debates/flag', {'id': CDW.state.activeDebate, 'count': likeButton.count}, onFlagPosted);
+			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/flag', {'id': CDW.state.activeDebate, 'count': likeButton.count}, onFlagPosted);
 		}
 		
 		private function onFlagPosted(response:Object):void {
@@ -635,7 +635,7 @@ package net.localprojects {
 				CDW.state.userOpinion = response['Body'];						
 						
 				// create or find the user
-				Utilities.postRequestJSON('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser); 
+				Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser); 
 			}
 			else {
 				// For debug								
@@ -689,7 +689,7 @@ package net.localprojects {
 			CDW.state.userOpinion = Utilities.dummyText(100);						
 			
 			// create or find the user
-			Utilities.postRequestJSON('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser);			
+			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser);			
 		}
 
 		
@@ -819,7 +819,7 @@ package net.localprojects {
 			CDW.state.userName = nameEntryField.getTextField().text;
 			
 			// Update the name on the server
-			Utilities.postRequest('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/users/add-or-update', {'id': CDW.state.userID, 'firstName': CDW.state.userName}, onNameUpdated);
+			Utilities.postRequest(CDW.settings.serverPath + '/api/users/add-or-update', {'id': CDW.state.userID, 'firstName': CDW.state.userName}, onNameUpdated);
 			
 			verifyOpinionView();
 		}
@@ -922,7 +922,7 @@ package net.localprojects {
 						
 			
 			var payload:Object = {'author': CDW.state.userID, 'question': CDW.state.activeQuestion, 'opinion': CDW.state.userOpinion, 'stance': CDW.state.userStance, 'origin': 'kiosk'};
-			Utilities.postRequest('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/debates/add', payload, onDebateUploaded);
+			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/add', payload, onDebateUploaded);
 
 			// refresh db?
 		}
