@@ -33,6 +33,7 @@ package net.localprojects.blocks {
 				lastImage = new Bitmap(currentImage.bitmapData);
 				
 				removeChild(currentImage);
+				
 				currentImage = new Bitmap(i.bitmapData);
 				addChild(currentImage);			
 				

@@ -29,8 +29,13 @@ package net.localprojects.ui {
 			
 			portrait = image;
 			roundedPortrait = new Sprite();
+			
+			portrait.width = 173;
+			portrait.height = 141;
+			portrait.bitmapData = Utilities.scaleToFill(portrait.bitmapData, 100, 100)
+			
 			roundedPortrait.graphics.beginBitmapFill(portrait.bitmapData, null, false, true);
-			roundedPortrait.graphics.drawRoundRect(0, 0, portrait.width - 1, portrait.height - 1, 15, 15);
+			roundedPortrait.graphics.drawRoundRect(0, 0, 100, 100, 15, 15);
 			roundedPortrait.graphics.endFill();			
 			roundedPortrait.cacheAsBitmap = false;
 			this.cacheAsBitmap = false;

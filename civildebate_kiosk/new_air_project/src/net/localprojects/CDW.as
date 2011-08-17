@@ -57,7 +57,7 @@ package net.localprojects {
 			
 			// load the wall state
 			database = new Database();
-			database.addEventListener(LoaderEvent.COMPLETE, onDatabaseLoaded);			
+			database.addEventListener(Event.COMPLETE, onDatabaseLoaded);			
 			database.load();
 			
 			// background
@@ -97,7 +97,7 @@ package net.localprojects {
 		}
 		
 		
-		private function onDatabaseLoaded(e:LoaderEvent):void {
+		private function onDatabaseLoaded(e:Event):void {
 			trace("database loaded");
 			
 			// set up test overlay

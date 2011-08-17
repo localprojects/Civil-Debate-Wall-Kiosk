@@ -123,7 +123,7 @@ package net.localprojects {
 			question = new Question();
 			question.setDefaultTweenIn(1, {x: 30, y: 126});
 			question.setDefaultTweenOut(1, {x: -question.width});
-			question.setText(CDW.database.questions[CDW.state.activeQuestion].question); // TODO abstract out these ridiculous traversals...
+			question.setText(CDW.database.getQuestionText()); // TODO abstract out these ridiculous traversals...
 			addChild(question);
 			
 			stance = new Stance();
@@ -350,7 +350,7 @@ package net.localprojects {
 			CDW.inactivityTimer.disarm();
 			
 			// mutations
-			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
+			portrait.setImage(CDW.database.getActivePortrait());
 			nametag.setText(CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName + ' Says :');
 			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance);
 			opinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);
@@ -463,7 +463,7 @@ package net.localprojects {
 			CDW.inactivityTimer.disarm();
 			
 			// mutations
-			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
+			portrait.setImage(CDW.database.getActivePortrait());
 			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName);			
 			viewDebateButton.setLabel('BACK TO HOME SCREEN');
 			
@@ -1011,7 +1011,7 @@ package net.localprojects {
 		
 		private function onStatsClose(e:Event):void {
 			// restore portrait
-			portrait.setImage(CDW.database.users[CDW.database.debates[CDW.state.activeDebate].author._id.$oid].portrait);
+			portrait.setImage(CDW.database.getActivePortrait());
 			
 			stats.tweenOut();
 		}

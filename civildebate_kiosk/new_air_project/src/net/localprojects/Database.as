@@ -4,6 +4,8 @@ package net.localprojects {
 	import com.greensock.events.*;
 	import com.greensock.loading.*;
 	
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.events.*;
 	import flash.net.*;
 	
@@ -19,14 +21,15 @@ package net.localprojects {
 		// update:
 		// load everything form the server since the last time, put it into flash objects		
 		
-		public const BASE_PATH:String = 'http://ec2-50-19-25-31.compute-1.amazonaws.com'
+		public const BASE_PATH:String = CDW.settings.imagePath;
 		
 
 		// todo, just use debate list with automatic python dereferencing!?
-
-		public var questions:Array = [];
-		public var users:Array = [];
-		public var debates:Array = [];			
+		
+		
+		public var question:Object = {};
+		public var debates:Object = {};
+		public var portraits:Object = {};
 			
 		private var imageQueue:LoaderMax;
 			
@@ -35,120 +38,80 @@ package net.localprojects {
 		}
 		
 		public function load():void {
-			loadAllQuestions();		
-			loadAllDebates();
-			loadAllUsers();
+			// load the question
+			// TODO get active question from server
+			trace('Loading from DB');
+			trace('Loading question');
+			Utilities.postRequestJSON('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/questions/get', {'id': '4e2755b50f2e420354000001'}, onQuestionReceived);
 		}
 		
-		private function loadAllDebates():void {
-			var urlRequest:URLRequest = new URLRequest(BASE_PATH + "/debates/list");
-			var urlLoader:URLLoader = new URLLoader();
-			urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
-			urlLoader.addEventListener(Event.COMPLETE, onAllDebatesLoaded);  
-			urlLoader.load(urlRequest);			
+		private function onQuestionReceived(r:Object):void {
+			trace('Question Loaded, getting debates');
+			
+			// Store the question
+			question = r;
+			
+			// User info is included automatically via Python's MongoDB DOCRef dereferencing
+			Utilities.postRequestJSON('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/debates/list', {'question': '4e2755b50f2e420354000001'}, onDebatesReceived);
 		}
 		
-		private function onAllDebatesLoaded(e:Event):void {
-			CDW.dashboard.log("Loaded debates list from server");			
-			var debateList:* = JSON.decode(e.target.data);
-			
-			for each (var debate:* in debateList) {
-				debates[debate._id.$oid] = debate;
-			}
-		}		
 		
-		private function loadAllQuestions():void {
-			var urlRequest:URLRequest = new URLRequest(BASE_PATH + "/questions/list");
-			var urlLoader:URLLoader = new URLLoader();
-			urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
-			urlLoader.addEventListener(Event.COMPLETE, onAllQuestionsLoaded);  
-			urlLoader.load(urlRequest);
-		}		
 		
-		private function onAllQuestionsLoaded(e:Event):void {
-			CDW.dashboard.log("Loaded question list from server");			
-			var questionList:* = JSON.decode(e.target.data);
-			
-			for each (var question:* in questionList) {
-				trace(question);
-				questions[question._id.$oid] = question;
-			}
-		}
+		private var portraitsRequested:int = 0;
+		private var portraitsLoaded:int = 0;
 		
-		public function loadAllUsers():void {
-			var urlRequest:URLRequest = new URLRequest(BASE_PATH + "/users/list");
-			var urlLoader:URLLoader = new URLLoader();
-			urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
-			urlLoader.addEventListener(Event.COMPLETE, onAllUsersLoaded);  
-			urlLoader.load(urlRequest);
-		}
-		
-		public function onAllUsersLoaded(e:Event):void {
-			// receives a JSON object of all users from the database,
-			// starts download and caching user images
-			CDW.dashboard.log("Loaded user list from server");
-			
-			var response:* = JSON.decode(e.target.data);
-			
-			// manage image loading
-			imageQueue = new LoaderMax({name:"imageQueue", onProgress:progressHandler, onComplete:completeHandler, onError:errorHandler});			
-			
-			for each (var user:* in response) {
-				trace(user.firstName);
+		private function onDebatesReceived(r:Object):void {
+			trace('Debates Loaded, getting portrait images');
+						
+			for each (var debate:Object in r) {
+				// Store the debates in an id-keyed array					
+				var debateID:String = debate['_id']['$oid'];
+				debates[debateID] = debate;
 				
-				if ((user.photos != undefined) && (user.photos.length > 0)) {
-					user.hasPhoto = true;
-					
-					var thumbnailUrlRequest:URLRequest = new URLRequest(BASE_PATH + '/static/' + user.photos[user.photos.length - 1].thumbnailUrl);
-					var portraitUrlRequest:URLRequest = new URLRequest(BASE_PATH + '/static/' + user.photos[user.photos.length - 1].originalUrl);										
-					
-					
-					user.thumbnailLoader = new ImageLoader(thumbnailUrlRequest, {estimatedBytes:2400});
-					user.portraitLoader = new ImageLoader(portraitUrlRequest, {estimatedBytes:2400});					
-					
-					// enqueue the photos
-					imageQueue.append(user.thumbnailLoader);
-					imageQueue.append(user.portraitLoader);
+				// start loading images, sotring them in an author-id keyed array
+				var authorID:String = debate['author']['_id']['$oid']
+				
+				if (authorID in portraits) {
+					trace('Already loading portrait for ' + authorID);
 				}
 				else {
-					// use placeholder
-					user.hasPhoto = false;					
+					portraitsRequested++;
+					
+					// load the image
+					portraits[authorID] = new Bitmap();
+					Utilities.loadImageFromDiskToTarget(CDW.settings.imagePath + authorID + '-full.jpg', portraits[authorID], onImageLoaded);
 				}
 				
-				// add the user to the db
-				users[user._id.$oid] = user;			
 			}
 			
-			//start loading images
-			imageQueue.load();											
+		}
+		
+		private function onImageLoaded():void {
+			portraitsLoaded++;
+			
+			trace("loaded " + portraitsLoaded + " out of " + portraitsRequested);
+			
+			if (portraitsRequested == portraitsLoaded) {
+				this.dispatchEvent(new Event(Event.COMPLETE));
+			}
+			
+			portraitsLoaded = portraitsLoaded;
 		}
 		
 		
-		
-		private function completeHandler(event:LoaderEvent):void {
-			CDW.dashboard.log(event.target + " is complete!");
-			
-			// pull out the bitmaps
-			for each (var user:* in users) {
-				if (user.hasPhoto) {
-					user.thumbnail = user.thumbnailLoader.rawContent;
-					user.portrait = user.portraitLoader.rawContent;
-				}
-			}
-			
-			// forward to the stage
-			this.dispatchEvent(event);
-		}		
-		
-		
-		private function progressHandler(event:LoaderEvent):void {
-			CDW.dashboard.log("progress: " + event.target.progress);
+		// STUBS
+		public function getQuestionText():String {
+			return '';
 		}
 		
-
-		private function errorHandler(event:LoaderEvent):void {
-			CDW.dashboard.log("error occured with " + event.target + ": " + event.text);
-		}				
+		public function getActivePortrait():Bitmap {
+			trace('Author '  + getDebateAuthor(CDW.state.activeDebate));
+			return portraits[getDebateAuthor(CDW.state.activeDebate)];
+		}
+		
+		private function getDebateAuthor(debateID:String):String {
+			return debates[debateID]['author']['_id']['$oid'];
+		}
 		
 	}
 }
