@@ -8,8 +8,8 @@ package net.localprojects.blocks {
 	
 	public class Portrait extends BlockBase {
 		
-		private var currentImage:Bitmap;
-		private var lastImage:Bitmap; // double buffer for the crossfade
+		private var image:Bitmap;
+		private var targetImage:Bitmap;
 		
 		public function Portrait() {
 			super();
@@ -17,38 +17,38 @@ package net.localprojects.blocks {
 		}
 		
 		private function init():void {
-			currentImage = new Bitmap(Assets.portraitPlaceholder.bitmapData);
-			addChild(currentImage);
+			image = new Bitmap();
+			targetImage = new Bitmap();			
+			
+			addChild(image);
+			addChild(targetImage);
+			
+			targetImage.alpha = 0;
 		}
 		
 		public function setImage(i:Bitmap, instant:Boolean = false):void {
+			var duration:Number = instant ? 0 : 0.5;
 			
-			if (instant) {
-				removeChild(currentImage);
-				currentImage = new Bitmap(i.bitmapData);				
-				addChild(currentImage);		
+			if(image.bitmapData == i.bitmapData) {
+				// image is already correct, get rid of the target
+				TweenMax.to(targetImage, duration, {alpha: 0});				
 			}
 			else {
-				// swaps images so we get a nice crossfade
-				lastImage = new Bitmap(currentImage.bitmapData);
-				
-				removeChild(currentImage);
-				
-				currentImage = new Bitmap(i.bitmapData);
-				addChild(currentImage);			
-				
-				addChild(lastImage);
-				TweenMax.to(lastImage, 0.5, {alpha: 0, ease: Quart.easeInOut, onComplete: onFadeOut});
+				targetImage.bitmapData = i.bitmapData;
+				TweenMax.to(targetImage, duration, {alpha: 1, onComplete: onFadeIn});				
 			}
 		}
 		
+		private function onFadeIn():void {
+			image.bitmapData = targetImage.bitmapData;
+			targetImage.alpha = 0;
+		}		
 		
-		
-		private function onFadeOut():void {
-			
-			if (contains(lastImage)) {
-				removeChild(lastImage);
-			}
+		public function setIntermediateImage(i:Bitmap, step:Number):void {
+			targetImage.bitmapData = i.bitmapData;
+			targetImage.alpha = step;
 		}
+		
+	
 	}
 }

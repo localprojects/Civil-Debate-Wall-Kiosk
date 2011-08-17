@@ -83,8 +83,7 @@ package net.localprojects {
 		// via http://segfaultlabs.com/devlogs/alchemy-asynchronous-jpeg-encoding-2		
 		/// init alchemy object
 				
-		
-		
+
 		public static function saveImageToDisk(bitmap:Bitmap, path:String, name:String):String {
 			var file:File = new File(path + name);
 			
@@ -121,7 +120,21 @@ package net.localprojects {
 		//var imageClip:MovieClip = new MovieClip();
 		//private var imageLoader:Loader = new Loader();
 		//private var loadedBitmap:Bitmap = new Bitmap();
+		public static function map(value:Number, min1:Number, max1:Number, min2:Number, max2:Number):Number {
+			return min2 + (max2 - min2) * ((value - min1) / (max1 - min1));
+		}		
 		
+		public static function mapClamp(value:Number, min1:Number, max1:Number, min2:Number, max2:Number):Number {
+			return clamp(map(value, min1, max1, min2, max2), min2, max2);
+		}				
+		
+		public static function clamp(value:Number, min:Number, max:Number):Number {
+			if (value < min) return min;
+			if (value > max) return max;
+			return value;
+		}
+		
+				
 		
 				
 		// loads a bitmap, passes it to the callback

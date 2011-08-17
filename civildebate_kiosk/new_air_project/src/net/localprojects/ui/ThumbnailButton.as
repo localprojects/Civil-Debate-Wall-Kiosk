@@ -24,9 +24,7 @@ package net.localprojects.ui {
 			this.graphics.drawRect(0, 0, 173, 141);
 			this.graphics.endFill();
 			
-			
-			
-			
+
 			portrait = image;
 			roundedPortrait = new Sprite();
 			
