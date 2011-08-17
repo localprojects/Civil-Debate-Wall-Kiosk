@@ -70,9 +70,18 @@ package net.localprojects {
 		private var editOpinion:BlockInputParagraph;		
 		
 		// multiples of these
-		private var stance:Stance;		
+		private var stance:Stance;
+		private var leftStance:Stance;
+		private var rightStance:Stance;		
+				
 		private var nametag:BlockLabel;
-		private var opinion:TripleBlock;
+		private var leftNametag:BlockLabel;
+		private var rightNametag:BlockLabel;		
+		
+		private var opinion:BlockParagraph;
+		private var leftOpinion:BlockParagraph;		
+		private var rightOpinion:BlockParagraph;
+		
 		private var byline:BlockLabel;
 		
 		// convenience
@@ -127,19 +136,38 @@ package net.localprojects {
 			addChild(question);
 			
 			stance = new Stance();
-			stance.setText(CDW.database.debates[CDW.state.activeDebate].stance);			
 			stance.setDefaultTweenIn(1, {x: 235, y: 280});
 			stance.setDefaultTweenOut(1, {x: -280, y: 280});						
-			addChild(stance);			
+			addChild(stance);
+			
+			leftStance = new Stance();
+			leftStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x - stageWidth, y: 280});						
+			addChild(leftStance);
+			
+			rightStance = new Stance();
+			rightStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x + stageWidth, y: 280});						
+			addChild(rightStance);			
 			
 			
 			
 
-			nametag = new BlockLabel('Name', 50, 0xffffff, Assets.COLOR_YES_MEDIUM, true, true);
+			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, true, true);
 			nametag.setPadding(26, 28, 20, 30);
 			nametag.setDefaultTweenIn(1, {x: 235, y: 410});
 			nametag.setDefaultTweenOut(1, {x: stageWidth, y: 410});
 			addChild(nametag);
+			
+			leftNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, true, true);
+			leftNametag.setPadding(26, 28, 20, 30);
+			leftNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x - stageWidth, y: 410});
+			addChild(leftNametag);
+
+			rightNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, true, true);
+			rightNametag.setPadding(26, 28, 20, 30);
+			rightNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x + stageWidth, y: 410});
+			addChild(rightNametag);
+			
+			
 			
 			byline = new BlockLabel('Byline', 22, 0xffffff, Assets.COLOR_YES_MEDIUM, false, true);
 			byline.setPadding(18, 32, 16, 32);
@@ -161,16 +189,24 @@ package net.localprojects {
 			rightQuote.setColor(Assets.COLOR_YES_LIGHT);
 			addChild(rightQuote);
 			
-			//
-			opinion = new TripleBlock();
-			opinion.setCenter(new BlockParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false));
-			opinion.setLeft(new BlockParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false));
-			opinion.setRight(new BlockParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false));
-
 			
+			// triple opinoions
+			opinion = new BlockParagraph(915, '', 44, 0x000000, false);	
 			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});
-			opinion.setDefaultTweenOut(1, {x: -opinion.width, y: 1095});
+			opinion.setDefaultTweenOut(1, {x: -stageWidth, y: 1095});
 			addChild(opinion);
+			
+			rightOpinion = new BlockParagraph(915, '', 44, 0x000000, false);	
+			rightOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: 1095});
+			rightOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: 1095});
+			addChild(rightOpinion);
+			
+			leftOpinion = new BlockParagraph(915, '', 44, 0x000000, false);	
+			leftOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: 1095});
+			leftOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: 1095});
+			addChild(leftOpinion);			
+			
+
 			
 			editOpinion = new BlockInputParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false);
 			editOpinion.setDefaultTweenIn(1, {x: 100, y: 1095});
@@ -364,24 +400,71 @@ package net.localprojects {
 			mouseDown = true;
 
 			// refactor startX based on tween progress, for portrait and other things
-			startX = this.mouseX + (nametag.x - nametag.defaultTweenInVars.x);
+			startX = this.mouseX - (nametag.x - nametag.defaultTweenInVars.x);
 			currentX = startX;
 			trace("down");
-			
+			leftEdge = 0;			
 
 			
 			// Stop home tweens
 			TweenMax.killTweensOf(nametag);
+			TweenMax.killTweensOf(leftNametag);
+			TweenMax.killTweensOf(rightNametag);			
 			TweenMax.killTweensOf(stance);
+			TweenMax.killTweensOf(leftStance);
+			TweenMax.killTweensOf(rightStance);			
 			TweenMax.killTweensOf(opinion);
+			TweenMax.killTweensOf(leftOpinion);
+			TweenMax.killTweensOf(rightOpinion);			
 			TweenMax.killChildTweensOf(portrait);
 			TweenMax.killChildTweensOf(leftQuote);
 			TweenMax.killChildTweensOf(rightQuote);			
 		}
 		
+		
+		private var transitioning:String = '';
+		
 		private function onMouseUp(e:MouseEvent):void {
 			mouseDown = false;
+			
 			trace("up");		
+			
+			// see if we need to transition
+			if (leftEdge < (stageWidth / -2)) {
+				trace("transition to next");
+				CDW.state.setActiveDebate(CDW.state.nextDebate);
+				leftOpinion.x += stageWidth;
+				opinion.x += stageWidth;
+				rightOpinion.x += stageWidth;
+				
+				leftStance.x += stageWidth;
+				rightStance.x += stageWidth;
+				stance.x += stageWidth;
+				
+				leftNametag.x += stageWidth;
+				rightNametag.x += stageWidth;
+				nametag.x += stageWidth;				
+				
+				
+			}
+			if (leftEdge > (stageWidth / 2)) {
+				trace("transition to previous");
+				CDW.state.setActiveDebate(CDW.state.previousDebate);
+				leftOpinion.x -= stageWidth;
+				opinion.x -= stageWidth;
+				rightOpinion.x -= stageWidth;
+				
+				leftStance.x -= stageWidth;
+				rightStance.x -= stageWidth;
+				stance.x -= stageWidth;
+				
+				leftNametag.x -= stageWidth;
+				rightNametag.x -= stageWidth;
+				nametag.x -= stageWidth;				
+			}
+			else {
+				// spring back to current
+			}
 			
 			
 			
@@ -390,38 +473,54 @@ package net.localprojects {
 			homeView();
 		}		
 		
+		
+		
 		private var difference:int;
-		
-		
+		private var leftEdge:int;
 		
 		
 		private function onMouseMove(e:Event):void {
 			if (mouseDown) {
+				
 				lastX = currentX;
 				currentX = this.mouseX;
+				leftEdge += currentX - lastX;
+				difference =  startX - currentX;				
+				
+				
+				trace(leftEdge);
 			
 				
-				nametag.x += currentX - lastX;
-				stance.x += currentX - lastX;
-				opinion.x += currentX - lastX;
-				
-				difference = startX - currentX;
-				
-				
-				var targetColorDark:uint;
-
-				
-				if (difference > 1) {
-					// moving left
+				// TODO temp off
+				if (true && ((leftEdge < 0) && (CDW.state.nextDebate == null))
+					|| ((leftEdge > stageWidth) && (CDW.state.previousDebate == null))) {
+					trace("hit edge");
 				}
 				else {
-					// moving right					
-				}
+					// drag blocks
+					nametag.x = nametag.defaultTweenInVars.x - difference;
+					stance.x = stance.defaultTweenInVars.x - difference;
+					
+					opinion.x = opinion.defaultTweenInVars.x - difference;
+					leftOpinion.x = leftOpinion.defaultTweenInVars.x - difference;
+					rightOpinion.x = rightOpinion.defaultTweenInVars.x - difference;
+					
+					leftStance.x = leftStance.defaultTweenInVars.x - difference;
+					stance.x = stance.defaultTweenInVars.x - difference;
+					rightStance.x = rightStance.defaultTweenInVars.x - difference;
+					
+					leftNametag.x = leftNametag.defaultTweenInVars.x - difference;
+					nametag.x = nametag.defaultTweenInVars.x - difference;
+					rightNametag.x = rightNametag.defaultTweenInVars.x - difference;					
 				
-				portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.nextDebate), Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));
-				leftQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));
-				rightQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));				
+					// tween colors
+					portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.nextDebate), Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));
+					leftQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));
+					rightQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));					
+				}
 			}
+
+			
 			
 		}
 		
@@ -438,14 +537,45 @@ package net.localprojects {
 			portrait.setImage(CDW.database.getActivePortrait());
 			
 			
-			nametag.setText(CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName + ' Says :');
-			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance);
-			opinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);
+			nametag.setText(CDW.database.getDebateAuthorName(CDW.state.activeDebate) + ' Says :', true);
+			
+			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance, true);
+			
+			opinion.setText(CDW.database.getOpinion(CDW.state.activeDebate));
 			
 			
-			if (CDW.state.previousDebate != null) opinion.left.setText(CDW.database.debates[CDW.state.previousDebate].opinion);
-			if (CDW.state.nextDebate != null) opinion.right.setText(CDW.database.debates[CDW.state.nextDebate].opinion);			
-
+			if (CDW.state.previousDebate != null) {
+				// set the previous debate
+				leftOpinion.setText(CDW.database.getOpinion(CDW.state.previousDebate));				
+				leftStance.setStance(CDW.database.getStance(CDW.state.previousDebate), true);
+				leftNametag.setText(CDW.database.getDebateAuthorName(CDW.state.previousDebate) + ' Says :', true);				
+				
+				if (CDW.database.getStance(CDW.state.previousDebate) == 'yes') {
+					leftOpinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);
+					leftNametag.setBackgroundColor(Assets.COLOR_YES_DARK, true);					
+				}
+				else {
+					leftOpinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);				
+					leftNametag.setBackgroundColor(Assets.COLOR_NO_DARK, true);					
+				}
+			}
+			
+			if (CDW.state.nextDebate != null) {
+				// set the previous debate
+				rightOpinion.setText(CDW.database.debates[CDW.state.nextDebate].opinion);				
+				rightStance.setStance(CDW.database.getStance(CDW.state.nextDebate), true);
+				rightNametag.setText(CDW.database.getDebateAuthorName(CDW.state.nextDebate) + ' Says :', true);				
+				
+				
+				if (CDW.database.getStance(CDW.state.nextDebate) == 'yes') {
+					rightOpinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);
+					rightNametag.setBackgroundColor(Assets.COLOR_YES_DARK, true);
+				}
+				else {
+					rightOpinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);
+					rightNametag.setBackgroundColor(Assets.COLOR_NO_DARK, true);					
+				}
+			}
 			
 			bigButton.setText('ADD YOUR OPINION');
 			viewDebateButton.setLabel('"The reality is that a decision…" +8 other responses');
@@ -457,18 +587,18 @@ package net.localprojects {
 			if (CDW.database.debates[CDW.state.activeDebate].stance == 'yes') {
 				leftQuote.setColor(Assets.COLOR_YES_LIGHT);
 				rightQuote.setColor(Assets.COLOR_YES_LIGHT);				
-				nametag.setBackgroundColor(Assets.COLOR_YES_DARK);
+				nametag.setBackgroundColor(Assets.COLOR_YES_DARK, true);
 				debateButton.setBackgroundColor(Assets.COLOR_YES_DARK);
 				opinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);
 				statsButton.setBackgroundColor(Assets.COLOR_YES_DARK);
 				likeButton.setBackgroundColor(Assets.COLOR_YES_DARK);
 				viewDebateButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				flagButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				flagButton.setBackgroundColor(Assets.COLOR_YES_DARK);					
 			}
 			else {
 				leftQuote.setColor(Assets.COLOR_NO_LIGHT);
 				rightQuote.setColor(Assets.COLOR_NO_LIGHT);				
-				nametag.setBackgroundColor(Assets.COLOR_NO_DARK);
+				nametag.setBackgroundColor(Assets.COLOR_NO_DARK, true);
 				debateButton.setBackgroundColor(Assets.COLOR_NO_DARK);
 				opinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);
 				statsButton.setBackgroundColor(Assets.COLOR_NO_DARK);
@@ -476,6 +606,17 @@ package net.localprojects {
 				viewDebateButton.setBackgroundColor(Assets.COLOR_NO_DARK);
 				flagButton.setBackgroundColor(Assets.COLOR_NO_DARK);			
 			}			
+			
+			
+			
+			if (CDW.state.nextDebate != null) {
+				if (CDW.database.debates[CDW.state.nextDebate].stance == 'yes') {
+					//rightOpinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);		
+				}
+				else {
+					//rightOpinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);					
+				}
+			}
 			
 			
 			// behaviors
@@ -491,11 +632,23 @@ package net.localprojects {
 			header.tweenIn();
 			divider.tweenIn();
 			question.tweenIn();
+			
+			
 			stance.tweenIn();
+			leftStance.tweenIn();
+			rightStance.tweenIn();
+			
 			nametag.tweenIn();
+			leftNametag.tweenIn();
+			rightNametag.tweenIn();
+			
 			leftQuote.tweenIn();
 			rightQuote.tweenIn();
+			
 			opinion.tweenIn();
+			rightOpinion.tweenIn();
+			leftOpinion.tweenIn();
+			
 			bigButton.tweenIn();
 			statsButton.tweenIn();
 			likeButton.tweenIn();
@@ -503,6 +656,12 @@ package net.localprojects {
 			flagButton.tweenIn();
 			viewDebateButton.tweenIn();
 			debatePicker.tweenIn();
+			
+			// restore triplet...
+			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});			
+			rightOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: 1095});			
+			leftOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: 1095});			
+			
 			
 			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
 			// note that it's a one-time thing, when the block tweens back in, it will start from its canonical "tween out" location

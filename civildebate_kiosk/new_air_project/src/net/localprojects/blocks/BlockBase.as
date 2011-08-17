@@ -57,7 +57,7 @@ package net.localprojects.blocks {
 			// override me
 		}		
 		
-		public function setBackgroundColor(c:uint):void {
+		public function setBackgroundColor(c:uint, instant:Boolean = false):void {
 			// override me
 		}
 		

@@ -129,34 +129,45 @@ package net.localprojects.elements {
 
 		
 		private var newText:String;
-		private var instant:Boolean;
+		private var instantTween:Boolean;
 		override public function setText(s:String, instant:Boolean = false):void {
-			if (s != textField.text) {
+			instantTween = instant;			
+			var textOutDuration:Number = instant ? 0 : 0.1;
+			var backgroundDuration:Number = instant ? 0 : 0.2;			
+			newText = s;			
+			
+			if (instant) {
+				textField.text = newText;							
+				
+				
+			}
+			
+			else {
+			
 				// TODO crossfade text
-				newText = s;
-				instant = instant;
-				
-				var textOutDuration:Number = instant ? 0 : 0.1;
-				var backgroundDuration:Number = instant ? 0 : 0.2;				
-				
+
 
 				TweenMax.to(textField, textOutDuration, {alpha: 0, ease: Quart.easeOut, onComplete: afterFade});
-				TweenMax.to(background, backgroundDuration, {width: getBackgroundDimensions(newText).width, height: getBackgroundDimensions(newText).height, ease: Quart.easeIn});
 			}
+			
+			TweenMax.to(background, backgroundDuration, {width: getBackgroundDimensions(newText).width, height: getBackgroundDimensions(newText).height, ease: Quart.easeIn});			
 		}
 			
 		
 		public function afterFade():void {
 			textField.text = newText;				
 			//drawBackground();				
-			var textInDuration:Number = instant ? 0 : 0.1;
+			var textInDuration:Number = instantTween ? 0 : 0.1;
 			TweenMax.to(textField, textInDuration, {alpha: 1, ease: Quart.easeIn});
 		}
 		
 		// tweens to a new color
-		override public function setBackgroundColor(c:uint):void {
+		override public function setBackgroundColor(c:uint, instant:Boolean = false):void {
 			_backgroundColor = c;
-			TweenMax.to(background, 0.5, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
+			
+			var duation:Number = instant ? 0 : 0.5;
+			
+			TweenMax.to(background, duation, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
 		}
 			
 		
