@@ -338,8 +338,83 @@ package net.localprojects {
 			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut});
 			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
 			addChild(flashOverlay);
+			
+			
+			
+			
+			
+			
+			// cross dragging, move to overlay block!? only in home view?
+			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			mouseDown = false;
 		}
 		
+		private var mouseDown:Boolean;		
+		private var startX:int;
+		private var lastX:int;
+		private var currentX:int;
+		private function onMouseDown(e:MouseEvent):void {
+			mouseDown = true;
+			// refactor startX based on tween progress, for portrait and other things
+			startX = this.mouseX + (nametag.x - nametag.defaultTweenInVars.x);
+			currentX = startX;
+			trace("down");
+			
+			
+			
+			
+			
+			
+			
+			
+			TweenMax.killTweensOf(nametag);
+			TweenMax.killTweensOf(stance);
+			TweenMax.killTweensOf(opinion);
+			TweenMax.killChildTweensOf(portrait);
+			TweenMax.killChildTweensOf(leftQuote);
+			TweenMax.killChildTweensOf(rightQuote);			
+			
+		}
+		
+		private function onMouseUp(e:MouseEvent):void {
+			mouseDown = false;
+			trace("up");			
+			
+			// put everything back into place
+			homeView();
+		}		
+		
+		private function onMouseMove(e:Event):void {
+			if (mouseDown) {
+				lastX = currentX;
+				currentX = this.mouseX;
+			
+				
+				nametag.x += currentX - lastX;
+				stance.x += currentX - lastX;
+				opinion.x += currentX - lastX;
+				
+				var difference:int = startX - currentX;
+				
+				
+				var targetColorDark:uint;
+
+				
+				if (difference > 1) {
+					// moving left
+				}
+				else {
+					// moving right					
+				}
+				
+				portrait.setIntermediateImage(CDW.database.portraits['4e4ae39a0f2e4243f7000004'], Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));
+				leftQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));
+				rightQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));				
+			}
+			
+		}
 		
 
 		

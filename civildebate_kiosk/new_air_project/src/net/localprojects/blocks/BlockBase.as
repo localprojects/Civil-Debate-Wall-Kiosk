@@ -15,7 +15,7 @@ package net.localprojects.blocks {
 		
 		
 		private var defaultTweenVars:Object;
-		private var defaultTweenInVars:Object;
+		public var defaultTweenInVars:Object;
 		private var defaultTweenOutVars:Object;
 		private var defaultDuration:Number;
 		private var defaultInDuration:Number;
