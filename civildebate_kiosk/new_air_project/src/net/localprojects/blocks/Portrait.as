@@ -45,7 +45,9 @@ package net.localprojects.blocks {
 		}		
 		
 		public function setIntermediateImage(i:Bitmap, step:Number):void {
-			targetImage.bitmapData = i.bitmapData;
+			if (targetImage.bitmapData != i.bitmapData) {
+				targetImage.bitmapData = i.bitmapData;
+			}
 			targetImage.alpha = step;
 		}
 		

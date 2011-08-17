@@ -5,6 +5,8 @@ package net.localprojects.blocks {
 	import com.greensock.easing.*;
 	import com.greensock.events.TweenEvent;
 	
+	import fl.motion.Color;
+	
 	import flash.display.Sprite;
 	import flash.geom.Point;
 	
@@ -15,7 +17,7 @@ package net.localprojects.blocks {
 		
 		
 		private var defaultTweenVars:Object;
-		public var defaultTweenInVars:Object;
+		public var defaultTweenInVars:Object; // public for the drag transition... TODO better way to expose tween-in X?
 		private var defaultTweenOutVars:Object;
 		private var defaultDuration:Number;
 		private var defaultInDuration:Number;
@@ -50,6 +52,15 @@ package net.localprojects.blocks {
 			defaultTweenOutVars = Utilities.mergeObjects(defaultTweenOutVars, params);
 		}				
 
+		
+		public function setText(s:String, instant:Boolean = false):void {
+			// override me
+		}		
+		
+		public function setBackgroundColor(c:uint):void {
+			// override me
+		}
+		
 		
 		// A little tweening abstraction... sets overridable default parameters
 		// manages visibility / invisibility

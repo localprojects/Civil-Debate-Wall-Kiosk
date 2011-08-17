@@ -4,15 +4,11 @@ package net.localprojects {
 	
 	public class State extends Object {
 		
-		public var activeQuestion:String = '4e2755b50f2e420354000001';
+		public var activeQuestion:String = '4e2755b50f2e420354000001'; // TODO load from server
 		
-		public var activeDebate:String = '4e2756a20f2e420341000000';
-		
-		public var nextDebate:String = '';
-		public var previousDebate:String = '';		
-		
-		
-		
+		public var activeDebate:String = null;
+		public var nextDebate:String = null;
+		public var previousDebate:String = null;		
 		
 		public var userStance:String = 'yes';
 		public var userName:String = '';
@@ -27,7 +23,17 @@ package net.localprojects {
 			userName = '';
 			userImage = new Bitmap(new BitmapData(1920, 1080));
 			userPhoneNumber = '';
-			userOpinion = '';			
+			userOpinion = '';
+		}
+		
+		public function setActiveDebate(debateID:String):void {
+			activeDebate = debateID;
+			nextDebate = CDW.database.getNextDebate();
+			previousDebate = CDW.database.getPreviousDebate();
+			
+			trace("Prev: " + previousDebate);
+			trace("Active: " + activeDebate);
+			trace("Next: " + nextDebate);
 		}
 		
 		public function State()	{

@@ -43,7 +43,7 @@ package net.localprojects.blocks {
 			addChild(questionText);	
 		}
 		
-		public function setText(s:String):void {
+		override public function setText(s:String, instant:Boolean = false):void {
 			questionText.text = s;
 		}
 		

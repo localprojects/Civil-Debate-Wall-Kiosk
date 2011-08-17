@@ -126,14 +126,11 @@ package net.localprojects.elements {
 			textField.text = oldString; // reset string
 			return newDimensions;
 		}
-				
-		
-		
-		
+
 		
 		private var newText:String;
 		private var instant:Boolean;
-		public function setText(s:String, instant:Boolean = false):void {
+		override public function setText(s:String, instant:Boolean = false):void {
 			if (s != textField.text) {
 				// TODO crossfade text
 				newText = s;
@@ -157,7 +154,7 @@ package net.localprojects.elements {
 		}
 		
 		// tweens to a new color
-		public function setBackgroundColor(c:uint):void {
+		override public function setBackgroundColor(c:uint):void {
 			_backgroundColor = c;
 			TweenMax.to(background, 0.5, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
 		}

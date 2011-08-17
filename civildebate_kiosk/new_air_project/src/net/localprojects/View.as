@@ -72,7 +72,7 @@ package net.localprojects {
 		// multiples of these
 		private var stance:Stance;		
 		private var nametag:BlockLabel;
-		private var opinion:BlockParagraph;
+		private var opinion:TripleBlock;
 		private var byline:BlockLabel;
 		
 		// convenience
@@ -93,7 +93,7 @@ package net.localprojects {
 			// http://forums.adobe.com/message/2794098?tstart=0
 			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;			
 			
-			// dump everything with just a single instanceon the stage,
+			// dump everything with just a single instance on the stage,
 			// they'll get tweened in and out as necessary
 			portrait = new Portrait();
 			portrait.setDefaultTweenIn(1, {alpha: 1});
@@ -131,6 +131,9 @@ package net.localprojects {
 			stance.setDefaultTweenIn(1, {x: 235, y: 280});
 			stance.setDefaultTweenOut(1, {x: -280, y: 280});						
 			addChild(stance);			
+			
+			
+			
 
 			nametag = new BlockLabel('Name', 50, 0xffffff, Assets.COLOR_YES_MEDIUM, true, true);
 			nametag.setPadding(26, 28, 20, 30);
@@ -158,10 +161,15 @@ package net.localprojects {
 			rightQuote.setColor(Assets.COLOR_YES_LIGHT);
 			addChild(rightQuote);
 			
-			opinion = new BlockParagraph(915, 'Opinion goes here', 44, Assets.COLOR_YES_LIGHT, false); 
+			//
+			opinion = new TripleBlock();
+			opinion.setCenter(new BlockParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false));
+			opinion.setLeft(new BlockParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false));
+			opinion.setRight(new BlockParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false));
+
+			
 			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});
 			opinion.setDefaultTweenOut(1, {x: -opinion.width, y: 1095});
-			opinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);
 			addChild(opinion);
 			
 			editOpinion = new BlockInputParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false);
@@ -339,10 +347,7 @@ package net.localprojects {
 			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
 			addChild(flashOverlay);
 			
-			
-			
-			
-			
+
 			
 			// cross dragging, move to overlay block!? only in home view?
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
@@ -357,34 +362,38 @@ package net.localprojects {
 		private var currentX:int;
 		private function onMouseDown(e:MouseEvent):void {
 			mouseDown = true;
+
 			// refactor startX based on tween progress, for portrait and other things
 			startX = this.mouseX + (nametag.x - nametag.defaultTweenInVars.x);
 			currentX = startX;
 			trace("down");
 			
+
 			
-			
-			
-			
-			
-			
-			
+			// Stop home tweens
 			TweenMax.killTweensOf(nametag);
 			TweenMax.killTweensOf(stance);
 			TweenMax.killTweensOf(opinion);
 			TweenMax.killChildTweensOf(portrait);
 			TweenMax.killChildTweensOf(leftQuote);
 			TweenMax.killChildTweensOf(rightQuote);			
-			
 		}
 		
 		private function onMouseUp(e:MouseEvent):void {
 			mouseDown = false;
-			trace("up");			
+			trace("up");		
+			
+			
+			
 			
 			// put everything back into place
 			homeView();
 		}		
+		
+		private var difference:int;
+		
+		
+		
 		
 		private function onMouseMove(e:Event):void {
 			if (mouseDown) {
@@ -396,7 +405,7 @@ package net.localprojects {
 				stance.x += currentX - lastX;
 				opinion.x += currentX - lastX;
 				
-				var difference:int = startX - currentX;
+				difference = startX - currentX;
 				
 				
 				var targetColorDark:uint;
@@ -409,7 +418,7 @@ package net.localprojects {
 					// moving right					
 				}
 				
-				portrait.setIntermediateImage(CDW.database.portraits['4e4ae39a0f2e4243f7000004'], Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));
+				portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.nextDebate), Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));
 				leftQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));
 				rightQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));				
 			}
@@ -425,10 +434,19 @@ package net.localprojects {
 			CDW.inactivityTimer.disarm();
 			
 			// mutations
+			
 			portrait.setImage(CDW.database.getActivePortrait());
+			
+			
 			nametag.setText(CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName + ' Says :');
 			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance);
 			opinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);
+			
+			
+			if (CDW.state.previousDebate != null) opinion.left.setText(CDW.database.debates[CDW.state.previousDebate].opinion);
+			if (CDW.state.nextDebate != null) opinion.right.setText(CDW.database.debates[CDW.state.nextDebate].opinion);			
+
+			
 			bigButton.setText('ADD YOUR OPINION');
 			viewDebateButton.setLabel('"The reality is that a decision…" +8 other responses');
 			
