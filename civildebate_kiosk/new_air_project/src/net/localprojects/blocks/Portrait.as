@@ -42,6 +42,8 @@ package net.localprojects.blocks {
 			}
 		}
 		
+		
+		
 		private function onFadeOut():void {
 			
 			if (contains(lastImage)) {

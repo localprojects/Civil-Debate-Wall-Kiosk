@@ -42,27 +42,27 @@ package net.localprojects.blocks {
 		public function update():void {
 			// reads the state and builds the strip
 			
-//			var i:int = 0;
-//			for each (var debate:* in CDW.database.debates) {
-//				var debateThumbnail:ThumbnailButton = new ThumbnailButton(CDW.database.users[debate.author._id.$oid].thumbnail, debate.stance);
-//				debateThumbnail.x = padding + ((debateThumbnail.width + padding) * i);
-//				debateThumbnail.y = 0;
-//				
-//				// todo diff updates
-//				if (CDW.state.activeDebate == debate._id.$oid) {
-//					debateThumbnail.active = true;
-//				}
-//				else {
-//					debateThumbnail.active = false;
-//				}
-//				
-//				debateHolder.addChild(debateThumbnail);
-//				i++;
-//				
-//				
-//				
-//			}
+			var i:int = 0;
+			for (var debateID:* in CDW.database.debates) {
+				var debate:Object = CDW.database.debates[debateID];
+				var debateThumbnail:ThumbnailButton = new ThumbnailButton(CDW.database.cloneDebateAuthorPortrait(debateID), debate.stance);
+				debateThumbnail.x = padding + ((debateThumbnail.width + padding) * i);
+				debateThumbnail.y = 0;
+				
+				// todo diff updates
+				if (CDW.state.activeDebate == debateID) {
+					debateThumbnail.active = true;
+				}
+				else {
+					debateThumbnail.active = false;
+				}
+				
+				debateHolder.addChild(debateThumbnail);
+				i++;
+			}
 		}
+		
+		
 		
 		// scroll physics
 		private var vx:Number = 0;
@@ -72,8 +72,6 @@ package net.localprojects.blocks {
 		private var vxSamples:Array = [];
 		private var vxSampleDepth:int = 5; // average the last five mouse velocities
 		private var avx:Number = 0; // average velocity over sample depth
-		
-		
 		
 		private function onMouseDown(e:MouseEvent):void {
 			CDW.ref.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
@@ -150,7 +148,7 @@ package net.localprojects.blocks {
 			// take the average vx
 			avx = Utilities.averageArray(vxSamples);
 
-			trace("Last velocity: " + vx +  "\tAverage Velocity: " + avx); 
+			//trace("Last velocity: " + vx +  "\tAverage Velocity: " + avx); 
 			
 			mouseDown = false;
 			

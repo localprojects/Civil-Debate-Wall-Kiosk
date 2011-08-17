@@ -1,32 +1,19 @@
 package net.localprojects {
 	import com.adobe.serialization.json.*;
 	import com.greensock.*;
-	import com.greensock.events.*;
+	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.*;
+	import com.greensock.loading.display.*;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.events.*;
+	import flash.filesystem.File;
 	import flash.net.*;
-	
+		
 	public class Database extends EventDispatcher {
 		
-		
-		
-		// startup:
-		// load everything from the server, put it into flash objects
-		
-		// download all the images, save them locally
-		
-		// update:
-		// load everything form the server since the last time, put it into flash objects		
-		
-		public const BASE_PATH:String = CDW.settings.imagePath;
-		
-
-		// todo, just use debate list with automatic python dereferencing!?
-		
-		
+	
 		public var question:Object = {};
 		public var debates:Object = {};
 		public var portraits:Object = {};
@@ -42,7 +29,7 @@ package net.localprojects {
 			// TODO get active question from server
 			trace('Loading from DB');
 			trace('Loading question');
-			Utilities.postRequestJSON('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/questions/get', {'id': '4e2755b50f2e420354000001'}, onQuestionReceived);
+			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/questions/get', {'id': '4e2755b50f2e420354000001'}, onQuestionReceived);
 		}
 		
 		private function onQuestionReceived(r:Object):void {
@@ -52,14 +39,12 @@ package net.localprojects {
 			question = r;
 			
 			// User info is included automatically via Python's MongoDB DOCRef dereferencing
-			Utilities.postRequestJSON('http://ec2-50-19-25-31.compute-1.amazonaws.com/api/debates/list', {'question': '4e2755b50f2e420354000001'}, onDebatesReceived);
+			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/debates/list', {'question': '4e2755b50f2e420354000001'}, onDebatesReceived);
 		}
 		
-		
-		
-		private var portraitsRequested:int = 0;
-		private var portraitsLoaded:int = 0;
-		
+
+		private var queue:LoaderMax = new LoaderMax({name:"portraitQueue", onProgress:progressHandler, onComplete:completeHandler, onError:errorHandler});
+
 		private function onDebatesReceived(r:Object):void {
 			trace('Debates Loaded, getting portrait images');
 						
@@ -75,28 +60,38 @@ package net.localprojects {
 					trace('Already loading portrait for ' + authorID);
 				}
 				else {
-					portraitsRequested++;
-					
 					// load the image
 					portraits[authorID] = new Bitmap();
-					Utilities.loadImageFromDiskToTarget(CDW.settings.imagePath + authorID + '-full.jpg', portraits[authorID], onImageLoaded);
+					
+					queue.append(new ImageLoader((new File(CDW.settings.imagePath + authorID + '-full.jpg')).url, {name: authorID, estimatedBytes:2400, container:this}) );
 				}
-				
 			}
 			
+			queue.load();
 		}
 		
-		private function onImageLoaded():void {
-			portraitsLoaded++;
-			
-			trace("loaded " + portraitsLoaded + " out of " + portraitsRequested);
-			
-			if (portraitsRequested == portraitsLoaded) {
-				this.dispatchEvent(new Event(Event.COMPLETE));
-			}
-			
-			portraitsLoaded = portraitsLoaded;
+		private function progressHandler(event:LoaderEvent):void {
+			trace("progress: " + event.target.progress);
 		}
+		
+		private function completeHandler(event:LoaderEvent):void {
+			trace(event.target + " is complete!");
+
+			for (var id:String in portraits) {
+				portraits[id] = (LoaderMax.getContent(id) as ContentDisplay).rawContent;
+			}
+
+			// ready to start
+			this.dispatchEvent(new Event(Event.COMPLETE));
+		}
+		
+		private function errorHandler(event:LoaderEvent):void {
+			trace("error occured with " + event.target + ": " + event.text);
+		}
+		
+		
+		
+
 		
 		
 		// STUBS
@@ -105,13 +100,21 @@ package net.localprojects {
 		}
 		
 		public function getActivePortrait():Bitmap {
-			trace('Author '  + getDebateAuthor(CDW.state.activeDebate));
-			return portraits[getDebateAuthor(CDW.state.activeDebate)];
+			return getDebateAuthorPortrait(CDW.state.activeDebate);
 		}
 		
-		private function getDebateAuthor(debateID:String):String {
+		public function getDebateAuthor(debateID:String):String {
 			return debates[debateID]['author']['_id']['$oid'];
 		}
+		
+		public function getDebateAuthorPortrait(debateID:String):Bitmap {
+			return portraits[getDebateAuthor(debateID)]; 
+		}
+		
+		
+		public function cloneDebateAuthorPortrait(debateID:String):Bitmap {
+			return new Bitmap(portraits[getDebateAuthor(debateID)].bitmapData.clone());; 
+		}		
 		
 	}
 }

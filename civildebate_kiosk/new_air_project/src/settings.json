@@ -4,5 +4,6 @@
 	"halfSize": true,
 	"startFullScreen": false,
 	"webcamOnly": true,
-	"imagePath": "/Users/Mika/Desktop/CDWImages/"
+	"imagePath": "/Users/Mika/Desktop/CDWImages/",
+	"serverPath": "http://ec2-50-19-25-31.compute-1.amazonaws.com"
 }
