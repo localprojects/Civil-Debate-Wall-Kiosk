@@ -3,14 +3,15 @@ package net.localprojects.camera {
 	import flash.display.BitmapData;
 	import flash.events.EventDispatcher;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import net.localprojects.Utilities;
 	
 	import jp.maaash.ObjectDetection.ObjectDetector;
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	import jp.maaash.ObjectDetection.ObjectDetectorOptions;
-	import flash.geom.Point;
+	
 	import net.localprojects.CDW;
+	import net.localprojects.Utilities;
 	
 	// Adapted from Mario Klingemann's code
 	// http://www.quasimondo.com/archives/000687.php
@@ -26,6 +27,8 @@ package net.localprojects.camera {
 		private var maxSourceHeight:int;
 		private var sourceCenter:Point;
 		
+		private var monitor:Bitmap;
+		
 		public function FaceDetector() {
 			super();
 			init();
@@ -40,8 +43,14 @@ package net.localprojects.camera {
 			
 			faceRect = new Rectangle();
 			
-			maxSourceWidth = 200;
-			maxSourceHeight = 200;
+			maxSourceWidth = 150;
+			maxSourceHeight = 150;
+			
+			monitor = new Bitmap(new BitmapData(maxSourceWidth, maxSourceHeight, false, 0xff0000));
+			monitor.y = 150;
+			CDW.dashboard.addChild(monitor);
+			
+			
 		}
 		
 		private function detectionHandler(e:ObjectDetectorEvent):void {
@@ -83,6 +92,11 @@ package net.localprojects.camera {
 		public function processBitmap(photo:BitmapData):void {
 			// resize
 			photo = Utilities.scaleToFit(photo, maxSourceWidth, maxSourceHeight);
+			
+
+			monitor.bitmapData = photo;
+			
+			
 			sourceCenter = new Point(photo.width / 2, photo.height / 2);
 			detector.detect(photo);
 		}

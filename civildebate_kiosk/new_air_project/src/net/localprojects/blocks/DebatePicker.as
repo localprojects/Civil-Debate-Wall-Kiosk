@@ -45,7 +45,7 @@ package net.localprojects.blocks {
 			var i:int = 0;
 			for (var debateID:* in CDW.database.debates) {
 				var debate:Object = CDW.database.debates[debateID];
-				var debateThumbnail:ThumbnailButton = new ThumbnailButton(CDW.database.cloneDebateAuthorPortrait(debateID), debate.stance);
+				var debateThumbnail:ThumbnailButton = new ThumbnailButton(CDW.database.cloneDebateAuthorPortrait(debateID), debate.stance, debateID);
 				debateThumbnail.x = padding + ((debateThumbnail.width + padding) * i);
 				debateThumbnail.y = 0;
 				
@@ -69,12 +69,18 @@ package net.localprojects.blocks {
 		private var friction:Number = 0.9;
 		private var vxThreshold:Number = 0.5;
 		private var mouseDown:Boolean = false;
+		
 		private var vxSamples:Array = [];
 		private var vxSampleDepth:int = 5; // average the last five mouse velocities
 		private var avx:Number = 0; // average velocity over sample depth
 		
+		private var startX:int;
+		
 		private function onMouseDown(e:MouseEvent):void {
 			CDW.ref.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			
+		
+			startX = this.stage.mouseX;
 			
 			mouseDown = true;
 			lastMouseX = this.stage.mouseX
@@ -143,6 +149,8 @@ package net.localprojects.blocks {
 			CDW.ref.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			
 			
+			trace("mouse has been on a journey of " + Math.abs(startX - this.stage.mouseX) + " pixels.");
+			
 			//CDW.dashboard.log(vxSamples.toString());
 			
 			// take the average vx
@@ -160,8 +168,29 @@ package net.localprojects.blocks {
 				
 				// kind of gross, use introspection to find out what's under the mouse instead of adding listeners to the thumbnails, need to block event bubbling instead?
 				if (objects[i] is ThumbnailButton) {
-					trace("clicked thumbnail!");
-					// TODO figure out if we should interpret a click or a scroll (does the touchscreen do this for us?)					
+					
+					
+					
+					
+					
+					
+					// figure out if we should interpret a click or a scroll (does the touchscreen do this for us?)
+					// interpret as a click only if we've moved less than 10 pixels
+					var distanceTraveled:int = Math.abs(startX - this.stage.mouseX);
+					var travelThreshold:int = 10;
+					
+					if (distanceTraveled < travelThreshold) {
+						trace("clicked thumbnail for debate " + objects[i].debateID);
+						
+						// TODO fire on view?
+						CDW.state.setActiveDebate(objects[i].debateID);
+						CDW.view.homeView();
+						
+						
+						
+					}
+					
+					
 				}
 				
 			}

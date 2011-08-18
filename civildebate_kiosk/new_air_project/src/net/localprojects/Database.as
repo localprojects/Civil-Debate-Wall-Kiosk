@@ -133,7 +133,7 @@ package net.localprojects {
 		
 		
 		public function cloneDebateAuthorPortrait(debateID:String):Bitmap {
-			return new Bitmap(portraits[getDebateAuthor(debateID)].bitmapData.clone());; 
+			return new Bitmap(portraits[getDebateAuthor(debateID)].bitmapData.clone());
 		}
 		
 		

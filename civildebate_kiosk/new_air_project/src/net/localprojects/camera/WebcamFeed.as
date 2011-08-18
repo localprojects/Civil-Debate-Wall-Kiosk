@@ -47,6 +47,8 @@ package net.localprojects.camera {
 			matrix = new Matrix();
 			matrix.scale(undersampleFactor, undersampleFactor);
 			matrix.rotate(Utilities.degToRad(-90));
+			matrix.scale(-1, 1);
+			matrix.tx = 1080;			
 			matrix.ty = 1920;
 		}
 		
