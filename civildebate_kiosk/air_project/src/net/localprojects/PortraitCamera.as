@@ -90,7 +90,7 @@ package net.localprojects {
 			maskContianer.addChild(maskBitmap);
 			
 			portraitContianer.addChild(videoBitmap);
-			portraitContianer.addChild(maskContianer);
+			portraitContianer.addChild(maskContianer);p
 			addChild(portraitContianer);
 			addChild(Assets.portraitOverlay);			
 			
