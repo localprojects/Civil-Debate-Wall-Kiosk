@@ -82,13 +82,6 @@ package net.localprojects {
 				portraits[id] = (LoaderMax.getContent(id) as ContentDisplay).rawContent;
 			}
 
-			// set active debate to first in list
-			// set the active debate to the first one
-			for (var debateID:String in debates) {			
-				CDW.state.setActiveDebate(debateID);
-				break;
-			}
-			
 			// ready to start
 			this.dispatchEvent(new Event(Event.COMPLETE));
 		}
