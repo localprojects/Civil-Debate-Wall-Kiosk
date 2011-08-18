@@ -96,35 +96,56 @@ package net.localprojects {
 			view.inactivityView();
 		}
 		
-		
+		private var firstTime:Boolean = true;
 		private function onDatabaseLoaded(e:Event):void {
-			trace("database loaded");
 			
-			// set up test overlay
-			testOverlay = new Bitmap(new BitmapData(1080, 1920));
-			testOverlay.visible = false;
-			testOverlay.alpha = 0.5;			
-			
-			// create the view, this is where
-			// all of the visuals come from
-			view = new View();
-			addChild(view);
+			if (firstTime) {
+				firstTime = false;
+				
+				// set active debate to first in list
+				// set the active debate to the first one
+				for (var debateID:String in CDW.database.debates) {			
+					CDW.state.setActiveDebate(debateID);
+					break;
+				}
+				
+				trace("database loaded");
+				
+				// set up test overlay
+				testOverlay = new Bitmap(new BitmapData(1080, 1920));
+				testOverlay.visible = false;
+				testOverlay.alpha = 0.5;			
+				
+				// create the view, this is where
+				// all of the visuals come from
+				view = new View();
+				addChild(view);
+				
+				// set the starting view
+				view.homeView();
+				
+				// FPS meter
+				var fps:FPSMeter = new FPSMeter(this, stage.stageWidth - 50, 0);		
+				
+				if (settings.halfSize) {
+					fps.scaleX = 2;
+					fps.scaleY = 2;			
+					fps.x = stage.stageWidth - 100;
+					fps.y = -5;	
+				}
+				
+				// Add test overlay
+				addChild(testOverlay);				
 							
-			// set the starting view
-			view.homeView();
-
-			// FPS meter
-			var fps:FPSMeter = new FPSMeter(this, stage.stageWidth - 50, 0);		
-			
-			if (settings.halfSize) {
-				fps.scaleX = 2;
-				fps.scaleY = 2;			
-				fps.x = stage.stageWidth - 100;
-				fps.y = -5;	
+			}
+			else {
+				trace('updated db')
+				// set the starting view
+				view.debatePicker.update();
+				view.homeView();				
 			}
 			
-			// Add test overlay
-			addChild(testOverlay);
+
 		}
 
 		private function onFullScreenContextMenuSelect(e:Event):void {

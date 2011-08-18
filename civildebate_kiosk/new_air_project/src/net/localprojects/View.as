@@ -56,7 +56,7 @@ package net.localprojects {
 		private var debateButton:BalloonButton;
 		private var flagButton:IconButton;
 		private var viewDebateButton:BlockButton;		
-		private var debatePicker:DebatePicker;
+		public var debatePicker:DebatePicker;
 		private var debateOverlay:DebateOverlay;
 		private var yesButton:BlockButton;
 		private var noButton:BlockButton;
@@ -963,7 +963,7 @@ package net.localprojects {
 			portrait.setImage(CDW.state.userImage, true);
 			bigButton.setText('SUBMIT THIS DEBATE');
 			bigButton.enable();
-			nametag.setText(CDW.state.userName + 'Says:', true);
+			nametag.setText(CDW.state.userName + ' Says:', true);
 			opinion.setText(CDW.state.userOpinion);
 			
 			
@@ -1052,8 +1052,9 @@ package net.localprojects {
 		private function onDebateUploaded(r:Object):void {
 			trace("debate uploaded");
 			
-			// go home and see what you just submitted			
-			homeView();
+			// go home and see what you just submitted	
+			// grab the latest from the db
+			CDW.database.load();
 		}
 		
 		

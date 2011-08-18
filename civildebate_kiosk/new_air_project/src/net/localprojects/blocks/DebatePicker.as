@@ -107,8 +107,10 @@ package net.localprojects.blocks {
 			}			
 			
 			
-			// check bounds			
-			if(debateHolder.width < this.width) {
+			// check bounds
+			trace("width : " + debateHolder.width);
+			if(debateHolder.width < stageWidth) {
+				trace("it's smaller");
 				// smaller than the holder
 				if (debateHolder.x < 0) {
 					debateHolder.x = 0;
@@ -120,6 +122,8 @@ package net.localprojects.blocks {
 				}
 			}
 			else {
+				trace('it\'s bigger ' + debateHolder.x);
+				
 				// bigger than the holder
 				if (debateHolder.x > 0) {
 					debateHolder.x = 0;
@@ -168,12 +172,7 @@ package net.localprojects.blocks {
 				
 				// kind of gross, use introspection to find out what's under the mouse instead of adding listeners to the thumbnails, need to block event bubbling instead?
 				if (objects[i] is ThumbnailButton) {
-					
-					
-					
-					
-					
-					
+
 					// figure out if we should interpret a click or a scroll (does the touchscreen do this for us?)
 					// interpret as a click only if we've moved less than 10 pixels
 					var distanceTraveled:int = Math.abs(startX - this.stage.mouseX);
@@ -185,20 +184,9 @@ package net.localprojects.blocks {
 						// TODO fire on view?
 						CDW.state.setActiveDebate(objects[i].debateID);
 						CDW.view.homeView();
-						
-						
-						
 					}
-					
-					
 				}
-				
 			}
-			
-			
-			
 		}
-		
-		
 	}
 }
