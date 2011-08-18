@@ -421,8 +421,74 @@ package net.localprojects {
 			TweenMax.killChildTweensOf(rightQuote);			
 		}
 		
+
 		
-		private var transitioning:String = '';
+		
+		// TODO
+		// PUT IT ON ITS OWN LAYER
+		// TODO PUT IT IN ITS OWN CLASS
+		
+		
+		private var difference:int;
+		private var leftEdge:int;
+		
+		
+		private function onMouseMove(e:Event):void {
+			if (mouseDown) {
+				
+				lastX = currentX;
+				currentX = this.mouseX;
+				leftEdge += currentX - lastX;
+				difference =  startX - currentX;				
+				
+				
+				trace("Left Edge: "+ leftEdge);
+			
+				
+				// edge limits
+				if ((leftEdge < 0) && (CDW.state.nextDebate == null)) {
+					leftEdge = 0;
+					difference = 0;
+				}
+				else if ((leftEdge > 0) && (CDW.state.previousDebate == null)) {
+					leftEdge = 0;
+					difference = 0;
+				}
+				
+					// drag blocks
+					nametag.x = nametag.defaultTweenInVars.x - difference;
+					stance.x = stance.defaultTweenInVars.x - difference;
+					
+					opinion.x = opinion.defaultTweenInVars.x - difference;
+					leftOpinion.x = leftOpinion.defaultTweenInVars.x - difference;
+					rightOpinion.x = rightOpinion.defaultTweenInVars.x - difference;
+					
+					leftStance.x = leftStance.defaultTweenInVars.x - difference;
+					stance.x = stance.defaultTweenInVars.x - difference;
+					rightStance.x = rightStance.defaultTweenInVars.x - difference;
+					
+					leftNametag.x = leftNametag.defaultTweenInVars.x - difference;
+					nametag.x = nametag.defaultTweenInVars.x - difference;
+					rightNametag.x = rightNametag.defaultTweenInVars.x - difference;					
+				
+					// tween colors
+					
+					
+					if (leftEdge < 0) {
+						// going to next
+						portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.nextDebate), Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
+					}
+					else if (leftEdge > 0) {
+						// going to previous
+						portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.previousDebate), Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));						
+					}
+					
+					leftQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
+					rightQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));					
+				}
+		
+			
+		}
 		
 		private function onMouseUp(e:MouseEvent):void {
 			mouseDown = false;
@@ -471,58 +537,7 @@ package net.localprojects {
 			
 			// put everything back into place
 			homeView();
-		}		
-		
-		
-		
-		private var difference:int;
-		private var leftEdge:int;
-		
-		
-		private function onMouseMove(e:Event):void {
-			if (mouseDown) {
-				
-				lastX = currentX;
-				currentX = this.mouseX;
-				leftEdge += currentX - lastX;
-				difference =  startX - currentX;				
-				
-				
-				trace(leftEdge);
-			
-				
-				// TODO temp off
-				if (true && ((leftEdge < 0) && (CDW.state.nextDebate == null))
-					|| ((leftEdge > stageWidth) && (CDW.state.previousDebate == null))) {
-					trace("hit edge");
-				}
-				else {
-					// drag blocks
-					nametag.x = nametag.defaultTweenInVars.x - difference;
-					stance.x = stance.defaultTweenInVars.x - difference;
-					
-					opinion.x = opinion.defaultTweenInVars.x - difference;
-					leftOpinion.x = leftOpinion.defaultTweenInVars.x - difference;
-					rightOpinion.x = rightOpinion.defaultTweenInVars.x - difference;
-					
-					leftStance.x = leftStance.defaultTweenInVars.x - difference;
-					stance.x = stance.defaultTweenInVars.x - difference;
-					rightStance.x = rightStance.defaultTweenInVars.x - difference;
-					
-					leftNametag.x = leftNametag.defaultTweenInVars.x - difference;
-					nametag.x = nametag.defaultTweenInVars.x - difference;
-					rightNametag.x = rightNametag.defaultTweenInVars.x - difference;					
-				
-					// tween colors
-					portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.nextDebate), Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));
-					leftQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));
-					rightQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(difference), 0, stageWidth, 0, 1));					
-				}
-			}
-
-			
-			
-		}
+		}				
 		
 
 		
@@ -656,11 +671,6 @@ package net.localprojects {
 			flagButton.tweenIn();
 			viewDebateButton.tweenIn();
 			debatePicker.tweenIn();
-			
-			// restore triplet...
-			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});			
-			rightOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: 1095});			
-			leftOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: 1095});			
 			
 			
 			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
