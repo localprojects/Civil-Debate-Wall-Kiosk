@@ -5,6 +5,10 @@ package net.localprojects
 	
 	public final class Assets	{
 		// Graphics
+		[Embed(source = '/assets/graphics/faceTarget.png')] private static const faceTargetClass:Class;
+		public static function getFaceTarget():Bitmap { return new faceTargetClass() as Bitmap; };
+		public static const faceTarget:Bitmap = getFaceTarget();		
+		
 		[Embed(source = '/assets/graphics/bigButton.png')] private static const bigButtonClass:Class;
 		public static function getBigButton():Bitmap { return new bigButtonClass() as Bitmap; };
 		public static const bigButton:Bitmap = getBigButton();		
@@ -109,5 +113,9 @@ package net.localprojects
 		[Embed(source = '/assets/graphics/commentsPlaceholder.png')] private static const commentsPlaceholderClass:Class;
 		public static function getCommentsPlaceholder():Bitmap { return new commentsPlaceholderClass() as Bitmap; };
 		public static const commentsPlaceholder:Bitmap = getCommentsPlaceholder();
+		
+		[Embed(source = '/assets/graphics/portraitBlurMask.png')] private static const portraitBlurMaskClass:Class;
+		public static function getPortraitBlurMask():Bitmap { return new portraitBlurMaskClass() as Bitmap; };
+		public static const portraitBlurMask:Bitmap = getPortraitBlurMask();
 	}
 }

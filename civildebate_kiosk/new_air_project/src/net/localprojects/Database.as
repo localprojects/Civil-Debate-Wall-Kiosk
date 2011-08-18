@@ -97,7 +97,7 @@ package net.localprojects {
 		
 		// STUBS
 		public function getQuestionText():String {
-			return '';
+			return question['question'];
 		}
 		
 		public function getActivePortrait():Bitmap {

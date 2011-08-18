@@ -27,7 +27,7 @@ package net.localprojects.camera {
 		private var maxSourceHeight:int;
 		private var sourceCenter:Point;
 		
-		private var monitor:Bitmap;
+		public var monitor:Bitmap;
 		
 		public function FaceDetector() {
 			super();

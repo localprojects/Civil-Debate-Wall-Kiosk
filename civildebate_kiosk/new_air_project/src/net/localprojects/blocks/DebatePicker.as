@@ -108,9 +108,9 @@ package net.localprojects.blocks {
 			
 			
 			// check bounds
-			trace("width : " + debateHolder.width);
+			
 			if(debateHolder.width < stageWidth) {
-				trace("it's smaller");
+			
 				// smaller than the holder
 				if (debateHolder.x < 0) {
 					debateHolder.x = 0;
@@ -122,7 +122,7 @@ package net.localprojects.blocks {
 				}
 			}
 			else {
-				trace('it\'s bigger ' + debateHolder.x);
+			
 				
 				// bigger than the holder
 				if (debateHolder.x > 0) {
