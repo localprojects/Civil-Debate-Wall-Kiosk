@@ -141,6 +141,7 @@ package net.localprojects {
 			else {
 				trace('updated db')
 				// set the starting view
+				CDW.state.setActiveDebate(CDW.state.activeDebate);
 				view.debatePicker.update();
 				view.homeView();				
 			}

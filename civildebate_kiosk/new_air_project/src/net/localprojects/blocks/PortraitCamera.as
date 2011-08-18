@@ -2,10 +2,13 @@ package net.localprojects.blocks {
 	
 	import com.adobe.images.*;
 	import com.adobe.images.JPGEncoder;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
 	import com.greensock.events.TweenEvent;
 	
 	import flash.display.*;
 	import flash.events.*;
+	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
 	
@@ -13,6 +16,8 @@ package net.localprojects.blocks {
 	
 	import mx.utils.Base64Encoder;
 	
+	import net.localprojects.Assets;
+	import net.localprojects.BitmapPlus;
 	import net.localprojects.CDW;
 	import net.localprojects.Utilities;
 	import net.localprojects.camera.*;
@@ -32,6 +37,15 @@ package net.localprojects.blocks {
 		public var detectFaces:Boolean;
 
 		private var onFaceShutter:Function;
+		
+		
+		private var blurBitmap:BitmapPlus; 
+		private var maskBitmap:Bitmap;		
+		private var maskContainer:Sprite;
+		
+		private var faceCircle:Shape;
+		private var faceTarget:BitmapPlus;
+		
 		
 		public function PortraitCamera() {
 			super();
@@ -54,17 +68,67 @@ package net.localprojects.blocks {
 			faceCounter = 0;
 			
 			// go by frames instead?
-			facePersistenceTimer = new Timer(3000, 0);
+			facePersistenceTimer = new Timer(4000, 0);
 			facePersistenceTimer.stop();
 			facePersistenceTimer.addEventListener(TimerEvent.TIMER, onFacePersistenceTimerComplete);
 			
 			faceCountThreshold = 10;
+			
+			// blur mask
+			blurBitmap = new BitmapPlus(new BitmapData(stageWidth, stageHeight, true, 0));
+			maskBitmap = Assets.portraitBlurMask;
+			maskBitmap.x = -540;
+			maskBitmap.y = -960;					
+			
+			maskContainer = new Sprite();
+			maskContainer.blendMode = BlendMode.LAYER;
+			maskBitmap.blendMode = BlendMode.ALPHA;
+			maskContainer.addChild(blurBitmap);
+			maskContainer.addChild(maskBitmap);			
+			addChild(maskContainer);
+			
+			
+			blurBitmap.blur = 40;
+			blurBitmap.saturation = 0;
+			blurBitmap.brightness = 1.5
+				
+				
+			// create the face circle
+			faceCircle = new Shape();
+			faceCircle.graphics.lineStyle(30, Assets.COLOR_YES_LIGHT, 1);
+			faceCircle.graphics.drawCircle(-120, -120, 240);
+			faceCircle.alpha = 0;
+			addChild(faceCircle);
+
+			faceTarget = new BitmapPlus(Assets.faceTarget.bitmapData);
+			faceTarget.tintAmount = 1;
+			faceTarget.tintColor = Assets.COLOR_YES_DARK;
+			
+			faceTarget.x = 285;
+			faceTarget.y = 404;
+			addChild(faceTarget);
+			
+			
+				
 		}
 
 		
 		private function onFaceFound(e:ObjectDetectorEvent):void {
 			trace("Face!");
 			trace(e.target.faceRect);
+			
+			
+			var faceCenter:Point = Utilities.centerPoint(e.target.faceRect);
+			faceCenter.x *= (stageWidth / faceDetector.monitor.width);
+			faceCenter.y *= (stageHeight / faceDetector.monitor.height);			
+			
+			// a little offset?
+			// TODO WTF
+			faceCenter.x += 50;
+			faceCenter.y += 50;			
+			
+			
+			TweenMax.to(faceCircle, 0.5, {alpha: 1, x: faceCenter.x, y: faceCenter.y, ease: Quart.easeInOut});
 			
 			if(!facePersistenceTimer.running) {
 				facePersistenceTimer.reset();
@@ -81,9 +145,14 @@ package net.localprojects.blocks {
 		private function onFacePersistenceTimerComplete(e:TimerEvent):void {
 			trace("Found " + faceCounter + " faces in last five seconds");
 			
+			// fade out the face circle
+			TweenMax.to(faceCircle, 5, {alpha: 0});
+			
+			
 			// if enough, take the picture....
 			if (faceCounter > faceCountThreshold) {
-				onFaceShutter(new Event("FaceShutter"));
+				// disabled for demo
+				//onFaceShutter(new Event("FaceShutter"));
 			}
 			
 			facePersistenceTimer.stop();
@@ -114,15 +183,28 @@ package net.localprojects.blocks {
 			trace("pausing camera")			
 		}
 		
+		
+		private var frameCount:int = 0;
+		private var faceInterval:int = 1; // detect every n frames
+		
 		private function onNewFrame(e:CameraFeedEvent):void {
+			frameCount++;
+			
+			
 			//cameraBitmap.bitmapData = Utilities.scaleToFill(e.target.frame, 1080, 1920);
 			cameraBitmap.bitmapData = e.target.frame;
 			
 			// only run face detection if we're tweened in
 			// so the transitions won't stutter
-			if (detectFaces) {			
+			if (detectFaces && ((frameCount % faceInterval) == 0)) {			
 				faceDetector.processBitmap(cameraBitmap.bitmapData);
 			}
+			
+			
+			// apply blur and desaturation masking
+			blurBitmap.bitmapData = cameraBitmap.bitmapData.clone();			
+									
+			
 		}
 		
 		public function setOnFaceShutter(f:Function):void {

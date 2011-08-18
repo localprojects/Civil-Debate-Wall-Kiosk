@@ -410,7 +410,7 @@ package net.localprojects {
 			// mutations
 			
 			portrait.setImage(CDW.database.getActivePortrait());
-			
+			question.setText(CDW.database.getQuestionText(), true);
 			
 			nametag.setText(CDW.database.getDebateAuthorName(CDW.state.activeDebate) + ' Says :', true);
 			
@@ -847,7 +847,7 @@ package net.localprojects {
 			divider.tweenIn();
 			question.tweenIn();
 			stance.tweenIn();
-			portraitOutline.tweenIn();
+			//portraitOutline.tweenIn();
 			photoBoothInstructions.tweenIn();			
 			countdown.tweenIn();			
 			
@@ -1038,10 +1038,7 @@ package net.localprojects {
 			var imageName:String = Utilities.saveImageToDisk(portraitCamera.cameraBitmap, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
 			
 			// upload opinion
-			
-			
-			
-						
+	
 			
 			var payload:Object = {'author': CDW.state.userID, 'question': CDW.state.activeQuestion, 'opinion': CDW.state.userOpinion, 'stance': CDW.state.userStance, 'origin': 'kiosk'};
 			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/add', payload, onDebateUploaded);
@@ -1051,6 +1048,10 @@ package net.localprojects {
 		
 		private function onDebateUploaded(r:Object):void {
 			trace("debate uploaded");
+			
+			// set the current
+			trace("uploaded debate " + r);
+			CDW.state.activeDebate = r.toString();
 			
 			// go home and see what you just submitted	
 			// grab the latest from the db
