@@ -14,17 +14,18 @@ package net.localprojects.ui {
 		private var portrait:Bitmap;
 		private var _active:Boolean;
 		private var textField:TextField;
+		public var debateID:String;
 		
 		private var textBackground:Sprite;
 		
-		public function ThumbnailButton(image:Bitmap, stance:String) {
+		public function ThumbnailButton(image:Bitmap, stance:String, debate:String) {
 			_active = false;
 			
 			this.graphics.beginFill(0xffffff);
 			this.graphics.drawRect(0, 0, 173, 141);
 			this.graphics.endFill();
 			
-
+			debateID = debate;
 			portrait = image;
 			roundedPortrait = new Sprite();
 			

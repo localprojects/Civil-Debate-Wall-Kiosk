@@ -18,7 +18,7 @@ package net.localprojects {
 		public function Dashboard(parent:DisplayObjectContainer=null, xpos:Number=0, ypos:Number=0, title:String="Dashboard")	{
 			super(parent, xpos, ypos, title);
 			this.width = 250;
-			this.height = 200;
+			this.height = 500;
 			this.hasMinimizeButton = true;
 			this.minimized = true;
 			logBox = new TextArea(this, 5, 5, "Dashboard ready");

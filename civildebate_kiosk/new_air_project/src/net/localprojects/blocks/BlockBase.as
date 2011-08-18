@@ -11,6 +11,7 @@ package net.localprojects.blocks {
 	import flash.geom.Point;
 	
 	import net.localprojects.Utilities;
+	import net.localprojects.CDW;	
 	
 	
 	public class BlockBase extends Sprite {
@@ -22,7 +23,9 @@ package net.localprojects.blocks {
 		private var defaultDuration:Number;
 		private var defaultInDuration:Number;
 		private var defaultOutDuration:Number;
-		public var active:Boolean; // inactive blocks are marked for tweening out on the screen 
+		public var active:Boolean; // inactive blocks are marked for tweening out on the screen
+		protected var stageWidth:int;
+		protected var stageHeight:int;
 		
 		public function BlockBase() {
 			super();
@@ -38,6 +41,9 @@ package net.localprojects.blocks {
 			
 			visible = false;
 			
+			// for convenience
+			stageWidth = CDW.ref.stage.stageWidth;
+			stageHeight = CDW.ref.stage.stageHeight;
 			
 		}
 		

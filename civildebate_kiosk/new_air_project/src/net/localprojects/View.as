@@ -47,9 +47,9 @@ package net.localprojects {
 		
 		// single copy, changes
 		private var question:Question;
-		private var leftQuote:QuotationMark;
-		private var rightQuote:QuotationMark;		
-		private var portrait:Portrait; // TODO fading
+		public var leftQuote:QuotationMark;
+		public var rightQuote:QuotationMark;		
+		public var portrait:Portrait; // TODO fading
 		private var bigButton:BigButton;		
 		private var statsButton:IconButton;
 		private var likeButton:CounterButton;
@@ -69,18 +69,20 @@ package net.localprojects {
 		private var keyboard:Keyboard;
 		private var editOpinion:BlockInputParagraph;		
 		
-		// multiples of these
-		private var stance:Stance;
-		private var leftStance:Stance;
-		private var rightStance:Stance;		
-				
-		private var nametag:BlockLabel;
-		private var leftNametag:BlockLabel;
-		private var rightNametag:BlockLabel;		
+		private var dragLayer:DragLayer;
 		
-		private var opinion:BlockParagraph;
-		private var leftOpinion:BlockParagraph;		
-		private var rightOpinion:BlockParagraph;
+		// multiples of these
+		public var stance:Stance;
+		public var leftStance:Stance;
+		public var rightStance:Stance;		
+				
+		public var nametag:BlockLabel;
+		public var leftNametag:BlockLabel;
+		public var rightNametag:BlockLabel;		
+		
+		public var opinion:BlockParagraph;
+		public var leftOpinion:BlockParagraph;		
+		public var rightOpinion:BlockParagraph;
 		
 		private var byline:BlockLabel;
 		
@@ -135,6 +137,9 @@ package net.localprojects {
 			question.setText(CDW.database.getQuestionText()); // TODO abstract out these ridiculous traversals...
 			addChild(question);
 			
+			
+
+			
 			stance = new Stance();
 			stance.setDefaultTweenIn(1, {x: 235, y: 280});
 			stance.setDefaultTweenOut(1, {x: -280, y: 280});						
@@ -147,6 +152,8 @@ package net.localprojects {
 			rightStance = new Stance();
 			rightStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x + stageWidth, y: 280});						
 			addChild(rightStance);			
+			
+			
 			
 			
 			
@@ -204,7 +211,13 @@ package net.localprojects {
 			leftOpinion = new BlockParagraph(915, '', 44, 0x000000, false);	
 			leftOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: 1095});
 			leftOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: 1095});
-			addChild(leftOpinion);			
+			addChild(leftOpinion);		
+			
+			
+			dragLayer = new DragLayer();
+			dragLayer.setDefaultTweenIn(0, {});
+			dragLayer.setDefaultTweenOut(0, {});			
+			addChild(dragLayer);			
 			
 
 			
@@ -382,162 +395,9 @@ package net.localprojects {
 			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut});
 			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
 			addChild(flashOverlay);
-			
-
-			
-			// cross dragging, move to overlay block!? only in home view?
-			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			mouseDown = false;
-		}
-		
-		private var mouseDown:Boolean;		
-		private var startX:int;
-		private var lastX:int;
-		private var currentX:int;
-		private function onMouseDown(e:MouseEvent):void {
-			mouseDown = true;
-
-			// refactor startX based on tween progress, for portrait and other things
-			startX = this.mouseX - (nametag.x - nametag.defaultTweenInVars.x);
-			currentX = startX;
-			trace("down");
-			leftEdge = 0;			
-
-			
-			// Stop home tweens
-			TweenMax.killTweensOf(nametag);
-			TweenMax.killTweensOf(leftNametag);
-			TweenMax.killTweensOf(rightNametag);			
-			TweenMax.killTweensOf(stance);
-			TweenMax.killTweensOf(leftStance);
-			TweenMax.killTweensOf(rightStance);			
-			TweenMax.killTweensOf(opinion);
-			TweenMax.killTweensOf(leftOpinion);
-			TweenMax.killTweensOf(rightOpinion);			
-			TweenMax.killChildTweensOf(portrait);
-			TweenMax.killChildTweensOf(leftQuote);
-			TweenMax.killChildTweensOf(rightQuote);			
 		}
 		
 
-		
-		
-		// TODO
-		// PUT IT ON ITS OWN LAYER
-		// TODO PUT IT IN ITS OWN CLASS
-		
-		
-		private var difference:int;
-		private var leftEdge:int;
-		
-		
-		private function onMouseMove(e:Event):void {
-			if (mouseDown) {
-				
-				lastX = currentX;
-				currentX = this.mouseX;
-				leftEdge += currentX - lastX;
-				difference =  startX - currentX;				
-				
-				
-				trace("Left Edge: "+ leftEdge);
-			
-				
-				// edge limits
-				if ((leftEdge < 0) && (CDW.state.nextDebate == null)) {
-					leftEdge = 0;
-					difference = 0;
-				}
-				else if ((leftEdge > 0) && (CDW.state.previousDebate == null)) {
-					leftEdge = 0;
-					difference = 0;
-				}
-				
-					// drag blocks
-					nametag.x = nametag.defaultTweenInVars.x - difference;
-					stance.x = stance.defaultTweenInVars.x - difference;
-					
-					opinion.x = opinion.defaultTweenInVars.x - difference;
-					leftOpinion.x = leftOpinion.defaultTweenInVars.x - difference;
-					rightOpinion.x = rightOpinion.defaultTweenInVars.x - difference;
-					
-					leftStance.x = leftStance.defaultTweenInVars.x - difference;
-					stance.x = stance.defaultTweenInVars.x - difference;
-					rightStance.x = rightStance.defaultTweenInVars.x - difference;
-					
-					leftNametag.x = leftNametag.defaultTweenInVars.x - difference;
-					nametag.x = nametag.defaultTweenInVars.x - difference;
-					rightNametag.x = rightNametag.defaultTweenInVars.x - difference;					
-				
-					// tween colors
-					
-					
-					if (leftEdge < 0) {
-						// going to next
-						portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.nextDebate), Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
-					}
-					else if (leftEdge > 0) {
-						// going to previous
-						portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.previousDebate), Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));						
-					}
-					
-					leftQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
-					rightQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));					
-				}
-		
-			
-		}
-		
-		private function onMouseUp(e:MouseEvent):void {
-			mouseDown = false;
-			
-			trace("up");		
-			
-			// see if we need to transition
-			if (leftEdge < (stageWidth / -2)) {
-				trace("transition to next");
-				CDW.state.setActiveDebate(CDW.state.nextDebate);
-				leftOpinion.x += stageWidth;
-				opinion.x += stageWidth;
-				rightOpinion.x += stageWidth;
-				
-				leftStance.x += stageWidth;
-				rightStance.x += stageWidth;
-				stance.x += stageWidth;
-				
-				leftNametag.x += stageWidth;
-				rightNametag.x += stageWidth;
-				nametag.x += stageWidth;				
-				
-				
-			}
-			if (leftEdge > (stageWidth / 2)) {
-				trace("transition to previous");
-				CDW.state.setActiveDebate(CDW.state.previousDebate);
-				leftOpinion.x -= stageWidth;
-				opinion.x -= stageWidth;
-				rightOpinion.x -= stageWidth;
-				
-				leftStance.x -= stageWidth;
-				rightStance.x -= stageWidth;
-				stance.x -= stageWidth;
-				
-				leftNametag.x -= stageWidth;
-				rightNametag.x -= stageWidth;
-				nametag.x -= stageWidth;				
-			}
-			else {
-				// spring back to current
-			}
-			
-			
-			
-			
-			// put everything back into place
-			homeView();
-		}				
 		
 
 		
@@ -647,7 +507,7 @@ package net.localprojects {
 			header.tweenIn();
 			divider.tweenIn();
 			question.tweenIn();
-			
+			dragLayer.tweenIn();
 			
 			stance.tweenIn();
 			leftStance.tweenIn();
