@@ -1,0 +1,9 @@
+{	
+	"phoneNumber": "+13525782609",
+	"characterLimit": 140,
+	"halfSize": true,
+	"startFullScreen": false,
+	"webcamOnly": false,
+	"imagePath": "C:/CDWImages/",
+	"serverPath": "http://ec2-50-19-25-31.compute-1.amazonaws.com"
+}

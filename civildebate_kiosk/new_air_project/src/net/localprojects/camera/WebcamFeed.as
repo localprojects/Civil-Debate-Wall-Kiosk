@@ -18,7 +18,7 @@ package net.localprojects.camera {
 		private var cameraWidth:int;
 		private var cameraHeight:int;
 		private var undersampleFactor:int;
-
+		
 		
 		private var camera:Camera;
 		private var video:Video;

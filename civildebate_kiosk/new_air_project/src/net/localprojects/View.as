@@ -21,7 +21,7 @@ package net.localprojects {
 	import net.localprojects.keyboard.*;
 	import net.localprojects.ui.*;
 	
-
+	
 	public class View extends Sprite {
 		
 		// single copy, never changes
@@ -43,6 +43,7 @@ package net.localprojects {
 		private var continueButton:BlockButton;
 		private var restartButton:BlockButton;
 		private var flashOverlay:FlashOverlay;
+		private var blackOverlay:BlackOverlay;
 		private var skipTextButton:BlockButton;		
 		
 		// single copy, changes
@@ -75,7 +76,7 @@ package net.localprojects {
 		public var stance:Stance;
 		public var leftStance:Stance;
 		public var rightStance:Stance;		
-				
+		
 		public var nametag:BlockLabel;
 		public var leftNametag:BlockLabel;
 		public var rightNametag:BlockLabel;		
@@ -138,7 +139,7 @@ package net.localprojects {
 			addChild(question);
 			
 			
-
+			
 			
 			stance = new Stance();
 			stance.setDefaultTweenIn(1, {x: 235, y: 280});
@@ -157,7 +158,7 @@ package net.localprojects {
 			
 			
 			
-
+			
 			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, true, true);
 			nametag.setPadding(26, 28, 20, 30);
 			nametag.setDefaultTweenIn(1, {x: 235, y: 410});
@@ -168,7 +169,7 @@ package net.localprojects {
 			leftNametag.setPadding(26, 28, 20, 30);
 			leftNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x - stageWidth, y: 410});
 			addChild(leftNametag);
-
+			
 			rightNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, true, true);
 			rightNametag.setPadding(26, 28, 20, 30);
 			rightNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x + stageWidth, y: 410});
@@ -219,7 +220,7 @@ package net.localprojects {
 			dragLayer.setDefaultTweenOut(0, {});			
 			addChild(dragLayer);			
 			
-
+			
 			
 			editOpinion = new BlockInputParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false);
 			editOpinion.setDefaultTweenIn(1, {x: 100, y: 1095});
@@ -241,7 +242,7 @@ package net.localprojects {
 			likeButton.setDefaultTweenIn(1, {x: 238, y: 1379});
 			likeButton.setDefaultTweenOut(1, {x: -likeButton.width});			
 			addChild(likeButton);
-				
+			
 			viewDebateButton = new BlockButton(517, 55, '"The reality is that a decision…" +8 other responses', 20, Assets.COLOR_YES_DARK, false);
 			viewDebateButton.setDefaultTweenIn(1, {x: 373, y: 1379});
 			viewDebateButton.setDefaultTweenOut(1, {x: stageWidth});			
@@ -391,19 +392,26 @@ package net.localprojects {
 			restartButton.setDefaultTweenOut(1, {x: stageWidth, y: 1116});					
 			addChild(restartButton);
 			
+			blackOverlay = new BlackOverlay();
+			blackOverlay.setDefaultTweenIn(0, {alpha: 1});
+			blackOverlay.setDefaultTweenOut(0, {alpha: 0});
+			addChild(blackOverlay);
+			
 			flashOverlay = new FlashOverlay();
 			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut});
 			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
 			addChild(flashOverlay);
+			
+			
 		}
 		
-
 		
-
+		
+		
 		
 		public function homeView(...args):void {
 			markAllInactive();
-
+			
 			
 			CDW.inactivityTimer.disarm();
 			
@@ -607,7 +615,7 @@ package net.localprojects {
 			debatePicker.tweenIn();
 			debateOverlay.tweenIn();			
 			// show the big button or not?
-
+			
 			tweenOutInactive();			
 		}
 		
@@ -692,15 +700,15 @@ package net.localprojects {
 				backButton.setBackgroundColor(Assets.COLOR_NO_DARK);				
 				yesButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_MEDIUM);
 			}
-
+			
 			// behaviors
 			backButton.setOnClick(pickStanceView); // TODO do we need the back button?
 			portrait.setImage(Assets.portraitPlaceholder);
 			yesButton.setOnClick(null);
 			noButton.setOnClick(null);
 			skipTextButton.setOnClick(simulateSMS);
-
-				
+			
+			
 			// start polling to see if the user has sent their opinion yet
 			CDW.state.latestSMSID = null;
 			smsCheckTimer = new Timer(1000);
@@ -725,13 +733,13 @@ package net.localprojects {
 			tweenOutInactive();
 		}
 		
-
+		
 		private function onSmsCheckTimer(e:TimerEvent):void {
 			trace("checking for SMS received");
 			var latestMessageLoader:URLLoader = new URLLoader();
 			latestMessageLoader.addEventListener(Event.COMPLETE, onSMSCheckResponse);
 			latestMessageLoader.load(new URLRequest("http://ec2-50-19-25-31.compute-1.amazonaws.com/api/sms/latest"));			
-
+			
 			smsCheckTimer.stop();
 		}
 		
@@ -748,14 +756,14 @@ package net.localprojects {
 				smsCheckTimer.start();
 			}
 			else if (CDW.state.latestSMSID != response['_id']['$oid'] &&
-							(response['To'] == CDW.settings.phoneNumber)) {
-
+				(response['To'] == CDW.settings.phoneNumber)) {
+				
 				trace("NEW SMS!!! from number:" + CDW.state.userPhoneNumber);
-						
+				
 				// write some stuff down	
 				CDW.state.userPhoneNumber = response['From'];
 				CDW.state.userOpinion = response['Body'];						
-						
+				
 				// create or find the user
 				Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser); 
 			}
@@ -770,7 +778,7 @@ package net.localprojects {
 		
 		private function onAddOrUpdateUser(user:Object):void {
 			trace('User added or updated');
-
+			
 			CDW.state.userID = user['_id']['$oid'];
 			
 			// does the user have a photo?
@@ -813,7 +821,7 @@ package net.localprojects {
 			// create or find the user
 			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser);			
 		}
-
+		
 		
 		
 		
@@ -853,7 +861,7 @@ package net.localprojects {
 			
 			tweenOutInactive();
 		}
-
+		
 		
 		private function onCameraClick(e:Event):void {
 			if (!countdown.isCountingDown()) {
@@ -863,22 +871,44 @@ package net.localprojects {
 		}
 		
 		private function onCountdownFinish(e:Event):void {
-			flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
+			
+			
+			
+			
+			
 			
 			// image is held in RAM for now, in case it's edited later
 			
 			// Do this in portrait camera instead?
 			if (CDW.settings.webcamOnly) {
 				// nothing to see here...
+				flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration					
 				CDW.state.userImage = portraitCamera.cameraBitmap;				
 			}
 			else {
 				// using SLR
-				// TODO
+				// TODO GO TO BLACK
+				blackOverlay.tweenIn();
+				portraitCamera.slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
+				portraitCamera.slr.takePhoto();
+				
 			}
 			
 			
 		}
+		
+		private function onPhotoCapture(e:CameraFeedEvent):void {
+			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
+			
+			// process SLR image?
+			
+			CDW.state.userImage = new Bitmap(Utilities.scaleToFill(portraitCamera.slr.image.bitmapData, 1080, 1920));
+			flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
+			blackOverlay.tweenOut();
+		}
+		
+		
+		
 		
 		private function onFlashOn():void {
 			// skip name entry if we already have it
@@ -1035,14 +1065,14 @@ package net.localprojects {
 			
 			
 			// only if the image is fresh!
-			var imageName:String = Utilities.saveImageToDisk(portraitCamera.cameraBitmap, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
+			var imageName:String = Utilities.saveImageToDisk(CDW.state.userImage, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
 			
 			// upload opinion
-	
+			
 			
 			var payload:Object = {'author': CDW.state.userID, 'question': CDW.state.activeQuestion, 'opinion': CDW.state.userOpinion, 'stance': CDW.state.userStance, 'origin': 'kiosk'};
 			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/add', payload, onDebateUploaded);
-
+			
 			// refresh db?
 		}
 		
@@ -1129,7 +1159,7 @@ package net.localprojects {
 			divider.tweenIn();
 			question.tweenIn();
 			stats.tweenIn();
-
+			
 			//tweenOutInactive();			
 		}
 		
@@ -1172,7 +1202,7 @@ package net.localprojects {
 			if (portraitCamera.active) portraitCamera.detectFaces = true;			
 		}
 		
-
+		
 		private function setTestOverlay(b:Bitmap):void {
 			CDW.testOverlay.bitmapData = b.bitmapData.clone();						
 		}	
