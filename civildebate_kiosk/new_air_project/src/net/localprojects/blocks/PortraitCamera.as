@@ -35,7 +35,7 @@ package net.localprojects.blocks {
 		private var faceCountThreshold:int; // how many we need to find within interval in order to fire shutter
 		
 		public var detectFaces:Boolean;
-
+		
 		private var onFaceShutter:Function;
 		
 		
@@ -45,6 +45,8 @@ package net.localprojects.blocks {
 		
 		private var faceCircle:Shape;
 		private var faceTarget:BitmapPlus;
+		
+		public var slr:SLRCamera;
 		
 		
 		public function PortraitCamera() {
@@ -91,15 +93,15 @@ package net.localprojects.blocks {
 			blurBitmap.blur = 40;
 			blurBitmap.saturation = 0;
 			blurBitmap.brightness = 1.5
-				
-				
+			
+			
 			// create the face circle
 			faceCircle = new Shape();
 			faceCircle.graphics.lineStyle(30, Assets.COLOR_YES_LIGHT, 1);
 			faceCircle.graphics.drawCircle(-120, -120, 240);
 			faceCircle.alpha = 0;
 			addChild(faceCircle);
-
+			
 			faceTarget = new BitmapPlus(Assets.faceTarget.bitmapData);
 			faceTarget.tintAmount = 1;
 			faceTarget.tintColor = Assets.COLOR_YES_DARK;
@@ -108,10 +110,12 @@ package net.localprojects.blocks {
 			faceTarget.y = 404;
 			addChild(faceTarget);
 			
+			if (!CDW.settings.webcamOnly) {
+				slr = new SLRCamera();
+			}
 			
-				
 		}
-
+		
 		
 		private function onFaceFound(e:ObjectDetectorEvent):void {
 			trace("Face!");
@@ -203,17 +207,18 @@ package net.localprojects.blocks {
 			
 			// apply blur and desaturation masking
 			blurBitmap.bitmapData = cameraBitmap.bitmapData.clone();			
-									
+			
 			
 		}
 		
 		public function setOnFaceShutter(f:Function):void {
 			onFaceShutter = f;
 		}
-
+		
 		
 		public function takePhoto():void {
 			trace("taking photo");
+			
 			
 			
 			// movie this to view.as?
@@ -221,14 +226,14 @@ package net.localprojects.blocks {
 			
 			
 			
-//			cameraBitmap.bitmapData = Utilities.scaleToFill(cameraBitmap.bitmapData, 100, 100);			
-//			var jpgEncoder:JPGEncoder = new JPGEncoder(98);
-//			var byteArray:ByteArray = jpgEncoder.encode(cameraBitmap.bitmapData);		
-//			var encoder:Base64Encoder = new Base64Encoder();
-//			encoder.encodeBytes(byteArray);			
-//			trace(encoder.toString());
+			//			cameraBitmap.bitmapData = Utilities.scaleToFill(cameraBitmap.bitmapData, 100, 100);			
+			//			var jpgEncoder:JPGEncoder = new JPGEncoder(98);
+			//			var byteArray:ByteArray = jpgEncoder.encode(cameraBitmap.bitmapData);		
+			//			var encoder:Base64Encoder = new Base64Encoder();
+			//			encoder.encodeBytes(byteArray);			
+			//			trace(encoder.toString());
 			
 		}
-				
+		
 	}
 }
