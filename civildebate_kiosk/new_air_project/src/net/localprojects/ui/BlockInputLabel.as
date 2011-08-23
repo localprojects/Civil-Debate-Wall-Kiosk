@@ -18,8 +18,8 @@ package net.localprojects.ui {
 		private var minHeight:Number = 0;
 		private var lastText:String = '';
 		
-		public function BlockInputLabel(text:String, textSize:Number, textColor:uint, backgroundColor:uint, bold:Boolean = false, showBackground:Boolean = true) {
-			super(text, textSize, textColor, backgroundColor, bold, showBackground);
+		public function BlockInputLabel(text:String, textSize:Number, textColor:uint, backgroundColor:uint, font:String = Assets.FONT_REGULAR, showBackground:Boolean = true) {
+			super(text, textSize, textColor, backgroundColor, font, showBackground);
 			postInit();
 		}
 		
@@ -74,21 +74,21 @@ package net.localprojects.ui {
 		
 		
 		override protected function drawBackground():void {
-			background.graphics.clear();
-			
-			//draw the background
-			if (_showBackground) {
-				var backgroundWidth:Number = Math.max(minWidth, textField.width + paddingLeft + paddingRight);
-				var backgroundHeight:Number = Math.max(minHeight, textField.height + paddingTop + paddingBottom);
-				
-				
-				background.graphics.beginFill(_backgroundColor);								
-				background.graphics.drawRect(0, 0, backgroundWidth, backgroundHeight);
-				background.graphics.endFill();				
-				
-				textField.x = paddingLeft;
-				textField.y = paddingTop;
-			}			
+//			background.graphics.clear();
+//			
+//			//draw the background
+//			if (_showBackground) {
+//				var backgroundWidth:Number = Math.max(minWidth, textField.width + paddingLeft + paddingRight);
+//				var backgroundHeight:Number = Math.max(minHeight, textField.height + paddingTop + paddingBottom);
+//				
+//				
+//				background.graphics.beginFill(_backgroundColor);								
+//				background.graphics.drawRect(0, 0, backgroundWidth, backgroundHeight);
+//				background.graphics.endFill();				
+//				
+//				textField.x = paddingLeft;
+//				textField.y = paddingTop;
+//			}			
 		}
 		
 //		public function setBackgroundColor(c:uint):void {

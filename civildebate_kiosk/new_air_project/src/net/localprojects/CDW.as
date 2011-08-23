@@ -40,14 +40,16 @@ package net.localprojects {
 			
 			// set up the stage
 			stage.quality = StageQuality.BEST;
-			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			
 			// temporarily squish screen for laptop development (half size)
 			if (settings.halfSize) {
+				stage.scaleMode = StageScaleMode.EXACT_FIT;
 				stage.nativeWindow.width = 540;
 				stage.nativeWindow.height = 960;
 			}
 			else {
+				stage.scaleMode = StageScaleMode.NO_SCALE;
+				stage.align = StageAlign.TOP;
 				stage.nativeWindow.width = 1080;
 				stage.nativeWindow.height = 1920;				
 			}
@@ -75,9 +77,25 @@ package net.localprojects {
 			
 			// set up a full screen option in the context menu
 			var myContextMenu:ContextMenu = new ContextMenu();
-			var item:ContextMenuItem = new ContextMenuItem("Toggle Full Screen");
-			myContextMenu.customItems.push(item);
-			item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onFullScreenContextMenuSelect);
+			var fullScreenItem:ContextMenuItem = new ContextMenuItem("Toggle Full Screen");
+			myContextMenu.customItems.push(fullScreenItem);
+			fullScreenItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onFullScreenContextMenuSelect);
+
+			// stage alignment for navigating an overdrawn window
+			var alignTopItem:ContextMenuItem = new ContextMenuItem("Align to Top");
+			myContextMenu.customItems.push(alignTopItem);
+			alignTopItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onAlignTop);	
+
+			var alignCenterItem:ContextMenuItem = new ContextMenuItem("Align to Center");
+			myContextMenu.customItems.push(alignCenterItem);
+			alignCenterItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onAlignCenter);	
+			
+			var alignBottomItem:ContextMenuItem = new ContextMenuItem("Align to Bottom");
+			myContextMenu.customItems.push(alignBottomItem);
+			alignBottomItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onAlignBottom);				
+			
+			
+			
 			contextMenu = myContextMenu;
 			
 			if (settings.startFullScreen) {
@@ -146,6 +164,19 @@ package net.localprojects {
 			
 
 		}
+		
+		
+		private function onAlignTop(e:Event):void {
+			stage.align = StageAlign.TOP;	
+		}
+		
+		private function onAlignCenter(e:Event):void {
+			stage.align = StageAlign.LEFT;			
+		}
+		
+		private function onAlignBottom(e:Event):void {
+			stage.align = StageAlign.BOTTOM;			
+		}		
 
 		private function onFullScreenContextMenuSelect(e:Event):void {
 			toggleFullScreen();

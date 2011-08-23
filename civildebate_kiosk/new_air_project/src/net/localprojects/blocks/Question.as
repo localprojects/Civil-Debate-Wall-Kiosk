@@ -18,8 +18,7 @@ package net.localprojects.blocks {
 			// text
 			// TODO get this from the state and move to update function
 			var textFormat:TextFormat = new TextFormat();
-			textFormat.bold = true;
-			textFormat.font =  Assets.FONT_REGULAR;
+			textFormat.font =  Assets.FONT_BOLD;
 			textFormat.align = TextFormatAlign.CENTER;
 			textFormat.size = 37;
 			textFormat.letterSpacing = -0.25;
@@ -36,8 +35,7 @@ package net.localprojects.blocks {
 			questionText.antiAliasType = AntiAliasType.NORMAL;
 			questionText.textColor = 0x414042;
 			questionText.width = 1022;
-			questionText.wordWrap = true;
-			//questionText.y = ((height - questionText.height) / 2) + 6;			
+			questionText.wordWrap = true;			
 			setText('Question goes here');
 			
 			addChild(questionText);	
@@ -46,8 +44,6 @@ package net.localprojects.blocks {
 		override public function setText(s:String, instant:Boolean = false):void {
 			questionText.text = s;
 		}
-		
-
 		
 	}
 }

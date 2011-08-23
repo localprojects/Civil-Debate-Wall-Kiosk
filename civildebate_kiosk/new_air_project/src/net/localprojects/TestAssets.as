@@ -4,6 +4,116 @@ package net.localprojects {
 	
 	public class TestAssets {
 		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final.jpg')] private static const CDW_082311_Kiosk_Design_FinalClass:Class;
+		public static function getCDW_082311_Kiosk_Design_Final():Bitmap { return new CDW_082311_Kiosk_Design_FinalClass() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final:Bitmap = getCDW_082311_Kiosk_Design_Final();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final10.jpg')] private static const CDW_082311_Kiosk_Design_Final10Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final10():Bitmap { return new CDW_082311_Kiosk_Design_Final10Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final10:Bitmap = getCDW_082311_Kiosk_Design_Final10();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final11.jpg')] private static const CDW_082311_Kiosk_Design_Final11Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final11():Bitmap { return new CDW_082311_Kiosk_Design_Final11Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final11:Bitmap = getCDW_082311_Kiosk_Design_Final11();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final12.jpg')] private static const CDW_082311_Kiosk_Design_Final12Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final12():Bitmap { return new CDW_082311_Kiosk_Design_Final12Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final12:Bitmap = getCDW_082311_Kiosk_Design_Final12();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final13.jpg')] private static const CDW_082311_Kiosk_Design_Final13Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final13():Bitmap { return new CDW_082311_Kiosk_Design_Final13Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final13:Bitmap = getCDW_082311_Kiosk_Design_Final13();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final14.jpg')] private static const CDW_082311_Kiosk_Design_Final14Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final14():Bitmap { return new CDW_082311_Kiosk_Design_Final14Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final14:Bitmap = getCDW_082311_Kiosk_Design_Final14();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final15.jpg')] private static const CDW_082311_Kiosk_Design_Final15Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final15():Bitmap { return new CDW_082311_Kiosk_Design_Final15Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final15:Bitmap = getCDW_082311_Kiosk_Design_Final15();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final16.jpg')] private static const CDW_082311_Kiosk_Design_Final16Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final16():Bitmap { return new CDW_082311_Kiosk_Design_Final16Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final16:Bitmap = getCDW_082311_Kiosk_Design_Final16();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final17.jpg')] private static const CDW_082311_Kiosk_Design_Final17Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final17():Bitmap { return new CDW_082311_Kiosk_Design_Final17Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final17:Bitmap = getCDW_082311_Kiosk_Design_Final17();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final18.jpg')] private static const CDW_082311_Kiosk_Design_Final18Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final18():Bitmap { return new CDW_082311_Kiosk_Design_Final18Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final18:Bitmap = getCDW_082311_Kiosk_Design_Final18();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final19.jpg')] private static const CDW_082311_Kiosk_Design_Final19Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final19():Bitmap { return new CDW_082311_Kiosk_Design_Final19Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final19:Bitmap = getCDW_082311_Kiosk_Design_Final19();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final2.jpg')] private static const CDW_082311_Kiosk_Design_Final2Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final2():Bitmap { return new CDW_082311_Kiosk_Design_Final2Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final2:Bitmap = getCDW_082311_Kiosk_Design_Final2();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final20.jpg')] private static const CDW_082311_Kiosk_Design_Final20Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final20():Bitmap { return new CDW_082311_Kiosk_Design_Final20Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final20:Bitmap = getCDW_082311_Kiosk_Design_Final20();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final21.jpg')] private static const CDW_082311_Kiosk_Design_Final21Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final21():Bitmap { return new CDW_082311_Kiosk_Design_Final21Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final21:Bitmap = getCDW_082311_Kiosk_Design_Final21();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final22.jpg')] private static const CDW_082311_Kiosk_Design_Final22Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final22():Bitmap { return new CDW_082311_Kiosk_Design_Final22Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final22:Bitmap = getCDW_082311_Kiosk_Design_Final22();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final23.jpg')] private static const CDW_082311_Kiosk_Design_Final23Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final23():Bitmap { return new CDW_082311_Kiosk_Design_Final23Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final23:Bitmap = getCDW_082311_Kiosk_Design_Final23();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final24.jpg')] private static const CDW_082311_Kiosk_Design_Final24Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final24():Bitmap { return new CDW_082311_Kiosk_Design_Final24Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final24:Bitmap = getCDW_082311_Kiosk_Design_Final24();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final25.jpg')] private static const CDW_082311_Kiosk_Design_Final25Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final25():Bitmap { return new CDW_082311_Kiosk_Design_Final25Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final25:Bitmap = getCDW_082311_Kiosk_Design_Final25();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final26.jpg')] private static const CDW_082311_Kiosk_Design_Final26Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final26():Bitmap { return new CDW_082311_Kiosk_Design_Final26Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final26:Bitmap = getCDW_082311_Kiosk_Design_Final26();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final3.jpg')] private static const CDW_082311_Kiosk_Design_Final3Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final3():Bitmap { return new CDW_082311_Kiosk_Design_Final3Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final3:Bitmap = getCDW_082311_Kiosk_Design_Final3();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final4.jpg')] private static const CDW_082311_Kiosk_Design_Final4Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final4():Bitmap { return new CDW_082311_Kiosk_Design_Final4Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final4:Bitmap = getCDW_082311_Kiosk_Design_Final4();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final5.jpg')] private static const CDW_082311_Kiosk_Design_Final5Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final5():Bitmap { return new CDW_082311_Kiosk_Design_Final5Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final5:Bitmap = getCDW_082311_Kiosk_Design_Final5();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final6.jpg')] private static const CDW_082311_Kiosk_Design_Final6Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final6():Bitmap { return new CDW_082311_Kiosk_Design_Final6Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final6:Bitmap = getCDW_082311_Kiosk_Design_Final6();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final7.jpg')] private static const CDW_082311_Kiosk_Design_Final7Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final7():Bitmap { return new CDW_082311_Kiosk_Design_Final7Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final7:Bitmap = getCDW_082311_Kiosk_Design_Final7();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final8.jpg')] private static const CDW_082311_Kiosk_Design_Final8Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final8():Bitmap { return new CDW_082311_Kiosk_Design_Final8Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final8:Bitmap = getCDW_082311_Kiosk_Design_Final8();
+		
+		[Embed(source = '/assets/graphics/CDW_082311_Kiosk_Design_Final9.jpg')] private static const CDW_082311_Kiosk_Design_Final9Class:Class;
+		public static function getCDW_082311_Kiosk_Design_Final9():Bitmap { return new CDW_082311_Kiosk_Design_Final9Class() as Bitmap; };
+		public static const CDW_082311_Kiosk_Design_Final9:Bitmap = getCDW_082311_Kiosk_Design_Final9();
+		
+		
+		
+		
+		//-----------------
+		
+		
 		[Embed(source = '/assets/graphics/CDW_08_15_11_Kiosk_Design.jpg')] private static const CDW_08_15_11_Kiosk_DesignClass:Class;
 		public static function getCDW_08_15_11_Kiosk_Design():Bitmap { return new CDW_08_15_11_Kiosk_DesignClass() as Bitmap; };
 		public static const CDW_08_15_11_Kiosk_Design:Bitmap = getCDW_08_15_11_Kiosk_Design();
