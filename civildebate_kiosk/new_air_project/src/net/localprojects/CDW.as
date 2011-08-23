@@ -65,8 +65,6 @@ package net.localprojects {
 			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 			graphics.endFill();
 			
-
-			
 			// set up gui overlay
 			dashboard = new Dashboard(this.stage, 5, 5);
 			
