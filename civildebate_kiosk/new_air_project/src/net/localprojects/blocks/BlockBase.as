@@ -75,7 +75,7 @@ package net.localprojects.blocks {
 		}
 		
 		protected function afterTweenIn():void {
-			
+	
 		}		
 		
 		protected function beforeTweenOut():void {

@@ -133,7 +133,7 @@ package net.localprojects {
 			addChild(divider);
 			
 			question = new Question();
-			question.setDefaultTweenIn(1, {x: 30, y: 126});
+			question.setDefaultTweenIn(1, {x: 30, y: 123});
 			question.setDefaultTweenOut(1, {x: -question.width});
 			question.setText(CDW.database.getQuestionText()); // TODO abstract out these ridiculous traversals...
 			addChild(question);
@@ -142,16 +142,16 @@ package net.localprojects {
 			
 			
 			stance = new Stance();
-			stance.setDefaultTweenIn(1, {x: 235, y: 280});
-			stance.setDefaultTweenOut(1, {x: -280, y: 280});						
+			stance.setDefaultTweenIn(1, {x: 238, y: 280});
+			stance.setDefaultTweenOut(1, {x: -280});						
 			addChild(stance);
 			
 			leftStance = new Stance();
-			leftStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x - stageWidth, y: 280});						
+			leftStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x - stageWidth, y:  stance.defaultTweenInVars.y});						
 			addChild(leftStance);
 			
 			rightStance = new Stance();
-			rightStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x + stageWidth, y: 280});						
+			rightStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x + stageWidth, y: stance.defaultTweenInVars.y});						
 			addChild(rightStance);			
 			
 			
@@ -159,25 +159,25 @@ package net.localprojects {
 			
 			
 			
-			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, true, true);
-			nametag.setPadding(26, 28, 20, 30);
-			nametag.setDefaultTweenIn(1, {x: 235, y: 410});
-			nametag.setDefaultTweenOut(1, {x: stageWidth, y: 410});
+			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_BOLD, true);
+			nametag.setPadding(33, 38, 24, 38);
+			nametag.setDefaultTweenIn(1, {x: 238, y: 410});
+			nametag.setDefaultTweenOut(1, {x: stageWidth});
 			addChild(nametag);
 			
-			leftNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, true, true);
+			leftNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_BOLD, true);
 			leftNametag.setPadding(26, 28, 20, 30);
-			leftNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x - stageWidth, y: 410});
+			leftNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x - stageWidth, y: nametag.defaultTweenInVars.y});
 			addChild(leftNametag);
 			
-			rightNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, true, true);
+			rightNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_BOLD, true);
 			rightNametag.setPadding(26, 28, 20, 30);
-			rightNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x + stageWidth, y: 410});
+			rightNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x + stageWidth, y: nametag.defaultTweenInVars.y});
 			addChild(rightNametag);
 			
 			
 			
-			byline = new BlockLabel('Byline', 22, 0xffffff, Assets.COLOR_YES_MEDIUM, false, true);
+			byline = new BlockLabel('Byline', 22, 0xffffff, Assets.COLOR_YES_MEDIUM, Assets.FONT_BOLD, true);
 			byline.setPadding(18, 32, 16, 32);
 			byline.setDefaultTweenIn(1, {x: 586, y: 694});
 			byline.setDefaultTweenOut(1, {x: -500, y: 694});			
@@ -269,7 +269,7 @@ package net.localprojects {
 			debatePicker.update(); // syncs with state, TODO same for stats
 			addChild(debatePicker);
 			
-			answerPrompt = new BlockLabel('Your Answer / Please Select One :', 19, 0xffffff, Assets.COLOR_INSTRUCTION_DARK, false, true);
+			answerPrompt = new BlockLabel('Your Answer / Please Select One :', 19, 0xffffff, Assets.COLOR_INSTRUCTION_DARK, Assets.FONT_REGULAR, true);
 			answerPrompt.setPadding(20, 30, 18, 32);
 			answerPrompt.setDefaultTweenIn(1, {x: 650, y: 1245});
 			answerPrompt.setDefaultTweenOut(1, {x: stageWidth, y: 1245});					
@@ -325,13 +325,13 @@ package net.localprojects {
 			countdown.setDefaultTweenOut(1, {x: 470, y: stageHeight});
 			addChild(countdown);
 			
-			nameEntryInstructions = new BlockLabel('TYPE IN YOUR NAME', 20, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
+			nameEntryInstructions = new BlockLabel('TYPE IN YOUR NAME', 20, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_REGULAR, true);
 			nameEntryInstructions.setDefaultTweenIn(1, {x: 101, y: 1003});
 			nameEntryInstructions.setDefaultTweenOut(1, {x: -nameEntryInstructions.width, y: 1096});
 			addChild(nameEntryInstructions);
 			
 			// TODO fix the text entry field
-			nameEntryField = new BlockInputLabel('', 30, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
+			nameEntryField = new BlockInputLabel('', 30, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_REGULAR, true);
 			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1096});
 			nameEntryField.setDefaultTweenOut(1, {x: -nameEntryField.width, y: 1196});
 			addChild(nameEntryField);			
@@ -356,7 +356,7 @@ package net.localprojects {
 			cancelButton.setDefaultTweenOut(1, {x: stageWidth, y: 1376});
 			addChild(cancelButton);			
 			
-			editTextInstructions = new BlockLabel('EDITING TEXT...', 20, 0xffffff, Assets.COLOR_YES_LIGHT, false, true);
+			editTextInstructions = new BlockLabel('EDITING TEXT...', 20, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_REGULAR, true);
 			editTextInstructions.setDefaultTweenIn(1, {x: 386, y: 1003});
 			editTextInstructions.setDefaultTweenOut(1, {x: -editTextInstructions.width, y: 1096});
 			addChild(editTextInstructions);			
@@ -550,10 +550,10 @@ package net.localprojects {
 			tweenOutInactive();
 			
 			if (CDW.database.debates[CDW.state.activeDebate].stance == 'yes') {			
-				setTestOverlay(TestAssets.CDW_08_15_11_Kiosk_Design);
+				setTestOverlay(TestAssets.CDW_082311_Kiosk_Design_Final);
 			}
 			else {
-				setTestOverlay(TestAssets.CDW_08_15_11_Kiosk_Design3);				
+				setTestOverlay(TestAssets.CDW_082311_Kiosk_Design_Final3);				
 			}
 		}
 		

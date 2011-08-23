@@ -76,7 +76,7 @@ package net.localprojects.ui {
 			topPanel.x = 35;
 			
 			// create the button text format
-			labelText = new BlockLabel(label, 36, 0x4c4d4f, 0x000000, true, false);
+			labelText = new BlockLabel(label, 36, 0x4c4d4f, 0x000000, Assets.FONT_BOLD, false);
 			labelText.visible = true;
 			labelText.setPadding(0, 0, 0, 0);
 			Utilities.centerWithin(labelText, topPanel);

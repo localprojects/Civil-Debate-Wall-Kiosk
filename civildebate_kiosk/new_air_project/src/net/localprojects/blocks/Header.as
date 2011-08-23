@@ -17,9 +17,8 @@ package net.localprojects.blocks
 			addChild(background);			
 			
 			// text
-			var textFormat:TextFormat = new TextFormat();
-			textFormat.bold = true;			
-			textFormat.font = Assets.FONT_REGULAR;
+			var textFormat:TextFormat = new TextFormat();	
+			textFormat.font = Assets.FONT_BOLD;
 			textFormat.align = TextFormatAlign.CENTER;
 			textFormat.size = 36;
 			
@@ -36,7 +35,7 @@ package net.localprojects.blocks
 			title.textColor = 0xffffff;
 			title.text = "The Great Civil Debate Wall".toUpperCase();
 			title.x = background.x + (width - title.width) / 2;
-			title.y = background.y + ((height - title.height) / 2) + 2;
+			title.y = background.y + ((height - title.height) / 2) + 1;
 			
 			addChild(title);
 		}

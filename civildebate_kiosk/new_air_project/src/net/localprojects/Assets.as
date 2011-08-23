@@ -83,16 +83,15 @@ package net.localprojects
 		public static const statsUnderlay:Bitmap = getStatsUnderlay();
 		
 		// Fonts
-		[Embed(source='/assets/fonts/rockwell.swf', symbol='RockwellRegular')] public static const Font:Class;
-		[Embed(source='/assets/fonts/rockwell.swf', symbol='RockwellBold')] public static const FontBold:Class;
-		public static const FONT_REGULAR:String = 'Rockwell';
+		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlab300')] public static const FontLight:Class;
+		public static const FONT_LIGHT:String = 'Museo Slab 300';		
 		
-		[Embed(source='/assets/fonts/rockwell.swf', symbol='RockwellExtraBold')] public static const FontExtraBold:Class;		
-		public static const FONT_EXTRA_BOLD:String = 'Rockwell Extra Bold';
+		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlab500')] public static const FontRegular:Class;
+		public static const FONT_REGULAR:String = 'Museo Slab 500';		
 		
-		[Embed(source='/assets/fonts/rockwell.swf', symbol='RockwellLight')] public static const FontLight:Class;		
-		public static const FONT_LIGHT:String = 'Rockwell Light';				
-
+		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlab900')] public static const FontBold:Class;		
+		public static const FONT_BOLD:String = 'Museo Slab 900';
+		
 
 		// Colors
 		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 185, 255);
