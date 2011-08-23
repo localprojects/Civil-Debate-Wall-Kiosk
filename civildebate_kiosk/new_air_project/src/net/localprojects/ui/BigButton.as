@@ -3,11 +3,12 @@ package net.localprojects.ui {
 	import com.greensock.easing.*;
 	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.geom.Matrix;
+	import flash.geom.*;
 	import flash.text.*;
 	
 	import net.localprojects.*;
@@ -24,82 +25,55 @@ package net.localprojects.ui {
 		private var textPanelHeight:Number;
 		private var buttonMask:Shape;
 		private var topPanel:Sprite;
-		
-
-		private var leftButtonEdge:Sprite;
+		private var leftButtonEdge:Bitmap;
 		private var leftEdgeMatrix:Matrix;
-		
-		private var bottomButtonEdge:Sprite;
+		private var bottomButtonEdge:Bitmap;
 		private var bottomEdgeMatrix:Matrix;		
+		private var barberPoleSpeed:Number; // pixels per frame
+		private var leftEdgeOffset:Number;
+		private var bottomEdgeOffset:Number;		
+		
 		
 		public function BigButton(buttonLabel:String) {
 			super();
-			buttonWidth = 520;
-			buttonHeight = 141;
 			label = buttonLabel;			
 			init();
 		}
 		
+
 		private function init():void {
-	
-			// draw the bounding box
+			buttonMode = true;
+			buttonWidth = 521;
+			buttonHeight = 133;	
+			
+			// create the bounding box / mask
 			buttonMask = new Shape();
 			buttonMask.graphics.beginFill(0x000000);
-			buttonMask.graphics.drawRect(0, 0, 520, 141);
+			buttonMask.graphics.drawRect(0, 0, buttonWidth, buttonHeight);
 			buttonMask.graphics.endFill();
 			
 			// create the actual button panel
 			button = new Sprite();
-			
+			 
+			barberPoleSpeed = 0.5 ;
 			
 			// bottom edge
-			bottomButtonEdge = new Sprite();
-			
+			bottomEdgeOffset = 0;
+			bottomButtonEdge = new Bitmap(new BitmapData(520, 35, true, 0xff0000));
 			bottomEdgeMatrix = new Matrix();
-			bottomButtonEdge.graphics.beginBitmapFill(Assets.bottomButtonTile.bitmapData, bottomEdgeMatrix);
-			bottomButtonEdge.graphics.drawRect(0, 0, 521, 42);
-			bottomButtonEdge.graphics.endFill();
-			bottomButtonEdge.cacheAsBitmap = true;
+			bottomButtonEdge.bitmapData.copyPixels(Assets.bottomButtonTile.bitmapData, Assets.bottomButtonTile.bitmapData.rect, new Point(0, bottomEdgeOffset), Assets.bottomEdgeMask.bitmapData, new Point(0, 0), true);
 			bottomButtonEdge.y = 98;
 			
-			var bottomMask:Bitmap = Assets.bottomEdgeMask;
-			bottomMask.cacheAsBitmap = true;
-			bottomMask.y = 98;
-			
-			button.addChild(bottomButtonEdge);
-			button.addChild(bottomMask);
-			
-			bottomButtonEdge.mask = bottomMask;					
-			
-			
 			// left edge
-			leftButtonEdge = new Sprite();			
-			
+			leftEdgeOffset = 3; // a little initial offset so the animation lines up with the bottom
+			leftButtonEdge = new Bitmap(new BitmapData(35, 133, true, 0xff0000));			
 			leftEdgeMatrix = new Matrix();
-			leftButtonEdge.graphics.beginBitmapFill(Assets.leftButtonTile.bitmapData, leftEdgeMatrix);
-			leftButtonEdge.graphics.drawRect(0, 0, 35, 141);
-			leftButtonEdge.graphics.endFill();
-			leftButtonEdge.cacheAsBitmap = true;
-			
-			var leftMask:Bitmap = Assets.leftEdgeMask;
-			leftMask.cacheAsBitmap = true;
-			
-			button.addChild(leftButtonEdge);			
-			button.addChild(leftMask);
-			
-			leftButtonEdge.mask = leftMask;
-			
+			leftButtonEdge.bitmapData.copyPixels(Assets.leftButtonTile.bitmapData, Assets.leftButtonTile.bitmapData.rect, new Point(leftEdgeOffset - Assets.leftEdgeMask.width, 0), Assets.leftEdgeMask.bitmapData, new Point(leftEdgeOffset - Assets.leftEdgeMask.width, 0), true);
 			
 			// top surface
-			
-			
 			topPanel = new Sprite();
-			topPanel.graphics.beginBitmapFill(Assets.buttonBackground.bitmapData);
-			topPanel.graphics.drawRect(0, 0, 485, 98);
-			topPanel.graphics.endFill();			
+			topPanel.addChild(Assets.buttonBackground);
 			topPanel.x = 35;
-			
-			button.addChild(topPanel);			
 			
 			// create the button text format
 			labelText = new BlockLabel(label, 36, 0x4c4d4f, 0x000000, true, false);
@@ -107,7 +81,10 @@ package net.localprojects.ui {
 			labelText.setPadding(0, 0, 0, 0);
 			Utilities.centerWithin(labelText, topPanel);
 
-			
+			// add children
+			button.addChild(bottomButtonEdge);
+			button.addChild(leftButtonEdge);
+			button.addChild(topPanel);
 			addChild(buttonMask);
 			addChild(button);
 			topPanel.addChild(labelText);
@@ -121,26 +98,17 @@ package net.localprojects.ui {
 		// pass through to the label
 		override public function setText(s:String, instant:Boolean = false):void {
 			labelText.setText(s, instant);
-			
 			Utilities.centerWithin(labelText, topPanel);			
 		}
 		
 
 		private function onEnterFrame(e:Event):void {
 			// barber pole animation			
-			
-			// disabled temporarily for performance investigation
-//			leftEdgeMatrix.tx -= 1;
-//			
-//			leftButtonEdge.graphics.beginBitmapFill(Assets.leftButtonTile.bitmapData, leftEdgeMatrix);
-//			leftButtonEdge.graphics.drawRect(0, 0, 35, 141);
-//			leftButtonEdge.graphics.endFill();
-//			
-//			bottomEdgeMatrix.ty += 1;
-//			
-//			bottomButtonEdge.graphics.beginBitmapFill(Assets.bottomButtonTile.bitmapData, bottomEdgeMatrix);
-//			bottomButtonEdge.graphics.drawRect(0, 0, 521, 42);
-//			bottomButtonEdge.graphics.endFill();			
+			leftEdgeOffset = ((leftEdgeOffset + barberPoleSpeed) % 22);
+			leftButtonEdge.bitmapData.copyPixels(Assets.leftButtonTile.bitmapData, Assets.leftButtonTile.bitmapData.rect, new Point(leftEdgeOffset - Assets.leftEdgeMask.width, 0), Assets.leftEdgeMask.bitmapData, new Point(leftEdgeOffset - Assets.leftEdgeMask.width, 0), true);
+
+			bottomEdgeOffset = ((bottomEdgeOffset - barberPoleSpeed) % 22);
+			bottomButtonEdge.bitmapData.copyPixels(Assets.bottomButtonTile.bitmapData, Assets.bottomButtonTile.bitmapData.rect, new Point(0, bottomEdgeOffset), Assets.bottomEdgeMask.bitmapData, new Point(0, bottomEdgeOffset), true);			
 		}
 		
 		
@@ -149,12 +117,14 @@ package net.localprojects.ui {
 			disable();
 		}
 		
+		
 		// move to parent?
 		override public function disable():void {
 			super.disable();
-			TweenMax.to(button, 0.25, {x: -26, y: 32, ease:Strong.easeOut, colorMatrixFilter:{saturation: 0}});
+			TweenMax.to(button, 0.25, {x: -24, y: 24, ease:Strong.easeOut, colorMatrixFilter:{saturation: 0}});
 			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);						
 		}
+		
 		
 		override public function enable():void {
 			super.enable();
@@ -162,11 +132,5 @@ package net.localprojects.ui {
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);			
 		}
 
-		
-		
-		
-
-		
-		
 	}
 }
