@@ -18,7 +18,7 @@ package net.localprojects.blocks {
 			// text
 			// TODO get this from the state and move to update function
 			var textFormat:TextFormat = new TextFormat();
-			textFormat.font =  Assets.FONT_BOLD;
+			textFormat.font =  Assets.FONT_HEAVY;
 			textFormat.align = TextFormatAlign.CENTER;
 			textFormat.size = 37;
 			textFormat.letterSpacing = -0.25;

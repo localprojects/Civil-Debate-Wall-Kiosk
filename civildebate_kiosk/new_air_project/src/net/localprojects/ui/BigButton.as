@@ -76,7 +76,7 @@ package net.localprojects.ui {
 			topPanel.x = 35;
 			
 			// create the button text format
-			labelText = new BlockLabel(label, 36, 0x4c4d4f, 0x000000, Assets.FONT_BOLD, false);
+			labelText = new BlockLabel(label, 36, 0x4c4d4f, 0x000000, Assets.FONT_HEAVY, false);
 			labelText.visible = true;
 			labelText.setPadding(0, 0, 0, 0);
 			Utilities.centerWithin(labelText, topPanel);
@@ -97,8 +97,13 @@ package net.localprojects.ui {
 		
 		// pass through to the label
 		override public function setText(s:String, instant:Boolean = false):void {
+			
+			// TODO, get centering to work for non-instant text settings
 			labelText.setText(s, instant);
-			Utilities.centerWithin(labelText, topPanel);			
+
+			
+			Utilities.centerWithin(labelText, topPanel);
+
 		}
 		
 
@@ -112,8 +117,11 @@ package net.localprojects.ui {
 		}
 		
 		
+		private var andFire:Boolean;
 		override protected function onMouseDown(e:MouseEvent):void {
-			super.onMouseDown(e);
+			// No mouse up event listener!
+			TweenMax.to(background, 0, {colorTransform: {tint: _backgroundColor, tintAmount: 0.2}});			
+			andFire = true;
 			disable();
 		}
 		
@@ -121,8 +129,24 @@ package net.localprojects.ui {
 		// move to parent?
 		override public function disable():void {
 			super.disable();
-			TweenMax.to(button, 0.25, {x: -24, y: 24, ease:Strong.easeOut, colorMatrixFilter:{saturation: 0}});
+			
+			if (andFire) {
+				// fire the mouse event once the animation is finished
+				TweenMax.to(button, 0.25, {x: -24, y: 24, ease:Strong.easeOut, colorMatrixFilter:{saturation: 0}, onComplete: onBigButtonDisabled});
+				andFire = false;
+			}
+			else {
+				// just diable the button...
+				TweenMax.to(button, 0.25, {x: -24, y: 24, ease:Strong.easeOut, colorMatrixFilter:{saturation: 0}});				
+			}
+			
 			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);						
+		}
+		
+
+		private function onBigButtonDisabled():void {
+			// don't wait for release
+			onClick();
 		}
 		
 		

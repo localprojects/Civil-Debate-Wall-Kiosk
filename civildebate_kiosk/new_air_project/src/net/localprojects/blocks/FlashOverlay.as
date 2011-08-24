@@ -11,6 +11,7 @@ package net.localprojects.blocks {
 			this.graphics.beginFill(0xffffff);
 			this.graphics.drawRect(0, 0, CDW.ref.stage.stageWidth, CDW.ref.stage.stageHeight);
 			this.graphics.endFill();
+			this.mouseEnabled = false; // let the keyboard through
 		}
 	}
 }

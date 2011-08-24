@@ -18,7 +18,7 @@ package net.localprojects.blocks
 			
 			// text
 			var textFormat:TextFormat = new TextFormat();	
-			textFormat.font = Assets.FONT_BOLD;
+			textFormat.font = Assets.FONT_HEAVY;
 			textFormat.align = TextFormatAlign.CENTER;
 			textFormat.size = 36;
 			

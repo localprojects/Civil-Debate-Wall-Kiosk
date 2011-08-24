@@ -71,6 +71,8 @@ package net.localprojects {
 		private var stats:Stats;
 		private var keyboard:Keyboard;
 		private var editOpinion:BlockInputParagraph;		
+		private var cameraArrow:BlockBitmap;
+		
 		
 		private var dragLayer:DragLayer;
 		
@@ -168,25 +170,25 @@ package net.localprojects {
 			
 			
 			
-			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_BOLD, true);
+			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
 			nametag.setPadding(33, 38, 24, 38);
 			nametag.setDefaultTweenIn(1, {x: 238, y: 410});
 			nametag.setDefaultTweenOut(1, {x: stageWidth});
 			addChild(nametag);
 			
-			leftNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_BOLD, true);
+			leftNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
 			leftNametag.setPadding(33, 38, 24, 38);
 			leftNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x - stageWidth, y: nametag.defaultTweenInVars.y});
 			addChild(leftNametag);
 			
-			rightNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_BOLD, true);
+			rightNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
 			rightNametag.setPadding(33, 38, 24, 38);
 			rightNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x + stageWidth, y: nametag.defaultTweenInVars.y});
 			addChild(rightNametag);
 			
 			
 			
-			byline = new BlockLabel('Byline', 22, 0xffffff, Assets.COLOR_YES_MEDIUM, Assets.FONT_BOLD, true);
+			byline = new BlockLabel('Byline', 22, 0xffffff, Assets.COLOR_YES_MEDIUM, Assets.FONT_HEAVY, true);
 			byline.setPadding(18, 32, 16, 32);
 			byline.setDefaultTweenIn(1, {x: 586, y: 694});
 			byline.setDefaultTweenOut(1, {x: -500, y: 694});			
@@ -326,18 +328,24 @@ package net.localprojects {
 			addChild(characterLimit);
 			
 			
-			photoBoothNag = new BlockLabel('Please keep your head inside the box.', 30, 0xffffff, Assets.COLOR_YES_LIGHT);
-			photoBoothNag.setDefaultTweenIn(1, {x: 196, y: 132});
-			photoBoothNag.setDefaultTweenOut(1, {x: -700});
+			photoBoothNag = new BlockLabel('Please look into the camera!', 33, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_BOLD);
+			photoBoothNag.setDefaultTweenIn(1.5, {x: 269, y: 176, ease: Elastic.easeOut, delay: 0.75});
+			photoBoothNag.setDefaultTweenOut(1, {x: 269, y: -100});
 			addChild(photoBoothNag);			
 			
-			photoBoothInstructions = new BlockLabel('Touch the camera icon to begin.', 30, 0xffffff, Assets.COLOR_YES_LIGHT);
-			photoBoothInstructions.setDefaultTweenIn(1, {x: 247, y: 1628});
-			photoBoothInstructions.setDefaultTweenOut(1, {x: stageWidth});
+			photoBoothInstructions = new BlockLabel('Touch to Begin', 33, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_BOLD);
+			photoBoothInstructions.setPadding(24, 24, 18, 24);
+			photoBoothInstructions.setDefaultTweenIn(1, {x: 389, y: 1628});
+			photoBoothInstructions.setDefaultTweenOut(1, {x: -350, y: 1628});
 			addChild(photoBoothInstructions);
 			
+			cameraArrow = new BlockBitmap(Assets.getCameraArrow());
+			cameraArrow.setDefaultTweenIn(1, {x: 529, y: 133});
+			cameraArrow.setDefaultTweenOut(1, {x: 529, y: -25});
+			addChild(cameraArrow);
+			
 			countdown = new Countdown(5);
-			countdown.setDefaultTweenIn(1, {x: 470, y: 1470});
+			countdown.setDefaultTweenIn(1, {x: 470, y: 1406});
 			countdown.setDefaultTweenOut(1, {x: 470, y: stageHeight});
 			addChild(countdown);
 			
@@ -432,15 +440,13 @@ package net.localprojects {
 			CDW.inactivityTimer.disarm();
 			
 			// mutations
-			
 			portrait.setImage(CDW.database.getActivePortrait());
 			question.setText(CDW.database.getQuestionText(), true);
-			
 			nametag.setText(CDW.database.getDebateAuthorName(CDW.state.activeDebate) + ' Says :', true);
-			
 			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance, true);
-			
 			opinion.setText(CDW.database.getOpinion(CDW.state.activeDebate));
+			bigButton.setText('ADD YOUR OPINION', true);
+			viewDebateButton.setLabel('"The reality is that a decision…" +8 other responses');			
 			
 			
 			if (CDW.state.previousDebate != null) {
@@ -476,8 +482,7 @@ package net.localprojects {
 				}
 			}
 			
-			bigButton.setText('ADD YOUR OPINION');
-			viewDebateButton.setLabel('"The reality is that a decision…" +8 other responses');
+
 			
 			// Reset user info
 			CDW.state.clearUser();
@@ -610,10 +615,9 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(CDW.database.getActivePortrait());
-			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName + ' ' + CDW.database.debates[CDW.state.activeDebate].author.lastName);			
+			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName);			
 			viewDebateButton.setLabel('BACK TO HOME SCREEN');
-			
-			
+
 			
 			// behaviors
 			viewDebateButton.setOnClick(homeView);
@@ -843,21 +847,30 @@ package net.localprojects {
 		
 		
 		public function photoBoothView(...args):void {
+			trace("photo booth view");
 			markAllInactive();
 			
 			CDW.inactivityTimer.arm();
 			
 			// mutations
+			countdown.progressRing.alpha = 0;			
 			stance.setStance(CDW.state.userStance);
+			
 			if (CDW.state.userStance == 'yes') {
 				countdown.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
 				countdown.setRingColor(Assets.COLOR_YES_LIGHT);
 				photoBoothInstructions.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
+				photoBoothNag.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
+				cameraOverlay.setColor(Assets.COLOR_YES_LIGHT);
+				cameraArrow.tween(0, {colorMatrixFilter: {colorize: Assets.COLOR_YES_MEDIUM, amount: 1}}); 
 			}
 			else {
 				countdown.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
 				countdown.setRingColor(Assets.COLOR_NO_LIGHT);
-				photoBoothInstructions.setBackgroundColor(Assets.COLOR_NO_MEDIUM);				
+				photoBoothInstructions.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
+				photoBoothNag.setBackgroundColor(Assets.COLOR_NO_MEDIUM);				
+				cameraOverlay.setColor(Assets.COLOR_NO_LIGHT);
+				cameraArrow.tween(0, {colorMatrixFilter: {colorize: Assets.COLOR_NO_MEDIUM, amount: 1}});
 			}
 			
 			// behaviors
@@ -868,39 +881,38 @@ package net.localprojects {
 			// blocks
 			portraitCamera.tweenIn();
 			header.tweenIn();
-			//divider.tweenIn();
-			//question.tweenIn();
-			//stance.tweenIn();
 			cameraOverlay.tweenIn();
-			//portraitOutline.tweenIn();
-			photoBoothNag.tweenIn();			
 			photoBoothInstructions.tweenIn();
-			
 			countdown.tweenIn();			
 			
 			tweenOutInactive();
+			
+			setTestOverlay(TestAssets.CDW_082311_Kiosk_Design_Final9);
 		}
 		
 		
 		private function onCameraClick(e:Event):void {
 			if (!countdown.isCountingDown()) {
-				photoBoothInstructions.tweenOut();
-				countdown.tween(1, {y: 343, ease: Quart.easeInOut}); // move it up
-				countdown.start()
+				photoBoothInstructions.tweenOut(1, {x: stageWidth});
+				countdown.tween(1, {y: 343, ease: Quart.easeInOut, onComplete: onCountdownPositioned}); // move it up
+				TweenMax.to(countdown.progressRing, 1, {alpha: 1, ease: Quart.easeInOut});
+				cameraArrow.tweenIn();
+				cameraArrow.tween(0.25, {yoyo: true, repeat: -1, colorMatrixFilter: {colorize: 0xffffff, amount: 1}});
+				photoBoothNag.tweenIn();
 			}
 		}
 		
+		private function onCountdownPositioned():void {
+			countdown.start()	
+		}
+		
 		private function onCountdownAlmostFinish():void {
-			photoBoothNag.setText('Smile and say Cheese!');		
-			photoBoothNag.tween(.1, {x: 338});
+			// nothing at the moment, could show cheese...
 		}
 		
 		private function onCountdownFinish(e:Event):void {
-			
-			
-			
-			
-			
+			// stop yoyoing the camera arroy
+			TweenMax.killTweensOf(cameraArrow); 
 			
 			// image is held in RAM for now, in case it's edited later
 			
@@ -913,28 +925,23 @@ package net.localprojects {
 				CDW.state.userImage = portraitCamera.cameraBitmap;				
 			}
 			else {
-				// using SLR
-				// TODO GO TO BLACK
+				// using SLR, go to black
 				blackOverlay.tweenIn();
 				portraitCamera.slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 				portraitCamera.slr.takePhoto();
-				
 			}
-			
-			
 		}
+		
 		
 		private function onPhotoCapture(e:CameraFeedEvent):void {
 			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 			
 			// process SLR image?
-			
+
 			CDW.state.userImage = new Bitmap(Utilities.scaleToFill(portraitCamera.slr.image.bitmapData, 1080, 1920));
 			flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
 			blackOverlay.tweenOut();
 		}
-		
-		
 		
 		
 		private function onFlashOn():void {
@@ -972,7 +979,9 @@ package net.localprojects {
 			}
 			
 			portrait.setImage(CDW.state.userImage, true);
+			nameEntryField.setText('', true); // clear the name entry field			
 			keyboard.target = nameEntryField.getTextField();
+			
 			
 			// behaviors
 			saveButton.setOnClick(onSaveName);
@@ -1018,7 +1027,7 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(CDW.state.userImage, true);
-			bigButton.setText('SUBMIT THIS DEBATE');
+			bigButton.setText('SUBMIT THIS DEBATE', true);
 			bigButton.enable();
 			nametag.setText(CDW.state.userName + ' Says:', true);
 			opinion.setText(CDW.state.userOpinion);
@@ -1082,7 +1091,7 @@ package net.localprojects {
 			homeView();
 		}
 		
-		private function onSubmitOpinion(e:Event):void {
+		private function onSubmitOpinion():void {
 			trace("Submitting opinion!");
 			// Syncs state up to the cloud
 			

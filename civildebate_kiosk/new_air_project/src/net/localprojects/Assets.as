@@ -4,6 +4,20 @@ package net.localprojects
 	import flash.media.Sound;
 	
 	public final class Assets	{
+		// Fonts
+		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlab300')] public static const FontLight:Class;
+		public static const FONT_LIGHT:String = 'Museo Slab 300';		
+		
+		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlab500')] public static const FontRegular:Class;
+		public static const FONT_REGULAR:String = 'Museo Slab 500';
+		
+		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlab700')] public static const FontBold:Class;
+		public static const FONT_BOLD:String = 'Museo Slab 700';		
+		
+		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlab900')] public static const FontHeavy:Class;		
+		public static const FONT_HEAVY:String = 'Museo Slab 900';		
+		
+		
 		// Graphics
 		[Embed(source = '/assets/graphics/faceTarget.png')] private static const faceTargetClass:Class;
 		public static function getFaceTarget():Bitmap { return new faceTargetClass() as Bitmap; };
@@ -82,22 +96,16 @@ package net.localprojects
 		public static function getYesPortraitOverlay():Bitmap { return new yesPortraitOverlayClass() as Bitmap; };
 		public static const yesPortraitOverlay:Bitmap = getYesPortraitOverlay();
 		
-
+		[Embed(source = '/assets/graphics/cameraArrow.png')] private static const cameraArrowClass:Class;
+		public static function getCameraArrow():Bitmap { return new cameraArrowClass() as Bitmap; };
+		public static const cameraArrow:Bitmap = getCameraArrow();
 		
 		
 		
 		public static function getStatsUnderlay():Bitmap { return new Bitmap(new BitmapData(1080, 1920, false, 0xffffff)); };
 		public static const statsUnderlay:Bitmap = getStatsUnderlay();
 		
-		// Fonts
-		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlab300')] public static const FontLight:Class;
-		public static const FONT_LIGHT:String = 'Museo Slab 300';		
-		
-		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlab500')] public static const FontRegular:Class;
-		public static const FONT_REGULAR:String = 'Museo Slab 500';		
-		
-		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlab900')] public static const FontBold:Class;		
-		public static const FONT_BOLD:String = 'Museo Slab 900';
+
 		
 
 		// Colors
