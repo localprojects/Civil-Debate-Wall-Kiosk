@@ -1,8 +1,10 @@
 package net.localprojects.blocks {
 	
-	import net.localprojects.*;
 	import com.greensock.TweenMax;
+	
 	import flash.events.*;
+	
+	import net.localprojects.*;
 
 	
 	public class DragLayer extends BlockBase {
@@ -30,12 +32,16 @@ package net.localprojects.blocks {
 			//this.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
 			this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			mouseDown = false;			
+			mouseDown = false;
+			
+			vxSampleDepth = 5;
+			vxThreshold = 40;
 		}
 		
 
 		private function onMouseDown(e:MouseEvent):void {
 			mouseDown = true;
+			vxSamples = new Array(); // clear the history
 			
 			// refactor startX based on tween progress, for portrait and other things
 			startX = this.mouseX - (CDW.view.nametag.x - CDW.view.nametag.defaultTweenInVars.x);
@@ -55,21 +61,42 @@ package net.localprojects.blocks {
 			TweenMax.killTweensOf(CDW.view.rightOpinion);			
 			TweenMax.killChildTweensOf(CDW.view.portrait);
 			TweenMax.killChildTweensOf(CDW.view.leftQuote);
-			TweenMax.killChildTweensOf(CDW.view.rightQuote);			
+			TweenMax.killChildTweensOf(CDW.view.rightQuote);
+			
+			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
 		
 		
+		private var vxSamples:Array;
+		private var vxSampleDepth:int;
+		private var vxThreshold:Number; // velocity required until a flick is a transition
+		
+		
+		private function onEnterFrame(e:Event):void {
+			lastX = currentX;
+			currentX = this.mouseX;
+			leftEdge += currentX - lastX;
+			difference =  startX - currentX;							
+			
+			// track velocity
+			vxSamples.unshift(currentX - lastX);
+			
+			while (vxSamples.length > vxSampleDepth) {
+				vxSamples.pop();
+			}
+			
+
+						
+		}
+		
 		private function onMouseMove(e:Event):void {
 			if (mouseDown) {
 				
-				lastX = currentX;
-				currentX = this.mouseX;
-				leftEdge += currentX - lastX;
-				difference =  startX - currentX;				
-				
 				
 				trace("Left Edge: "+ leftEdge);
+
+				
 				
 				
 				// edge limits
@@ -80,7 +107,7 @@ package net.localprojects.blocks {
 				else if ((leftEdge > 0) && (CDW.state.previousDebate == null)) {
 					leftEdge = 0;
 					difference = 0;
-				}
+				}				
 				
 				// drag blocks
 				CDW.view.nametag.x = CDW.view.nametag.defaultTweenInVars.x - difference;
@@ -119,11 +146,19 @@ package net.localprojects.blocks {
 		
 		private function onMouseUp(e:MouseEvent):void {
 			mouseDown = false;
-			
+			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			trace("up");		
 			
+			
+			
+			var vxAverage:Number = Utilities.averageArray(vxSamples);
+			
+			trace("Velocity average: " + vxAverage);
+			
+			
+			
 			// see if we need to transition
-			if (leftEdge < (stageWidth / -2)) {
+			if ((CDW.state.nextDebate != null) &&(vxAverage < -vxThreshold) || (leftEdge < (stageWidth / -2))) {
 				trace("transition to next");
 				CDW.state.setActiveDebate(CDW.state.nextDebate);
 				CDW.view.leftOpinion.x += stageWidth;
@@ -140,7 +175,7 @@ package net.localprojects.blocks {
 				
 				
 			}
-			if (leftEdge > (stageWidth / 2)) {
+			if ((CDW.state.previousDebate != null) && (vxAverage > vxThreshold) || (leftEdge > (stageWidth / 2))) {
 				trace("transition to previous");
 				CDW.state.setActiveDebate(CDW.state.previousDebate);
 				CDW.view.leftOpinion.x -= stageWidth;

@@ -182,8 +182,11 @@ package net.localprojects.blocks {
 						trace("clicked thumbnail for debate " + objects[i].debateID);
 						
 						// TODO fire on view?
-						CDW.state.setActiveDebate(objects[i].debateID);
-						CDW.view.homeView();
+						if (CDW.state.activeDebate != objects[i].debateID) {
+						
+							CDW.state.setActiveDebate(objects[i].debateID);
+							CDW.view.transitionView();
+						}
 					}
 				}
 			}

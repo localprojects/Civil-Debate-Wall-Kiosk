@@ -4,8 +4,8 @@ package net.localprojects.keyboard {
 	
 	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
-	import flash.events.Event;
 	import flash.events.*;
+	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.ui.Mouse;
 	
@@ -213,7 +213,8 @@ package net.localprojects.keyboard {
 			return spaceCount;
 		}
 		
-		public function setColor(c:uint):void {
+		public function setColor(c:uint, instant:Boolean = false):void {
+			// TODO implement non-instant color transition
 			for each (var key:Key in keys) {
 				key.setColor(c);
 			}
