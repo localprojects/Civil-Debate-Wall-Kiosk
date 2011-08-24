@@ -39,7 +39,8 @@ package net.localprojects {
 		private var cancelButton:BlockButton;		
 		private var editTextInstructions:BlockLabel;
 		private var inactivityOverlay:InactivityOverlay;
-		private var inactivityInstructions:BlockLabel;
+		private var inactivityTimerBar:ProgressBar;
+		private var inactivityInstructions:BlockLabelBar;
 		private var continueButton:BlockButton;
 		private var restartButton:BlockButton;
 		private var flashOverlay:FlashOverlay;
@@ -173,7 +174,7 @@ package net.localprojects {
 			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
 			nametag.setPadding(33, 38, 24, 38);
 			nametag.setDefaultTweenIn(1, {x: 238, y: 410});
-			nametag.setDefaultTweenOut(1, {x: stageWidth});
+			nametag.setDefaultTweenOut(1, {x: stageWidth + 50});
 			addChild(nametag);
 			
 			leftNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
@@ -203,7 +204,7 @@ package net.localprojects {
 			
 			rightQuote = new QuotationMark();
 			rightQuote.setDefaultTweenIn(1, {x: 660, y: 1639});
-			rightQuote.setDefaultTweenOut(1, {x: stageWidth});				
+			rightQuote.setDefaultTweenOut(1, {x: stageWidth + 50});				
 			rightQuote.setStyle(QuotationMark.CLOSING);
 			rightQuote.setColor(Assets.COLOR_YES_LIGHT);
 			addChild(rightQuote);
@@ -246,29 +247,29 @@ package net.localprojects {
 			
 			statsButton = new IconButton(111, 55, 'Stats', 20, Assets.COLOR_YES_DARK, Assets.statsIcon);
 			statsButton.setDefaultTweenIn(1, {x: 104, y: 1379});
-			statsButton.setDefaultTweenOut(1, {x: -statsButton.width});
+			statsButton.setDefaultTweenOut(1, {x: -statsButton.width - 50});
 			addChild(statsButton);
 			
 			likeButton = new CounterButton(111, 55, 'Like', 20, Assets.COLOR_YES_DARK, 0);
 			likeButton.setTimeout(5000);
 			likeButton.setDefaultTweenIn(1, {x: 238, y: 1379});
-			likeButton.setDefaultTweenOut(1, {x: -likeButton.width});			
+			likeButton.setDefaultTweenOut(1, {x: -likeButton.width - 50});			
 			addChild(likeButton);
 			
 			viewDebateButton = new BlockButton(517, 55, '"The reality is that a decision…" +8 other responses', 20, Assets.COLOR_YES_DARK, false);
 			viewDebateButton.setDefaultTweenIn(1, {x: 373, y: 1379});
-			viewDebateButton.setDefaultTweenOut(1, {x: stageWidth});			
+			viewDebateButton.setDefaultTweenOut(1, {x: stageWidth + 50});			
 			addChild(viewDebateButton);
 			
 			flagButton = new IconButton(59, 55, '', 20, Assets.COLOR_YES_DARK, Assets.flagIcon);
 			flagButton.setTimeout(5000);			
 			flagButton.setDefaultTweenIn(1, {x: 914, y: 1379});
-			flagButton.setDefaultTweenOut(1, {x: stageWidth});
+			flagButton.setDefaultTweenOut(1, {x: stageWidth + 50});
 			addChild(flagButton);			
 			
 			debateButton = new BalloonButton(145, 130, 'LET\u0027S\nDEBATE !', 20, Assets.COLOR_YES_DARK, false, true);
 			debateButton.setDefaultTweenIn(1, {x: 828, y: 901, scaleX: 1, scaleY: 1});
-			debateButton.setDefaultTweenOut(1, {x: stageWidth, y: 901, scaleX: 1, scaleY: 1});
+			debateButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 901, scaleX: 1, scaleY: 1});
 			addChild(debateButton);
 			
 			debateOverlay = new DebateOverlay();
@@ -285,23 +286,23 @@ package net.localprojects {
 			answerPrompt = new BlockLabel('Your Answer / Please Select One :', 19, 0xffffff, Assets.COLOR_INSTRUCTION_DARK, Assets.FONT_REGULAR, true);
 			answerPrompt.setPadding(20, 30, 18, 32);
 			answerPrompt.setDefaultTweenIn(1, {x: 650, y: 1245});
-			answerPrompt.setDefaultTweenOut(1, {x: stageWidth, y: 1245});					
+			answerPrompt.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1245});					
 			addChild(answerPrompt);
 			
 			yesButton = new BlockButton(215, 100, 'YES!', 80, Assets.COLOR_YES_LIGHT, false, false);
 			yesButton.setDefaultTweenIn(1, {x: 447, y: 1340});
-			yesButton.setDefaultTweenOut(1, {x: 447, y: stageHeight});
+			yesButton.setDefaultTweenOut(1, {x: 447, y: stageHeight + 50});
 			addChild(yesButton);
 			
 			noButton = new BlockButton(185, 100, 'NO!', 80, Assets.COLOR_NO_LIGHT, false, false);			
 			noButton.setDefaultTweenIn(1.2, {x: 677, y: 1340});
-			noButton.setDefaultTweenOut(1.2, {x: 677, y: stageHeight});
+			noButton.setDefaultTweenOut(1.2, {x: 677, y: stageHeight + 50});
 			addChild(noButton);
 			
 			// Temp debug button so we don't have to SMS every time
 			skipTextButton = new BlockButton(200, 100, 'SIMULATE SMS', 20, Assets.COLOR_INSTRUCTION_DARK, false, false);
 			skipTextButton.setDefaultTweenIn(1, {x: (stageWidth - 200) / 2, y: 500});
-			skipTextButton.setDefaultTweenOut(1, {x: stageWidth, y: 500});
+			skipTextButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 500});
 			addChild(skipTextButton);
 			
 			var smsDisclaimerText:String = 'You will receive an SMS notifying you of any future opponents \nwho would like to enter into a debate with you based on your opinion. \nYou can opt out at any time by replying STOP.';
@@ -318,18 +319,18 @@ package net.localprojects {
 			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
 			smsInstructions = new BlockParagraph(915, smsInstructionText, 30, Assets.COLOR_YES_LIGHT, false);
 			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
-			smsInstructions.setDefaultTweenOut(1, {x: stageWidth, y: 1096});
+			smsInstructions.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1096});
 			addChild(smsInstructions);			
 			
 			characterLimit = new BlockLabel('Use no more than ' + CDW.settings.characterLimit + ' characters', 20, 0xffffff, Assets.COLOR_YES_MEDIUM);
 			characterLimit.setPadding(20, 30, 18, 32);
 			characterLimit.setDefaultTweenIn(1, {x: 648, y: 1246});
-			characterLimit.setDefaultTweenOut(1, {x: stageWidth, y: 1246});
+			characterLimit.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1246});
 			addChild(characterLimit);
 			
 			
 			photoBoothNag = new BlockLabel('Please look into the camera!', 33, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_BOLD);
-			photoBoothNag.setDefaultTweenIn(1.5, {x: 269, y: 176, ease: Elastic.easeOut, delay: 0.75});
+			photoBoothNag.setDefaultTweenIn(1.5, {x: 269, y: 176, delay: 0.75}); // elastic easing was over-the-top...65777777777777777
 			photoBoothNag.setDefaultTweenOut(1, {x: 269, y: -100});
 			addChild(photoBoothNag);			
 			
@@ -351,38 +352,38 @@ package net.localprojects {
 			
 			nameEntryInstructions = new BlockLabel('TYPE IN YOUR NAME', 20, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_REGULAR, true);
 			nameEntryInstructions.setDefaultTweenIn(1, {x: 101, y: 1003});
-			nameEntryInstructions.setDefaultTweenOut(1, {x: -nameEntryInstructions.width, y: 1096});
+			nameEntryInstructions.setDefaultTweenOut(1, {x: -nameEntryInstructions.width - 50, y: 1003});
 			addChild(nameEntryInstructions);
 			
 			// TODO fix the text entry field
 			nameEntryField = new BlockInputLabel('', 30, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_REGULAR, true);
 			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1096});
-			nameEntryField.setDefaultTweenOut(1, {x: -nameEntryField.width, y: 1196});
+			nameEntryField.setDefaultTweenOut(1, {x: -nameEntryField.width - 500, y: 1096});
 			addChild(nameEntryField);			
 			
 			saveButton = new BlockButton(335, 63, 'SAVE AND CONTINUE', 20, Assets.COLOR_YES_DARK, false);
 			saveButton.setDefaultTweenIn(1, {x: 308, y: 1200});
-			saveButton.setDefaultTweenOut(1, {x: -saveButton.width, y: 1200});
+			saveButton.setDefaultTweenOut(1, {x: -saveButton.width - 50, y: 1200});
 			addChild(saveButton);
 			
 			retakePhotoButton = new BlockButton(270, 63, 'RETAKE PHOTO', 20, Assets.COLOR_YES_DARK, false);
 			retakePhotoButton.setDefaultTweenIn(1, {x: 101, y: 1003});
-			retakePhotoButton.setDefaultTweenOut(1, {x: -retakePhotoButton.width, y: 1003});
+			retakePhotoButton.setDefaultTweenOut(1, {x: -retakePhotoButton.width - 50, y: 1003});
 			addChild(retakePhotoButton);
 			
 			editTextButton = new BlockButton(200, 63, 'EDIT TEXT', 20, Assets.COLOR_YES_DARK, false);
 			editTextButton.setDefaultTweenIn(1, {x: 386, y: 1003});
-			editTextButton.setDefaultTweenOut(1, {x: stageWidth, y: 1003});
+			editTextButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1003});
 			addChild(editTextButton);
 			
 			cancelButton = new BlockButton(171, 63, 'CANCEL', 20, Assets.COLOR_YES_DARK, false);
 			cancelButton.setDefaultTweenIn(1, {x: 789, y: 1376});
-			cancelButton.setDefaultTweenOut(1, {x: stageWidth, y: 1376});
+			cancelButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1376});
 			addChild(cancelButton);			
 			
 			editTextInstructions = new BlockLabel('EDITING TEXT...', 20, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_REGULAR, true);
 			editTextInstructions.setDefaultTweenIn(1, {x: 386, y: 1003});
-			editTextInstructions.setDefaultTweenOut(1, {x: -editTextInstructions.width, y: 1096});
+			editTextInstructions.setDefaultTweenOut(1, {x: -editTextInstructions.width - 50, y: 1003});
 			addChild(editTextInstructions);			
 			
 			keyboard = new Keyboard();
@@ -400,20 +401,24 @@ package net.localprojects {
 			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(inactivityOverlay);
 			
-			inactivityInstructions = new BlockLabel('ARE YOU STILL THERE?', 30, 0xffffff, Assets.COLOR_INSTRUCTION_DARK);
-			inactivityInstructions.setDefaultTweenIn(1, {x: 168, y: 1038});
-			inactivityInstructions.setDefaultTweenOut(1, {x: 168, y: -inactivityInstructions.height});			
-			inactivityInstructions.width = 735; 
+			inactivityTimerBar = new ProgressBar(735, 10, 20);		
+			inactivityTimerBar.setDefaultTweenIn(1, {x: 173, y: 993});
+			inactivityTimerBar.setDefaultTweenOut(1, {x: 173, y: -inactivityTimerBar.height - 25});			
+			addChild(inactivityTimerBar);
+			
+			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_INSTRUCTION_DARK, Assets.FONT_HEAVY);
+			inactivityInstructions.setDefaultTweenIn(1, {x: 173, y: 1018});
+			inactivityInstructions.setDefaultTweenOut(1, {x: 173, y: -inactivityInstructions.height - 50});			
 			addChild(inactivityInstructions);
 			
-			continueButton = new BlockButton(259, 120, 'YES!', 50, Assets.COLOR_INSTRUCTION_MEDIUM, false);
-			continueButton.setDefaultTweenIn(1, {x: 168, y: 1116});
-			continueButton.setDefaultTweenOut(1, {x: -continueButton.width, y: 1116});					
+			continueButton = new BlockButton(230, 110, 'YES!', 92, Assets.COLOR_INSTRUCTION_MEDIUM, false);
+			continueButton.setDefaultTweenIn(1, {x: 175, y: 1098});
+			continueButton.setDefaultTweenOut(1, {x: -continueButton.width - 50, y: 1098});					
 			addChild(continueButton);
 			
-			restartButton = new BlockButton(461, 120, 'RESTART!', 50, Assets.COLOR_INSTRUCTION_MEDIUM, false);
-			restartButton.setDefaultTweenIn(1, {x: 443, y: 1116});
-			restartButton.setDefaultTweenOut(1, {x: stageWidth, y: 1116});					
+			restartButton = new BlockButton(481, 110, 'RESTART!', 92, Assets.COLOR_INSTRUCTION_MEDIUM, false);
+			restartButton.setDefaultTweenIn(1, {x: 423, y: 1098});
+			restartButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1098});					
 			addChild(restartButton);
 			
 			blackOverlay = new BlackOverlay();
@@ -578,6 +583,9 @@ package net.localprojects {
 			}
 		}
 		
+		
+
+		
 		private function incrementLikes(e:Event):void {
 			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/like', {'id': CDW.state.activeDebate, 'count': likeButton.count}, onLikePosted);
 		}
@@ -655,7 +663,37 @@ package net.localprojects {
 		
 		
 		
+		// For inter-debate transitions initiated by the debate picker... tweens everything out except the portrait, then tweens stuff back in
+		public function transitionView(...args):void {
+			markAllInactive();
+			portrait.setImage(CDW.database.getActivePortrait());
+			
+			portrait.tweenIn(0.5, {delay: 0.5, onComplete: onViewTransitionComplete});
+			header.tweenIn();
+			divider.tweenIn();
+			question.tweenIn();			
+			debatePicker.tweenIn();			
+			
+			leftQuote.tweenOut(0.25);
+			rightQuote.tweenOut(0.25);
+			opinion.tweenOut(0.25);
+			stance.tweenOut(0.25);
+			nametag.tweenOut(0.25);
+			bigButton.tweenOut(0.25);
+			statsButton.tweenOut(0.25);
+			likeButton.tweenOut(0.25);
+			debateButton.tweenOut(0.25);
+			flagButton.tweenOut(0.25);
+			viewDebateButton.tweenOut(0.25);			
+			
+			
+			tweenOutInactive();	
+		}
 		
+		private function onViewTransitionComplete():void {
+			// tween stuff back in
+			homeView();
+		}
 		
 		
 		
@@ -893,7 +931,7 @@ package net.localprojects {
 		
 		private function onCameraClick(e:Event):void {
 			if (!countdown.isCountingDown()) {
-				photoBoothInstructions.tweenOut(1, {x: stageWidth});
+				photoBoothInstructions.tweenOut(1, {x: stageWidth + 50});
 				countdown.tween(1, {y: 343, ease: Quart.easeInOut, onComplete: onCountdownPositioned}); // move it up
 				TweenMax.to(countdown.progressRing, 1, {alpha: 1, ease: Quart.easeInOut});
 				cameraArrow.tweenIn();
@@ -966,10 +1004,10 @@ package net.localprojects {
 			// mutations
 			stance.setStance(CDW.state.userStance);
 			if (CDW.state.userStance == 'yes') {
-				nameEntryInstructions.setBackgroundColor(Assets.COLOR_YES_LIGHT);
-				saveButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				keyboard.setColor(Assets.COLOR_YES_LIGHT);
-				nameEntryField.setBackgroundColor(Assets.COLOR_YES_LIGHT);
+				nameEntryInstructions.setBackgroundColor(Assets.COLOR_YES_LIGHT, true);
+				saveButton.setBackgroundColor(Assets.COLOR_YES_DARK, true);
+				keyboard.setColor(Assets.COLOR_YES_LIGHT, true);
+				nameEntryField.setBackgroundColor(Assets.COLOR_YES_LIGHT, true);
 			}
 			else {
 				nameEntryInstructions.setBackgroundColor(Assets.COLOR_NO_LIGHT);
@@ -991,7 +1029,7 @@ package net.localprojects {
 			header.tweenIn(0);
 			divider.tweenIn(0);
 			question.tweenIn(0);
-			stance.tweenIn(0);
+			stance.tweenIn(-1, {delay: 1});
 			nameEntryInstructions.tweenIn(-1, {delay: 1});
 			nameEntryField.tweenIn(-1, {delay: 1});
 			saveButton.tweenIn(-1, {delay: 1});
@@ -1016,8 +1054,6 @@ package net.localprojects {
 			trace("Name updated on server");
 			trace(r);
 		}
-		
-		
 		
 		
 		public function verifyOpinionView(...args):void {
@@ -1205,26 +1241,36 @@ package net.localprojects {
 			
 			stats.tweenOut();
 		}
+
+		
+		
+		
+		
+		
 		
 		public function inactivityView(...args):void {
 			// mutations			
 			CDW.inactivityTimer.disarm();
-			
-			
-			
+
 			// behaviors
 			continueButton.setOnClick(onContinue);
 			restartButton.setOnClick(onRestart);
-			
-			
+			inactivityTimerBar.setOnComplete(onInactivityTimeout);
 			
 			// blocks
 			inactivityOverlay.tweenIn();
+			inactivityTimerBar.tweenIn();			
 			inactivityInstructions.tweenIn();
 			continueButton.tweenIn();
 			restartButton.tweenIn();
+			
+			this.setTestOverlay(TestAssets.CDW_082311_Kiosk_Design_Final21);
 		}
 		
+		private function onInactivityTimeout():void {
+			homeView();
+		}
+
 		private function onRestart(e:Event):void {
 			homeView();
 		}
@@ -1235,6 +1281,11 @@ package net.localprojects {
 			continueButton.tweenOut();
 			restartButton.tweenOut();			
 		}
+		
+		
+		
+		
+		
 		
 		
 		private function setTestOverlay(b:Bitmap):void {
@@ -1250,7 +1301,9 @@ package net.localprojects {
 			
 			// marks all FIRST LEVEL blocks as inactive
 			for (var i:int = 0; i < this.numChildren; i++) {
-				if ((this.getChildAt(i) is BlockBase) && (this.getChildAt(i).visible)) {
+				//if ((this.getChildAt(i) is BlockBase) && (this.getChildAt(i).visible)) {
+				// attempt to fix blank screen issue....
+				if (this.getChildAt(i) is BlockBase) {				
 					(this.getChildAt(i) as BlockBase).active = false;
 				}
 			}
