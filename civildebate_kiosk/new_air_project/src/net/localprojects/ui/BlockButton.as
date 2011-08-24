@@ -22,6 +22,10 @@ package net.localprojects.ui {
 		protected var outline:Shape;
 		
 		
+		
+		
+		
+		
 		protected var strokeWeight:Number;
 		
 		// TODO arrow...
@@ -70,6 +74,7 @@ package net.localprojects.ui {
 		}
 		
 		private var newLabel:TextField;
+		
 		override public function setLabel(text:String):void {
 			_labelText = text;
 			newLabel = generateLabel(_labelText);

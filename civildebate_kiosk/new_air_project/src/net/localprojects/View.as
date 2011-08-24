@@ -47,6 +47,7 @@ package net.localprojects {
 		private var skipTextButton:BlockButton;		
 		
 		// single copy, changes
+		private var cameraOverlay:CameraOverlay;
 		private var question:Question;
 		public var leftQuote:QuotationMark;
 		public var rightQuote:QuotationMark;		
@@ -64,7 +65,8 @@ package net.localprojects {
 		private var backButton:BlockButton;
 		private var smsInstructions:BlockParagraph;
 		private var characterLimit:BlockLabel;
-		private var photoBoothInstructions:BlockParagraph;
+		private var photoBoothNag:BlockLabel;
+		private var photoBoothInstructions:BlockLabel;
 		private var countdown:Countdown;
 		private var stats:Stats;
 		private var keyboard:Keyboard;
@@ -122,6 +124,13 @@ package net.localprojects {
 			portraitOutline.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(portraitOutline);
 			
+			
+			cameraOverlay = new CameraOverlay();
+			cameraOverlay.setDefaultTweenIn(1, {alpha: 1});
+			cameraOverlay.setDefaultTweenOut(1, {alpha: 0});			
+			addChild(cameraOverlay);
+			
+			
 			header = new Header();
 			header.setDefaultTweenIn(1, {x: 30, y: 30});
 			header.setDefaultTweenOut(1, {x: 30, y: -header.height});
@@ -166,12 +175,12 @@ package net.localprojects {
 			addChild(nametag);
 			
 			leftNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_BOLD, true);
-			leftNametag.setPadding(26, 28, 20, 30);
+			leftNametag.setPadding(33, 38, 24, 38);
 			leftNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x - stageWidth, y: nametag.defaultTweenInVars.y});
 			addChild(leftNametag);
 			
 			rightNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_BOLD, true);
-			rightNametag.setPadding(26, 28, 20, 30);
+			rightNametag.setPadding(33, 38, 24, 38);
 			rightNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x + stageWidth, y: nametag.defaultTweenInVars.y});
 			addChild(rightNametag);
 			
@@ -198,8 +207,8 @@ package net.localprojects {
 			addChild(rightQuote);
 			
 			
-			// triple opinoions
-			opinion = new BlockParagraph(915, '', 44, 0x000000, false);	
+			// triple opinions
+			opinion = new BlockParagraph(915, '', 42, 0x000000, false);	
 			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});
 			opinion.setDefaultTweenOut(1, {x: -stageWidth, y: 1095});
 			addChild(opinion);
@@ -239,6 +248,7 @@ package net.localprojects {
 			addChild(statsButton);
 			
 			likeButton = new CounterButton(111, 55, 'Like', 20, Assets.COLOR_YES_DARK, 0);
+			likeButton.setTimeout(5000);
 			likeButton.setDefaultTweenIn(1, {x: 238, y: 1379});
 			likeButton.setDefaultTweenOut(1, {x: -likeButton.width});			
 			addChild(likeButton);
@@ -249,6 +259,7 @@ package net.localprojects {
 			addChild(viewDebateButton);
 			
 			flagButton = new IconButton(59, 55, '', 20, Assets.COLOR_YES_DARK, Assets.flagIcon);
+			flagButton.setTimeout(5000);			
 			flagButton.setDefaultTweenIn(1, {x: 914, y: 1379});
 			flagButton.setDefaultTweenOut(1, {x: stageWidth});
 			addChild(flagButton);			
@@ -303,7 +314,7 @@ package net.localprojects {
 			addChild(backButton);
 			
 			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
-			smsInstructions = new BlockParagraph(915, smsInstructionText, 33, Assets.COLOR_YES_LIGHT, false);
+			smsInstructions = new BlockParagraph(915, smsInstructionText, 30, Assets.COLOR_YES_LIGHT, false);
 			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
 			smsInstructions.setDefaultTweenOut(1, {x: stageWidth, y: 1096});
 			addChild(smsInstructions);			
@@ -314,10 +325,15 @@ package net.localprojects {
 			characterLimit.setDefaultTweenOut(1, {x: stageWidth, y: 1246});
 			addChild(characterLimit);
 			
-			var photoBoothInstructionText:String = 'Thank you! Please align yourself with the silhouette in\norder to accurately take your photo for the debate.';
-			photoBoothInstructions = new BlockParagraph(880, photoBoothInstructionText, 30, Assets.COLOR_YES_LIGHT, false);
-			photoBoothInstructions.setDefaultTweenIn(1, {x: 100, y: 1096});
-			photoBoothInstructions.setDefaultTweenOut(1, {x: stageWidth, y: 1096});
+			
+			photoBoothNag = new BlockLabel('Please keep your head inside the box.', 30, 0xffffff, Assets.COLOR_YES_LIGHT);
+			photoBoothNag.setDefaultTweenIn(1, {x: 196, y: 132});
+			photoBoothNag.setDefaultTweenOut(1, {x: -700});
+			addChild(photoBoothNag);			
+			
+			photoBoothInstructions = new BlockLabel('Touch the camera icon to begin.', 30, 0xffffff, Assets.COLOR_YES_LIGHT);
+			photoBoothInstructions.setDefaultTweenIn(1, {x: 247, y: 1628});
+			photoBoothInstructions.setDefaultTweenOut(1, {x: stageWidth});
 			addChild(photoBoothInstructions);
 			
 			countdown = new Countdown(5);
@@ -846,17 +862,20 @@ package net.localprojects {
 			
 			// behaviors
 			countdown.setOnClick(onCameraClick);
+			countdown.setOnAlmostFinish(onCountdownAlmostFinish);			
 			countdown.setOnFinish(onCountdownFinish);
-			portraitCamera.setOnFaceShutter(onCameraClick);
 			
 			// blocks
 			portraitCamera.tweenIn();
 			header.tweenIn();
-			divider.tweenIn();
-			question.tweenIn();
-			stance.tweenIn();
+			//divider.tweenIn();
+			//question.tweenIn();
+			//stance.tweenIn();
+			cameraOverlay.tweenIn();
 			//portraitOutline.tweenIn();
-			photoBoothInstructions.tweenIn();			
+			photoBoothNag.tweenIn();			
+			photoBoothInstructions.tweenIn();
+			
 			countdown.tweenIn();			
 			
 			tweenOutInactive();
@@ -865,9 +884,15 @@ package net.localprojects {
 		
 		private function onCameraClick(e:Event):void {
 			if (!countdown.isCountingDown()) {
-				portraitCamera.detectFaces = false; // turn off face detection
+				photoBoothInstructions.tweenOut();
+				countdown.tween(1, {y: 343, ease: Quart.easeInOut}); // move it up
 				countdown.start()
 			}
+		}
+		
+		private function onCountdownAlmostFinish():void {
+			photoBoothNag.setText('Smile and say Cheese!');		
+			photoBoothNag.tween(.1, {x: 338});
 		}
 		
 		private function onCountdownFinish(e:Event):void {
@@ -882,7 +907,9 @@ package net.localprojects {
 			// Do this in portrait camera instead?
 			if (CDW.settings.webcamOnly) {
 				// nothing to see here...
-				flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration					
+				flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
+				
+				portraitCamera.takePhoto();
 				CDW.state.userImage = portraitCamera.cameraBitmap;				
 			}
 			else {
@@ -1171,8 +1198,7 @@ package net.localprojects {
 		}
 		
 		public function inactivityView(...args):void {
-			// mutations
-			if (portraitCamera.active) portraitCamera.detectFaces = false;			
+			// mutations			
 			CDW.inactivityTimer.disarm();
 			
 			
@@ -1198,8 +1224,7 @@ package net.localprojects {
 			inactivityOverlay.tweenOut();
 			inactivityInstructions.tweenOut();
 			continueButton.tweenOut();
-			restartButton.tweenOut();
-			if (portraitCamera.active) portraitCamera.detectFaces = true;			
+			restartButton.tweenOut();			
 		}
 		
 		

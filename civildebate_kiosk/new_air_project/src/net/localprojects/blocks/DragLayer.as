@@ -27,7 +27,7 @@ package net.localprojects.blocks {
 			graphics.endFill();
 			
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			this.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
+			//this.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
 			this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			mouseDown = false;			

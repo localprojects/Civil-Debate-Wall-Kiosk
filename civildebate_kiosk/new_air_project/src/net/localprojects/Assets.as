@@ -78,6 +78,13 @@ package net.localprojects
 		public static function getPortraitMask():Bitmap { return new portraitMaskClass() as Bitmap; };
 		public static const portraitMask:Bitmap = getPortraitMask();
 		
+		[Embed(source = '/assets/graphics/yesPortraitOverlay.png')] private static const yesPortraitOverlayClass:Class;
+		public static function getYesPortraitOverlay():Bitmap { return new yesPortraitOverlayClass() as Bitmap; };
+		public static const yesPortraitOverlay:Bitmap = getYesPortraitOverlay();
+		
+
+		
+		
 		
 		public static function getStatsUnderlay():Bitmap { return new Bitmap(new BitmapData(1080, 1920, false, 0xffffff)); };
 		public static const statsUnderlay:Bitmap = getStatsUnderlay();
