@@ -21,7 +21,7 @@ package net.localprojects {
 			stageRef.addEventListener(MouseEvent.MOUSE_MOVE, onActivity, false, 0, true);
 			stageRef.addEventListener(MouseEvent.MOUSE_WHEEL, onActivity, false, 0, true);
 			stageRef.addEventListener(MouseEvent.MOUSE_UP, onActivity, false, 0, true);
-			stageRef.addEventListener(TouchEvent.TOUCH_BEGIN, onActivity, false, 0, true);			
+			//stageRef.addEventListener(TouchEvent.TOUCH_BEGIN, onActivity, false, 0, true);			
 
 			// Set the timer
 			timer = new Timer(seconds * 1000);
