@@ -65,7 +65,9 @@ package net.localprojects.blocks {
 			}
 			
 			// wait until everything is initalized to select the active thumb so it will draw on top
-			activeThumbnail.selected = true;			
+			if (activeThumbnail != null) {
+				activeThumbnail.selected = true;
+			}
 		}
 		
 

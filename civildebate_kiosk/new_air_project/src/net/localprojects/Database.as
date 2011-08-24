@@ -105,6 +105,7 @@ package net.localprojects {
 		}
 		
 		public function getDebateAuthor(debateID:String):String {
+			
 			return debates[debateID]['author']['_id']['$oid'];
 		}
 		

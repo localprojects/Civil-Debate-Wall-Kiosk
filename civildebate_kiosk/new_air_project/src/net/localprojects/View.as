@@ -242,7 +242,7 @@ package net.localprojects {
 			editOpinion = new BlockInputParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false);
 			editOpinion.setDefaultTweenIn(1, {x: 100, y: 1095});
 			editOpinion.setDefaultTweenOut(1, {x: -editOpinion.width, y: 1095});
-			editOpinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);			
+			//editOpinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);			
 			addChild(editOpinion);
 			
 			bigButton = new BigButton('ADD YOUR OPINION');
