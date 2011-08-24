@@ -29,6 +29,7 @@ package net.localprojects.ui {
 		
 		// events
 		public var onCountdownFinish:Function;	
+		private var onAlmostFinish:Function;
 		
 		// constructor
 		public function Countdown(timerDuration:Number) {
@@ -88,7 +89,7 @@ package net.localprojects.ui {
 			countText.wordWrap = false;
 			countText.text = duration.toString();
 			countText.x = (-width / 4) - 3;
-			countText.y = -42;
+			countText.y = -50;
 			countText.visible = false;
 			
 			countTextWrapper.addChild(countText);
@@ -118,7 +119,10 @@ package net.localprojects.ui {
 		// every second
 		private function onTimerSecond(e:TimerEvent):void {
 			// shrink and fade the counter text, then call the rest of the animation in onSecondTweenComplete
-			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countTextWrapper, 180, true), scaleX: 0, scaleY: 0, onComplete: onSecondTweenComplete});			
+			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countTextWrapper, 180, true), scaleX: 0, scaleY: 0, onComplete: onSecondTweenComplete});
+			
+			
+			
 		}
 		
 		private function onSecondTweenComplete():void {
@@ -126,6 +130,11 @@ package net.localprojects.ui {
 			icon.visible = false;
 			countText.visible = true;
 			countText.text = (duration - timer.currentCount).toString();
+			
+			if (countText.text == '1') {
+				onAlmostFinish();				
+			}
+			
 			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 1, scaleY: 1});			
 		}
 		
@@ -152,6 +161,9 @@ package net.localprojects.ui {
 		// trace progress along the outer circle
 		private function onEnterFrame(e:Event):void {
 			progress = (getTimer() - startTime) / (duration * 1000);
+			
+			
+			
 			drawRing();
 		}
 		
@@ -209,6 +221,11 @@ package net.localprojects.ui {
 		public function setOnFinish(f:Function):void {
 			onCountdownFinish = f;			
 		}
+		
+		// extra events		
+		public function setOnAlmostFinish(f:Function):void {
+			onAlmostFinish = f;			
+		}		
 		
 		
 		// override default fade out behavior

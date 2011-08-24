@@ -10,6 +10,9 @@ package net.localprojects {
 	import flash.net.*;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
+	import flash.ui.Mouse;
+	import flash.ui.MouseCursor;
+	import flash.ui.MouseCursorData;
 	
 	import net.localprojects.blocks.*;
 	import net.localprojects.camera.*;
@@ -103,8 +106,16 @@ package net.localprojects {
 			}
 			
 			// inactivity timer
-			inactivityTimer = new InactivityTimer(stage, 30);
+			inactivityTimer = new InactivityTimer(stage, 60);
 			inactivityTimer.addEventListener(InactivityEvent.INACTIVE, onInactive);
+			
+			// Mouse Hiding
+			// This is ridiculous
+			var cursorData:MouseCursorData = new MouseCursorData();
+			var cursorBitmaps:Vector.<BitmapData> = new Vector.<BitmapData>(1, true);
+			cursorBitmaps[0] = new BitmapData(1, 1, true, 0x000000ff);
+			cursorData.data = cursorBitmaps;
+			Mouse.registerCursor("hidden", cursorData);
 		}
 		
 		private function onInactive(e:InactivityEvent):void {
@@ -185,9 +196,11 @@ package net.localprojects {
 		private function toggleFullScreen():void {
 			if (stage.displayState == StageDisplayState.NORMAL) {
 				stage.displayState = StageDisplayState.FULL_SCREEN;
+				Mouse.cursor = "hidden";
 			}
 			else {
 				stage.displayState = StageDisplayState.NORMAL;
+				Mouse.cursor = MouseCursor.ARROW;
 			}
 		}
 		

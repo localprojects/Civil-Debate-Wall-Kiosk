@@ -127,15 +127,9 @@ package net.localprojects.elements {
 		public var considerDescenders:Boolean
 		
 		protected function drawBackground():void {
-			//background.graphics.clear();
-			
+
 			//draw the background
 			if (_showBackground) {
-				
-				
-				
-				
-				
 				background.bitmapData = new BitmapData(textWidth() + paddingLeft + paddingRight, textHeight() + paddingTop + paddingBottom, false, 0xffffff);
 				background.pixelSnapping = PixelSnapping.ALWAYS;
 
