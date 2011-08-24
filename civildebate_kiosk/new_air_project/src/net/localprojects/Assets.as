@@ -19,6 +19,10 @@ package net.localprojects
 		
 		
 		// Graphics
+		[Embed(source = '/assets/graphics/blankCursor.png')] private static const blankCursorClass:Class;
+		public static function getBlankCursor():Bitmap { return new blankCursorClass() as Bitmap; };
+		public static const blankCursor:Bitmap = getBlankCursor();		
+		
 		[Embed(source = '/assets/graphics/faceTarget.png')] private static const faceTargetClass:Class;
 		public static function getFaceTarget():Bitmap { return new faceTargetClass() as Bitmap; };
 		public static const faceTarget:Bitmap = getFaceTarget();		
