@@ -11,10 +11,9 @@ package net.localprojects.ui {
 		protected var _icon:Bitmap;
 		
 		// TODO skip the subclass and just roll this into BlockButton? Same for counter?
-		public function IconButton(buttonWidth:Number, buttonHeight:Number, labelText:String, labelSize:Number, backgroundColor:uint, icon:Bitmap = null) {
-			super(buttonWidth, buttonHeight, labelText, labelSize, backgroundColor, false, false);			
+		public function IconButton(buttonWidth:Number, buttonHeight:Number, backgroundColor:uint, labelText:String, labelSize:Number, labelColor:uint, labelFont:String = null, icon:Bitmap = null) {
+			super(buttonWidth, buttonHeight, backgroundColor, labelText, labelSize, labelColor, labelFont);			
 		
-			
 			_icon = icon;
 			
 			// fit the icon

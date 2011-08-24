@@ -16,29 +16,38 @@ package net.localprojects.elements {
 		protected var _text:String;
 		protected var _textSize:Number;
 		protected var _backgroundColor:uint;
-		protected var _bold:Boolean;
+		protected var _font:String;
 		
-		protected var textField:TextField;
+		
+		public var textField:TextField;
 		protected var paddingTop:Number;
 		protected var paddingRight:Number;
 		protected var paddingBottom:Number;
 		protected var paddingLeft:Number;	
 		
 
-		protected var leading:Number;
+		protected var _leading:Number;
 		protected var background:Shape;
 		
-		public function BlockParagraph(textWidth:Number, text:String, textSize:Number, backgroundColor:uint, bold:Boolean = false) {
-			leading = 5;			
+		
+
+		public function BlockParagraph(textWidth:Number, backgroundColor:uint, text:String, textSize:Number, textColor:uint = 0xffffff, textFont:String = null, leading:Number = 3) {
+			if (textFont == null) {
+				_font = Assets.FONT_REGULAR;
+			}
+			else {
+				_font = textFont;
+			}
+			
+			_leading = leading;			
 			paddingTop = 17;
 			paddingRight = 30;
-			paddingBottom = 25;
+			paddingBottom = 18;;
 			paddingLeft = 30;			
 			
 			_textWidth = textWidth - (paddingLeft + paddingRight);
 			_text = text;
 			_textSize = textSize;
-			_bold = bold;
 			_backgroundColor = backgroundColor;
 
 			init();
@@ -47,11 +56,11 @@ package net.localprojects.elements {
 		private function init():void {
 			// set up the text format
 			var textFormat:TextFormat = new TextFormat();			
-			textFormat.bold = _bold;
-			textFormat.font =  Assets.FONT_REGULAR;
+			textFormat.font =  _font;
 			textFormat.align = TextFormatAlign.LEFT;
 			textFormat.size = _textSize;
-			textFormat.leading = leading;
+			textFormat.leading = _leading;
+			textFormat.letterSpacing = -1;
 			
 			// this is just to make sure line breaks are calculated reasonably
 			// since Flash doesn't have line height control (just leading), there's no way
@@ -100,7 +109,7 @@ package net.localprojects.elements {
 				TweenMax.to(background, 0, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
 				
 				yPos += metrics.height;				
-			}	
+			}
 			
 			
 			//background
@@ -120,8 +129,6 @@ package net.localprojects.elements {
 			_backgroundColor = c;
 			TweenMax.to(background, 0, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
 		}
-	
-		// TODO getters and setters
 
 	}
 }

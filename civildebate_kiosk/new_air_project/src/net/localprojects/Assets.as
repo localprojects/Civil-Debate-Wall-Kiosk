@@ -120,7 +120,8 @@ package net.localprojects
 		public static const COLOR_NO_MEDIUM:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the designtemplate!
 		public static const COLOR_NO_DARK:uint = Utilities.color(255, 60, 0);
 		public static const COLOR_INSTRUCTION_DARK:uint = Utilities.color(77, 77, 79);
-		public static const COLOR_INSTRUCTION_MEDIUM:uint = Utilities.color(147, 149, 152); 
+		public static const COLOR_INSTRUCTION_MEDIUM:uint = Utilities.color(99, 100, 102);		
+		public static const COLOR_INSTRUCTION_LIGHT:uint = Utilities.color(147, 149, 152); 
 		
 		
 		// Temp

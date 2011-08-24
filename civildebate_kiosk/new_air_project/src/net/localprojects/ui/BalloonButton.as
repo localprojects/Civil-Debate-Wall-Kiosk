@@ -8,8 +8,7 @@ package net.localprojects.ui {
 	
 	
 	public class BalloonButton extends BlockButton {
-	
-		
+
 		private var tail:Shape;
 		private var tailOutline:Shape;
 		private var tailWidth:Number;
@@ -17,32 +16,25 @@ package net.localprojects.ui {
 		
 		
 		// block button with a tail
-		public function BalloonButton(buttonWidth:Number, buttonHeight:Number, labelText:String, labelSize:Number, backgroundColor:uint, arrow:Boolean, bold:Boolean=false)	{
-			
-						
+		public function BalloonButton(buttonWidth:Number, buttonHeight:Number, backgroundColor:uint, labelText:String, labelSize:Number, labelColor:uint = 0xffffff, labelFont:String = null)	{
 			tail = new Shape();
 			tailOutline = new Shape;
-
-
 			addChild(tailOutline);
 			
-			super(buttonWidth, buttonHeight, labelText, labelSize, backgroundColor, arrow, bold);
-			
+			super(buttonWidth, buttonHeight, backgroundColor, labelText, labelSize, labelColor, labelFont);			
+
 			addChild(tail);	
 
 			tail.y = buttonHeight - strokeWeight;
 			tailOutline.y = buttonHeight - strokeWeight;
 			
-			
 			tailWidth = 30;
 			tailHeight = 30 + strokeWeight;
-			
-			
+					
 			draw();
 		}
 		
 		override protected function draw():void {
-			
 			// draw the background
 			background.graphics.clear();
 			background.graphics.beginFill(0xffffff);

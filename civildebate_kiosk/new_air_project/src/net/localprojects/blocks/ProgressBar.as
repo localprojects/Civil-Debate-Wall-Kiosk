@@ -26,7 +26,7 @@ package net.localprojects.blocks {
 		
 		private function init():void {
 			 background = new Shape();
-			 background.graphics.beginFill(Assets.COLOR_INSTRUCTION_MEDIUM);
+			 background.graphics.beginFill(Assets.COLOR_INSTRUCTION_LIGHT);
 			 background.graphics.drawRect(0, 0, _barWidth, _barHeight);
 			 background.graphics.endFill();
 			 

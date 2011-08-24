@@ -113,9 +113,9 @@ package net.localprojects {
 			// This is ridiculous
 			var cursorData:MouseCursorData = new MouseCursorData();
 			var cursorBitmaps:Vector.<BitmapData> = new Vector.<BitmapData>(1, true);
-			cursorBitmaps[0] = Assets.blankCursor.bitmapData; // work-around for windows
+			cursorBitmaps[0] = new BitmapData(1, 1, true, 0x000000ff);
 			cursorData.data = cursorBitmaps;
-			Mouse.registerCursor("hidden", cursorData);
+			Mouse.registerCursor('hidden', cursorData);
 		}
 		
 		private function onInactive(e:InactivityEvent):void {
@@ -131,6 +131,9 @@ package net.localprojects {
 				
 				// set active debate to first in list
 				// set the active debate to the first one
+				
+				
+				
 				for (var debateID:String in CDW.database.debates) {			
 					CDW.state.setActiveDebate(debateID);
 					break;
@@ -149,7 +152,12 @@ package net.localprojects {
 				addChild(view);
 				
 				// set the starting view
-				view.homeView();
+				if(database.getDebateCount() > 0) {
+					view.homeView();
+				}
+				else {
+					view.noOpinionView();
+				}
 				
 				// FPS meter
 				var fps:FPSMeter = new FPSMeter(this, stage.stageWidth - 50, 0);		
@@ -170,7 +178,13 @@ package net.localprojects {
 				// set the starting view
 				CDW.state.setActiveDebate(CDW.state.activeDebate);
 				view.debatePicker.update();
-				view.homeView();				
+				
+				if(database.getDebateCount() > 0) {
+					view.homeView();
+				}
+				else {
+					view.noOpinionView();
+				}
 			}
 			
 
@@ -197,10 +211,12 @@ package net.localprojects {
 			if (stage.displayState == StageDisplayState.NORMAL) {
 				stage.displayState = StageDisplayState.FULL_SCREEN;
 				Mouse.cursor = "hidden";
+				Mouse.hide();
 			}
 			else {
 				stage.displayState = StageDisplayState.NORMAL;
 				Mouse.cursor = MouseCursor.ARROW;
+				Mouse.show();
 			}
 		}
 		

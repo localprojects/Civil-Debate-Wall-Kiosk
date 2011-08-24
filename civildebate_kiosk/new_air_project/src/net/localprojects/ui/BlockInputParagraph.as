@@ -10,8 +10,9 @@ package net.localprojects.ui {
 		private var minHeight:Number = 0;
 		private var lastText:String = '';		
 		
-		public function BlockInputParagraph(textWidth:Number, text:String, textSize:Number, backgroundColor:uint, bold:Boolean=false)	{
-			super(textWidth, text, textSize, backgroundColor, bold);
+		
+		public function BlockInputParagraph(textWidth:Number, backgroundColor:uint, text:String, textSize:Number, textColor:uint = 0xffffff, textFont:String = null, leading:Number = 3) {		
+			super(textWidth, backgroundColor, text, textSize, textColor, textFont, leading);
 			postInit();
 		}
 		

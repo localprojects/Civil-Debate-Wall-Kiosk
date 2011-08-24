@@ -105,7 +105,6 @@ package net.localprojects {
 		}
 		
 		public function getDebateAuthor(debateID:String):String {
-			
 			return debates[debateID]['author']['_id']['$oid'];
 		}
 		
@@ -114,7 +113,7 @@ package net.localprojects {
 		}
 		
 		public function getDebateAuthorName(debateID:String):String {
-			return debates[debateID]['author']['firstName']; 
+			return Utilities.toTitleCase(debates[debateID]['author']['firstName']); 
 		}		
 		
 		public function getOpinion(debateID:String):String {
@@ -123,6 +122,14 @@ package net.localprojects {
 		
 		public function getStance(debateID:String):String {
 			return debates[debateID]['stance'];
+		}
+		
+		public function getDebateCount():int {
+			var i:int = 0;
+			for (var debateID:String in debates) {
+				i++;
+			}
+			return i;
 		}
 		
 		

@@ -12,6 +12,7 @@ package net.localprojects {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.*;
+	import flash.text.TextFormat;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.Timer;
@@ -28,6 +29,8 @@ package net.localprojects {
 	
 	
 	public class View extends Sprite {
+		
+
 		
 		// single copy, never changes
 		private var header:Header;
@@ -68,8 +71,9 @@ package net.localprojects {
 		private var debateOverlay:DebateOverlay;
 		private var yesButton:BlockButton;
 		private var noButton:BlockButton;
-		private var backButton:BlockButton;
+		private var exitButton:BlockButton;
 		private var smsInstructions:BlockParagraph;
+		private var webPlug:BlockLabel;
 		private var characterLimit:BlockLabel;
 		private var photoBoothNag:BlockLabel;
 		private var photoBoothInstructions:BlockLabel;
@@ -113,7 +117,7 @@ package net.localprojects {
 			
 			// Work around for lack of mouse-down events
 			// http://forums.adobe.com/message/2794098?tstart=0
-			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;			
+			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 			
 			// dump everything with just a single instance on the stage,
 			// they'll get tweened in and out as necessary
@@ -216,17 +220,18 @@ package net.localprojects {
 			
 			
 			// triple opinions
-			opinion = new BlockParagraph(915, '', 42, 0x000000, false);	
+			opinion = new BlockParagraph(915, 0x000000, '', 42);	
 			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});
 			opinion.setDefaultTweenOut(1, {x: -stageWidth, y: 1095});
 			addChild(opinion);
 			
-			rightOpinion = new BlockParagraph(915, '', 44, 0x000000, false);	
+			
+			rightOpinion = new BlockParagraph(915, 0x000000, '', 42);
 			rightOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: 1095});
 			rightOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: 1095});
 			addChild(rightOpinion);
 			
-			leftOpinion = new BlockParagraph(915, '', 44, 0x000000, false);	
+			leftOpinion = new BlockParagraph(915, 0x000000, '', 42);	
 			leftOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: 1095});
 			leftOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: 1095});
 			addChild(leftOpinion);		
@@ -238,11 +243,9 @@ package net.localprojects {
 			addChild(dragLayer);			
 			
 			
-			
-			editOpinion = new BlockInputParagraph(915, '', 44, Assets.COLOR_YES_LIGHT, false);
+			editOpinion = new BlockInputParagraph(915, 0x000000, '', 42);			
 			editOpinion.setDefaultTweenIn(1, {x: 100, y: 1095});
-			editOpinion.setDefaultTweenOut(1, {x: -editOpinion.width, y: 1095});
-			//editOpinion.setText(CDW.database.debates[CDW.state.activeDebate].opinion);			
+			editOpinion.setDefaultTweenOut(1, {x: -editOpinion.width, y: 1095});			
 			addChild(editOpinion);
 			
 			bigButton = new BigButton('ADD YOUR OPINION');
@@ -250,29 +253,29 @@ package net.localprojects {
 			bigButton.setDefaultTweenOut(1, {x: 455, y: 1470, alpha: 0}); // TODO need to subclass and override tweenout and in methods because of weird animation???
 			addChild(bigButton);
 			
-			statsButton = new IconButton(111, 55, 'Stats', 20, Assets.COLOR_YES_DARK, Assets.statsIcon);
+			statsButton = new IconButton(111, 55, 0x000000, 'Stats', 20, 0xffffff, null, Assets.statsIcon);
 			statsButton.setDefaultTweenIn(1, {x: 104, y: 1379});
 			statsButton.setDefaultTweenOut(1, {x: -statsButton.width - 50});
 			addChild(statsButton);
 			
-			likeButton = new CounterButton(111, 55, 'Like', 20, Assets.COLOR_YES_DARK, 0);
+			likeButton = new CounterButton(111, 55, 0x000000, 'Like', 20);
 			likeButton.setTimeout(5000);
 			likeButton.setDefaultTweenIn(1, {x: 238, y: 1379});
 			likeButton.setDefaultTweenOut(1, {x: -likeButton.width - 50});			
 			addChild(likeButton);
 			
-			viewDebateButton = new BlockButton(517, 55, '"The reality is that a decision…" +8 other responses', 20, Assets.COLOR_YES_DARK, false);
+			viewDebateButton = new BlockButton(517, 55, 0x000000, '', 20);
 			viewDebateButton.setDefaultTweenIn(1, {x: 373, y: 1379});
 			viewDebateButton.setDefaultTweenOut(1, {x: stageWidth + 50});			
 			addChild(viewDebateButton);
 			
-			flagButton = new IconButton(59, 55, '', 20, Assets.COLOR_YES_DARK, Assets.flagIcon);
+			flagButton = new IconButton(59, 55, 0x000000, '', 20, 0xffffff, null, Assets.flagIcon);
 			flagButton.setTimeout(5000);			
 			flagButton.setDefaultTweenIn(1, {x: 914, y: 1379});
 			flagButton.setDefaultTweenOut(1, {x: stageWidth + 50});
 			addChild(flagButton);			
 			
-			debateButton = new BalloonButton(145, 130, 'LET\u0027S\nDEBATE !', 20, Assets.COLOR_YES_DARK, false, true);
+			debateButton = new BalloonButton(145, 130, 0x000000, 'LET\u0027S\nDEBATE !', 20);
 			debateButton.setDefaultTweenIn(1, {x: 828, y: 901, scaleX: 1, scaleY: 1});
 			debateButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 901, scaleX: 1, scaleY: 1});
 			addChild(debateButton);
@@ -289,53 +292,68 @@ package net.localprojects {
 			addChild(debatePicker);
 			
 			answerPrompt = new BlockLabel('Your Answer / Please Select One :', 19, 0xffffff, Assets.COLOR_INSTRUCTION_DARK, Assets.FONT_REGULAR, true);
-			answerPrompt.setPadding(20, 30, 18, 32);
+			answerPrompt.setPadding(22, 32, 24, 32);
+			
 			answerPrompt.setDefaultTweenIn(1, {x: 650, y: 1245});
 			answerPrompt.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1245});					
 			addChild(answerPrompt);
 			
-			yesButton = new BlockButton(215, 100, 'YES!', 80, Assets.COLOR_YES_LIGHT, false, false);
+			yesButton = new BlockButton(215, 100, Assets.COLOR_YES_LIGHT, 'YES!', 80);
+			yesButton.setLetterSpacing(-3);
 			yesButton.setDefaultTweenIn(1, {x: 447, y: 1340});
 			yesButton.setDefaultTweenOut(1, {x: 447, y: stageHeight + 50});
 			addChild(yesButton);
 			
-			noButton = new BlockButton(185, 100, 'NO!', 80, Assets.COLOR_NO_LIGHT, false, false);			
+			noButton = new BlockButton(185, 100, Assets.COLOR_NO_LIGHT, 'NO!', 80);			
+			noButton.setLetterSpacing(-5);
 			noButton.setDefaultTweenIn(1.2, {x: 677, y: 1340});
 			noButton.setDefaultTweenOut(1.2, {x: 677, y: stageHeight + 50});
 			addChild(noButton);
 			
 			// Temp debug button so we don't have to SMS every time
-			skipTextButton = new BlockButton(200, 100, 'SIMULATE SMS', 20, Assets.COLOR_INSTRUCTION_DARK, false, false);
+			skipTextButton = new BlockButton(200, 100, Assets.COLOR_INSTRUCTION_DARK, 'SIMULATE SMS', 20);
 			skipTextButton.setDefaultTweenIn(1, {x: (stageWidth - 200) / 2, y: 500});
 			skipTextButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 500});
 			addChild(skipTextButton);
 			
+
+			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
+			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_LIGHT);
+			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
+			smsInstructions.setDefaultTweenOut(1, {x: smsInstructions.width - 50, y: 1096});
+			addChild(smsInstructions);
+			
+
 			var smsDisclaimerText:String = 'You will receive an SMS notifying you of any future opponents \nwho would like to enter into a debate with you based on your opinion. \nYou can opt out at any time by replying STOP.';
-			smsDisclaimer = new BlockParagraph(872, smsDisclaimerText, 25, Assets.COLOR_INSTRUCTION_DARK, false);
-			smsDisclaimer.setDefaultTweenIn(1, {x: 100, y: 1625});
-			smsDisclaimer.setDefaultTweenOut(1, {x: 100, y: stageHeight});
+			smsDisclaimer = new BlockParagraph(872, Assets.COLOR_INSTRUCTION_MEDIUM, smsDisclaimerText, 25);
+			smsDisclaimer.textField.setTextFormat(new TextFormat(null, null, 0xc7c8ca), smsDisclaimerText.length -45, smsDisclaimerText.length);
+			smsDisclaimer.setDefaultTweenIn(1, {x: 101, y: 1625});
+			smsDisclaimer.setDefaultTweenOut(1, {x: smsDisclaimer.width - 50, y: 1625});
 			addChild(smsDisclaimer);
 			
-			backButton = new BlockButton(135, 63, 'BACK', 25, Assets.COLOR_YES_DARK, true);
-			backButton.setDefaultTweenIn(1, {x: 101, y: 1003});
-			backButton.setDefaultTweenOut(1, {x: -backButton.width, y: 1003});			
-			addChild(backButton);
+			webPlug = new BlockLabel('Check out your photo and opinion at civildebatewall.com', 25, 0xffffff, Assets.COLOR_INSTRUCTION_MEDIUM);
+			webPlug.considerDescenders = false;
+			webPlug.setPadding(25, 30, 25, 33);
+			webPlug.setDefaultTweenIn(1, {x: 101, y: 1772});
+			webPlug.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1772});
+			addChild(webPlug);			
 			
-			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
-			smsInstructions = new BlockParagraph(915, smsInstructionText, 30, Assets.COLOR_YES_LIGHT, false);
-			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
-			smsInstructions.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1096});
-			addChild(smsInstructions);			
 			
-			characterLimit = new BlockLabel('Use no more than ' + CDW.settings.characterLimit + ' characters', 20, 0xffffff, Assets.COLOR_YES_MEDIUM);
-			characterLimit.setPadding(20, 30, 18, 32);
-			characterLimit.setDefaultTweenIn(1, {x: 648, y: 1246});
+			exitButton = new BlockButton(120, 60, 0x000000, 'EXIT', 25, 0xffffff, Assets.FONT_HEAVY);
+			exitButton.setDefaultTweenIn(1, {x: 101, y: 1003});
+			exitButton.setDefaultTweenOut(1, {x: -exitButton.width, y: 1003});			
+			addChild(exitButton);
+			
+
+			characterLimit = new BlockLabel('Use No More than ' + CDW.settings.characterLimit + ' characters', 18, 0xffffff, Assets.COLOR_YES_MEDIUM, Assets.FONT_BOLD);
+			characterLimit.setPadding(22, 34, 22, 32);
+			characterLimit.setDefaultTweenIn(1, {x: 683, y: 1246});
 			characterLimit.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1246});
 			addChild(characterLimit);
 			
 			
 			photoBoothNag = new BlockLabel('Please look into the camera!', 33, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_BOLD);
-			photoBoothNag.setDefaultTweenIn(1.5, {x: 269, y: 176}); // elastic easing was over-the-top...65777777777777777
+			photoBoothNag.setDefaultTweenIn(1.5, {x: 269, y: 176}); // elastic easing was over-the-top
 			photoBoothNag.setDefaultTweenOut(1, {x: photoBoothNag.width - 50, y: 176});
 			addChild(photoBoothNag);			
 			
@@ -366,22 +384,23 @@ package net.localprojects {
 			nameEntryField.setDefaultTweenOut(1, {x: -nameEntryField.width - 500, y: 1096});
 			addChild(nameEntryField);			
 			
-			saveButton = new BlockButton(335, 63, 'SAVE AND CONTINUE', 20, Assets.COLOR_YES_DARK, false);
+			
+			saveButton = new BlockButton(335, 63, 0x000000, 'SAVE AND CONTINUE', 20);			
 			saveButton.setDefaultTweenIn(1, {x: 308, y: 1200});
 			saveButton.setDefaultTweenOut(1, {x: -saveButton.width - 50, y: 1200});
 			addChild(saveButton);
 			
-			retakePhotoButton = new BlockButton(270, 63, 'RETAKE PHOTO', 20, Assets.COLOR_YES_DARK, false);
+			retakePhotoButton = new BlockButton(270, 63, 0x000000, 'RETAKE PHOTO', 20);
 			retakePhotoButton.setDefaultTweenIn(1, {x: 101, y: 1003});
 			retakePhotoButton.setDefaultTweenOut(1, {x: -retakePhotoButton.width - 50, y: 1003});
 			addChild(retakePhotoButton);
 			
-			editTextButton = new BlockButton(200, 63, 'EDIT TEXT', 20, Assets.COLOR_YES_DARK, false);
+			editTextButton = new BlockButton(200, 63, 0x000000, 'EDIT TEXT', 20);
 			editTextButton.setDefaultTweenIn(1, {x: 386, y: 1003});
 			editTextButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1003});
 			addChild(editTextButton);
 			
-			cancelButton = new BlockButton(171, 63, 'CANCEL', 20, Assets.COLOR_YES_DARK, false);
+			cancelButton = new BlockButton(171, 63, 0x000000, 'CANCEL', 20);
 			cancelButton.setDefaultTweenIn(1, {x: 789, y: 1376});
 			cancelButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1376});
 			addChild(cancelButton);			
@@ -416,12 +435,12 @@ package net.localprojects {
 			inactivityInstructions.setDefaultTweenOut(1, {x: 173, y: -inactivityInstructions.height - 50});			
 			addChild(inactivityInstructions);
 			
-			continueButton = new BlockButton(230, 110, 'YES!', 92, Assets.COLOR_INSTRUCTION_MEDIUM, false);
+			continueButton = new BlockButton(230, 110, 0x000000, 'YES!', 92);
 			continueButton.setDefaultTweenIn(1, {x: 175, y: 1098});
 			continueButton.setDefaultTweenOut(1, {x: -continueButton.width - 50, y: 1098});					
 			addChild(continueButton);
 			
-			restartButton = new BlockButton(481, 110, 'RESTART!', 92, Assets.COLOR_INSTRUCTION_MEDIUM, false);
+			restartButton = new BlockButton(481, 110, 0x000000, 'RESTART!', 92);
 			restartButton.setDefaultTweenIn(1, {x: 423, y: 1098});
 			restartButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1098});					
 			addChild(restartButton);
@@ -434,18 +453,35 @@ package net.localprojects {
 			flashOverlay = new FlashOverlay();
 			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut});
 			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
-			addChild(flashOverlay);
-			
-			
+			addChild(flashOverlay);	
 		}
+	
 		
-		
-		
+		public function noOpinionView(...args):void {
+			markAllInactive();
+			
+			// mutations
+			CDW.inactivityTimer.disarm();
+			portrait.setImage(Assets.portraitPlaceholder);
+			bigButton.setText('ADD YOUR OPINION', true);
+			CDW.state.clearUser();			
+
+			// behaviors
+			bigButton.setOnClick(pickStanceView);				
+			
+			// blocks
+			portrait.tweenIn();
+			header.tweenIn();
+			divider.tweenIn();
+			question.tweenIn();			
+			bigButton.tweenIn();	
+
+			tweenOutInactive();
+		}
 		
 		
 		public function homeView(...args):void {
 			markAllInactive();
-			
 			
 			CDW.inactivityTimer.disarm();
 			
@@ -456,7 +492,8 @@ package net.localprojects {
 			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance, true);
 			opinion.setText(CDW.database.getOpinion(CDW.state.activeDebate));
 			bigButton.setText('ADD YOUR OPINION', true);
-			viewDebateButton.setLabel('"The reality is that a decision…" +8 other responses');			
+			viewDebateButton.setLabel('"The reality is that a decision…" +8 other responses');
+			likeButton.setCount( CDW.database.debates[CDW.state.activeDebate].likes);
 			
 			
 			if (CDW.state.previousDebate != null) {
@@ -580,28 +617,21 @@ package net.localprojects {
 			// clean up the old based on what's not active
 			tweenOutInactive();
 			
-			if (CDW.database.debates[CDW.state.activeDebate].stance == 'yes') {			
-				setTestOverlay(TestAssets.CDW_082311_Kiosk_Design_Final);
-			}
-			else {
-				setTestOverlay(TestAssets.CDW_082311_Kiosk_Design_Final3);				
-			}
+						
+			setTestOverlay(TestAssets.CDW_082311_Kiosk_Design_Final);
 		}
-		
-		
 		
 		
 		private function incrementLikes(e:Event):void {
-			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/like', {'id': CDW.state.activeDebate, 'count': likeButton.count}, onLikePosted);
+			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/like', {'id': CDW.state.activeDebate, 'count': likeButton.getCount()}, onLikePosted);
 		}
 		
 		private function onLikePosted(response:Object):void {
-			trace('bumping likes');
-			likeButton.count = parseInt(response.toString());
+			likeButton.setCount(parseInt(response.toString()));
 		}
 		
 		private function incrementFlags(e:Event):void {
-			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/flag', {'id': CDW.state.activeDebate, 'count': likeButton.count}, onFlagPosted);
+			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/flag', {'id': CDW.state.activeDebate}, onFlagPosted);
 		}
 		
 		private function onFlagPosted(response:Object):void {
@@ -714,7 +744,6 @@ package net.localprojects {
 			noButton.setBackgroundColor(Assets.COLOR_NO_LIGHT);
 			yesButton.setBackgroundColor(Assets.COLOR_YES_LIGHT);			
 			
-			
 			// behaviors
 			yesButton.setOnClick(onYesButton);
 			noButton.setOnClick(onNoButton);
@@ -725,23 +754,18 @@ package net.localprojects {
 			divider.tweenIn();
 			question.tweenIn();
 			bigButton.tweenIn();
-			answerPrompt.tweenIn();
+			answerPrompt.tweenIn()	;
 			yesButton.tweenIn();
 			noButton.tweenIn();
-			smsDisclaimer.tweenIn();
 			
-			tweenOutInactive();	// TODO disable behaviors as well? or let them ride? implications for mid-tween events		
+			tweenOutInactive();	// TODO disable behaviors as well? or let them ride? implications for mid-tween events
+			
+			setTestOverlay(TestAssets.CDW_082311_Kiosk_Design_Final7);			
 		}
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
+
 		
 		private var smsCheckTimer:Timer;
 		
@@ -754,18 +778,18 @@ package net.localprojects {
 			if (CDW.state.userStance == 'yes') {
 				smsInstructions.setBackgroundColor(Assets.COLOR_YES_LIGHT);
 				characterLimit.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
-				backButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				noButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_MEDIUM);
+				exitButton.setBackgroundColor(Assets.COLOR_YES_DARK);
+				noButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_LIGHT);
 			}
 			else {
 				smsInstructions.setBackgroundColor(Assets.COLOR_NO_LIGHT);
 				characterLimit.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
-				backButton.setBackgroundColor(Assets.COLOR_NO_DARK);				
-				yesButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_MEDIUM);
+				exitButton.setBackgroundColor(Assets.COLOR_NO_DARK);				
+				yesButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_LIGHT);
 			}
 			
 			// behaviors
-			backButton.setOnClick(pickStanceView); // TODO do we need the back button?
+			exitButton.setOnClick(homeView); // TODO do we need the back button?
 			portrait.setImage(Assets.portraitPlaceholder);
 			yesButton.setOnClick(null);
 			noButton.setOnClick(null);
@@ -787,13 +811,16 @@ package net.localprojects {
 			bigButton.tweenIn();
 			yesButton.tweenIn();
 			noButton.tweenIn();
-			backButton.tweenIn();
+			exitButton.tweenIn();
 			smsInstructions.tweenIn();
 			characterLimit.tweenIn();
 			smsDisclaimer.tweenIn();
+			webPlug.tweenIn();
 			skipTextButton.tweenIn(); // TEMP for debug, TODO put on setting switch
 			
 			tweenOutInactive();
+			
+			setTestOverlay(TestAssets.CDW_082311_Kiosk_Design_Final8);			
 		}
 		
 		

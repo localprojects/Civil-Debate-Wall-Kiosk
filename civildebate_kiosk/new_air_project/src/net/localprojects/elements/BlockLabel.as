@@ -65,6 +65,7 @@ package net.localprojects.elements {
 			textFormat.font =  _font;
 			textFormat.align = TextFormatAlign.LEFT;
 			textFormat.size = _textSize;
+			textFormat.letterSpacing = -1;
 			//textFormat.leading = -0.25;
 			
 			textField = new TextField();
