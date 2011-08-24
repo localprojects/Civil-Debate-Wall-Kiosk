@@ -15,6 +15,7 @@ package net.localprojects.blocks {
 		private var debateHolder:Sprite = new Sprite();
 		private	var padding:int = 0;
 		private var lastMouseX:int;
+		private var activeThumbnail:ThumbnailButton;
 		
 		public function DebatePicker() {
 			super();
@@ -46,21 +47,28 @@ package net.localprojects.blocks {
 			for (var debateID:* in CDW.database.debates) {
 				var debate:Object = CDW.database.debates[debateID];
 				var debateThumbnail:ThumbnailButton = new ThumbnailButton(CDW.database.cloneDebateAuthorPortrait(debateID), debate.stance, debateID);
-				debateThumbnail.x = padding + ((debateThumbnail.width + padding) * i);
+				debateThumbnail.x = padding + ((debateThumbnail.width - 6) * i); // compensate for dots
 				debateThumbnail.y = 0;
 				
 				// todo diff updates
 				if (CDW.state.activeDebate == debateID) {
-					debateThumbnail.active = true;
+					trace("Active");
+					activeThumbnail = debateThumbnail;
 				}
 				else {
-					debateThumbnail.active = false;
+					trace("Not Active");					
+					debateThumbnail.selected = false;
 				}
 				
 				debateHolder.addChild(debateThumbnail);
 				i++;
 			}
+			
+			// wait until everything is initalized to select the active thumb so it will draw on top
+			activeThumbnail.selected = true;			
 		}
+		
+
 		
 		
 		
@@ -163,9 +171,15 @@ package net.localprojects.blocks {
 			//trace("Last velocity: " + vx +  "\tAverage Velocity: " + avx); 
 			
 			mouseDown = false;
+
 			
+
+			
+			// now find the one we clicked
 			// are we clicking on a thumbnail? or just scrolling?
 			var objects:Array = this.getObjectsUnderPoint(new Point(this.stage.mouseX, this.stage.mouseY));
+						
+			
 			for (var i:int = 0; i < objects.length; i++) {
 				//trace(objects[i].toString());	
 				
@@ -183,8 +197,14 @@ package net.localprojects.blocks {
 						
 						// TODO fire on view?
 						if (CDW.state.activeDebate != objects[i].debateID) {
-						
-							CDW.state.setActiveDebate(objects[i].debateID);
+							// deselect the active one
+							activeThumbnail.selected = false;
+							
+							// select the new one
+							activeThumbnail = objects[i];
+							debateHolder.setChildIndex(activeThumbnail, debateHolder.numChildren - 1); // make sure the colored dots are on top 
+							activeThumbnail.selected = true;
+							CDW.state.setActiveDebate(activeThumbnail.debateID);
 							CDW.view.transitionView();
 						}
 					}

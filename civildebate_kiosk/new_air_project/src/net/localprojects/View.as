@@ -1281,12 +1281,7 @@ package net.localprojects {
 			continueButton.tweenOut();
 			restartButton.tweenOut();			
 		}
-		
-		
-		
-		
-		
-		
+
 		
 		private function setTestOverlay(b:Bitmap):void {
 			CDW.testOverlay.bitmapData = b.bitmapData.clone();						
