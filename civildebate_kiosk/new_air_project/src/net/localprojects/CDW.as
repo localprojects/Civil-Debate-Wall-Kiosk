@@ -113,7 +113,7 @@ package net.localprojects {
 			// This is ridiculous
 			var cursorData:MouseCursorData = new MouseCursorData();
 			var cursorBitmaps:Vector.<BitmapData> = new Vector.<BitmapData>(1, true);
-			cursorBitmaps[0] = new BitmapData(1, 1, true, 0x000000ff);
+			cursorBitmaps[0] = Assets.blankCursor.bitmapData; // work-around for windows
 			cursorData.data = cursorBitmaps;
 			Mouse.registerCursor("hidden", cursorData);
 		}

@@ -302,6 +302,7 @@ package net.localprojects {
 		
 		// like post request, but automatically digests JSON
 		public static function postRequestJSON(url:String, payload:Object, callback:Function):void {
+			trace("posting json to " + url);
 			postRequest(url, payload, function(r:Object):void { callback(JSON.decode(r.toString()))	}); 
 		}		
 		

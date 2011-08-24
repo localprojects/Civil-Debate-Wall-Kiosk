@@ -6,7 +6,7 @@ package net.localprojects.camera
 	import flash.filesystem.*;
 	import flash.net.*;
 	import flash.utils.*;
-	
+	import flash.geom.Matrix;
 	import net.localprojects.*;
 	
 	
@@ -139,17 +139,17 @@ package net.localprojects.camera
 			loadedBitmap = imageLoader.content as Bitmap;
 			loadedBitmap.smoothing = true;
 			
-			//loadedBitmap.bitmapData = Utilities.scaleToFit(loadedBitmap.bitmapData, 1080, 1920);
+			// rotate the image
+			var matrix:Matrix = new Matrix();
+			matrix.rotate(Utilities.degToRad(-90));			
+			matrix.ty = loadedBitmap.bitmapData.width;
 			
-			image = new Bitmap(loadedBitmap.bitmapData);
+			image = new Bitmap(new BitmapData(loadedBitmap.height, loadedBitmap.width), "auto", true);
+			image.bitmapData.draw(loadedBitmap, matrix, null, null, null, true);			
 			
 			this.dispatchEvent(new CameraFeedEvent(CameraFeedEvent.NEW_FRAME_EVENT));
-			// TODO send event
 			
-			//this.addChildAt(loadedBitmap, 0);
-			
-			// now move or delete the image!
-			
+			// TODO now move or delete the image!
 		}
 		
 		

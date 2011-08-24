@@ -8,6 +8,9 @@ package net.localprojects {
 	
 	import flash.display.*;
 	import flash.events.*;
+	import flash.geom.Matrix;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.net.*;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
@@ -20,6 +23,8 @@ package net.localprojects {
 	import net.localprojects.elements.*;
 	import net.localprojects.keyboard.*;
 	import net.localprojects.ui.*;
+	
+	
 	
 	
 	public class View extends Sprite {
@@ -330,8 +335,8 @@ package net.localprojects {
 			
 			
 			photoBoothNag = new BlockLabel('Please look into the camera!', 33, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_BOLD);
-			photoBoothNag.setDefaultTweenIn(1.5, {x: 269, y: 176, delay: 0.75}); // elastic easing was over-the-top...65777777777777777
-			photoBoothNag.setDefaultTweenOut(1, {x: 269, y: -100});
+			photoBoothNag.setDefaultTweenIn(1.5, {x: 269, y: 176}); // elastic easing was over-the-top...65777777777777777
+			photoBoothNag.setDefaultTweenOut(1, {x: photoBoothNag.width - 50, y: 176});
 			addChild(photoBoothNag);			
 			
 			photoBoothInstructions = new BlockLabel('Touch to Begin', 33, 0xffffff, Assets.COLOR_YES_LIGHT, Assets.FONT_BOLD);
@@ -403,7 +408,7 @@ package net.localprojects {
 			
 			inactivityTimerBar = new ProgressBar(735, 10, 20);		
 			inactivityTimerBar.setDefaultTweenIn(1, {x: 173, y: 993});
-			inactivityTimerBar.setDefaultTweenOut(1, {x: 173, y: -inactivityTimerBar.height - 25});			
+			inactivityTimerBar.setDefaultTweenOut(1, {x: 173, y: -50});			
 			addChild(inactivityTimerBar);
 			
 			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_INSTRUCTION_DARK, Assets.FONT_HEAVY);
@@ -487,7 +492,7 @@ package net.localprojects {
 				}
 			}
 			
-
+			
 			
 			// Reset user info
 			CDW.state.clearUser();
@@ -584,7 +589,7 @@ package net.localprojects {
 		}
 		
 		
-
+		
 		
 		private function incrementLikes(e:Event):void {
 			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/like', {'id': CDW.state.activeDebate, 'count': likeButton.count}, onLikePosted);
@@ -625,7 +630,7 @@ package net.localprojects {
 			portrait.setImage(CDW.database.getActivePortrait());
 			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName);			
 			viewDebateButton.setLabel('BACK TO HOME SCREEN');
-
+			
 			
 			// behaviors
 			viewDebateButton.setOnClick(homeView);
@@ -816,11 +821,13 @@ package net.localprojects {
 			else if (CDW.state.latestSMSID != response['_id']['$oid'] &&
 				(response['To'] == CDW.settings.phoneNumber)) {
 				
-				trace("NEW SMS!!! from number:" + CDW.state.userPhoneNumber);
+				
 				
 				// write some stuff down	
 				CDW.state.userPhoneNumber = response['From'];
-				CDW.state.userOpinion = response['Body'];						
+				CDW.state.userOpinion = response['Body'];
+				
+				trace("NEW SMS!!! from number:" + CDW.state.userPhoneNumber);				
 				
 				// create or find the user
 				Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser); 
@@ -839,28 +846,33 @@ package net.localprojects {
 			
 			CDW.state.userID = user['_id']['$oid'];
 			
+			
+			trace("no photo! go take one!");
+			photoBoothView();			
+			
 			// does the user have a photo?
-			if (user['photo'] == null) {
-				// no photo
-				trace("no photo! go take one!");
-				photoBoothView();
-			}
-			else {
-				// have a photo, load it
-				Utilities.loadImageFromDisk(CDW.settings.imagePath + CDW.state.userID + '-full.jpg', onUserImageLoaded);
-				
-				//how about a name?
-				if (user['firstName'] == null) {
-					// go get a name
-					nameEntryView();
-				}
-				else {
-					// you have a name and a photo! go to review page
-					CDW.state.userName = user['firstName'];
-					
-					verifyOpinionView();
-				}
-			}
+//			if (user['photo'] == null) {
+//				// no photo
+//				trace("no photo! go take one!");
+//				photoBoothView();
+//			}
+			// TEMP off due to missing image
+//			else {
+//				// have a photo, load it
+//				Utilities.loadImageFromDisk(CDW.settings.imagePath + CDW.state.userID + '-full.jpg', onUserImageLoaded);
+//				
+//				//how about a name?
+//				if (user['firstName'] == null) {
+//					// go get a name
+//					nameEntryView();
+//				}
+//				else {
+//					// you have a name and a photo! go to review page
+//					CDW.state.userName = user['firstName'];
+//					
+//					verifyOpinionView();
+//				}
+//			}
 		}
 		
 		
@@ -954,17 +966,19 @@ package net.localprojects {
 			
 			// image is held in RAM for now, in case it's edited later
 			
+			// go to black
+			blackOverlay.tweenIn();
+			
+			
 			// Do this in portrait camera instead?
 			if (CDW.settings.webcamOnly) {
-				// nothing to see here...
-				flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
-				
+				// using webcam
 				portraitCamera.takePhoto();
-				CDW.state.userImage = portraitCamera.cameraBitmap;				
+				CDW.state.userImage = portraitCamera.cameraBitmap; // store here temporarily	
+				detectFace(CDW.state.userImage);
 			}
 			else {
-				// using SLR, go to black
-				blackOverlay.tweenIn();
+				// using SLR
 				portraitCamera.slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 				portraitCamera.slr.takePhoto();
 			}
@@ -974,15 +988,90 @@ package net.localprojects {
 		private function onPhotoCapture(e:CameraFeedEvent):void {
 			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 			
-			// process SLR image?
-
-			CDW.state.userImage = new Bitmap(Utilities.scaleToFill(portraitCamera.slr.image.bitmapData, 1080, 1920));
-			flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
-			blackOverlay.tweenOut();
+			// process SLR image
+			CDW.state.userImage = portraitCamera.slr.image;
+			detectFace(CDW.state.userImage);
 		}
 		
 		
+		private var faceDetector:FaceDetector = new FaceDetector();
+		
+		private function detectFace(b:Bitmap):void {
+			trace('face detection started');
+			// find the face closest to the center
+			faceDetector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onDetectionComplete);			
+			faceDetector.processBitmap(b.bitmapData);
+		}
+		
+		private function onDetectionComplete(e:ObjectDetectorEvent):void {
+			faceDetector.removeEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onDetectionComplete);
+			trace('face detection complete');
+			trace(faceDetector.faceRect);
+			
+			if (faceDetector.faceRect != null) {
+				trace("face found, cropping to it");
+				
+				var scaleFactor:Number = CDW.state.userImage.height / faceDetector.maxSourceHeight;
+				var faceRect:Rectangle = faceDetector.faceRect;
+				var scaledFaceRect:Rectangle = new Rectangle(faceRect.x * scaleFactor, faceRect.y * scaleFactor, faceRect.width * scaleFactor, faceRect.height * scaleFactor);
+				var stageFactor:Number = CDW.state.userImage.height / stageHeight; // unused
+				
+				// first center it
+				var idealFacePoint:Point = new Point(CDW.state.userImage.width / 2, CDW.state.userImage.height / 4);
+				var facePoint:Point = Utilities.centerPoint(scaledFaceRect);
+				
+				// TODO add scale step
+				
+				// figure out how we need to move
+				var shiftX:int = idealFacePoint.x - facePoint.x;
+				var shiftY:int = idealFacePoint.y - facePoint.y;
+				
+				var cropRect:Rectangle = new Rectangle();
+				
+				if (shiftX < 0) {
+					// cut from the left
+					cropRect.x = Math.abs(shiftX);
+					cropRect.width = CDW.state.userImage.bitmapData.width - cropRect.x;
+				}
+				else {
+					// cut from the right
+					cropRect.x = 0;
+					cropRect.width = CDW.state.userImage.bitmapData.width - shiftX;					
+				}
+				
+				if (shiftY < 0) {
+					// cut from the top
+					cropRect.y = Math.abs(shiftY);
+					cropRect.height = CDW.state.userImage.bitmapData.height - cropRect.y;
+				}
+				else {
+					// cut from the bottom
+					cropRect.y = 0;
+					cropRect.width = CDW.state.userImage.bitmapData.height - shiftY;					
+				}				
+				
+				
+				// crop off the side as necessarry
+				var croppedImage:BitmapData = new BitmapData(cropRect.width, cropRect.height);
+				
+				//CDW.state.userImage.bitmapData.fillRect(scaledFaceRect, 0xcc000000);				
+				croppedImage.copyPixels(CDW.state.userImage.bitmapData, cropRect, new Point(0,0));
+				
+				CDW.state.userImage.bitmapData = Utilities.scaleToFill(croppedImage, stageWidth, stageHeight);				
+			}
+			else {
+				trace("no face found, saving as is");
+				CDW.state.userImage.bitmapData = Utilities.scaleToFill(CDW.state.userImage.bitmapData, stageWidth, stageHeight);
+			}
+			
+			// NOW flash
+			flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
+		}				
+		
+		
 		private function onFlashOn():void {
+			blackOverlay.tweenOut();
+			
 			// skip name entry if we already have it
 			if(CDW.state.userName == '') {			
 				nameEntryView();
@@ -992,6 +1081,9 @@ package net.localprojects {
 			}
 			flashOverlay.tweenOut();
 		}
+		
+		
+		
 		
 		
 		public function nameEntryView(...args):void {
@@ -1241,7 +1333,7 @@ package net.localprojects {
 			
 			stats.tweenOut();
 		}
-
+		
 		
 		
 		
@@ -1251,7 +1343,7 @@ package net.localprojects {
 		public function inactivityView(...args):void {
 			// mutations			
 			CDW.inactivityTimer.disarm();
-
+			
 			// behaviors
 			continueButton.setOnClick(onContinue);
 			restartButton.setOnClick(onRestart);
@@ -1270,18 +1362,19 @@ package net.localprojects {
 		private function onInactivityTimeout():void {
 			homeView();
 		}
-
+		
 		private function onRestart(e:Event):void {
 			homeView();
 		}
 		
 		private function onContinue(e:Event):void {
 			inactivityOverlay.tweenOut();
+			inactivityTimerBar.tweenOut();
 			inactivityInstructions.tweenOut();
 			continueButton.tweenOut();
 			restartButton.tweenOut();			
 		}
-
+		
 		
 		private function setTestOverlay(b:Bitmap):void {
 			CDW.testOverlay.bitmapData = b.bitmapData.clone();						

@@ -46,9 +46,14 @@ package net.localprojects.blocks {
 		
 		override protected function afterTweenOut():void {
 			super.afterTweenOut();
-			TweenMax.killTweensOf(bar);
+			
 			bar.scaleX = 0;
 		}		
+		
+		override protected function beforeTweenOut():void {
+			TweenMax.killTweensOf(bar);
+		}
+				
 		
 		private function onCompeteFunction():void {
 			onProgressComplete();

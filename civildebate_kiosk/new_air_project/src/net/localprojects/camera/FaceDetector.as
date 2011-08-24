@@ -23,8 +23,8 @@ package net.localprojects.camera {
 		private var detectionMap:BitmapData;
 		public var faceRect:Rectangle;
 		
-		private var maxSourceWidth:int;
-		private var maxSourceHeight:int;
+		public var maxSourceWidth:int;
+		public var maxSourceHeight:int;
 		private var sourceCenter:Point;
 		
 		public var monitor:Bitmap;
@@ -37,23 +37,22 @@ package net.localprojects.camera {
 		private function init():void {
 			detector = new ObjectDetector();
 			var options:ObjectDetectorOptions = new ObjectDetectorOptions();
-			options.min_size = 30;
+			options.min_size = 10;
 			detector.options = options;
 			detector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, detectionHandler);
 			
 			faceRect = new Rectangle();
 			
-			maxSourceWidth = 150;
-			maxSourceHeight = 150;
+			maxSourceWidth = 250;
+			maxSourceHeight = 250;
 			
-			monitor = new Bitmap(new BitmapData(maxSourceWidth, maxSourceHeight, false, 0xff0000));
-			monitor.y = 150;
-			CDW.dashboard.addChild(monitor);
-			
-			
+//			monitor = new Bitmap(new BitmapData(maxSourceWidth, maxSourceHeight, false, 0xff0000));
+//			monitor.y = 150;
+//			CDW.dashboard.addChild(monitor);
 		}
 		
 		private function detectionHandler(e:ObjectDetectorEvent):void {
+			trace('from face detector: ' + e);
 			// compensate for scale, and then forward the event
 			if (e.rects.length > 0) {
 				
@@ -79,14 +78,17 @@ package net.localprojects.camera {
 					faceRect = e.rects[closestIndex];
 				}
 				
-				this.dispatchEvent(e);
+				
 				
 				//CDW.dashboard.log("Face detected");
 			}
 			else {
 				// no faces found... increment timer for back-up button?
 				//CDW.dashboard.log("---------");
+				faceRect = null;
 			}
+			
+			this.dispatchEvent(e);			
 		}
 		
 		public function processBitmap(photo:BitmapData):void {
@@ -94,7 +96,7 @@ package net.localprojects.camera {
 			photo = Utilities.scaleToFit(photo, maxSourceWidth, maxSourceHeight);
 			
 
-			monitor.bitmapData = photo;
+			//monitor.bitmapData = photo;
 			
 			
 			sourceCenter = new Point(photo.width / 2, photo.height / 2);
