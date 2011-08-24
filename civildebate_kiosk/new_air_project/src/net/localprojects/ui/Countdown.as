@@ -22,9 +22,8 @@ package net.localprojects.ui {
 		private var countText:TextField;
 		
 		// graphics
-		private var progressRing:Shape;
+		public var progressRing:Shape;
 		private var ringColor:uint;
-		private var backgroundColor:uint;
 		private var icon:Bitmap;
 		
 		// events
@@ -50,7 +49,7 @@ package net.localprojects.ui {
 			
 			// inner circle background		
 			addChild(background);
-			backgroundColor = Assets.COLOR_YES_MEDIUM;
+			_backgroundColor = Assets.COLOR_YES_MEDIUM;
 			drawBackground();
 			
 			// set up the progress ring
@@ -179,7 +178,7 @@ package net.localprojects.ui {
 		// drawing
 		private function drawBackground():void {
 			background.graphics.clear();
-			background.graphics.beginFill(backgroundColor);
+			background.graphics.beginFill(0xffffff);
 			background.graphics.drawCircle(0, 0, 58);
 			background.graphics.endFill();
 			background.x = 58 + 12;
@@ -208,8 +207,8 @@ package net.localprojects.ui {
 		
 		// mutations
 		override public function setBackgroundColor(c:uint, instant:Boolean = false):void {
-			backgroundColor = c;
-			drawBackground();
+			_backgroundColor = c;
+			TweenMax.to(background, 0, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
 		}		
 		
 		public function setRingColor(c:uint):void {
@@ -228,17 +227,7 @@ package net.localprojects.ui {
 		}		
 		
 		
-		// override default fade out behavior
-		override protected function onMouseDown(e:MouseEvent):void {
-			CDW.ref.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			//TweenMax.to(background, 0, {colorTransform: {tint: _backgroundColor, tintAmount: 0.2}});
-		}
-		
-		override protected function onMouseUp(e:MouseEvent):void {
-			CDW.ref.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
-			//TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
-			onClick(e);
-		}				
+
 		
 		
 		

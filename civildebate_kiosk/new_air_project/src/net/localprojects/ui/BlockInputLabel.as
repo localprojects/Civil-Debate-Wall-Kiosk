@@ -18,7 +18,7 @@ package net.localprojects.ui {
 		private var minHeight:Number = 0;
 		private var lastText:String = '';
 		
-		public function BlockInputLabel(text:String, textSize:Number, textColor:uint, backgroundColor:uint, font:String = Assets.FONT_REGULAR, showBackground:Boolean = true) {
+		public function BlockInputLabel(text:String, textSize:Number, textColor:uint, backgroundColor:uint, font:String = null, showBackground:Boolean = true) {			
 			super(text, textSize, textColor, backgroundColor, font, showBackground);
 			postInit();
 		}

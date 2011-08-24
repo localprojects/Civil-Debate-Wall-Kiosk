@@ -7,10 +7,11 @@ package net.localprojects.elements {
 	import flash.geom.Rectangle;
 	import flash.text.*;
 	
-	import flashx.textLayout.TextLayoutVersion;
+	
 	
 	import net.localprojects.*;
 	import net.localprojects.blocks.*;
+	import net.localprojects.Assets;
 	
 	// multi-line block text
 	public class BlockLabel extends BlockBase {
@@ -28,11 +29,16 @@ package net.localprojects.elements {
 		protected var paddingBottom:int;		
 		protected var paddingLeft:int;
 		protected var paddingRight:int;		
-		protected var background:Bitmap;
+		public var background:Bitmap;
 		
 		
 		
-		public function BlockLabel(text:String, textSize:Number, textColor:uint, backgroundColor:uint, font:String = Assets.FONT_REGULAR, showBackground:Boolean = true) {
+		public function BlockLabel(text:String, textSize:Number, textColor:uint, backgroundColor:uint, font:String = null, showBackground:Boolean = true) {
+			// Work around for intermittent 1047 error
+			if (font == null) {
+				font = Assets.FONT_REGULAR				
+			}
+			
 			paddingTop = 28;
 			paddingBottom = 28;
 			paddingLeft = 40;
@@ -173,15 +179,19 @@ package net.localprojects.elements {
 				newText = s;			
 			
 				if (instant) {
-					textField.text = newText;							
+					textField.text = newText;		
+					drawBackground();
+//					background.width = getBackgroundDimensions(newText).width;
+//					background.height = getBackgroundDimensions(newText).height;
 				}
 				else {
 					// crossfade text
 					TweenMax.to(textField, textOutDuration, {alpha: 0, ease: Quart.easeOut, onComplete: afterFade});
+					TweenMax.to(background, backgroundDuration, {width: getBackgroundDimensions(newText).width, height: getBackgroundDimensions(newText).height, ease: Quart.easeIn});					
 				}
 			
 			// resize the background
-			TweenMax.to(background, backgroundDuration, {width: getBackgroundDimensions(newText).width, height: getBackgroundDimensions(newText).height, ease: Quart.easeIn});
+			
 			}
 		}
 			
