@@ -45,8 +45,6 @@ package net.localprojects.ui {
 			
 			// only easy way to watch for text changes...
 			
-			
-			
 			drawBackground();
 		}
 		
@@ -73,28 +71,6 @@ package net.localprojects.ui {
 		// TODO prevent drag selections without clobbering the cursor?
 		
 		
-		override protected function drawBackground():void {
-//			background.graphics.clear();
-//			
-//			//draw the background
-//			if (_showBackground) {
-//				var backgroundWidth:Number = Math.max(minWidth, textField.width + paddingLeft + paddingRight);
-//				var backgroundHeight:Number = Math.max(minHeight, textField.height + paddingTop + paddingBottom);
-//				
-//				
-//				background.graphics.beginFill(_backgroundColor);								
-//				background.graphics.drawRect(0, 0, backgroundWidth, backgroundHeight);
-//				background.graphics.endFill();				
-//				
-//				textField.x = paddingLeft;
-//				textField.y = paddingTop;
-//			}			
-		}
-		
-//		public function setBackgroundColor(c:uint):void {
-//			
-//		}
-//		
 
 		
 
