@@ -18,7 +18,7 @@ package net.localprojects.elements {
 		}
 		
 		private function init():void {
-			window = new Rectangle(128, 302, 824, 1500);
+			window = new Rectangle(116, 289, 849, 1522);
 			opacity = 0.25;
 			draw();
 			this.cacheAsBitmap = true;

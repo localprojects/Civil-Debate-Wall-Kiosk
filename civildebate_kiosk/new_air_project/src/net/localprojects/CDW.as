@@ -96,8 +96,6 @@ package net.localprojects {
 			myContextMenu.customItems.push(alignBottomItem);
 			alignBottomItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onAlignBottom);				
 			
-			
-			
 			contextMenu = myContextMenu;
 			
 			if (settings.startFullScreen) {

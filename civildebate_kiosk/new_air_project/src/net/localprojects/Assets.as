@@ -48,6 +48,10 @@ package net.localprojects
 		public static function getLeftEdgeMask():Bitmap { return new leftEdgeMaskClass() as Bitmap; };
 		public static const leftEdgeMask:Bitmap = getLeftEdgeMask();
 		
+		[Embed(source = '/assets/graphics/likeIcon.png')] private static const likeIconClass:Class;
+		public static function getLikeIcon():Bitmap { return new likeIconClass() as Bitmap; };
+		public static const likeIcon:Bitmap = getLikeIcon();		
+		
 		[Embed(source = '/assets/graphics/portraitPlaceholder.png')] private static const portraitPlaceholderClass:Class;
 		public static function getPortraitPlaceholder():Bitmap { return new portraitPlaceholderClass() as Bitmap; };
 		public static const portraitPlaceholder:Bitmap = getPortraitPlaceholder();
@@ -90,11 +94,19 @@ package net.localprojects
 		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 185, 255);
 		public static const COLOR_YES_MEDIUM:uint = Utilities.color(0, 155, 255);
 		public static const COLOR_YES_DARK:uint = Utilities.color(0, 115, 255);
+		public static const COLOR_YES_OVERLAY:uint = Utilities.color(53, 124, 146);		
+		
 		public static const COLOR_NO_LIGHT:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the design template!
 		public static const COLOR_NO_MEDIUM:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the designtemplate!
 		public static const COLOR_NO_DARK:uint = Utilities.color(255, 60, 0);
+		public static const COLOR_NO_OVERLAY:uint = Utilities.color(255, 60, 0);		
+		
 		public static const COLOR_INSTRUCTION_DARK:uint = Utilities.color(77, 77, 79);
 		public static const COLOR_INSTRUCTION_MEDIUM:uint = Utilities.color(99, 100, 102);		
-		public static const COLOR_INSTRUCTION_LIGHT:uint = Utilities.color(147, 149, 152); 
+		public static const COLOR_INSTRUCTION_LIGHT:uint = Utilities.color(147, 149, 152);
+		
+		
+		
+		
 	}
 }

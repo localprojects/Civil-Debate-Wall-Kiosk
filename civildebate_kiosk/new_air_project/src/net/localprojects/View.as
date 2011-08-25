@@ -38,7 +38,6 @@ package net.localprojects {
 		private var inactivityTimerBar:ProgressBar;
 		private var inactivityInstructions:BlockLabelBar;
 		private var continueButton:BlockButton;
-		private var restartButton:BlockButton;
 		private var flashOverlay:BlockBitmap;
 		private var blackOverlay:BlockBitmap;
 		private var skipTextButton:BlockButton; // debug only
@@ -384,7 +383,7 @@ package net.localprojects {
 			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(inactivityOverlay);
 			
-			inactivityTimerBar = new ProgressBar(735, 10, 20);		
+			inactivityTimerBar = new ProgressBar(735, 2, 20);		
 			inactivityTimerBar.setDefaultTweenIn(1, {x: 173, y: 993});
 			inactivityTimerBar.setDefaultTweenOut(1, {x: 173, y: -50});			
 			addChild(inactivityTimerBar);
@@ -394,15 +393,10 @@ package net.localprojects {
 			inactivityInstructions.setDefaultTweenOut(1, {x: 173, y: -inactivityInstructions.height - 50});			
 			addChild(inactivityInstructions);
 			
-			continueButton = new BlockButton(230, 110, 0x000000, 'YES!', 92);
+			continueButton = new BlockButton(735, 120, Assets.COLOR_INSTRUCTION_MEDIUM, 'YES!', 92);
 			continueButton.setDefaultTweenIn(1, {x: 175, y: 1098});
 			continueButton.setDefaultTweenOut(1, {x: -continueButton.width - 50, y: 1098});					
 			addChild(continueButton);
-			
-			restartButton = new BlockButton(481, 110, 0x000000, 'RESTART!', 92);
-			restartButton.setDefaultTweenIn(1, {x: 423, y: 1098});
-			restartButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1098});					
-			addChild(restartButton);
 			
 			blackOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, true, 0x000000)));
 			blackOverlay.setDefaultTweenIn(0, {alpha: 1});
@@ -629,7 +623,9 @@ package net.localprojects {
 			debatePicker.tweenIn();
 			debateOverlay.tweenIn();			
 			
-			tweenOutInactive();			
+			tweenOutInactive();	
+			
+			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design7);			
 		}
 		
 		private function onYesButton(e:MouseEvent):void {
@@ -709,7 +705,7 @@ package net.localprojects {
 			
 			tweenOutInactive();	// TODO disable behaviors as well? or let them ride? implications for mid-tween events
 			
-			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design7);			
+			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design8);			
 		}
 		
 		
@@ -767,7 +763,7 @@ package net.localprojects {
 			
 			tweenOutInactive();
 			
-			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design8);			
+			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design10);			
 		}
 		
 		
@@ -879,14 +875,14 @@ package net.localprojects {
 				countdown.setRingColor(Assets.COLOR_YES_LIGHT);
 				photoBoothInstructions.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
 				photoBoothNag.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
-				cameraOverlay.setColor(Assets.COLOR_YES_LIGHT); 
+				cameraOverlay.setColor(Assets.COLOR_YES_OVERLAY); 
 			}
 			else {
 				countdown.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
 				countdown.setRingColor(Assets.COLOR_NO_LIGHT);
 				photoBoothInstructions.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
 				photoBoothNag.setBackgroundColor(Assets.COLOR_NO_MEDIUM);				
-				cameraOverlay.setColor(Assets.COLOR_NO_LIGHT);
+				cameraOverlay.setColor(Assets.COLOR_NO_OVERLAY);
 			}
 			
 			// behaviors
@@ -904,7 +900,7 @@ package net.localprojects {
 			
 			tweenOutInactive();
 			
-			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design9);
+			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design11);
 		}
 		
 		
@@ -1091,6 +1087,8 @@ package net.localprojects {
 			keyboard.tweenIn(-1, {delay: 1});
 			
 			tweenOutInactive(true);
+			
+			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design16);			
 		}
 		
 		private function onSaveName(e:Event):void {
@@ -1168,6 +1166,8 @@ package net.localprojects {
 			cancelButton.tweenIn();			
 			
 			tweenOutInactive();
+			
+			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design17);			
 		}
 		
 		private function onSubmitOpinion():void {
@@ -1240,6 +1240,8 @@ package net.localprojects {
 			keyboard.tweenIn();
 			
 			tweenOutInactive();
+			
+			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design21);			
 		}
 		
 		
@@ -1268,6 +1270,8 @@ package net.localprojects {
 			divider.tweenIn();
 			question.tweenIn();
 			stats.tweenIn();
+			
+			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design25);			
 		}
 		
 		private function onStatsClose(e:Event):void {
@@ -1293,9 +1297,8 @@ package net.localprojects {
 			inactivityTimerBar.tweenIn();			
 			inactivityInstructions.tweenIn();
 			continueButton.tweenIn();
-			restartButton.tweenIn();
 			
-			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design21);
+			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
 		}
 
 		
@@ -1303,8 +1306,7 @@ package net.localprojects {
 			inactivityOverlay.tweenOut();
 			inactivityTimerBar.tweenOut();
 			inactivityInstructions.tweenOut();
-			continueButton.tweenOut();
-			restartButton.tweenOut();			
+			continueButton.tweenOut();			
 		}
 		
 		
