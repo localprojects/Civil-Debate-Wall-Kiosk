@@ -111,6 +111,15 @@ package net.localprojects.ui {
 			labelFieldA = generateLabel(_labelText);
 			addChild(labelFieldA);
 		}
+		
+		public function showOutline(show:Boolean):void {
+			if (show) {
+				if (!contains(outline)) addChild(outline);
+			}
+			else {
+				if (contains(outline)) removeChild(outline);			
+			}
+		}
 	
 		
 		override public function setLabel(text:String):void {
