@@ -1,8 +1,9 @@
-package net.localprojects.blocks {
+package net.localprojects.elements {
 	import flash.display.*;
 	import flash.text.*;
 	
 	import net.localprojects.Assets;
+	import net.localprojects.blocks.BlockBase;
 	
 	public class Question extends BlockBase {
 		

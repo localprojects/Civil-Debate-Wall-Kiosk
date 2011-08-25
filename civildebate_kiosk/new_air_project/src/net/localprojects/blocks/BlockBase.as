@@ -1,21 +1,15 @@
 package net.localprojects.blocks {
 
 	import com.greensock.*;
-	import com.greensock.data.TweenMaxVars;
 	import com.greensock.easing.*;
-	import com.greensock.events.TweenEvent;
-	
-	import fl.motion.Color;
 	
 	import flash.display.Sprite;
-	import flash.geom.Point;
 	
-	import net.localprojects.Utilities;
-	import net.localprojects.CDW;	
+	import net.localprojects.CDW;
+	import net.localprojects.Utilities;	
 	
 	
 	public class BlockBase extends Sprite {
-		
 		
 		private var defaultTweenVars:Object;
 		public var defaultTweenInVars:Object; // public for the drag transition... TODO better way to expose tween-in X?
@@ -26,6 +20,7 @@ package net.localprojects.blocks {
 		public var active:Boolean; // inactive blocks are marked for tweening out on the screen
 		protected var stageWidth:int;
 		protected var stageHeight:int;
+		
 		
 		public function BlockBase() {
 			super();
@@ -44,7 +39,6 @@ package net.localprojects.blocks {
 			// for convenience
 			stageWidth = CDW.ref.stage.stageWidth;
 			stageHeight = CDW.ref.stage.stageHeight;
-			
 		}
 		
 		// TODO add duration control?

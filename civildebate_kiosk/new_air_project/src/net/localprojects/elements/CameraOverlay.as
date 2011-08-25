@@ -1,9 +1,10 @@
-package net.localprojects.blocks {
+package net.localprojects.elements {
 	
 	import flash.geom.Rectangle;
 	
 	import net.localprojects.Assets;
 	import net.localprojects.CDW;
+	import net.localprojects.blocks.BlockBase;
 	
 	public class CameraOverlay extends BlockBase {
 		

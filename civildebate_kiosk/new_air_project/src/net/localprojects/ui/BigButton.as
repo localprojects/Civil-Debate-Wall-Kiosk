@@ -12,7 +12,7 @@ package net.localprojects.ui {
 	import flash.text.*;
 	
 	import net.localprojects.*;
-	import net.localprojects.elements.BlockLabel;
+	import net.localprojects.blocks.BlockLabel;
 	
 	public class BigButton extends ButtonBase	{
 		

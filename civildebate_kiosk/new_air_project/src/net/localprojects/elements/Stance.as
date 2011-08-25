@@ -1,8 +1,9 @@
-package net.localprojects.blocks {
+package net.localprojects.elements {
 	import flash.display.Sprite;
 	
 	import net.localprojects.Assets;
-	import net.localprojects.elements.*;
+	import net.localprojects.blocks.BlockBase;
+	import net.localprojects.blocks.BlockLabel;
 	
 	public class Stance extends BlockBase {
 		
@@ -24,9 +25,6 @@ package net.localprojects.blocks {
 			addChild(blockLabel);
 			
 			stance = '';			
-			
-			
-			
 		}
 		
 		public function setStance(s:String, instant:Boolean = false):void {

@@ -1,4 +1,4 @@
-package net.localprojects.blocks {
+package net.localprojects.elements {
 	
 	import com.adobe.images.*;
 	import com.greensock.easing.*;
@@ -11,6 +11,7 @@ package net.localprojects.blocks {
 	import net.localprojects.CDW;
 	import net.localprojects.Utilities;
 	import net.localprojects.camera.*;
+	import net.localprojects.blocks.BlockBase;
 	
 	public class PortraitCamera extends BlockBase {
 		

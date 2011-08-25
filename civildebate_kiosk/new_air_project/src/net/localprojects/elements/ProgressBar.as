@@ -1,11 +1,11 @@
-package net.localprojects.blocks {
+package net.localprojects.elements {
 	import com.greensock.*;
 	import com.greensock.easing.Linear;
 	
 	import flash.display.Shape;
 	
 	import net.localprojects.Assets;
-	
+	import net.localprojects.blocks.BlockBase;
 	
 	public class ProgressBar extends BlockBase {
 		
@@ -62,11 +62,6 @@ package net.localprojects.blocks {
 		public function setOnComplete(f:Function):void {
 			onProgressComplete = f;
 		}
-		
 
-		
-		
-
-		
 	}
 }

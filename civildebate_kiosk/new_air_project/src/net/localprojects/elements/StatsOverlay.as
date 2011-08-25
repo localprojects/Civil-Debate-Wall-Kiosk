@@ -1,12 +1,13 @@
-package net.localprojects.blocks {
+package net.localprojects.elements {
 	import net.localprojects.ui.BlockButton;
 	import net.localprojects.Assets;
+	import net.localprojects.blocks.BlockBase;
 	
-	public class Stats extends BlockBase {
+	public class StatsOverlay extends BlockBase {
 		
 		public var homeButton:BlockButton;
 		
-		public function Stats() {
+		public function StatsOverlay() {
 			super();
 			init();
 		}

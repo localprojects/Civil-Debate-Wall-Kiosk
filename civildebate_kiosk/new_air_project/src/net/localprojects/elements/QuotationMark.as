@@ -1,4 +1,4 @@
-package net.localprojects.blocks
+package net.localprojects.elements
 {
 	import com.greensock.*;
 	import com.greensock.easing.*;
@@ -8,6 +8,7 @@ package net.localprojects.blocks
 	import flash.display.*;
 	
 	import net.localprojects.*;
+	import net.localprojects.blocks.BlockBase;
 	
 	public class QuotationMark extends BlockBase	{
 		
@@ -35,7 +36,6 @@ package net.localprojects.blocks
 		}
 		
 
-				
 		public function setIntermediateColor(startColor:uint, targetColor:uint, step:Number):void {
 			setColor(Color.interpolateColor(startColor, targetColor, step), true);
 		}

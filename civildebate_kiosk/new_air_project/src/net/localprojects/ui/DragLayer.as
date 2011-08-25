@@ -1,10 +1,11 @@
-package net.localprojects.blocks {
+package net.localprojects.ui {
 	
 	import com.greensock.TweenMax;
 	
 	import flash.events.*;
 	
 	import net.localprojects.*;
+	import net.localprojects.blocks.BlockBase;
 
 	
 	public class DragLayer extends BlockBase {

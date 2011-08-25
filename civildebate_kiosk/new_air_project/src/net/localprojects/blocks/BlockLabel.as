@@ -1,4 +1,4 @@
-package net.localprojects.elements {
+package net.localprojects.blocks {
 	import com.bit101.components.Text;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
@@ -10,7 +10,6 @@ package net.localprojects.elements {
 	
 	
 	import net.localprojects.*;
-	import net.localprojects.blocks.*;
 	import net.localprojects.Assets;
 	
 	// multi-line block text

@@ -8,7 +8,7 @@ package net.localprojects.ui {
 	import net.localprojects.*;
 	import net.localprojects.Assets;
 	import net.localprojects.blocks.BlockBase;
-	import net.localprojects.elements.BlockLabel;
+	import net.localprojects.blocks.BlockLabel;
 	
 	public class ThumbnailButton extends BlockBase {
 	

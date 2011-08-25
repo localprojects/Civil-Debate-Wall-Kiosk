@@ -1,8 +1,10 @@
-package net.localprojects.blocks
+package net.localprojects.elements
 {
 	import flash.display.*;
-	import net.localprojects.*;
 	import flash.text.*;
+	
+	import net.localprojects.*;
+	import net.localprojects.blocks.BlockBase;
 	
 	public class Header extends BlockBase	{
 		

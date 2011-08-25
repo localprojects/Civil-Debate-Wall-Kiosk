@@ -1,4 +1,4 @@
-package net.localprojects.elements {
+package net.localprojects.blocks {
 	import flash.display.*;
 	import net.localprojects.Utilities;
 	
