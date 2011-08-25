@@ -71,10 +71,7 @@ package net.localprojects.keyboard {
 					var key:Key = new Key(letter, keyWidth * widthFactor, keyHeight);
 					
 					key.x = xPos;
-					
 					key.y = marginTopBottom + row * keyHeight;
-					
-					trace(key.y);
 					
 					// accuumulate width
 					xPos += key.width;

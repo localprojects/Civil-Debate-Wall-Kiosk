@@ -52,11 +52,9 @@ package net.localprojects.blocks {
 				
 				// todo diff updates
 				if (CDW.state.activeDebate == debateID) {
-					trace("Active");
 					activeThumbnail = debateThumbnail;
 				}
 				else {
-					trace("Not Active");					
 					debateThumbnail.selected = false;
 				}
 				
@@ -138,12 +136,12 @@ package net.localprojects.blocks {
 				if (debateHolder.x > 0) {
 					debateHolder.x = 0;
 					//vx = 0; // TEMP disabled for bounce
-					trace("left limit");				
+					trace('left limit');				
 				}
 				else if (debateHolder.x < ((debateHolder.width - 1080) * -1)) {
 					debateHolder.x = (debateHolder.width - 1080) * -1;
 					//vx = 0; // TEMP disabled for bounce
-					trace("right limit");				
+					trace('right limit');				
 				}
 			}
 			
@@ -152,39 +150,23 @@ package net.localprojects.blocks {
 				debateHolder.x += avx;
 				avx *= friction;
 			}
-			
-			if(mouseDown) {
-				CDW.dashboard.log("Mouse down Velocity: " + vx.toString());				
-			}
-			
 		}
 		
 		private function onMouseUp(e:MouseEvent):void {
 			CDW.ref.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			
-			
-			trace("mouse has been on a journey of " + Math.abs(startX - this.stage.mouseX) + " pixels.");
-			
-			//CDW.dashboard.log(vxSamples.toString());
-			
+						
 			// take the average vx
 			avx = Utilities.averageArray(vxSamples);
 
-			//trace("Last velocity: " + vx +  "\tAverage Velocity: " + avx); 
+			trace('Last velocity: ' + vx +  '\tAverage Velocity: ' + avx); 
 			
 			mouseDown = false;
-
-			
-
 			
 			// now find the one we clicked
 			// are we clicking on a thumbnail? or just scrolling?
 			var objects:Array = this.getObjectsUnderPoint(new Point(this.stage.mouseX, this.stage.mouseY));
 						
-			
 			for (var i:int = 0; i < objects.length; i++) {
-				//trace(objects[i].toString());	
-				
 				
 				// kind of gross, use introspection to find out what's under the mouse instead of adding listeners to the thumbnails, need to block event bubbling instead?
 				if (objects[i] is ThumbnailButton) {
@@ -195,7 +177,7 @@ package net.localprojects.blocks {
 					var travelThreshold:int = 10;
 					
 					if (distanceTraveled < travelThreshold) {
-						trace("clicked thumbnail for debate " + objects[i].debateID);
+						trace('Clicked thumbnail for debate ' + objects[i].debateID);
 						
 						// TODO fire on view?
 						if (CDW.state.activeDebate != objects[i].debateID) {

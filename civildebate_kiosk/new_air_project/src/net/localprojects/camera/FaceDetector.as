@@ -45,17 +45,12 @@ package net.localprojects.camera {
 			
 			maxSourceWidth = 250;
 			maxSourceHeight = 250;
-			
-//			monitor = new Bitmap(new BitmapData(maxSourceWidth, maxSourceHeight, false, 0xff0000));
-//			monitor.y = 150;
-//			CDW.dashboard.addChild(monitor);
 		}
 		
 		private function detectionHandler(e:ObjectDetectorEvent):void {
-			trace('from face detector: ' + e);
+			
 			// compensate for scale, and then forward the event
 			if (e.rects.length > 0) {
-				
 				
 				if (e.rects.length == 1) {
 					// just return the first and only face
@@ -77,28 +72,18 @@ package net.localprojects.camera {
 					
 					faceRect = e.rects[closestIndex];
 				}
-				
-				
-				
-				//CDW.dashboard.log("Face detected");
 			}
 			else {
 				// no faces found... increment timer for back-up button?
-				//CDW.dashboard.log("---------");
 				faceRect = null;
 			}
 			
 			this.dispatchEvent(e);			
 		}
 		
-		public function processBitmap(photo:BitmapData):void {
+		public function searchBitmap(photo:BitmapData):void {
 			// resize
 			photo = Utilities.scaleToFit(photo, maxSourceWidth, maxSourceHeight);
-			
-
-			//monitor.bitmapData = photo;
-			
-			
 			sourceCenter = new Point(photo.width / 2, photo.height / 2);
 			detector.detect(photo);
 		}

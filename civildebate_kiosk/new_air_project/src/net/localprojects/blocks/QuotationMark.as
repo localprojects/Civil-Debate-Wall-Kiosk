@@ -58,7 +58,7 @@ package net.localprojects.blocks
 				quotation.scaleY = -1;				
 			}
 			else {
-				trace("invalid quotation type");
+				trace('Invalid quotation type.');
 			}
 			
 		}

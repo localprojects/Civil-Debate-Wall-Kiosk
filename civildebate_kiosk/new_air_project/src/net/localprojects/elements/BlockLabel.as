@@ -33,7 +33,7 @@ package net.localprojects.elements {
 		
 		
 		
-		public function BlockLabel(text:String, textSize:Number, textColor:uint, backgroundColor:uint, font:String = null, showBackground:Boolean = true) {
+		public function BlockLabel(text:String, textSize:Number, textColor:uint = 0xffffff, backgroundColor:uint = 0x000000, font:String = null, showBackground:Boolean = true) {
 			// Work around for intermittent 1047 error
 			if (font == null) {
 				font = Assets.FONT_REGULAR				

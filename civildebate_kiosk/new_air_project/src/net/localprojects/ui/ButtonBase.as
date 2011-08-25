@@ -52,7 +52,7 @@ package net.localprojects.ui {
 		}
 		
 		private function onTimeout(e:TimerEvent):void {
-			trace("button back!");
+			trace('button back!');
 			locked = false;
 		}
 		
@@ -65,7 +65,6 @@ package net.localprojects.ui {
 		
 		protected function onMouseUp(e:MouseEvent):void {
 			
-			
 			if (timeout > 0) {
 				locked = true;
 				timer.reset();
@@ -77,9 +76,11 @@ package net.localprojects.ui {
 			onClick(e);
 		}		
 		
+		
 		protected function defaultOnClick(e:MouseEvent):void {
 			trace("default button click, nothing to do");
 		}		
+		
 		
 		public function setOnClick(f:Function):void {
 			if (f == null) {
@@ -92,51 +93,27 @@ package net.localprojects.ui {
 						
 		}
 		
+		
 		public function setLabel(text:String):void {
 			// override me
 		}
+		
 		
 		public function enable():void {
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			//this.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
 		}
 		
+		
 		public function disable():void {
 			this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			//this.removeEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
 		}
 		
-		public function setMode(buttonMode:String):void {
-			mode = buttonMode;
-			// redraw
-			
-			switch (mode) {
-				case ACTIVE:
-					trace ('active');
-					break;
-				case INACTIVE:
-					trace ('inactive');
-					break;
-				case UP:
-					trace ('up');
-					break;
-				case DOWN:
-					trace ('down');
-					break;				
-				default:
-					trace('button set mode error')
-			}
-			
-			draw();
-		}
 		
 		protected function draw():void {
-			
+			// override me
 		}
-		
-		
-		
-		
 		
 	}
 }

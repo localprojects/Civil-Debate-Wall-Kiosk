@@ -11,6 +11,7 @@ package net.localprojects {
 		private var viewChooser:ComboBox;
 		private var testOverlayCheckbox:CheckBox;
 		private var overlaySlider:Slider;
+		private var focalLengthSlider:Slider;
 		
 		
 		private var testImages:Array;
@@ -32,7 +33,12 @@ package net.localprojects {
 			overlaySlider.maximum = 1;
 			overlaySlider.value = 0.5;
 			
-			viewChooser = new ComboBox(this, 5, 120, 'View');
+			focalLengthSlider = new Slider("horizontal", this, 120, 120, onFocalLengthSlider);
+			focalLengthSlider.minimum = 1;
+			focalLengthSlider.maximum = 3;
+			focalLengthSlider.value = 1;			
+			
+			viewChooser = new ComboBox(this, 5, 140, 'View');
 			viewChooser.addItem('Home');
 			viewChooser.addItem('Debate Overlay');
 			viewChooser.addItem('Pick Stance');	
@@ -57,6 +63,10 @@ package net.localprojects {
 		
 		private function onOverlaySlider(e:Event):void {
 			CDW.testOverlay.alpha = overlaySlider.value;
+		}
+		
+		private function onFocalLengthSlider(e:Event):void {
+			CDW.view.portraitCamera.setFocalLength(focalLengthSlider.value);
 		}
 		
 		private function onOverlayToggle(e:Event):void {

@@ -154,9 +154,7 @@ package net.localprojects {
 		// loads a bitmap, passes it to the callback
 		// USE LOADER MAX AGAIN INSTEAD PASSING IN FILE URL?
 		public static function loadImageFromDiskToTarget(path:String, target:Bitmap, onComplete:Function):void {
-			trace("loading");
 			var file:File = new File(path);
-			
 			var imageLoader:Loader = new Loader();
 			var thisTarget:Bitmap = target;
 			
@@ -165,12 +163,10 @@ package net.localprojects {
 				onComplete();
 			});
 			
-			trace(file.url);
+			trace(':oading image from ' + file.url);
 			imageLoader.load(new URLRequest(file.url));
 		}
-		
-		
-		
+
 		
 		// a la processing
 		public static function color(r:int, g:int, b:int):uint {

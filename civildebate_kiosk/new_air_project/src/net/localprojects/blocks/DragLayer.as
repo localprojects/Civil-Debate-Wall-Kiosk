@@ -46,7 +46,6 @@ package net.localprojects.blocks {
 			// refactor startX based on tween progress, for portrait and other things
 			startX = this.mouseX - (CDW.view.nametag.x - CDW.view.nametag.defaultTweenInVars.x);
 			currentX = startX;
-			trace("down");
 			leftEdge = 0;			
 			
 			// Stop home tweens
@@ -92,12 +91,6 @@ package net.localprojects.blocks {
 		
 		private function onMouseMove(e:Event):void {
 			if (mouseDown) {
-				
-				
-				trace("Left Edge: "+ leftEdge);
-
-				
-				
 				
 				// edge limits
 				if ((leftEdge < 0) && (CDW.state.nextDebate == null)) {
@@ -147,19 +140,15 @@ package net.localprojects.blocks {
 		private function onMouseUp(e:MouseEvent):void {
 			mouseDown = false;
 			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			trace("up");		
-			
-			
 			
 			var vxAverage:Number = Utilities.averageArray(vxSamples);
 			
-			trace("Velocity average: " + vxAverage);
-			
+			trace('Mouse up. Velocity average: ' + vxAverage);
 			
 			
 			// see if we need to transition
 			if ((CDW.state.nextDebate != null) &&(vxAverage < -vxThreshold) || (leftEdge < (stageWidth / -2))) {
-				trace("transition to next");
+				trace('Transition to next.');
 				CDW.state.setActiveDebate(CDW.state.nextDebate);
 				CDW.view.leftOpinion.x += stageWidth;
 				CDW.view.opinion.x += stageWidth;
@@ -176,7 +165,7 @@ package net.localprojects.blocks {
 				
 			}
 			if ((CDW.state.previousDebate != null) && (vxAverage > vxThreshold) || (leftEdge > (stageWidth / 2))) {
-				trace("transition to previous");
+				trace('Transition to previous.');
 				CDW.state.setActiveDebate(CDW.state.previousDebate);
 				CDW.view.leftOpinion.x -= stageWidth;
 				CDW.view.opinion.x -= stageWidth;
