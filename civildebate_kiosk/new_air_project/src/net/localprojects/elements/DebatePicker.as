@@ -1,4 +1,4 @@
-package net.localprojects.blocks {
+package net.localprojects.elements {
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	
@@ -9,6 +9,7 @@ package net.localprojects.blocks {
 	
 	import net.localprojects.*;
 	import net.localprojects.ui.*;
+	import net.localprojects.blocks.BlockBase;
 	
 	public class DebatePicker extends BlockBase {
 		

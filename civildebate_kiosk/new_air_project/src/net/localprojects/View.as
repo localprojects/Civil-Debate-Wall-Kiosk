@@ -30,17 +30,17 @@ package net.localprojects {
 				
 		// immutable
 		private var header:Header;
-		private var divider:Divider;
+		private var divider:BlockBitmap;
 		private var answerPrompt:BlockLabel;
 		private var smsDisclaimer:BlockParagraph;
 		public var portraitCamera:PortraitCamera; // public for dashboard
-		private var inactivityOverlay:InactivityOverlay;
+		private var inactivityOverlay:BlockBitmap;
 		private var inactivityTimerBar:ProgressBar;
 		private var inactivityInstructions:BlockLabelBar;
 		private var continueButton:BlockButton;
 		private var restartButton:BlockButton;
-		private var flashOverlay:FlashOverlay;
-		private var blackOverlay:BlackOverlay;
+		private var flashOverlay:BlockBitmap;
+		private var blackOverlay:BlockBitmap;
 		private var skipTextButton:BlockButton; // debug only
 		private var smsInstructions:BlockParagraph;
 		private var webPlug:BlockLabel;
@@ -79,7 +79,7 @@ package net.localprojects {
 		private var byline:BlockLabel;		
 		
 		// containers, have lots of nested content
-		private var stats:Stats;
+		private var stats:StatsOverlay;
 		public var debatePicker:DebatePicker;
 		private var debateOverlay:DebateOverlay;		
 
@@ -134,7 +134,7 @@ package net.localprojects {
 			header.setDefaultTweenOut(1, {x: 30, y: -header.height});
 			addChild(header);
 			
-			divider = new Divider();
+			divider = new BlockBitmap(Assets.divider);
 			divider.setDefaultTweenIn(1, {x: 30, y: 250});
 			divider.setDefaultTweenOut(1, {x: -divider.width, y: 250});			
 			addChild(divider);
@@ -374,13 +374,13 @@ package net.localprojects {
 			addChild(keyboard);
 			
 			// TODO update from database
-			stats = new Stats();
+			stats = new StatsOverlay();
 			stats.setDefaultTweenIn(1, {x: 30, y: 264});
 			stats.setDefaultTweenOut(1, {x: 30, y: stageHeight});
 			addChild(stats);
 			
-			inactivityOverlay = new InactivityOverlay();
-			inactivityOverlay.setDefaultTweenIn(1, {alpha: 1});
+			inactivityOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, true, 0x000000)));
+			inactivityOverlay.setDefaultTweenIn(1, {alpha: 0.85});
 			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(inactivityOverlay);
 			
@@ -404,12 +404,12 @@ package net.localprojects {
 			restartButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1098});					
 			addChild(restartButton);
 			
-			blackOverlay = new BlackOverlay();
+			blackOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, true, 0x000000)));
 			blackOverlay.setDefaultTweenIn(0, {alpha: 1});
 			blackOverlay.setDefaultTweenOut(0, {alpha: 0});
 			addChild(blackOverlay);
 			
-			flashOverlay = new FlashOverlay();
+			flashOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, true, 0xffffff)));
 			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut});
 			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
 			addChild(flashOverlay);	

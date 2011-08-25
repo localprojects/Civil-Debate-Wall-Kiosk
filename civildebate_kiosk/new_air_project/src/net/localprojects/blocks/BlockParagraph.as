@@ -1,4 +1,4 @@
-package net.localprojects.elements {
+package net.localprojects.blocks {
 	import com.bit101.components.Text;
 	import com.greensock.*;
 	import com.greensock.easing.*;
@@ -7,7 +7,6 @@ package net.localprojects.elements {
 	import flash.text.*;
 	
 	import net.localprojects.*;
-	import net.localprojects.blocks.BlockBase;
 	
 	// multi-line block text
 	public class BlockParagraph extends BlockBase {

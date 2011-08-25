@@ -1,10 +1,11 @@
-package net.localprojects.blocks {
+package net.localprojects.elements {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
 	import flash.display.*;
 	
 	import net.localprojects.*;
+	import net.localprojects.blocks.BlockBase;
 	
 	public class Portrait extends BlockBase {
 		

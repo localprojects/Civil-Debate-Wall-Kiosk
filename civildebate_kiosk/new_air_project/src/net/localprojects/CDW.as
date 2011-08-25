@@ -3,7 +3,6 @@ package net.localprojects {
 	import com.bit101.components.FPSMeter;
 	import com.greensock.*;
 	import com.greensock.easing.*;
-	import com.greensock.events.LoaderEvent;
 	
 	import flash.display.*;
 	import flash.events.*;

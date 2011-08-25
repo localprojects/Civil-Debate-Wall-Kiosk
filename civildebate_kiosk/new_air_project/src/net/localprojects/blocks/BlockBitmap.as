@@ -1,29 +1,21 @@
 package net.localprojects.blocks {
-	import fl.motion.Color;
-	
 	import flash.display.Bitmap;
-	
-	import net.localprojects.BitmapPlus;
 	
 	public class BlockBitmap extends BlockBase {
 		
-		private var b:BitmapPlus;
-		private var color:uint;
+		private var b:Bitmap;
+		
 		
 		public function BlockBitmap(source:Bitmap) {
 			super();
-			b = new BitmapPlus(source.bitmapData);
+			b = source;
 			init();
 		}
+
 		
 		private function init():void {
 			addChild(b);
-		}
-		
-		public function setColor(c:uint, instant:Boolean = false):void {
-			color = c;
-//			b.tintAmount = 1;
-//			b.tintColor = c;
+			mouseEnabled = false; // let clicks through
 		}
 		 
 	}

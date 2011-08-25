@@ -1,5 +1,5 @@
 package net.localprojects.ui {
-	import net.localprojects.elements.BlockParagraph;
+	import net.localprojects.blocks.BlockParagraph;
 	import flash.text.*;
 	import flash.events.Event;
 	
