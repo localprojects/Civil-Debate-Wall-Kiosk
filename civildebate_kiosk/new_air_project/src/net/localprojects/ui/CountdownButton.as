@@ -23,7 +23,7 @@ package net.localprojects.ui {
 		
 		// graphics
 		public var progressRing:Shape;
-		private var progressColor;
+		private var progressColor:uint;
 		private var ringColor:uint;
 		private var icon:Bitmap;
 		

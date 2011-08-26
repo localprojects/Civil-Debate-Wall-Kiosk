@@ -19,6 +19,12 @@ package net.localprojects {
 		public var latestSMSID:String = '';
 		
 		
+		// adds exclamation point
+		public var activeStanceText:String = '';
+		public var userStanceText:String = '';
+		public var nextStanceText:String = '';
+		public var previousStanceText:String = '';
+		
 		
 		// color state
 		public var userStanceColorLight:uint;
@@ -53,6 +59,8 @@ package net.localprojects {
 		public function setStance(s:String):void {
 			userStance = s;
 			
+			userStanceText = formatStanceText(userStance);			
+			
 			if (userStance == 'yes') {
 				userStanceColorLight = Assets.COLOR_YES_LIGHT;
 				userStanceColorMedium = Assets.COLOR_YES_MEDIUM;
@@ -72,9 +80,11 @@ package net.localprojects {
 			nextDebate = CDW.database.getNextDebate();
 			previousDebate = CDW.database.getPreviousDebate();
 			
+			// set stance text
+			activeStanceText = formatStanceText(CDW.database.debates[activeDebate].stance);
+						
 			// set colors
-			
-			if (CDW.database.debates[activeDebate].stance == 'yes') {			
+			if (CDW.database.debates[activeDebate].stance == 'yes') {		
 				activeStanceColorLight = Assets.COLOR_YES_LIGHT;
 				activeStanceColorMedium = Assets.COLOR_YES_MEDIUM;
 				activeStanceColorDark = Assets.COLOR_YES_DARK;
@@ -89,6 +99,8 @@ package net.localprojects {
 			
 			
 			if(nextDebate != null) {
+				nextStanceText = formatStanceText(CDW.database.debates[nextDebate].stance);				
+				
 				if (CDW.database.debates[nextDebate].stance == 'yes') {			
 					nextStanceColorLight = Assets.COLOR_YES_LIGHT;
 					nextStanceColorMedium = Assets.COLOR_YES_MEDIUM;
@@ -104,6 +116,8 @@ package net.localprojects {
 			}
 			
 			if(previousDebate != null) {
+				previousStanceText = formatStanceText(CDW.database.debates[previousDebate].stance);
+				
 				if (CDW.database.debates[previousDebate].stance == 'yes') {			
 					nextStanceColorLight = Assets.COLOR_YES_LIGHT;
 					nextStanceColorMedium = Assets.COLOR_YES_MEDIUM;
@@ -122,6 +136,10 @@ package net.localprojects {
 			trace("Prev: " + previousDebate);
 			trace("Active: " + activeDebate);
 			trace("Next: " + nextDebate);
+		}
+		
+		private function formatStanceText(s:String):String {
+			return s.toUpperCase() + '!';
 		}
 		
 		public function State()	{
