@@ -288,7 +288,7 @@ package net.localprojects {
 			addChild(skipTextButton);
 
 			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
-			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_LIGHT);
+			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_MEDIUM);
 			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
 			smsInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1096});
 			addChild(smsInstructions);
@@ -333,17 +333,19 @@ package net.localprojects {
 			countdownButton.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: stageHeight});
 			addChild(countdownButton);
 			
-			nameEntryInstructions = new BlockLabel('TYPE IN YOUR NAME', 20)
-			nameEntryInstructions.setDefaultTweenIn(1, {x: 101, y: 1003});
+			nameEntryInstructions = new BlockLabel('ENTER A UNIQUE NAME', 26, 0xffffff, 0x000000, Assets.FONT_HEAVY)
+			nameEntryInstructions.setPadding(20, 31, 20, 31);
+			nameEntryInstructions.setDefaultTweenIn(1, {x: 101, y: 1000});
 			nameEntryInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1003});
 			addChild(nameEntryInstructions);
 			
-			nameEntryField = new BlockInputLabel('', 30, 0xffffff, 0x000000, Assets.FONT_REGULAR, true);
-			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1096});
+			nameEntryField = new BlockInputLabel('', 33, 0xffffff, 0x000000, Assets.FONT_REGULAR, true);
+			nameEntryField.setPadding(24, 30, 20, 30);
+			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1093});
 			nameEntryField.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1096});
 			addChild(nameEntryField);			
 			
-			saveButton = new BlockButton(335, 63, 0x000000, 'SAVE AND CONTINUE', 20);			
+			saveButton = new BlockButton(335, 63, 0x000000, 'SAVE AND CONTINUE', 26, 0xffffff, Assets.FONT_HEAVY);			
 			saveButton.setDefaultTweenIn(1, {x: 308, y: 1200});
 			saveButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1200});
 			addChild(saveButton);
@@ -454,7 +456,7 @@ package net.localprojects {
 			opinion.setText(CDW.database.getOpinion(CDW.state.activeDebate));
 			bigButton.setText('ADD YOUR OPINION', true);
 			viewDebateButton.setLabel('"The reality is that a decision…" +8 other responses');
-			likeButton.setCount( CDW.database.debates[CDW.state.activeDebate].likes);
+			likeButton.setCount(CDW.database.debates[CDW.state.activeDebate].likes);
 			CDW.state.clearUser(); // Reset user info
 			
 			if (CDW.state.previousDebate != null) {
@@ -724,7 +726,6 @@ package net.localprojects {
 			smsInstructions.tweenIn();
 			characterLimit.tweenIn();
 			smsDisclaimer.tweenIn();
-			webPlug.tweenIn();
 			skipTextButton.tweenIn(); // TEMP for debug, TODO put on setting switch
 			
 			
@@ -878,7 +879,7 @@ package net.localprojects {
 				countdownButton.setBackgroundColor(CDW.state.userStanceColorMedium);
 				countdownButton.tween(1, {x: countdownButton.x + 15, y: 30, scaleX: scaleFactor, scaleY: scaleFactor, ease: Quart.easeInOut, onComplete: onCountdownPositioned}); // move it up
 				TweenMax.to(countdownButton.progressRing, 1, {alpha: 1, ease: Quart.easeInOut});
-				photoBoothNag.tweenIn();
+				photoBoothNag.tweenIn(-1, {delay: 1});
 			}
 		}
 		
@@ -1116,6 +1117,7 @@ package net.localprojects {
 			retakePhotoButton.tweenIn();
 			editTextButton.tweenIn();
 			cancelButton.tweenIn();			
+			webPlug.tweenIn();			
 			
 			trace("tweening out name entry");
 			nameEntryField.tweenOut();
