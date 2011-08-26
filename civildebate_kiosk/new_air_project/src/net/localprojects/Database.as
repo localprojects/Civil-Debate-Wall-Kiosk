@@ -33,67 +33,91 @@ package net.localprojects {
 		}
 		
 		private function onQuestionReceived(r:Object):void {
-			trace('Question Loaded, getting debates');
+			trace('Question Loaded, getting users');
 			
 			// Store the question
 			question = r;
-			
-			// User info is included automatically via Python's MongoDB DOCRef dereferencing
-			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/debates/list', {'question': '4e2755b50f2e420354000001'}, onDebatesReceived);
-		}
 		
-
+			// Get users
+			Utilities.getRequestJSON(CDW.settings.serverPath + '/users/list', onUsersReceived);			
+		}
+			
+			
+		
 		private var queue:LoaderMax = new LoaderMax({name:"portraitQueue", onProgress:progressHandler, onComplete:completeHandler, onError:errorHandler});
-
-		private function onDebatesReceived(r:Object):void {
-			trace('Debates Loaded, getting portrait images');
-						
-			for each (var debate:Object in r) {
+		
+		private function onUsersReceived(r:Object):void {
+			trace('Users received, now loading portraits');
+			
+			portraits = {};
+			var userID:String;
+			
+			// create list of unique users...
+			for (var userIndex:String in r) {
+				userID = r[userIndex]['_id']['$oid'];
+				portraits[userID] = null;
+			}
+			
+			// load images
+			for (userID in portraits) {
 				
-				// Store the debates in an id-keyed array					
-				var debateID:String = debate['_id']['$oid'];
-				debates[debateID] = debate;
+				// see if it exists
+				var imageFile:File = new File(CDW.settings.imagePath + userID + '-full.jpg');
 				
-				// start loading images, sotring them in an author-id keyed array
-				var authorID:String = debate['author']['_id']['$oid']
-				
-				if (authorID in portraits) {
-					trace('Already loading portrait for ' + authorID);
+				if (imageFile.exists) {
+					// load the portrait
+					trace('Loading image from file for ' + userID);
+					queue.append(new ImageLoader(imageFile.url, {name: userID, estimatedBytes:2400, container:this}) );
 				}
 				else {
-					// load the image
-					portraits[authorID] = new Bitmap();
-					
-					queue.append(new ImageLoader((new File(CDW.settings.imagePath + authorID + '-full.jpg')).url, {name: authorID, estimatedBytes:2400, container:this}) );
+					// use placeholder
+					trace('Using placeholder for ' + userID);
+					portraits[userID] = Assets.portraitPlaceholder;
 				}
 			}
 			
 			queue.load();
 		}
 		
+		
 		private function progressHandler(event:LoaderEvent):void {
 			trace("progress: " + event.target.progress);
 		}
 		
+		private function errorHandler(event:LoaderEvent):void {
+			trace("error occured with " + event.target + ": " + event.text);
+		}		
+		
 		private function completeHandler(event:LoaderEvent):void {
 			trace(event.target + " is complete!");
-
+			
 			for (var id:String in portraits) {
-				portraits[id] = (LoaderMax.getContent(id) as ContentDisplay).rawContent;
+				if (portraits[id] == null) {
+					portraits[id] = (LoaderMax.getContent(id) as ContentDisplay).rawContent;
+				}
 			}
+			
+			// load debates
+			// TODO dynamic question
+			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/debates/list', {'question': '4e2755b50f2e420354000001'}, onDebatesReceived);			
+		}
+		
 
+		private function onDebatesReceived(r:Object):void {
+			trace('Debates received.');
+						
+			for each (var debate:Object in r) {
+				// Store the debates in an id-keyed array					
+				var debateID:String = debate['_id']['$oid'];
+				debates[debateID] = debate;
+			}
+			
 			// ready to start
 			this.dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
-		private function errorHandler(event:LoaderEvent):void {
-			trace("error occured with " + event.target + ": " + event.text);
-		}
-		
-		
 		
 
-		
 		
 		// STUBS
 		public function getQuestionText():String {
@@ -111,6 +135,10 @@ package net.localprojects {
 		public function getDebateAuthorPortrait(debateID:String):Bitmap {
 			return portraits[getDebateAuthor(debateID)]; 
 		}
+		
+		public function getPortrait(authorID:String):Bitmap {
+			return portraits[authorID]; 
+		}		
 		
 		public function getDebateAuthorName(debateID:String):String {
 			return Utilities.toTitleCase(debates[debateID]['author']['firstName']); 

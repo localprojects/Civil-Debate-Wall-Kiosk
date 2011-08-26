@@ -56,6 +56,10 @@ package net.localprojects
 		public static function getPortraitPlaceholder():Bitmap { return new portraitPlaceholderClass() as Bitmap; };
 		public static const portraitPlaceholder:Bitmap = getPortraitPlaceholder();
 		
+		[Embed(source = '/assets/graphics/smallFlagIcon.png')] private static const smallFlagIconClass:Class;
+		public static function getSmallFlagIcon():Bitmap { return new smallFlagIconClass() as Bitmap; };
+		public static const smallFlagIcon:Bitmap = getSmallFlagIcon();		
+		
 		[Embed(source = '/assets/graphics/statsIcon.png')] private static const statsIconClass:Class;
 		public static function getStatsIcon():Bitmap { return new statsIconClass() as Bitmap; };
 		public static const statsIcon:Bitmap = getStatsIcon();
@@ -87,7 +91,21 @@ package net.localprojects
 		public static const FONT_BOLD:String = 'Museo Slab 700';		
 		
 		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlab900')] public static const FontHeavy:Class;		
-		public static const FONT_HEAVY:String = 'Museo Slab 900';				
+		public static const FONT_HEAVY:String = 'Museo Slab 900';		
+		
+		
+		
+		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlabItalic300')] public static const FontLightItalic:Class;
+		public static const FONT_LIGHT_ITALIC:String = 'Museo Slab Italic 300';		
+		
+		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlabItalic500')] public static const FontRegularItalic:Class;
+		public static const FONT_REGULAR_ITALIC:String = 'Museo Slab Italic 500';
+		
+		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlabItalic700')] public static const FontBoldItalic:Class;
+		public static const FONT_BOLD_ITALIC:String = 'Museo Slab Italic 700';		
+		
+		[Embed(source='/assets/fonts/museo.swf', symbol='MuseoSlabItalic900')] public static const FontHeavyItalic:Class;		
+		public static const FONT_HEAVY_ITALIC:String = 'Museo Slab Italic 900 ';				
 
 		
 		// Colors

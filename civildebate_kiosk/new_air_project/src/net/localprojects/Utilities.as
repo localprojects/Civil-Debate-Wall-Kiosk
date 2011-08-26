@@ -179,6 +179,16 @@ package net.localprojects {
 			return (haystack.indexOf(needle) > -1);
 		}
 		
+		
+		
+		public static function zeroPad(number:*, width:int):String {
+			var ret:String = ""+ number.toString();
+			while( ret.length < width )
+				ret="0" + ret;
+			return ret;
+		}
+				
+		
 		public static function centerWithin(containee:DisplayObject, container:DisplayObject):void {
 			containee.x = (container.width / 2) - (containee.width / 2);
 			containee.y = (container.height / 2) - (containee.height / 2);			
@@ -332,6 +342,20 @@ package net.localprojects {
 			loader.addEventListener(Event.COMPLETE, function(e:Event):void { callback(e.target.data); });  
 			loader.load(request);	
 		}
+		
+		public static function getRequest(url:String, callback:Function):void {
+			var loader:URLLoader = new URLLoader()
+			var request:URLRequest = new URLRequest(url);
+			request.method = URLRequestMethod.GET;
+			  
+			// Handlers
+			loader.addEventListener(Event.COMPLETE, function(e:Event):void { callback(e.target.data); });  
+			loader.load(request);	
+		}
+		
+		public static function getRequestJSON(url:String, callback:Function):void {
+			getRequest(url, function(r:Object):void { callback(JSON.decode(r.toString()))	}); 	
+		}	
 		
 		// via http://www.jadbox.com/2009/01/object-to-urlvariables/
 		// only supports single level of depth

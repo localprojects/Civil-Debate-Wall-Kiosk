@@ -83,6 +83,8 @@ package net.localprojects {
 			nextDebate = CDW.database.getNextDebate();
 			previousDebate = CDW.database.getPreviousDebate();
 			
+			// update the debate overlay? no it has to happen after we hit the db
+			
 			// set stance text
 			activeStanceText = formatStanceText(CDW.database.debates[activeDebate].stance);
 						

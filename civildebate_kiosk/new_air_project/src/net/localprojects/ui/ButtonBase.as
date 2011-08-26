@@ -95,7 +95,7 @@ package net.localprojects.ui {
 		}
 		
 		
-		public function setLabel(text:String):void {
+		public function setLabel(text:String, instant:Boolean = false):void {
 			// override me
 		}
 		
