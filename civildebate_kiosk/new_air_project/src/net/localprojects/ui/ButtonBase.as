@@ -6,6 +6,7 @@ package net.localprojects.ui {
 	import flash.events.*;
 	import flash.utils.Timer;
 	
+	import net.localprojects.Assets;
 	import net.localprojects.CDW;
 	import net.localprojects.blocks.BlockBase;
 	
@@ -101,12 +102,15 @@ package net.localprojects.ui {
 		
 		public function enable():void {
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			
 			//this.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
 		}
 		
 		
 		public function disable():void {
+			trace('disabled');
 			this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+						
 			//this.removeEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
 		}
 		
