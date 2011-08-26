@@ -19,6 +19,7 @@ package net.localprojects.ui {
 		protected var onClick:Function;
 		protected var background:Sprite;
 		protected var _backgroundColor:uint;
+		protected var _backgroundDownColor:uint;
 		
 		protected var timeout:Number; // time between presses
 		private var timer:Timer;
@@ -48,7 +49,6 @@ package net.localprojects.ui {
 			timeout = 0;
 			timer = new Timer(timeout );
 			timer.addEventListener(TimerEvent.TIMER, onTimeout);
-			
 		}
 		
 		private function onTimeout(e:TimerEvent):void {
@@ -59,7 +59,7 @@ package net.localprojects.ui {
 		protected function onMouseDown(e:MouseEvent):void {
 			if (!locked) {
 				CDW.ref.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-				TweenMax.to(background, 0, {colorTransform: {tint: _backgroundColor, tintAmount: 0.2}});
+				TweenMax.to(background, 0, {colorTransform: {tint: _backgroundDownColor, tintAmount: 1}});
 			}
 		}
 		
@@ -113,6 +113,10 @@ package net.localprojects.ui {
 		
 		protected function draw():void {
 			// override me
+		}
+		
+		public function setDownColor(c:uint):void {
+			_backgroundDownColor = c;
 		}
 		
 	}

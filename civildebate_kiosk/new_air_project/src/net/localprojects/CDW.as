@@ -103,7 +103,7 @@ package net.localprojects {
 			}
 			
 			// inactivity timer
-			inactivityTimer = new InactivityTimer(stage, 60);
+			inactivityTimer = new InactivityTimer(stage, settings.inactivityTimeout);
 			inactivityTimer.addEventListener(InactivityEvent.INACTIVE, onInactive);
 			
 			// Mouse Hiding

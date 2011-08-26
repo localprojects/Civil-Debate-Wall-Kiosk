@@ -102,8 +102,8 @@ package net.localprojects
 		public static const COLOR_NO_OVERLAY:uint = Utilities.color(255, 60, 0);		
 		
 		public static const COLOR_INSTRUCTION_DARK:uint = Utilities.color(77, 77, 79);
-		public static const COLOR_INSTRUCTION_MEDIUM:uint = Utilities.color(99, 100, 102);		
-		public static const COLOR_INSTRUCTION_LIGHT:uint = Utilities.color(147, 149, 152);
+		public static const COLOR_INSTRUCTION_75:uint = Utilities.color(99, 100, 102); // 75% K
+		public static const COLOR_INSTRUCTION_50:uint = Utilities.color(147, 149, 152); // 50% K
 		
 		
 		

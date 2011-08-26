@@ -54,6 +54,9 @@ package net.localprojects.ui {
 			_letterSpacing = -1;
 			labelFieldA = generateLabel(_labelText);
 			
+			_buttonWidth -= strokeWeight;
+			_buttonHeight -= strokeWeight;
+			
 			addChild(background);
 			addChild(outline);
 			addChild(labelFieldA);

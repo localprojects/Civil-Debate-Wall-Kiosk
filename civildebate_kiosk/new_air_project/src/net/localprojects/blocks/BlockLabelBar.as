@@ -25,8 +25,7 @@ package net.localprojects.blocks {
 		}
 		
 		private function postInit():void {
-			textField.x = 33;
-			textField.y = (bar.height / 2) - (textField.height / 2);
+			Utilities.centerWithin(textField, bar);
 			bar.pixelSnapping = PixelSnapping.ALWAYS;
 			cacheAsBitmap = true;
 		}

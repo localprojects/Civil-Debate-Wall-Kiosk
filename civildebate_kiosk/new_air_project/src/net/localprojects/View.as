@@ -47,7 +47,6 @@ package net.localprojects {
 		
 		// mutable (e.g. color changes)
 		private var nameEntryInstructions:BlockLabel;		
-		private var nameEntryField:BlockInputLabel;		
 		private var saveButton:BlockButton;		
 		private var retakePhotoButton:BlockButton;
 		private var editTextButton:BlockButton;
@@ -65,17 +64,18 @@ package net.localprojects {
 		private var characterLimit:BlockLabel;
 		private var photoBoothNag:BlockLabel;
 		private var photoBoothInstructions:BlockButton;
-		private var countdown:Countdown;		
+		private var countdownButton:Countdown;		
 		private var keyboard:Keyboard;		
 		
 		// mutable, dynamic content (e.g. text changes based on database)
-		private var question:Question;
+		private var nameEntryField:BlockInputLabel; // changes dimensions
+		private var question:Question; // changes dimensions
 		public var portrait:Portrait;
 		private var bigButton:BigButton;
 		private var likeButton:CounterButton;
 		private var viewDebateButton:BlockButton;
-		private var editOpinion:BlockInputParagraph;
-		private var byline:BlockLabel;		
+		private var editOpinion:BlockInputParagraph; // changes dimensions 
+		private var byline:BlockLabel; // changes dimensions
 		
 		// containers, have lots of nested content
 		private var stats:StatsOverlay;
@@ -129,29 +129,29 @@ package net.localprojects {
 			addChild(cameraOverlay);
 			
 			header = new Header();
-			header.setDefaultTweenIn(1, {x: 30, y: 30});
-			header.setDefaultTweenOut(1, {x: 30, y: -header.height});
+			header.setDefaultTweenIn(1, {x: 'center', y: 30});
+			header.setDefaultTweenOut(1, {x: 'center', y: 'offTopEdge'});
 			addChild(header);
 			
 			divider = new BlockBitmap(Assets.divider);
-			divider.setDefaultTweenIn(1, {x: 30, y: 250});
-			divider.setDefaultTweenOut(1, {x: -divider.width, y: 250});			
+			divider.setDefaultTweenIn(1, {x: 'center', y: 250});
+			divider.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 250});			
 			addChild(divider);
 			
 			question = new Question();
-			question.setDefaultTweenIn(1, {x: 30, y: 123});
-			question.setDefaultTweenOut(1, {x: -question.width});
+			question.setDefaultTweenIn(1, {x: 'center', y: 123});
+			question.setDefaultTweenOut(1, {x: 'offLeftEdge'});
 			question.setText(CDW.database.getQuestionText());
 			addChild(question);
 			
 			// triple stances
 			stance = new Stance();
 			stance.setDefaultTweenIn(1, {x: 238, y: 280});
-			stance.setDefaultTweenOut(1, {x: -280});						
+			stance.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 280});						
 			addChild(stance);
 			
 			leftStance = new Stance();
-			leftStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x - stageWidth, y:  stance.defaultTweenInVars.y});						
+			leftStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x - stageWidth, y: stance.defaultTweenInVars.y});						
 			addChild(leftStance);
 			
 			rightStance = new Stance();
@@ -162,7 +162,7 @@ package net.localprojects {
 			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
 			nametag.setPadding(33, 38, 24, 38);
 			nametag.setDefaultTweenIn(1, {x: 238, y: 410});
-			nametag.setDefaultTweenOut(1, {x: stageWidth + 50});
+			nametag.setDefaultTweenOut(1, {x: 'offRightEdge', y: 410});
 			addChild(nametag);
 			
 			leftNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
@@ -178,45 +178,46 @@ package net.localprojects {
 			byline = new BlockLabel('Byline', 22, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
 			byline.setPadding(18, 32, 16, 32);
 			byline.setDefaultTweenIn(1, {x: 586, y: 694});
-			byline.setDefaultTweenOut(1, {x: -500, y: 694});			
+			byline.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 694});			
 			addChild(byline);
 			
 			leftQuote = new QuotationMark();
 			leftQuote.setDefaultTweenIn(1, {x: 114, y: 545});
-			leftQuote.setDefaultTweenOut(1, {x: -leftQuote.width});	
+			leftQuote.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 545});	
 			leftQuote.setStyle(QuotationMark.OPENING);
 			addChild(leftQuote);
 			
 			rightQuote = new QuotationMark();
 			rightQuote.setDefaultTweenIn(1, {x: 660, y: 1639});
-			rightQuote.setDefaultTweenOut(1, {x: stageWidth + 50});				
+			rightQuote.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1639});				
 			rightQuote.setStyle(QuotationMark.CLOSING);
 			addChild(rightQuote);
 			
 			// triple opinions
 			opinion = new BlockParagraph(915, 0x000000, '', 42);	
 			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});
-			opinion.setDefaultTweenOut(1, {x: -stageWidth, y: 1095});
+			opinion.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1095});
 			addChild(opinion);
 			
 			rightOpinion = new BlockParagraph(915, 0x000000, '', 42);
-			rightOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: 1095});
-			rightOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: 1095});
+			rightOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: opinion.defaultTweenInVars.y});
+			rightOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: opinion.defaultTweenInVars.y});
 			addChild(rightOpinion);
 			
 			leftOpinion = new BlockParagraph(915, 0x000000, '', 42);	
-			leftOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: 1095});
-			leftOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: 1095});
+			leftOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: opinion.defaultTweenInVars.y});
+			leftOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: opinion.defaultTweenInVars.y});
 			addChild(leftOpinion);		
 			
+			// TODO is there always a drag layer?
 			dragLayer = new DragLayer();
 			dragLayer.setDefaultTweenIn(0, {});
-			dragLayer.setDefaultTweenOut(0, {});			
+			dragLayer.setDefaultTweenOut(0, {});
 			addChild(dragLayer);			
 			
-			editOpinion = new BlockInputParagraph(915, 0x000000, '', 42);			
+			editOpinion = new BlockInputParagraph(915, 0x000000, '', 42);
 			editOpinion.setDefaultTweenIn(1, {x: 100, y: 1095});
-			editOpinion.setDefaultTweenOut(1, {x: -editOpinion.width, y: 1095});			
+			editOpinion.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1095});			
 			addChild(editOpinion);
 			
 			bigButton = new BigButton('ADD YOUR OPINION');
@@ -226,185 +227,187 @@ package net.localprojects {
 			
 			statsButton = new IconButton(111, 55, 0x000000, 'Stats', 20, 0xffffff, null, Assets.statsIcon);
 			statsButton.setDefaultTweenIn(1, {x: 104, y: 1379});
-			statsButton.setDefaultTweenOut(1, {x: -statsButton.width - 50});
+			statsButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1379});
 			addChild(statsButton);
 			
 			likeButton = new CounterButton(111, 55, 0x000000, 'Like', 20);
 			likeButton.setTimeout(5000);
 			likeButton.setDefaultTweenIn(1, {x: 238, y: 1379});
-			likeButton.setDefaultTweenOut(1, {x: -likeButton.width - 50});			
+			likeButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1379});			
 			addChild(likeButton);
 			
 			viewDebateButton = new BlockButton(517, 55, 0x000000, '', 20);
 			viewDebateButton.setDefaultTweenIn(1, {x: 373, y: 1379});
-			viewDebateButton.setDefaultTweenOut(1, {x: stageWidth + 50});			
+			viewDebateButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1379});			
 			addChild(viewDebateButton);
 			
 			flagButton = new IconButton(59, 55, 0x000000, '', 20, 0xffffff, null, Assets.flagIcon);
 			flagButton.setTimeout(5000);			
 			flagButton.setDefaultTweenIn(1, {x: 914, y: 1379});
-			flagButton.setDefaultTweenOut(1, {x: stageWidth + 50});
+			flagButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1379});
 			addChild(flagButton);			
 			
 			debateButton = new BalloonButton(145, 130, 0x000000, 'LET\u0027S\nDEBATE !', 20);
 			debateButton.setDefaultTweenIn(1, {x: 828, y: 901, scaleX: 1, scaleY: 1});
-			debateButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 901, scaleX: 1, scaleY: 1});
+			debateButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 901, scaleX: 1, scaleY: 1});
 			addChild(debateButton);
 			
 			debateOverlay = new DebateOverlay();
 			debateOverlay.setDefaultTweenIn(1, {x: 30, y: 813});
-			debateOverlay.setDefaultTweenOut(1, {x: 30, y: stageHeight});			
+			debateOverlay.setDefaultTweenOut(1, {x: 30, y: 'offBottomEdge'});			
 			addChild(debateOverlay);			
 			
 			debatePicker = new DebatePicker();
 			debatePicker.setDefaultTweenIn(1, {x: 0, y: 1748});
-			debatePicker.setDefaultTweenOut(1, {x: 0, y: stageHeight});			
+			debatePicker.setDefaultTweenOut(1, {x: 0, y: 'offBottomEdge'});			
 			debatePicker.update();
 			addChild(debatePicker);
 			
 			answerPrompt = new BlockLabel('Your Answer / Please Select One :', 19, 0xffffff, Assets.COLOR_INSTRUCTION_DARK, Assets.FONT_REGULAR, true);
 			answerPrompt.setPadding(22, 32, 24, 32);
 			answerPrompt.setDefaultTweenIn(1, {x: 650, y: 1245});
-			answerPrompt.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1245});					
+			answerPrompt.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1245});					
 			addChild(answerPrompt);
 			
 			yesButton = new BlockButton(215, 100, Assets.COLOR_YES_LIGHT, 'YES!', 80);
 			yesButton.setLetterSpacing(-3);
 			yesButton.setDefaultTweenIn(1, {x: 447, y: 1340});
-			yesButton.setDefaultTweenOut(1, {x: 447, y: stageHeight + 50});
+			yesButton.setDefaultTweenOut(1, {x: 447, y: 'offBottomEdge'});
 			addChild(yesButton);
 			
 			noButton = new BlockButton(185, 100, Assets.COLOR_NO_LIGHT, 'NO!', 80);			
 			noButton.setLetterSpacing(-5);
 			noButton.setDefaultTweenIn(1.2, {x: 677, y: 1340});
-			noButton.setDefaultTweenOut(1.2, {x: 677, y: stageHeight + 50});
+			noButton.setDefaultTweenOut(1.2, {x: 677, y: 'offBottomEdge'});
 			addChild(noButton);
 			
 			// Temp debug button so we don't have to SMS every time
 			skipTextButton = new BlockButton(200, 100, Assets.COLOR_INSTRUCTION_DARK, 'SIMULATE SMS', 20);
-			skipTextButton.setDefaultTweenIn(1, {x: (stageWidth - 200) / 2, y: 500});
-			skipTextButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 500});
+			skipTextButton.setDefaultTweenIn(1, {x: 'center', y: 500});
+			skipTextButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 500});
 			addChild(skipTextButton);
 
 			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
 			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_LIGHT);
 			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
-			smsInstructions.setDefaultTweenOut(1, {x: smsInstructions.width - 50, y: 1096});
+			smsInstructions.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1096});
 			addChild(smsInstructions);
 			
 			var smsDisclaimerText:String = 'You will receive an SMS notifying you of any future opponents \nwho would like to enter into a debate with you based on your opinion. \nYou can opt out at any time by replying STOP.';
-			smsDisclaimer = new BlockParagraph(872, Assets.COLOR_INSTRUCTION_MEDIUM, smsDisclaimerText, 25);
+			smsDisclaimer = new BlockParagraph(872, Assets.COLOR_INSTRUCTION_75, smsDisclaimerText, 25);
 			smsDisclaimer.textField.setTextFormat(new TextFormat(null, null, 0xc7c8ca), smsDisclaimerText.length -45, smsDisclaimerText.length);
 			smsDisclaimer.setDefaultTweenIn(1, {x: 101, y: 1625});
-			smsDisclaimer.setDefaultTweenOut(1, {x: smsDisclaimer.width - 50, y: 1625});
+			smsDisclaimer.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1625});
 			addChild(smsDisclaimer);
 			
-			webPlug = new BlockLabel('Check out your photo and opinion at civildebatewall.com', 25, 0xffffff, Assets.COLOR_INSTRUCTION_MEDIUM);
+			webPlug = new BlockLabel('Check out your photo and opinion at civildebatewall.com', 25, 0xffffff, Assets.COLOR_INSTRUCTION_75);
 			webPlug.considerDescenders = false;
 			webPlug.setPadding(25, 30, 25, 33);
 			webPlug.setDefaultTweenIn(1, {x: 101, y: 1772});
-			webPlug.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1772});
+			webPlug.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1772});
 			addChild(webPlug);			
 			
 			exitButton = new BlockButton(120, 60, 0x000000, 'EXIT', 25, 0xffffff, Assets.FONT_HEAVY);
 			exitButton.setDefaultTweenIn(1, {x: 101, y: 1003});
-			exitButton.setDefaultTweenOut(1, {x: -exitButton.width, y: 1003});			
+			exitButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1003});			
 			addChild(exitButton);
 			
 			characterLimit = new BlockLabel('Use No More than ' + CDW.settings.characterLimit + ' characters', 18, 0xffffff, 0x000000, Assets.FONT_BOLD);
 			characterLimit.setPadding(22, 34, 22, 32);
 			characterLimit.setDefaultTweenIn(1, {x: 683, y: 1246});
-			characterLimit.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1246});
+			characterLimit.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1246});
 			addChild(characterLimit);
 			
-			photoBoothNag = new BlockLabel('Please look into the camera!', 33, 0xffffff, 0x000000, Assets.FONT_BOLD);
-			photoBoothNag.setDefaultTweenIn(1.5, {x: 269, y: 176}); // elastic easing was over-the-top
-			photoBoothNag.setDefaultTweenOut(1, {x: photoBoothNag.width - 50, y: 176});
+			photoBoothNag = new BlockLabel('Please look into the Camera!', 33, 0xffffff, 0x000000, Assets.FONT_BOLD);
+			photoBoothNag.setDefaultTweenIn(1.5, {x: 'center', y: 176}); // elastic easing was over-the-top
+			photoBoothNag.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 176});
 			addChild(photoBoothNag);			
 			
-			photoBoothInstructions = new BlockButton(298, 73, 0x000000, 'Touch to Begin', 33);
-			photoBoothInstructions.setDefaultTweenIn(1, {x: 391, y: 1628});
-			photoBoothInstructions.setDefaultTweenOut(1, {x: -photoBoothInstructions.width - 50, y: 1628});
+			photoBoothInstructions = new BlockButton(382, 73, 0x000000, 'Touch to Countdown', 33);
+			photoBoothInstructions.setDefaultTweenIn(1, {x: 'center', y: 1628});
+			photoBoothInstructions.setDefaultTweenOut(1, {x: 'center', y: 'offBottomEdge'});
 			addChild(photoBoothInstructions);
 			
-			countdown = new Countdown(5);
-			countdown.setDefaultTweenIn(1, {x: 470, y: 1406});
-			countdown.setDefaultTweenOut(1, {x: 470, y: stageHeight});
-			addChild(countdown);
+			countdownButton = new Countdown(5);
+			countdownButton.setDefaultTweenIn(1, {x: 'center', y: 1406});
+			countdownButton.setDefaultTweenOut(1, {x: 'center', y: stageHeight});
+			addChild(countdownButton);
 			
 			nameEntryInstructions = new BlockLabel('TYPE IN YOUR NAME', 20)
 			nameEntryInstructions.setDefaultTweenIn(1, {x: 101, y: 1003});
-			nameEntryInstructions.setDefaultTweenOut(1, {x: -nameEntryInstructions.width - 50, y: 1003});
+			nameEntryInstructions.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1003});
 			addChild(nameEntryInstructions);
 			
 			nameEntryField = new BlockInputLabel('', 30, 0xffffff, 0x000000, Assets.FONT_REGULAR, true);
 			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1096});
-			nameEntryField.setDefaultTweenOut(1, {x: -nameEntryField.width - 500, y: 1096});
+			nameEntryField.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1096});
 			addChild(nameEntryField);			
 			
 			saveButton = new BlockButton(335, 63, 0x000000, 'SAVE AND CONTINUE', 20);			
 			saveButton.setDefaultTweenIn(1, {x: 308, y: 1200});
-			saveButton.setDefaultTweenOut(1, {x: -saveButton.width - 50, y: 1200});
+			saveButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1200});
 			addChild(saveButton);
 			
 			retakePhotoButton = new BlockButton(270, 63, 0x000000, 'RETAKE PHOTO', 20);
 			retakePhotoButton.setDefaultTweenIn(1, {x: 101, y: 1003});
-			retakePhotoButton.setDefaultTweenOut(1, {x: -retakePhotoButton.width - 50, y: 1003});
+			retakePhotoButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1003});
 			addChild(retakePhotoButton);
 			
 			editTextButton = new BlockButton(200, 63, 0x000000, 'EDIT TEXT', 20);
 			editTextButton.setDefaultTweenIn(1, {x: 386, y: 1003});
-			editTextButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1003});
+			editTextButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1003});
 			addChild(editTextButton);
 			
 			cancelButton = new BlockButton(171, 63, 0x000000, 'CANCEL', 20);
 			cancelButton.setDefaultTweenIn(1, {x: 789, y: 1376});
-			cancelButton.setDefaultTweenOut(1, {x: stageWidth + 50, y: 1376});
+			cancelButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1376});
 			addChild(cancelButton);			
 			
 			editTextInstructions = new BlockLabel('EDITING TEXT...', 20);
 			editTextInstructions.setDefaultTweenIn(1, {x: 386, y: 1003});
-			editTextInstructions.setDefaultTweenOut(1, {x: -editTextInstructions.width - 50, y: 1003});
+			editTextInstructions.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1003});
 			addChild(editTextInstructions);			
 			
 			keyboard = new Keyboard();
 			keyboard.setDefaultTweenIn(1, {x: 0, y: stageHeight - keyboard.height});
-			keyboard.setDefaultTweenOut(1, {x: 0, y: stageHeight});
+			keyboard.setDefaultTweenOut(1, {x: 0, y: 'offBottomEdge'});
 			addChild(keyboard);
 			
 			// TODO update from database
 			stats = new StatsOverlay();
-			stats.setDefaultTweenIn(1, {x: 30, y: 264});
-			stats.setDefaultTweenOut(1, {x: 30, y: stageHeight});
+			stats.setDefaultTweenIn(1, {x: 'center', y: 264});
+			stats.setDefaultTweenOut(1, {x: 'center', y: 'offBottomEdge'});
 			addChild(stats);
 			
-			inactivityOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, true, 0x000000)));
+			inactivityOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
 			inactivityOverlay.setDefaultTweenIn(1, {alpha: 0.85});
 			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(inactivityOverlay);
 			
 			inactivityTimerBar = new ProgressBar(735, 2, 20);		
-			inactivityTimerBar.setDefaultTweenIn(1, {x: 173, y: 993});
-			inactivityTimerBar.setDefaultTweenOut(1, {x: 173, y: -50});			
+			inactivityTimerBar.setDefaultTweenIn(1, {x: 'center', y: 1002});
+			inactivityTimerBar.setDefaultTweenOut(1, {x: 'center', y: 'offTopEdge'});			
 			addChild(inactivityTimerBar);
 			
-			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_INSTRUCTION_DARK, Assets.FONT_HEAVY);
-			inactivityInstructions.setDefaultTweenIn(1, {x: 173, y: 1018});
-			inactivityInstructions.setDefaultTweenOut(1, {x: 173, y: -inactivityInstructions.height - 50});			
+			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_INSTRUCTION_75, Assets.FONT_HEAVY);
+			inactivityInstructions.setDefaultTweenIn(1, {x: 'center', y: 1018});
+			inactivityInstructions.setDefaultTweenOut(1, {x: 'center', y: 'offTopEdge'});			
 			addChild(inactivityInstructions);
 			
-			continueButton = new BlockButton(735, 120, Assets.COLOR_INSTRUCTION_MEDIUM, 'YES!', 92);
-			continueButton.setDefaultTweenIn(1, {x: 175, y: 1098});
-			continueButton.setDefaultTweenOut(1, {x: -continueButton.width - 50, y: 1098});					
+			continueButton = new BlockButton(735, 120, Assets.COLOR_INSTRUCTION_50, 'YES!', 92);
+			continueButton.setDownColor(Assets.COLOR_INSTRUCTION_75);
+			continueButton.setDefaultTweenIn(1, {x: 'center', y: 1098});
+			continueButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1098});					
 			addChild(continueButton);
 			
-			blackOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, true, 0x000000)));
-			blackOverlay.setDefaultTweenIn(0, {alpha: 1});
+			blackOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
+			blackOverlay.setDefaultTweenIn(0.1, {alpha: 1, immediateRender: true}); // duration of 0 doesn't work?
 			blackOverlay.setDefaultTweenOut(0, {alpha: 0});
-			addChild(blackOverlay);
+			addChild(blackOverlay);				
 			
-			flashOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, true, 0xffffff)));
-			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut});
+			flashOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0xffffff)));
+			flashOverlay.mouseEnabled = false; // let keystrokes through to the keyboard
+			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut, immediateRender: true});
 			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
 			addChild(flashOverlay);	
 		}
@@ -724,13 +727,13 @@ package net.localprojects {
 				smsInstructions.setBackgroundColor(Assets.COLOR_YES_LIGHT);
 				characterLimit.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
 				exitButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				noButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_LIGHT);
+				noButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50);
 			}
 			else {
 				smsInstructions.setBackgroundColor(Assets.COLOR_NO_LIGHT);
 				characterLimit.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
 				exitButton.setBackgroundColor(Assets.COLOR_NO_DARK);				
-				yesButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_LIGHT);
+				yesButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50);
 			}
 			
 			// behaviors
@@ -867,28 +870,28 @@ package net.localprojects {
 			CDW.inactivityTimer.arm();
 			
 			// mutations
-			countdown.progressRing.alpha = 0;			
+			countdownButton.progressRing.alpha = 0;			
 			stance.setStance(CDW.state.userStance);
 			
 			if (CDW.state.userStance == 'yes') {
-				countdown.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
-				countdown.setRingColor(Assets.COLOR_YES_LIGHT);
+				countdownButton.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
+				countdownButton.setRingColor(Assets.COLOR_YES_LIGHT);
 				photoBoothInstructions.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
 				photoBoothNag.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
-				cameraOverlay.setColor(Assets.COLOR_YES_OVERLAY); 
+				cameraOverlay.setColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_YES_OVERLAY);
 			}
 			else {
-				countdown.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
-				countdown.setRingColor(Assets.COLOR_NO_LIGHT);
+				countdownButton.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
+				countdownButton.setRingColor(Assets.COLOR_NO_LIGHT);
 				photoBoothInstructions.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
 				photoBoothNag.setBackgroundColor(Assets.COLOR_NO_MEDIUM);				
-				cameraOverlay.setColor(Assets.COLOR_NO_OVERLAY);
+				cameraOverlay.setColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_OVERLAY);
 			}
 			
 			// behaviors
-			countdown.setOnClick(onCameraClick);
-			countdown.setOnAlmostFinish(onCountdownAlmostFinish);			
-			countdown.setOnFinish(onCountdownFinish);
+			countdownButton.setOnClick(onCameraClick);
+			countdownButton.setOnAlmostFinish(onCountdownAlmostFinish);			
+			countdownButton.setOnFinish(onCountdownFinish);
 			photoBoothInstructions.setOnClick(onCameraClick);
 			
 			// blocks
@@ -896,7 +899,7 @@ package net.localprojects {
 			header.tweenIn();
 			cameraOverlay.tweenIn();
 			photoBoothInstructions.tweenIn();
-			countdown.tweenIn();			
+			countdownButton.tweenIn();			
 			
 			tweenOutInactive();
 			
@@ -905,17 +908,18 @@ package net.localprojects {
 		
 		
 		private function onCameraClick(e:Event):void {
-			if (!countdown.isCountingDown()) {
-				photoBoothInstructions.tweenOut(1, {x: stageWidth + 50});
-				countdown.tween(1, {y: 343, ease: Quart.easeInOut, onComplete: onCountdownPositioned}); // move it up
-				TweenMax.to(countdown.progressRing, 1, {alpha: 1, ease: Quart.easeInOut});
+			if (!countdownButton.isCountingDown()) {
+				header.tweenOut();
+				photoBoothInstructions.tweenOut();
+				countdownButton.tween(1, {y: 30, ease: Quart.easeInOut, onComplete: onCountdownPositioned}); // move it up
+				TweenMax.to(countdownButton.progressRing, 1, {alpha: 1, ease: Quart.easeInOut});
 				photoBoothNag.tweenIn();
 			}
 		}
 		
 		
 		private function onCountdownPositioned():void {
-			countdown.start()	
+			countdownButton.start()	
 		}
 		
 		
@@ -925,11 +929,14 @@ package net.localprojects {
 		
 		
 		private function onCountdownFinish(e:Event):void {			
-			// image is held in RAM for now, in case it's edited later
-			
 			// go to black
 			// TODO Y U NO WORK?
-			blackOverlay.tweenIn();
+			//blackOverlay.tweenIn(0, {alpha: 1, onComplete: onScreenBlack});
+			blackOverlay.tweenIn(-1, {onComplete: onScreenBlack});
+		}
+		
+		private function onScreenBlack():void {
+			trace('screen black');
 			
 			// Do this in portrait camera instead?
 			if (CDW.settings.webcamOnly) {
@@ -1027,7 +1034,7 @@ package net.localprojects {
 			
 			// NOW flash
 			flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
-		}				
+		}
 		
 		
 		private function onFlashOn():void {
@@ -1164,6 +1171,9 @@ package net.localprojects {
 			retakePhotoButton.tweenIn();
 			editTextButton.tweenIn();
 			cancelButton.tweenIn();			
+			
+			trace("tweening out name entry");
+			nameEntryField.tweenOut();
 			
 			tweenOutInactive();
 			
