@@ -132,6 +132,16 @@ package net.localprojects {
 			return i;
 		}
 		
+		public function getCommentCount(debateID:String):int {
+			var i:int = 0;
+			
+			for (var commentID:String in debates[debateID]['comments']) {
+				trace('comment ID: ' + commentID);
+				i++;
+			}
+			return i;
+		}		
+		
 		
 		public function cloneDebateAuthorPortrait(debateID:String):Bitmap {
 			return new Bitmap(portraits[getDebateAuthor(debateID)].bitmapData.clone());

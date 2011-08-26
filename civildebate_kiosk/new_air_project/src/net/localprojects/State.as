@@ -18,6 +18,8 @@ package net.localprojects {
 		public var userImage:Bitmap = new Bitmap(new BitmapData(1080, 1920));
 		public var latestSMSID:String = '';
 		
+		public var userIsResponding:Boolean = false; // true if we're entering a debate through the "let's debate" button
+		
 		
 		// adds exclamation point
 		public var activeStanceText:String = '';
@@ -54,6 +56,7 @@ package net.localprojects {
 			userImage = new Bitmap(new BitmapData(1920, 1080));
 			userPhoneNumber = '';
 			userOpinion = '';
+			userIsResponding = false;
 		}
 		
 		public function setStance(s:String):void {

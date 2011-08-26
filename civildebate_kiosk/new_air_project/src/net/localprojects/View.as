@@ -45,6 +45,9 @@ package net.localprojects {
 		private var webPlug:BlockLabel;
 		private var dragLayer:DragLayer;		
 		
+		
+		private var letsDebateUnderlay:BlockBitmap;
+		
 		// mutable (e.g. color changes)
 		private var nameEntryInstructions:BlockLabel;		
 		private var saveButton:BlockButton;		
@@ -127,6 +130,15 @@ package net.localprojects {
 			cameraOverlay.setDefaultTweenIn(1, {alpha: 1});
 			cameraOverlay.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(cameraOverlay);
+			
+			
+			letsDebateUnderlay = new BlockBitmap(new Bitmap(new BitmapData(1022, 577, false, 0xffffff)));
+			letsDebateUnderlay.mouseEnabled = false; // let keystrokes through to the keyboard
+			letsDebateUnderlay.x = 30;
+			letsDebateUnderlay.y = 249;
+			letsDebateUnderlay.setDefaultTweenIn(1, {alpha: 0.95, ease: Quart.easeOut});
+			letsDebateUnderlay.setDefaultTweenOut(1, {alpha: 0, ease: Quart.easeOut});
+			addChild(letsDebateUnderlay);				
 			
 			header = new Header();
 			header.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 30});
@@ -295,21 +307,21 @@ package net.localprojects {
 
 			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
 			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_REGULAR);
-			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
+			smsInstructions.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1096});
 			smsInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1096});
 			addChild(smsInstructions);
 			
 			var smsDisclaimerText:String = 'You will receive an SMS notifying you of any future opponents \nwho would like to enter into a debate with you based on your opinion. \nYou can opt out at any time by replying STOP.';
 			smsDisclaimer = new BlockParagraph(872, Assets.COLOR_INSTRUCTION_75, smsDisclaimerText, 25);
 			smsDisclaimer.textField.setTextFormat(new TextFormat(null, null, 0xc7c8ca), smsDisclaimerText.length -45, smsDisclaimerText.length);
-			smsDisclaimer.setDefaultTweenIn(1, {x: 101, y: 1625});
+			smsDisclaimer.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1625});
 			smsDisclaimer.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1625});
 			addChild(smsDisclaimer);
 			
 			webPlug = new BlockLabel('Check out your photo and opinion at civildebatewall.com', 25, 0xffffff, Assets.COLOR_INSTRUCTION_75);
 			webPlug.considerDescenders = false;
 			webPlug.setPadding(25, 30, 25, 33);
-			webPlug.setDefaultTweenIn(1, {x: 101, y: 1772});
+			webPlug.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1772});
 			webPlug.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1772});
 			addChild(webPlug);			
 			
@@ -461,7 +473,10 @@ package net.localprojects {
 			stance.setText(CDW.state.activeStanceText, true);
 			opinion.setText(CDW.database.getOpinion(CDW.state.activeDebate));
 			bigButton.setText('ADD YOUR OPINION', true);
-			viewDebateButton.setLabel('"The reality is that a decision…" +8 other responses');
+			
+			var commentCount:int = CDW.database.getCommentCount(CDW.state.activeDebate);
+			
+
 			likeButton.setCount(CDW.database.debates[CDW.state.activeDebate].likes);
 			CDW.state.clearUser(); // Reset user info
 			
@@ -496,16 +511,36 @@ package net.localprojects {
 			opinion.setBackgroundColor(CDW.state.activeStanceColorLight, true);
 			statsButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			likeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			flagButton.setBackgroundColor(CDW.state.activeStanceColorDark), true;
 			
+
+			if (commentCount == 0) {
+				viewDebateButton.setLabel('No responses yet. Be the first!');
+				viewDebateButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50, true);				
+			}
+			else {
+				viewDebateButton.setLabel(commentCount + ' ' + Utilities.plural('response', commentCount));
+				viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+				
+				// update the comments TODO move this to "set active debate" so it only happens once per update?
+				debateOverlay.update();
+			}			
+			
+			
 			// behaviors
-			viewDebateButton.setOnClick(debateOverlayView);	
-			bigButton.setOnClick(pickStanceView);			
+			if (commentCount == 0) {			
+				viewDebateButton.setOnClick(null);
+			}
+			else {
+				viewDebateButton.setOnClick(debateOverlayView);				
+			}
+			
+			bigButton.setOnClick(onAddOpinionButton);			
 			statsButton.setOnClick(statsView);
-			debateButton.setOnClick(pickStanceView);
+			debateButton.setOnClick(onDebateButton);
 			likeButton.setOnClick(incrementLikes);
 			flagButton.setOnClick(incrementFlags);
+			
 			
 			// blocks
 			portrait.tweenIn();
@@ -549,6 +584,16 @@ package net.localprojects {
 			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design);
 		}
 		
+		private function onDebateButton(e:Event):void {
+			CDW.state.userIsResponding = true;
+			pickStanceView();
+		}
+		
+		private function onAddOpinionButton():void {
+			CDW.state.userIsResponding = false;
+			pickStanceView();
+		}		
+		
 		
 		private function incrementLikes(e:Event):void {
 			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/like', {'id': CDW.state.activeDebate, 'count': likeButton.getCount()}, onLikePosted);
@@ -581,7 +626,8 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(CDW.database.getActivePortrait());
-			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName);			
+			byline.setBackgroundColor(CDW.state.activeStanceColorMedium, true);
+			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName, true);			
 			viewDebateButton.setLabel('BACK TO HOME SCREEN');
 			
 			// behaviors
@@ -589,8 +635,8 @@ package net.localprojects {
 			
 			// blocks
 			portrait.tweenIn();
+			letsDebateUnderlay.tweenIn();
 			header.tweenIn();
-			divider.tweenIn();
 			question.tweenIn();
 			stance.tweenIn();
 			byline.tweenIn();
@@ -665,6 +711,15 @@ package net.localprojects {
 			portrait.setImage(Assets.portraitPlaceholder);
 			noButton.setBackgroundColor(Assets.COLOR_NO_LIGHT);
 			yesButton.setBackgroundColor(Assets.COLOR_YES_LIGHT);			
+			noButton.showOutline(true);
+			yesButton.showOutline(true);			
+			
+			if (CDW.state.userIsResponding) {
+				trace("User is responding!");
+				// got here from the 'let's debate' button and not the 'add opinion button'
+				bigButton.setText('DEBATE ME', true);
+				bigButton.disable();
+			}
 			
 			// behaviors
 			yesButton.setOnClick(onYesButton);
@@ -701,13 +756,21 @@ package net.localprojects {
 			smsInstructions.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			characterLimit.setBackgroundColor(CDW.state.userStanceColorMedium, true);
 			exitButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
-			
+			noButton.showOutline(false);
+			yesButton.showOutline(false);			
 			
 			if (CDW.state.userStance == 'yes') {
 				noButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50, true);
 			}
 			else {	
 				yesButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50, true);
+			}
+			
+			if (CDW.state.userIsResponding) {
+				bigButton.setText('DEBATE ME', true);				
+			}
+			else {
+				bigButton.setText('ADD YOUR OPINION', true);				
 			}
 			
 			// behaviors
@@ -741,7 +804,7 @@ package net.localprojects {
 			
 			
 			// push the character limit down
-			answerPrompt.tweenOut(-1, {x: answerPrompt.x, y: BlockBase.OFF_BOTTOM_EDGE});
+			answerPrompt.tweenOut(-1, {x: BlockBase.OFF_LEFT_EDGE, y: answerPrompt.y});
 			
 			
 			tweenOutInactive();
@@ -763,6 +826,8 @@ package net.localprojects {
 		private function onSMSCheckResponse(e:Event):void {
 			trace('check sms response received');
 			var response:* = JSON.decode(e.target.data);			
+			
+			// TODO handle nothing in SMS chain
 			
 			// first time? save the id so we can compare
 			if (CDW.state.latestSMSID == null) {
@@ -1098,13 +1163,13 @@ package net.localprojects {
 			nametag.setText(CDW.state.userName + ' Says:', true);
 			opinion.setText(CDW.state.userOpinion);
 			
-			nametag.setBackgroundColor(CDW.state.userStanceColorMedium); // make instant?
-			opinion.setBackgroundColor(CDW.state.userStanceColorLight);	
-			retakePhotoButton.setBackgroundColor(CDW.state.userStanceColorDark);
-			editTextButton.setBackgroundColor(CDW.state.userStanceColorDark);
-			cancelButton.setBackgroundColor(CDW.state.userStanceColorDark);
-			leftQuote.setColor(CDW.state.userStanceColorLight);
-			rightQuote.setColor(CDW.state.userStanceColorLight);				
+			nametag.setBackgroundColor(CDW.state.userStanceColorMedium, true); // make instant?
+			opinion.setBackgroundColor(CDW.state.userStanceColorLight, true);	
+			retakePhotoButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
+			editTextButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
+			cancelButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
+			leftQuote.setColor(CDW.state.userStanceColorLight, true);
+			rightQuote.setColor(CDW.state.userStanceColorLight, true);				
 			
 			// TODO stance?
 			
@@ -1139,22 +1204,39 @@ package net.localprojects {
 		}
 		
 		private function onSubmitOpinion():void {
-			trace('Submitting opinion!');
+			
 			// Syncs state up to the cloud
 						
 			// save the image to disk
 			var imageName:String = Utilities.saveImageToDisk(CDW.state.userImage, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
 			
-			// upload opinion
-			var payload:Object = {'author': CDW.state.userID, 'question': CDW.state.activeQuestion, 'opinion': CDW.state.userOpinion, 'stance': CDW.state.userStance, 'origin': 'kiosk'};
-			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/add', payload, onDebateUploaded);
+			
+			var payload:Object;
+			
+			if (CDW.state.userIsResponding) {
+				// create and upload new comment
+				trace("Uploading comment");
+				payload = {'author': CDW.state.userID, 'question': CDW.state.activeQuestion, 'debate': CDW.state.activeDebate, 'comment': CDW.state.userOpinion, 'stance': CDW.state.userStance, 'origin': 'kiosk'};
+				Utilities.postRequest(CDW.settings.serverPath + '/api/comments/add', payload, onDebateUploaded);				
+			}
+			else {
+				// create and upload new debate
+				trace("Uploading new debate");				
+				payload = {'author': CDW.state.userID, 'question': CDW.state.activeQuestion, 'opinion': CDW.state.userOpinion, 'stance': CDW.state.userStance, 'origin': 'kiosk'};
+				Utilities.postRequest(CDW.settings.serverPath + '/api/debates/add', payload, onDebateUploaded);
+			}
 		}
 		
 		private function onDebateUploaded(r:Object):void {
-			trace('debate uploaded: ' + r);
 			
-			// set the current debate to the one that was just saved
-			CDW.state.activeDebate = r.toString();
+			if (CDW.state.userIsResponding) {
+				trace('comment uploaded: ' + r);
+			}
+			else {
+				trace('debate uploaded: ' + r);
+				// set the current debate to the one that was just saved				
+				CDW.state.activeDebate = r.toString();
+			}
 			
 			// grab the latest from the db
 			// this will go to home view
