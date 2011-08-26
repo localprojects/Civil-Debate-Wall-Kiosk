@@ -83,9 +83,9 @@ package net.localprojects {
 		private var debateOverlay:DebateOverlay;		
 
 		// multiples of these for the drag transitions
-		public var stance:Stance;
-		public var leftStance:Stance;
-		public var rightStance:Stance;		
+		public var stance:BlockLabel;
+		public var leftStance:BlockLabel;
+		public var rightStance:BlockLabel;		
 		public var nametag:BlockLabel;
 		public var leftNametag:BlockLabel;
 		public var rightNametag:BlockLabel;		
@@ -145,16 +145,22 @@ package net.localprojects {
 			addChild(question);
 			
 			// triple stances
-			stance = new Stance();
+			stance= new BlockLabel('', 92, 0xffffff, 0x000000);
+			stance.setPadding(24, 31, 23, 30);
+			stance.considerDescenders = false;
 			stance.setDefaultTweenIn(1, {x: 238, y: 280});
-			stance.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 280});						
-			addChild(stance);
+			stance.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 280});			
+			addChild(stance);			
 			
-			leftStance = new Stance();
+			leftStance= new BlockLabel('', 92, 0xffffff, 0x000000);
+			leftStance.setPadding(24, 31, 23, 30);
+			leftStance.considerDescenders = false;
 			leftStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x - stageWidth, y: stance.defaultTweenInVars.y});						
 			addChild(leftStance);
-			
-			rightStance = new Stance();
+
+			rightStance= new BlockLabel('', 92, 0xffffff, 0x000000);
+			rightStance.setPadding(24, 31, 23, 30);
+			leftStance.considerDescenders = false;			
 			rightStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x + stageWidth, y: stance.defaultTweenInVars.y});						
 			addChild(rightStance);			
 			
@@ -288,7 +294,7 @@ package net.localprojects {
 			addChild(skipTextButton);
 
 			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
-			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_MEDIUM);
+			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_REGULAR);
 			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
 			smsInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1096});
 			addChild(smsInstructions);
@@ -452,7 +458,7 @@ package net.localprojects {
 			portrait.setImage(CDW.database.getActivePortrait());
 			question.setText(CDW.database.getQuestionText(), true);
 			nametag.setText(CDW.database.getDebateAuthorName(CDW.state.activeDebate) + ' Says :', true);
-			stance.setStance(CDW.database.debates[CDW.state.activeDebate].stance, true);
+			stance.setText(CDW.state.activeStanceText, true);
 			opinion.setText(CDW.database.getOpinion(CDW.state.activeDebate));
 			bigButton.setText('ADD YOUR OPINION', true);
 			viewDebateButton.setLabel('"The reality is that a decision…" +8 other responses');
@@ -462,9 +468,10 @@ package net.localprojects {
 			if (CDW.state.previousDebate != null) {
 				// set the previous debate				
 				leftOpinion.setText(CDW.database.getOpinion(CDW.state.previousDebate));				
-				leftStance.setStance(CDW.database.getStance(CDW.state.previousDebate), true);
+				leftStance.setText(CDW.state.previousStanceText, true);
 				leftNametag.setText(CDW.database.getDebateAuthorName(CDW.state.previousDebate) + ' Says :', true);				
 				
+				leftStance.setBackgroundColor(CDW.state.previousStanceColorLight, true);
 				leftOpinion.setBackgroundColor(CDW.state.previousStanceColorLight, true);
 				leftNametag.setBackgroundColor(CDW.state.previousStanceColorDark, true);					
 			}
@@ -472,23 +479,25 @@ package net.localprojects {
 			if (CDW.state.nextDebate != null) {
 				// set the previous debate
 				rightOpinion.setText(CDW.database.debates[CDW.state.nextDebate].opinion);				
-				rightStance.setStance(CDW.database.getStance(CDW.state.nextDebate), true);
+				rightStance.setText(CDW.state.nextStanceText, true);
 				rightNametag.setText(CDW.database.getDebateAuthorName(CDW.state.nextDebate) + ' Says :', true);				
 				
+				rightStance.setBackgroundColor(CDW.state.nextStanceColorLight, true);				
 				rightOpinion.setBackgroundColor(CDW.state.nextStanceColorLight, true);
 				rightNametag.setBackgroundColor(CDW.state.nextStanceColorDark, true);
 			}
 			
 			// set the active debate
-			leftQuote.setColor(CDW.state.activeStanceColorLight);
-			rightQuote.setColor(CDW.state.activeStanceColorLight);				
+			stance.setBackgroundColor(CDW.state.activeStanceColorLight, true);
+			leftQuote.setColor(CDW.state.activeStanceColorLight, true);
+			rightQuote.setColor(CDW.state.activeStanceColorLight, true);				
 			nametag.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			debateButton.setBackgroundColor(CDW.state.activeStanceColorDark);
-			opinion.setBackgroundColor(CDW.state.activeStanceColorLight);
-			statsButton.setBackgroundColor(CDW.state.activeStanceColorDark);
-			likeButton.setBackgroundColor(CDW.state.activeStanceColorDark);
-			viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark);
-			flagButton.setBackgroundColor(CDW.state.activeStanceColorDark);					
+			debateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			opinion.setBackgroundColor(CDW.state.activeStanceColorLight, true);
+			statsButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			likeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			flagButton.setBackgroundColor(CDW.state.activeStanceColorDark), true;
 			
 			// behaviors
 			viewDebateButton.setOnClick(debateOverlayView);	
@@ -842,7 +851,8 @@ package net.localprojects {
 			
 			// mutations
 			countdownButton.progressRing.alpha = 0; // starts transparent			
-			stance.setStance(CDW.state.userStance);
+			stance.setText(CDW.state.userStanceText, true);
+			stance.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			countdownButton.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			countdownButton.setRingColor(CDW.state.userStanceColorLight);
 			countdownButton.setProgressColor(CDW.state.userStanceColorDark);				
@@ -1027,7 +1037,8 @@ package net.localprojects {
 			CDW.inactivityTimer.arm();
 			
 			// mutations
-			stance.setStance(CDW.state.userStance);
+			stance.setText(CDW.state.userStanceText);
+			stance.setBackgroundColor(CDW.state.userStanceColorLight);			
 			nameEntryInstructions.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			saveButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
 			keyboard.setColor(CDW.state.userStanceColorLight, true);
