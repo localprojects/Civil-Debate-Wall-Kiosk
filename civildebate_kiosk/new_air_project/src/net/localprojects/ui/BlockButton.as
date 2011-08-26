@@ -102,8 +102,8 @@ package net.localprojects.ui {
 			labelField.width = _buttonWidth;
 			labelField.autoSize = TextFieldAutoSize.CENTER;
 			labelField.text = text;
-			labelField.x = (_buttonWidth / 2) - (labelField.width / 2);
-			labelField.y = (_buttonHeight / 2) - (labelField.height / 2);			
+			labelField.x = (_buttonWidth / 2) - (labelField.width / 2) - (strokeWeight / 2);
+			labelField.y = (_buttonHeight / 2) - (labelField.height / 2) - (strokeWeight / 2);			
 			
 			return labelField;
 		}

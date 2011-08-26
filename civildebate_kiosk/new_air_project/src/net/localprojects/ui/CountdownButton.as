@@ -9,7 +9,7 @@ package net.localprojects.ui {
 	
 	import net.localprojects.*;
 	
-	public class Countdown extends ButtonBase {
+	public class CountdownButton extends ButtonBase {
 		
 		// time keeping
 		private var duration:Number;		
@@ -23,6 +23,7 @@ package net.localprojects.ui {
 		
 		// graphics
 		public var progressRing:Shape;
+		private var progressColor;
 		private var ringColor:uint;
 		private var icon:Bitmap;
 		
@@ -30,8 +31,11 @@ package net.localprojects.ui {
 		public var onCountdownFinish:Function;	
 		private var onAlmostFinish:Function;
 		
+		private var innerCircleRadius:Number;
+		private var outerRingRadius:Number;		
+		
 		// constructor
-		public function Countdown(timerDuration:Number) {
+		public function CountdownButton(timerDuration:Number) {
 			duration = timerDuration;
 			super();
 			init();
@@ -42,6 +46,10 @@ package net.localprojects.ui {
 		}
 
 		private function init():void {
+			//dimensions
+			innerCircleRadius = 62;
+			outerRingRadius = 74;
+			
 			// set up timer
 			timer = new Timer(1000, duration);
 			timer.addEventListener(TimerEvent.TIMER, onTimerSecond);
@@ -63,9 +71,6 @@ package net.localprojects.ui {
 			countTextWrapper = new Sprite();
 			countTextWrapper.x = width / 2;
 			countTextWrapper.y = height / 2;
-//			countTextWrapper.alpha = 0;
-//			countTextWrapper.scaleX = 0;
-//			countTextWrapper.scaleY = 0;			
 			
 			// set up the text
 			var textFormat:TextFormat = new TextFormat();
@@ -95,12 +100,18 @@ package net.localprojects.ui {
 			
 			// set up the icon
 			icon = Assets.getCameraIcon();
-			icon.x = -icon.width / 2;
+			icon.x = -icon.width / 2 - 3;
 			icon.y = (-icon.height / 2) - 3;			
 			
 			countTextWrapper.addChild(icon);
 				
 			addChild(countTextWrapper);
+			
+			
+//			this.graphics.beginFill(0xff000);
+//			this.graphics.drawRect(0, 0, width, height);
+//			this.graphics.endFill();			
+		
 		}		
 				
 		// run the timer
@@ -119,10 +130,8 @@ package net.localprojects.ui {
 		private function onTimerSecond(e:TimerEvent):void {
 			// shrink and fade the counter text, then call the rest of the animation in onSecondTweenComplete
 			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countTextWrapper, 180, true), scaleX: 0, scaleY: 0, onComplete: onSecondTweenComplete});
-			
-			
-			
 		}
+		
 		
 		private function onSecondTweenComplete():void {
 			// update the count, then bring back the text
@@ -137,6 +146,7 @@ package net.localprojects.ui {
 			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 1, scaleY: 1});			
 		}
 		
+		
 		private function onTimerComplete(e:TimerEvent):void {
 			// timer's complete, forward the event
 			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -148,6 +158,7 @@ package net.localprojects.ui {
 			onCountdownFinish(e);
 		}		
 		
+		
 		private function onFinalTweenComplete():void {
 			icon.visible = true;
 			countText.visible = false;
@@ -157,14 +168,13 @@ package net.localprojects.ui {
 			drawRing();			
 		}
 		
+		
 		// trace progress along the outer circle
 		private function onEnterFrame(e:Event):void {
 			progress = (getTimer() - startTime) / (duration * 1000);
-			
-			
-			
 			drawRing();
 		}
+		
 		
 		// helper for directional rotation via http://forums.greensock.com/viewtopic.php?f=1&t=3176
 		private function getRotationChange(mc:DisplayObject, newRotation:Number, clockwise:Boolean):String {
@@ -174,24 +184,25 @@ package net.localprojects.ui {
 			}
 			return String(dif);
 		}			
-		
+
+
 		// drawing
 		private function drawBackground():void {
 			background.graphics.clear();
 			background.graphics.beginFill(0xffffff);
-			background.graphics.drawCircle(0, 0, 58);
+			background.graphics.drawCircle(0, 0, innerCircleRadius);
 			background.graphics.endFill();
-			background.x = 58 + 12;
-			background.y = 58 + 12;
+			background.x = innerCircleRadius + (outerRingRadius - innerCircleRadius);
+			background.y = innerCircleRadius + (outerRingRadius - innerCircleRadius);
 		}
 		
 		private function drawRing():void {
 			var highlightDegrees:Number = progress * 360;
-			var radius:Number = 70;
+			var radius:Number = outerRingRadius;;
 			var lineWeight:Number = 6;
 			
 			progressRing.graphics.clear();
-			progressRing.graphics.lineStyle(lineWeight, 0xffffff);
+			progressRing.graphics.lineStyle(lineWeight, progressColor);
 			
 			progressRing.graphics.moveTo(0, -radius);
 			// TODO optimize by not clearing buffer? or taking bigger steps?
@@ -203,18 +214,27 @@ package net.localprojects.ui {
 			
 			progressRing.x = radius;
 			progressRing.y = radius;
+			
+
 		}		
 		
 		// mutations
 		override public function setBackgroundColor(c:uint, instant:Boolean = false):void {
 			_backgroundColor = c;
-			TweenMax.to(background, 0, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
+			
+			var duration:Number = instant ? 0 : 1; 
+			TweenMax.to(background, duration, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
 		}		
 		
 		public function setRingColor(c:uint):void {
 			ringColor = c;
 			drawRing();
 		}
+		
+		public function setProgressColor(c:uint):void {
+			progressColor = c;
+			drawRing();
+		}		
 		
 		// extra events		
 		public function setOnFinish(f:Function):void {
