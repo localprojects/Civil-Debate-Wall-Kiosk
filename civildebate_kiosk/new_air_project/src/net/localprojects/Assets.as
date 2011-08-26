@@ -97,7 +97,7 @@ package net.localprojects
 		public static const COLOR_YES_OVERLAY:uint = Utilities.color(53, 124, 146);		
 		
 		public static const COLOR_NO_LIGHT:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the design template!
-		public static const COLOR_NO_MEDIUM:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the designtemplate!
+		public static const COLOR_NO_MEDIUM:uint = Utilities.color(255, 70, 0); // TODO medium and light are identical in the designtemplate!
 		public static const COLOR_NO_DARK:uint = Utilities.color(255, 60, 0);
 		public static const COLOR_NO_OVERLAY:uint = Utilities.color(255, 60, 0);		
 		
