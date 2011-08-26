@@ -27,9 +27,8 @@ package net.localprojects.blocks {
 
 		protected var _leading:Number;
 		protected var background:Shape;
-		
-		
 
+		
 		public function BlockParagraph(textWidth:Number, backgroundColor:uint, text:String, textSize:Number, textColor:uint = 0xffffff, textFont:String = null, leading:Number = 3) {
 			if (textFont == null) {
 				_font = Assets.FONT_REGULAR;
@@ -92,6 +91,14 @@ package net.localprojects.blocks {
 
 			this.cacheAsBitmap = true;
 		}
+		
+		public function setPadding(top:Number, right:Number, bottom:Number, left:Number):void {
+			paddingTop = top;
+			paddingRight = right;
+			paddingBottom = bottom;
+			paddingLeft = left;
+			drawBackground();
+		}		
 		
 		protected function drawBackground():void {
 			background.graphics.clear();

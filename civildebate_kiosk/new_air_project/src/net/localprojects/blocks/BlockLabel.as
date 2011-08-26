@@ -20,8 +20,8 @@ package net.localprojects.blocks {
 		protected var _textColor:uint;		
 		protected var _backgroundColor:uint;
 		protected var _showBackground:Boolean;		
-		protected var _bold:Boolean;
-		protected var _font:String;		
+		protected var _italic:Boolean;
+		protected var _font:String;
 		
 		protected var textField:TextField;
 		protected var paddingTop:int;
@@ -33,9 +33,18 @@ package net.localprojects.blocks {
 		
 		
 		public function BlockLabel(text:String, textSize:Number, textColor:uint = 0xffffff, backgroundColor:uint = 0x000000, font:String = null, showBackground:Boolean = true) {
+			_italic = false;
+			
 			// Work around for intermittent 1047 error
 			if (font == null) {
 				font = Assets.FONT_REGULAR				
+			}
+			
+			// kludge to get italic fonts working without additional intervention
+			if (font.indexOf('Italic') > 0) {
+				_italic = true;
+				font = font.replace(' Italic', '');
+				trace('new font: ' + font);
 			}
 			
 			paddingTop = 28;
@@ -65,6 +74,7 @@ package net.localprojects.blocks {
 			textFormat.align = TextFormatAlign.LEFT;
 			textFormat.size = _textSize;
 			textFormat.letterSpacing = -1;
+			textFormat.italic = _italic;
 			//textFormat.leading = -0.25;
 			
 			textField = new TextField();

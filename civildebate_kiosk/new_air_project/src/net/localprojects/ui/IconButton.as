@@ -27,12 +27,21 @@ package net.localprojects.ui {
 				labelFieldA.x = _icon.x + _icon.width + iconPadding;			
 			}
 			else {
-				_icon.x = (buttonWidth - _icon.width) / 2;
-				_icon.y = (buttonHeight - _icon.height) / 2;						
+				_icon.x = ((buttonWidth - _icon.width) / 2) - (strokeWeight / 2);
+				_icon.y = ((buttonHeight - _icon.height) / 2) - (strokeWeight / 2);						
 			}
 			
 			addChild(_icon);
-		}		
+		}
+		
+		override public function setStrokeWeight(weight:Number):void {
+			super.setStrokeWeight(weight);
+			
+			if (labelFieldA.text.length == 0) {			
+				_icon.x = ((_buttonWidth - _icon.width) / 2) - (strokeWeight / 2);
+				_icon.y = ((_buttonHeight - _icon.height) / 2) - (strokeWeight / 2);
+			}
+		}
 						
 		
 	}

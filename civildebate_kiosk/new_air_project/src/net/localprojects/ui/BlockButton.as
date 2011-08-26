@@ -1,4 +1,5 @@
 package net.localprojects.ui {
+	import com.bit101.components.Text;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
@@ -6,6 +7,8 @@ package net.localprojects.ui {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.text.*;
+	
+	import flashx.textLayout.elements.TextRange;
 	
 	import net.localprojects.Assets;
 	
@@ -79,6 +82,11 @@ package net.localprojects.ui {
 			outline.graphics.endFill();
 		}		
 		
+		public function setStrokeWeight(weight:Number):void {
+			strokeWeight = weight;
+			draw();
+		}
+		
 		
 		private var textFormat:TextFormat;
 		private var labelField:TextField;
@@ -108,6 +116,15 @@ package net.localprojects.ui {
 			return labelField;
 		}
 		
+		public function getLabelTextWidth():Number {
+			var metrics:TextLineMetrics = labelFieldA.getLineMetrics(0);
+			return metrics.width;
+		}
+		
+		public function getLabelText():String {
+			return _labelText;
+		}		
+		
 		public function setLetterSpacing(amount:Number):void {
 			_letterSpacing = amount;
 			removeChild(labelFieldA);
@@ -125,16 +142,21 @@ package net.localprojects.ui {
 		}
 	
 		
-		override public function setLabel(text:String):void {
+		override public function setLabel(text:String, instant:Boolean = false):void {
 			_labelText = text;
 			
 			labelFieldB = labelFieldA;
 			labelFieldA = generateLabel(_labelText);
-			labelFieldA.alpha = 0;
 			addChild(labelFieldA);
-			
-			TweenMax.to(labelFieldB, 0.2, {alpha: 0, ease: Quart.easeIn});
-			TweenMax.to(labelFieldA, 0.2, {alpha: 1, ease: Quart.easeOut});
+
+			if (instant) {
+				labelFieldB.alpha = 0;
+			}
+			else {			
+				labelFieldA.alpha = 0;			
+				TweenMax.to(labelFieldB, 0.2, {alpha: 0, ease: Quart.easeIn});
+				TweenMax.to(labelFieldA, 0.2, {alpha: 1, ease: Quart.easeOut});
+			}
 		}
 		
 		
