@@ -14,7 +14,6 @@ package net.localprojects.elements
 		
 		public function init():void {
 			this.addChild(Assets.commentsPlaceholder);
-
 		}
 		
 	}

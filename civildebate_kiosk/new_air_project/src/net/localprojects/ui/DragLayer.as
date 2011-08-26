@@ -139,53 +139,55 @@ package net.localprojects.ui {
 		}
 		
 		private function onMouseUp(e:MouseEvent):void {
-			mouseDown = false;
-			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			
-			var vxAverage:Number = Utilities.averageArray(vxSamples);
-			
-			trace('Mouse up. Velocity average: ' + vxAverage);
-			
-			
-			// see if we need to transition
-			if ((CDW.state.nextDebate != null) &&(vxAverage < -vxThreshold) || (leftEdge < (stageWidth / -2))) {
-				trace('Transition to next.');
-				CDW.state.setActiveDebate(CDW.state.nextDebate);
-				CDW.view.leftOpinion.x += stageWidth;
-				CDW.view.opinion.x += stageWidth;
-				CDW.view.rightOpinion.x += stageWidth;
+			if (mouseDown) {
+				mouseDown = false;
+				this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 				
-				CDW.view.leftStance.x += stageWidth;
-				CDW.view.rightStance.x += stageWidth;
-				CDW.view.stance.x += stageWidth;
+				var vxAverage:Number = Utilities.averageArray(vxSamples);
 				
-				CDW.view.leftNametag.x += stageWidth;
-				CDW.view.rightNametag.x += stageWidth;
-				CDW.view.nametag.x += stageWidth;				
+				trace('Mouse up. Velocity average: ' + vxAverage);
 				
 				
+				// see if we need to transition
+				if ((CDW.state.nextDebate != null) &&(vxAverage < -vxThreshold) || (leftEdge < (stageWidth / -2))) {
+					trace('Transition to next.');
+					CDW.state.setActiveDebate(CDW.state.nextDebate);
+					CDW.view.leftOpinion.x += stageWidth;
+					CDW.view.opinion.x += stageWidth;
+					CDW.view.rightOpinion.x += stageWidth;
+					
+					CDW.view.leftStance.x += stageWidth;
+					CDW.view.rightStance.x += stageWidth;
+					CDW.view.stance.x += stageWidth;
+					
+					CDW.view.leftNametag.x += stageWidth;
+					CDW.view.rightNametag.x += stageWidth;
+					CDW.view.nametag.x += stageWidth;				
+					
+					
+				}
+				if ((CDW.state.previousDebate != null) && (vxAverage > vxThreshold) || (leftEdge > (stageWidth / 2))) {
+					trace('Transition to previous.');
+					CDW.state.setActiveDebate(CDW.state.previousDebate);
+					CDW.view.leftOpinion.x -= stageWidth;
+					CDW.view.opinion.x -= stageWidth;
+					CDW.view.rightOpinion.x -= stageWidth;
+					
+					CDW.view.leftStance.x -= stageWidth;
+					CDW.view.rightStance.x -= stageWidth;
+					CDW.view.stance.x -= stageWidth;
+					
+					CDW.view.leftNametag.x -= stageWidth;
+					CDW.view.rightNametag.x -= stageWidth;
+					CDW.view.nametag.x -= stageWidth;				
+				}
+				else {
+					// spring back to current
+				}
+				
+				// put everything back into place
+				CDW.view.homeView();
 			}
-			if ((CDW.state.previousDebate != null) && (vxAverage > vxThreshold) || (leftEdge > (stageWidth / 2))) {
-				trace('Transition to previous.');
-				CDW.state.setActiveDebate(CDW.state.previousDebate);
-				CDW.view.leftOpinion.x -= stageWidth;
-				CDW.view.opinion.x -= stageWidth;
-				CDW.view.rightOpinion.x -= stageWidth;
-				
-				CDW.view.leftStance.x -= stageWidth;
-				CDW.view.rightStance.x -= stageWidth;
-				CDW.view.stance.x -= stageWidth;
-				
-				CDW.view.leftNametag.x -= stageWidth;
-				CDW.view.rightNametag.x -= stageWidth;
-				CDW.view.nametag.x -= stageWidth;				
-			}
-			else {
-				// spring back to current
-			}
-			
-			// put everything back into place
-			CDW.view.homeView();
 		}		
 	}
 }

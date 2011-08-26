@@ -25,8 +25,6 @@ package net.localprojects {
 
 			// Set the timer
 			timer = new Timer(seconds * 1000);
-			timer.addEventListener(TimerEvent.TIMER, onInactivity);
-			//timer.start();
 		}
 		
 		
@@ -42,11 +40,12 @@ package net.localprojects {
 
 		public function arm():void {
 			timer.reset();
-			timer.start();			
+			timer.start();
+			timer.addEventListener(TimerEvent.TIMER, onInactivity);			
 		}		
 		
 		public function disarm():void {
-			timer.stop();
+			timer.removeEventListener(TimerEvent.TIMER, onInactivity);
 		}
 		
 	}

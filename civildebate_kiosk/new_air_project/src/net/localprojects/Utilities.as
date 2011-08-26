@@ -179,9 +179,9 @@ package net.localprojects {
 			return (haystack.indexOf(needle) > -1);
 		}
 		
-		public static function centerWithin(a:DisplayObject, b:DisplayObject):void {
-			a.x = (b.width / 2) - (a.width / 2);
-			a.y = (b.height / 2) - (a.height / 2);			
+		public static function centerWithin(containee:DisplayObject, container:DisplayObject):void {
+			containee.x = (container.width / 2) - (containee.width / 2);
+			containee.y = (container.height / 2) - (containee.height / 2);			
 		}
 		
 		// returns a point at the center of a rectangle
@@ -210,7 +210,18 @@ package net.localprojects {
 		
 		
 		// adapted from http://stackoverflow.com/questions/5350907/merging-objects-in-as3
-		// if both objects have the same field, object 2 overrides object 1 
+		// if both objects have the same field, object 2 overrides object 1
+		
+		
+		public static function cloneObject(o1:Object):Object {
+			var bytes:ByteArray = new ByteArray( );
+			bytes.writeObject(o1);
+			bytes.position = 0;
+			return bytes.readObject( );
+		}
+			
+			
+		
 		public static function mergeObjects(o1:Object, o2:Object):Object {
 			var o:Object = {};
 			
@@ -286,6 +297,12 @@ package net.localprojects {
 		
 		import flash.net.*;
 		import com.adobe.serialization.json.*;		
+		
+		
+		public static function traceObject(o:Object):void {
+			trace(JSON.encode(o));
+		}
+																			 
 		
 		public static function formatPhoneNumber(s:String):String {
 			// remove country code

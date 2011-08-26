@@ -91,7 +91,7 @@ package net.localprojects.ui {
 			leftDot = new Shape();
 			rightDot = new Shape();			
 
-			setDotColor(Assets.COLOR_INSTRUCTION_LIGHT);
+			setDotColor(Assets.COLOR_INSTRUCTION_50);
 			
 			leftDot.y = 70;
 			leftDot.x = 0;
@@ -141,7 +141,7 @@ package net.localprojects.ui {
 				// desaturate
 				TweenMax.to(roundedPortrait, 1, {colorMatrixFilter:{saturation: 0}, ease: Quart.easeInOut});
 				TweenMax.to(textBackground, 0.5, {y: 85, alpha: 1, ease: Quart.easeOut});				
-				setDotColor(Assets.COLOR_INSTRUCTION_LIGHT);				
+				setDotColor(Assets.COLOR_INSTRUCTION_50);				
 			}
 		}
 		

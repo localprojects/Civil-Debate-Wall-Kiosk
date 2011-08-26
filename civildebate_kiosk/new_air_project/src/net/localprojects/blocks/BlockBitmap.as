@@ -15,7 +15,7 @@ package net.localprojects.blocks {
 		
 		private function init():void {
 			addChild(b);
-			mouseEnabled = false; // let clicks through
+			//mouseEnabled = false; // let clicks through
 		}
 		 
 	}
