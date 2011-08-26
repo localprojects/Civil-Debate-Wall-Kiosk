@@ -64,7 +64,7 @@ package net.localprojects {
 		private var characterLimit:BlockLabel;
 		private var photoBoothNag:BlockLabel;
 		private var photoBoothInstructions:BlockButton;
-		private var countdownButton:Countdown;		
+		private var countdownButton:CountdownButton;		
 		private var keyboard:Keyboard;		
 		
 		// mutable, dynamic content (e.g. text changes based on database)
@@ -129,25 +129,25 @@ package net.localprojects {
 			addChild(cameraOverlay);
 			
 			header = new Header();
-			header.setDefaultTweenIn(1, {x: 'center', y: 30});
-			header.setDefaultTweenOut(1, {x: 'center', y: 'offTopEdge'});
+			header.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 30});
+			header.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});
 			addChild(header);
 			
 			divider = new BlockBitmap(Assets.divider);
-			divider.setDefaultTweenIn(1, {x: 'center', y: 250});
-			divider.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 250});			
+			divider.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 250});
+			divider.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 250});			
 			addChild(divider);
 			
 			question = new Question();
-			question.setDefaultTweenIn(1, {x: 'center', y: 123});
-			question.setDefaultTweenOut(1, {x: 'offLeftEdge'});
+			question.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 123});
+			question.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});
 			question.setText(CDW.database.getQuestionText());
 			addChild(question);
 			
 			// triple stances
 			stance = new Stance();
 			stance.setDefaultTweenIn(1, {x: 238, y: 280});
-			stance.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 280});						
+			stance.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 280});						
 			addChild(stance);
 			
 			leftStance = new Stance();
@@ -162,7 +162,7 @@ package net.localprojects {
 			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
 			nametag.setPadding(33, 38, 24, 38);
 			nametag.setDefaultTweenIn(1, {x: 238, y: 410});
-			nametag.setDefaultTweenOut(1, {x: 'offRightEdge', y: 410});
+			nametag.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 410});
 			addChild(nametag);
 			
 			leftNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
@@ -178,25 +178,25 @@ package net.localprojects {
 			byline = new BlockLabel('Byline', 22, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
 			byline.setPadding(18, 32, 16, 32);
 			byline.setDefaultTweenIn(1, {x: 586, y: 694});
-			byline.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 694});			
+			byline.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 694});			
 			addChild(byline);
 			
 			leftQuote = new QuotationMark();
 			leftQuote.setDefaultTweenIn(1, {x: 114, y: 545});
-			leftQuote.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 545});	
+			leftQuote.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 545});	
 			leftQuote.setStyle(QuotationMark.OPENING);
 			addChild(leftQuote);
 			
 			rightQuote = new QuotationMark();
 			rightQuote.setDefaultTweenIn(1, {x: 660, y: 1639});
-			rightQuote.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1639});				
+			rightQuote.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1639});				
 			rightQuote.setStyle(QuotationMark.CLOSING);
 			addChild(rightQuote);
 			
 			// triple opinions
 			opinion = new BlockParagraph(915, 0x000000, '', 42);	
 			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});
-			opinion.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1095});
+			opinion.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1095});
 			addChild(opinion);
 			
 			rightOpinion = new BlockParagraph(915, 0x000000, '', 42);
@@ -217,7 +217,7 @@ package net.localprojects {
 			
 			editOpinion = new BlockInputParagraph(915, 0x000000, '', 42);
 			editOpinion.setDefaultTweenIn(1, {x: 100, y: 1095});
-			editOpinion.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1095});			
+			editOpinion.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1095});			
 			addChild(editOpinion);
 			
 			bigButton = new BigButton('ADD YOUR OPINION');
@@ -227,156 +227,156 @@ package net.localprojects {
 			
 			statsButton = new IconButton(111, 55, 0x000000, 'Stats', 20, 0xffffff, null, Assets.statsIcon);
 			statsButton.setDefaultTweenIn(1, {x: 104, y: 1379});
-			statsButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1379});
+			statsButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1379});
 			addChild(statsButton);
 			
 			likeButton = new CounterButton(111, 55, 0x000000, 'Like', 20);
 			likeButton.setTimeout(5000);
 			likeButton.setDefaultTweenIn(1, {x: 238, y: 1379});
-			likeButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1379});			
+			likeButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1379});			
 			addChild(likeButton);
 			
 			viewDebateButton = new BlockButton(517, 55, 0x000000, '', 20);
 			viewDebateButton.setDefaultTweenIn(1, {x: 373, y: 1379});
-			viewDebateButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1379});			
+			viewDebateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1379});			
 			addChild(viewDebateButton);
 			
 			flagButton = new IconButton(59, 55, 0x000000, '', 20, 0xffffff, null, Assets.flagIcon);
 			flagButton.setTimeout(5000);			
 			flagButton.setDefaultTweenIn(1, {x: 914, y: 1379});
-			flagButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1379});
+			flagButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1379});
 			addChild(flagButton);			
 			
 			debateButton = new BalloonButton(145, 130, 0x000000, 'LET\u0027S\nDEBATE !', 20);
 			debateButton.setDefaultTweenIn(1, {x: 828, y: 901, scaleX: 1, scaleY: 1});
-			debateButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 901, scaleX: 1, scaleY: 1});
+			debateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 901, scaleX: 1, scaleY: 1});
 			addChild(debateButton);
 			
 			debateOverlay = new DebateOverlay();
 			debateOverlay.setDefaultTweenIn(1, {x: 30, y: 813});
-			debateOverlay.setDefaultTweenOut(1, {x: 30, y: 'offBottomEdge'});			
+			debateOverlay.setDefaultTweenOut(1, {x: 30, y: BlockBase.OFF_BOTTOM_EDGE});			
 			addChild(debateOverlay);			
 			
 			debatePicker = new DebatePicker();
 			debatePicker.setDefaultTweenIn(1, {x: 0, y: 1748});
-			debatePicker.setDefaultTweenOut(1, {x: 0, y: 'offBottomEdge'});			
+			debatePicker.setDefaultTweenOut(1, {x: 0, y: BlockBase.OFF_BOTTOM_EDGE});			
 			debatePicker.update();
 			addChild(debatePicker);
 			
 			answerPrompt = new BlockLabel('Your Answer / Please Select One :', 19, 0xffffff, Assets.COLOR_INSTRUCTION_DARK, Assets.FONT_REGULAR, true);
 			answerPrompt.setPadding(22, 32, 24, 32);
 			answerPrompt.setDefaultTweenIn(1, {x: 650, y: 1245});
-			answerPrompt.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1245});					
+			answerPrompt.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1245});					
 			addChild(answerPrompt);
 			
 			yesButton = new BlockButton(215, 100, Assets.COLOR_YES_LIGHT, 'YES!', 80);
 			yesButton.setLetterSpacing(-3);
 			yesButton.setDefaultTweenIn(1, {x: 447, y: 1340});
-			yesButton.setDefaultTweenOut(1, {x: 447, y: 'offBottomEdge'});
+			yesButton.setDefaultTweenOut(1, {x: 447, y: BlockBase.OFF_BOTTOM_EDGE});
 			addChild(yesButton);
 			
 			noButton = new BlockButton(185, 100, Assets.COLOR_NO_LIGHT, 'NO!', 80);			
 			noButton.setLetterSpacing(-5);
 			noButton.setDefaultTweenIn(1.2, {x: 677, y: 1340});
-			noButton.setDefaultTweenOut(1.2, {x: 677, y: 'offBottomEdge'});
+			noButton.setDefaultTweenOut(1.2, {x: 677, y: BlockBase.OFF_BOTTOM_EDGE});
 			addChild(noButton);
 			
 			// Temp debug button so we don't have to SMS every time
 			skipTextButton = new BlockButton(200, 100, Assets.COLOR_INSTRUCTION_DARK, 'SIMULATE SMS', 20);
-			skipTextButton.setDefaultTweenIn(1, {x: 'center', y: 500});
-			skipTextButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 500});
+			skipTextButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 500});
+			skipTextButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 500});
 			addChild(skipTextButton);
 
 			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
 			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_LIGHT);
 			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
-			smsInstructions.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1096});
+			smsInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1096});
 			addChild(smsInstructions);
 			
 			var smsDisclaimerText:String = 'You will receive an SMS notifying you of any future opponents \nwho would like to enter into a debate with you based on your opinion. \nYou can opt out at any time by replying STOP.';
 			smsDisclaimer = new BlockParagraph(872, Assets.COLOR_INSTRUCTION_75, smsDisclaimerText, 25);
 			smsDisclaimer.textField.setTextFormat(new TextFormat(null, null, 0xc7c8ca), smsDisclaimerText.length -45, smsDisclaimerText.length);
 			smsDisclaimer.setDefaultTweenIn(1, {x: 101, y: 1625});
-			smsDisclaimer.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1625});
+			smsDisclaimer.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1625});
 			addChild(smsDisclaimer);
 			
 			webPlug = new BlockLabel('Check out your photo and opinion at civildebatewall.com', 25, 0xffffff, Assets.COLOR_INSTRUCTION_75);
 			webPlug.considerDescenders = false;
 			webPlug.setPadding(25, 30, 25, 33);
 			webPlug.setDefaultTweenIn(1, {x: 101, y: 1772});
-			webPlug.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1772});
+			webPlug.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1772});
 			addChild(webPlug);			
 			
 			exitButton = new BlockButton(120, 60, 0x000000, 'EXIT', 25, 0xffffff, Assets.FONT_HEAVY);
 			exitButton.setDefaultTweenIn(1, {x: 101, y: 1003});
-			exitButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1003});			
+			exitButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1003});			
 			addChild(exitButton);
 			
 			characterLimit = new BlockLabel('Use No More than ' + CDW.settings.characterLimit + ' characters', 18, 0xffffff, 0x000000, Assets.FONT_BOLD);
 			characterLimit.setPadding(22, 34, 22, 32);
 			characterLimit.setDefaultTweenIn(1, {x: 683, y: 1246});
-			characterLimit.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1246});
+			characterLimit.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1246});
 			addChild(characterLimit);
 			
 			photoBoothNag = new BlockLabel('Please look into the Camera!', 33, 0xffffff, 0x000000, Assets.FONT_BOLD);
-			photoBoothNag.setDefaultTweenIn(1.5, {x: 'center', y: 176}); // elastic easing was over-the-top
-			photoBoothNag.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 176});
+			photoBoothNag.setDefaultTweenIn(1.5, {x: BlockBase.CENTER, y: 176}); // elastic easing was over-the-top
+			photoBoothNag.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 176});
 			addChild(photoBoothNag);			
 			
 			photoBoothInstructions = new BlockButton(382, 73, 0x000000, 'Touch to Countdown', 33);
-			photoBoothInstructions.setDefaultTweenIn(1, {x: 'center', y: 1628});
-			photoBoothInstructions.setDefaultTweenOut(1, {x: 'center', y: 'offBottomEdge'});
+			photoBoothInstructions.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1628});
+			photoBoothInstructions.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_BOTTOM_EDGE});
 			addChild(photoBoothInstructions);
 			
-			countdownButton = new Countdown(5);
-			countdownButton.setDefaultTweenIn(1, {x: 'center', y: 1406});
-			countdownButton.setDefaultTweenOut(1, {x: 'center', y: stageHeight});
+			countdownButton = new CountdownButton(5);
+			countdownButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1438, scaleX: 1, scaleY: 1});
+			countdownButton.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: stageHeight});
 			addChild(countdownButton);
 			
 			nameEntryInstructions = new BlockLabel('TYPE IN YOUR NAME', 20)
 			nameEntryInstructions.setDefaultTweenIn(1, {x: 101, y: 1003});
-			nameEntryInstructions.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1003});
+			nameEntryInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1003});
 			addChild(nameEntryInstructions);
 			
 			nameEntryField = new BlockInputLabel('', 30, 0xffffff, 0x000000, Assets.FONT_REGULAR, true);
 			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1096});
-			nameEntryField.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1096});
+			nameEntryField.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1096});
 			addChild(nameEntryField);			
 			
 			saveButton = new BlockButton(335, 63, 0x000000, 'SAVE AND CONTINUE', 20);			
 			saveButton.setDefaultTweenIn(1, {x: 308, y: 1200});
-			saveButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1200});
+			saveButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1200});
 			addChild(saveButton);
 			
 			retakePhotoButton = new BlockButton(270, 63, 0x000000, 'RETAKE PHOTO', 20);
 			retakePhotoButton.setDefaultTweenIn(1, {x: 101, y: 1003});
-			retakePhotoButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1003});
+			retakePhotoButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1003});
 			addChild(retakePhotoButton);
 			
 			editTextButton = new BlockButton(200, 63, 0x000000, 'EDIT TEXT', 20);
 			editTextButton.setDefaultTweenIn(1, {x: 386, y: 1003});
-			editTextButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1003});
+			editTextButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1003});
 			addChild(editTextButton);
 			
 			cancelButton = new BlockButton(171, 63, 0x000000, 'CANCEL', 20);
 			cancelButton.setDefaultTweenIn(1, {x: 789, y: 1376});
-			cancelButton.setDefaultTweenOut(1, {x: 'offRightEdge', y: 1376});
+			cancelButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1376});
 			addChild(cancelButton);			
 			
 			editTextInstructions = new BlockLabel('EDITING TEXT...', 20);
 			editTextInstructions.setDefaultTweenIn(1, {x: 386, y: 1003});
-			editTextInstructions.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1003});
+			editTextInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1003});
 			addChild(editTextInstructions);			
 			
 			keyboard = new Keyboard();
 			keyboard.setDefaultTweenIn(1, {x: 0, y: stageHeight - keyboard.height});
-			keyboard.setDefaultTweenOut(1, {x: 0, y: 'offBottomEdge'});
+			keyboard.setDefaultTweenOut(1, {x: 0, y: BlockBase.OFF_BOTTOM_EDGE});
 			addChild(keyboard);
 			
 			// TODO update from database
 			stats = new StatsOverlay();
-			stats.setDefaultTweenIn(1, {x: 'center', y: 264});
-			stats.setDefaultTweenOut(1, {x: 'center', y: 'offBottomEdge'});
+			stats.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 264});
+			stats.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_BOTTOM_EDGE});
 			addChild(stats);
 			
 			inactivityOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
@@ -385,19 +385,19 @@ package net.localprojects {
 			addChild(inactivityOverlay);
 			
 			inactivityTimerBar = new ProgressBar(735, 2, 20);		
-			inactivityTimerBar.setDefaultTweenIn(1, {x: 'center', y: 1002});
-			inactivityTimerBar.setDefaultTweenOut(1, {x: 'center', y: 'offTopEdge'});			
+			inactivityTimerBar.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1002});
+			inactivityTimerBar.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});			
 			addChild(inactivityTimerBar);
 			
 			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_INSTRUCTION_75, Assets.FONT_HEAVY);
-			inactivityInstructions.setDefaultTweenIn(1, {x: 'center', y: 1018});
-			inactivityInstructions.setDefaultTweenOut(1, {x: 'center', y: 'offTopEdge'});			
+			inactivityInstructions.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1018});
+			inactivityInstructions.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});			
 			addChild(inactivityInstructions);
 			
 			continueButton = new BlockButton(735, 120, Assets.COLOR_INSTRUCTION_50, 'YES!', 92);
 			continueButton.setDownColor(Assets.COLOR_INSTRUCTION_75);
-			continueButton.setDefaultTweenIn(1, {x: 'center', y: 1098});
-			continueButton.setDefaultTweenOut(1, {x: 'offLeftEdge', y: 1098});					
+			continueButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1098});
+			continueButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1098});					
 			addChild(continueButton);
 			
 			blackOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
@@ -458,19 +458,13 @@ package net.localprojects {
 			CDW.state.clearUser(); // Reset user info
 			
 			if (CDW.state.previousDebate != null) {
-				// set the previous debate
+				// set the previous debate				
 				leftOpinion.setText(CDW.database.getOpinion(CDW.state.previousDebate));				
 				leftStance.setStance(CDW.database.getStance(CDW.state.previousDebate), true);
 				leftNametag.setText(CDW.database.getDebateAuthorName(CDW.state.previousDebate) + ' Says :', true);				
 				
-				if (CDW.database.getStance(CDW.state.previousDebate) == 'yes') {
-					leftOpinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);
-					leftNametag.setBackgroundColor(Assets.COLOR_YES_DARK, true);					
-				}
-				else {
-					leftOpinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);				
-					leftNametag.setBackgroundColor(Assets.COLOR_NO_DARK, true);					
-				}
+				leftOpinion.setBackgroundColor(CDW.state.previousStanceColorLight, true);
+				leftNametag.setBackgroundColor(CDW.state.previousStanceColorDark, true);					
 			}
 			
 			if (CDW.state.nextDebate != null) {
@@ -479,51 +473,20 @@ package net.localprojects {
 				rightStance.setStance(CDW.database.getStance(CDW.state.nextDebate), true);
 				rightNametag.setText(CDW.database.getDebateAuthorName(CDW.state.nextDebate) + ' Says :', true);				
 				
-				
-				if (CDW.database.getStance(CDW.state.nextDebate) == 'yes') {
-					rightOpinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);
-					rightNametag.setBackgroundColor(Assets.COLOR_YES_DARK, true);
-				}
-				else {
-					rightOpinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);
-					rightNametag.setBackgroundColor(Assets.COLOR_NO_DARK, true);					
-				}
+				rightOpinion.setBackgroundColor(CDW.state.nextStanceColorLight, true);
+				rightNametag.setBackgroundColor(CDW.state.nextStanceColorDark, true);
 			}
 			
-		
-			if (CDW.database.debates[CDW.state.activeDebate].stance == 'yes') {
-				leftQuote.setColor(Assets.COLOR_YES_LIGHT);
-				rightQuote.setColor(Assets.COLOR_YES_LIGHT);				
-				nametag.setBackgroundColor(Assets.COLOR_YES_DARK, true);
-				debateButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				opinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);
-				statsButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				likeButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				viewDebateButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				flagButton.setBackgroundColor(Assets.COLOR_YES_DARK);					
-			}
-			else {
-				leftQuote.setColor(Assets.COLOR_NO_LIGHT);
-				rightQuote.setColor(Assets.COLOR_NO_LIGHT);				
-				nametag.setBackgroundColor(Assets.COLOR_NO_DARK, true);
-				debateButton.setBackgroundColor(Assets.COLOR_NO_DARK);
-				opinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);
-				statsButton.setBackgroundColor(Assets.COLOR_NO_DARK);
-				likeButton.setBackgroundColor(Assets.COLOR_NO_DARK);
-				viewDebateButton.setBackgroundColor(Assets.COLOR_NO_DARK);
-				flagButton.setBackgroundColor(Assets.COLOR_NO_DARK);			
-			}			
-			
-			
-			if (CDW.state.nextDebate != null) {
-				if (CDW.database.debates[CDW.state.nextDebate].stance == 'yes') {
-					//rightOpinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);		
-				}
-				else {
-					//rightOpinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);					
-				}
-			}
-			
+			// set the active debate
+			leftQuote.setColor(CDW.state.activeStanceColorLight);
+			rightQuote.setColor(CDW.state.activeStanceColorLight);				
+			nametag.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			debateButton.setBackgroundColor(CDW.state.activeStanceColorDark);
+			opinion.setBackgroundColor(CDW.state.activeStanceColorLight);
+			statsButton.setBackgroundColor(CDW.state.activeStanceColorDark);
+			likeButton.setBackgroundColor(CDW.state.activeStanceColorDark);
+			viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark);
+			flagButton.setBackgroundColor(CDW.state.activeStanceColorDark);					
 			
 			// behaviors
 			viewDebateButton.setOnClick(debateOverlayView);	
@@ -632,13 +595,13 @@ package net.localprojects {
 		}
 		
 		private function onYesButton(e:MouseEvent):void {
-			CDW.state.userStance = 'yes';
-			textPromptView();
+			CDW.state.setStance('yes');
+			smsPromptView();
 		}
 		
 		private function onNoButton(e:MouseEvent):void {
-			CDW.state.userStance = 'no';
-			textPromptView();			
+			CDW.state.setStance('no');
+			smsPromptView();			
 		}
 		
 		
@@ -702,9 +665,10 @@ package net.localprojects {
 			divider.tweenIn();
 			question.tweenIn();
 			bigButton.tweenIn();
-			answerPrompt.tweenIn()	;
+			answerPrompt.tweenIn();
 			yesButton.tweenIn();
 			noButton.tweenIn();
+			
 			
 			tweenOutInactive();	// TODO disable behaviors as well? or let them ride? implications for mid-tween events
 			
@@ -717,23 +681,22 @@ package net.localprojects {
 		
 		private var smsCheckTimer:Timer;
 		
-		public function textPromptView(...args):void {
+		public function smsPromptView(...args):void {
 			markAllInactive();
 			
 			CDW.inactivityTimer.arm();
 			
 			// mutations
+			smsInstructions.setBackgroundColor(CDW.state.userStanceColorLight, true);
+			characterLimit.setBackgroundColor(CDW.state.userStanceColorMedium, true);
+			exitButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
+			
+			
 			if (CDW.state.userStance == 'yes') {
-				smsInstructions.setBackgroundColor(Assets.COLOR_YES_LIGHT);
-				characterLimit.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
-				exitButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				noButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50);
+				noButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50, true);
 			}
-			else {
-				smsInstructions.setBackgroundColor(Assets.COLOR_NO_LIGHT);
-				characterLimit.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
-				exitButton.setBackgroundColor(Assets.COLOR_NO_DARK);				
-				yesButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50);
+			else {	
+				yesButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50, true);
 			}
 			
 			// behaviors
@@ -763,6 +726,13 @@ package net.localprojects {
 			smsDisclaimer.tweenIn();
 			webPlug.tweenIn();
 			skipTextButton.tweenIn(); // TEMP for debug, TODO put on setting switch
+			
+			
+			
+			
+			// push the character limit down
+			answerPrompt.tweenOut(-1, {x: answerPrompt.x, y: BlockBase.OFF_BOTTOM_EDGE});
+			
 			
 			tweenOutInactive();
 			
@@ -870,23 +840,14 @@ package net.localprojects {
 			CDW.inactivityTimer.arm();
 			
 			// mutations
-			countdownButton.progressRing.alpha = 0;			
+			countdownButton.progressRing.alpha = 0; // starts transparent			
 			stance.setStance(CDW.state.userStance);
-			
-			if (CDW.state.userStance == 'yes') {
-				countdownButton.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
-				countdownButton.setRingColor(Assets.COLOR_YES_LIGHT);
-				photoBoothInstructions.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
-				photoBoothNag.setBackgroundColor(Assets.COLOR_YES_MEDIUM);
-				cameraOverlay.setColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_YES_OVERLAY);
-			}
-			else {
-				countdownButton.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
-				countdownButton.setRingColor(Assets.COLOR_NO_LIGHT);
-				photoBoothInstructions.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
-				photoBoothNag.setBackgroundColor(Assets.COLOR_NO_MEDIUM);				
-				cameraOverlay.setColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_OVERLAY);
-			}
+			countdownButton.setBackgroundColor(CDW.state.userStanceColorLight, true);
+			countdownButton.setRingColor(CDW.state.userStanceColorLight);
+			countdownButton.setProgressColor(CDW.state.userStanceColorDark);				
+			photoBoothInstructions.setBackgroundColor(CDW.state.userStanceColorMedium, true);
+			photoBoothNag.setBackgroundColor(CDW.state.userStanceColorMedium, true);
+			cameraOverlay.setColor(CDW.state.userStanceColorLight, CDW.state.userStanceColorOverlay);
 			
 			// behaviors
 			countdownButton.setOnClick(onCameraClick);
@@ -911,7 +872,11 @@ package net.localprojects {
 			if (!countdownButton.isCountingDown()) {
 				header.tweenOut();
 				photoBoothInstructions.tweenOut();
-				countdownButton.tween(1, {y: 30, ease: Quart.easeInOut, onComplete: onCountdownPositioned}); // move it up
+				
+				var scaleFactor:Number = 103 / 124;
+				
+				countdownButton.setBackgroundColor(CDW.state.userStanceColorMedium);
+				countdownButton.tween(1, {x: countdownButton.x + 15, y: 30, scaleX: scaleFactor, scaleY: scaleFactor, ease: Quart.easeInOut, onComplete: onCountdownPositioned}); // move it up
 				TweenMax.to(countdownButton.progressRing, 1, {alpha: 1, ease: Quart.easeInOut});
 				photoBoothNag.tweenIn();
 			}
@@ -1062,19 +1027,10 @@ package net.localprojects {
 			
 			// mutations
 			stance.setStance(CDW.state.userStance);
-			if (CDW.state.userStance == 'yes') {
-				nameEntryInstructions.setBackgroundColor(Assets.COLOR_YES_LIGHT, true);
-				saveButton.setBackgroundColor(Assets.COLOR_YES_DARK, true);
-				keyboard.setColor(Assets.COLOR_YES_LIGHT, true);
-				nameEntryField.setBackgroundColor(Assets.COLOR_YES_LIGHT, true);
-			}
-			else {
-				nameEntryInstructions.setBackgroundColor(Assets.COLOR_NO_LIGHT);
-				saveButton.setBackgroundColor(Assets.COLOR_NO_DARK);
-				keyboard.setColor(Assets.COLOR_NO_LIGHT);				
-				nameEntryField.setBackgroundColor(Assets.COLOR_NO_LIGHT);				
-			}
-			
+			nameEntryInstructions.setBackgroundColor(CDW.state.userStanceColorLight, true);
+			saveButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
+			keyboard.setColor(CDW.state.userStanceColorLight, true);
+			nameEntryField.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			portrait.setImage(CDW.state.userImage, true);
 			nameEntryField.setText('', true); // clear the name entry field			
 			keyboard.target = nameEntryField.getTextField();
@@ -1130,24 +1086,13 @@ package net.localprojects {
 			nametag.setText(CDW.state.userName + ' Says:', true);
 			opinion.setText(CDW.state.userOpinion);
 			
-			if (CDW.state.userStance == 'yes') {
-				nametag.setBackgroundColor(Assets.COLOR_YES_MEDIUM); // make instant?
-				opinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);	
-				retakePhotoButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				editTextButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				cancelButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				leftQuote.setColor(Assets.COLOR_YES_LIGHT);
-				rightQuote.setColor(Assets.COLOR_YES_LIGHT);				
-			}
-			else {
-				nametag.setBackgroundColor(Assets.COLOR_NO_MEDIUM);
-				opinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);
-				retakePhotoButton.setBackgroundColor(Assets.COLOR_NO_DARK);
-				editTextButton.setBackgroundColor(Assets.COLOR_NO_DARK);
-				cancelButton.setBackgroundColor(Assets.COLOR_NO_DARK);
-				leftQuote.setColor(Assets.COLOR_NO_LIGHT);
-				rightQuote.setColor(Assets.COLOR_NO_LIGHT);				
-			}
+			nametag.setBackgroundColor(CDW.state.userStanceColorMedium); // make instant?
+			opinion.setBackgroundColor(CDW.state.userStanceColorLight);	
+			retakePhotoButton.setBackgroundColor(CDW.state.userStanceColorDark);
+			editTextButton.setBackgroundColor(CDW.state.userStanceColorDark);
+			cancelButton.setBackgroundColor(CDW.state.userStanceColorDark);
+			leftQuote.setColor(CDW.state.userStanceColorLight);
+			rightQuote.setColor(CDW.state.userStanceColorLight);				
 			
 			// TODO stance?
 			
@@ -1215,20 +1160,12 @@ package net.localprojects {
 			
 			// mutations
 			editOpinion.setText(CDW.state.userOpinion);
-			
+
 			keyboard.target = editOpinion.getTextField();
 			
-			if (CDW.state.userStance == 'yes') {
-				editTextInstructions.setBackgroundColor(Assets.COLOR_YES_DARK);
-				saveButton.setBackgroundColor(Assets.COLOR_YES_DARK);
-				editOpinion.setBackgroundColor(Assets.COLOR_YES_LIGHT);
-			}
-			else {
-				editTextInstructions.setBackgroundColor(Assets.COLOR_NO_DARK);
-				saveButton.setBackgroundColor(Assets.COLOR_NO_DARK);
-				editOpinion.setBackgroundColor(Assets.COLOR_NO_LIGHT);				
-			}
-			
+			editTextInstructions.setBackgroundColor(CDW.state.userStanceColorDark);
+			saveButton.setBackgroundColor(CDW.state.userStanceColorDark);
+			editOpinion.setBackgroundColor(CDW.state.userStanceColorLight);
 			
 			// behaviors
 			saveButton.setOnClick(onSaveOpinionEdit);
@@ -1324,6 +1261,8 @@ package net.localprojects {
 		
 		
 		// View utilities
+
+
 		
 		private function setTestOverlay(b:Bitmap):void {
 			CDW.testOverlay.bitmapData = b.bitmapData.clone();						

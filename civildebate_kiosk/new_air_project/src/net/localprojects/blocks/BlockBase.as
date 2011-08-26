@@ -42,16 +42,15 @@ package net.localprojects.blocks {
 			stageHeight = CDW.ref.stage.stageHeight;
 		}
 		
+		
 		// TODO add duration control?
 		public function setDefaultTweenIn(duration:Number, params:Object):void {
 			defaultInDuration = duration;
-			
 			defaultTweenInVars = Utilities.mergeObjects(defaultTweenInVars, params);
 		}
 		
 		public function setDefaultTweenOut(duration:Number, params:Object):void {
 			defaultOutDuration = duration;
-			
 			defaultTweenOutVars = Utilities.mergeObjects(defaultTweenOutVars, params);
 		}				
 
@@ -70,7 +69,6 @@ package net.localprojects.blocks {
 		public static const OFF_RIGHT_EDGE:String = 'offRightEdge';
 		public static const OFF_BOTTOM_EDGE:String = 'offBottomEdge';		
 		public static const OFF_LEFT_EDGE:String = 'offLeftEdge';
-		
 		
 		// gives us custom shortcuts like 'center' in the parameter list
 		// note that it works on a COPY of the parameters so that they can
@@ -103,9 +101,11 @@ package net.localprojects.blocks {
 			// override me
 		}		
 		
+		
 		protected function beforeTweenOut():void {
 			// override me			
 		}
+		
 		
 		protected function afterTweenOut():void {
 			this.visible = false;
@@ -116,10 +116,12 @@ package net.localprojects.blocks {
 			defaultTweenOutVars.onComplete = afterTweenOut;
 		}		
 		
+		
 		public function tween(duration:Number, params:Object):void {
 			TweenMax.to(this, duration, Utilities.mergeObjects(defaultTweenVars, params));
 			active = true;
 		}
+		
 		
 		// Tweens to default location, or takes modifiers if called without arguments
 		public function tweenIn(duration:Number = -1, params:Object = null):void {
@@ -135,12 +137,12 @@ package net.localprojects.blocks {
 				params = Utilities.mergeObjects(defaultTweenInVars, params);
 			}
 			
-			
 			params = preprocessParams(params);
 			
 			TweenMax.to(this, duration, params);
 			active = true;
 		}
+		
 		
 		public function tweenOut(duration:Number = -1, params:Object = null):void {
 			if (duration == -1) {
@@ -154,11 +156,10 @@ package net.localprojects.blocks {
 				params = Utilities.mergeObjects(defaultTweenOutVars, params);
 			}
 			
-			
 			params = preprocessParams(params);			
 			
 			TweenMax.to(this, duration, params);
-			active = false; // TODO WHY WAS THIS TRUE?
+			active = true; // TODO WHY WAS THIS FALSE?
 		}		
 		
 	}

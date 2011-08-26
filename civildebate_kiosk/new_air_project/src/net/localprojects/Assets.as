@@ -91,7 +91,7 @@ package net.localprojects
 
 		
 		// Colors
-		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 185, 255);
+		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 187, 250);
 		public static const COLOR_YES_MEDIUM:uint = Utilities.color(0, 155, 255);
 		public static const COLOR_YES_DARK:uint = Utilities.color(0, 115, 255);
 		public static const COLOR_YES_OVERLAY:uint = Utilities.color(53, 124, 146);		

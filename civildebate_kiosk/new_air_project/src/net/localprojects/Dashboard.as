@@ -79,7 +79,7 @@ package net.localprojects {
 			if (selection == 'Home') CDW.view.homeView();
 			if (selection == 'Debate Overlay') CDW.view.debateOverlayView();
 			if (selection == 'Pick Stance') CDW.view.pickStanceView();
-			if (selection == 'SMS Prompt') CDW.view.textPromptView();
+			if (selection == 'SMS Prompt') CDW.view.smsPromptView();
 			if (selection == 'Photo Booth') CDW.view.photoBoothView();
 			if (selection == 'Name Entry') CDW.view.nameEntryView();
 			if (selection == 'Verify Opinion') CDW.view.verifyOpinionView();
