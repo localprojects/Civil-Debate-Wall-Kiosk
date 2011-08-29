@@ -42,7 +42,6 @@ package net.localprojects {
 		private var blackOverlay:BlockBitmap;
 		private var skipTextButton:BlockButton; // debug only
 		private var smsInstructions:BlockParagraph;
-		private var webPlug:BlockLabel;
 		private var dragLayer:DragLayer;
 		private var flagOverlay:BlockBitmap;
 		private var flagTimerBar:ProgressBar;
@@ -330,12 +329,7 @@ package net.localprojects {
 			smsDisclaimer.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1625});
 			addChild(smsDisclaimer);
 			
-			webPlug = new BlockLabel('Check out your photo and opinion at civildebatewall.com', 25, 0xffffff, Assets.COLOR_GRAY_75);
-			webPlug.considerDescenders = false;
-			webPlug.setPadding(25, 30, 25, 33);
-			webPlug.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1772});
-			webPlug.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1772});
-			addChild(webPlug);			
+		
 			
 			exitButton = new BlockButton(120, 60, 0x000000, 'EXIT', 25, 0xffffff, Assets.FONT_HEAVY);
 			exitButton.setDefaultTweenIn(1, {x: 101, y: 1003});
@@ -573,7 +567,6 @@ package net.localprojects {
 			var commentCount:int = CDW.database.getCommentCount(CDW.state.activeDebate);
 			
 			
-			debateButton.y = 1347 - opinion.height - 193;
 			opinion.y = 1347 - opinion.height;
 			leftOpinion.y = 1347 - leftOpinion.height;
 			rightOpinion.y = 1347 - rightOpinion.height;			
@@ -688,7 +681,7 @@ package net.localprojects {
 			bigButton.tweenIn();
 			statsButton.tweenIn();
 			likeButton.tweenIn();
-			debateButton.tweenIn(-1, {y: opinion.y - 195});
+			debateButton.tweenIn(-1, {y: opinion.y - 195});//debateButton.y = 1347 - opinion.height - 193;
 			flagButton.tweenIn();
 			viewDebateButton.tweenIn();
 			debatePicker.tweenIn();
@@ -1097,7 +1090,7 @@ package net.localprojects {
 			stance.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			countdownButton.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			countdownButton.setRingColor(CDW.state.userStanceColorLight);
-			countdownButton.setProgressColor(CDW.state.userStanceColorDark);				
+			countdownButton.setProgressColor(0xffffff);				
 			photoBoothInstructions.setBackgroundColor(CDW.state.userStanceColorMedium, true);
 			photoBoothNag.setBackgroundColor(CDW.state.userStanceColorMedium, true);
 			cameraOverlay.setColor(CDW.state.userStanceColorLight, CDW.state.userStanceColorOverlay);
@@ -1369,11 +1362,9 @@ package net.localprojects {
 			opinion.tweenIn();
 			retakePhotoButton.tweenIn();
 			editTextButton.tweenIn();
-			cancelButton.tweenIn();			
-			webPlug.tweenIn();			
+			cancelButton.tweenIn();						
 			
-			trace("tweening out name entry");
-			nameEntryField.tweenOut();
+
 			
 			tweenOutInactive();
 			
@@ -1444,6 +1435,19 @@ package net.localprojects {
 			submitOverlay.tweenIn();
 			submitOverlayMessage.tweenIn();
 			submitOverlayContinueButton.tweenIn();
+			
+			
+			leftQuote.tweenOut();
+			rightQuote.tweenOut();			
+			stance.tweenOut();
+			bigButton.tweenOut();
+			nametag.tweenOut();
+			opinion.tweenOut();
+			retakePhotoButton.tweenOut();
+			editTextButton.tweenOut();
+			cancelButton.tweenOut();			
+						
+						
 			
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
 		}
