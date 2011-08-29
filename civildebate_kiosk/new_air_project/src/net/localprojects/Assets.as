@@ -109,7 +109,7 @@ package net.localprojects
 
 		
 		// Colors
-		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 187, 250);
+		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 185, 255);
 		public static const COLOR_YES_MEDIUM:uint = Utilities.color(0, 155, 255);
 		public static const COLOR_YES_DARK:uint = Utilities.color(0, 115, 255);
 		public static const COLOR_YES_OVERLAY:uint = Utilities.color(53, 124, 146);		
@@ -119,9 +119,10 @@ package net.localprojects
 		public static const COLOR_NO_DARK:uint = Utilities.color(255, 60, 0);
 		public static const COLOR_NO_OVERLAY:uint = Utilities.color(255, 60, 0);		
 		
-		public static const COLOR_INSTRUCTION_DARK:uint = Utilities.color(77, 77, 79);
-		public static const COLOR_INSTRUCTION_75:uint = Utilities.color(99, 100, 102); // 75% K
-		public static const COLOR_INSTRUCTION_50:uint = Utilities.color(147, 149, 152); // 50% K
+		public static const COLOR_GRAY_15:uint = Utilities.color(220, 221, 222); // 15%
+		public static const COLOR_GRAY_85:uint = Utilities.color(77, 77, 79); // 85% K
+		public static const COLOR_GRAY_75:uint = Utilities.color(99, 100, 102); // 75% K
+		public static const COLOR_GRAY_50:uint = Utilities.color(147, 149, 152); // 50% K
 		
 		
 		

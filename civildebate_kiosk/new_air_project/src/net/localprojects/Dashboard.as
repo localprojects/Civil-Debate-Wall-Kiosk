@@ -49,6 +49,7 @@ package net.localprojects {
 			viewChooser.addItem('Edit Opinion');	
 			viewChooser.addItem('Stats Overlay');
 			viewChooser.addItem('Inactivity Overlay');
+			viewChooser.addItem('Submit Overlay');			
 			
 			viewChooser.numVisibleItems = viewChooser.items.length;
 			
@@ -85,7 +86,8 @@ package net.localprojects {
 			if (selection == 'Verify Opinion') CDW.view.verifyOpinionView();
 			if (selection == 'Edit Opinion') CDW.view.editOpinionView();
 			if (selection == 'Stats Overlay') CDW.view.statsView();
-			if (selection == 'Inactivity Overlay') CDW.view.inactivityView();
+			if (selection == 'Inactivity Overlay') CDW.view.inactivityOverlayView();
+			if (selection == 'Submit Overlay') CDW.view.submitOverlayView();			
 		}
 		
 		

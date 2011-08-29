@@ -26,7 +26,7 @@ package net.localprojects.elements {
 		
 		private function init():void {
 			 background = new Shape();
-			 background.graphics.beginFill(Assets.COLOR_INSTRUCTION_75);
+			 background.graphics.beginFill(Assets.COLOR_GRAY_75);
 			 background.graphics.drawRect(0, 0, _barWidth, _barHeight);
 			 background.graphics.endFill();
 			 
@@ -38,6 +38,10 @@ package net.localprojects.elements {
 			 
 			 addChild(background);
 			 addChild(bar);
+		}
+		
+		public function pause():void {
+			TweenMax.killTweensOf(bar);
 		}
 		
 		override protected function afterTweenIn():void {

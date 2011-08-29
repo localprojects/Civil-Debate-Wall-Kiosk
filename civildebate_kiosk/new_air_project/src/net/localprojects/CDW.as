@@ -117,7 +117,7 @@ package net.localprojects {
 		
 		private function onInactive(e:InactivityEvent):void {
 			trace("inactive!");
-			view.inactivityView();
+			view.inactivityOverlayView();
 		}
 		
 		private var firstTime:Boolean = true;
