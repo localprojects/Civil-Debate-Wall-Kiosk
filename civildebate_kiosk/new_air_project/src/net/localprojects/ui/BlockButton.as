@@ -116,8 +116,9 @@ package net.localprojects.ui {
 			return labelField;
 		}
 		
+		private var metrics:TextLineMetrics;		
 		public function getLabelTextWidth():Number {
-			var metrics:TextLineMetrics = labelFieldA.getLineMetrics(0);
+			metrics = labelFieldA.getLineMetrics(0);
 			return metrics.width;
 		}
 		
@@ -141,6 +142,12 @@ package net.localprojects.ui {
 			}
 		}
 	
+		public function measureText(s:String):Number {
+			labelFieldA.text = s;
+			var w:Number = getLabelTextWidth();
+			labelFieldA.text = _labelText;
+			return w;
+		}
 		
 		override public function setLabel(text:String, instant:Boolean = false):void {
 			_labelText = text;
