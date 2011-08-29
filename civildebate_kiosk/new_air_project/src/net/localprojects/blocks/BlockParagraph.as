@@ -40,7 +40,7 @@ package net.localprojects.blocks {
 			_leading = leading;			
 			paddingTop = 17;
 			paddingRight = 30;
-			paddingBottom = 18;;
+			paddingBottom = 20;
 			paddingLeft = 30;			
 			
 			_textWidth = textWidth - (paddingLeft + paddingRight);
@@ -107,8 +107,22 @@ package net.localprojects.blocks {
 			for (var i:int = 0; i < textField.numLines; i++) {
 				var metrics:TextLineMetrics = textField.getLineMetrics(i);				
 				
-				background.graphics.beginFill(0xffffff); // white fill for manipulation by tweenmax												
-				background.graphics.drawRect(0 - paddingLeft, yPos - paddingTop, metrics.width + paddingLeft + paddingRight, metrics.height + paddingTop + paddingBottom);
+				
+				
+				
+				
+				background.graphics.beginFill(0xffffff); // white fill for manipulation by tweenmax			
+				
+				if (i == 0 || i == textField.numLines - 1) {
+					// first or last line
+					background.graphics.drawRect(0 - paddingLeft, yPos - paddingTop, Math.round(metrics.width) + paddingLeft + paddingRight, Math.round(metrics.height) + paddingTop + paddingBottom);
+				}
+				else {
+					// middle line
+					background.graphics.drawRect(0 - paddingLeft, yPos - paddingTop + 4, Math.round(metrics.width) + paddingLeft + paddingRight, Math.round(metrics.height) + paddingTop - 4 + paddingBottom);					
+				}
+				
+				
 				background.graphics.endFill();
 				
 				// actual color is set by tweenmax
@@ -124,6 +138,8 @@ package net.localprojects.blocks {
 			
 			textField.x =  paddingLeft;
 			textField.y =  paddingTop;			
+			
+			background.cacheAsBitmap = true;
 		}
 		
 		override public function setText(s:String, instant:Boolean = false):void {
