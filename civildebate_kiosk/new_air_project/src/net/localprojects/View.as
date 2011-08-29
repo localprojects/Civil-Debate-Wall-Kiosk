@@ -522,32 +522,23 @@ package net.localprojects {
 				// TODO comment preview
 				
 				
-				// Show as much comment as possible...
+				// Show as much comment as possible... truncate what we can't
+				var firstCommentText:String = CDW.database.debates[CDW.state.activeDebate]['comments'][0]['comment'];
+				var newLabel:String = '"' + firstCommentText + '" + ' + commentCount + ' ' + Utilities.plural('response', commentCount);				
+				var commentLength:int = firstCommentText.length;
+				var commentPreview:String = firstCommentText;				
+				var previewWidth:Number = viewDebateButton.measureText(newLabel);
 				
-				//var textWidth:Number = 0;
-				var oldLabel:String = viewDebateButton.getLabelText();
-				var commentPreview:String = '';
-				var newLabel:String = '';
-				var labelWidth:Number = 0;
-				
-				
-				// TODO DO THIS ONCE AND STORE IT
-				var i:int = 0;
-				while ((i < 1000) && (labelWidth < 470)) {
-					newLabel = '"' + commentPreview + '" + ' + commentCount + ' ' + Utilities.plural('response', commentCount);
-					viewDebateButton.setLabel(newLabel, true);
-					commentPreview += 'A';
-					labelWidth = viewDebateButton.getLabelTextWidth();
-					//trace(labelWidth + ": " + commentPreview);
-					i++;
+				while (previewWidth > 470) {
+					commentLength--;
+					commentPreview = StringUtils.truncate(firstCommentText, commentLength, '...');
+					newLabel = '"' + commentPreview + '" + ' + commentCount + ' ' + Utilities.plural('response', commentCount);					
+					previewWidth = viewDebateButton.measureText(newLabel);
 				}
 				
-				viewDebateButton.setLabel('BACK TO DEBATE', true);
 				viewDebateButton.setLabel(newLabel); // finally, tween it in				
 				
 
-			
-				
 				viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 				
 				// update the comments TODO move this to "set active debate" so it only happens once per update?

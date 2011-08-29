@@ -380,7 +380,11 @@ package net.localprojects {
 		
 		public static function toInitialCap(original:String):String {
 			return original.charAt(0).toUpperCase() + original.substr(1).toLowerCase();
-		}   
+		
+		}
+		
+		
+
 		
 		
 		public static function dummyText(characters:int):String {
