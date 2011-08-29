@@ -108,9 +108,6 @@ package net.localprojects.blocks {
 				var metrics:TextLineMetrics = textField.getLineMetrics(i);				
 				
 				
-				
-				
-				
 				background.graphics.beginFill(0xffffff); // white fill for manipulation by tweenmax			
 				
 				if (i == 0 || i == textField.numLines - 1) {
