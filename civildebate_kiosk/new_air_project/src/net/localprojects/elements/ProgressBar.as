@@ -29,6 +29,7 @@ package net.localprojects.elements {
 			 background.graphics.beginFill(Assets.COLOR_GRAY_75);
 			 background.graphics.drawRect(0, 0, _barWidth, _barHeight);
 			 background.graphics.endFill();
+			 background.alpha = 0; // disable per jonathan review
 			 
 			 bar = new Shape();
 			 bar.graphics.beginFill(0xffffff);

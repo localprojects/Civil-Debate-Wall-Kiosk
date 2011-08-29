@@ -225,18 +225,18 @@ package net.localprojects {
 			
 			// triple opinions
 			opinion = new BlockParagraph(915, 0x000000, '', 42);	
-			opinion.setDefaultTweenIn(1, {x: 100, y: 1095});
-			opinion.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1095});
+			opinion.setDefaultTweenIn(1, {x: 101});
+			opinion.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});
 			addChild(opinion);
 			
 			rightOpinion = new BlockParagraph(915, 0x000000, '', 42);
-			rightOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: opinion.defaultTweenInVars.y});
-			rightOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x + stageWidth, y: opinion.defaultTweenInVars.y});
+			rightOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x + stageWidth});
+			rightOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x + stageWidth});
 			addChild(rightOpinion);
 			
 			leftOpinion = new BlockParagraph(915, 0x000000, '', 42);	
-			leftOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: opinion.defaultTweenInVars.y});
-			leftOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x - stageWidth, y: opinion.defaultTweenInVars.y});
+			leftOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x - stageWidth});
+			leftOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x - stageWidth});
 			addChild(leftOpinion);		
 			
 			// TODO is there always a drag layer?
@@ -278,8 +278,8 @@ package net.localprojects {
 			addChild(flagButton);			
 			
 			debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
-			debateButton.setDefaultTweenIn(1, {x: 813, y: 902, scaleX: 1, scaleY: 1});
-			debateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 901, scaleX: 1, scaleY: 1});
+			debateButton.setDefaultTweenIn(1, {x: 813, scaleX: 1, scaleY: 1});
+			debateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, scaleX: 1, scaleY: 1});
 			addChild(debateButton);
 			
 			debateOverlay = new DebateOverlay();
@@ -572,6 +572,12 @@ package net.localprojects {
 			
 			var commentCount:int = CDW.database.getCommentCount(CDW.state.activeDebate);
 			
+			
+			debateButton.y = 1347 - opinion.height - 193;
+			opinion.y = 1347 - opinion.height;
+			leftOpinion.y = 1347 - leftOpinion.height;
+			rightOpinion.y = 1347 - rightOpinion.height;			
+			
 
 			likeButton.setCount(CDW.database.debates[CDW.state.activeDebate].likes);
 			CDW.state.clearUser(); // Reset user info
@@ -682,7 +688,7 @@ package net.localprojects {
 			bigButton.tweenIn();
 			statsButton.tweenIn();
 			likeButton.tweenIn();
-			debateButton.tweenIn();
+			debateButton.tweenIn(-1, {y: opinion.y - 195});
 			flagButton.tweenIn();
 			viewDebateButton.tweenIn();
 			debatePicker.tweenIn();
@@ -793,7 +799,7 @@ package net.localprojects {
 			// behaviors
 			flagYesButton.setOnClick(incrementFlags);
 			flagNoButton.setOnClick(homeView);			
-			inactivityTimerBar.setOnComplete(homeView);
+			flagTimerBar.setOnComplete(homeView);
 			
 			// blocks
 			flagOverlay.tweenIn();
