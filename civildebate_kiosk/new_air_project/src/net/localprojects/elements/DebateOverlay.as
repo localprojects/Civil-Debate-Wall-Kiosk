@@ -12,6 +12,7 @@ package net.localprojects.elements
 		
 		// scrolling TBA....
 		
+		private var containerHeight:Number;
 		
 		private var scrollSheet:Sprite;
 		
@@ -23,15 +24,21 @@ package net.localprojects.elements
 		
 		public function init():void {
 			
-			// todo defined by available space
-			this.graphics.beginFill(0xcccccc);
-			this.graphics.drawRect(0, 0, 1022, 763);
-			this.graphics.endFill();
+
 			
 
 			scrollSheet = new Sprite(); 
 			
 			addChild(scrollSheet); // TODO add to scroll container
+		}
+		
+		public function setHeight(h:Number):void {
+			containerHeight = h;
+			// todo defined by available space
+			this.graphics.clear();
+			this.graphics.beginFill(0xffffff, 0.9);
+			this.graphics.drawRect(0, 0, 1022, containerHeight);
+			this.graphics.endFill();			
 		}
 		
 		public function update():void {

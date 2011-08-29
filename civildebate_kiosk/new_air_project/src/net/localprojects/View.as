@@ -139,7 +139,7 @@ package net.localprojects {
 			letsDebateUnderlay.mouseEnabled = false; // let keystrokes through to the keyboard
 			letsDebateUnderlay.x = 30;
 			letsDebateUnderlay.y = 249;
-			letsDebateUnderlay.setDefaultTweenIn(1, {alpha: 0.95, ease: Quart.easeOut});
+			letsDebateUnderlay.setDefaultTweenIn(1, {alpha: 0.9, ease: Quart.easeOut});
 			letsDebateUnderlay.setDefaultTweenOut(1, {alpha: 0, ease: Quart.easeOut});
 			addChild(letsDebateUnderlay);				
 			
@@ -150,7 +150,7 @@ package net.localprojects {
 			
 			divider = new BlockBitmap(Assets.divider);
 			divider.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 250});
-			divider.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 250});			
+			divider.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 250});
 			addChild(divider);
 			
 			question = new Question();
@@ -246,18 +246,18 @@ package net.localprojects {
 			bigButton.setDefaultTweenOut(1, {x: 455, y: 1470, alpha: 0}); // TODO possibly subclass for cooler in and out tweens
 			addChild(bigButton);
 			
-			statsButton = new IconButton(111, 55, 0x000000, 'Stats', 20, 0xffffff, null, Assets.statsIcon);
+			statsButton = new IconButton(111, 55, 0x000000, 'Stats', 20, 0xffffff, Assets.FONT_BOLD, Assets.statsIcon);
 			statsButton.setDefaultTweenIn(1, {x: 104, y: 1379});
 			statsButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1379});
 			addChild(statsButton);
 			
-			likeButton = new CounterButton(111, 55, 0x000000, 'Like', 20);
+			likeButton = new CounterButton(111, 55, 0x000000, 'Like', 20, 0xffffff, Assets.FONT_BOLD);
 			likeButton.setTimeout(5000);
 			likeButton.setDefaultTweenIn(1, {x: 238, y: 1379});
 			likeButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1379});			
 			addChild(likeButton);
 			
-			viewDebateButton = new BlockButton(517, 55, 0x000000, '', 20);
+			viewDebateButton = new BlockButton(517, 55, 0x000000, '', 20, 0xffffff, Assets.FONT_BOLD);
 			viewDebateButton.setDefaultTweenIn(1, {x: 373, y: 1379});
 			viewDebateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1379});			
 			addChild(viewDebateButton);
@@ -268,8 +268,8 @@ package net.localprojects {
 			flagButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1379});
 			addChild(flagButton);			
 			
-			debateButton = new BalloonButton(145, 130, 0x000000, 'LET\u0027S\nDEBATE !', 20);
-			debateButton.setDefaultTweenIn(1, {x: 828, y: 901, scaleX: 1, scaleY: 1});
+			debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
+			debateButton.setDefaultTweenIn(1, {x: 813, y: 902, scaleX: 1, scaleY: 1});
 			debateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 901, scaleX: 1, scaleY: 1});
 			addChild(debateButton);
 			
@@ -404,7 +404,7 @@ package net.localprojects {
 			
 			inactivityOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
 			inactivityOverlay.setDefaultTweenIn(1, {alpha: 0.85});
-			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});			
+			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});
 			addChild(inactivityOverlay);
 			
 			inactivityTimerBar = new ProgressBar(735, 2, 20);		
@@ -426,19 +426,22 @@ package net.localprojects {
 			blackOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
 			blackOverlay.setDefaultTweenIn(0.1, {alpha: 1, immediateRender: true}); // duration of 0 doesn't work?
 			blackOverlay.setDefaultTweenOut(0, {alpha: 0});
+		
 			addChild(blackOverlay);				
 			
 			flashOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0xffffff)));
 			flashOverlay.mouseEnabled = false; // let keystrokes through to the keyboard
 			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut, immediateRender: true});
 			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
+			flashOverlay.name = 'Flash Overlay';
 			addChild(flashOverlay);	
 			
+			// Block input during tweens
 			protection = new Sprite();
-			protection.graphics.beginFill(0xff0000);
+			protection.graphics.beginFill(0x000000);
 			protection.graphics.drawRect(0, 0, stageWidth, stageHeight);
 			protection.graphics.endFill();
-			protection.alpha = 0;
+			protection.alpha = 0.25;
 			addChild(protection);
 			protection.visible = false;
 			
@@ -448,21 +451,26 @@ package net.localprojects {
 
 		// another attempt to fix the missing tween problem by blocking input during tweens
 		// better way to do it? tween counting at start and end of view function?
+		// this ignores the flash overlay and breaks the draglayer...
 		private function onEnterFrame(e:Event):void {
-
-			var tweens:Array = TweenMax.getAllTweens();
 			protection.visible = false;
-			for(var i:int = 1; i < tweens.length; i++) {
-					
+			var tweens:Array = TweenMax.getAllTweens();
+			
+
+			for(var i:int = 0; i < tweens.length; i++) {
 				if(tweens[i].target is BlockBase) {
-					protection.visible = true;
+					if(tweens[i].target.name !== 'Flash Overlay') {
+						protection.visible = true;
+					}
 				}
 			}
-			
 		}
 	
 		
 		// =========================================================================
+		
+		
+		
 		
 		// land here if there aren't yet opinions for the current question
 		// TODO some kind of "be the first" message
@@ -473,7 +481,7 @@ package net.localprojects {
 			CDW.inactivityTimer.disarm();
 			portrait.setImage(Assets.portraitPlaceholder);
 			bigButton.setText('ADD YOUR OPINION', true);
-			CDW.state.clearUser();			
+			CDW.state.clearUser();
 
 			// behaviors
 			bigButton.setOnClick(pickStanceView);				
@@ -553,7 +561,7 @@ package net.localprojects {
 				
 				// Show as much comment as possible... truncate what we can't
 				var firstCommentText:String = CDW.database.debates[CDW.state.activeDebate]['comments'][0]['comment'];
-				var newLabel:String = '"' + firstCommentText + '" + ' + commentCount + ' ' + Utilities.plural('response', commentCount);				
+				var newLabel:String = '\u201C' + firstCommentText + '\u201D + ' + commentCount + ' ' + Utilities.plural('response', commentCount);				
 				var commentLength:int = firstCommentText.length;
 				var commentPreview:String = firstCommentText;				
 				var previewWidth:Number = viewDebateButton.measureText(newLabel);
@@ -561,7 +569,7 @@ package net.localprojects {
 				while (previewWidth > 470) {
 					commentLength--;
 					commentPreview = StringUtils.truncate(firstCommentText, commentLength, '...');
-					newLabel = '"' + commentPreview + '" + ' + commentCount + ' ' + Utilities.plural('response', commentCount);					
+					newLabel = '\u201C' + commentPreview + '\u201D + ' + commentCount + ' ' + Utilities.plural('response', commentCount);					
 					previewWidth = viewDebateButton.measureText(newLabel);
 				}
 				
@@ -677,22 +685,26 @@ package net.localprojects {
 			byline.setBackgroundColor(CDW.state.activeStanceColorMedium, true);
 			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName, true);			
 			viewDebateButton.setLabel('BACK TO HOME SCREEN');
+			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 - letsDebateUnderlay.y; // height depends on opinion
+			debateOverlay.setHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));
 			
 			// behaviors
 			viewDebateButton.setOnClick(homeView);
 			
 			// blocks
 			portrait.tweenIn();
+			
+			
 			letsDebateUnderlay.tweenIn();
 			header.tweenIn();
 			question.tweenIn();
 			stance.tweenIn();
-			byline.tweenIn();
+			byline.tweenIn(-1, {x: 916 - byline.width - 39, y: 410 + opinion.height + 30}); // dynamic based on opinion size
 			opinion.tweenIn(1, {y: 410});
-			debateButton.tweenIn(1, {x: 916, y: 660, scaleX: 0.75, scaleY: 0.75});
-			viewDebateButton.tweenIn(1, {y: 1650});
+			debateButton.tweenIn(1, {x: 916, y: 410 + opinion.height + 15, scaleX: 0.75, scaleY: 0.75});
+			viewDebateButton.tweenIn(1, {y: 1650});	
 			debatePicker.tweenIn();
-			debateOverlay.tweenIn();			
+			debateOverlay.tweenIn(-1, {y: letsDebateUnderlay.y + letsDebateUnderlay.height + 30});			
 			
 			tweenOutInactive();	
 			
