@@ -93,7 +93,12 @@ package net.localprojects {
 			
 			for (var id:String in portraits) {
 				if (portraits[id] == null) {
-					portraits[id] = (LoaderMax.getContent(id) as ContentDisplay).rawContent;
+					try {
+						portraits[id] = (LoaderMax.getContent(id) as ContentDisplay).rawContent;
+					}
+					catch (error:Error) {
+						trace("error" + error);
+					}
 				}
 			}
 			

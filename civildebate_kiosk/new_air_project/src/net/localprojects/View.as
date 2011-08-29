@@ -95,7 +95,10 @@ package net.localprojects {
 		public var opinion:BlockParagraph;
 		public var leftOpinion:BlockParagraph;		
 		public var rightOpinion:BlockParagraph;
-			
+		
+		// mouse protection during tweens
+		public var protection:Sprite;
+		
 		// convenience
 		private var stageWidth:Number;
 		private var stageHeight:Number;
@@ -430,6 +433,32 @@ package net.localprojects {
 			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut, immediateRender: true});
 			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
 			addChild(flashOverlay);	
+			
+			protection = new Sprite();
+			protection.graphics.beginFill(0xff0000);
+			protection.graphics.drawRect(0, 0, stageWidth, stageHeight);
+			protection.graphics.endFill();
+			protection.alpha = 0;
+			addChild(protection);
+			protection.visible = false;
+			
+			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		}
+		
+
+		// another attempt to fix the missing tween problem by blocking input during tweens
+		// better way to do it? tween counting at start and end of view function?
+		private function onEnterFrame(e:Event):void {
+
+			var tweens:Array = TweenMax.getAllTweens();
+			protection.visible = false;
+			for(var i:int = 1; i < tweens.length; i++) {
+					
+				if(tweens[i].target is BlockBase) {
+					protection.visible = true;
+				}
+			}
+			
 		}
 	
 		

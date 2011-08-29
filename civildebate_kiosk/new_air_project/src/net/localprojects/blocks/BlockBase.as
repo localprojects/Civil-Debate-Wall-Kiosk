@@ -112,6 +112,7 @@ package net.localprojects.blocks {
 			
 			// restore position so overriden out tweens restart from their canonical location
 			defaultTweenOutVars.onComplete = null;
+			
 			TweenMax.to(this, 0, preprocessParams(defaultTweenOutVars)); // note that we have to preprocess again othwerise it will try to tween to the name shortcuts
 			defaultTweenOutVars.onComplete = afterTweenOut;
 		}		
