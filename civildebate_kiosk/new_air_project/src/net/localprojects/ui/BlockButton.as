@@ -53,7 +53,7 @@ package net.localprojects.ui {
 		}
 		
 		private function init():void {
-			strokeWeight = 4;
+			strokeWeight = 5;
 			_letterSpacing = -1;
 			labelFieldA = generateLabel(_labelText);
 			

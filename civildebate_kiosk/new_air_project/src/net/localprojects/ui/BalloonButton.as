@@ -1,8 +1,8 @@
 package net.localprojects.ui {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
-	
-	import flash.display.Shape;
+	import net.localprojects.CDW;
+	import flash.display.*;
 	import flash.events.MouseEvent;
 	
 	
@@ -13,6 +13,7 @@ package net.localprojects.ui {
 		private var tailOutline:Shape;
 		private var tailWidth:Number;
 		private var tailHeight:Number;
+		private var scaleMode:String;
 		
 		
 		// block button with a tail
@@ -21,15 +22,23 @@ package net.localprojects.ui {
 			tailOutline = new Shape;
 			addChild(tailOutline);
 			
+			if (CDW.settings.halfSize) {
+				scaleMode = LineScaleMode.NORMAL; 
+			}
+			else {
+				// don't scale line at full res, keeps things cleaner
+				scaleMode = LineScaleMode.NONE;				
+			}
+			
 			super(buttonWidth, buttonHeight, backgroundColor, labelText, labelSize, labelColor, labelFont);			
 
 			addChild(tail);	
 
-			tail.y = buttonHeight - strokeWeight;
-			tailOutline.y = buttonHeight - strokeWeight;
+			tail.y = buttonHeight - strokeWeight * 2;
+			tailOutline.y = buttonHeight - strokeWeight * 2;
 			
-			tailWidth = 30;
-			tailHeight = 30 + strokeWeight;
+			tailWidth = 25;
+			tailHeight = 22 + strokeWeight;
 					
 			draw();
 		}
@@ -53,13 +62,13 @@ package net.localprojects.ui {
 			
 			// draw the outline
 			outline.graphics.clear();
-			outline.graphics.lineStyle(strokeWeight, 0xffffff);
+			outline.graphics.lineStyle(strokeWeight, 0xffffff, 1, true, scaleMode);
 			outline.graphics.drawRoundRect(0, 0, _buttonWidth, _buttonHeight, 20, 20);
 			outline.graphics.endFill();
 			
 			// draw the tail outline
 			tailOutline.graphics.clear();
-			tailOutline.graphics.lineStyle(strokeWeight * 2, 0xffffff);
+			tailOutline.graphics.lineStyle(strokeWeight * 2, 0xffffff, 1, true, scaleMode, CapsStyle.SQUARE, JointStyle.MITER, 2);
 			tailOutline.graphics.moveTo((_buttonWidth / 2) - (tailWidth / 2), 0);
 			tailOutline.graphics.lineTo((_buttonWidth / 2) + (tailWidth / 2), 0);
 			tailOutline.graphics.lineTo((_buttonWidth / 2), tailHeight);
@@ -75,7 +84,7 @@ package net.localprojects.ui {
 		
 		override protected function onMouseDown(e:MouseEvent):void {
 			super.onMouseDown(e);
-			TweenMax.to(tail, 0, {colorTransform: {tint: _backgroundColor, tintAmount: 0.2}});
+			TweenMax.to(tail, 0, {colorTransform: {tint: _backgroundDownColor, tintAmount: 1}});
 		}
 		
 		override protected function onMouseUp(e:MouseEvent):void {
