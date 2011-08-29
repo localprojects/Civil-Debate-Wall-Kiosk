@@ -62,13 +62,13 @@ package net.localprojects.ui {
 			
 			// draw the outline
 			outline.graphics.clear();
-			outline.graphics.lineStyle(strokeWeight, 0xffffff, 1, true, scaleMode);
+			outline.graphics.lineStyle(strokeWeight, strokeColor, 1, true, scaleMode);
 			outline.graphics.drawRoundRect(0, 0, _buttonWidth, _buttonHeight, 20, 20);
 			outline.graphics.endFill();
 			
 			// draw the tail outline
 			tailOutline.graphics.clear();
-			tailOutline.graphics.lineStyle(strokeWeight * 2, 0xffffff, 1, true, scaleMode, CapsStyle.SQUARE, JointStyle.MITER, 2);
+			tailOutline.graphics.lineStyle(strokeWeight * 2, strokeColor, 1, true, scaleMode, CapsStyle.SQUARE, JointStyle.MITER, 2);
 			tailOutline.graphics.moveTo((_buttonWidth / 2) - (tailWidth / 2), 0);
 			tailOutline.graphics.lineTo((_buttonWidth / 2) + (tailWidth / 2), 0);
 			tailOutline.graphics.lineTo((_buttonWidth / 2), tailHeight);
@@ -81,6 +81,15 @@ package net.localprojects.ui {
 			TweenMax.to(background, 0.5, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
 			TweenMax.to(tail, 0.5, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
 		}
+		
+		
+		override public function setStrokeColor(c:uint):void {
+			if(strokeColor != c) {
+				strokeColor = c;				
+				TweenMax.to(outline, 0.5, {ease: Quart.easeOut, colorTransform: {tint: strokeColor, tintAmount: 1}});				
+				TweenMax.to(tailOutline, 0.5, {ease: Quart.easeOut, colorTransform: {tint: strokeColor, tintAmount: 1}});			
+			}
+		}		
 		
 		override protected function onMouseDown(e:MouseEvent):void {
 			super.onMouseDown(e);

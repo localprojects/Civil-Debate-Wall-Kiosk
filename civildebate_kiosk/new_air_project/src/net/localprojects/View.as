@@ -43,7 +43,14 @@ package net.localprojects {
 		private var skipTextButton:BlockButton; // debug only
 		private var smsInstructions:BlockParagraph;
 		private var webPlug:BlockLabel;
-		private var dragLayer:DragLayer;		
+		private var dragLayer:DragLayer;
+		private var flagOverlay:BlockBitmap;
+		private var flagTimerBar:ProgressBar;
+		private var flagInstructions:BlockLabelBar;
+		private var flagYesButton:BlockButton;
+		private var flagNoButton:BlockButton;
+		private var submitOverlay:BlockBitmap;		
+				
 		
 		
 		private var letsDebateUnderlay:BlockBitmap;
@@ -68,7 +75,9 @@ package net.localprojects {
 		private var photoBoothNag:BlockLabel;
 		private var photoBoothInstructions:BlockButton;
 		private var countdownButton:CountdownButton;		
-		private var keyboard:Keyboard;		
+		private var keyboard:Keyboard;
+		private var submitOverlayContinueButton:BlockButton;				
+		private var submitOverlayMessage:BlockParagraph;
 		
 		// mutable, dynamic content (e.g. text changes based on database)
 		private var nameEntryField:BlockInputLabel; // changes dimensions
@@ -198,8 +207,8 @@ package net.localprojects {
 
 			byline = new BlockLabel('Byline', 22, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
 			byline.setPadding(18, 32, 16, 32);
-			byline.setDefaultTweenIn(1, {x: 586, y: 694});
-			byline.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 694});			
+			byline.setDefaultTweenIn(1, {x: 586});
+			byline.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE	});			
 			addChild(byline);
 			
 			leftQuote = new QuotationMark();
@@ -284,7 +293,7 @@ package net.localprojects {
 			debatePicker.update();
 			addChild(debatePicker);
 			
-			answerPrompt = new BlockLabel('Your Answer / Please Select One :', 19, 0xffffff, Assets.COLOR_INSTRUCTION_DARK, Assets.FONT_REGULAR, true);
+			answerPrompt = new BlockLabel('Your Answer / Please Select One :', 19, 0xffffff, Assets.COLOR_GRAY_85, Assets.FONT_REGULAR, true);
 			answerPrompt.setPadding(22, 32, 24, 32);
 			answerPrompt.setDefaultTweenIn(1, {x: 650, y: 1245});
 			answerPrompt.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1245});					
@@ -303,7 +312,7 @@ package net.localprojects {
 			addChild(noButton);
 			
 			// Temp debug button so we don't have to SMS every time
-			skipTextButton = new BlockButton(200, 100, Assets.COLOR_INSTRUCTION_DARK, 'SIMULATE SMS', 20);
+			skipTextButton = new BlockButton(200, 100, Assets.COLOR_GRAY_85, 'SIMULATE SMS', 20);
 			skipTextButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 500});
 			skipTextButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 500});
 			addChild(skipTextButton);
@@ -315,13 +324,13 @@ package net.localprojects {
 			addChild(smsInstructions);
 			
 			var smsDisclaimerText:String = 'You will receive an SMS notifying you of any future opponents \nwho would like to enter into a debate with you based on your opinion. \nYou can opt out at any time by replying STOP.';
-			smsDisclaimer = new BlockParagraph(872, Assets.COLOR_INSTRUCTION_75, smsDisclaimerText, 25);
+			smsDisclaimer = new BlockParagraph(872, Assets.COLOR_GRAY_75, smsDisclaimerText, 25);
 			smsDisclaimer.textField.setTextFormat(new TextFormat(null, null, 0xc7c8ca), smsDisclaimerText.length -45, smsDisclaimerText.length);
 			smsDisclaimer.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1625});
 			smsDisclaimer.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1625});
 			addChild(smsDisclaimer);
 			
-			webPlug = new BlockLabel('Check out your photo and opinion at civildebatewall.com', 25, 0xffffff, Assets.COLOR_INSTRUCTION_75);
+			webPlug = new BlockLabel('Check out your photo and opinion at civildebatewall.com', 25, 0xffffff, Assets.COLOR_GRAY_75);
 			webPlug.considerDescenders = false;
 			webPlug.setPadding(25, 30, 25, 33);
 			webPlug.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1772});
@@ -412,21 +421,70 @@ package net.localprojects {
 			inactivityTimerBar.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});			
 			addChild(inactivityTimerBar);
 			
-			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_INSTRUCTION_75, Assets.FONT_HEAVY);
+			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
 			inactivityInstructions.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1018});
 			inactivityInstructions.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});			
 			addChild(inactivityInstructions);
 			
-			continueButton = new BlockButton(735, 120, Assets.COLOR_INSTRUCTION_50, 'YES!', 92);
-			continueButton.setDownColor(Assets.COLOR_INSTRUCTION_75);
+			continueButton = new BlockButton(735, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
+			continueButton.setDownColor(Assets.COLOR_GRAY_75);
 			continueButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1098});
 			continueButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1098});					
 			addChild(continueButton);
 			
+			
+			
+			// Flag overlay
+			flagOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
+			flagOverlay.setDefaultTweenIn(1, {alpha: 0.85});
+			flagOverlay.setDefaultTweenOut(1, {alpha: 0});
+			addChild(flagOverlay);
+			
+			flagTimerBar = new ProgressBar(735, 2, 20);		
+			flagTimerBar.setDefaultTweenIn(1, {alpha: 1, x: BlockBase.CENTER, y: 1002});
+			flagTimerBar.setDefaultTweenOut(1, {alpha: 1, x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});			
+			addChild(flagTimerBar);
+			
+			flagInstructions = new BlockLabelBar('FLAG AS INAPPROPRIATE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
+			flagInstructions.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1018});
+			flagInstructions.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});			
+			addChild(flagInstructions);
+			
+			flagYesButton = new BlockButton(360, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
+			flagYesButton.setDownColor(Assets.COLOR_GRAY_75);
+			flagYesButton.setDefaultTweenIn(1, {x: 173, y: 1098});
+			flagYesButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1098});					
+			addChild(flagYesButton);
+			
+			flagNoButton = new BlockButton(360, 120, Assets.COLOR_GRAY_50, 'NO!', 92);
+			flagNoButton.setDownColor(Assets.COLOR_GRAY_75);
+			flagNoButton.setDefaultTweenIn(1, {x: 548, y: 1098});
+			flagNoButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1098});					
+			addChild(flagNoButton);			
+						
+			
+			// Submit overlay
+			submitOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
+			submitOverlay.setDefaultTweenIn(1, {alpha: 0.85});
+			submitOverlay.setDefaultTweenOut(1, {alpha: 0});
+			addChild(submitOverlay);
+			
+			submitOverlayMessage = new BlockParagraph(755, 0x000000, 'Thank you for your participation.\nKeep up with the latest at civildebatewall.com', 31, 0xffffff, Assets.FONT_BOLD);
+			submitOverlayMessage.setDefaultTweenIn(1, {x: 101, y: 1093});
+			submitOverlayMessage.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1093});					
+			addChild(submitOverlayMessage);			
+			
+			submitOverlayContinueButton = new BlockButton(202, 65, 0x000000, 'CONTINUE', 25, 0xffffff, Assets.FONT_HEAVY);
+			submitOverlayContinueButton.setDefaultTweenIn(1, {x: 779, y: 1243});
+			submitOverlayContinueButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
+			addChild(submitOverlayContinueButton);						
+			
+			
+			
+			// Camera Overlays
 			blackOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
 			blackOverlay.setDefaultTweenIn(0.1, {alpha: 1, immediateRender: true}); // duration of 0 doesn't work?
 			blackOverlay.setDefaultTweenOut(0, {alpha: 0});
-		
 			addChild(blackOverlay);				
 			
 			flashOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0xffffff)));
@@ -441,7 +499,7 @@ package net.localprojects {
 			protection.graphics.beginFill(0x000000);
 			protection.graphics.drawRect(0, 0, stageWidth, stageHeight);
 			protection.graphics.endFill();
-			protection.alpha = 0.25;
+			protection.alpha = 0;
 			addChild(protection);
 			protection.visible = false;
 			
@@ -510,6 +568,7 @@ package net.localprojects {
 			stance.setText(CDW.state.activeStanceText, true);
 			opinion.setText(CDW.database.getOpinion(CDW.state.activeDebate));
 			bigButton.setText('ADD YOUR OPINION', true);
+			debateButton.setStrokeColor(0xffffff);			
 			
 			var commentCount:int = CDW.database.getCommentCount(CDW.state.activeDebate);
 			
@@ -553,7 +612,7 @@ package net.localprojects {
 
 			if (commentCount == 0) {
 				viewDebateButton.setLabel('No responses yet. Be the first!');
-				viewDebateButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50, true);				
+				viewDebateButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);				
 			}
 			else {
 				// TODO comment preview
@@ -595,7 +654,7 @@ package net.localprojects {
 			statsButton.setOnClick(statsView);
 			debateButton.setOnClick(onDebateButton);
 			likeButton.setOnClick(incrementLikes);
-			flagButton.setOnClick(incrementFlags);
+			flagButton.setOnClick(flagView);
 			
 			
 			// blocks
@@ -661,15 +720,7 @@ package net.localprojects {
 		}
 		
 		
-		private function incrementFlags(e:Event):void {
-			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/flag', {'id': CDW.state.activeDebate}, onFlagPosted);
-		}
-		
-		
-		private function onFlagPosted(response:Object):void {
-			trace('bumping flags to  ' + response.toString());
-		}		
-		
+
 
 		// =========================================================================
 		
@@ -682,11 +733,14 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(CDW.database.getActivePortrait());
+			byline.y = 410 + opinion.height + 30;
 			byline.setBackgroundColor(CDW.state.activeStanceColorMedium, true);
 			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName, true);			
 			viewDebateButton.setLabel('BACK TO HOME SCREEN');
 			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 - letsDebateUnderlay.y; // height depends on opinion
 			debateOverlay.setHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));
+			debateButton.setStrokeColor(Assets.COLOR_GRAY_15);
+			
 			
 			// behaviors
 			viewDebateButton.setOnClick(homeView);
@@ -694,12 +748,11 @@ package net.localprojects {
 			// blocks
 			portrait.tweenIn();
 			
-			
 			letsDebateUnderlay.tweenIn();
 			header.tweenIn();
 			question.tweenIn();
 			stance.tweenIn();
-			byline.tweenIn(-1, {x: 916 - byline.width - 39, y: 410 + opinion.height + 30}); // dynamic based on opinion size
+			byline.tweenIn(-1, {x: 916 - byline.width - 39}); // dynamic based on opinion size
 			opinion.tweenIn(1, {y: 410});
 			debateButton.tweenIn(1, {x: 916, y: 410 + opinion.height + 15, scaleX: 0.75, scaleY: 0.75});
 			viewDebateButton.tweenIn(1, {y: 1650});	
@@ -722,7 +775,65 @@ package net.localprojects {
 		}
 		
 		
-		// =========================================================================		
+		// =========================================================================
+		
+		
+		public function flagView(...args):void {
+			// mutations			
+			CDW.inactivityTimer.disarm();
+			flagInstructions.setText("FLAG AS INAPPROPRIATE ?");			
+			flagYesButton.enable();
+			flagYesButton.showOutline(true, true);
+			flagYesButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);
+			
+			flagNoButton.disable();
+			flagNoButton.showOutline(true, true);
+			flagNoButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);			
+			
+			// behaviors
+			flagYesButton.setOnClick(incrementFlags);
+			flagNoButton.setOnClick(homeView);			
+			inactivityTimerBar.setOnComplete(homeView);
+			
+			// blocks
+			flagOverlay.tweenIn();
+			flagTimerBar.tweenIn();			
+			flagInstructions.tweenIn();
+			flagYesButton.tweenIn();
+			flagNoButton.tweenIn();			
+			
+			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
+		}
+		
+		
+		
+		
+		private function incrementFlags(e:Event):void {
+			// stop the bar
+			flagInstructions.setText("FLAGGED FOR REVIEW. WE WILL LOOK INTO IT.");
+			flagTimerBar.pause();
+			flagTimerBar.tweenOut(-1, {alpha: 0, y: flagTimerBar.y}); // just fade out 
+			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/flag', {'id': CDW.state.activeDebate}, onFlagPosted);
+			
+			flagYesButton.disable();
+			flagYesButton.showOutline(false);
+			flagYesButton.setBackgroundColor(Assets.COLOR_GRAY_75);
+			
+			flagNoButton.disable();
+			flagNoButton.showOutline(false);
+			
+			// Wait and then go back
+			Utilities.doAfterDelay(homeView, 2000);
+		}
+		
+		
+		private function onFlagPosted(response:Object):void {
+			trace('bumping flags to  ' + response.toString());
+		}		
+				
+		
+		
+		// =========================================================================
 		
 		
 		// For inter-debate transitions initiated by the debate picker...
@@ -820,10 +931,10 @@ package net.localprojects {
 			yesButton.showOutline(false);			
 			
 			if (CDW.state.userStance == 'yes') {
-				noButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50, true);
+				noButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);
 			}
 			else {	
-				yesButton.setBackgroundColor(Assets.COLOR_INSTRUCTION_50, true);
+				yesButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);
 			}
 			
 			if (CDW.state.userIsResponding) {
@@ -1301,7 +1412,43 @@ package net.localprojects {
 			// grab the latest from the db
 			// this will go to home view
 			// TODO fire a passed in callback function instead?
-			CDW.database.load();
+			submitOverlayView();
+		}
+		
+		
+		// =========================================================================
+		
+		
+
+		
+		
+		public function submitOverlayView(...args):void {
+			// mutations			
+			// TODO HOW TO HANDLE OVERLAYS ON OVERLAYS? IS IT ALREADY SUBMITTED AT THIS POINT/
+			CDW.inactivityTimer.arm();
+			
+			// mutations
+			submitOverlayMessage.setBackgroundColor(CDW.state.userStanceColorLight, true);
+			submitOverlayContinueButton.setBackgroundColor(CDW.state.userStanceColorDark, true);			
+			
+			// behaviors
+			submitOverlayContinueButton.setOnClick(onSubmitContinue);
+			
+			// blocks
+			submitOverlay.tweenIn();
+			submitOverlayMessage.tweenIn();
+			submitOverlayContinueButton.tweenIn();
+			
+			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
+		}
+		
+		
+		private function onSubmitContinue(e:Event):void {
+//			inactivityOverlay.tweenOut();
+//			inactivityTimerBar.tweenOut();
+//			inactivityInstructions.tweenOut();
+//			continueButton.tweenOut();
+			CDW.database.load();			
 		}
 		
 		
@@ -1386,7 +1533,7 @@ package net.localprojects {
 		// =========================================================================		
 		
 		
-		public function inactivityView(...args):void {
+		public function inactivityOverlayView(...args):void {
 			// mutations			
 			CDW.inactivityTimer.disarm();
 			

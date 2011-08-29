@@ -158,7 +158,7 @@ package net.localprojects.blocks {
 		}
 		
 		
-		private function getBackgroundWidth(s:String):Number {
+		protected function getBackgroundWidth(s:String):Number {
 			var oldString:String = textField.text;
 			textField.text = s; // temporarily measure with new string
 			var newWidth:Number = textField.width + paddingLeft + paddingRight;
@@ -167,7 +167,7 @@ package net.localprojects.blocks {
 		}
 		
 		
-		private function getBackgroundDimensions(s:String):Rectangle {
+		protected function getBackgroundDimensions(s:String):Rectangle {
 			var oldString:String = textField.text;
 			textField.text = s; // temporarily measure with new string
 			var newDimensions:Rectangle = new Rectangle(0, 0, textWidth() + paddingLeft + paddingRight, textHeight() + paddingTop + paddingBottom);  
@@ -176,8 +176,8 @@ package net.localprojects.blocks {
 		}
 
 		
-		private var newText:String;
-		private var instantTween:Boolean;
+		protected var newText:String;
+		protected var instantTween:Boolean;
 		
 		override public function setText(s:String, instant:Boolean = false):void {
 			// make sure it's a change

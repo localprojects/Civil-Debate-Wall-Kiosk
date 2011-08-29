@@ -23,10 +23,6 @@ package net.localprojects.elements
 		}
 		
 		public function init():void {
-			
-
-			
-
 			scrollSheet = new Sprite(); 
 			
 			addChild(scrollSheet); // TODO add to scroll container
@@ -44,6 +40,11 @@ package net.localprojects.elements
 		public function update():void {
 			// rebuild the list
 		
+			// clear children
+			for (var i:int = 0; i < scrollSheet.numChildren; i++) {
+				scrollSheet.removeChild(scrollSheet.getChildAt(i));
+			}			
+			
 			var paddingBottom:int = 20;
 			
 			var index:int = 0;

@@ -3,6 +3,7 @@ package net.localprojects {
 	
 	import flash.display.*;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.filesystem.*;
 	import flash.geom.*;
 	import flash.utils.*;
@@ -384,7 +385,21 @@ package net.localprojects {
 		}
 		
 		
-
+		public static function doAfterDelay(f:Function, d:Number):void {
+			var timer:Timer = new Timer(d);
+			
+			var callback:Function = function(t:TimerEvent):void {
+				trace("fire");
+				t.target.stop();
+				t.target.removeEventListener(TimerEvent.TIMER, callback);
+				// call the function
+				f();
+			}
+			
+			timer.addEventListener(TimerEvent.TIMER, callback);
+			
+			timer.start();
+		}
 		
 		
 		public static function dummyText(characters:int):String {

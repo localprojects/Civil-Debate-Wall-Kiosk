@@ -13,9 +13,9 @@ package net.localprojects {
 		
 	public class Database extends EventDispatcher {
 		
-	
+		
 		public var question:Object = {};
-		public var debates:Object = {};
+		public var debates:OrderedObject = new OrderedObject();
 		public var portraits:Object = {};
 			
 		private var imageQueue:LoaderMax;

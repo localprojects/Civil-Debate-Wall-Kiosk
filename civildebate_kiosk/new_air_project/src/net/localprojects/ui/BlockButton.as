@@ -26,12 +26,14 @@ package net.localprojects.ui {
 		protected var _labelColor:uint;		
 		protected var outline:Shape;
 		
+		protected var strokeColor:uint;
 		protected var strokeWeight:Number;
 		
 		// TODO arrow...
 		public function BlockButton(buttonWidth:Number, buttonHeight:Number, backgroundColor:uint, labelText:String, labelSize:Number, labelColor:uint = 0xffffff, labelFont:String = null) {
 			super();
 			outline = new Shape();
+			strokeColor = 0xffffff;
 			
 			if (labelFont == null) {
 				_font = Assets.FONT_REGULAR;
@@ -77,10 +79,17 @@ package net.localprojects.ui {
 			
 			// draw the outline
 			outline.graphics.clear();
-			outline.graphics.lineStyle(strokeWeight, 0xffffff);
+			outline.graphics.lineStyle(strokeWeight, strokeColor);
 			outline.graphics.drawRect(0, 0, _buttonWidth, _buttonHeight);
 			outline.graphics.endFill();
-		}		
+		}
+		
+		public function setStrokeColor(c:uint):void {
+			if(strokeColor != c) {
+				strokeColor = c;
+				TweenMax.to(outline, 0.5, {ease: Quart.easeOut, colorTransform: {tint: strokeColor, tintAmount: 1}});			
+			}
+		}
 		
 		public function setStrokeWeight(weight:Number):void {
 			strokeWeight = weight;
@@ -133,12 +142,22 @@ package net.localprojects.ui {
 			addChild(labelFieldA);
 		}
 		
-		public function showOutline(show:Boolean):void {
+		public function showOutline(show:Boolean, instant:Boolean = false):void {
 			if (show) {
-				if (!contains(outline)) addChild(outline);
+				if(instant) {
+					outline.alpha = 1;
+				}
+				else {
+					TweenMax.to(outline, 0.25, {alpha: 1, ease: Quart.easeIn});
+				}
 			}
 			else {
-				if (contains(outline)) removeChild(outline);			
+				if(instant) {
+					outline.alpha = 0;
+				}			
+				else {
+					TweenMax.to(outline, 0.25, {alpha: 0, ease: Quart.easeOut});					
+				}
 			}
 		}
 	
