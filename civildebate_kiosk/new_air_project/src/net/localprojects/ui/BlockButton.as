@@ -79,7 +79,7 @@ package net.localprojects.ui {
 			
 			// draw the outline
 			outline.graphics.clear();
-			outline.graphics.lineStyle(strokeWeight, strokeColor);
+			outline.graphics.lineStyle(strokeWeight, strokeColor, 1, true);
 			outline.graphics.drawRect(0, 0, _buttonWidth, _buttonHeight);
 			outline.graphics.endFill();
 		}
