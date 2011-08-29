@@ -255,26 +255,26 @@ package net.localprojects {
 			bigButton.setDefaultTweenOut(1, {x: 455, y: 1470, alpha: 0}); // TODO possibly subclass for cooler in and out tweens
 			addChild(bigButton);
 			
-			statsButton = new IconButton(111, 55, 0x000000, 'Stats', 20, 0xffffff, Assets.FONT_BOLD, Assets.statsIcon);
-			statsButton.setDefaultTweenIn(1, {x: 104, y: 1379});
-			statsButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1379});
+			statsButton = new IconButton(119, 63, 0x000000, 'Stats', 20, 0xffffff, Assets.FONT_BOLD, Assets.statsIcon);
+			statsButton.setDefaultTweenIn(1, {x: 101, y: 1376});
+			statsButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1376});
 			addChild(statsButton);
 			
-			likeButton = new CounterButton(111, 55, 0x000000, 'Like', 20, 0xffffff, Assets.FONT_BOLD);
+			likeButton = new CounterButton(148, 63, 0x000000, 'Like', 20, 0xffffff, Assets.FONT_BOLD);
 			likeButton.setTimeout(5000);
-			likeButton.setDefaultTweenIn(1, {x: 238, y: 1379});
-			likeButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1379});			
+			likeButton.setDefaultTweenIn(1, {x: 238, y: 1376});
+			likeButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1376});			
 			addChild(likeButton);
 			
-			viewDebateButton = new BlockButton(517, 55, 0x000000, '', 20, 0xffffff, Assets.FONT_BOLD);
-			viewDebateButton.setDefaultTweenIn(1, {x: 373, y: 1379});
-			viewDebateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1379});			
+			viewDebateButton = new BlockButton(492, 63, 0x000000, '', 20, 0xffffff, Assets.FONT_BOLD);
+			viewDebateButton.setDefaultTweenIn(1, {x: 404, y: 1376});
+			viewDebateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1376});			
 			addChild(viewDebateButton);
 			
-			flagButton = new IconButton(59, 55, 0x000000, '', 20, 0xffffff, null, Assets.flagIcon);
+			flagButton = new IconButton(67, 63, 0x000000, '', 20, 0xffffff, null, Assets.flagIcon);
 			flagButton.setTimeout(5000);			
-			flagButton.setDefaultTweenIn(1, {x: 914, y: 1379});
-			flagButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1379});
+			flagButton.setDefaultTweenIn(1, {x: 914, y: 1376});
+			flagButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1376});
 			addChild(flagButton);			
 			
 			debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
@@ -691,7 +691,7 @@ package net.localprojects {
 			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
 			// note that it's a one-time thing, when the block tweens back in, it will start from its canonical "tween out" location
 			// and not this temporary override
-			debateOverlay.tweenOut(1, {y: -debateOverlay.height});
+			//debateOverlay.tweenOut(1, {y: -debateOverlay.height});
 			
 			// clean up the old based on what's not active
 			tweenOutInactive();
