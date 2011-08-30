@@ -43,7 +43,7 @@ package net.localprojects.ui {
 
 		private function init():void {
 			buttonMode = true;
-			buttonWidth = 521;
+			buttonWidth = 519;
 			buttonHeight = 133;	
 			
 			// create the bounding box / mask

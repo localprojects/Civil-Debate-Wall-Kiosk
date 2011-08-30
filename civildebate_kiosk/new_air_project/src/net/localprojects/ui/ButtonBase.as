@@ -55,6 +55,8 @@ package net.localprojects.ui {
 		private function onTimeout(e:TimerEvent):void {
 			trace('button back!');
 			locked = false;
+			timer.stop();
+			TweenMax.to(background, 1, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
 		}
 		
 		protected function onMouseDown(e:MouseEvent):void {
@@ -70,10 +72,14 @@ package net.localprojects.ui {
 				locked = true;
 				timer.reset();
 				timer.start();
+				TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: Assets.COLOR_GRAY_50, tintAmount: 1}});				
+			}
+			else {
+				TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
 			}
 			
 			CDW.ref.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
-			TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
+			
 			onClick(e);
 		}		
 		

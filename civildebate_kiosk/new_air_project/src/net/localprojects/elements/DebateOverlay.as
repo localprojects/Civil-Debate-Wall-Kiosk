@@ -41,10 +41,11 @@ package net.localprojects.elements
 			// rebuild the list
 		
 			// clear children
-			for (var i:int = 0; i < scrollSheet.numChildren; i++) {
-				scrollSheet.removeChild(scrollSheet.getChildAt(i));
+			while(scrollSheet.numChildren > 0) {
+				scrollSheet.removeChild(scrollSheet.getChildAt(0));
 			}			
 			
+			var yOffset:int = 30;
 			var paddingBottom:int = 20;
 			
 			var index:int = 0;
@@ -134,8 +135,9 @@ package net.localprojects.elements
 				// add the flag button
 				var flagButton:IconButton = new IconButton(33, 32, stanceColorLight, '', 0, 0x000000, null, Assets.getSmallFlagIcon());
 				flagButton.setStrokeWeight(2);
+				flagButton.setStrokeColor(Assets.COLOR_GRAY_15);
 				flagButton.visible = true;
-				flagButton.x = 786;
+				flagButton.x = 791;
 				flagButton.y = 0;
 				
 				commentRow.addChild(flagButton);
@@ -164,9 +166,10 @@ package net.localprojects.elements
 				// Add the debate me button
 				var debateButton:BalloonButton = new BalloonButton(110, 101, 0x000000, 'LET\u0027S\nDEBATE !', 15);
 				debateButton.setBackgroundColor(stanceColorLight, true);
+				debateButton.setStrokeColor(Assets.COLOR_GRAY_15);				
 				debateButton.visible = true;
 				
-				debateButton.x = 858;
+				debateButton.x = 849;
 				debateButton.y = 61; 
 				
 				commentRow.addChild(debateButton);				
@@ -179,7 +182,9 @@ package net.localprojects.elements
 				
 
 				commentRow.x = 30;
-				commentRow.y = index * (commentRow.height + paddingBottom);
+				commentRow.y = yOffset;
+				
+				yOffset += Math.max(opinion.height + 60, portrait.height) + paddingBottom;
 				
 				scrollSheet.addChild(commentRow);
 				

@@ -422,5 +422,11 @@ package net.localprojects {
 			return text;
 		}
 		
+		
+		public static function shortenName(s:String):String {
+			// Capitalized First word 
+			return StringUtils.capitalize(StringUtils.trim(s.split(' ')[0]))			
+		}
+		
 	}
 }
