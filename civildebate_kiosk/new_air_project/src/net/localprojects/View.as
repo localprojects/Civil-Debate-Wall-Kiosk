@@ -110,6 +110,8 @@ package net.localprojects {
 		// convenience
 		private var stageWidth:Number;
 		private var stageHeight:Number;
+		private var yesLetterSpacing:Number;
+		private var noLetterSpacing:Number;		
 		
 		public function View() {
 			super();
@@ -120,6 +122,9 @@ package net.localprojects {
 			// for convenience
 			stageWidth = CDW.ref.stage.stageWidth;
 			stageHeight = CDW.ref.stage.stageHeight;
+			yesLetterSpacing = -4;
+			noLetterSpacing = -7;
+			
 			
 			// Work around for lack of mouse-down events
 			// http://forums.adobe.com/message/2794098?tstart=0
@@ -169,26 +174,28 @@ package net.localprojects {
 			
 			// triple stances
 			stance= new BlockLabel('', 92, 0xffffff, 0x000000);
-			stance.setPadding(24, 31, 23, 30);
+			stance.setPadding(24, 36, 23, 30);
+			
 			stance.considerDescenders = false;
 			stance.setDefaultTweenIn(1, {x: 238, y: 280});
 			stance.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 280});			
 			addChild(stance);			
 			
-			leftStance= new BlockLabel('', 92, 0xffffff, 0x000000);
-			leftStance.setPadding(24, 31, 23, 30);
+			
+			leftStance = new BlockLabel('', 92, 0xffffff, 0x000000);
+			leftStance.setPadding(24, 36, 23, 30);		
 			leftStance.considerDescenders = false;
 			leftStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x - stageWidth, y: stance.defaultTweenInVars.y});						
 			addChild(leftStance);
 
 			rightStance= new BlockLabel('', 92, 0xffffff, 0x000000);
-			rightStance.setPadding(24, 31, 23, 30);
+			rightStance.setPadding(24, 36, 23, 30);
 			leftStance.considerDescenders = false;			
 			rightStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x + stageWidth, y: stance.defaultTweenInVars.y});						
 			addChild(rightStance);			
 			
 			// triple nametags
-			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
+			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);	
 			nametag.setPadding(33, 38, 24, 38);
 			nametag.setDefaultTweenIn(1, {x: 238, y: 410});
 			nametag.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 410});
@@ -217,8 +224,8 @@ package net.localprojects {
 			addChild(leftQuote);
 			
 			rightQuote = new QuotationMark();
-			rightQuote.setDefaultTweenIn(1, {x: 660, y: 1639});
-			rightQuote.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1639});				
+			rightQuote.setDefaultTweenIn(1, {x: 660, y: 1636});
+			rightQuote.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1636});				
 			rightQuote.setStyle(QuotationMark.CLOSING);
 			addChild(rightQuote);
 			
@@ -299,13 +306,13 @@ package net.localprojects {
 			addChild(answerPrompt);
 			
 			yesButton = new BlockButton(215, 100, Assets.COLOR_YES_LIGHT, 'YES!', 80);
-			yesButton.setLetterSpacing(-3);
+			yesButton.setLetterSpacing(yesLetterSpacing);
 			yesButton.setDefaultTweenIn(1, {x: 447, y: 1340});
 			yesButton.setDefaultTweenOut(1, {x: 447, y: BlockBase.OFF_BOTTOM_EDGE});
 			addChild(yesButton);
 			
-			noButton = new BlockButton(185, 100, Assets.COLOR_NO_LIGHT, 'NO!', 80);			
-			noButton.setLetterSpacing(-5);
+			noButton = new BlockButton(185, 100, Assets.COLOR_NO_LIGHT, 'NO!', 80);
+			noButton.setLetterSpacing(noLetterSpacing);
 			noButton.setDefaultTweenIn(1.2, {x: 677, y: 1340});
 			noButton.setDefaultTweenOut(1.2, {x: 677, y: BlockBase.OFF_BOTTOM_EDGE});
 			addChild(noButton);
@@ -328,8 +335,6 @@ package net.localprojects {
 			smsDisclaimer.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1625});
 			smsDisclaimer.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1625});
 			addChild(smsDisclaimer);
-			
-		
 			
 			exitButton = new BlockButton(120, 60, 0x000000, 'EXIT', 25, 0xffffff, Assets.FONT_HEAVY);
 			exitButton.setDefaultTweenIn(1, {x: 101, y: 1003});
@@ -357,7 +362,7 @@ package net.localprojects {
 			countdownButton.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: stageHeight});
 			addChild(countdownButton);
 			
-			nameEntryInstructions = new BlockLabel('ENTER A UNIQUE NAME', 26, 0xffffff, 0x000000, Assets.FONT_HEAVY)
+			nameEntryInstructions = new BlockLabel('ENTER YOUR NAME', 26, 0xffffff, 0x000000, Assets.FONT_HEAVY)
 			nameEntryInstructions.setPadding(20, 31, 20, 31);
 			nameEntryInstructions.setDefaultTweenIn(1, {x: 101, y: 1000});
 			nameEntryInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1003});
@@ -503,7 +508,7 @@ package net.localprojects {
 
 		// another attempt to fix the missing tween problem by blocking input during tweens
 		// better way to do it? tween counting at start and end of view function?
-		// this ignores the flash overlay and breaks the draglayer...
+		// this ignores the flash operspective rectificationverlay and breaks the draglayer...
 		private function onEnterFrame(e:Event):void {
 			protection.visible = false;
 			var tweens:Array = TweenMax.getAllTweens();
@@ -532,6 +537,7 @@ package net.localprojects {
 			// mutations
 			CDW.inactivityTimer.disarm();
 			portrait.setImage(Assets.portraitPlaceholder);
+			question.setTextColor(CDW.state.questionTextColor);
 			bigButton.setText('ADD YOUR OPINION', true);
 			CDW.state.clearUser();
 
@@ -557,11 +563,18 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(CDW.database.getActivePortrait());
+			question.setTextColor(CDW.state.questionTextColor);			
 			question.setText(CDW.database.getQuestionText(), true);
+			
+			
 			nametag.setText(CDW.database.getDebateAuthorName(CDW.state.activeDebate) + ' Says :', true);
 			stance.setText(CDW.state.activeStanceText, true);
+
+			(CDW.state.activeStanceText == 'YES!') ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);
+			
 			opinion.setText(CDW.database.getOpinion(CDW.state.activeDebate));
 			bigButton.setText('ADD YOUR OPINION', true);
+			
 			debateButton.setStrokeColor(0xffffff);			
 			
 			var commentCount:int = CDW.database.getCommentCount(CDW.state.activeDebate);
@@ -579,6 +592,7 @@ package net.localprojects {
 				// set the previous debate				
 				leftOpinion.setText(CDW.database.getOpinion(CDW.state.previousDebate));				
 				leftStance.setText(CDW.state.previousStanceText, true);
+				(CDW.state.previousStanceText == 'YES!') ? leftStance.setLetterSpacing(yesLetterSpacing) : leftStance.setLetterSpacing(noLetterSpacing);				
 				leftNametag.setText(CDW.database.getDebateAuthorName(CDW.state.previousDebate) + ' Says :', true);				
 				
 				leftStance.setBackgroundColor(CDW.state.previousStanceColorLight, true);
@@ -590,6 +604,7 @@ package net.localprojects {
 				// set the previous debate
 				rightOpinion.setText(CDW.database.debates[CDW.state.nextDebate].opinion);				
 				rightStance.setText(CDW.state.nextStanceText, true);
+				(CDW.state.nextStanceText == 'YES!') ? rightStance.setLetterSpacing(yesLetterSpacing) : rightStance.setLetterSpacing(noLetterSpacing);				
 				rightNametag.setText(CDW.database.getDebateAuthorName(CDW.state.nextDebate) + ' Says :', true);				
 				
 				rightStance.setBackgroundColor(CDW.state.nextStanceColorLight, true);				
@@ -602,20 +617,25 @@ package net.localprojects {
 			leftQuote.setColor(CDW.state.activeStanceColorLight, true);
 			rightQuote.setColor(CDW.state.activeStanceColorLight, true);				
 			nametag.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			debateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			opinion.setBackgroundColor(CDW.state.activeStanceColorLight, true);
-			statsButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			likeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			flagButton.setBackgroundColor(CDW.state.activeStanceColorDark), true;
 			
+			debateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			debateButton.setDownColor(CDW.state.activeStanceColorMedium);
+			statsButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			statsButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			likeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			likeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			flagButton.setBackgroundColor(CDW.state.activeStanceColorDark), true;
+			flagButton.setDownColor(CDW.state.activeStanceColorMedium);			
 
+			viewDebateButton.setDownColor(CDW.state.activeStanceColorMedium);
+			
 			if (commentCount == 0) {
 				viewDebateButton.setLabel('No responses yet. Be the first!');
 				viewDebateButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);				
 			}
 			else {
 				// TODO comment preview
-				
 				
 				// Show as much comment as possible... truncate what we can't
 				var firstCommentText:String = CDW.database.debates[CDW.state.activeDebate]['comments'][0]['comment'];
@@ -731,18 +751,28 @@ package net.localprojects {
 			CDW.inactivityTimer.disarm();
 			
 			// mutations
+			// TODO set stance etc?
 			portrait.setImage(CDW.database.getActivePortrait());
+			question.setTextColor(CDW.state.questionTextColor);			
 			byline.y = 410 + opinion.height + 30;
 			byline.setBackgroundColor(CDW.state.activeStanceColorMedium, true);
-			byline.setText('Said by ' + CDW.database.debates[CDW.state.activeDebate].author.firstName, true);			
+			
+			debateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			debateButton.setDownColor(CDW.state.activeStanceColorMedium);
+			
+			viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			viewDebateButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			
+			// use the full capitalize name for the byline
+			byline.setText('Said by ' + StringUtils.capitalize(CDW.database.debates[CDW.state.activeDebate].author.firstName, true), true);			
 			viewDebateButton.setLabel('BACK TO HOME SCREEN');
 			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 - letsDebateUnderlay.y; // height depends on opinion
 			debateOverlay.setHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));
 			debateButton.setStrokeColor(Assets.COLOR_GRAY_15);
 			
-			
 			// behaviors
 			viewDebateButton.setOnClick(homeView);
+			
 			
 			// blocks
 			portrait.tweenIn();
@@ -840,6 +870,7 @@ package net.localprojects {
 		public function transitionView(...args):void {
 			markAllInactive();
 			portrait.setImage(CDW.database.getActivePortrait());
+			question.setTextColor(CDW.state.questionTextColor);			
 			
 			portrait.tweenIn(0.5, {delay: 0.5, onComplete: onViewTransitionComplete});
 			header.tweenIn();
@@ -879,6 +910,7 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(Assets.portraitPlaceholder);
+			question.setTextColor(CDW.state.questionTextColor);			
 			noButton.setBackgroundColor(Assets.COLOR_NO_LIGHT);
 			yesButton.setBackgroundColor(Assets.COLOR_YES_LIGHT);			
 			noButton.showOutline(true);
@@ -946,6 +978,7 @@ package net.localprojects {
 			// behaviors
 			exitButton.setOnClick(homeView); // TODO do we need the back button?
 			portrait.setImage(Assets.portraitPlaceholder);
+			question.setTextColor(CDW.state.questionTextColor);			
 			yesButton.setOnClick(null);
 			noButton.setOnClick(null);
 			skipTextButton.setOnClick(simulateSMS);
@@ -1060,6 +1093,7 @@ package net.localprojects {
 		private function onUserImageLoaded(b:Bitmap):void {
 			CDW.state.userImage = b;
 			portrait.setImage(CDW.state.userImage);
+			question.setTextColor(CDW.state.questionTextColor);			
 		}
 		
 		
@@ -1273,12 +1307,14 @@ package net.localprojects {
 			
 			// mutations
 			stance.setText(CDW.state.userStanceText);
-			stance.setBackgroundColor(CDW.state.userStanceColorLight);			
+			stance.setBackgroundColor(CDW.state.userStanceColorLight);
+			(CDW.state.userStanceText == 'YES!') ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);			
 			nameEntryInstructions.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			saveButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
 			keyboard.setColor(CDW.state.userStanceColorLight, true);
 			nameEntryField.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			portrait.setImage(CDW.state.userImage, true);
+			question.setTextColor(CDW.state.questionTextColor);			
 			nameEntryField.setText('', true); // clear the name entry field			
 			keyboard.target = nameEntryField.getTextField();
 			
@@ -1327,7 +1363,9 @@ package net.localprojects {
 			CDW.inactivityTimer.arm();
 			
 			// mutations
+			
 			portrait.setImage(CDW.state.userImage, true);
+			question.setTextColor(CDW.state.questionTextColor);			
 			bigButton.setText('SUBMIT THIS DEBATE', true);
 			bigButton.enable();
 			nametag.setText(CDW.state.userName + ' Says:', true);
@@ -1341,7 +1379,9 @@ package net.localprojects {
 			leftQuote.setColor(CDW.state.userStanceColorLight, true);
 			rightQuote.setColor(CDW.state.userStanceColorLight, true);				
 			
-			// TODO stance?
+			stance.setText(CDW.state.userStanceText);
+			stance.setBackgroundColor(CDW.state.userStanceColorLight);
+			(CDW.state.userStanceText == 'YES!') ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);
 			
 			// behaviors
 			retakePhotoButton.setOnClick(photoBoothView);
@@ -1479,6 +1519,10 @@ package net.localprojects {
 			saveButton.setBackgroundColor(CDW.state.userStanceColorDark);
 			editOpinion.setBackgroundColor(CDW.state.userStanceColorLight);
 			
+			stance.setText(CDW.state.userStanceText);
+			stance.setBackgroundColor(CDW.state.userStanceColorLight);
+			(CDW.state.userStanceText == 'YES!') ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);			
+			
 			// behaviors
 			saveButton.setOnClick(onSaveOpinionEdit);
 			
@@ -1519,6 +1563,7 @@ package net.localprojects {
 			
 			// mutations
 			portrait.setImage(Assets.statsUnderlay);
+			question.setTextColor(CDW.state.questionTextColor);			
 			
 			// behaviors
 			stats.homeButton.setOnClick(onStatsClose);
@@ -1536,6 +1581,7 @@ package net.localprojects {
 		private function onStatsClose(e:Event):void {
 			// restore portrait
 			portrait.setImage(CDW.database.getActivePortrait());
+			question.setTextColor(CDW.state.questionTextColor);			
 			stats.tweenOut();
 		}
 		

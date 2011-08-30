@@ -1,4 +1,7 @@
 package net.localprojects.elements {
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
+	
 	import flash.display.*;
 	import flash.text.*;
 	
@@ -8,6 +11,7 @@ package net.localprojects.elements {
 	public class Question extends BlockBase {
 		
 		private var questionText:TextField;
+		private var questionTextColor:uint;
 		
 		public function Question() {
 			super();
@@ -34,7 +38,7 @@ package net.localprojects.elements {
 			questionText.mouseEnabled = false;			
 			questionText.gridFitType = GridFitType.NONE;
 			questionText.antiAliasType = AntiAliasType.NORMAL;
-			questionText.textColor = 0x414042;
+			questionText.textColor = 0xffffff;
 			questionText.width = 1022;
 			questionText.wordWrap = true;			
 			setText('Question goes here');
@@ -44,6 +48,13 @@ package net.localprojects.elements {
 		
 		override public function setText(s:String, instant:Boolean = false):void {
 			questionText.text = s;
+		}
+		
+		public function setTextColor(c:uint):void {
+			if (c != questionTextColor) {
+				questionTextColor = c;
+				TweenMax.to(questionText, 0.3, {ease: Quart.easeInOut, colorTransform: {tint: questionTextColor, tintAmount: 1}});
+			}
 		}
 		
 	}

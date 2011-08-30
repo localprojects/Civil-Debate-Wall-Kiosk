@@ -1,9 +1,11 @@
 package net.localprojects.ui {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
-	import net.localprojects.CDW;
+	
 	import flash.display.*;
 	import flash.events.MouseEvent;
+	
+	import net.localprojects.CDW;
 	
 	
 	
@@ -14,10 +16,13 @@ package net.localprojects.ui {
 		private var tailWidth:Number;
 		private var tailHeight:Number;
 		private var scaleMode:String;
+		private var radius:Number;
 		
 		
 		// block button with a tail
 		public function BalloonButton(buttonWidth:Number, buttonHeight:Number, backgroundColor:uint, labelText:String, labelSize:Number, labelColor:uint = 0xffffff, labelFont:String = null)	{
+			radius = 30;
+			
 			tail = new Shape();
 			tailOutline = new Shape;
 			addChild(tailOutline);
@@ -47,7 +52,7 @@ package net.localprojects.ui {
 			// draw the background
 			background.graphics.clear();
 			background.graphics.beginFill(0xffffff);
-			background.graphics.drawRoundRect(0, 0, _buttonWidth, _buttonHeight, 20, 20);
+			background.graphics.drawRoundRect(0, 0, _buttonWidth, _buttonHeight, radius, radius);
 			background.graphics.endFill();
 			TweenMax.to(background, 0, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
 			
@@ -63,7 +68,7 @@ package net.localprojects.ui {
 			// draw the outline
 			outline.graphics.clear();
 			outline.graphics.lineStyle(strokeWeight, strokeColor, 1, true, scaleMode);
-			outline.graphics.drawRoundRect(0, 0, _buttonWidth, _buttonHeight, 20, 20);
+			outline.graphics.drawRoundRect(0, 0, _buttonWidth, _buttonHeight, radius, radius);
 			outline.graphics.endFill();
 			
 			// draw the tail outline

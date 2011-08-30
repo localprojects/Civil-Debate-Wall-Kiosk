@@ -140,7 +140,7 @@ package net.localprojects.blocks {
 		}
 		
 		override public function setText(s:String, instant:Boolean = false):void {
-			textField.text = s;
+			textField.text = s + ' '; // trailing space balances background
 			drawBackground();
 		}
 		

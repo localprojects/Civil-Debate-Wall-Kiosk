@@ -18,8 +18,10 @@ package net.localprojects {
 		public var userImage:Bitmap = new Bitmap(new BitmapData(1080, 1920));
 		public var latestSMSID:String = '';
 		
+		public var activeComment:String = null;
 		public var userIsResponding:Boolean = false; // true if we're entering a debate through the "let's debate" button
 		
+		public var questionTextColor:uint = 0xff0000;
 		
 		// adds exclamation point
 		public var activeStanceText:String = '';

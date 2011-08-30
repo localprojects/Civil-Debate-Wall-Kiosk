@@ -7,8 +7,6 @@ package net.localprojects.blocks {
 	import flash.geom.Rectangle;
 	import flash.text.*;
 	
-	
-	
 	import net.localprojects.*;
 	import net.localprojects.Assets;
 	
@@ -22,8 +20,10 @@ package net.localprojects.blocks {
 		protected var _showBackground:Boolean;		
 		protected var _italic:Boolean;
 		protected var _font:String;
+		protected var _letterSpacing:Number;		
 		
 		protected var textField:TextField;
+		protected var textFormat:TextFormat;		
 		protected var paddingTop:int;
 		protected var paddingBottom:int;		
 		protected var paddingLeft:int;
@@ -34,6 +34,7 @@ package net.localprojects.blocks {
 		
 		public function BlockLabel(text:String, textSize:Number, textColor:uint = 0xffffff, backgroundColor:uint = 0x000000, font:String = null, showBackground:Boolean = true) {
 			_italic = false;
+			_letterSpacing = -1;			
 			
 			// Work around for intermittent 1047 error
 			if (font == null) {
@@ -63,7 +64,7 @@ package net.localprojects.blocks {
 		}
 		
 		
-		private var textFormat:TextFormat;		
+				
 		private function init():void {
 			considerDescenders = true;
 			
@@ -73,7 +74,7 @@ package net.localprojects.blocks {
 			textFormat.font =  _font;
 			textFormat.align = TextFormatAlign.LEFT;
 			textFormat.size = _textSize;
-			textFormat.letterSpacing = -1;
+			textFormat.letterSpacing = _letterSpacing;
 			textFormat.italic = _italic;
 			//textFormat.leading = -0.25;
 			
@@ -88,8 +89,7 @@ package net.localprojects.blocks {
 			textField.textColor = _textColor;
 			textField.autoSize = TextFieldAutoSize.LEFT;
 			
-			
-			
+
 			//textField.backgroundColor = 0xff0000cc;
 			//textField.background = true;
 			
@@ -110,6 +110,16 @@ package net.localprojects.blocks {
 			
 			this.cacheAsBitmap = true;
 		}
+
+		public function setLetterSpacing(amount:Number):void {
+			_letterSpacing = amount;
+			textFormat.letterSpacing = _letterSpacing;			
+			textField.defaultTextFormat = textFormat;
+			textField.text = _text;
+			drawBackground();
+		}
+		
+		
 		
 
 		public function setPadding(top:Number, right:Number, bottom:Number, left:Number):void {
@@ -181,7 +191,8 @@ package net.localprojects.blocks {
 		
 		override public function setText(s:String, instant:Boolean = false):void {
 			// make sure it's a change
-			if (textField.text != s) {			
+			if (textField.text != s) {		
+				_text = s;
 			
 				instantTween = instant;			
 				var textOutDuration:Number = instant ? 0 : 0.1;
