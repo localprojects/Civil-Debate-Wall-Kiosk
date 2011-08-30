@@ -23,13 +23,14 @@ package net.localprojects.blocks {
 			_backgroundHeight = backgroundHeight;
 			preInit();
 			super(text, textSize, textColor, backgroundColor, font, false);
-
+			setBackgroundColor(_backgroundColor, true);
 			postInit();
 		}
 		
 		private function preInit():void {
-			bar = new Bitmap(new BitmapData(_backgroundWidth, _backgroundHeight, false, _backgroundColor), PixelSnapping.ALWAYS, false);
-			addChild(bar);			
+			bar = new Bitmap(new BitmapData(_backgroundWidth, _backgroundHeight, false, 0xffffff), PixelSnapping.ALWAYS, false);
+			
+			addChild(bar);		
 		}
 		
 		private function postInit():void {
@@ -62,6 +63,16 @@ package net.localprojects.blocks {
 				
 			}
 		}
+		
+		// tweens to a new color
+		override public function setBackgroundColor(c:uint, instant:Boolean = false):void {
+			_backgroundColor = c;
+			
+			var duation:Number = instant ? 0 : 0.5;
+			
+			TweenMax.to(bar, duation, {ease: Quart.easeInOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
+		}
+				
 		
 		override public function afterFade():void {
 			textField.text = newText;				

@@ -1,14 +1,10 @@
 package net.localprojects {
 	import com.adobe.serialization.json.*;
-	import com.bit101.components.FPSMeter;
 	import com.greensock.*;
 	import com.greensock.easing.*;
-	import com.greensock.events.LoaderEvent;
-	import com.greensock.events.TweenEvent;
 	
 	import flash.display.*;
 	import flash.events.*;
-	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.*;
@@ -49,9 +45,6 @@ package net.localprojects {
 		private var flagYesButton:BlockButton;
 		private var flagNoButton:BlockButton;
 		private var submitOverlay:BlockBitmap;		
-				
-		
-		
 		private var letsDebateUnderlay:BlockBitmap;
 		
 		// mutable (e.g. color changes)
@@ -124,7 +117,6 @@ package net.localprojects {
 			yesLetterSpacing = -4;
 			noLetterSpacing = -7;
 			
-			
 			// Work around for lack of mouse-down events
 			// http://forums.adobe.com/message/2794098?tstart=0
 			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
@@ -145,7 +137,6 @@ package net.localprojects {
 			cameraOverlay.setDefaultTweenIn(1, {alpha: 1});
 			cameraOverlay.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(cameraOverlay);
-			
 			
 			letsDebateUnderlay = new BlockBitmap(new Bitmap(new BitmapData(1022, 577, false, 0xffffff)));
 			letsDebateUnderlay.mouseEnabled = false; // let keystrokes through to the keyboard
@@ -179,7 +170,6 @@ package net.localprojects {
 			stance.setDefaultTweenIn(1, {x: 238, y: 280});
 			stance.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 280});			
 			addChild(stance);			
-			
 			
 			leftStance = new BlockLabel('', 92, 0xffffff, 0x000000);
 			leftStance.setPadding(24, 36, 23, 30);		
@@ -298,8 +288,7 @@ package net.localprojects {
 			debatePicker.update();
 			addChild(debatePicker);
 			
-			
-			pickStanceInstructions = new BlockLabelBar('Your Answer / Please Select One :', 19, 0xffffff, 367, 63, Assets.COLOR_GRAY_85, Assets.FONT_REGULAR, true);			
+			pickStanceInstructions = new BlockLabelBar('Your Answer / Please Select One :', 19, 0xffffff, 367, 63, Assets.COLOR_GRAY_85, Assets.FONT_REGULAR);			
 			pickStanceInstructions.setDefaultTweenIn(1, {x: 649, y: 1243});
 			pickStanceInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
 			addChild(pickStanceInstructions);
@@ -340,13 +329,6 @@ package net.localprojects {
 			exitButton.setDefaultTweenIn(1, {x: 100});
 			exitButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});			
 			addChild(exitButton);
-			
-			
-//			pickStanceInstructions = new BlockLabel('Your Answer / Please Select One :', 19, 0xffffff, Assets.COLOR_GRAY_85, Assets.FONT_REGULAR, true);
-//			pickStanceInstructions.setPadding(22, 32, 24, 32);
-//			pickStanceInstructions.setDefaultTweenIn(1, {x: 649, y: 1243});
-//			pickStanceInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
-//			addChild(pickStanceInstructions);			
 			
 
 			characterLimit = new BlockLabelBar('Use No More than ' + CDW.settings.characterLimit + ' characters', 19, 0xffffff, 367, 63, 0x000000, Assets.FONT_BOLD);			
@@ -437,8 +419,6 @@ package net.localprojects {
 			continueButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1098});					
 			addChild(continueButton);
 			
-			
-			
 			// Flag overlay
 			flagOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
 			flagOverlay.setDefaultTweenIn(1, {alpha: 0.85});
@@ -467,7 +447,6 @@ package net.localprojects {
 			flagNoButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1098});					
 			addChild(flagNoButton);			
 						
-			
 			// Submit overlay
 			submitOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
 			submitOverlay.setDefaultTweenIn(1, {alpha: 0.85});
@@ -483,9 +462,7 @@ package net.localprojects {
 			submitOverlayContinueButton.setDefaultTweenIn(1, {x: 779, y: 1243});
 			submitOverlayContinueButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
 			addChild(submitOverlayContinueButton);						
-			
-			
-			
+
 			// Camera Overlays
 			blackOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
 			blackOverlay.setDefaultTweenIn(0.1, {alpha: 1, immediateRender: true}); // duration of 0 doesn't work?
@@ -519,7 +496,6 @@ package net.localprojects {
 			protection.visible = false;
 			var tweens:Array = TweenMax.getAllTweens();
 			
-
 			for(var i:int = 0; i < tweens.length; i++) {
 				if(tweens[i].target is BlockBase) {
 					if(tweens[i].target.name !== 'Flash Overlay') {
@@ -531,8 +507,6 @@ package net.localprojects {
 	
 		
 		// =========================================================================
-		
-		
 		
 		
 		// land here if there aren't yet opinions for the current question
@@ -641,7 +615,8 @@ package net.localprojects {
 				viewDebateButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);				
 			}
 			else {
-				// TODO comment preview
+				// TODO embed this functionality in the button label itself?
+				// viewDebateButton.fitLabel(text, maxWidth, prefix, postfix);
 				
 				// Show as much comment as possible... truncate what we can't
 				var firstCommentText:String = CDW.database.debates[CDW.state.activeDebate]['comments'][0]['comment'];
@@ -657,9 +632,7 @@ package net.localprojects {
 					previewWidth = viewDebateButton.measureText(newLabel);
 				}
 				
-				viewDebateButton.setLabel(newLabel); // finally, tween it in				
-				
-
+				viewDebateButton.setLabel(newLabel); // finally, tween it in
 				viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 				
 				// update the comments TODO move this to "set active debate" so it only happens once per update?
@@ -966,7 +939,7 @@ package net.localprojects {
 			
 			// mutations
 			smsInstructions.setBackgroundColor(CDW.state.userStanceColorLight, true);
-			characterLimit.setBackgroundColor(CDW.state.userStanceColorMedium, true);
+			characterLimit.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			
 			exitButton.y = 1000;
 			exitButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
