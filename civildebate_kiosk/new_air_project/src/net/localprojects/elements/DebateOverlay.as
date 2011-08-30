@@ -83,15 +83,18 @@ package net.localprojects.elements
 				
 				var stanceColorLight:uint;
 				var stanceColorMedium:uint;
+				var stanceColorDark:uint;				
 				
 				if (comment['stance'] == 'yes') {
 					stanceColorLight = Assets.COLOR_YES_LIGHT;
 					stanceColorMedium = Assets.COLOR_YES_MEDIUM;
+					stanceColorDark = Assets.COLOR_YES_DARK;
 					stanceLabel.setText('YES!', true);
 				}
 				else {
 					stanceColorLight = Assets.COLOR_NO_LIGHT;
-					stanceColorMedium = Assets.COLOR_NO_MEDIUM;					
+					stanceColorMedium = Assets.COLOR_NO_MEDIUM;
+					stanceColorDark = Assets.COLOR_NO_DARK;					
 					stanceLabel.setText('NO!', true);					
 				}
 				
@@ -133,7 +136,8 @@ package net.localprojects.elements
 				commentRow.addChild(timeLabel);
 				
 				// add the flag button
-				var flagButton:IconButton = new IconButton(33, 32, stanceColorLight, '', 0, 0x000000, null, Assets.getSmallFlagIcon());
+				var flagButton:IconButton = new IconButton(33, 32, stanceColorDark, '', 0, 0x000000, null, Assets.getSmallFlagIcon());
+				flagButton.setDownColor(stanceColorMedium);
 				flagButton.setStrokeWeight(2);
 				flagButton.setStrokeColor(Assets.COLOR_GRAY_15);
 				flagButton.visible = true;
@@ -165,7 +169,8 @@ package net.localprojects.elements
 				
 				// Add the debate me button
 				var debateButton:BalloonButton = new BalloonButton(110, 101, 0x000000, 'LET\u0027S\nDEBATE !', 15);
-				debateButton.setBackgroundColor(stanceColorLight, true);
+				debateButton.setBackgroundColor(stanceColorDark, true);
+				debateButton.setDownColor(stanceColorMedium);				
 				debateButton.setStrokeColor(Assets.COLOR_GRAY_15);				
 				debateButton.visible = true;
 				

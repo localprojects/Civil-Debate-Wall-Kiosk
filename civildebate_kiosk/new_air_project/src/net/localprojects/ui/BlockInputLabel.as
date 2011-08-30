@@ -31,7 +31,7 @@ package net.localprojects.ui {
 			textField.selectable = true;
 			textField.cacheAsBitmap = false;
 			textField.mouseEnabled = true;
-			textField.maxChars = 20;
+			textField.maxChars = 60;
 			
 			// find minimum dimensions
 			textField.text =  'Height Test'; // test character

@@ -1,7 +1,7 @@
 {
 	"phoneNumber": "+13525782609",
 	"characterLimit": 140,
-	"halfSize": false,
+	"halfSize": true,
 	"startFullScreen": false,
 	"webcamOnly": true,
 	"imagePath": "/Users/Mika/Desktop/CDWImages/",
