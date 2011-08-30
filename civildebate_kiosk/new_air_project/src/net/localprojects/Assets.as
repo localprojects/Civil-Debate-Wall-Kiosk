@@ -119,10 +119,11 @@ package net.localprojects
 		public static const COLOR_NO_DARK:uint = Utilities.color(255, 60, 0);
 		public static const COLOR_NO_OVERLAY:uint = Utilities.color(255, 60, 0);		
 		
-		public static const COLOR_GRAY_15:uint = Utilities.color(220, 221, 222); // 15%
-		public static const COLOR_GRAY_85:uint = Utilities.color(77, 77, 79); // 85% K
-		public static const COLOR_GRAY_75:uint = Utilities.color(99, 100, 102); // 75% K
+		public static const COLOR_GRAY_15:uint = Utilities.color(220, 221, 222); // 15% K
+		public static const COLOR_GRAY_25:uint = Utilities.color(199, 200, 202); // 25% K
 		public static const COLOR_GRAY_50:uint = Utilities.color(147, 149, 152); // 50% K
-		public static const COLOR_GRAY_90:uint = Utilities.color(65, 66, 64); // 50% K		
+		public static const COLOR_GRAY_75:uint = Utilities.color(99, 100, 102); // 75% K
+		public static const COLOR_GRAY_85:uint = Utilities.color(77, 77, 79); // 85% K
+		public static const COLOR_GRAY_90:uint = Utilities.color(65, 66, 64); // 90% K		
 	}
 }
