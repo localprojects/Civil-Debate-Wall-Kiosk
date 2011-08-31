@@ -121,12 +121,14 @@ package net.localprojects
 		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 185, 255);
 		public static const COLOR_YES_MEDIUM:uint = Utilities.color(0, 155, 255);
 		public static const COLOR_YES_DARK:uint = Utilities.color(0, 115, 255);
-		public static const COLOR_YES_OVERLAY:uint = Utilities.color(53, 124, 146);		
+		public static const COLOR_YES_OVERLAY:uint = Utilities.color(53, 124, 146);
+		public static const COLOR_YES_WATERMARK:uint = Utilities.color(239, 249, 254);		
 		
 		public static const COLOR_NO_LIGHT:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the design template!
 		public static const COLOR_NO_MEDIUM:uint = Utilities.color(255, 75, 0); // TODO medium and light are identical in the designtemplate!
 		public static const COLOR_NO_DARK:uint = Utilities.color(255, 60, 0);
-		public static const COLOR_NO_OVERLAY:uint = Utilities.color(255, 60, 0);		
+		public static const COLOR_NO_OVERLAY:uint = Utilities.color(255, 60, 0);
+		public static const COLOR_NO_WATERMARK:uint = Utilities.color(255, 242, 235);		
 		
 		public static const COLOR_GRAY_15:uint = Utilities.color(220, 221, 222); // 15% K
 		public static const COLOR_GRAY_25:uint = Utilities.color(199, 200, 202); // 25% K
