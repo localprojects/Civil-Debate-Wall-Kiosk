@@ -7,6 +7,15 @@ package net.localprojects
 		
 		// Embed code is generated dynamically by embedgen.py
 		
+		
+		
+		// Temp
+		[Embed(source = '/assets/graphics/4e4d360f0f2e421e7b000002-full.jpg')] private static const a4e4d360f0f2e421e7b000002fullClass:Class;
+		public static function getSample():Bitmap { return new a4e4d360f0f2e421e7b000002fullClass() as Bitmap; };
+		
+			
+		
+		
 		// Bitmaps
 		[Embed(source = '/assets/graphics/bottomButtonTile.png')] private static const bottomButtonTileClass:Class;
 		public static function getBottomButtonTile():Bitmap { return new bottomButtonTileClass() as Bitmap; };
