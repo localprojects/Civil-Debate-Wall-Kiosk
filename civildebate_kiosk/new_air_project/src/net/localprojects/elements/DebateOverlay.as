@@ -15,6 +15,7 @@ package net.localprojects.elements
 		private var containerHeight:Number;
 		
 		private var scrollSheet:Sprite;
+		private var scrollMask:Sprite;
 		
 		
 		public function DebateOverlay()	{
@@ -24,8 +25,10 @@ package net.localprojects.elements
 		
 		public function init():void {
 			scrollSheet = new Sprite(); 
+			scrollMask = new Sprite();
 			
 			addChild(scrollSheet); // TODO add to scroll container
+			addChild(scrollMask);
 		}
 		
 		public function setHeight(h:Number):void {
@@ -34,7 +37,16 @@ package net.localprojects.elements
 			this.graphics.clear();
 			this.graphics.beginFill(0xffffff, 0.9);
 			this.graphics.drawRect(0, 0, 1022, containerHeight);
-			this.graphics.endFill();			
+			this.graphics.endFill()
+				
+			scrollMask.graphics.clear();
+			scrollMask.graphics.beginFill(0x000000);
+			scrollMask.graphics.drawRect(0, 0, 1022, containerHeight);
+			scrollMask.graphics.endFill()				
+				
+			scrollSheet.mask = scrollMask; 
+			
+			
 		}
 		
 		public function update():void {
@@ -60,9 +72,9 @@ package net.localprojects.elements
 				Utilities.traceObject(comment);
 				
 				var commentRow:Sprite = new Sprite();
-				commentRow.graphics.beginFill(0xffffff);
-				commentRow.graphics.drawRect(0, 0, 957, 188);
-				commentRow.graphics.endFill();				
+//				commentRow.graphics.beginFill(0xffffff);
+//				commentRow.graphics.drawRect(0, 0, 957, 188);
+//				commentRow.graphics.endFill();				
 				
 				
 				var portraitWidth:int = 137;

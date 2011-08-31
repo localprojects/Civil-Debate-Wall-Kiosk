@@ -56,7 +56,7 @@ package net.localprojects.ui {
 		
 		private function init():void {
 			strokeWeight = 5;
-			_letterSpacing = -1;
+			_letterSpacing = 0;
 			labelFieldA = generateLabel(_labelText);
 			
 			_buttonWidth -= strokeWeight;

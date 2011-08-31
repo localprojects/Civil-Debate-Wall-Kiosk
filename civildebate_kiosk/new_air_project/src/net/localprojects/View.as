@@ -293,7 +293,7 @@ package net.localprojects {
 			debateStrip.update();
 			addChild(debateStrip);
 			
-			pickStanceInstructions = new BlockLabelBar('Your Answer / Please Select One :', 19, 0xffffff, 367, 63, Assets.COLOR_GRAY_85, Assets.FONT_REGULAR);			
+			pickStanceInstructions = new BlockLabelBar('Your Answer / Please Select One :', 19, 0xffffff, 367, 63, Assets.COLOR_GRAY_85, Assets.FONT_REGULAR);
 			pickStanceInstructions.setDefaultTweenIn(1, {x: 649, y: 1243});
 			pickStanceInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
 			addChild(pickStanceInstructions);
@@ -1484,7 +1484,7 @@ package net.localprojects {
 
 			keyboard.target = editOpinion.getTextField();
 			
-			editTextInstructions.setBackgroundColor(CDW.state.userStanceColorDark);
+			editTextInstructions.setBackgroundColor(CDW.state.userStanceColorDark, true);
 			
 			
 			saveButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
@@ -1539,6 +1539,8 @@ package net.localprojects {
 		
 		
 		public function statsView(...args):void {
+			markAllInactive();
+			
 			CDW.inactivityTimer.disarm();
 			
 			// mutations
@@ -1546,7 +1548,7 @@ package net.localprojects {
 			question.setTextColor(CDW.state.questionTextColor);			
 			
 			// behaviors
-			stats.homeButton.setOnClick(onStatsClose);
+			stats.homeButton.setOnClick(homeView);
 			
 			// blocks
 			portrait.tweenIn();	
@@ -1555,14 +1557,9 @@ package net.localprojects {
 			question.tweenIn();
 			stats.tweenIn();
 			
-			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design25);			
-		}
-		
-		private function onStatsClose(e:Event):void {
-			// restore portrait
-			portrait.setImage(CDW.database.getActivePortrait());
-			question.setTextColor(CDW.state.questionTextColor);			
-			stats.tweenOut();
+			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design25);
+			
+			tweenOutInactive();			
 		}
 		
 		
@@ -1572,8 +1569,6 @@ package net.localprojects {
 		public function inactivityOverlayView(...args):void {
 			// mutations			
 			CDW.inactivityTimer.disarm();
-			
-			
 			
 			// behaviors
 			continueButton.setOnClick(onContinue);

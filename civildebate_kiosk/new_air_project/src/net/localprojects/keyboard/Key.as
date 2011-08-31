@@ -89,12 +89,8 @@ package net.localprojects.keyboard {
 			textField.autoSize = TextFieldAutoSize.CENTER;
 			textField.text = letter;
 			textField.height = height;
-//			textField.backgroundColor = 0xff0000;
-//			textField.background = true;
-			textField.y = height / 2 - 10;
+			textField.y = (height / 2) - 13;
 			addChild(textField);
-			
-			
 		}
 		
 		private function draw():void {
