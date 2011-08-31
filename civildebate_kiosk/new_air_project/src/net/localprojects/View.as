@@ -1,4 +1,5 @@
 package net.localprojects {
+	import com.greensock.plugins.*;	
 	import com.adobe.serialization.json.*;
 	import com.greensock.*;
 	import com.greensock.easing.*;
@@ -82,7 +83,7 @@ package net.localprojects {
 		
 		// containers, have lots of nested content
 		private var stats:StatsOverlay;
-		public var debatePicker:DebatePicker;
+		public var debateStrip:DebateStrip;
 		private var debateOverlay:DebateOverlay;		
 
 		// multiples of these for the drag transitions
@@ -116,6 +117,10 @@ package net.localprojects {
 			stageHeight = CDW.ref.stage.stageHeight;
 			yesLetterSpacing = -4;
 			noLetterSpacing = -7;
+			
+			// Greensock plugins
+			TweenPlugin.activate([ThrowPropsPlugin]);
+			TweenPlugin.activate([MotionBlurPlugin]);			
 			
 			// Work around for lack of mouse-down events
 			// http://forums.adobe.com/message/2794098?tstart=0
@@ -152,8 +157,8 @@ package net.localprojects {
 			addChild(header);
 			
 			divider = new BlockBitmap(Assets.divider);
-			divider.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 250});
-			divider.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 250});
+			divider.setDefaultTweenIn(1, {alpha: 1, x: BlockBase.CENTER, y: 250});
+			divider.setDefaultTweenOut(1, {alpha: 0, x: BlockBase.CENTER, y: 250});
 			addChild(divider);
 			
 			question = new Question();
@@ -282,11 +287,11 @@ package net.localprojects {
 			debateOverlay.setDefaultTweenOut(1, {x: 30, y: BlockBase.OFF_BOTTOM_EDGE});			
 			addChild(debateOverlay);			
 			
-			debatePicker = new DebatePicker();
-			debatePicker.setDefaultTweenIn(1, {x: 0, y: 1748});
-			debatePicker.setDefaultTweenOut(1, {x: 0, y: BlockBase.OFF_BOTTOM_EDGE});			
-			debatePicker.update();
-			addChild(debatePicker);
+			debateStrip = new DebateStrip();
+			debateStrip.setDefaultTweenIn(1, {x: 0, y: 1748});
+			debateStrip.setDefaultTweenOut(1, {x: 0, y: BlockBase.OFF_BOTTOM_EDGE});			
+			debateStrip.update();
+			addChild(debateStrip);
 			
 			pickStanceInstructions = new BlockLabelBar('Your Answer / Please Select One :', 19, 0xffffff, 367, 63, Assets.COLOR_GRAY_85, Assets.FONT_REGULAR);			
 			pickStanceInstructions.setDefaultTweenIn(1, {x: 649, y: 1243});
@@ -683,7 +688,7 @@ package net.localprojects {
 			debateButton.tweenIn(-1, {y: opinion.y - 195});//debateButton.y = 1347 - opinion.height - 193;
 			flagButton.tweenIn();
 			viewDebateButton.tweenIn();
-			debatePicker.tweenIn();
+			debateStrip.tweenIn();
 			
 			
 			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
@@ -763,7 +768,7 @@ package net.localprojects {
 			opinion.tweenIn(1, {y: 410});
 			debateButton.tweenIn(1, {x: 916, y: 410 + opinion.height + 15, scaleX: 0.75, scaleY: 0.75});
 			viewDebateButton.tweenIn(1, {y: 1650});	
-			debatePicker.tweenIn();
+			debateStrip.tweenIn();
 			debateOverlay.tweenIn(-1, {y: letsDebateUnderlay.y + letsDebateUnderlay.height + 30});			
 			
 			tweenOutInactive();	
@@ -854,7 +859,7 @@ package net.localprojects {
 			header.tweenIn();
 			divider.tweenIn();
 			question.tweenIn();			
-			debatePicker.tweenIn();			
+			debateStrip.tweenIn();			
 			
 			leftQuote.tweenOut(0.25);
 			rightQuote.tweenOut(0.25);

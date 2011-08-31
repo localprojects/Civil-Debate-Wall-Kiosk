@@ -12,12 +12,16 @@ package net.localprojects.ui {
 	
 	public class ThumbnailButton extends BlockBase {
 	
+		private var _backgroundColor:uint;
+		private var background:Sprite;
+		private var lines:Sprite;
 		private var roundedPortrait:Sprite;
 		private var portrait:Bitmap;
 		private var _selected:Boolean;
 		private var textField:BlockLabel;
 		public var debateID:String;
-		private var tempColor:uint;
+		private var stanceColorLight:uint;
+		public var downBackgroundColor:uint;		
 		
 		private var textBackground:Sprite;
 		
@@ -27,9 +31,12 @@ package net.localprojects.ui {
 		public function ThumbnailButton(image:Bitmap, stance:String, debate:String) {
 			_selected = false;
 			
-			this.graphics.beginFill(0xffffff);
-			this.graphics.drawRect(0, 0, 173, 141);
-			this.graphics.endFill();
+			
+			background = new Sprite();
+			background.graphics.beginFill(0xffffff);
+			background.graphics.drawRect(0, 0, 173, 141);
+			background.graphics.endFill();
+			addChild(background);
 			
 			debateID = debate;
 			portrait = image;
@@ -57,11 +64,13 @@ package net.localprojects.ui {
 			
 			
 			if (stance == 'yes') {
-				tempColor = Assets.COLOR_YES_LIGHT;
+				stanceColorLight = Assets.COLOR_YES_LIGHT;
+				downBackgroundColor = Assets.COLOR_YES_WATERMARK; 
 				textField.setText('YES!', true);
 			}
 			else if (stance == 'no') {
-				tempColor = Assets.COLOR_NO_LIGHT;				
+				stanceColorLight = Assets.COLOR_NO_LIGHT;
+				downBackgroundColor = Assets.COLOR_NO_WATERMARK;				
 				textField.setText('NO!', true);				
 			}
 			else {
@@ -69,18 +78,22 @@ package net.localprojects.ui {
 			}			
 			
 			// top line
-			this.graphics.beginFill(tempColor);
-			this.graphics.drawRect(2, 4, 169, 3);			
-			this.graphics.endFill();
+			lines = new Sprite();
+			
+			lines.graphics.beginFill(stanceColorLight);
+			lines.graphics.drawRect(2, 4, 169, 3);			
+			lines.graphics.endFill();
 			
 			// bottom line
-			this.graphics.beginFill(tempColor);
-			this.graphics.drawRect(2, 132, 169, 3);			
-			this.graphics.endFill();			
+			lines.graphics.beginFill(stanceColorLight);
+			lines.graphics.drawRect(2, 132, 169, 3);			
+			lines.graphics.endFill();		
+			
+			addChild(lines);
 
 			// text background			
 			textBackground = new Sprite();
-			textBackground.graphics.beginFill(tempColor);
+			textBackground.graphics.beginFill(stanceColorLight);
 			textBackground.graphics.drawRect(0, 0, 71, 24);
 			textBackground.graphics.endFill();
 			textBackground.x = roundedPortrait.x;
@@ -128,6 +141,16 @@ package net.localprojects.ui {
 			rightDot.graphics.endFill();			
 		}
 		
+		
+		override public function setBackgroundColor(c:uint, instant:Boolean = false):void {
+			_backgroundColor = c;
+			if (instant) {
+				TweenMax.to(background, 0, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});				
+			}
+			else {
+				TweenMax.to(background, 0.5, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
+			}
+		}
 	
 		
 		public function update():void {
@@ -135,7 +158,7 @@ package net.localprojects.ui {
 				// saturate
 				TweenMax.to(roundedPortrait, 1, {colorMatrixFilter:{saturation: 1}, ease: Quart.easeInOut});
 				TweenMax.to(textBackground, 0.5, {y: this.height, alpha: 0, ease: Quart.easeOut});				
-				setDotColor(tempColor);
+				setDotColor(stanceColorLight);
 			}
 			else {
 				// desaturate

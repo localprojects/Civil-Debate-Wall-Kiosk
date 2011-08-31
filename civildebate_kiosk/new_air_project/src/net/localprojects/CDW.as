@@ -4,6 +4,7 @@ package net.localprojects {
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	
+	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
@@ -174,7 +175,7 @@ package net.localprojects {
 				trace('updated db')
 				// set the starting view
 				CDW.state.setActiveDebate(CDW.state.activeDebate);
-				view.debatePicker.update();
+				view.debateStrip.update();
 				
 				if(database.getDebateCount() > 0) {
 					view.homeView();
