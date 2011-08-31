@@ -215,6 +215,15 @@ package net.localprojects.blocks {
 			
 			}
 		}
+		
+		public function checkWidth(s:String):Number {
+			var existingText:String = textField.text; 
+			textField.text = s;
+			var w:Number = textField.width; 
+			textField.text = existingText;
+			return w;
+		}
+		
 			
 		
 		public function afterFade():void {

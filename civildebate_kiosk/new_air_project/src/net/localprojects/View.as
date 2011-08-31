@@ -1,8 +1,8 @@
 package net.localprojects {
-	import com.greensock.plugins.*;	
 	import com.adobe.serialization.json.*;
 	import com.greensock.*;
 	import com.greensock.easing.*;
+	import com.greensock.plugins.*;
 	
 	import flash.display.*;
 	import flash.events.*;
@@ -28,7 +28,6 @@ package net.localprojects {
 		// immutable
 		private var header:Header;
 		private var divider:BlockBitmap;
-		private var pickStanceInstructions:BlockLabelBar;
 		private var smsDisclaimer:BlockParagraph;
 		public var portraitCamera:PortraitCamera; // public for dashboard
 		private var inactivityOverlay:BlockBitmap;
@@ -47,6 +46,7 @@ package net.localprojects {
 		private var flagNoButton:BlockButton;
 		private var submitOverlay:BlockBitmap;		
 		private var letsDebateUnderlay:BlockBitmap;
+		private var pickStanceInstructions:BlockLabelBar;
 		
 		// mutable (e.g. color changes)
 		private var nameEntryInstructions:BlockLabel;		
@@ -59,7 +59,8 @@ package net.localprojects {
 		public var rightQuote:QuotationMark
 		private var statsButton:IconButton;
 		private var flagButton:IconButton;		
-		private var debateButton:BalloonButton;		
+		private var debateButton:BalloonButton;
+		private var secondaryDebateButton:BalloonButton;		
 		private var yesButton:BlockButton;
 		private var noButton:BlockButton;
 		private var exitButton:BlockButton;				
@@ -192,7 +193,7 @@ package net.localprojects {
 			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);	
 			nametag.setPadding(33, 38, 24, 38);
 			nametag.setDefaultTweenIn(1, {x: 238, y: 410});
-			nametag.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 410});
+			nametag.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 410});
 			addChild(nametag);
 			
 			leftNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
@@ -245,9 +246,10 @@ package net.localprojects {
 			dragLayer.setDefaultTweenOut(0, {});
 			addChild(dragLayer);			
 			
+			// dynamic y
 			editOpinion = new BlockInputParagraph(915, 0x000000, '', 42);
-			editOpinion.setDefaultTweenIn(1, {x: 100, y: 1095});
-			editOpinion.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1095});			
+			editOpinion.setDefaultTweenIn(0, {visible: true, x: 101});
+			editOpinion.setDefaultTweenOut(0, {visible: false, x: 101});			
 			addChild(editOpinion);
 			
 			bigButton = new BigButton('ADD YOUR OPINION');
@@ -267,6 +269,7 @@ package net.localprojects {
 			addChild(likeButton);
 			
 			viewDebateButton = new BlockButton(492, 63, 0x000000, '', 20, 0xffffff, Assets.FONT_BOLD);
+			viewDebateButton.shiftBaseline(2);
 			viewDebateButton.setDefaultTweenIn(1, {x: 404, y: 1376});
 			viewDebateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1376});			
 			addChild(viewDebateButton);
@@ -277,10 +280,22 @@ package net.localprojects {
 			flagButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1376});
 			addChild(flagButton);			
 			
+//			debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
+//			debateButton.setDefaultTweenIn(1, {x: 813, scaleX: 1, scaleY: 1});
+//			debateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, scaleX: 1, scaleY: 1});
+//			addChild(debateButton);
+			
 			debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
 			debateButton.setDefaultTweenIn(1, {x: 813, scaleX: 1, scaleY: 1});
 			debateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, scaleX: 1, scaleY: 1});
-			addChild(debateButton);
+			addChild(debateButton);			
+			
+			secondaryDebateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
+			secondaryDebateButton.scaleX = 0.75;  
+			secondaryDebateButton.scaleY = 0.75; 				
+			secondaryDebateButton.setDefaultTweenIn(1, {x: 905});
+			secondaryDebateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE});
+			addChild(secondaryDebateButton);	
 			
 			debateOverlay = new DebateOverlay();
 			debateOverlay.setDefaultTweenIn(1, {x: 30, y: 813});
@@ -294,20 +309,22 @@ package net.localprojects {
 			addChild(debateStrip);
 			
 			pickStanceInstructions = new BlockLabelBar('Your Answer / Please Select One :', 19, 0xffffff, 367, 63, Assets.COLOR_GRAY_85, Assets.FONT_REGULAR);
-			pickStanceInstructions.setDefaultTweenIn(1, {x: 649, y: 1243});
+			pickStanceInstructions.setDefaultTweenIn(1, {x: 670, y: 1243});
 			pickStanceInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
 			addChild(pickStanceInstructions);
 			
 			yesButton = new BlockButton(215, 100, Assets.COLOR_YES_LIGHT, 'YES!', 80);
+			yesButton.shiftBaseline(3);
 			yesButton.setLetterSpacing(yesLetterSpacing);
 			yesButton.setDefaultTweenIn(1, {x: 447, y: 1340});
-			yesButton.setDefaultTweenOut(1, {x: 447, y: BlockBase.OFF_BOTTOM_EDGE});
+			yesButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1340});
 			addChild(yesButton);
 			
 			noButton = new BlockButton(185, 100, Assets.COLOR_NO_LIGHT, 'NO!', 80);
+			noButton.shiftBaseline(3);			
 			noButton.setLetterSpacing(noLetterSpacing);
 			noButton.setDefaultTweenIn(1.2, {x: 677, y: 1340});
-			noButton.setDefaultTweenOut(1.2, {x: 677, y: BlockBase.OFF_BOTTOM_EDGE});
+			noButton.setDefaultTweenOut(1.2, {x: BlockBase.OFF_RIGHT_EDGE, y: 1340});
 			addChild(noButton);
 			
 			// Temp debug button so we don't have to SMS every time
@@ -318,14 +335,14 @@ package net.localprojects {
 
 			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
 			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_REGULAR);
-			smsInstructions.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1096});
+			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
 			smsInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1096});
 			addChild(smsInstructions);
 			
 			var smsDisclaimerText:String = 'You will receive an SMS notifying you of any future opponents \nwho would like to enter into a debate with you based on your opinion. \nYou can opt out at any time by replying STOP.';
-			smsDisclaimer = new BlockParagraph(872, Assets.COLOR_GRAY_75, smsDisclaimerText, 25);
+			smsDisclaimer = new BlockParagraph(915, Assets.COLOR_GRAY_75, smsDisclaimerText, 24);
 			smsDisclaimer.textField.setTextFormat(new TextFormat(null, null, 0xc7c8ca), smsDisclaimerText.length -45, smsDisclaimerText.length);
-			smsDisclaimer.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1625});
+			smsDisclaimer.setDefaultTweenIn(1, {x: 101, y: 1625});
 			smsDisclaimer.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1625});
 			addChild(smsDisclaimer);
 			
@@ -337,18 +354,18 @@ package net.localprojects {
 			
 
 			characterLimit = new BlockLabelBar('Use No More than ' + CDW.settings.characterLimit + ' characters', 19, 0xffffff, 367, 63, 0x000000, Assets.FONT_BOLD);			
-			characterLimit.setDefaultTweenIn(1, {x: 649, y: 1243});
+			characterLimit.setDefaultTweenIn(1, {x: 670, y: 1243});
 			characterLimit.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
 			addChild(characterLimit);			
 			
 			photoBoothNag = new BlockLabel('Please look into the Camera!', 33, 0xffffff, 0x000000, Assets.FONT_BOLD);
-			photoBoothNag.setDefaultTweenIn(1.5, {x: BlockBase.CENTER, y: 176}); // elastic easing was over-the-top
-			photoBoothNag.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 176});
+			photoBoothNag.setDefaultTweenIn(1.5, {alpha: 1, x: BlockBase.CENTER, y: 176}); // elastic easing was over-the-top
+			photoBoothNag.setDefaultTweenOut(1, {alpha: 0, x: BlockBase.CENTER, y: 176});
 			addChild(photoBoothNag);			
 			
-			photoBoothButton = new BlockButton(382, 63, 0x000000, 'TOUCH TO COUNTDOWN', 26, 0xffffff, Assets.FONT_HEAVY);
-			photoBoothButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1628});
-			photoBoothButton.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_BOTTOM_EDGE});
+			photoBoothButton = new BlockButton(398, 63, 0x000000, 'TOUCH TO COUNTDOWN', 26, 0xffffff, Assets.FONT_HEAVY);
+			photoBoothButton.setDefaultTweenIn(1, {alpha: 1, x: BlockBase.CENTER, y: 1628});
+			photoBoothButton.setDefaultTweenOut(1, {alpha: 0, x: BlockBase.CENTER, y: 1628});
 			addChild(photoBoothButton);
 			
 			countdownButton = new CountdownButton(5);
@@ -616,14 +633,18 @@ package net.localprojects {
 			viewDebateButton.setDownColor(CDW.state.activeStanceColorMedium);
 			
 			if (commentCount == 0) {
-				viewDebateButton.setLabel('No responses yet. Be the first!');
+				viewDebateButton.setFont(Assets.FONT_BOLD); // actually sets after call to set label
+				viewDebateButton.setLabel('No responses yet. Be the first!', false);
 				viewDebateButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);				
+				viewDebateButton.showOutline(false);				
 			}
 			else {
+				
 				// TODO embed this functionality in the button label itself?
 				// viewDebateButton.fitLabel(text, maxWidth, prefix, postfix);
 				
 				// Show as much comment as possible... truncate what we can't
+				viewDebateButton.setFont(Assets.FONT_BOLD);
 				var firstCommentText:String = CDW.database.debates[CDW.state.activeDebate]['comments'][0]['comment'];
 				var newLabel:String = '\u201C' + firstCommentText + '\u201D + ' + commentCount + ' ' + Utilities.plural('response', commentCount);				
 				var commentLength:int = firstCommentText.length;
@@ -639,6 +660,7 @@ package net.localprojects {
 				
 				viewDebateButton.setLabel(newLabel); // finally, tween it in
 				viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+				viewDebateButton.showOutline(true);								
 				
 				// update the comments TODO move this to "set active debate" so it only happens once per update?
 				debateOverlay.update();
@@ -685,7 +707,8 @@ package net.localprojects {
 			bigButton.tweenIn();
 			statsButton.tweenIn();
 			likeButton.tweenIn();
-			debateButton.tweenIn(-1, {y: opinion.y - 195});//debateButton.y = 1347 - opinion.height - 193;
+			debateButton.y = opinion.y - 195;
+			debateButton.tweenIn();//debateButton.y = 1347 - opinion.height - 193;
 			flagButton.tweenIn();
 			viewDebateButton.tweenIn();
 			debateStrip.tweenIn();
@@ -748,11 +771,14 @@ package net.localprojects {
 			viewDebateButton.setDownColor(CDW.state.activeStanceColorMedium);			
 			
 			// use the full capitalize name for the byline
-			byline.setText('Said by ' + StringUtils.capitalize(CDW.database.debates[CDW.state.activeDebate].author.firstName, true), true);			
-			viewDebateButton.setLabel('BACK TO HOME SCREEN');
-			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 - letsDebateUnderlay.y; // height depends on opinion
+			byline.setText('Said by ' + StringUtils.capitalize(CDW.database.debates[CDW.state.activeDebate].author.firstName, true), true);
+			viewDebateButton.setFont(Assets.FONT_HEAVY);
+			viewDebateButton.setLabel('BACK TO HOME SCREEN', false);
+			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 + 5 - letsDebateUnderlay.y; // height depends on opinion
 			debateOverlay.setHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));
 			debateButton.setStrokeColor(Assets.COLOR_GRAY_15);
+			
+			
 			
 			// behaviors
 			viewDebateButton.setOnClick(homeView);
@@ -766,7 +792,17 @@ package net.localprojects {
 			stance.tweenIn();
 			byline.tweenIn(-1, {x: 916 - byline.width - 39}); // dynamic based on opinion size
 			opinion.tweenIn(1, {y: 410});
-			debateButton.tweenIn(1, {x: 916, y: 410 + opinion.height + 15, scaleX: 0.75, scaleY: 0.75});
+			//debateButton.tweenIn(1, {x: 916, y: 410 + opinion.height + 15, scaleX: 0.75, scaleY: 0.75});
+			
+			
+			secondaryDebateButton.setOnClick(onDebateButton);
+			
+			secondaryDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			secondaryDebateButton.setDownColor(CDW.state.activeStanceColorMedium);
+			
+			secondaryDebateButton.y = 410 + opinion.height + 15;
+			secondaryDebateButton.tweenIn(1, {x: 916});
+			
 			viewDebateButton.tweenIn(1, {y: 1650});	
 			debateStrip.tweenIn();
 			debateOverlay.tweenIn(-1, {y: letsDebateUnderlay.y + letsDebateUnderlay.height + 30});			
@@ -922,8 +958,8 @@ package net.localprojects {
 			question.tweenIn();
 			bigButton.tweenIn();
 			pickStanceInstructions.tweenIn();
-			yesButton.tweenIn();
-			noButton.tweenIn();
+			yesButton.tweenIn(-1, {delay: 0.5}); // side slide & delay per jonathan
+			noButton.tweenIn(-1, {delay: 0.5}); // side slide & delay per jonathan
 			
 			
 			tweenOutInactive();	// TODO disable behaviors as well? or let them ride? implications for mid-tween events
@@ -1115,7 +1151,8 @@ package net.localprojects {
 			stance.setText(CDW.state.userStanceText, true);
 			stance.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			countdownButton.setBackgroundColor(CDW.state.userStanceColorLight, true);
-			countdownButton.setDownColor(CDW.state.userStanceColorMedium);			
+			// countdownButton.setDownColor(CDW.state.userStanceColorMedium); // per jonathan
+			countdownButton.setDownColor(CDW.state.userStanceColorLight); // makes the down state invisible	
 			countdownButton.setRingColor(CDW.state.userStanceColorLight);
 			countdownButton.setProgressColor(0xffffff);				
 			photoBoothButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
@@ -1124,7 +1161,7 @@ package net.localprojects {
 			cameraOverlay.setColor(CDW.state.userStanceColorLight, CDW.state.userStanceColorOverlay);
 			
 			// behaviors
-			countdownButton.setOnClick(onCameraClick);
+			// countdownButton.setOnClick(onCameraClick); // per jonathan
 			countdownButton.setOnAlmostFinish(onCountdownAlmostFinish);			
 			countdownButton.setOnFinish(onCountdownFinish);
 			photoBoothButton.setOnClick(onCameraClick);
@@ -1510,7 +1547,8 @@ package net.localprojects {
 			nametag.tweenIn();
 			
 			//opinion.tweenIn(); // TODO fade this out?
-			editOpinion.tweenIn();
+			editOpinion.y = stageHeight - 574 - opinion.height; 			
+			editOpinion.tweenIn(); // instant
 			
 			saveButton.y = 1376;
 			saveButton.tweenIn(-1, {x: 589});
@@ -1519,15 +1557,21 @@ package net.localprojects {
 			editTextInstructions.tweenIn();
 			keyboard.tweenIn();
 			
+			opinion.tweenOut(0);
+			
 			tweenOutInactive();
 			
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design21);			
 		}
-		
+			
 		
 		private function onSaveOpinionEdit(e:Event):void {
 			// TODO validate opinion edit
 			CDW.state.userOpinion = editOpinion.getTextField().text;
+			
+			// move the opinion back
+			opinion.tweenIn(0);
+			
 			verifyOpinionView();
 		}
 		

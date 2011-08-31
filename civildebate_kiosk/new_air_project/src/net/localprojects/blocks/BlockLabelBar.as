@@ -36,6 +36,7 @@ package net.localprojects.blocks {
 		private function postInit():void {
 			Utilities.centerWithin(textField, bar);
 			bar.pixelSnapping = PixelSnapping.ALWAYS;
+			
 			cacheAsBitmap = true;
 		}
 		

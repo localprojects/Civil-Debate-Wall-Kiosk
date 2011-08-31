@@ -181,6 +181,11 @@ package net.localprojects.elements
 				
 				// Add the debate me button
 				var debateButton:BalloonButton = new BalloonButton(110, 101, 0x000000, 'LET\u0027S\nDEBATE !', 15);
+				
+				
+				debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
+				debateButton.scaleX = 0.75;  
+				debateButton.scaleY = 0.75;				
 				debateButton.setBackgroundColor(stanceColorDark, true);
 				debateButton.setDownColor(stanceColorMedium);				
 				debateButton.setStrokeColor(Assets.COLOR_GRAY_15);				

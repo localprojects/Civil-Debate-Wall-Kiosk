@@ -24,7 +24,7 @@ package net.localprojects.ui {
 		protected var _letterSpacing:Number;
 		protected var _font:String;
 		protected var _labelColor:uint;		
-		protected var outline:Shape;
+		
 		
 		protected var strokeColor:uint;
 		protected var strokeWeight:Number;
@@ -68,6 +68,13 @@ package net.localprojects.ui {
 		}
 		
 		
+		private var baselineShift:Number = 1;
+		public function shiftBaseline(n:Number):void {
+				baselineShift += n;
+				setLabel(_labelText);
+		}
+		
+		
 		override protected function draw():void {
 			
 			// draw the background
@@ -100,7 +107,7 @@ package net.localprojects.ui {
 		private var textFormat:TextFormat;
 		private var labelField:TextField;
 		
-		private function generateLabel(text:String):TextField {
+		protected function generateLabel(text:String):TextField {
 			// label
 			textFormat = new TextFormat();
 			textFormat.font =  _font;
@@ -120,7 +127,7 @@ package net.localprojects.ui {
 			labelField.autoSize = TextFieldAutoSize.CENTER;
 			labelField.text = text;
 			labelField.x = (_buttonWidth / 2) - (labelField.width / 2) - (strokeWeight / 2);
-			labelField.y = (_buttonHeight / 2) - (labelField.height / 2) - (strokeWeight / 2);			
+			labelField.y = (_buttonHeight / 2) - (labelField.height / 2) - (strokeWeight / 2) + baselineShift;			
 			
 			return labelField;
 		}
@@ -169,6 +176,8 @@ package net.localprojects.ui {
 		}
 		
 		override public function setLabel(text:String, instant:Boolean = false):void {
+
+			
 			_labelText = text;
 			
 			labelFieldB = labelFieldA;
@@ -185,6 +194,13 @@ package net.localprojects.ui {
 			}
 		}
 		
+		
+	
+		public function setFont(s:String):void {
+			_font = s;
+			//setLabel(_labelText, true);
+			
+		}
 		
 		override public function setBackgroundColor(c:uint, instant:Boolean = false):void {
 			_backgroundColor = c;

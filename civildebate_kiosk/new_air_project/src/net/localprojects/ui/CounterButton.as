@@ -8,6 +8,9 @@ package net.localprojects.ui {
 	import net.localprojects.Utilities;
 	import net.localprojects.blocks.BlockLabel;
 
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;	
+	
 	public class CounterButton extends BlockButton	{
 		private var _count:int;
 		private var _baseLabel:String;
@@ -20,18 +23,21 @@ package net.localprojects.ui {
 		public function CounterButton(buttonWidth:Number, buttonHeight:Number, backgroundColor:uint, labelText:String, labelSize:Number, labelColor:uint = 0xffffff, labelFont:String = null, startingCount:int = 0) {
 			super(buttonWidth, buttonHeight, backgroundColor, '', labelSize, labelColor, labelFont)
 			
-			// Dynamic count text
-			counterLabel = new BlockLabel(_count.toString(), labelSize, labelColor, backgroundColor, labelFont, false);
-			counterLabel.visible = true;
-			counterLabel.x = 15;
-			counterLabel.y = 13;			
-			addChild(counterLabel);
+
 			
 			// Icon
 			icon = Assets.getLikeIcon();
 			icon.x = 49;
-			icon.y = 17;	
+			icon.y = 19;	
 			addChild(icon);
+			
+			
+			// Dynamic count text
+			counterLabel = new BlockLabel(_count.toString(), labelSize, labelColor, backgroundColor, labelFont, false);
+			counterLabel.visible = true;
+			counterLabel.x = icon.x - counterLabel.checkWidth(_count.toString()) - 6;
+			counterLabel.y = 16;			
+			addChild(counterLabel);			
 			
 			
 			
@@ -39,20 +45,17 @@ package net.localprojects.ui {
 			buttonLabel = new BlockLabel(labelText, labelSize, labelColor, backgroundColor, labelFont, false);
 			buttonLabel.visible = true;
 			buttonLabel.x = 85;
-			buttonLabel.y = 13;				
+			buttonLabel.y = 16;				
 			addChild(buttonLabel);
-			
-			
-			
-			
-			
+
 			_count = startingCount;
 			_baseLabel = labelText;
 			updateLabel();
 		}
 			
 		private function updateLabel():void {
-			counterLabel.setText(_count.toString());			
+			counterLabel.setText(_count.toString());
+			TweenMax.to(counterLabel, 0.5, {x: icon.x - counterLabel.checkWidth(_count.toString()) - 6, ease: Quart.easeInOut});
 		}
 
 	

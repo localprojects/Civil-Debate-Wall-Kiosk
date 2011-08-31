@@ -5,6 +5,7 @@ package net.localprojects.ui {
 	import flash.display.Sprite;
 	import flash.events.*;
 	import flash.utils.Timer;
+	import flash.display.Shape;
 	
 	import net.localprojects.Assets;
 	import net.localprojects.CDW;
@@ -18,6 +19,7 @@ package net.localprojects.ui {
 		public static const DOWN:String = 'active';		
 		private var mode:String;
 		protected var onClick:Function;
+		protected var outline:Shape;
 		protected var background:Sprite;
 		protected var _backgroundColor:uint;
 		protected var _backgroundDownColor:uint;
@@ -56,7 +58,8 @@ package net.localprojects.ui {
 			trace('button back!');
 			locked = false;
 			timer.stop();
-			TweenMax.to(background, 1, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});			
+			TweenMax.to(background, 1, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
+			TweenMax.to(outline, 1, {ease: Quart.easeOut, alpha: 1});
 		}
 		
 		protected function onMouseDown(e:MouseEvent):void {
@@ -72,7 +75,8 @@ package net.localprojects.ui {
 				locked = true;
 				timer.reset();
 				timer.start();
-				TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: Assets.COLOR_GRAY_50, tintAmount: 1}});				
+				TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: Assets.COLOR_GRAY_50, tintAmount: 1}});
+				TweenMax.to(outline, 0.3, {ease: Quart.easeOut, alpha: 0});				
 			}
 			else {
 				TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});

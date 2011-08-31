@@ -21,7 +21,7 @@ package net.localprojects.ui {
 			
 			if (labelFieldA.text.length > 0) {
 				_icon.x = (buttonWidth - (_icon.width + iconPadding + labelFieldA.width)) / 2;
-				_icon.y = labelFieldA.y + 2;
+				_icon.y = labelFieldA.y + 3;
 				
 				// reposition text
 				labelFieldA.x = _icon.x + _icon.width + iconPadding;			
@@ -32,7 +32,16 @@ package net.localprojects.ui {
 			}
 			
 			addChild(_icon);
+			
 		}
+		
+		override protected function generateLabel(text:String):TextField {
+			// label
+			var tempTextField:TextField = super.generateLabel(text);
+			//tempTextField.y -= 2;
+			
+			return tempTextField;
+		}		
 		
 		override public function setStrokeWeight(weight:Number):void {
 			super.setStrokeWeight(weight);
