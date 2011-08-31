@@ -43,8 +43,11 @@ package net.localprojects.camera {
 			
 			faceRect = new Rectangle();
 			
-			maxSourceWidth = 250;
-			maxSourceHeight = 250;
+			var undersample:Number = 6;
+			
+			// TODO, use aspect ratio of camera files???
+			maxSourceWidth = Math.round(1080 / undersample);
+			maxSourceHeight = Math.round(1920 / undersample);
 		}
 		
 		private function detectionHandler(e:ObjectDetectorEvent):void {
