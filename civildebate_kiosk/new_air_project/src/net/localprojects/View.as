@@ -100,8 +100,8 @@ package net.localprojects {
 		public var protection:Sprite;
 		
 		// convenience
-		private var stageWidth:Number;
-		private var stageHeight:Number;
+		public var stageWidth:Number;
+		public var stageHeight:Number;
 		private var yesLetterSpacing:Number;
 		private var noLetterSpacing:Number;		
 		
@@ -1164,8 +1164,6 @@ package net.localprojects {
 		
 		private function onCountdownFinish(e:Event):void {			
 			// go to black
-			// TODO Y U NO WORK?
-			//blackOverlay.tweenIn(0, {alpha: 1, onComplete: onScreenBlack});
 			blackOverlay.tweenIn(-1, {onComplete: onScreenBlack});
 		}
 		
@@ -1212,54 +1210,13 @@ package net.localprojects {
 			if (faceDetector.faceRect != null) {
 				trace('face found, cropping to it');
 				
-				// TODO move this to function
-				var scaleFactor:Number = CDW.state.userImage.height / faceDetector.maxSourceHeight;
-				var faceRect:Rectangle = faceDetector.faceRect;
-				var scaledFaceRect:Rectangle = new Rectangle(faceRect.x * scaleFactor, faceRect.y * scaleFactor, faceRect.width * scaleFactor, faceRect.height * scaleFactor);
-				var stageFactor:Number = CDW.state.userImage.height / stageHeight; // unused
+				// Scale the face detector rectangle
+				var scaleFactor:Number = CDW.state.userImage.height / faceDetector.maxSourceHeight; 
+				var scaledFaceRect:Rectangle = Utilities.scaleRect(faceDetector.faceRect, scaleFactor);
 				
-				// first center it
-				var idealFacePoint:Point = new Point(CDW.state.userImage.width / 2, CDW.state.userImage.height / 4);
-				var facePoint:Point = Utilities.centerPoint(scaledFaceRect);
+				trace("Scaled face rect: " + scaledFaceRect);
 				
-				// TODO add scale step
-				
-				// figure out how we need to move
-				var shiftX:int = idealFacePoint.x - facePoint.x;
-				var shiftY:int = idealFacePoint.y - facePoint.y;
-				
-				var cropRect:Rectangle = new Rectangle();
-				
-				if (shiftX < 0) {
-					// cut from the left
-					cropRect.x = Math.abs(shiftX);
-					cropRect.width = CDW.state.userImage.bitmapData.width - cropRect.x;
-				}
-				else {
-					// cut from the right
-					cropRect.x = 0;
-					cropRect.width = CDW.state.userImage.bitmapData.width - shiftX;					
-				}
-				
-				if (shiftY < 0) {
-					// cut from the top
-					cropRect.y = Math.abs(shiftY);
-					cropRect.height = CDW.state.userImage.bitmapData.height - cropRect.y;
-				}
-				else {
-					// cut from the bottom
-					cropRect.y = 0;
-					cropRect.width = CDW.state.userImage.bitmapData.height - shiftY;					
-				}				
-				
-				
-				// crop off the side as necessarry
-				var croppedImage:BitmapData = new BitmapData(cropRect.width, cropRect.height);
-				
-				//CDW.state.userImage.bitmapData.fillRect(scaledFaceRect, 0xcc000000);				
-				croppedImage.copyPixels(CDW.state.userImage.bitmapData, cropRect, new Point(0,0));
-				
-				CDW.state.userImage.bitmapData = Utilities.scaleToFill(croppedImage, stageWidth, stageHeight);				
+				CDW.state.userImage = Utilities.cropToFace(CDW.state.userImage, scaledFaceRect);				
 			}
 			else {
 				trace('no face found, saving as is');
