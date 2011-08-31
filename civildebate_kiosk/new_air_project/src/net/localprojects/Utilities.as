@@ -263,6 +263,12 @@ package net.localprojects {
 			return o;
 		}
 		
+		
+		public static function scaleRect(rectangle:Rectangle, scaleFactor:Number):Rectangle {
+			return new Rectangle(rectangle.x * scaleFactor, rectangle.y * scaleFactor, rectangle.width * scaleFactor, rectangle.height * scaleFactor);
+			
+		}
+		
 		// scales down a bitmap data object so it fills the width and height specified, even if it has to crop		
 		public static function scaleToFill(b:BitmapData, newWidth:int, newHeight:int):BitmapData {
 			// scale
