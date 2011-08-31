@@ -100,8 +100,8 @@ package net.localprojects.ui {
 			
 			// set up the icon
 			icon = Assets.getCameraIcon();
-			icon.x = -icon.width / 2 - 3;
-			icon.y = (-icon.height / 2) - 3;			
+			icon.x = -icon.width / 2 - 4;
+			icon.y = (-icon.height / 2) - 4;			
 			
 			countTextWrapper.addChild(icon);
 				

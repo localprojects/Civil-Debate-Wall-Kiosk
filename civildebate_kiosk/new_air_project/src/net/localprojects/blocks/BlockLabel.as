@@ -34,7 +34,7 @@ package net.localprojects.blocks {
 		
 		public function BlockLabel(text:String, textSize:Number, textColor:uint = 0xffffff, backgroundColor:uint = 0x000000, font:String = null, showBackground:Boolean = true) {
 			_italic = false;
-			_letterSpacing = -1;			
+			_letterSpacing = 0;			
 			
 			// Work around for intermittent 1047 error
 			if (font == null) {
