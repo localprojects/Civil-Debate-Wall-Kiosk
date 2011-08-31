@@ -58,7 +58,7 @@ package net.localprojects.blocks {
 			textFormat.align = TextFormatAlign.LEFT;
 			textFormat.size = _textSize;
 			textFormat.leading = _leading;
-			textFormat.letterSpacing = -1;
+			textFormat.letterSpacing = 0;
 			
 			// this is just to make sure line breaks are calculated reasonably
 			// since Flash doesn't have line height control (just leading), there's no way
