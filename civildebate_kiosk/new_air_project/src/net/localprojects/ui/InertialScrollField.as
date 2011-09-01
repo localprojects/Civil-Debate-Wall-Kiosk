@@ -35,7 +35,10 @@ package net.localprojects.ui {
 		public var xMin:Number = Number.MIN_VALUE;
 		public var xMax:Number = Number.MAX_VALUE;
 		public var yMin:Number = Number.MIN_VALUE;		
-		public var yMax:Number = Number.MAX_VALUE;		
+		public var yMax:Number = Number.MAX_VALUE;
+		
+		private var _backgroundColor:uint;
+		private var _backgroundAlpha:Number;		
 		
 		
 		private var scrollMask:Shape;
@@ -70,6 +73,9 @@ package net.localprojects.ui {
 		public function InertialScrollField(containerWidth:Number, containerHeight:Number, scrollAxis:String = SCROLL_Y) {
 			super();
 			
+			_backgroundColor = 0xffffff;
+			_backgroundAlpha = 1.0;			
+			
 			scrollSheet = new Sprite();
 			addChild(scrollSheet);
 			
@@ -81,23 +87,23 @@ package net.localprojects.ui {
 			
 			_containerWidth = containerWidth;
 			_containerHeight = containerHeight;
-			setContainer(_containerWidth , _containerHeight);
+			setContainerSize(_containerWidth , _containerHeight);
 			
 			dragBounds = new Rectangle();
 			_scrollAxis = scrollAxis;
 			setScrollAxis(_scrollAxis);
-			
+
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		}
 		
 		
 		// creates and resizes the container defining the bounds of the scroll area
-		private function setContainer(containerWidth:Number, containerHeight:Number):void {
+		public function setContainerSize(containerWidth:Number, containerHeight:Number):void {
 			_containerWidth = containerWidth;
 			_containerHeight = containerHeight;
 			
 			this.graphics.clear();
-			this.graphics.beginFill(0xffffff, 1);
+			this.graphics.beginFill(_backgroundColor, _backgroundAlpha);
 			this.graphics.drawRect(0, 0, _containerWidth, _containerHeight);
 			this.graphics.endFill();
 			
@@ -168,8 +174,10 @@ package net.localprojects.ui {
 			lastMouseX = CDW.ref.stage.mouseX;
 			lastMouseY = CDW.ref.stage.mouseY;
 			
+			y2 = y1;
 			x2 = x1;
 			t2 = t1;
+			y1 = scrollSheet.y;			
 			x1 = scrollSheet.x;
 			t1 = getTimer();
 			
@@ -217,7 +225,8 @@ package net.localprojects.ui {
 				}
 				if ((_scrollAxis == SCROLL_Y) || (_scrollAxis == SCROLL_BOTH)) {
 					// Y Stuff
-					props.throwProps.y.velocity = xVelocity;
+					props.throwProps.y = {};					
+					props.throwProps.y.velocity = yVelocity;
 					props.throwProps.y.min = yMin;
 					props.throwProps.y.max = yMax;
 					props.throwProps.y.resistance = resistance;					
@@ -228,9 +237,34 @@ package net.localprojects.ui {
 				// Stopped Here
 				ThrowPropsPlugin.to(scrollSheet, props, maxDuration, minDuration, overshootTolerance);
 				
-				trace("Throw velocity was: " + xVelocity);
+				trace("Throw velocity was: " + xVelocity + " / " + yVelocity);
 				trace("Mouse travel was: " + mouseTravel);			
 			}
+		}
+		
+		public function get containerWidth():Number {
+			return _containerWidth;
+		}
+		
+		public function set containerWidth(n:Number):void {
+			_containerWidth = n;
+			setContainerSize(_containerWidth, _containerHeight);			
+			
+		}
+		
+		public function get containerHeight():Number {
+			return _containerHeight;
+		}
+		
+		public function set containerHeight(n:Number):void {
+			_containerHeight = n;
+			setContainerSize(_containerWidth, _containerHeight);
+		}		
+		
+		public function setBackgroundColor(c:uint, a:Number = 1.0):void {
+			_backgroundColor = c;
+			_backgroundAlpha = a;
+			setContainerSize(_containerWidth, _containerHeight);			
 		}
 		
 		public function scrollTo(x:Number, y:Number):void {

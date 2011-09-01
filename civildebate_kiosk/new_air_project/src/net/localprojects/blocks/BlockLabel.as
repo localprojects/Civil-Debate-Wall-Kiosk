@@ -45,7 +45,6 @@ package net.localprojects.blocks {
 			if (font.indexOf('Italic') > 0) {
 				_italic = true;
 				font = font.replace(' Italic', '');
-				trace('new font: ' + font);
 			}
 			
 			paddingTop = 28;

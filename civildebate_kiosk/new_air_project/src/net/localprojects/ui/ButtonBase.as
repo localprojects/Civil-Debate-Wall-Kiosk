@@ -19,6 +19,7 @@ package net.localprojects.ui {
 		public static const DOWN:String = 'active';		
 		private var mode:String;
 		protected var onClick:Function;
+		protected var onDown:Function;		
 		protected var outline:Shape;
 		protected var background:Sprite;
 		protected var _backgroundColor:uint;
@@ -64,6 +65,7 @@ package net.localprojects.ui {
 		
 		protected function onMouseDown(e:MouseEvent):void {
 			if (!locked) {
+				if (onDown != null) onDown(e);
 				CDW.ref.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				TweenMax.to(background, 0, {colorTransform: {tint: _backgroundDownColor, tintAmount: 1}});
 			}
@@ -101,8 +103,17 @@ package net.localprojects.ui {
 				onClick = f;
 				enable();
 			}
-						
 		}
+		
+		public function setOnDown(f:Function):void {
+			if (f == null) {
+				//disable();
+			}
+			else {
+				onDown = f;
+				//enable();
+			}
+		}		
 		
 		
 		public function setLabel(text:String, instant:Boolean = false):void {

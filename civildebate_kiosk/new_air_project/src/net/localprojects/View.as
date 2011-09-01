@@ -117,11 +117,7 @@ package net.localprojects {
 			stageWidth = CDW.ref.stage.stageWidth;
 			stageHeight = CDW.ref.stage.stageHeight;
 			yesLetterSpacing = -4;
-			noLetterSpacing = -7;
-			
-			// Greensock plugins
-			TweenPlugin.activate([ThrowPropsPlugin]);
-			TweenPlugin.activate([MotionBlurPlugin]);			
+			noLetterSpacing = -7;			
 			
 			// Work around for lack of mouse-down events
 			// http://forums.adobe.com/message/2794098?tstart=0
@@ -499,13 +495,13 @@ package net.localprojects {
 			addChild(flashOverlay);	
 			
 			// Block input during tweens
-			protection = new Sprite();
-			protection.graphics.beginFill(0x000000);
-			protection.graphics.drawRect(0, 0, stageWidth, stageHeight);
-			protection.graphics.endFill();
-			protection.alpha = 0;
-			addChild(protection);
-			protection.visible = false;
+//			protection = new Sprite();
+//			protection.graphics.beginFill(0x000000);
+//			protection.graphics.drawRect(0, 0, stageWidth, stageHeight);
+//			protection.graphics.endFill();
+//			protection.alpha = 0;
+//			addChild(protection);
+//			protection.visible = false;
 			
 			//this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
@@ -567,7 +563,7 @@ package net.localprojects {
 			portrait.setImage(CDW.database.getActivePortrait());
 			question.setTextColor(CDW.state.questionTextColor);			
 			question.setText(CDW.database.getQuestionText(), true);
-			
+			debateOverlay.scrollField.scrollTo(0, 0);
 			
 			nametag.setText(CDW.database.getDebateAuthorName(CDW.state.activeDebate) + ' Says :', true);
 			stance.setText(CDW.state.activeStanceText, true);
@@ -737,6 +733,7 @@ package net.localprojects {
 		
 		
 		private function incrementLikes(e:Event):void {
+			CDW.database.debates[CDW.state.activeDebate].likes = likeButton.getCount() + 1; // update local db			
 			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/like', {'id': CDW.state.activeDebate, 'count': likeButton.getCount()}, onLikePosted);
 		}
 		
@@ -1371,11 +1368,11 @@ package net.localprojects {
 			
 			retakePhotoButton.y = buttonRowY;
 			retakePhotoButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
-			retakePhotoButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
+			retakePhotoButton.setDownColor(CDW.state.userStanceColorMedium);
 			
 			editTextButton.y = buttonRowY;
 			editTextButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
-			editTextButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
+			editTextButton.setDownColor(CDW.state.userStanceColorMedium);			
 			
 			exitButton.y = buttonRowY;
 			exitButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
