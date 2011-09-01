@@ -29,6 +29,8 @@ package net.localprojects.text {
 		protected var _textLetterSpacing:Number = 0; // tweens
 		protected var _textAlign:String = LEFT; // set to tween
 		
+		
+		
 		// Metrics
 		protected var _bounds:String = BOUNDS_GROW; // set to tween
 		protected var _boundsWidth:Number = Number.MAX_VALUE; // tweens

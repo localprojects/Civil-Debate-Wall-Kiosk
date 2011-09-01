@@ -27,7 +27,7 @@ package net.localprojects.blocks {
 			super();
 			
 			// set some default parameters, can be overriden
-			defaultTweenVars = {};
+			defaultTweenVars = {cacheAsBitmap: true};
 			defaultTweenInVars = Utilities.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenIn, onComplete: afterTweenIn});
 			defaultTweenOutVars = Utilities.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenOut, onComplete: afterTweenOut});
 			defaultDuration = 1;
@@ -127,6 +127,9 @@ package net.localprojects.blocks {
 		
 		// Tweens to default location, or takes modifiers if called without arguments
 		public function tweenIn(duration:Number = -1, params:Object = null):void {
+			// THIS TRIES TO FIX THE MISSING BLOCK PROBLEM!!!
+			TweenMax.killTweensOf(this); // stop tweening out if we're tweening out, keeps afterTweenOut from firing...
+			active = true;
 			
 			if (duration == -1) {
 				duration = defaultInDuration;
@@ -142,7 +145,7 @@ package net.localprojects.blocks {
 			params = preprocessParams(params);
 			
 			TweenMax.to(this, duration, params);
-			active = true;
+			
 		}
 		
 		

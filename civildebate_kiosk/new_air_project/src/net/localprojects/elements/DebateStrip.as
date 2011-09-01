@@ -26,6 +26,7 @@ package net.localprojects.elements {
 		public function DebateStrip()	{
 			super();
 			scrollField = new InertialScrollField(1080, 141, InertialScrollField.SCROLL_X);
+			scrollField.setBackgroundColor(0xffffff, 1.0);
 			scrollField.addEventListener(InertialScrollField.EVENT_NOT_CLICK, onNotClick);
 			// min and max get updated in update			
 			addChild(scrollField);

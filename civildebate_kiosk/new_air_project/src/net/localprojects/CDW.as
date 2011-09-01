@@ -2,6 +2,7 @@ package net.localprojects {
 
 	import com.bit101.components.FPSMeter;
 	import com.greensock.*;
+	import com.greensock.plugins.*;	
 	import com.greensock.easing.*;
 	
 	
@@ -19,6 +20,12 @@ package net.localprojects {
 	import net.localprojects.elements.*;
 	import net.localprojects.keyboard.*;
 	import net.localprojects.ui.*;
+	
+	// Greensock plugins
+	TweenPlugin.activate([ThrowPropsPlugin]);
+	TweenPlugin.activate([MotionBlurPlugin]);			
+	TweenPlugin.activate([CacheAsBitmapPlugin]);	
+	FastEase.activate([Linear, Quad, Cubic, Quart, Quint, Strong]);
 	
 	public class CDW extends Sprite {
 		
