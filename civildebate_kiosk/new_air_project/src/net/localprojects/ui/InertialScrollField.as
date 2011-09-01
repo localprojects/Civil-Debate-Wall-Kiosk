@@ -20,8 +20,6 @@ package net.localprojects.ui {
 	
 	public class InertialScrollField extends Sprite {
 		
-		
-		
 		public static const SCROLL_BOTH:String = "scrollBoth";
 		public static const SCROLL_X:String = "scrollX";
 		public static const SCROLL_Y:String = "scrollY";
@@ -32,17 +30,23 @@ package net.localprojects.ui {
 		private var _containerWidth:Number;
 		private var _containerHeight:Number;
 		
-		private var scrollMask:Shape;
+		// settable
 		public var scrollSheet:Sprite;
+		public var xMin:Number = Number.MIN_VALUE;
+		public var xMax:Number = Number.MAX_VALUE;
+		public var yMin:Number = Number.MIN_VALUE;		
+		public var yMax:Number = Number.MAX_VALUE;		
 		
+		
+		private var scrollMask:Shape;
 		private var dragBounds:Rectangle;
 		
 		// settings
-		private var wiggleThreshold:Number = 50; // How much mouse wiggle before we call it a drag instead of a click
-		private var resistance:Number = 150;
-		private var maxDuration:Number = 5; // max coast time, seconds
+		private var wiggleThreshold:Number = 75; // How much mouse wiggle before we call it a drag instead of a click
+		private var resistance:Number = 800;
+		private var maxDuration:Number = 2; // max coast time, seconds
 		private var minDuration:Number = 0.25; // min coast time, seconds
-		private var overshootTolerance:Number = 1; // maximum time spent overshooting		
+		private var overshootTolerance:Number = 0.5; // maximum time spent overshooting		
 		
 		// heuristics
 		private var t1:uint;
@@ -72,7 +76,8 @@ package net.localprojects.ui {
 			scrollMask = new Shape();
 			addChild(scrollMask);
 			
-			scrollSheet.mask = scrollMask; 
+			scrollSheet.mask = scrollMask;
+			scrollSheet.cacheAsBitmap = true;
 			
 			_containerWidth = containerWidth;
 			_containerHeight = containerHeight;
@@ -92,7 +97,7 @@ package net.localprojects.ui {
 			_containerHeight = containerHeight;
 			
 			this.graphics.clear();
-			this.graphics.beginFill(0xff0000, 1);
+			this.graphics.beginFill(0xffffff, 1);
 			this.graphics.drawRect(0, 0, _containerWidth, _containerHeight);
 			this.graphics.endFill();
 			
@@ -108,7 +113,7 @@ package net.localprojects.ui {
 			
 			// TODO what is with these numbers?			
 			
-			switch (_scrollAxis)	{
+			switch (_scrollAxis) {
 				case SCROLL_BOTH:
 					trace ('Scrolling both axes.');
 					dragBounds = new Rectangle(-99999, -99999, 99999999, 99999999);
@@ -132,7 +137,7 @@ package net.localprojects.ui {
 			// ignore clicks if we're "poking" at a moving
 			// strip to stop it from inertially scrolling
 			isClick = (!TweenMax.isTweening(scrollSheet));
-
+			
 			// stop any coasting, this is the "poke"
 			TweenMax.killTweensOf(scrollSheet);
 			
@@ -172,12 +177,12 @@ package net.localprojects.ui {
 			if(_scrollAxis == SCROLL_BOTH) mouseTravel = mouseTravelX + mouseTravelY; // Take square root?
 			else if(_scrollAxis == SCROLL_X) mouseTravel = mouseTravelX; // Take square root?
 			else if(_scrollAxis == SCROLL_Y) mouseTravel = mouseTravelY; // Take square root?			
-
+			
 			// detect scroll vs. click			
 			if (mouseTravel > wiggleThreshold) {
 				// TODO FIRE "NOT_CLICK" EVENT
 				this.dispatchEvent(new Event(EVENT_NOT_CLICK));	
-			
+				
 				// cancel the click
 				// child events still fire, but we can decide not
 				// to actually act on them based on this public flag
@@ -186,7 +191,6 @@ package net.localprojects.ui {
 			
 			// TODO manual dragging instead? Increase friction at bounds?
 		}
-		
 		
 		private function onMouseUp(event:MouseEvent):void {
 			// Hand it over to the throw tween
@@ -199,33 +203,39 @@ package net.localprojects.ui {
 			xVelocity = (scrollSheet.x - x2) / time;
 			yVelocity = (scrollSheet.y - y2) / time;
 			
-			
-			
 			if (!isClick) {
 				
 				var props:Object = {throwProps: {}};
 				
-				if ((_scrollAxis == SCROLL_X) || (_scrollAxis == SCROLL_BOTH))
+				if ((_scrollAxis == SCROLL_X) || (_scrollAxis == SCROLL_BOTH)) {
 					// X Stuff
+					props.throwProps.x = {};
 					props.throwProps.x.velocity = xVelocity;
-					props.throwProps.x.min = -scrollSheet.width; // always lands within min / max range
-					props.throwProps.x.max = 0;
+					props.throwProps.x.min = xMin; // always lands within min / max range
+					props.throwProps.x.max = xMax;
 					props.throwProps.x.resistance = resistance; // coasting time (less is "heavier"!	
 				}
 				if ((_scrollAxis == SCROLL_Y) || (_scrollAxis == SCROLL_BOTH)) {
 					// Y Stuff
 					props.throwProps.y.velocity = xVelocity;
-					props.throwProps.y.min = -scrollSheet.height;
-					props.throwProps.y.max = 0;
+					props.throwProps.y.min = yMin;
+					props.throwProps.y.max = yMax;
 					props.throwProps.y.resistance = resistance;					
 				}
+				
 				props.ease = Quart.easeOut;
 				
 				// Stopped Here
 				ThrowPropsPlugin.to(scrollSheet, props, maxDuration, minDuration, overshootTolerance);
+				
+				trace("Throw velocity was: " + xVelocity);
+				trace("Mouse travel was: " + mouseTravel);			
 			}
-			
-			trace("Throw velocity was: " + xVelocity);
-			trace("Mouse travel was: " + mouseTravel);
-		}				
+		}
+		
+		public function scrollTo(x:Number, y:Number):void {
+			TweenMax.to(scrollSheet, 1, {x: x, y: y, ease: Quart.easeInOut, roundProps:['x']});
+		}
+		
 	}
+}

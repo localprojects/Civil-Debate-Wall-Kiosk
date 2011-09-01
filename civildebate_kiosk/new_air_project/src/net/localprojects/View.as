@@ -507,7 +507,7 @@ package net.localprojects {
 			addChild(protection);
 			protection.visible = false;
 			
-			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			//this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
 
