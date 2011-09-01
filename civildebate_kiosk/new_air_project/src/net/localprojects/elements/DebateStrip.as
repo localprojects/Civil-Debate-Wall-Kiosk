@@ -15,7 +15,7 @@ package net.localprojects.elements {
 	import net.localprojects.blocks.BlockBase;
 	import net.localprojects.ui.*;
 	
-	import sekati.converters.BoolConverter;
+	
 	
 	public class DebateStrip extends BlockBase {
 		
@@ -33,6 +33,8 @@ package net.localprojects.elements {
 			
 			strip = new Sprite();
 			addChild(strip);
+			
+			
 			
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		}
