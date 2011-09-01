@@ -470,7 +470,7 @@ class get_stats:
 	def POST(self):
 		set_api_headers()
 		i = web.input()
-		question_id = i.id;
+		question_id = i.question;
 		
 		stats = dict()		
 		# total votes
@@ -589,25 +589,7 @@ class get_stats:
 		stats['mostLikedDebates'] = liked # only the top 5
 		stats['mostDebatedOpinions'] = mostDebatedOpinions[0:5] # only the top 5
 		
-		
-		
 		return json.dumps(stats, default=json_util.default, sort_keys=False, indent=2)			
-
-		
-
-# 		mostFrequentWords: [{word: 'someWord', threads: [debateID], yesRatio: 0.4}, {word: 'someWord', thread: debateID, yesRatio: 0.4}],
-# 		mostDebatedOpinions: [debateID, debateID], // number of responses
-# 		mostLikedOpinions: [debateID, debateID], // # of likes
-# 		mostActiveUsers: [
-# 		 Most active users (measured by total number of posts)
-# 		}
-
-		
-		
-		
-		return 'stats!'
-		
-		return json.dumps(db.questions.find_one(ObjectId(i.id)), default=json_util.default, sort_keys = False, indent = 2)
 		
 
 if __name__ == "__main__":

@@ -83,7 +83,7 @@ package net.localprojects {
 		private var byline:BlockLabel; // changes dimensions
 		
 		// containers, have lots of nested content
-		private var stats:StatsOverlay;
+		public var statsOverlay:StatsOverlay;
 		public var debateStrip:DebateStrip;
 		private var debateOverlay:DebateOverlay;		
 
@@ -411,10 +411,10 @@ package net.localprojects {
 			addChild(keyboard);
 			
 			// TODO update from database
-			stats = new StatsOverlay();
-			stats.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 264});
-			stats.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_BOTTOM_EDGE});
-			addChild(stats);
+			statsOverlay = new StatsOverlay();
+			statsOverlay.setDefaultTweenIn(1, {x: 29, y: 264});
+			statsOverlay.setDefaultTweenOut(1, {x: 29, y: BlockBase.OFF_BOTTOM_EDGE});
+			addChild(statsOverlay);
 			
 			inactivityOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000)));
 			inactivityOverlay.setDefaultTweenIn(1, {alpha: 0.85});
@@ -1589,14 +1589,14 @@ package net.localprojects {
 			question.setTextColor(CDW.state.questionTextColor);			
 			
 			// behaviors
-			stats.homeButton.setOnClick(homeView);
+			statsOverlay.homeButton.setOnClick(homeView);
 			
 			// blocks
 			portrait.tweenIn();	
 			header.tweenIn();
 			divider.tweenIn();
 			question.tweenIn();
-			stats.tweenIn();
+			statsOverlay.tweenIn();
 			
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design25);
 			

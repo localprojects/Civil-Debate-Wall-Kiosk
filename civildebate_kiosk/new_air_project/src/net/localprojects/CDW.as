@@ -183,6 +183,7 @@ package net.localprojects {
 				// set the starting view
 				CDW.state.setActiveDebate(CDW.state.activeDebate);
 				view.debateStrip.update();
+				view.statsOverlay.update();
 				
 				if(database.getDebateCount() > 0) {
 					view.homeView();
