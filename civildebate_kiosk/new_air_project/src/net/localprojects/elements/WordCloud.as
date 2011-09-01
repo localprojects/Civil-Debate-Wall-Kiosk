@@ -1,10 +1,19 @@
 package net.localprojects.elements {
+	import com.greensock.TweenMax;
+	
+	import flash.events.*;
+	
 	import net.localprojects.*;
 	import net.localprojects.blocks.BlockBase;
 	import net.localprojects.ui.WordButton;
 	
 	public class WordCloud extends BlockBase {
 		
+		public static const EVENT_WORD_SELECTED:String = "eventWordSelected";
+		public static const EVENT_WORD_DESELECTED:String = "eventWordDeselected";		
+		
+		
+		public var activeWord:WordButton;
 		
 		private var row1:Array;
 		private var row2:Array;
@@ -17,7 +26,7 @@ package net.localprojects.elements {
 			super();
 			
 			this.graphics.beginFill(Assets.COLOR_GRAY_5);
-			this.graphics.drawRect(0, 0, 1022, 298);
+			this.graphics.drawRect(0, 0, 1022, 299);
 			this.graphics.endFill();
 			
 			
@@ -27,10 +36,16 @@ package net.localprojects.elements {
 			
 			// TODO, call recursively until it fits?
 			
+			// remove existing
+			// clear children
+			while (this.numChildren > 0) {
+				removeChild(this.getChildAt(0));
+			}					
+			
 			trace("Setting words from : " + source);
 			
 			row1 = []; 
-		  row2 = []; 
+			row2 = []; 
 			row3 = []; 
 			row4 = [];
 			
@@ -89,9 +104,57 @@ package net.localprojects.elements {
 			trace("Row length: " + row1.length);
 			
 			
+			// Add Listeners
+			for (var m:int = 0; m < words.length; m++) {
+				words[m].addEventListener(MouseEvent.MOUSE_DOWN, onDown);
+				words[m].addEventListener(MouseEvent.MOUSE_DOWN, onUp);				
+			}
+			
 			
 			// TODO some kind of weighting system to find out which row combinations make the most sense
 			//words.push(new WordButton(wordInfo['word'], 
+		}
+		
+		private function onDown(e:MouseEvent):void {
+			//fade everything else
+			var selectedWord:WordButton = e.target as WordButton;
+			
+			
+			
+			// TODO dragable reselections
+			
+			if (selectedWord == activeWord) {
+				// un-toggle
+				for (var n:int = 0; n < words.length; n++) {
+					words[n].tween(0.5, {colorTransform: {tint: 0xffffff, tintAmount: 0}});
+				}
+				
+				trace("deselected");
+				this.dispatchEvent(new Event(EVENT_WORD_DESELECTED, true, true));
+				activeWord = null;				
+			}			
+			else {
+				activeWord = selectedWord;
+				
+				for (var m:int = 0; m < words.length; m++) {
+					if (words[m] != activeWord) {
+						words[m].tween(0.5, {colorTransform: {tint: 0xffffff, tintAmount: 0.85}});
+					}
+					else {
+						words[m].tween(0, {colorTransform: {tint: 0xffffff, tintAmount: 0}});						
+					}
+				}
+				
+				trace("selected");
+				this.dispatchEvent(new Event(EVENT_WORD_SELECTED, true, true));				
+			}
+			
+			
+			
+		}
+		
+		private function onUp(e:MouseEvent):void {
+			
 		}
 		
 		private function positionRow(row:Array, rowNumber:int):void {
@@ -99,29 +162,42 @@ package net.localprojects.elements {
 			trace("row: " + rowNumber + " " + row);
 			
 			rowNumber--; // zero it
-			var xAccumulator:Number = 15;
+			var xAccumulator:Number = 0;
 			
 			for(var i:int = 0; i < row.length; i++) {
+				if (!this.contains(row[i])) addChild(row[i]);				
+				
 				row[i].x = xAccumulator;
 				xAccumulator += row[i].width + 15;
 				row[i].y = (row[i].height + 15) * (rowNumber) + 15;
 				row[i].visible = true;
-				if (!this.contains(row[i])) addChild(row[i]);				
+				
 			}
 			
 			// center
-			var xOffset:Number = (1022 - xAccumulator) / 2;
 			
-			trace("X offset: " + xOffset);
 			
-			for(var j:int = 0; j < row.length; j++) {
-				row[j].x += xOffset;
-			}
 			
-			if ((row[row.length - 1].x + row[row.length - 1].width) > 1022) {
+
+
+
+			
+			
+			trace("Row width: " + (row[row.length - 1].x + row[row.length - 1].width));
+			if ((row[row.length - 1].x + row[row.length - 1].width) > (1022 - 30)) {
 				// too big, recurse
-				this.removeChildAt(row.pop());
-				positionRow(row, rowNumber);
+				// TODO does this work?
+				trace("trimming");
+				removeChild(row.pop());
+				positionRow(row, ++rowNumber);
+			}
+			else {
+				// center it, we're done
+				var xOffset:Number = (1022 - (row[row.length - 1].x + row[row.length - 1].width)) / 2;
+				trace("we're done... center itX offset: " + xOffset);
+				for(var j:int = 0; j < row.length; j++) {
+					row[j].x += xOffset;
+				}				
 			}
 			
 			

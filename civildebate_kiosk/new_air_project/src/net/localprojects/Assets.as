@@ -7,13 +7,22 @@ package net.localprojects
 		
 		// Embed code is generated dynamically by embedgen.py
 		
-		
-		
+
 		// Temp
 		[Embed(source = '/assets/graphics/4e4d360f0f2e421e7b000002-full.jpg')] private static const a4e4d360f0f2e421e7b000002fullClass:Class;
 		public static function getSample():Bitmap { return new a4e4d360f0f2e421e7b000002fullClass() as Bitmap; };
 		
-			
+		[Embed(source = '/assets/graphics/wordFrequencyBlockPlaceholder.png')] private static const wordFrequencyBlockPlaceholderClass:Class;
+		public static function getWordFrequencyBlockPlaceholder():Bitmap { return new wordFrequencyBlockPlaceholderClass() as Bitmap; };
+		public static const wordFrequencyBlockPlaceholder:Bitmap = getWordFrequencyBlockPlaceholder();
+		
+		[Embed(source = '/assets/graphics/mostDebatedPlaceholder.png')] private static const mostDebatedPlaceholderClass:Class;
+		public static function getMostDebatedPlaceholder():Bitmap { return new mostDebatedPlaceholderClass() as Bitmap; };
+		public static const mostDebatedPlaceholder:Bitmap = getMostDebatedPlaceholder();
+		
+		[Embed(source = '/assets/graphics/mostDebatedPortraitPlaceholder.png')] private static const mostDebatedPortraitPlaceholderClass:Class;
+		public static function getMostDebatedPortraitPlaceholder():Bitmap { return new mostDebatedPortraitPlaceholderClass() as Bitmap; };
+		public static const mostDebatedPortraitPlaceholder:Bitmap = getMostDebatedPortraitPlaceholder();		
 		
 		
 		// Bitmaps

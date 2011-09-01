@@ -27,7 +27,10 @@ package net.localprojects.ui {
 			interpolatedColor = Color.interpolateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, _normalDifference);
 			this.setBackgroundColor(interpolatedColor, true);
 			
-			this.setPadding(14, 15, 11, 15);
+			this.setPadding(14, 15, 10, 15);
+			
+			
+			
 		}
 		
 	}

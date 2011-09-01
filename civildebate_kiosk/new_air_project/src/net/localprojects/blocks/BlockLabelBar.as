@@ -46,8 +46,8 @@ package net.localprojects.blocks {
 			if (textField.text != s) {			
 				
 				instantTween = instant;			
-				var textOutDuration:Number = instant ? 0 : 0.1;
-				var backgroundDuration:Number = instant ? 0 : 0.2;			
+				var textOutDuration:Number = instant ? 0 : 0.25;
+				var backgroundDuration:Number = instant ? 0 : 0.4;			
 				newText = s;			
 				
 				if (instant) {
