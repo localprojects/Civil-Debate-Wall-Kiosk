@@ -25,6 +25,15 @@ package net.localprojects.elements {
 		
 		private var wordTitleBar:BlockLabelBar;
 		private var wordCloud:WordCloud;
+		private var wordFrequencyList:WordFrequencyList;
+		
+		private var superlativesTitleBar:BlockLabelBar;
+		private var nextSuperlativeButton:IconButton;
+		private var previousSuperlativeButton:IconButton;
+		private var superlativesPortrait:Portrait;
+		
+		private var mostDebatedPanel:MostDebatedPanel;
+		
 		
 		public function StatsOverlay() {
 			super();
@@ -39,10 +48,12 @@ package net.localprojects.elements {
 			
 			// no animation for this at the moment
 			// TODO put it in the parent block instead?
-			homeButton = new BlockButton(1022, 63, Assets.COLOR_YES_MEDIUM, 'BACK TO DEBATE', 20);
+			homeButton = new BlockButton(1022, 63, 0x000000, 'BACK TO DEBATE', 34, 0xffffff, Assets.FONT_HEAVY);
+			
+			homeButton.setStrokeColor(Assets.COLOR_GRAY_15);
 			homeButton.setDefaultTweenIn(0, {x:0, y: 1563});
 			homeButton.setDefaultTweenOut(0, {x:0, y: 1563});
-			addChild(homeButton);			
+			addChild(homeButton);
 			
 			
 			// Voting bar
@@ -56,8 +67,8 @@ package net.localprojects.elements {
 			previousVoteStatButton.showBackground(false);
 			previousVoteStatButton.setStrokeWeight(0);			
 			previousVoteStatButton.showOutline(false, true);
-			previousVoteStatButton.setDefaultTweenIn(1, {alpha: 1, x:259, y: 3});
-			previousVoteStatButton.setDefaultTweenOut(1, {alpha: 0.25, x:259, y: 3});
+			previousVoteStatButton.setDefaultTweenIn(1, {alpha: 1, x:244, y: 3});
+			previousVoteStatButton.setDefaultTweenOut(1, {alpha: 0.25, x:244, y: 3});
 			addChild(previousVoteStatButton);
 			
 			nextVoteStatButton = new IconButton(63, 63, 0x000000, '', 0, 0x000000, null, Assets.getRightArrow());
@@ -65,8 +76,8 @@ package net.localprojects.elements {
 			nextVoteStatButton.showBackground(false);			
 			nextVoteStatButton.setStrokeWeight(0);
 			nextVoteStatButton.showOutline(false, true);			
-			nextVoteStatButton.setDefaultTweenIn(1, {alpha: 1, x: 734, y: 3});
-			nextVoteStatButton.setDefaultTweenOut(1, {alpha: 0.25, x: 734, y: 3});
+			nextVoteStatButton.setDefaultTweenIn(1, {alpha: 1, x: 719, y: 3});
+			nextVoteStatButton.setDefaultTweenOut(1, {alpha: 0.25, x: 719, y: 3});
 			addChild(nextVoteStatButton);						
 			
 			voteStatBar = new VoteStatBar();
@@ -86,12 +97,59 @@ package net.localprojects.elements {
 			wordCloud.setDefaultTweenOut(0, {x:0, y: 312});
 			addChild(wordCloud);						
 			
+			wordCloud.addEventListener(WordCloud.EVENT_WORD_SELECTED, frequentWordView);
+			wordCloud.addEventListener(WordCloud.EVENT_WORD_DESELECTED, mostDebatedView);
+			
+			wordFrequencyList = new WordFrequencyList();
+			wordFrequencyList.setDefaultTweenIn(1, {alpha: 1, x:0, y: 626});
+			wordFrequencyList.setDefaultTweenOut(1, {alpha: 0, x:0, y: 626});
+			addChild(wordFrequencyList);
+			
+			
+			// Superlatives
+			superlativesTitleBar = new BlockLabelBar("Most Debated Opinions", 26, 0xffffff, 1022, 63, 0x000000, Assets.FONT_BOLD);
+			superlativesTitleBar.setDefaultTweenIn(1, {alpha: 1, x:0, y: 626});
+			superlativesTitleBar.setDefaultTweenOut(1, {alpha: 0, x:0, y: 626});
+			addChild(superlativesTitleBar);
+			
+			previousSuperlativeButton = new IconButton(63, 63, 0x000000, '', 0, 0x000000, null, Assets.getLeftArrow());
+			previousSuperlativeButton.buttonMode = true;
+			previousSuperlativeButton.showBackground(false);
+			previousSuperlativeButton.setStrokeWeight(0);			
+			previousSuperlativeButton.showOutline(false, true);
+			previousSuperlativeButton.setDefaultTweenIn(1, {alpha: 1, x:244, y: 626});
+			previousSuperlativeButton.setDefaultTweenOut(1, {alpha: 0, x:244, y: 626});
+			addChild(previousSuperlativeButton);
+			
+			nextSuperlativeButton = new IconButton(63, 63, 0x000000, '', 0, 0x000000, null, Assets.getRightArrow());
+			nextSuperlativeButton.buttonMode = true;
+			nextSuperlativeButton.showBackground(false);			
+			nextSuperlativeButton.setStrokeWeight(0);
+			nextSuperlativeButton.showOutline(false, true);			
+			nextSuperlativeButton.setDefaultTweenIn(1, {alpha: 1, x: 719, y: 626});
+			nextSuperlativeButton.setDefaultTweenOut(1, {alpha:0, x: 719, y: 626});
+			addChild(nextSuperlativeButton);		
+			
+			superlativesPortrait = new Portrait();
+			// TODO pass width and height into constructor?
+//			superlativesPortrait.width = 504;
+//			superlativesPortrait.height= 844;
+			superlativesPortrait.setImage(Assets.getMostDebatedPortraitPlaceholder(), true);			
+			superlativesPortrait.setDefaultTweenIn(1, {x: 0, y: 705});
+			superlativesPortrait.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 705});			
+			
+			addChild(superlativesPortrait);
+			
+			mostDebatedPanel = new MostDebatedPanel();
+			mostDebatedPanel.setDefaultTweenIn(1, {x: 519, y: 705});
+			mostDebatedPanel.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 705});			
+			addChild(mostDebatedPanel);			
 			
 			// start with word frequency
 			update();
-			frequentWordView();
+			mostDebatedView();
 			
-			showLikeTotals();
+			showDebateTotals();
 			
 			this.addEventListener(Event.ENTER_FRAME, onFrame);
 		}
@@ -102,21 +160,118 @@ package net.localprojects.elements {
 		}
 		
 		public function frequentWordView(...args):void {
-			trace("Frequent word view");
-			// TODO mark as doomed
+			markAllInactive();
+			previousVoteStatButton.active = true;		
+			nextVoteStatButton.active = true;
 			
-
+			trace("Frequent word view");
+			
+			
+			// wordFrequencyList.setWord(wordCloud.activeWord);
+			
+			// mutate to use current word
+			
+			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			
 			voteTitleBar.tweenIn();
 			voteStatBar.tweenIn();
-			previousVoteStatButton.tweenIn();			
-			nextVoteStatButton.tweenIn();
+
 			wordTitleBar.tweenIn();
-			wordCloud.tweenIn();			
+			wordCloud.tweenIn();	
+			wordFrequencyList.tweenIn();
 			homeButton.tweenIn();			
 			
 			
-			// TODO tween out unwanted
+			tweenOutInactive();			
 		}
+		
+		public function mostDebatedView(...args):void {
+			markAllInactive();
+			
+			previousVoteStatButton.active = true;
+			nextVoteStatButton.active = true;
+			
+			superlativesTitleBar.setText('Most Debated Opinions');
+			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			
+			previousSuperlativeButton.setOnClick(null);
+			nextSuperlativeButton.setOnClick(mostLikedView);
+			
+			voteTitleBar.tweenIn();
+			voteStatBar.tweenIn();
+			wordTitleBar.tweenIn();
+			wordCloud.tweenIn();
+			superlativesTitleBar.tweenIn();
+			
+			previousSuperlativeButton.tweenIn(1, {alpha: 0.25});
+			nextSuperlativeButton.tweenIn();
+			
+			superlativesPortrait.tweenIn();
+			mostDebatedPanel.tweenIn();
+			homeButton.tweenIn();				
+			
+			tweenOutInactive();					
+		}
+		
+		public function mostLikedView(...args):void {
+			markAllInactive();
+			
+			previousVoteStatButton.active = true;
+			nextVoteStatButton.active = true;			
+			
+			superlativesTitleBar.setText('Most Liked Debates');
+			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			
+			previousSuperlativeButton.setOnClick(mostDebatedView);
+			nextSuperlativeButton.setOnClick(mostActiveUsersView);			
+			
+			
+			voteTitleBar.tweenIn();
+			voteStatBar.tweenIn();
+			wordTitleBar.tweenIn();
+			wordCloud.tweenIn();
+			superlativesTitleBar.tweenIn();
+			nextSuperlativeButton.tweenIn();
+			previousSuperlativeButton.tweenIn();			
+			superlativesPortrait.tweenIn();
+			mostDebatedPanel.tweenIn();
+			homeButton.tweenIn();				
+			
+			tweenOutInactive();					
+		}		
+		
+		public function mostActiveUsersView(...args):void {
+			markAllInactive();
+			
+			previousVoteStatButton.active = true;
+			nextVoteStatButton.active = true;			
+			
+			superlativesTitleBar.setText('Most Active Users');
+			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			
+			previousSuperlativeButton.setOnClick(mostLikedView);
+			nextSuperlativeButton.setOnClick(null);			
+			
+			voteTitleBar.tweenIn();
+			voteStatBar.tweenIn();
+						
+			wordTitleBar.tweenIn();
+			wordCloud.tweenIn();
+			superlativesTitleBar.tweenIn();
+			
+			previousSuperlativeButton.tweenIn();
+			nextSuperlativeButton.tweenIn(1, {alpha: 0.25});		
+		
+			superlativesPortrait.tweenIn();
+			mostDebatedPanel.tweenIn();
+			homeButton.tweenIn();				
+			
+			tweenOutInactive();					
+		}				
 		
 
 
@@ -124,7 +279,8 @@ package net.localprojects.elements {
 		public function showLikeTotals(...args):void {			
 			// behaviors
 			previousVoteStatButton.setOnClick(null);
-			previousVoteStatButton.tween(1, {alpha: 0.25});			
+			previousVoteStatButton.tweenIn(1, {alpha: 0.5});
+			
 			
 			nextVoteStatButton.setOnClick(showDebateTotals);
 			nextVoteStatButton.tweenIn();						
@@ -146,7 +302,7 @@ package net.localprojects.elements {
 			previousVoteStatButton.tweenIn();			
 			
 			nextVoteStatButton.setOnClick(null);
-			nextVoteStatButton.tween(1, {alpha: 0.25});			
+			nextVoteStatButton.tweenIn(1, {alpha: 0.5});			
 			
 			// mutation
 			voteTitleBar.setText('Total Number of Opinions');			
@@ -158,6 +314,8 @@ package net.localprojects.elements {
 			voteStatBar.setLabels(yesCount + ' Yes', noCount + ' No');
 			TweenMax.to(voteStatBar, 1, {barPercent: targetPercent, ease: Quart.easeInOut});
 		}
+		
+		
 				
 		
 		
@@ -168,6 +326,36 @@ package net.localprojects.elements {
 			wordCloud.setWords(CDW.database.stats['frequentWords']);
 			
 		}
+		
+		
+		// TOdo inherit these from a container class... or just put it in block base!?
+		private function markAllInactive():void {
+
+			
+			// marks all FIRST LEVEL blocks as inactive
+			for (var i:int = 0; i < this.numChildren; i++) {
+				//if ((this.getChildAt(i) is BlockBase) && (this.getChildAt(i).visible)) {
+				// attempt to fix blank screen issue....
+				if (this.getChildAt(i) is BlockBase) {				
+					(this.getChildAt(i) as BlockBase).active = false;
+				}
+			}
+		}
+		
+		
+		private function tweenOutInactive(instant:Boolean = false):void {	
+			for (var i:int = 0; i < this.numChildren; i++) {
+				
+				if ((this.getChildAt(i) is BlockBase) && !(this.getChildAt(i) as BlockBase).active) {
+					
+					if (instant)
+						(this.getChildAt(i) as BlockBase).tweenOut(0);
+					else
+						(this.getChildAt(i) as BlockBase).tweenOut();
+					
+				}
+			}
+		}		
 		
 		
 	}

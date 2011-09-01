@@ -1497,6 +1497,7 @@ package net.localprojects {
 		
 		
 		private function onSubmitContinue(e:Event):void {
+			continueButton.tween(1, {alpha: 0});
 //			inactivityOverlay.tweenOut();
 //			inactivityTimerBar.tweenOut();
 //			inactivityInstructions.tweenOut();
