@@ -17,6 +17,18 @@ package net.localprojects
 		
 		
 		// Bitmaps
+		[Embed(source = '/assets/graphics/dashedBar.png')] private static const dashedBarClass:Class;
+		public static function getDashedBar():Bitmap { return new dashedBarClass() as Bitmap; };
+		public static const dashedBar:Bitmap = getDashedBar();		
+		
+		[Embed(source = '/assets/graphics/leftArrow.png')] private static const leftArrowClass:Class;
+		public static function getLeftArrow():Bitmap { return new leftArrowClass() as Bitmap; };
+		public static const leftArrow:Bitmap = getLeftArrow();
+		
+		[Embed(source = '/assets/graphics/rightArrow.png')] private static const rightArrowClass:Class;
+		public static function getRightArrow():Bitmap { return new rightArrowClass() as Bitmap; };
+		public static const rightArrow:Bitmap = getRightArrow();
+		
 		[Embed(source = '/assets/graphics/bottomButtonTile.png')] private static const bottomButtonTileClass:Class;
 		public static function getBottomButtonTile():Bitmap { return new bottomButtonTileClass() as Bitmap; };
 		public static const bottomButtonTile:Bitmap = getBottomButtonTile();
@@ -130,6 +142,7 @@ package net.localprojects
 		public static const COLOR_NO_OVERLAY:uint = Utilities.color(255, 60, 0);
 		public static const COLOR_NO_WATERMARK:uint = Utilities.color(255, 242, 235);		
 		
+		public static const COLOR_GRAY_5:uint = Utilities.color(241, 242, 242); // 5% K
 		public static const COLOR_GRAY_15:uint = Utilities.color(220, 221, 222); // 15% K
 		public static const COLOR_GRAY_25:uint = Utilities.color(199, 200, 202); // 25% K
 		public static const COLOR_GRAY_50:uint = Utilities.color(147, 149, 152); // 50% K

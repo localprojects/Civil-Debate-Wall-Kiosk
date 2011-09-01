@@ -17,6 +17,7 @@ package net.localprojects {
 		public var question:Object = {};
 		public var debates:OrderedObject = new OrderedObject();
 		public var portraits:Object = {};
+		public var stats:Object = {};
 			
 		private var imageQueue:LoaderMax;
 			
@@ -117,8 +118,17 @@ package net.localprojects {
 				debates[debateID] = debate;
 			}
 			
+			
+			// load stats						
+			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/stats/get', {'question': '4e2755b50f2e420354000001'}, onStatsReceived);			
+		}
+		
+		private function onStatsReceived(r:Object):void {
+			trace('Stats received.');
+			stats = r;
+			
 			// ready to start
-			this.dispatchEvent(new Event(Event.COMPLETE));
+			this.dispatchEvent(new Event(Event.COMPLETE));			
 		}
 		
 		

@@ -12,6 +12,8 @@ package net.localprojects.ui {
 	
 	import net.localprojects.Assets;
 	
+	import sekati.converters.BoolConverter;
+	
 	public class BlockButton extends ButtonBase	{
 
 		protected var labelFieldA:TextField;
@@ -72,6 +74,10 @@ package net.localprojects.ui {
 		public function shiftBaseline(n:Number):void {
 				baselineShift += n;
 				setLabel(_labelText);
+		}
+		
+		public function showBackground(b:Boolean):void {
+			background.alpha = b ? 1 : 0;
 		}
 		
 		
