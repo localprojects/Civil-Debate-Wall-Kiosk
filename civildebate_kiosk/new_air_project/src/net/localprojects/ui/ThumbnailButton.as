@@ -25,8 +25,8 @@ package net.localprojects.ui {
 		
 		private var textBackground:Sprite;
 		
-		private var leftDot:Shape;
-		private var rightDot:Shape;		
+		public var leftDot:Shape;
+		public  var rightDot:Shape;		
 		
 		public function ThumbnailButton(image:Bitmap, stance:String, debate:String) {
 			_selected = false;
