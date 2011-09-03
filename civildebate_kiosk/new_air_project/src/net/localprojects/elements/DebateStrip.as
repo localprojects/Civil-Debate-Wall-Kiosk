@@ -15,6 +15,8 @@ package net.localprojects.elements {
 	import net.localprojects.blocks.BlockBase;
 	import net.localprojects.ui.*;
 	
+	import sekati.converters.BoolConverter;
+	
 	
 	
 	public class DebateStrip extends BlockBase {
@@ -38,7 +40,6 @@ package net.localprojects.elements {
 			// Clean up the kids, could do a diff instead...
 			Utilities.removeChildren(scrollField.scrollSheet);
 
-			
 			var i:int = 0;
 			for (var debateID:* in CDW.database.debates) {
 				var debate:Object = CDW.database.debates[debateID];
@@ -49,13 +50,6 @@ package net.localprojects.elements {
 				debateThumbnail.addEventListener(MouseEvent.MOUSE_DOWN, onThumbnailMouseDown);
 				debateThumbnail.addEventListener(MouseEvent.MOUSE_UP, onThumbnailMouseUp);				
 				
-				if (CDW.state.activeDebate == debateID) {
-					activeThumbnail = debateThumbnail;
-				}
-				else {
-					debateThumbnail.selected = false;
-				}
-				
 				// remove the left dot from the first one
 				if (i == 0) debateThumbnail.removeChild(debateThumbnail.leftDot);
 				scrollField.scrollSheet.addChild(debateThumbnail);
@@ -64,19 +58,48 @@ package net.localprojects.elements {
 			
 			// remove the right dot from the last one
 			debateThumbnail.removeChild(debateThumbnail.rightDot);
-			
-			// wait until everything is initalized to select the active thumb so it will draw on top
-			if (activeThumbnail != null) activeThumbnail.selected = true;
-			
+
 			// update the scroll field limits to acommodate the growing strip...
 			scrollField.xMin = -scrollField.scrollSheet.width + 594;
 			scrollField.xMax = 450; 	
-
-			scrollToActive();
 		}
-
 		
-		private function scrollToActive():void {
+		
+
+		public function setActiveThumbnail(id:String):void {
+			
+			for (var i:int = 0; i < scrollField.scrollSheet.numChildren; i++) {
+				
+				if (scrollField.scrollSheet.getChildAt(i) is ThumbnailButton) {
+				
+					var tempThumb:ThumbnailButton = scrollField.scrollSheet.getChildAt(i) as ThumbnailButton;
+					
+					
+					if (tempThumb.debateID == id) {
+						// deactivate the old one
+						
+						if (activeThumbnail != null) {						
+							activeThumbnail.selected = false;
+							activeThumbnail.setBackgroundColor(0xffffff);
+							trace("deselecting: " + activeThumbnail);
+						}
+						
+						// select the new one
+						activeThumbnail = tempThumb;
+						activeThumbnail.setBackgroundColor(activeThumbnail.downBackgroundColor);
+						scrollField.scrollSheet.setChildIndex(activeThumbnail, scrollField.scrollSheet.numChildren - 1); // make sure the colored dots are on top 
+						activeThumbnail.selected = true;						
+					
+						break;
+					}
+					
+				}			
+			}
+			
+			scrollToActive();			
+		}
+		
+		public function scrollToActive():void {
 			var activeThumbnailX:Number = -activeThumbnail.x + ((1080 - activeThumbnail.width) / 2);
 			scrollField.scrollTo(activeThumbnailX, 0);
 		}
@@ -96,18 +119,26 @@ package net.localprojects.elements {
 				// go to opinion
 				
 				if (activeThumbnail != targetThumbnail) {
-					// deactivate the old one
-					activeThumbnail.selected = false;
-					activeThumbnail.setBackgroundColor(0xffffff);
+					//setActiveThumbnail(targetThumbnail.debateID);
 					
-					// select the new one
-					activeThumbnail = targetThumbnail;
-					scrollField.scrollSheet.setChildIndex(activeThumbnail, scrollField.scrollSheet.numChildren - 1); // make sure the colored dots are on top 
-					activeThumbnail.selected = true;
-					CDW.state.setActiveDebate(activeThumbnail.debateID);
-					CDW.view.transitionView();
+					// is it to the left, or the right?
+					var before:Boolean = true;
 					
-					scrollToActive();					
+					for (var debateID:* in CDW.database.debates) {
+						if (debateID == CDW.state.activeDebate) before = false;
+						if (debateID == targetThumbnail.debateID) break;
+					}
+					
+					// transition to it
+					if (before) {
+						CDW.state.setActiveDebate(CDW.state.activeDebate, targetThumbnail.debateID, CDW.state.nextDebate);
+						CDW.view.previousDebate();						
+					}
+					else {						
+						CDW.state.setActiveDebate(CDW.state.activeDebate, CDW.state.previousDebate, targetThumbnail.debateID);
+						CDW.view.nextDebate();
+					}
+						
 				}
 			}
 			else {

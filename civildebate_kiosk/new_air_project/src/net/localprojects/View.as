@@ -22,6 +22,8 @@ package net.localprojects {
 	import net.localprojects.keyboard.*;
 	import net.localprojects.ui.*;
 	
+	import sekati.converters.BoolConverter;
+	
 
 	public class View extends Sprite {
 				
@@ -60,9 +62,9 @@ package net.localprojects {
 		private var cameraOverlay:CameraOverlay;
 		public var leftQuote:QuotationMark;
 		public var rightQuote:QuotationMark
-		private var statsButton:IconButton;
-		private var flagButton:IconButton;		
-		private var debateButton:BalloonButton;
+		public var statsButton:IconButton;
+		public var flagButton:IconButton;		
+		public var debateButton:BalloonButton;
 		private var secondaryDebateButton:BalloonButton;		
 		private var yesButton:BlockButton;
 		private var noButton:BlockButton;
@@ -80,8 +82,8 @@ package net.localprojects {
 		private var question:Question; // changes dimensions
 		public var portrait:Portrait;
 		private var bigButton:BigButton;
-		private var likeButton:CounterButton;
-		private var viewDebateButton:BlockButton;
+		public var likeButton:CounterButton;
+		public var viewDebateButton:BlockButton;
 		private var editOpinion:BlockInputParagraph; // changes dimensions 
 		private var byline:BlockLabel; // changes dimensions
 		
@@ -184,7 +186,7 @@ package net.localprojects {
 
 			rightStance= new BlockLabel('', 92, 0xffffff, 0x000000);
 			rightStance.setPadding(24, 36, 23, 30);
-			leftStance.considerDescenders = false;			
+			rightStance.considerDescenders = false;			
 			rightStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x + stageWidth, y: stance.defaultTweenInVars.y});						
 			addChild(rightStance);			
 			
@@ -514,7 +516,7 @@ package net.localprojects {
 			// Flash overlay
 			flashOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0xffffff)));
 			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut, immediateRender: true});
-			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
+			flashOverlay.setDefaultTweenOut(1, {alpha: 0, ease: Quart.easeOut});
 			flashOverlay.name = 'Flash Overlay';
 			addChild(flashOverlay);	
 		}
@@ -551,44 +553,45 @@ package net.localprojects {
 		// =========================================================================
 		
 		public function homeView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = homeView;
 			markAllInactive();
 			
 			CDW.inactivityTimer.disarm();
 			
-			// mutations
+			// content mutations
 			portrait.setImage(CDW.database.getActivePortrait());
-			question.setTextColor(CDW.state.questionTextColor);			
 			question.setText(CDW.database.getQuestionText(), true);
-			debateOverlay.scrollField.scrollTo(0, 0);
+			nametag.setText(CDW.database.getDebateAuthorName(CDW.state.activeDebate) + ' Says :', true);
+			stance.setText(CDW.state.activeStanceText, true);
+			opinion.setText(CDW.database.getOpinion(CDW.state.activeDebate));
+			bigButton.setText('ADD YOUR OPINION', true);
+			likeButton.setCount(CDW.database.debates[CDW.state.activeDebate].likes);			
 			
+			// state mutations
+			debateOverlay.scrollField.scrollTo(0, 0);			
+			CDW.state.clearUser(); // Reset user info
+			debateStrip.setActiveThumbnail(CDW.state.activeDebate);
+			
+			// aesthetic mutations
+			question.setTextColor(CDW.state.questionTextColor);
+			debateButton.setStrokeColor(0xffffff);
+			(CDW.state.activeStanceText == 'YES!') ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);			
+			
+			// disabled colors
 			likeButton.setDisabledColor(CDW.state.activeStanceColorDisabled);
 			flagButton.setDisabledColor(CDW.state.activeStanceColorDisabled);
 			viewDebateButton.setDisabledColor(CDW.state.activeStanceColorDisabled);
 			
-			nametag.setText(CDW.database.getDebateAuthorName(CDW.state.activeDebate) + ' Says :', true);
-			stance.setText(CDW.state.activeStanceText, true);
 
-			(CDW.state.activeStanceText == 'YES!') ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);
-			
-			opinion.setText(CDW.database.getOpinion(CDW.state.activeDebate));
-			bigButton.setText('ADD YOUR OPINION', true);
-			
-			debateButton.setStrokeColor(0xffffff);			
+
 			
 			var commentCount:int = CDW.database.getCommentCount(CDW.state.activeDebate);
 			
-			
-			opinion.y = 1347 - opinion.height;
-			leftOpinion.y = 1347 - leftOpinion.height;
-			rightOpinion.y = 1347 - rightOpinion.height;			
-			
-
-			likeButton.setCount(CDW.database.debates[CDW.state.activeDebate].likes);
-			CDW.state.clearUser(); // Reset user info
-			
+			// Set up previous and next overlay
 			if (CDW.state.previousDebate != null) {
 				// set the previous debate				
-				leftOpinion.setText(CDW.database.getOpinion(CDW.state.previousDebate));				
+				leftOpinion.setText(CDW.database.getOpinion(CDW.state.previousDebate), true);				
 				leftStance.setText(CDW.state.previousStanceText, true);
 				(CDW.state.previousStanceText == 'YES!') ? leftStance.setLetterSpacing(yesLetterSpacing) : leftStance.setLetterSpacing(noLetterSpacing);				
 				leftNametag.setText(CDW.database.getDebateAuthorName(CDW.state.previousDebate) + ' Says :', true);				
@@ -610,28 +613,41 @@ package net.localprojects {
 				rightNametag.setBackgroundColor(CDW.state.nextStanceColorDark, true);
 			}
 			
-			// set the active debate
+			
+			opinion.y = 1347 - opinion.height;
+			leftOpinion.y = 1347 - leftOpinion.height;
+			rightOpinion.y = 1347 - rightOpinion.height;			
+						
+			
+			// ease if we're transitioning
+			var instant:Boolean = true;
+			if (CDW.state.activeView == CDW.state.lastView) instant = false;
+			
 			stance.setBackgroundColor(CDW.state.activeStanceColorLight, true);
-			leftQuote.setColor(CDW.state.activeStanceColorLight, true);
-			rightQuote.setColor(CDW.state.activeStanceColorLight, true);				
+			leftQuote.setColor(CDW.state.activeStanceColorLight, instant);
+			rightQuote.setColor(CDW.state.activeStanceColorLight, instant);				
 			nametag.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			opinion.setBackgroundColor(CDW.state.activeStanceColorLight, true);
-			
-			debateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			debateButton.setBackgroundColor(CDW.state.activeStanceColorDark, instant);
 			debateButton.setDownColor(CDW.state.activeStanceColorMedium);
-			statsButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			statsButton.setBackgroundColor(CDW.state.activeStanceColorDark, instant);
 			statsButton.setDownColor(CDW.state.activeStanceColorMedium);			
 			
-			likeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			if (likeButton.locked) likeButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, true); 
 			
+			// respect locked buttons
+			likeButton.setBackgroundColor(CDW.state.activeStanceColorDark, instant);			
+//			if (likeButton.locked) likeButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, instant); 
 			likeButton.setDownColor(CDW.state.activeStanceColorMedium);			
 			
-			flagButton.setBackgroundColor(CDW.state.activeStanceColorDark), true;
-			if (flagButton.locked) flagButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, true);
+			flagButton.setBackgroundColor(CDW.state.activeStanceColorDark), instant;
+			if (flagButton.locked) flagButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, instant);
+			flagButton.setDownColor(CDW.state.activeStanceColorMedium);
+						
 			
-			flagButton.setDownColor(CDW.state.activeStanceColorMedium);			
-
+			flagButton.unlock();
+			likeButton.unlock();
+			
+			// view debate button
 			viewDebateButton.setDownColor(CDW.state.activeStanceColorMedium);
 			
 			if (commentCount == 0) {
@@ -641,7 +657,6 @@ package net.localprojects {
 				viewDebateButton.showOutline(false);				
 			}
 			else {
-				
 				// TODO embed this functionality in the button label itself?
 				// viewDebateButton.fitLabel(text, maxWidth, prefix, postfix);
 				
@@ -669,9 +684,14 @@ package net.localprojects {
 			// behaviors
 			if (commentCount == 0) {			
 				viewDebateButton.setOnClick(null);
+				CDW.state.debateOverlayOpen = false;
 			}
 			else {
-				viewDebateButton.setOnClick(debateOverlayView);				
+				viewDebateButton.setOnClick(onDebateViewButton);
+				
+				if (CDW.state.debateOverlayOpen) {
+					TweenMax.delayedCall(1.0, debateOverlayView);
+				}
 			}
 			
 			bigButton.setOnClick(onAddOpinionButton);			
@@ -687,30 +707,38 @@ package net.localprojects {
 			divider.tweenIn();
 			question.tweenIn();
 			dragLayer.tweenIn();
-			
 			stance.tweenIn();
 			leftStance.tweenIn();
 			rightStance.tweenIn();
-			
 			nametag.tweenIn();
 			leftNametag.tweenIn();
 			rightNametag.tweenIn();
-			
 			leftQuote.tweenIn();
 			rightQuote.tweenIn();
-			
 			opinion.tweenIn();
 			rightOpinion.tweenIn();
 			leftOpinion.tweenIn();
-			
 			bigButton.tweenIn();
 			statsButton.tweenIn();
 			likeButton.tweenIn();
-			debateButton.y = opinion.y - 195;
-			debateButton.tweenIn();//debateButton.y = 1347 - opinion.height - 193;
 			flagButton.tweenIn();
 			viewDebateButton.tweenIn();
 			debateStrip.tweenIn();
+			
+			// is it a transition?
+			if (CDW.state.activeView == CDW.state.lastView) {
+				// it's a transition
+				debateButton.tweenIn(-1, {y: opinion.y - 195});
+			}
+			else {
+				// we're landing here from somewhere else, snap to it
+				debateButton.y = opinion.y - 195;
+				debateButton.tweenIn();				
+			}
+			
+			
+			// Fire the debate overlay?
+						
 			
 			
 			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
@@ -723,6 +751,50 @@ package net.localprojects {
 						
 			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design);
 		}
+		
+		private function onDebateViewButton(e:Event):void {
+			CDW.state.debateOverlayOpen = true;
+			debateOverlayView();			
+		}
+		
+		
+		public function nextDebate():void {
+			if (CDW.state.nextDebate != null) { 	
+				trace('Transition to next.');
+				CDW.state.setActiveDebate(CDW.state.nextDebate);
+				CDW.view.leftOpinion.x += stageWidth;
+				CDW.view.opinion.x += stageWidth;
+				CDW.view.rightOpinion.x += stageWidth;
+				
+				CDW.view.leftStance.x += stageWidth;
+				CDW.view.rightStance.x += stageWidth;
+				CDW.view.stance.x += stageWidth;
+				
+				CDW.view.leftNametag.x += stageWidth;
+				CDW.view.rightNametag.x += stageWidth;
+				CDW.view.nametag.x += stageWidth;
+			}
+			homeView();
+		}
+		
+		public function previousDebate():void {
+			if (CDW.state.previousDebate != null) {			
+				trace('Transition to previous.');
+				CDW.state.setActiveDebate(CDW.state.previousDebate);
+				CDW.view.leftOpinion.x -= stageWidth;
+				CDW.view.opinion.x -= stageWidth;
+				CDW.view.rightOpinion.x -= stageWidth;
+				
+				CDW.view.leftStance.x -= stageWidth;
+				CDW.view.rightStance.x -= stageWidth;
+				CDW.view.stance.x -= stageWidth;
+				
+				CDW.view.leftNametag.x -= stageWidth;
+				CDW.view.rightNametag.x -= stageWidth;
+				CDW.view.nametag.x -= stageWidth;
+			}
+			homeView();			
+		}		
 		
 		private function onDebateButton(e:Event):void {
 			CDW.state.userIsResponding = true;
@@ -752,7 +824,11 @@ package net.localprojects {
 		
 		
 		public function debateOverlayView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = debateOverlayView;			
 			markAllInactive();			
+			
+			
 			
 			// services
 			CDW.inactivityTimer.disarm();
@@ -785,7 +861,7 @@ package net.localprojects {
 			
 			
 			// behaviors
-			viewDebateButton.setOnClick(homeView);
+			viewDebateButton.setOnClick(onCloseDebateOverlay);
 			
 			// blocks
 			portrait.tweenIn();
@@ -819,6 +895,11 @@ package net.localprojects {
 			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design7);			
 		}
 		
+		private function onCloseDebateOverlay(e:Event):void {
+			CDW.state.debateOverlayOpen = false;
+			homeView();
+		}
+		
 		private function onYesButton(e:MouseEvent):void {
 			CDW.state.setStance('yes');
 			smsPromptView();
@@ -834,6 +915,9 @@ package net.localprojects {
 		
 		
 		public function flagOverlayView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = flagOverlayView;
+			
 			// mutations			
 			CDW.inactivityTimer.disarm();
 			flagInstructions.setText("FLAG AS INAPPROPRIATE ?");			
@@ -861,6 +945,10 @@ package net.localprojects {
 		}
 		
 		private function removeFlagOverlayView():void {
+			CDW.state.activeView = CDW.state.lastView; // revert the view, since it was just an overlay
+			CDW.state.lastView = flagOverlayView;
+						
+			
 			flagOverlay.tweenOut();
 			flagTimerBar.tweenOut();			
 			flagInstructions.tweenOut();
@@ -901,31 +989,48 @@ package net.localprojects {
 		
 		// For inter-debate transitions initiated by the debate picker...
 		// tweens everything out except the portrait, then tweens stuff back in
+		// TODO get rid of this?
 		public function transitionView(...args):void {
-			markAllInactive();
-			portrait.setImage(CDW.database.getActivePortrait());
-			question.setTextColor(CDW.state.questionTextColor);			
-			
-			portrait.tweenIn(0.5, {delay: 0.5, onComplete: onViewTransitionComplete});
-			header.tweenIn();
-			divider.tweenIn();
-			question.tweenIn();			
-			debateStrip.tweenIn();			
-			
-			leftQuote.tweenOut(0.25);
-			rightQuote.tweenOut(0.25);
-			opinion.tweenOut(0.25);
-			stance.tweenOut(0.25);
-			nametag.tweenOut(0.25);
-			bigButton.tweenOut(0.25);
-			statsButton.tweenOut(0.25);
-			likeButton.tweenOut(0.25);
-			debateButton.tweenOut(0.25);
-			flagButton.tweenOut(0.25);
-			viewDebateButton.tweenOut(0.25);			
+		//	markAllInactive();
 			
 			
-			tweenOutInactive();	
+			// are we going from debate to debate?
+			if (CDW.state.activeView == CDW.state.lastView) {
+				// are we going in the next direction?
+				
+				
+				// 
+				
+				// are we going in the previous direction
+//				nextDebate();
+				
+				
+			}
+			
+			
+//			portrait.setImage(CDW.database.getActivePortrait());
+//			question.setTextColor(CDW.state.questionTextColor);			
+//			
+//			portrait.tweenIn(0.5, {delay: 0.5, onComplete: onViewTransitionComplete});
+//			header.tweenIn();
+//			divider.tweenIn();
+//			question.tweenIn();			
+//			debateStrip.tweenIn();			
+//			
+//			leftQuote.tweenOut(0.25);
+//			rightQuote.tweenOut(0.25);
+//			opinion.tweenOut(0.25);
+//			stance.tweenOut(0.25);
+//			nametag.tweenOut(0.25);
+//			bigButton.tweenOut(0.25);
+//			statsButton.tweenOut(0.25);
+//			likeButton.tweenOut(0.25);
+//			debateButton.tweenOut(0.25);
+//			flagButton.tweenOut(0.25);
+//			viewDebateButton.tweenOut(0.25);			
+			
+			
+			//tweenOutInactive();	
 		}
 		
 		private function onViewTransitionComplete():void {
@@ -938,6 +1043,8 @@ package net.localprojects {
 		
 		
 		public function pickStanceView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = pickStanceView;			
 			markAllInactive();		
 			
 			CDW.inactivityTimer.arm();
@@ -989,6 +1096,8 @@ package net.localprojects {
 		private var smsCheckTimer:Timer;
 		
 		public function smsPromptView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = smsPromptView;
 			markAllInactive();
 			
 			CDW.inactivityTimer.arm();
@@ -1141,7 +1250,7 @@ package net.localprojects {
 		
 		
 		public function simulateSMS(e:Event):void {
-			smsCheckTimer.stop();			
+			smsCheckTimer.stop();
 			
 			// write some stuff down	
 			CDW.state.userPhoneNumber = '+1555' + Utilities.randRange(1000000, 9999999).toString();
@@ -1157,6 +1266,8 @@ package net.localprojects {
 		private var faceDetector:FaceDetector = new FaceDetector();
 		
 		public function photoBoothView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = photoBoothView;			
 			markAllInactive();
 			
 			CDW.inactivityTimer.arm();
@@ -1302,6 +1413,8 @@ package net.localprojects {
 		
 		
 		public function nameEntryView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = nameEntryView;			
 			markAllInactive();
 			flashOverlay.active = true; // needs to tween out itself
 			
@@ -1391,6 +1504,8 @@ package net.localprojects {
 		
 		public function verifyOpinionView(...args):void {
 			markAllInactive();
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = verifyOpinionView;			
 			
 			CDW.inactivityTimer.arm();
 			
@@ -1506,6 +1621,9 @@ package net.localprojects {
 		
 		
 		public function submitOverlayView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = submitOverlayView;
+			
 			// mutations			
 			// TODO HOW TO HANDLE OVERLAYS ON OVERLAYS? IS IT ALREADY SUBMITTED AT THIS POINT/
 			CDW.inactivityTimer.arm();
@@ -1532,9 +1650,7 @@ package net.localprojects {
 			opinion.tweenOut();
 			retakePhotoButton.tweenOut();
 			editTextButton.tweenOut();
-			exitButton.tweenOut();			
-						
-						
+			exitButton.tweenOut();	
 			
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
 		}
@@ -1551,6 +1667,8 @@ package net.localprojects {
 		
 		
 		public function editOpinionView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = editOpinionView;			
 			markAllInactive();
 			
 			CDW.inactivityTimer.arm();
@@ -1645,7 +1763,10 @@ package net.localprojects {
 		
 		
 		public function statsView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = statsView;	
 			markAllInactive();
+			
 			
 			CDW.inactivityTimer.disarm();
 			
@@ -1673,6 +1794,8 @@ package net.localprojects {
 		
 		
 		public function inactivityOverlayView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = inactivityOverlayView;			
 			// mutations			
 			CDW.inactivityTimer.disarm();
 			
@@ -1692,6 +1815,10 @@ package net.localprojects {
 
 		
 		private function onContinue(e:Event):void {
+			CDW.state.activeView = CDW.state.lastView ;
+			CDW.state.lastView = inactivityOverlayView; // revert since it's an overlay
+			
+			
 			CDW.inactivityTimer.arm();
 			inactivityOverlay.tweenOut();
 			inactivityTimerBar.tweenOut();
@@ -1713,6 +1840,7 @@ package net.localprojects {
 		
 
 		private function markAllInactive():void {
+			
 			// other housekeeping, TODO break this into its own function?
 			if(smsCheckTimer != null) smsCheckTimer.stop();					
 			

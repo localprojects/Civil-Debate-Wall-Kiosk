@@ -6,6 +6,7 @@ package net.localprojects.ui {
 	
 	import net.localprojects.*;
 	import net.localprojects.blocks.BlockBase;
+	import fl.motion.Color;
 
 	
 	public class DragLayer extends BlockBase {
@@ -36,7 +37,7 @@ package net.localprojects.ui {
 			mouseDown = false;
 			
 			vxSampleDepth = 5;
-			vxThreshold = 40;
+			vxThreshold = 25;
 		}
 		
 
@@ -49,7 +50,9 @@ package net.localprojects.ui {
 			currentX = startX;
 			leftEdge = 0;			
 			
-			// Stop home tweens
+			// Stop tweens
+			 TweenMax.killAll();
+			
 			TweenMax.killTweensOf(CDW.view.nametag);
 			TweenMax.killTweensOf(CDW.view.leftNametag);
 			TweenMax.killTweensOf(CDW.view.rightNametag);			
@@ -101,7 +104,17 @@ package net.localprojects.ui {
 				else if ((leftEdge > 0) && (CDW.state.previousDebate == null)) {
 					leftEdge = 0;
 					difference = 0;
-				}				
+				}
+				
+				trace("leftEdge: " + leftEdge + " difference: " + difference);
+				
+				
+				difference = Utilities.clamp(difference, -stageWidth, stageWidth);
+				leftEdge = Utilities.clamp(leftEdge, -stageWidth, stageWidth);				
+				
+				
+				
+				var amount:Number = Utilities.map(Math.abs(leftEdge), 0, stageWidth, 0, 1);
 				
 				// drag blocks
 				CDW.view.nametag.x = CDW.view.nametag.defaultTweenInVars.x - difference;
@@ -119,20 +132,59 @@ package net.localprojects.ui {
 				CDW.view.nametag.x = CDW.view.nametag.defaultTweenInVars.x - difference;
 				CDW.view.rightNametag.x = CDW.view.rightNametag.defaultTweenInVars.x - difference;					
 				
-				// tween colors
+				
+				// TODO tween debate overlay
 				
 				
+				// TODO tween label text?				
+				
+
 				if (leftEdge < 0) {
 					// going to next
 					CDW.view.portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.nextDebate), Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
+					
+					// No tween if no change!
+					if (CDW.state.nextStanceText != CDW.state.activeStanceText) {
+
+						CDW.view.leftQuote.setColor(Color.interpolateColor(CDW.state.activeStanceColorLight, CDW.state.nextStanceColorLight, amount), true);
+						CDW.view.rightQuote.setColor(Color.interpolateColor(CDW.state.activeStanceColorLight, CDW.state.nextStanceColorLight, amount), true);
+						CDW.view.flagButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
+						CDW.view.statsButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
+						CDW.view.likeButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);					
+						CDW.view.viewDebateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
+						CDW.view.debateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);						
+//						CDW.view.leftQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorLight, CDW.state.nextStanceColorLight, amount), true);
+//						CDW.view.rightQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorLight, CDW.state.nextStanceColorLight, amount), true);
+//						CDW.view.flagButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
+//						CDW.view.statsButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
+//						CDW.view.likeButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);					
+//						CDW.view.viewDebateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
+//						CDW.view.debateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
+					}
+					
 				}
 				else if (leftEdge > 0) {
 					// going to previous
-					CDW.view.portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.previousDebate), Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));						
+					CDW.view.portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.previousDebate), Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
+					
+					if (CDW.state.previousStanceText != CDW.state.activeStanceText) { 						
+						CDW.view.leftQuote.setColor(Color.interpolateColor(CDW.state.activeStanceColorLight, CDW.state.previousStanceColorLight, amount), true);
+						CDW.view.rightQuote.setColor(Color.interpolateColor(CDW.state.activeStanceColorLight, CDW.state.previousStanceColorLight, amount), true);
+						CDW.view.flagButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
+						CDW.view.statsButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
+						CDW.view.likeButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);					
+						CDW.view.viewDebateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
+						CDW.view.debateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
+//						CDW.view.leftQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorLight, CDW.state.previousStanceColorLight, amount), true);
+//						CDW.view.rightQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorLight, CDW.state.previousStanceColorLight, amount), true);
+//						CDW.view.flagButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
+//						CDW.view.statsButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
+//						CDW.view.likeButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);					
+//						CDW.view.viewDebateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
+//						CDW.view.debateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
+					}					
 				}
-				
-				CDW.view.leftQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
-				CDW.view.rightQuote.setIntermediateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));					
+									
 			}
 			
 			
@@ -146,47 +198,18 @@ package net.localprojects.ui {
 				var vxAverage:Number = Utilities.averageArray(vxSamples);
 				
 				trace('Mouse up. Velocity average: ' + vxAverage);
-				
-				
+
 				// see if we need to transition
 				if ((CDW.state.nextDebate != null) &&(vxAverage < -vxThreshold) || (leftEdge < (stageWidth / -2))) {
-					trace('Transition to next.');
-					CDW.state.setActiveDebate(CDW.state.nextDebate);
-					CDW.view.leftOpinion.x += stageWidth;
-					CDW.view.opinion.x += stageWidth;
-					CDW.view.rightOpinion.x += stageWidth;
-					
-					CDW.view.leftStance.x += stageWidth;
-					CDW.view.rightStance.x += stageWidth;
-					CDW.view.stance.x += stageWidth;
-					
-					CDW.view.leftNametag.x += stageWidth;
-					CDW.view.rightNametag.x += stageWidth;
-					CDW.view.nametag.x += stageWidth;				
-					
-					
+					CDW.view.nextDebate();
 				}
 				if ((CDW.state.previousDebate != null) && (vxAverage > vxThreshold) || (leftEdge > (stageWidth / 2))) {
-					trace('Transition to previous.');
-					CDW.state.setActiveDebate(CDW.state.previousDebate);
-					CDW.view.leftOpinion.x -= stageWidth;
-					CDW.view.opinion.x -= stageWidth;
-					CDW.view.rightOpinion.x -= stageWidth;
-					
-					CDW.view.leftStance.x -= stageWidth;
-					CDW.view.rightStance.x -= stageWidth;
-					CDW.view.stance.x -= stageWidth;
-					
-					CDW.view.leftNametag.x -= stageWidth;
-					CDW.view.rightNametag.x -= stageWidth;
-					CDW.view.nametag.x -= stageWidth;				
+					CDW.view.previousDebate();			
 				}
 				else {
 					// spring back to current
+					CDW.view.homeView();					
 				}
-				
-				// put everything back into place
-				CDW.view.homeView();
 			}
 		}		
 	}

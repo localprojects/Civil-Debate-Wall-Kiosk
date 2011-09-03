@@ -9,8 +9,11 @@ package net.localprojects {
 	import flash.display.BitmapData;
 	import flash.events.*;
 	import flash.filesystem.File;
+	import flash.geom.Rectangle;
 	import flash.net.*;
-		
+	
+	import sekati.utils.ColorUtil;
+	
 	public class Database extends EventDispatcher {
 		
 		
@@ -96,13 +99,21 @@ package net.localprojects {
 			for (var id:String in portraits) {
 				if (portraits[id] == null) {
 					try {
-						portraits[id] = (LoaderMax.getContent(id) as ContentDisplay).rawContent;
+						portraits[id] = new MetaBitmap(((LoaderMax.getContent(id) as ContentDisplay).rawContent as Bitmap).bitmapData, "auto", true); 
 					}
 					catch (error:Error) {
 						trace("error" + error);
 					}
 				}
 			}
+			
+			Utilities.traceObject(brightness);
+			
+			
+						
+			
+			
+			
 			
 			// load debates
 			// TODO dynamic question
@@ -192,7 +203,7 @@ package net.localprojects {
 		
 		
 		public function cloneDebateAuthorPortrait(debateID:String):Bitmap {
-			return new Bitmap(portraits[getDebateAuthor(debateID)].bitmapData.clone());
+			return new MetaBitmap(portraits[getDebateAuthor(debateID)].bitmapData.clone());
 		}
 		
 		
