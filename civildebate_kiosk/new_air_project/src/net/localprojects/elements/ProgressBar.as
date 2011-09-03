@@ -56,6 +56,7 @@ package net.localprojects.elements {
 		}		
 		
 		override protected function beforeTweenOut():void {
+			super.beforeTweenOut();
 			TweenMax.killTweensOf(bar);
 		}
 				
