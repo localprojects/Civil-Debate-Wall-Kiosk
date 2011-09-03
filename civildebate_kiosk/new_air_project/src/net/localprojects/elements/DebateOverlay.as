@@ -14,6 +14,7 @@ package net.localprojects.elements
 		private var containerHeight:Number;
 		private var targetComment:Comment;
 		private var targetButton:ButtonBase;		
+		private var _maxHeight:Number = Number.MAX_VALUE;
 		
 		public function DebateOverlay()	{
 			super();
@@ -43,16 +44,16 @@ package net.localprojects.elements
 			// rebuild the list
 		
 			// clear children
-			while (scrollField.scrollSheet.numChildren > 0) {
-				scrollField.scrollSheet.removeChild(scrollField.scrollSheet.getChildAt(0));
-			}			
+			Utilities.removeChildren(scrollField.scrollSheet);
 			
 			var yOffset:int = 30;
-			var paddingBottom:int = 20;
+			var paddingBottom:int = 35;
 			
 			var index:int = 0;
+			var numComments:uint = Utilities.objectLength(CDW.database.debates[CDW.state.activeDebate]['comments']);
+			
 			for each (var comment:Object in CDW.database.debates[CDW.state.activeDebate]['comments']) {
-				Utilities.traceObject(comment);
+				//Utilities.traceObject(comment);
 				
 				// portrait
 				var userID:String = comment['author']['id'];
@@ -71,23 +72,53 @@ package net.localprojects.elements
 				commentRow.visible = true;
 				
 				yOffset += commentRow.height + paddingBottom;
-	
 				scrollField.scrollSheet.addChild(commentRow);
 				
-				index++;	
+				
+				index++;
+				
+				// add the lines between the comments				
+				if (index < numComments) {
+					var line:Shape = new Shape();
+					line.graphics.lineStyle(1, Assets.COLOR_GRAY_25, 1.0, true);
+					line.graphics.moveTo(0, 0);
+					line.graphics.lineTo(commentRow.width, 0);
+					line.x = commentRow.x;
+					line.y = yOffset;
+					yOffset += paddingBottom;
+					
+					scrollField.scrollSheet.addChild(line);
+				}
 			}
 			
+			// set scroll bounds
 			scrollField.yMin = -scrollField.scrollSheet.height + containerHeight -60;
+			
+			
+			// resize background
+			this.setHeight(Math.min(scrollField.scrollSheet.height + 60, _maxHeight));
+			
+			// do we need to scroll?
+			scrollField.scrollAllowed = (scrollField.scrollSheet.height > _maxHeight - 30);
+		}
+		
+		
+		public function setMaxHeight(maxHeight:Number):void {
+			_maxHeight = maxHeight;
+			trace('Max Height: ' + _maxHeight);			
 		}
 		
 
+	
 		private function onDown(e:Event):void {
 			targetComment = e.target as Comment;
 		}
 		
+		
 		private function onNotClick(e:Event):void {
 			if (targetComment != null) targetComment.unClick();
 		}		
+		
 		
 		private function onDebate(e:Event):void {
 			targetButton = e.currentTarget as ButtonBase;
@@ -101,6 +132,7 @@ package net.localprojects.elements
 				trace('Not a real click.');
 			}
 		}
+		
 		
 		private function onFlag(e:Event):void {
 			targetButton = e.currentTarget as ButtonBase;

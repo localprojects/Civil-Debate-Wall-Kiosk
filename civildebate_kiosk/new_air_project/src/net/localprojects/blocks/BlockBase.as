@@ -131,7 +131,7 @@ package net.localprojects.blocks {
 		
 		// Tweens to default location, or takes modifiers if called without arguments
 		public function tweenIn(duration:Number = -1, params:Object = null):void {
-			// THIS TRIES TO FIX THE MISSING BLOCK PROBLEM!!!
+			// THIS TRIES TO FIX THE MISSING BLOCK PROBLEM!!! // IT WORKS!s
 			TweenMax.killTweensOf(this); // stop tweening out if we're tweening out, keeps afterTweenOut from firing...
 			active = true;
 			

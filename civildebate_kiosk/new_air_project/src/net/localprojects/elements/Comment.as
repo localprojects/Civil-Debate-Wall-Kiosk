@@ -52,7 +52,7 @@ package net.localprojects.elements {
 		
 		private function init():void {
 			
-			trace("initing comment");
+			
 			
 			// draw the portrait
 			portrait = new Sprite();

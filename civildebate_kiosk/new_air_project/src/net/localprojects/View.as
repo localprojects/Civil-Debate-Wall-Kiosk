@@ -47,6 +47,9 @@ package net.localprojects {
 		private var submitOverlay:BlockBitmap;		
 		private var letsDebateUnderlay:BlockBitmap;
 		private var pickStanceInstructions:BlockLabelBar;
+		private var characterLimitWarning:BlockLabel;
+		private var noNameWarning:BlockLabel;
+		private var noOpinionWarning:BlockLabel;				
 		
 		// mutable (e.g. color changes)
 		private var nameEntryInstructions:BlockLabel;		
@@ -329,8 +332,13 @@ package net.localprojects {
 			skipTextButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 500});
 			addChild(skipTextButton);
 
-			var smsInstructionText:String = 'What would you say to convince others of your opinion?\nText ' + Utilities.formatPhoneNumber(CDW.settings.phoneNumber) + ' with your statement.'; 	
+			// broken apart for easy measurability
+			var smsInstrucitonPrefix:String = 'What would you say to convince others of your opinion?\nText ';
+			var smsInstrucitonPostfix:String = ' with your statement.';			
+			var smsPhoneNumber:String = Utilities.formatPhoneNumber(CDW.settings.phoneNumber);
+			var smsInstructionText:String = smsInstrucitonPrefix + smsPhoneNumber + smsInstrucitonPostfix;
 			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_REGULAR);
+			smsInstructions.textField.setTextFormat(new TextFormat(Assets.FONT_HEAVY), smsInstrucitonPrefix.length, smsInstrucitonPrefix.length + smsPhoneNumber.length);			
 			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
 			smsInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1096});
 			addChild(smsInstructions);
@@ -344,7 +352,7 @@ package net.localprojects {
 			
 			// y value is dynamic
 			exitButton = new BlockButton(125, 63, 0x000000, 'EXIT', 26, 0xffffff, Assets.FONT_HEAVY);
-			exitButton.setDefaultTweenIn(1, {x: 100});
+			exitButton.setDefaultTweenIn(1, {x: 103});
 			exitButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});			
 			addChild(exitButton);
 			
@@ -377,7 +385,7 @@ package net.localprojects {
 			
 			nameEntryField = new BlockInputLabel('', 33, 0xffffff, 0x000000, Assets.FONT_REGULAR, true);
 			nameEntryField.setPadding(24, 30, 20, 30);
-			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1093});
+			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1096});
 			nameEntryField.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1096});
 			addChild(nameEntryField);			
 			
@@ -389,13 +397,13 @@ package net.localprojects {
 			
 			// Y is dynamic
 			retakePhotoButton = new BlockButton(270, 63, 0x000000, 'RETAKE PHOTO', 26, 0xffffff, Assets.FONT_HEAVY);
-			retakePhotoButton.setDefaultTweenIn(1, {x: 101});
+			retakePhotoButton.setDefaultTweenIn(1, {x: 243});
 			retakePhotoButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});
 			addChild(retakePhotoButton);
 			
 			// y is dynamic
 			editTextButton = new BlockButton(200, 63, 0x000000, 'EDIT TEXT', 26, 0xffffff, Assets.FONT_HEAVY);
-			editTextButton.setDefaultTweenIn(1, {x: 386});
+			editTextButton.setDefaultTweenIn(1, {x: 528});
 			editTextButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE});
 			addChild(editTextButton);
 			
@@ -409,6 +417,22 @@ package net.localprojects {
 			keyboard.setDefaultTweenIn(1, {x: 0, y: stageHeight - keyboard.height});
 			keyboard.setDefaultTweenOut(1, {x: 0, y: BlockBase.OFF_BOTTOM_EDGE});
 			addChild(keyboard);
+			
+			
+			characterLimitWarning = new BlockLabel('You reached the character limit!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
+			characterLimitWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (characterLimitWarning.height / 2) - 10});	
+			characterLimitWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (characterLimitWarning.height / 2) - 10});
+			addChild(characterLimitWarning);
+			
+			noNameWarning = new BlockLabel('Please enter your name!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
+			noNameWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
+			noNameWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (noNameWarning.height / 2) - 10});
+			addChild(noNameWarning);	
+			
+			noOpinionWarning = new BlockLabel('Please enter your opinion!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
+			noOpinionWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (noOpinionWarning.height / 2) - 10});	
+			noOpinionWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (noOpinionWarning.height / 2) - 10});
+			addChild(noOpinionWarning);				
 			
 			// TODO update from database
 			statsOverlay = new StatsOverlay();
@@ -487,42 +511,14 @@ package net.localprojects {
 			blackOverlay.setDefaultTweenOut(0, {alpha: 0});
 			addChild(blackOverlay);				
 			
+			// Flash overlay
 			flashOverlay = new BlockBitmap(new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0xffffff)));
-			flashOverlay.mouseEnabled = false; // let keystrokes through to the keyboard
 			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut, immediateRender: true});
 			flashOverlay.setDefaultTweenOut(5, {alpha: 0, ease: Quart.easeOut});
 			flashOverlay.name = 'Flash Overlay';
 			addChild(flashOverlay);	
-			
-			// Block input during tweens
-//			protection = new Sprite();
-//			protection.graphics.beginFill(0x000000);
-//			protection.graphics.drawRect(0, 0, stageWidth, stageHeight);
-//			protection.graphics.endFill();
-//			protection.alpha = 0;
-//			addChild(protection);
-//			protection.visible = false;
-			
-			//this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
-
-		// another attempt to fix the missing tween problem by blocking input during tweens
-		// better way to do it? tween counting at start and end of view function?
-		// this ignores the flash operspective rectificationverlay and breaks the draglayer...
-		private function onEnterFrame(e:Event):void {
-			protection.visible = false;
-			var tweens:Array = TweenMax.getAllTweens();
-			
-			for(var i:int = 0; i < tweens.length; i++) {
-				if(tweens[i].target is BlockBase) {
-					if(tweens[i].target.name !== 'Flash Overlay') {
-						protection.visible = true;
-					}
-				}
-			}
-		}
-	
 		
 		// =========================================================================
 		
@@ -657,9 +653,6 @@ package net.localprojects {
 				viewDebateButton.setLabel(newLabel); // finally, tween it in
 				viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 				viewDebateButton.showOutline(true);								
-				
-				// update the comments TODO move this to "set active debate" so it only happens once per update?
-				debateOverlay.update();
 			}			
 			
 			
@@ -772,9 +765,13 @@ package net.localprojects {
 			viewDebateButton.setFont(Assets.FONT_HEAVY);
 			viewDebateButton.setLabel('BACK TO HOME SCREEN', false);
 			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 + 5 - letsDebateUnderlay.y; // height depends on opinion
-			debateOverlay.setHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));
 			debateButton.setStrokeColor(Assets.COLOR_GRAY_15);
 			
+			
+			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 + 5 - letsDebateUnderlay.y; // height depends on opinion				
+			debateOverlay.setMaxHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));				
+			
+			debateOverlay.update();			
 			
 			
 			// behaviors
@@ -799,6 +796,9 @@ package net.localprojects {
 			
 			secondaryDebateButton.y = 410 + opinion.height + 15;
 			secondaryDebateButton.tweenIn(1, {x: 916});
+			
+			
+			
 			
 			viewDebateButton.tweenIn(1, {y: 1650});	
 			debateStrip.tweenIn();
@@ -1148,8 +1148,7 @@ package net.localprojects {
 			stance.setText(CDW.state.userStanceText, true);
 			stance.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			countdownButton.setBackgroundColor(CDW.state.userStanceColorLight, true);
-			// countdownButton.setDownColor(CDW.state.userStanceColorMedium); // per jonathan
-			countdownButton.setDownColor(CDW.state.userStanceColorLight); // makes the down state invisible	
+			countdownButton.setDownColor(CDW.state.userStanceColorMedium);	
 			countdownButton.setRingColor(CDW.state.userStanceColorLight);
 			countdownButton.setProgressColor(0xffffff);				
 			photoBoothButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
@@ -1158,7 +1157,7 @@ package net.localprojects {
 			cameraOverlay.setColor(CDW.state.userStanceColorLight, CDW.state.userStanceColorOverlay);
 			
 			// behaviors
-			// countdownButton.setOnClick(onCameraClick); // per jonathan
+			countdownButton.setOnClick(onCameraClick);
 			countdownButton.setOnAlmostFinish(onCountdownAlmostFinish);			
 			countdownButton.setOnFinish(onCountdownFinish);
 			photoBoothButton.setOnClick(onCameraClick);
@@ -1304,6 +1303,10 @@ package net.localprojects {
 			nameEntryField.setText('', true); // clear the name entry field			
 			keyboard.target = nameEntryField.getTextField();
 			
+			nameEntryField.setOnLimitReached(onLimitReached);
+			nameEntryField.setOnLimitUnreached(onLimitUnreached);			
+			
+			
 			// behaviors
 			saveButton.setOnClick(onSaveName);
 			
@@ -1314,6 +1317,7 @@ package net.localprojects {
 			question.tweenIn(0);
 			stance.tweenIn(-1, {delay: 1});
 			nameEntryInstructions.tweenIn(-1, {delay: 1});
+			
 			nameEntryField.tweenIn(-1, {delay: 1});
 			
 			saveButton.y = 1197;
@@ -1325,16 +1329,38 @@ package net.localprojects {
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design16);			
 		}
 		
+		private function onLimitReached(e:Event):void {
+			characterLimitWarning.tweenIn();			
+		}
+		
+		private function onLimitUnreached(e:Event):void {
+			characterLimitWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE});			
+		}		
+		
+		
+		private function onNameNotEmpty(e:Event):void {
+			noNameWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE});
+			nameEntryField.setOnNotEmpty(null);
+		}
+		
 		private function onSaveName(e:Event):void {
-			// TODO input validation
+			// trim white space
+			nameEntryField.getTextField().text = StringUtils.trim(nameEntryField.getTextField().text);
 			
-			// Save name to RAM
-			CDW.state.userName = nameEntryField.getTextField().text;
-			
-			// Update the name on the server
-			Utilities.postRequest(CDW.settings.serverPath + '/api/users/add-or-update', {'id': CDW.state.userID, 'firstName': CDW.state.userName}, onNameUpdated);
-			
-			verifyOpinionView();
+			if (nameEntryField.getTextField().length == 0) {
+				noNameWarning.tweenIn();
+				nameEntryField.setOnNotEmpty(onNameNotEmpty);
+			}
+			else {
+				// Validates
+				// Save name to RAM
+				CDW.state.userName = nameEntryField.getTextField().text;
+				
+				// Update the name on the server (lazy)
+				Utilities.postRequest(CDW.settings.serverPath + '/api/users/add-or-update', {'id': CDW.state.userID, 'firstName': CDW.state.userName}, onNameUpdated);
+				
+				verifyOpinionView();
+			}
 		}
 		
 		private function onNameUpdated(r:Object):void {
@@ -1533,6 +1559,10 @@ package net.localprojects {
 			
 			// behaviors
 			saveButton.setOnClick(onSaveOpinionEdit);
+			editOpinion.setOnLimitReached(onLimitReached);
+			editOpinion.setOnLimitUnreached(onLimitUnreached);
+			editOpinion.setOnNumLinesChange(onNumLinesChange);			
+			
 			
 			//blocks
 			leftQuote.tweenIn();
@@ -1561,17 +1591,36 @@ package net.localprojects {
 			
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design21);			
 		}
+		
+		private function onNumLinesChange(e:Event):void {
+			// flow upwards
+			TweenMax.to(editOpinion, 0.5, {y: stageHeight - 574 - editOpinion.height, ease: Quart.easeInOut});
+			TweenMax.to(editTextInstructions, 0.5, {y: (stageHeight - 574 - editOpinion.height) - editTextInstructions.height - 30, ease: Quart.easeInOut});
+		}
 			
 		
 		private function onSaveOpinionEdit(e:Event):void {
-			// TODO validate opinion edit
-			CDW.state.userOpinion = editOpinion.getTextField().text;
+			// Validate
+			editOpinion.getTextField().text = StringUtils.trim(editOpinion.getTextField().text);
+			CDW.state.userOpinion = editOpinion.getTextField().text
 			
-			// move the opinion back
-			opinion.tweenIn(0);
-			
-			verifyOpinionView();
+			if (editOpinion.getTextField().length == 0) {
+				noOpinionWarning.tweenIn();
+				editOpinion.setOnNotEmpty(onOpinionNotEmpty);
+			}
+			else {
+				// valid
+				// move the opinion back
+				opinion.tweenIn(0);
+				verifyOpinionView();				
+			}
 		}
+		
+		private function onOpinionNotEmpty(e:Event):void {
+			noOpinionWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE});
+			nameEntryField.setOnNotEmpty(null);
+		}
+				
 		
 		
 		// =========================================================================
