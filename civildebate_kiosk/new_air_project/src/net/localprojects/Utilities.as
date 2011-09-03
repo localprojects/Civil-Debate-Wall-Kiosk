@@ -378,11 +378,16 @@ package net.localprojects {
 		}		
 		
 		public static function toTitleCase(original:String):String {
+			if (original!= null) {
 			var words:Array = original.split(' ');
 			for (var i:int = 0; i < words.length; i++) {
 				words[i] = toInitialCap(words[i]);
 			}
 			return (words.join(' '));
+			}
+			else {
+				return '';
+			}
 		}
 		
 		public static function toInitialCap(original:String):String {

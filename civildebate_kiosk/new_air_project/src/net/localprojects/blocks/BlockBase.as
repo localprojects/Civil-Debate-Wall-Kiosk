@@ -96,6 +96,8 @@ package net.localprojects.blocks {
 		// manages visibility / invisibility
 		protected function beforeTweenIn():void {
 			this.visible = true;
+			this.mouseEnabled = true;
+			this.mouseChildren = true;			
 		}
 		
 		protected function afterTweenIn():void {
@@ -104,7 +106,9 @@ package net.localprojects.blocks {
 		
 		
 		protected function beforeTweenOut():void {
-			// override me			
+			// override me
+			this.mouseEnabled = false;
+			this.mouseChildren = false;			
 		}
 		
 		
