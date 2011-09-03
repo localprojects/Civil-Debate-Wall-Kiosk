@@ -64,7 +64,7 @@ package net.localprojects.ui {
 			progress = 0;
 			progressRing = new Shape();
 			addChild(progressRing);
-			ringColor = Assets.COLOR_YES_LIGHT;
+			ringColor = 0xffffff;
 			drawRing();
 			
 			// set up the wrapper, allows rotation around center
@@ -202,20 +202,19 @@ package net.localprojects.ui {
 			var lineWeight:Number = 6;
 			
 			progressRing.graphics.clear();
-			progressRing.graphics.lineStyle(lineWeight, progressColor);
+			progressRing.graphics.lineStyle(lineWeight, progressColor, 1);
 			
 			progressRing.graphics.moveTo(0, -radius);
 			// TODO optimize by not clearing buffer? or taking bigger steps?
 			for (var i:int = 0; i < 360; i++)	{
 				var rad:Number = (i - 90) * Math.PI / 180;
-				if (i > highlightDegrees) progressRing.graphics.lineStyle(lineWeight, ringColor);
+				
+				if (i > highlightDegrees) progressRing.graphics.lineStyle(lineWeight, ringColor, 0);
 				progressRing.graphics.lineTo(Math.cos(rad) * radius, Math.sin(rad) * radius);
 			}
 			
 			progressRing.x = radius;
 			progressRing.y = radius;
-			
-
 		}		
 		
 		// mutations

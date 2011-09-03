@@ -2,10 +2,10 @@ package net.localprojects.ui {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.*;
 	import flash.utils.Timer;
-	import flash.display.Shape;
 	
 	import net.localprojects.Assets;
 	import net.localprojects.CDW;
@@ -24,10 +24,11 @@ package net.localprojects.ui {
 		protected var background:Sprite;
 		protected var _backgroundColor:uint;
 		protected var _backgroundDownColor:uint;
+		protected var _disabledColor:uint = 0;		
 		
 		protected var timeout:Number; // time between presses
 		private var timer:Timer;
-		private var locked:Boolean;
+		public var locked:Boolean;
 	
 		public function ButtonBase() {
 			super();
@@ -77,7 +78,7 @@ package net.localprojects.ui {
 				locked = true;
 				timer.reset();
 				timer.start();
-				TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: Assets.COLOR_GRAY_50, tintAmount: 1}});
+				TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _disabledColor, tintAmount: 1}});
 				TweenMax.to(outline, 0.3, {ease: Quart.easeOut, alpha: 0});				
 			}
 			else {
@@ -92,7 +93,11 @@ package net.localprojects.ui {
 		
 		protected function defaultOnClick(e:MouseEvent):void {
 			trace("default button click, nothing to do");
-		}		
+		}
+		
+		public function setDisabledColor(c:uint):void {
+			_disabledColor = c;			
+		}
 		
 		
 		public function setOnClick(f:Function):void {

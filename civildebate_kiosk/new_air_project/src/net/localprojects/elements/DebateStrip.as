@@ -36,9 +36,8 @@ package net.localprojects.elements {
 			// reads the state and builds the strip
 			
 			// Clean up the kids, could do a diff instead...
-			while(scrollField.scrollSheet.numChildren > 0) {
-				scrollField.scrollSheet.removeChild(scrollField.scrollSheet.getChildAt(0));
-			}   
+			Utilities.removeChildren(scrollField.scrollSheet);
+
 			
 			var i:int = 0;
 			for (var debateID:* in CDW.database.debates) {

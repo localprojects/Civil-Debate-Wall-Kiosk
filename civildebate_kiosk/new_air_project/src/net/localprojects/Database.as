@@ -31,6 +31,7 @@ package net.localprojects {
 			trace('Loading from DB');
 			trace('Loading question');
 			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/questions/get', {'id': '4e2755b50f2e420354000001'}, onQuestionReceived);
+			
 		}
 		
 		private function onQuestionReceived(r:Object):void {
@@ -113,10 +114,14 @@ package net.localprojects {
 			trace('Debates received.');
 						
 			for each (var debate:Object in r) {
-				// Store the debates in an id-keyed array					
+				// Store the debates in an ordered object			
 				var debateID:String = debate['_id']['$oid'];
+				
 				debates[debateID] = debate;
 			}
+			
+			// reverse them, newest first
+			debates.reverse();			
 			
 			
 			// load stats						
