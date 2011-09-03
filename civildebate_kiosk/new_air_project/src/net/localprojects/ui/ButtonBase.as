@@ -58,10 +58,14 @@ package net.localprojects.ui {
 		
 		private function onTimeout(e:TimerEvent):void {
 			trace('button back!');
+			unlock();
+		}
+		
+		public function unlock():void {
 			locked = false;
 			timer.stop();
 			TweenMax.to(background, 1, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
-			TweenMax.to(outline, 1, {ease: Quart.easeOut, alpha: 1});
+			TweenMax.to(outline, 1, {ease: Quart.easeOut, alpha: 1});			
 		}
 		
 		protected function onMouseDown(e:MouseEvent):void {

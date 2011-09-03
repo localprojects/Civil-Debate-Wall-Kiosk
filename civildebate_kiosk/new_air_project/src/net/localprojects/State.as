@@ -2,13 +2,21 @@ package net.localprojects {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	
+	import sekati.converters.BoolConverter;
+	
 	public class State extends Object {
 		
 		public var activeQuestion:String = '4e2755b50f2e420354000001'; // TODO load from server
 		
+		
+		public var activeView:Function;
+		public var lastView:Function;
+		
+		public var lastDebate:String = null;		
 		public var activeDebate:String = null;
 		public var nextDebate:String = null;
 		public var previousDebate:String = null;		
+		public var debateOverlayOpen:Boolean = false;
 		
 		public var userStance:String = 'yes';
 		public var userName:String = '';
@@ -86,10 +94,29 @@ package net.localprojects {
 			}
 		}
 		
-		public function setActiveDebate(debateID:String):void {
+		
+		public function setActiveDebate(debateID:String, overridePrevious:String = null, overrideNext:String = null):void {
+			lastDebate = activeDebate;
 			activeDebate = debateID;
-			nextDebate = CDW.database.getNextDebate();
-			previousDebate = CDW.database.getPreviousDebate();
+			
+			// funky overrides for big-jump transitions
+			if (overridePrevious != null) {
+				previousDebate = overridePrevious; 
+			}
+			else {
+				previousDebate = CDW.database.getPreviousDebate();
+			}					
+			
+			if (overrideNext != null) {
+				nextDebate =overrideNext; 
+			}
+			else {
+				nextDebate = CDW.database.getNextDebate();
+			}
+			
+			
+	
+			
 			
 			// update the debate overlay? no it has to happen after we hit the db
 			

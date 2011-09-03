@@ -145,7 +145,10 @@ package net.localprojects.ui {
 		private function onMouseDown(e:MouseEvent):void {
 			// ignore clicks if we're "poking" at a moving
 			// strip to stop it from inertially scrolling
-			isClick = (!TweenMax.isTweening(scrollSheet));
+			
+
+			//isClick = (!TweenMax.isTweening(scrollSheet));
+			isClick = true;
 			
 			// stop any coasting, this is the "poke"
 			TweenMax.killTweensOf(scrollSheet);
@@ -242,6 +245,7 @@ package net.localprojects.ui {
 				
 				// Stopped Here
 				ThrowPropsPlugin.to(scrollSheet, props, maxDuration, minDuration, overshootTolerance);
+				
 				
 				trace("Throw velocity was: " + xVelocity + " / " + yVelocity);
 				trace("Mouse travel was: " + mouseTravel);			

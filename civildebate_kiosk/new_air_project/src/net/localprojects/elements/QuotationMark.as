@@ -36,10 +36,7 @@ package net.localprojects.elements
 		}
 		
 
-		public function setIntermediateColor(startColor:uint, targetColor:uint, step:Number):void {
-			setColor(Color.interpolateColor(startColor, targetColor, step), true);
-		}
-		
+
 		public function setStyle(type:String):void {
 			// specify an opening or closing quotation
 			// default is "opening"

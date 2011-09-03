@@ -1,6 +1,8 @@
 package net.localprojects {
 	import cmodule.aircall.CLibInit;
 	
+	import fl.motion.Color;
+	
 	import flash.display.*;
 	import flash.events.Event;
 	import flash.events.TimerEvent;
@@ -45,6 +47,19 @@ package net.localprojects {
 		private static const EXT_JPEG:String = ".jpg";
 		private static const EXT_PNG:String = ".png";		
 		
+		
+		
+		public static function interpolateColorThroughWhite(start:uint, end:uint, step:Number):uint {
+			
+			if(step <= 0.5) {
+				// towards white
+				return Color.interpolateColor(start, 0xffffff, step * 2);				
+			}
+			else {
+				// from white
+				return Color.interpolateColor(0xffffff, end, (step * 2) - 1);		
+			}
+		}
 		
 		public static function getNewImageFile(ext:String):File {
 			//Create a new unique filename based on date/time
