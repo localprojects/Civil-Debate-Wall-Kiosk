@@ -262,7 +262,7 @@ package net.localprojects {
 			addChild(statsButton);
 			
 			likeButton = new CounterButton(148, 63, 0x000000, 'Like', 20, 0xffffff, Assets.FONT_BOLD);
-			likeButton.setTimeout(5000);
+			likeButton.setTimeout(15000);
 			likeButton.setDefaultTweenIn(1, {x: 238, y: 1376});
 			likeButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1376});			
 			addChild(likeButton);
@@ -274,7 +274,7 @@ package net.localprojects {
 			addChild(viewDebateButton);
 			
 			flagButton = new IconButton(67, 63, 0x000000, '', 20, 0xffffff, null, Assets.flagIcon);
-			flagButton.setTimeout(5000);			
+			flagButton.setTimeout(15000);			
 			flagButton.setDefaultTweenIn(1, {x: 914, y: 1376});
 			flagButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1376});
 			addChild(flagButton);			
@@ -457,8 +457,8 @@ package net.localprojects {
 			
 			continueButton = new BlockButton(735, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
 			continueButton.setDownColor(Assets.COLOR_GRAY_75);
-			continueButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1098});
-			continueButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1098});					
+			continueButton.setDefaultTweenIn(1, {alpha: 1, x: BlockBase.CENTER, y: 1098});
+			continueButton.setDefaultTweenOut(1, {alpha: 1, x: BlockBase.OFF_LEFT_EDGE, y: 1098});					
 			addChild(continueButton);
 			
 			// Flag overlay
@@ -495,7 +495,7 @@ package net.localprojects {
 			submitOverlay.setDefaultTweenOut(1, {alpha: 0});
 			addChild(submitOverlay);
 			
-			submitOverlayMessage = new BlockParagraph(755, 0x000000, 'Thank you for your participation.\nKeep up with the latest at civildebatewall.com', 31, 0xffffff, Assets.FONT_BOLD);
+			submitOverlayMessage = new BlockParagraph(800, 0x000000, 'Thank you for your participation.\nKeep up with the latest at civildebatewall.com', 31, 0xffffff, Assets.FONT_BOLD);
 			submitOverlayMessage.setDefaultTweenIn(1, {x: 101, y: 1093});
 			submitOverlayMessage.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1093});					
 			addChild(submitOverlayMessage);			
@@ -561,6 +561,10 @@ package net.localprojects {
 			question.setText(CDW.database.getQuestionText(), true);
 			debateOverlay.scrollField.scrollTo(0, 0);
 			
+			likeButton.setDisabledColor(CDW.state.activeStanceColorDisabled);
+			flagButton.setDisabledColor(CDW.state.activeStanceColorDisabled);
+			viewDebateButton.setDisabledColor(CDW.state.activeStanceColorDisabled);
+			
 			nametag.setText(CDW.database.getDebateAuthorName(CDW.state.activeDebate) + ' Says :', true);
 			stance.setText(CDW.state.activeStanceText, true);
 
@@ -617,9 +621,15 @@ package net.localprojects {
 			debateButton.setDownColor(CDW.state.activeStanceColorMedium);
 			statsButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			statsButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			
 			likeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			if (likeButton.locked) likeButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, true); 
+			
 			likeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			
 			flagButton.setBackgroundColor(CDW.state.activeStanceColorDark), true;
+			if (flagButton.locked) flagButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, true);
+			
 			flagButton.setDownColor(CDW.state.activeStanceColorMedium);			
 
 			viewDebateButton.setDownColor(CDW.state.activeStanceColorMedium);
@@ -627,7 +637,7 @@ package net.localprojects {
 			if (commentCount == 0) {
 				viewDebateButton.setFont(Assets.FONT_BOLD); // actually sets after call to set label
 				viewDebateButton.setLabel('No responses yet. Be the first!', false);
-				viewDebateButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);				
+				viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, true);				
 				viewDebateButton.showOutline(false);				
 			}
 			else {
@@ -668,7 +678,7 @@ package net.localprojects {
 			statsButton.setOnClick(statsView);
 			debateButton.setOnClick(onDebateButton);
 			likeButton.setOnClick(incrementLikes);
-			flagButton.setOnClick(flagView);
+			flagButton.setOnClick(flagOverlayView);
 			
 			
 			// blocks
@@ -823,7 +833,7 @@ package net.localprojects {
 		// =========================================================================
 		
 		
-		public function flagView(...args):void {
+		public function flagOverlayView(...args):void {
 			// mutations			
 			CDW.inactivityTimer.disarm();
 			flagInstructions.setText("FLAG AS INAPPROPRIATE ?");			
@@ -837,8 +847,8 @@ package net.localprojects {
 			
 			// behaviors
 			flagYesButton.setOnClick(incrementFlags);
-			flagNoButton.setOnClick(homeView);			
-			flagTimerBar.setOnComplete(homeView);
+			flagNoButton.setOnClick(removeFlagOverlayView);			
+			flagTimerBar.setOnComplete(removeFlagOverlayView);
 			
 			// blocks
 			flagOverlay.tweenIn();
@@ -848,6 +858,14 @@ package net.localprojects {
 			flagNoButton.tweenIn();			
 			
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
+		}
+		
+		private function removeFlagOverlayView():void {
+			flagOverlay.tweenOut();
+			flagTimerBar.tweenOut();			
+			flagInstructions.tweenOut();
+			flagYesButton.tweenOut();
+			flagNoButton.tweenOut();			
 		}
 		
 		
@@ -868,7 +886,7 @@ package net.localprojects {
 			flagNoButton.showOutline(false);
 			
 			// Wait and then go back
-			Utilities.doAfterDelay(homeView, 2000);
+			Utilities.doAfterDelay(removeFlagOverlayView, 2000);
 		}
 		
 		
@@ -1523,11 +1541,8 @@ package net.localprojects {
 		
 		
 		private function onSubmitContinue(e:Event):void {
-			continueButton.tween(1, {alpha: 0});
-//			inactivityOverlay.tweenOut();
-//			inactivityTimerBar.tweenOut();
-//			inactivityInstructions.tweenOut();
-//			continueButton.tweenOut();
+			trace("submitting");
+			submitOverlayContinueButton.tweenOut(-1, {alpha: 0, x: submitOverlayContinueButton.x, y: submitOverlayContinueButton.y});
 			CDW.database.load();			
 		}
 		
@@ -1673,9 +1688,11 @@ package net.localprojects {
 			
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
 		}
+		
 
 		
 		private function onContinue(e:Event):void {
+			CDW.inactivityTimer.arm();
 			inactivityOverlay.tweenOut();
 			inactivityTimerBar.tweenOut();
 			inactivityInstructions.tweenOut();

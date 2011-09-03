@@ -55,6 +55,10 @@ package net.localprojects
 			return wasDeleted;
 		}
 		
+		public function reverse():void {
+			contentByIndex.reverse();
+		}
+		
 		override flash_proxy function getProperty(name:*):*
 		{
 			return content[name];
