@@ -78,6 +78,24 @@ package net.localprojects {
 			return 	tstamp;			
 		}
 		
+		public static function objectLength(o:Object):uint {
+			var len:uint = 0;
+			for (var item:* in o)
+				if (item != "mx_internal_uid")
+					len++;
+			return len;	
+		}
+		
+		// return children removed
+		public static function removeChildren(o:DisplayObjectContainer):uint {
+			var numRemoved:uint = 0;
+			while (o.numChildren > 0) {
+				o.removeChild(o.getChildAt(0));
+				numRemoved++;				
+			}						
+			return numRemoved;
+		}
+		
 		
 		
 		// faster jpeg encoding

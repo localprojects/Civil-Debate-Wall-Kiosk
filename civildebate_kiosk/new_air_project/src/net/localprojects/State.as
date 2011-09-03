@@ -35,21 +35,25 @@ package net.localprojects {
 		public var userStanceColorMedium:uint;
 		public var userStanceColorDark:uint;
 		public var userStanceColorOverlay:uint;
+		public var userStanceColorDisabled:uint;		
 		
 		public var activeStanceColorLight:uint;
 		public var activeStanceColorMedium:uint;
 		public var activeStanceColorDark:uint;
 		public var activeStanceColorOverlay:uint;
+		public var activeStanceColorDisabled:uint;		
 		
 		public var nextStanceColorLight:uint;
 		public var nextStanceColorMedium:uint;
 		public var nextStanceColorDark:uint;
 		public var nextStanceColorOverlay:uint;
+		public var nextStanceColorDisabled:uint;		
 		
 		public var previousStanceColorLight:uint;
 		public var previousStanceColorMedium:uint;
 		public var previousStanceColorDark:uint;
-		public var previousStanceColorOverlay:uint;				
+		public var previousStanceColorOverlay:uint;
+		public var previousStanceColorDisabled:uint;		
 		
 		
 		public function clearUser():void {
@@ -70,13 +74,15 @@ package net.localprojects {
 				userStanceColorLight = Assets.COLOR_YES_LIGHT;
 				userStanceColorMedium = Assets.COLOR_YES_MEDIUM;
 				userStanceColorDark = Assets.COLOR_YES_DARK;
-				userStanceColorOverlay = Assets.COLOR_YES_OVERLAY;				
+				userStanceColorOverlay = Assets.COLOR_YES_OVERLAY;
+				userStanceColorDisabled = Assets.COLOR_YES_DISABLED;
 			}
 			else {
 				userStanceColorLight = Assets.COLOR_NO_LIGHT;
 				userStanceColorMedium = Assets.COLOR_NO_MEDIUM;
 				userStanceColorDark = Assets.COLOR_NO_DARK;
 				userStanceColorOverlay = Assets.COLOR_NO_OVERLAY;
+				userStanceColorDisabled = Assets.COLOR_NO_DISABLED;				
 			}
 		}
 		
@@ -95,13 +101,15 @@ package net.localprojects {
 				activeStanceColorLight = Assets.COLOR_YES_LIGHT;
 				activeStanceColorMedium = Assets.COLOR_YES_MEDIUM;
 				activeStanceColorDark = Assets.COLOR_YES_DARK;
-				activeStanceColorOverlay = Assets.COLOR_YES_OVERLAY;				
+				activeStanceColorOverlay = Assets.COLOR_YES_OVERLAY;
+				activeStanceColorDisabled = Assets.COLOR_YES_DISABLED;							
 			}
 			else {
 				activeStanceColorLight = Assets.COLOR_NO_LIGHT;
 				activeStanceColorMedium = Assets.COLOR_NO_MEDIUM;
 				activeStanceColorDark = Assets.COLOR_NO_DARK;
 				activeStanceColorOverlay = Assets.COLOR_NO_OVERLAY;
+				activeStanceColorDisabled = Assets.COLOR_NO_DISABLED;							
 			}
 			
 			
@@ -112,13 +120,15 @@ package net.localprojects {
 					nextStanceColorLight = Assets.COLOR_YES_LIGHT;
 					nextStanceColorMedium = Assets.COLOR_YES_MEDIUM;
 					nextStanceColorDark = Assets.COLOR_YES_DARK;
-					nextStanceColorOverlay = Assets.COLOR_YES_OVERLAY;				
+					nextStanceColorOverlay = Assets.COLOR_YES_OVERLAY;
+					nextStanceColorDisabled = Assets.COLOR_YES_DISABLED;					
 				}
 				else {
 					nextStanceColorLight = Assets.COLOR_NO_LIGHT;
 					nextStanceColorMedium = Assets.COLOR_NO_MEDIUM;
 					nextStanceColorDark = Assets.COLOR_NO_DARK;
 					nextStanceColorOverlay = Assets.COLOR_NO_OVERLAY;
+					nextStanceColorDisabled = Assets.COLOR_NO_DISABLED;					
 				}
 			}
 			
@@ -126,16 +136,18 @@ package net.localprojects {
 				previousStanceText = formatStanceText(CDW.database.debates[previousDebate].stance);
 				
 				if (CDW.database.debates[previousDebate].stance == 'yes') {			
-					nextStanceColorLight = Assets.COLOR_YES_LIGHT;
-					nextStanceColorMedium = Assets.COLOR_YES_MEDIUM;
-					nextStanceColorDark = Assets.COLOR_YES_DARK;
-					nextStanceColorOverlay = Assets.COLOR_YES_OVERLAY;				
+					previousStanceColorLight = Assets.COLOR_YES_LIGHT;
+					previousStanceColorMedium = Assets.COLOR_YES_MEDIUM;
+					previousStanceColorDark = Assets.COLOR_YES_DARK;
+					previousStanceColorOverlay = Assets.COLOR_YES_OVERLAY;
+					previousStanceColorDisabled = Assets.COLOR_YES_DISABLED;															
 				}
 				else {
-					nextStanceColorLight = Assets.COLOR_NO_LIGHT;
-					nextStanceColorMedium = Assets.COLOR_NO_MEDIUM;
-					nextStanceColorDark = Assets.COLOR_NO_DARK;
-					nextStanceColorOverlay = Assets.COLOR_NO_OVERLAY;
+					previousStanceColorLight = Assets.COLOR_NO_LIGHT;
+					previousStanceColorMedium = Assets.COLOR_NO_MEDIUM;
+					previousStanceColorDark = Assets.COLOR_NO_DARK;
+					previousStanceColorOverlay = Assets.COLOR_NO_OVERLAY;
+					previousStanceColorDisabled = Assets.COLOR_NO_DISABLED;										
 				}
 			}			
 						

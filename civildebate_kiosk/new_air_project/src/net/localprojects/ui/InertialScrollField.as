@@ -38,7 +38,8 @@ package net.localprojects.ui {
 		public var yMax:Number = Number.MAX_VALUE;
 		
 		private var _backgroundColor:uint;
-		private var _backgroundAlpha:Number;		
+		private var _backgroundAlpha:Number;	
+		private var _scrollAllowed:Boolean;
 		
 		
 		private var scrollMask:Shape;
@@ -92,6 +93,8 @@ package net.localprojects.ui {
 			dragBounds = new Rectangle();
 			_scrollAxis = scrollAxis;
 			setScrollAxis(_scrollAxis);
+			
+			_scrollAllowed = true;
 
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		}
@@ -158,7 +161,9 @@ package net.localprojects.ui {
 			t1 = t2 = getTimer();
 			
 			// follow the mouse
-			scrollSheet.startDrag(false, dragBounds);
+			if (_scrollAllowed) {
+				scrollSheet.startDrag(false, dragBounds);
+			}
 			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			CDW.ref.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
@@ -166,38 +171,39 @@ package net.localprojects.ui {
 		
 		
 		private function onEnterFrame(event:Event):void {
-			
-			// Odometer for the mouse
-			// Not just distance! cumulative to handle double-back situation
-			mouseTravelX += Math.abs(CDW.ref.stage.mouseX - lastMouseX);
-			mouseTravelY += Math.abs(CDW.ref.stage.mouseY - lastMouseY);			
-			lastMouseX = CDW.ref.stage.mouseX;
-			lastMouseY = CDW.ref.stage.mouseY;
-			
-			y2 = y1;
-			x2 = x1;
-			t2 = t1;
-			y1 = scrollSheet.y;			
-			x1 = scrollSheet.x;
-			t1 = getTimer();
-			
-			// use the mouse travel values that apply to the axis we're scrolling
-			if(_scrollAxis == SCROLL_BOTH) mouseTravel = mouseTravelX + mouseTravelY; // Take square root?
-			else if(_scrollAxis == SCROLL_X) mouseTravel = mouseTravelX; // Take square root?
-			else if(_scrollAxis == SCROLL_Y) mouseTravel = mouseTravelY; // Take square root?			
-			
-			// detect scroll vs. click			
-			if (mouseTravel > wiggleThreshold) {
-				// TODO FIRE "NOT_CLICK" EVENT
-				this.dispatchEvent(new Event(EVENT_NOT_CLICK));	
+			if (_scrollAllowed) {
+				// Odometer for the mouse
+				// Not just distance! cumulative to handle double-back situation
+				mouseTravelX += Math.abs(CDW.ref.stage.mouseX - lastMouseX);
+				mouseTravelY += Math.abs(CDW.ref.stage.mouseY - lastMouseY);			
+				lastMouseX = CDW.ref.stage.mouseX;
+				lastMouseY = CDW.ref.stage.mouseY;
 				
-				// cancel the click
-				// child events still fire, but we can decide not
-				// to actually act on them based on this public flag
-				isClick = false;
+				y2 = y1;
+				x2 = x1;
+				t2 = t1;
+				y1 = scrollSheet.y;			
+				x1 = scrollSheet.x;
+				t1 = getTimer();
+				
+				// use the mouse travel values that apply to the axis we're scrolling
+				if(_scrollAxis == SCROLL_BOTH) mouseTravel = mouseTravelX + mouseTravelY; // Take square root?
+				else if(_scrollAxis == SCROLL_X) mouseTravel = mouseTravelX; // Take square root?
+				else if(_scrollAxis == SCROLL_Y) mouseTravel = mouseTravelY; // Take square root?			
+				
+				// detect scroll vs. click			
+				if (mouseTravel > wiggleThreshold) {
+					// TODO FIRE "NOT_CLICK" EVENT
+					this.dispatchEvent(new Event(EVENT_NOT_CLICK));	
+					
+					// cancel the click
+					// child events still fire, but we can decide not
+					// to actually act on them based on this public flag
+					isClick = false;
+				}
+				
+				// TODO manual dragging instead? Increase friction at bounds?
 			}
-			
-			// TODO manual dragging instead? Increase friction at bounds?
 		}
 		
 		private function onMouseUp(event:MouseEvent):void {
@@ -211,7 +217,7 @@ package net.localprojects.ui {
 			xVelocity = (scrollSheet.x - x2) / time;
 			yVelocity = (scrollSheet.y - y2) / time;
 			
-			if (!isClick) {
+			if (_scrollAllowed && !isClick) {
 				
 				var props:Object = {throwProps: {}};
 				
@@ -259,7 +265,16 @@ package net.localprojects.ui {
 		public function set containerHeight(n:Number):void {
 			_containerHeight = n;
 			setContainerSize(_containerWidth, _containerHeight);
-		}		
+		}	
+		
+		
+		public function get scrollAllowed():Boolean {
+			return _scrollAllowed;
+		}
+		
+		public function set scrollAllowed(b:Boolean):void {
+			_scrollAllowed = b;
+		}			
 		
 		public function setBackgroundColor(c:uint, a:Number = 1.0):void {
 			_backgroundColor = c;
