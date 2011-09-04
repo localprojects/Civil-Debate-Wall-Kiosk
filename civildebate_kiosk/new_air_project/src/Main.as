@@ -21,6 +21,8 @@ package {
 	import flash.ui.MouseCursor;
 	import flash.ui.MouseCursorData;
 	
+	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
+	
 	import net.localprojects.*;
 	import net.localprojects.blocks.*;
 	import net.localprojects.camera.*;
@@ -29,20 +31,74 @@ package {
 	import net.localprojects.text.Text;
 	import net.localprojects.ui.*;
 	
-	import sekati.layout.Arrange;
-	
+
 	//import net.localprojects.CDW;
 	
 	[SWF(width="1080", height="1920", frameRate="60")]
 	public class Main extends Sprite	{
+		private var slr:SLRCamera;
+		private var faceDetector:FaceDetector;
 		
+		private function onShutter(e:Event):void {
+			trace("shutter");
+			slr.takePhoto();
+		}
 		
+		var sample:Bitmap;
+		
+		private function onPhotoTaken(e:Event):void {
+			trace("got it");
+			
+			
+			
+			 sample = new Bitmap(Utilities.scaleToFit(slr.image.bitmapData, 500, 500));
+			sample.y = 50;
+			addChild(sample);
+			
+			faceDetector.searchBitmap(slr.image.bitmapData);
+			
+			
+			
+			
+			
+		}
+		
+		private function onFaceDetected(e:Event):void {
+			trace("face detection complete");
+			
+			if(faceDetector.faceRect != null) {
+				
+			
+				
+				trace(faceDetector.faceRect);
+				// Scale the face detector rectangle
+				var scaleFactor:Number = slr.image.height / faceDetector.maxSourceHeight; 
+				var scaledFaceRect:Rectangle = Utilities.scaleRect(faceDetector.faceRect, scaleFactor);			
+				
+				
+				var temp:Bitmap = Utilities.cropToFace(slr.image, scaledFaceRect);		
+				var cropped:Bitmap = new Bitmap(Utilities.scaleToFit(temp.bitmapData, 500, 500));
+				cropped.x = 500;
+				addChild(cropped);
+			}
+			
 
-		public function Main() {
+			
+		}
 		
+		public function Main() {
+			faceDetector = new FaceDetector();
+			faceDetector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onFaceDetected);
+				
+				
 			
-			// Windows edit
+			// SLR test area
+			var button:PushButton = new PushButton(this, 0, 0, "Shutter", onShutter);
+			slr = new SLRCamera();
+
+			slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoTaken);
 			
+	
 			
 			/* 
 			// TEXT DEVELOPMENT ZONE
@@ -87,8 +143,8 @@ package {
 			
 			*/
 			
-			var civilDebateWall:CDW = new CDW();
-			addChild(civilDebateWall);
+			//var civilDebateWall:CDW = new CDW();
+			//addChild(civilDebateWall);
 			
 
 		}

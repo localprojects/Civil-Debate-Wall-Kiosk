@@ -43,11 +43,22 @@ package net.localprojects.camera {
 			
 			faceRect = new Rectangle();
 			
-			var undersample:Number = 6;
+	
+			// respect aspect ratios
+			// TEMP use SLR
+//			if(CDW.settings.webcamOnly) {
+//				maxSourceWidth = Math.round(190);
+//				maxSourceHeight = Math.round(320);
+//			}
+//			else {
+//				maxSourceWidth = 213;
+//				maxSourceHeight = 320;
+//			}
 			
-			// TODO, use aspect ratio of camera files???
-			maxSourceWidth = Math.round(1080 / undersample);
-			maxSourceHeight = Math.round(1920 / undersample);
+			
+			maxSourceWidth = 213;
+			maxSourceHeight = 320;			
+
 		}
 		
 		private function detectionHandler(e:ObjectDetectorEvent):void {
