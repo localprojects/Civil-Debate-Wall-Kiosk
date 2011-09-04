@@ -30,8 +30,8 @@ package net.localprojects.ui {
 		private var bottomButtonEdge:Bitmap;
 		private var bottomEdgeMatrix:Matrix;		
 		private var barberPoleSpeed:Number; // pixels per frame
-		private var leftEdgeOffset:Number;
-		private var bottomEdgeOffset:Number;		
+		public var leftEdgeOffset:Number;
+		public var bottomEdgeOffset:Number;		
 		
 		
 		public function BigButton(buttonLabel:String) {
@@ -110,10 +110,9 @@ package net.localprojects.ui {
 		private function onEnterFrame(e:Event):void {
 			// barber pole animation			
 			leftEdgeOffset = ((leftEdgeOffset + barberPoleSpeed) % 22);
-			leftButtonEdge.bitmapData.copyPixels(Assets.leftButtonTile.bitmapData, Assets.leftButtonTile.bitmapData.rect, new Point(leftEdgeOffset - Assets.leftEdgeMask.width, 0), Assets.leftEdgeMask.bitmapData, new Point(leftEdgeOffset - Assets.leftEdgeMask.width, 0), true);
-
 			bottomEdgeOffset = ((bottomEdgeOffset - barberPoleSpeed) % 22);
-			bottomButtonEdge.bitmapData.copyPixels(Assets.bottomButtonTile.bitmapData, Assets.bottomButtonTile.bitmapData.rect, new Point(0, bottomEdgeOffset), Assets.bottomEdgeMask.bitmapData, new Point(0, bottomEdgeOffset), true);			
+			
+			updateBarberPole();
 		}
 		
 		
@@ -126,9 +125,19 @@ package net.localprojects.ui {
 		}
 		
 		
+		private function updateBarberPole():void {
+			leftButtonEdge.bitmapData.copyPixels(Assets.leftButtonTile.bitmapData, Assets.leftButtonTile.bitmapData.rect, new Point(leftEdgeOffset - Assets.leftEdgeMask.width, 0), Assets.leftEdgeMask.bitmapData, new Point(leftEdgeOffset - Assets.leftEdgeMask.width, 0), true);			
+			bottomButtonEdge.bitmapData.copyPixels(Assets.bottomButtonTile.bitmapData, Assets.bottomButtonTile.bitmapData.rect, new Point(0, bottomEdgeOffset), Assets.bottomEdgeMask.bitmapData, new Point(0, bottomEdgeOffset), true);
+		}
+		
 		// move to parent?
 		override public function disable():void {
 			super.disable();
+			
+			// position the stripes
+			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);			
+			
+			TweenMax.to(this, 0.25, {leftEdgeOffset: 3, bottomEdgeOffset: 0, onUpdate: updateBarberPole});			
 			
 			if (andFire) {
 				// fire the mouse event once the animation is finished
@@ -140,7 +149,7 @@ package net.localprojects.ui {
 				TweenMax.to(button, 0.25, {x: -24, y: 24, ease:Strong.easeOut, colorMatrixFilter:{saturation: 0}});				
 			}
 			
-			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);						
+									
 		}
 		
 
