@@ -126,12 +126,9 @@ package net.localprojects.camera
 		}		
 		
 		private function loadImage(file:File):void {
-			trace("loading");
-			trace(file.url);
+			trace("loading slr photo " + file.url);
 			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleImageLoad);
 			imageLoader.load(new URLRequest(file.url.replace('%0d', ''))); // completely weird filename bug
-			
-			//if (this.contains(loadedBitmap)) this.removeChild(loadedBitmap);
 		}
 		
 		private function handleImageLoad( e:Event ):void {
@@ -139,10 +136,10 @@ package net.localprojects.camera
 			loadedBitmap = imageLoader.content as Bitmap;
 			loadedBitmap.smoothing = true;
 			
-			// rotate the image
+			// rotate and flip the image
 			var matrix:Matrix = new Matrix();
-			matrix.rotate(Utilities.degToRad(-90));			
-			matrix.ty = loadedBitmap.bitmapData.width;
+			matrix.rotate(Utilities.degToRad(90));			
+			matrix.scale(-1, 1); // flip horizontally
 			
 			image = new Bitmap(new BitmapData(loadedBitmap.height, loadedBitmap.width), "auto", true);
 			image.bitmapData.draw(loadedBitmap, matrix, null, null, null, true);			
