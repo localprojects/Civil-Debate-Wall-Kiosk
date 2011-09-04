@@ -30,6 +30,14 @@ package net.localprojects
 		public static function getDashedBar():Bitmap { return new dashedBarClass() as Bitmap; };
 		public static const dashedBar:Bitmap = getDashedBar();		
 		
+		[Embed(source = '/assets/graphics/roundColon.png')] private static const roundColonClass:Class;
+		public static function getRoundColon():Bitmap { return new roundColonClass() as Bitmap; };
+		public static const roundColon:Bitmap = getRoundColon();		
+		
+		[Embed(source = '/assets/graphics/cameraArrow.png')] private static const cameraArrowClass:Class;
+		public static function getCameraArrow():Bitmap { return new cameraArrowClass() as Bitmap; };
+		public static const cameraArrow:Bitmap = getCameraArrow();		
+		
 		[Embed(source = '/assets/graphics/leftArrow.png')] private static const leftArrowClass:Class;
 		public static function getLeftArrow():Bitmap { return new leftArrowClass() as Bitmap; };
 		public static const leftArrow:Bitmap = getLeftArrow();

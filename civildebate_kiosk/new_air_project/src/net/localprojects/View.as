@@ -96,9 +96,9 @@ package net.localprojects {
 		public var stance:BlockLabel;
 		public var leftStance:BlockLabel;
 		public var rightStance:BlockLabel;		
-		public var nametag:BlockLabel;
-		public var leftNametag:BlockLabel;
-		public var rightNametag:BlockLabel;		
+		public var nametag:NameTag;
+		public var leftNametag:NameTag;
+		public var rightNametag:NameTag;		
 		public var opinion:BlockParagraph;
 		public var leftOpinion:BlockParagraph;		
 		public var rightOpinion:BlockParagraph;
@@ -191,18 +191,18 @@ package net.localprojects {
 			addChild(rightStance);			
 			
 			// triple nametags
-			nametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);	
+			nametag = new NameTag('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);	
 			nametag.setPadding(33, 38, 24, 38);
 			nametag.setDefaultTweenIn(1, {x: 238, y: 410});
 			nametag.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 410});
 			addChild(nametag);
 			
-			leftNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
+			leftNametag = new NameTag('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
 			leftNametag.setPadding(33, 38, 24, 38);
 			leftNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x - stageWidth, y: nametag.defaultTweenInVars.y});
 			addChild(leftNametag);
 			
-			rightNametag = new BlockLabel('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
+			rightNametag = new NameTag('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
 			rightNametag.setPadding(33, 38, 24, 38);
 			rightNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x + stageWidth, y: nametag.defaultTweenInVars.y});
 			addChild(rightNametag);
@@ -374,7 +374,7 @@ package net.localprojects {
 			photoBoothButton.setDefaultTweenOut(1, {alpha: 0, x: BlockBase.CENTER, y: 1628});
 			addChild(photoBoothButton);
 			
-			countdownButton = new CountdownButton(5);
+			countdownButton = new CountdownButton(6);
 			countdownButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1438, scaleX: 1, scaleY: 1});
 			countdownButton.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: stageHeight});
 			addChild(countdownButton);

@@ -23,7 +23,7 @@ package net.localprojects.ui {
 			
 		}
 		
-		// TODO velocity based push-over
+		// velocity based push-over
 		
 		private function init():void {
 			graphics.beginFill(0x000000, 0);
@@ -36,8 +36,8 @@ package net.localprojects.ui {
 			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			mouseDown = false;
 			
-			vxSampleDepth = 5;
-			vxThreshold = 25;
+			vxSampleDepth = 2;
+			vxThreshold = 20;
 		}
 		
 
@@ -51,7 +51,7 @@ package net.localprojects.ui {
 			leftEdge = 0;			
 			
 			// Stop tweens
-			 TweenMax.killAll();
+			// TweenMax.killAll();
 			
 			TweenMax.killTweensOf(CDW.view.nametag);
 			TweenMax.killTweensOf(CDW.view.leftNametag);
@@ -67,6 +67,8 @@ package net.localprojects.ui {
 			TweenMax.killChildTweensOf(CDW.view.rightQuote);
 			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+
+			
 		}
 		
 		

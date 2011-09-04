@@ -26,6 +26,7 @@ package net.localprojects.ui {
 		private var progressColor:uint;
 		private var ringColor:uint;
 		private var icon:Bitmap;
+		private var arrow:Bitmap;
 		
 		// events
 		public var onCountdownFinish:Function;	
@@ -107,11 +108,12 @@ package net.localprojects.ui {
 				
 			addChild(countTextWrapper);
 			
+			arrow = Assets.getCameraArrow();
+			arrow.alpha = 0;
+			Utilities.centerWithin(arrow, this);
+			arrow.y += 10;			
+			addChild(arrow);
 			
-//			this.graphics.beginFill(0xff000);
-//			this.graphics.drawRect(0, 0, width, height);
-//			this.graphics.endFill();			
-		
 		}		
 				
 		// run the timer
@@ -121,6 +123,11 @@ package net.localprojects.ui {
 			
 			startTime = getTimer();
 			countText.text = duration.toString();
+			
+			// reset the arrow
+			TweenMax.killTweensOf(arrow);
+			arrow.alpha = 0;
+
 			
 			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countTextWrapper, 180, true), scaleX: 0, scaleY: 0, onComplete: onSecondTweenComplete});			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -137,13 +144,22 @@ package net.localprojects.ui {
 			// update the count, then bring back the text
 			icon.visible = false;
 			countText.visible = true;
-			countText.text = (duration - timer.currentCount).toString();
+			countText.text = (duration - (timer.currentCount + 2)).toString();
 			
-			if (countText.text == '1') {
-				onAlmostFinish();				
+			if (timer.currentCount < 4) {
+				//onAlmostFinish();
+				// spin up a new number
+				TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 1, scaleY: 1});	
+			}
+			else if (timer.currentCount == 4) {
+				// stop spinning numbers, show the icon
+				trace("Showing icon");
+				TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 0, scaleY: 0});
+				TweenMax.to(arrow, 0.2, {alpha: 1});
+				TweenMax.to(arrow, 0.25, {y: "-20", yoyo: true, repeat: -1});				
 			}
 			
-			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 1, scaleY: 1});			
+						
 		}
 		
 		
@@ -244,13 +260,6 @@ package net.localprojects.ui {
 		public function setOnAlmostFinish(f:Function):void {
 			onAlmostFinish = f;			
 		}		
-		
-		
 
-		
-		
-		
-		
-		
 	}
 }

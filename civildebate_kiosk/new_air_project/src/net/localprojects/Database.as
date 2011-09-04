@@ -106,14 +106,7 @@ package net.localprojects {
 					}
 				}
 			}
-			
-			Utilities.traceObject(brightness);
-			
-			
-						
-			
-			
-			
+				
 			
 			// load debates
 			// TODO dynamic question
