@@ -7,7 +7,7 @@ package net.localprojects
 		
 		// Embed code is generated dynamically by embedgen.py
 		
-
+		
 		// Temp
 		[Embed(source = '/assets/graphics/4e4d360f0f2e421e7b000002-full.jpg')] private static const a4e4d360f0f2e421e7b000002fullClass:Class;
 		public static function getSample():Bitmap { return new a4e4d360f0f2e421e7b000002fullClass() as Bitmap; };
@@ -33,6 +33,10 @@ package net.localprojects
 		[Embed(source = '/assets/graphics/roundColon.png')] private static const roundColonClass:Class;
 		public static function getRoundColon():Bitmap { return new roundColonClass() as Bitmap; };
 		public static const roundColon:Bitmap = getRoundColon();		
+		
+		[Embed(source = '/assets/graphics/wordCloudGradient.png')] private static const wordCloudGradientClass:Class;
+		public static function getWordCloudGradient():Bitmap { return new wordCloudGradientClass() as Bitmap; };
+		public static const wordCloudGradient:Bitmap = getWordCloudGradient();		
 		
 		[Embed(source = '/assets/graphics/cameraArrow.png')] private static const cameraArrowClass:Class;
 		public static function getCameraArrow():Bitmap { return new cameraArrowClass() as Bitmap; };
@@ -162,7 +166,8 @@ package net.localprojects
 		public static const COLOR_NO_DISABLED:uint = Utilities.color(140, 41, 4);		
 		
 		public static const COLOR_GRAY_5:uint = Utilities.color(241, 242, 242); // 5% K
-		public static const COLOR_GRAY_15:uint = Utilities.color(220, 221, 222); // 15% K
+		public static const COLOR_GRAY_15:uint = Utilities.color(220, 221, 222); // 15% K		
+		public static const COLOR_GRAY_20:uint = Utilities.color(230, 231, 232); // 20% K
 		public static const COLOR_GRAY_25:uint = Utilities.color(199, 200, 202); // 25% K
 		public static const COLOR_GRAY_50:uint = Utilities.color(147, 149, 152); // 50% K
 		public static const COLOR_GRAY_75:uint = Utilities.color(99, 100, 102); // 75% K

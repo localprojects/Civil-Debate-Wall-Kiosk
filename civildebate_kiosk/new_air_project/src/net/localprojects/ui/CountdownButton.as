@@ -109,17 +109,22 @@ package net.localprojects.ui {
 			addChild(countTextWrapper);
 			
 			arrow = Assets.getCameraArrow();
+			addChild(arrow);
+			resetArrow();
+		}
+		
+		private function resetArrow():void {
+			TweenMax.killTweensOf(arrow);			
 			arrow.alpha = 0;
 			Utilities.centerWithin(arrow, this);
-			arrow.y += 14;			
-			addChild(arrow);
-		}		
+			arrow.y += 14;	
+			arrow.x += 12;
+		}
 		
 		override protected function beforeTweenIn():void {
 			super.beforeTweenIn();
 			// reset the arrow
-			TweenMax.killTweensOf(arrow);
-			arrow.alpha = 0;
+			resetArrow();	
 		}
 				
 		// run the timer
@@ -131,8 +136,7 @@ package net.localprojects.ui {
 			countText.text = duration.toString();
 			
 			// reset the arrow
-			TweenMax.killTweensOf(arrow);
-			arrow.alpha = 0;
+			resetArrow();
 
 			
 			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countTextWrapper, 180, true), scaleX: 0, scaleY: 0, onComplete: onSecondTweenComplete});			

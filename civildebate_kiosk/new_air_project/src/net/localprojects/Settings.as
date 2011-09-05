@@ -8,12 +8,13 @@ package net.localprojects {
 		
 		public static function load():Object {
 			var settingsName:String = '';
+
 			
 			if((Capabilities.os.indexOf("Windows") >= 0)) {
 				settingsName = 'settingsWindows.json';
 			}
 			else if((Capabilities.os.indexOf("Mac") >= 0)) {
-				settingsName = 'settingsWindows.json';
+				settingsName = 'settingsMac.json';
 			} 
 			
 			var file:File = File.applicationDirectory.resolvePath(settingsName);

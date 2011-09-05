@@ -97,13 +97,12 @@ package net.localprojects.ui {
 		
 		// pass through to the label
 		override public function setText(s:String, instant:Boolean = false):void {
-			
-			// TODO, get centering to work for non-instant text settings
+			// find target width
+			var newWidth:Number = labelText.checkWidth(s);
+			labelText.x = (topPanel.width / 2) - (newWidth / 2);
+			labelText.y = (topPanel.height / 2) - (labelText.height / 2);			
+
 			labelText.setText(s, instant);
-
-			
-			Utilities.centerWithin(labelText, topPanel);
-
 		}
 		
 
