@@ -66,6 +66,8 @@ package net.localprojects {
 			for (userID in portraits) {
 				
 				// see if it exists
+
+				
 				var imageFile:File = new File(CDW.settings.imagePath + userID + '.jpg');
 				
 				if (imageFile.exists) {

@@ -18,19 +18,14 @@ package net.localprojects.ui {
 			_normalDifference = normalDifference;
 			_threads = threads;
 			font = Assets.FONT_REGULAR;
-			
-			
+
 			super(StringUtils.capitalize(text), textSize, textColor, backgroundColor, font, showBackground);
 			
 			// set background color
-			
-			interpolatedColor = Color.interpolateColor(Assets.COLOR_YES_LIGHT, Assets.COLOR_NO_LIGHT, _normalDifference);
+			interpolatedColor = Utilities.getPixelGradient(Assets.wordCloudGradient, _normalDifference);
 			this.setBackgroundColor(interpolatedColor, true);
 			
 			this.setPadding(14, 15, 10, 15);
-			
-			
-			
 		}
 		
 	}

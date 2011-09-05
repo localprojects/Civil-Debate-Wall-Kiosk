@@ -237,6 +237,12 @@ package net.localprojects {
 			return Math.floor(Math.random() * (high - low + 1) + low);			
 		}		
 		
+		// picking gradient colors from horizontal bitmaps
+		// position is a normal from 0 to 1
+		public static function getPixelGradient(b:Bitmap, position:Number):uint {
+			return b.bitmapData.getPixel(Math.floor(mapClamp(position, 0, 1, 0, b.width - 1)), 0);
+		}
+		
 		public static function getClassName(o:Object):String {
 			var fullClassName:String = getQualifiedClassName(o);
 			return fullClassName.slice(fullClassName.lastIndexOf("::") + 2);			

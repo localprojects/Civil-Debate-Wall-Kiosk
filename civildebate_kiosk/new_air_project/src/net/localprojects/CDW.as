@@ -115,16 +115,6 @@ package net.localprojects {
 			inactivityTimer = new InactivityTimer(stage, settings.inactivityTimeout);
 			inactivityTimer.addEventListener(InactivityEvent.INACTIVE, onInactive);
 			
-			// Mouse Hiding
-			// This is ridiculous
-			if((Capabilities.os.indexOf("Mac") >= 0)) {
-				var cursorData:MouseCursorData = new MouseCursorData();
-				var cursorBitmaps:Vector.<BitmapData> = new Vector.<BitmapData>(1, true);
-				cursorBitmaps[0] = new BitmapData(1, 1, true, 0x000000ff);
-				cursorData.data = cursorBitmaps;
-				Mouse.registerCursor('hidden', cursorData);
-			} 			
-
 		}
 		
 		private function onInactive(e:InactivityEvent):void {
@@ -220,17 +210,10 @@ package net.localprojects {
 		private function toggleFullScreen():void {
 			if (stage.displayState == StageDisplayState.NORMAL) {
 				stage.displayState = StageDisplayState.FULL_SCREEN;
-				
-				if ((Capabilities.os.indexOf("Mac") >= 0)) {
-					Mouse.cursor = "hidden";
-				}
 				Mouse.hide();
 			}
 			else {
 				stage.displayState = StageDisplayState.NORMAL;
-				if ((Capabilities.os.indexOf("Mac") >= 0)) {
-					Mouse.cursor = MouseCursor.ARROW;
-				}
 				Mouse.show();
 			}
 		}

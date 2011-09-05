@@ -565,6 +565,8 @@ package net.localprojects {
 			
 			CDW.inactivityTimer.disarm();
 			
+			
+			
 			// content mutations
 			portrait.setImage(CDW.database.getActivePortrait());
 			question.setText(CDW.database.getQuestionText(), true);
