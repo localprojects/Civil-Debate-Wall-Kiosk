@@ -27,7 +27,6 @@ package net.localprojects.elements {
 			
 			// now strip the colon
 			if (this.textField.text.indexOf(':') > -1) {
-				trace("there's a colon! kill it!");
 				this.textField.text = textField.text.replace(':', '');	
 				
 				var metrics:TextLineMetrics = textField.getLineMetrics(0);

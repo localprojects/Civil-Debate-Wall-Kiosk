@@ -1,12 +1,18 @@
 package net.localprojects.blocks {
+	import com.adobe.utils.StringUtil;
 	import com.bit101.components.Text;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	
 	import flash.display.*;
+	import flash.geom.Rectangle;
 	import flash.text.*;
 	
+	import flashx.textLayout.elements.BreakElement;
+	
 	import net.localprojects.*;
+	
+	import sekati.layout.Arrange;
 	
 	// multi-line block text
 	public class BlockParagraph extends BlockBase {
@@ -27,6 +33,7 @@ package net.localprojects.blocks {
 
 		protected var _leading:Number;
 		protected var background:Shape;
+		protected var highlightLayer:Shape;
 
 		
 		public function BlockParagraph(textWidth:Number, backgroundColor:uint, text:String, textSize:Number, textColor:uint = 0xffffff, textFont:String = null, leading:Number = 3) {
@@ -48,8 +55,95 @@ package net.localprojects.blocks {
 			_textSize = textSize;
 			_backgroundColor = backgroundColor;
 
+			
+			
 			init();
+			
+			
+			
 		}
+		
+		
+		
+		
+		
+		
+		protected var highlightedString:String = '';
+		private var _highlightColor:uint = 0x000000;
+		
+		protected var highlightPaddingTop:Number = 0;
+		protected var highlightPaddingBottom:Number = 7;
+		protected var highlightPaddingLeft:Number = 8;
+		protected var highlightPaddingRight:Number = 9;
+		
+		
+		private function highlightPosition(start:int, end:int):void {
+			var existingText:String = textField.text;
+			var highlightArea:Rectangle = new Rectangle();
+			
+			// left bounds, string up to the highlighted word
+			var leftStringExclusive:String = existingText.substring(0, start);
+			
+			trace("leftStringExclusive: " + leftStringExclusive);
+			
+			textField.text = leftStringExclusive;
+			var leftExclusiveMetrics:TextLineMetrics = textField.getLineMetrics(textField.numLines - 1);
+			highlightArea.x = leftExclusiveMetrics.x + leftExclusiveMetrics.width + paddingLeft;
+			highlightArea.y = (leftExclusiveMetrics.height * (textField.numLines - 1)) + paddingTop;
+			
+			
+			// right bounds, string up to and including the highlighted word
+			var leftStringInclusive:String = existingText.substring(0, end);
+			
+			trace("leftStringInclusive: " + leftStringInclusive);
+			
+			textField.text = leftStringInclusive;
+			var leftInclusiveMetrics:TextLineMetrics = textField.getLineMetrics(textField.numLines - 1);
+			highlightArea.width = (leftInclusiveMetrics.x + leftInclusiveMetrics.width + paddingLeft) - highlightArea.x;
+			highlightArea.height = leftInclusiveMetrics.height;						
+			
+			trace("existingText: " + existingText);
+			setText(existingText, true);
+			
+			trace("highlightArea", highlightArea);
+
+			// apply padding
+			highlightArea.y -= highlightPaddingTop;			
+			highlightArea.x -= highlightPaddingLeft;
+			highlightArea.width += highlightPaddingLeft + highlightPaddingRight;
+			highlightArea.height += highlightPaddingTop + highlightPaddingBottom;
+			
+			// draw the hilite
+			
+			highlightLayer.graphics.beginFill(_highlightColor);
+			highlightLayer.graphics.drawRect(highlightArea.x, highlightArea.y, highlightArea.width, highlightArea.height);
+			highlightLayer.graphics.endFill();
+		}
+		
+		public function setHighlightColor(c:uint):void {
+			_highlightColor = c;
+			setHighlight(highlightedString);
+		}
+		
+		public function setHighlight(s:String):void {
+			highlightedString = s;
+			
+			highlightLayer.graphics.clear();
+			
+			var locations:Array = Utilities.searchString(s, textField.text);
+			
+			// highlight each one...
+			for (var i:int = 0; i < locations.length; i++) {
+				highlightPosition(locations[i][0], locations[i][1]);
+			}
+		}
+		
+		public function clearHighlight():void {
+			highlightLayer.graphics.clear();
+			highlightedString = '';
+		}
+		
+		
 		
 		private function init():void {
 			// set up the text format
@@ -85,7 +179,10 @@ package net.localprojects.blocks {
 			
 			drawBackground();
 			
+			highlightLayer = new Shape();
+			
 			addChild(background);
+			addChild(highlightLayer);
 			addChild(textField);			
 			
 

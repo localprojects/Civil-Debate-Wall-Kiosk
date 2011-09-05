@@ -2,11 +2,12 @@ package net.localprojects.ui {
 	
 	import com.greensock.TweenMax;
 	
+	import fl.motion.Color;
+	
 	import flash.events.*;
 	
 	import net.localprojects.*;
 	import net.localprojects.blocks.BlockBase;
-	import fl.motion.Color;
 
 	
 	public class DragLayer extends BlockBase {
@@ -42,6 +43,9 @@ package net.localprojects.ui {
 		
 
 		private function onMouseDown(e:MouseEvent):void {
+			
+			if(!TweenMax.isTweening(CDW.view.nametag)) {
+			
 			mouseDown = true;
 			vxSamples = new Array(); // clear the history
 			
@@ -67,6 +71,7 @@ package net.localprojects.ui {
 			TweenMax.killChildTweensOf(CDW.view.rightQuote);
 			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			}
 
 			
 		}

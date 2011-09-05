@@ -2,6 +2,9 @@ package net.localprojects.elements {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
+	import fl.motion.Color;
+	
+	import flash.display.Shape;
 	import flash.events.Event;
 	
 	import net.localprojects.*;
@@ -12,20 +15,27 @@ package net.localprojects.elements {
 	
 	public class StatsOverlay extends BlockBase {
 		
-		
 
 		// blocks		
 		public var homeButton:BlockButton;
 		
 		
+
+		
 		private var voteTitleBar:BlockLabelBar;
-		private var previousVoteStatButton:IconButton;
-		private var nextVoteStatButton:IconButton;		
+		private var voteTitleLeftDot:Shape;
+		private var voteTitleRightDot:Shape;		
 		private var voteStatBar:VoteStatBar;
 		
 		private var wordTitleBar:BlockLabelBar;
+		private var wordTitleLeftDot:Shape;
+		private var wordTitleRightDot:Shape;				
 		private var wordCloud:WordCloud;
-		private var wordFrequencyList:WordFrequencyList;
+		private var wordSearchResults:WordFrequencyList;
+		private var closeWordCloudButton:IconButton;
+		
+		private var wordCloudResultsTitleBar:BlockLabelBar;
+		
 		
 		private var superlativesTitleBar:BlockLabelBar;
 		private var nextSuperlativeButton:IconButton;
@@ -38,6 +48,14 @@ package net.localprojects.elements {
 		public function StatsOverlay() {
 			super();
 			init();
+		}
+		
+		private function generateDot(c:uint):Shape {
+			var shape:Shape = new Shape();
+			shape.graphics.beginFill(c);
+			shape.graphics.drawCircle(0, 0, 3.6);
+			shape.graphics.endFill();
+			return shape;
 		}
 		
 		private function init():void {
@@ -54,31 +72,24 @@ package net.localprojects.elements {
 			homeButton.setDefaultTweenIn(0, {x:0, y: 1563});
 			homeButton.setDefaultTweenOut(0, {x:0, y: 1563});
 			addChild(homeButton);
-			
+					
 			
 			// Voting bar
 			voteTitleBar = new BlockLabelBar("Total Number of Votes", 26, 0xffffff, 1022, 63, 0x000000, Assets.FONT_BOLD);
 			voteTitleBar.setDefaultTweenIn(0, {x:0, y: 0});
 			voteTitleBar.setDefaultTweenOut(0, {x:0, y: 0});
-			addChild(voteTitleBar);
 			
-			previousVoteStatButton = new IconButton(63, 63, 0x000000, '', 0, 0x000000, null, Assets.getLeftArrow());
-			previousVoteStatButton.buttonMode = true;
-			previousVoteStatButton.showBackground(false);
-			previousVoteStatButton.setStrokeWeight(0);			
-			previousVoteStatButton.showOutline(false, true);
-			previousVoteStatButton.setDefaultTweenIn(1, {alpha: 1, x:244, y: 3});
-			previousVoteStatButton.setDefaultTweenOut(1, {alpha: 0.25, x:244, y: 3});
-			addChild(previousVoteStatButton);
+			voteTitleLeftDot = generateDot(Assets.COLOR_YES_LIGHT);
+			voteTitleLeftDot.x = 248;
+			voteTitleLeftDot.y = 27;
+			voteTitleBar.addChild(voteTitleLeftDot);
 			
-			nextVoteStatButton = new IconButton(63, 63, 0x000000, '', 0, 0x000000, null, Assets.getRightArrow());
-			nextVoteStatButton.buttonMode = true;
-			nextVoteStatButton.showBackground(false);			
-			nextVoteStatButton.setStrokeWeight(0);
-			nextVoteStatButton.showOutline(false, true);			
-			nextVoteStatButton.setDefaultTweenIn(1, {alpha: 1, x: 719, y: 3});
-			nextVoteStatButton.setDefaultTweenOut(1, {alpha: 0.25, x: 719, y: 3});
-			addChild(nextVoteStatButton);						
+			voteTitleRightDot = generateDot(Assets.COLOR_NO_LIGHT);
+			voteTitleRightDot.x = 764;
+			voteTitleRightDot.y = 27;
+			voteTitleBar.addChild(voteTitleRightDot);			
+
+			addChild(voteTitleBar);			
 			
 			voteStatBar = new VoteStatBar();
 			voteStatBar.setDefaultTweenIn(1, {x: 0, y: 78});
@@ -90,8 +101,19 @@ package net.localprojects.elements {
 			wordTitleBar = new BlockLabelBar('Most Frequently Used Words', 26, 0xffffff, 1022, 63, 0x000000, Assets.FONT_BOLD);
 			wordTitleBar.setDefaultTweenIn(0, {x:0, y: 234});
 			wordTitleBar.setDefaultTweenOut(0, {x:0, y: 234});
-			addChild(wordTitleBar);			
+
+			wordTitleLeftDot = generateDot(Assets.COLOR_YES_LIGHT);
+			wordTitleLeftDot.x = 248;
+			wordTitleLeftDot.y = 27;
+			wordTitleBar.addChild(wordTitleLeftDot);
 			
+			wordTitleRightDot = generateDot(Assets.COLOR_NO_LIGHT);
+			wordTitleRightDot.x = 764;
+			wordTitleRightDot.y = 27;
+			wordTitleBar.addChild(wordTitleRightDot);					
+			
+			addChild(wordTitleBar);			
+
 			wordCloud = new WordCloud();
 			wordCloud.setDefaultTweenIn(0, {x:0, y: 312});
 			wordCloud.setDefaultTweenOut(0, {x:0, y: 312});
@@ -100,11 +122,25 @@ package net.localprojects.elements {
 			wordCloud.addEventListener(WordCloud.EVENT_WORD_SELECTED, frequentWordView);
 			wordCloud.addEventListener(WordCloud.EVENT_WORD_DESELECTED, mostDebatedView);
 			
-			wordFrequencyList = new WordFrequencyList();
-			wordFrequencyList.setDefaultTweenIn(1, {alpha: 1, x:0, y: 626});
-			wordFrequencyList.setDefaultTweenOut(1, {alpha: 0, x:0, y: 626});
-			addChild(wordFrequencyList);
+			wordSearchResults = new WordFrequencyList();
+			wordSearchResults.setDefaultTweenIn(1, {alpha: 1, x:0, y: 702});
+			wordSearchResults.setDefaultTweenOut(1, {alpha: 0, x:0, y: 702});
+			addChild(wordSearchResults);
+
+			closeWordCloudButton = new IconButton(63, 63, 0x000000, '', 0, 0x000000, null, Assets.getCloseButton());
+			closeWordCloudButton.buttonMode = true;
+			closeWordCloudButton.showBackground(false);
+			closeWordCloudButton.setStrokeWeight(0);			
+			closeWordCloudButton.showOutline(false, true);
+			closeWordCloudButton.setDefaultTweenIn(1, {alpha: 1, x: 925, y: 234});
+			closeWordCloudButton.setDefaultTweenOut(1, {alpha: 0, x: 925, y: 234});
+			addChild(closeWordCloudButton);
+						
 			
+			wordCloudResultsTitleBar = new BlockLabelBar('Results', 26, Assets.COLOR_GRAY_75, 1022, 63, Assets.COLOR_GRAY_20, Assets.FONT_BOLD);
+			wordCloudResultsTitleBar.setDefaultTweenIn(0, {alpha: 1, x:0, y: 626});
+			wordCloudResultsTitleBar.setDefaultTweenOut(0, {alpha: 0, x:0, y: 626});			
+			addChild(wordCloudResultsTitleBar);
 			
 			// Superlatives
 			superlativesTitleBar = new BlockLabelBar("Most Debated Opinions", 26, 0xffffff, 1022, 63, 0x000000, Assets.FONT_BOLD);
@@ -161,8 +197,7 @@ package net.localprojects.elements {
 		
 		public function frequentWordView(...args):void {
 			markAllInactive();
-			previousVoteStatButton.active = true;		
-			nextVoteStatButton.active = true;
+
 			
 			trace("Frequent word view");
 			
@@ -171,15 +206,26 @@ package net.localprojects.elements {
 			
 			// mutate to use current word
 			
+			// update based on active word?
+			
 			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.getText() + '\u2019 used in '  + wordSearchResults.count + ' Opinions');
 			
+			
+			// behaviors
+			closeWordCloudButton.setOnClick(mostDebatedView);
+			
+			
+			// blocks
 			voteTitleBar.tweenIn();
 			voteStatBar.tweenIn();
 
 			wordTitleBar.tweenIn();
-			wordCloud.tweenIn();	
-			wordFrequencyList.tweenIn();
+			closeWordCloudButton.tweenIn();			
+			wordCloud.tweenIn();
+			wordCloudResultsTitleBar.tweenIn();			
+			wordSearchResults.tweenIn();
 			homeButton.tweenIn();			
 			
 			
@@ -189,9 +235,7 @@ package net.localprojects.elements {
 		public function mostDebatedView(...args):void {
 			markAllInactive();
 			
-			previousVoteStatButton.active = true;
-			nextVoteStatButton.active = true;
-			
+
 			superlativesTitleBar.setText('Most Debated Opinions');
 			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
@@ -218,9 +262,7 @@ package net.localprojects.elements {
 		public function mostLikedView(...args):void {
 			markAllInactive();
 			
-			previousVoteStatButton.active = true;
-			nextVoteStatButton.active = true;			
-			
+
 			superlativesTitleBar.setText('Most Liked Debates');
 			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
@@ -246,8 +288,7 @@ package net.localprojects.elements {
 		public function mostActiveUsersView(...args):void {
 			markAllInactive();
 			
-			previousVoteStatButton.active = true;
-			nextVoteStatButton.active = true;			
+
 			
 			superlativesTitleBar.setText('Most Active Users');
 			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
@@ -278,12 +319,7 @@ package net.localprojects.elements {
 		// like overlays
 		public function showLikeTotals(...args):void {			
 			// behaviors
-			previousVoteStatButton.setOnClick(null);
-			previousVoteStatButton.tweenIn(1, {alpha: 0.5});
-			
-			
-			nextVoteStatButton.setOnClick(showDebateTotals);
-			nextVoteStatButton.tweenIn();						
+						
 			
 			// mutation
 			voteTitleBar.setText('Total Number of Votes');
@@ -297,12 +333,7 @@ package net.localprojects.elements {
 		}
 		
 		public function showDebateTotals(...args):void {			
-			// behaviors
-			previousVoteStatButton.setOnClick(showLikeTotals);
-			previousVoteStatButton.tweenIn();			
-			
-			nextVoteStatButton.setOnClick(null);
-			nextVoteStatButton.tweenIn(1, {alpha: 0.5});			
+			// behaviors;			
 			
 			// mutation
 			voteTitleBar.setText('Total Number of Opinions');			

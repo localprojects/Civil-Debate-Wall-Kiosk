@@ -293,9 +293,10 @@ package net.localprojects {
 			addChild(debateButton);			
 			
 			secondaryDebateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
+			secondaryDebateButton.setStrokeColor(Assets.COLOR_GRAY_15);
 			secondaryDebateButton.scaleX = 0.75;  
 			secondaryDebateButton.scaleY = 0.75; 				
-			secondaryDebateButton.setDefaultTweenIn(1, {x: 905});
+			secondaryDebateButton.setDefaultTweenIn(1, {x: 909});
 			secondaryDebateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE});
 			addChild(secondaryDebateButton);	
 			
@@ -576,6 +577,8 @@ package net.localprojects {
 			bigButton.setText('ADD YOUR OPINION', true);
 			likeButton.setCount(CDW.database.debates[CDW.state.activeDebate].likes);			
 			
+			opinion.setHighlight('quo');
+			
 			// state mutations
 			debateOverlay.scrollField.scrollTo(0, 0);			
 			CDW.state.clearUser(); // Reset user info
@@ -676,7 +679,7 @@ package net.localprojects {
 				var commentPreview:String = firstCommentText;				
 				var previewWidth:Number = viewDebateButton.measureText(newLabel);
 				
-				while (previewWidth > 470) {
+				while (previewWidth > 460) {
 					commentLength--;
 					commentPreview = StringUtils.truncate(firstCommentText, commentLength, '...');
 					newLabel = '\u201C' + commentPreview + '\u201D + ' + commentCount + ' ' + Utilities.plural('response', commentCount);					
@@ -889,7 +892,7 @@ package net.localprojects {
 			secondaryDebateButton.setDownColor(CDW.state.activeStanceColorMedium);
 			
 			secondaryDebateButton.y = 410 + opinion.height + 15;
-			secondaryDebateButton.tweenIn(1, {x: 916});
+			secondaryDebateButton.tweenIn();
 			
 			
 			
