@@ -50,6 +50,7 @@ package net.localprojects {
 		private var letsDebateUnderlay:BlockBitmap;
 		private var pickStanceInstructions:BlockLabelBar;
 		private var characterLimitWarning:BlockLabel;
+		private var cameraTimeoutWarning:BlockLabel;
 		private var noNameWarning:BlockLabel;
 		private var noOpinionWarning:BlockLabel;				
 		
@@ -425,6 +426,11 @@ package net.localprojects {
 			characterLimitWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (characterLimitWarning.height / 2) - 10});	
 			characterLimitWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (characterLimitWarning.height / 2) - 10});
 			addChild(characterLimitWarning);
+			
+			cameraTimeoutWarning = new BlockLabel('The camera could not focus, please try again!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
+			cameraTimeoutWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: BlockBase.CENTER});	
+			cameraTimeoutWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: BlockBase.CENTER});
+			addChild(cameraTimeoutWarning);
 			
 			noNameWarning = new BlockLabel('Please enter your name!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
 			noNameWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
@@ -1298,6 +1304,12 @@ package net.localprojects {
 			photoBoothButton.tweenIn();
 			countdownButton.tweenIn();			
 			
+			if (CDW.state.lastView == photoBoothView) {
+				// we timed out! show the message for five seconds
+				cameraTimeoutWarning.tweenIn();
+				TweenMax.delayedCall(5, function():void { cameraTimeoutWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE})});
+			}
+			
 			tweenOutInactive();
 			
 			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design11);
@@ -1346,9 +1358,17 @@ package net.localprojects {
 			}
 			else {
 				// using SLR
+				portraitCamera.slr.setOnTimeout(onSLRTimeout);
 				portraitCamera.slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 				portraitCamera.slr.takePhoto();
 			}
+		}
+		
+		private function onSLRTimeout(e:Event):void {
+			// go back to photo page
+			CDW.dashboard.log("SLR timeout callback");
+			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
+			photoBoothView();
 		}
 		
 		
@@ -1373,6 +1393,9 @@ package net.localprojects {
 			faceDetector.removeEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onDetectionComplete);
 			trace('face detection complete');
 			trace(faceDetector.faceRect);
+			
+			// save a copy of the original image, we'll write it to disk later
+			CDW.state.userImageFull = new Bitmap(CDW.state.userImage.bitmapData.clone());
 			
 			if (faceDetector.faceRect != null) {
 				trace('face found, cropping to it');
@@ -1566,20 +1589,16 @@ package net.localprojects {
 			exitButton.tweenIn();						
 			
 
-			
 			tweenOutInactive();
-			
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design17);			
 		}
 		
 		private function onSubmitOpinion():void {
-			
 			// Syncs state up to the cloud
 						
-			// save the image to disk
-			var imageName:String = Utilities.saveImageToDisk(CDW.state.userImage, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');
-			
-			
+			// save the images to disk, one full res and one scaled and cropped 
+			Utilities.saveImageToDisk(CDW.state.userImageFull, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');			
+			var imageName:String = Utilities.saveImageToDisk(CDW.state.userImage, CDW.settings.imagePath, CDW.state.userID + '.jpg');
 			var payload:Object;
 			
 			if (CDW.state.userIsResponding) {

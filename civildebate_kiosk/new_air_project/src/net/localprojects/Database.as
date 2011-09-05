@@ -34,7 +34,6 @@ package net.localprojects {
 			trace('Loading from DB');
 			trace('Loading question');
 			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/questions/get', {'id': '4e2755b50f2e420354000001'}, onQuestionReceived);
-			
 		}
 		
 		private function onQuestionReceived(r:Object):void {
@@ -67,7 +66,7 @@ package net.localprojects {
 			for (userID in portraits) {
 				
 				// see if it exists
-				var imageFile:File = new File(CDW.settings.imagePath + userID + '-full.jpg');
+				var imageFile:File = new File(CDW.settings.imagePath + userID + '.jpg');
 				
 				if (imageFile.exists) {
 					// load the portrait

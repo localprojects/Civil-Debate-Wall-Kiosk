@@ -20,6 +20,7 @@ package net.localprojects {
 	import net.localprojects.elements.*;
 	import net.localprojects.keyboard.*;
 	import net.localprojects.ui.*;
+	import flash.system.Capabilities;
 	
 	// Greensock plugins
 	TweenPlugin.activate([ThrowPropsPlugin]);
@@ -116,11 +117,14 @@ package net.localprojects {
 			
 			// Mouse Hiding
 			// This is ridiculous
-			var cursorData:MouseCursorData = new MouseCursorData();
-			var cursorBitmaps:Vector.<BitmapData> = new Vector.<BitmapData>(1, true);
-			cursorBitmaps[0] = new BitmapData(1, 1, true, 0x000000ff);
-			cursorData.data = cursorBitmaps;
-			Mouse.registerCursor('hidden', cursorData);
+			if((Capabilities.os.indexOf("Mac") >= 0)) {
+				var cursorData:MouseCursorData = new MouseCursorData();
+				var cursorBitmaps:Vector.<BitmapData> = new Vector.<BitmapData>(1, true);
+				cursorBitmaps[0] = new BitmapData(1, 1, true, 0x000000ff);
+				cursorData.data = cursorBitmaps;
+				Mouse.registerCursor('hidden', cursorData);
+			} 			
+
 		}
 		
 		private function onInactive(e:InactivityEvent):void {
@@ -216,12 +220,17 @@ package net.localprojects {
 		private function toggleFullScreen():void {
 			if (stage.displayState == StageDisplayState.NORMAL) {
 				stage.displayState = StageDisplayState.FULL_SCREEN;
-				Mouse.cursor = "hidden";
+				
+				if ((Capabilities.os.indexOf("Mac") >= 0)) {
+					Mouse.cursor = "hidden";
+				}
 				Mouse.hide();
 			}
 			else {
 				stage.displayState = StageDisplayState.NORMAL;
-				Mouse.cursor = MouseCursor.ARROW;
+				if ((Capabilities.os.indexOf("Mac") >= 0)) {
+					Mouse.cursor = MouseCursor.ARROW;
+				}
 				Mouse.show();
 			}
 		}

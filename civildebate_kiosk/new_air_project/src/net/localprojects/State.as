@@ -24,6 +24,7 @@ package net.localprojects {
 		public var userPhoneNumber:String = '#########';
 		public var userID:String = '';
 		public var userImage:Bitmap = new Bitmap(new BitmapData(1080, 1920));
+		public var userImageFull:Bitmap = new Bitmap();		
 		public var latestSMSID:String = '';
 		
 		public var activeComment:String = null;
