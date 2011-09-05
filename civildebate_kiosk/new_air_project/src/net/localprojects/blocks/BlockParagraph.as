@@ -66,39 +66,44 @@ package net.localprojects.blocks {
 		
 		
 		
-		
-		
 		protected var highlightedString:String = '';
 		private var _highlightColor:uint = 0x000000;
 		
 		protected var highlightPaddingTop:Number = 0;
-		protected var highlightPaddingBottom:Number = 7;
-		protected var highlightPaddingLeft:Number = 8;
-		protected var highlightPaddingRight:Number = 9;
+		protected var highlightPaddingBottom:Number = 5;
+		protected var highlightPaddingLeft:Number = 7;
+		protected var highlightPaddingRight:Number = 8;
 		
 		
 		private function highlightPosition(start:int, end:int):void {
+			// add space to end
 			var existingText:String = textField.text;
 			var highlightArea:Rectangle = new Rectangle();
 			
 			// left bounds, string up to the highlighted word
-			var leftStringExclusive:String = existingText.substring(0, start);
+			var onLine:int = textField.getLineIndexOfChar(start);
+			var theLineText:String = textField.getLineText(onLine);
+			var lineLeftIndex:int = textField.getLineOffset(onLine);
+			
+			var leftStringExclusive:String = theLineText.substring(0, start - lineLeftIndex);
 			
 			trace("leftStringExclusive: " + leftStringExclusive);
 			
 			textField.text = leftStringExclusive;
-			var leftExclusiveMetrics:TextLineMetrics = textField.getLineMetrics(textField.numLines - 1);
-			highlightArea.x = leftExclusiveMetrics.x + leftExclusiveMetrics.width + paddingLeft;
-			highlightArea.y = (leftExclusiveMetrics.height * (textField.numLines - 1)) + paddingTop;
 			
+			var leftExclusiveMetrics:TextLineMetrics = textField.getLineMetrics(0);			
+
+				highlightArea.x = leftExclusiveMetrics.x + leftExclusiveMetrics.width + paddingLeft;
+				highlightArea.y = (leftExclusiveMetrics.height * onLine) + paddingTop;				
+
 			
 			// right bounds, string up to and including the highlighted word
-			var leftStringInclusive:String = existingText.substring(0, end);
+			var leftStringInclusive:String = theLineText.substring(0, end - lineLeftIndex);
 			
 			trace("leftStringInclusive: " + leftStringInclusive);
 			
 			textField.text = leftStringInclusive;
-			var leftInclusiveMetrics:TextLineMetrics = textField.getLineMetrics(textField.numLines - 1);
+			var leftInclusiveMetrics:TextLineMetrics = textField.getLineMetrics(0);
 			highlightArea.width = (leftInclusiveMetrics.x + leftInclusiveMetrics.width + paddingLeft) - highlightArea.x;
 			highlightArea.height = leftInclusiveMetrics.height;						
 			
@@ -126,15 +131,18 @@ package net.localprojects.blocks {
 		}
 		
 		public function setHighlight(s:String):void {
-			highlightedString = s;
-			
-			highlightLayer.graphics.clear();
-			
-			var locations:Array = Utilities.searchString(s, textField.text);
-			
-			// highlight each one...
-			for (var i:int = 0; i < locations.length; i++) {
-				highlightPosition(locations[i][0], locations[i][1]);
+			if (s.length > 0) {
+				
+				highlightedString = s;
+				
+				highlightLayer.graphics.clear();
+				
+				var locations:Array = Utilities.searchString(s, textField.text);
+				
+				// highlight each one...
+				for (var i:int = 0; i < locations.length; i++) {
+					highlightPosition(locations[i][0], locations[i][1]);
+				}
 			}
 		}
 		

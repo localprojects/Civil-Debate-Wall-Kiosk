@@ -55,7 +55,7 @@ package net.localprojects.elements {
 			
 			
 			leftLabel = new BlockButton(160, 57, 0x000000, 'Left', 26);
-			leftLabel.setStrokeWeight(0);
+			leftLabel.setOutlineWeight(0);
 			leftLabel.shiftBaseline(0);
 			leftLabel.showOutline(false);
 			leftLabel.showBackground(false);
@@ -63,7 +63,7 @@ package net.localprojects.elements {
 			overlay.addChild(leftLabel);
 			
 			rightLabel = new BlockButton(160, 57, 0x000000, 'Right', 26);
-			rightLabel.setStrokeWeight(0);
+			rightLabel.setOutlineWeight(0);
 			rightLabel.shiftBaseline(0);
 			rightLabel.showOutline(false);
 			rightLabel.showBackground(false);

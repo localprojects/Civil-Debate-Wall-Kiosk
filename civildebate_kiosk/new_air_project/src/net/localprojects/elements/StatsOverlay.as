@@ -31,7 +31,7 @@ package net.localprojects.elements {
 		private var wordTitleLeftDot:Shape;
 		private var wordTitleRightDot:Shape;				
 		private var wordCloud:WordCloud;
-		private var wordSearchResults:WordFrequencyList;
+		private var wordSearchResults:WordSearchResults;
 		private var closeWordCloudButton:IconButton;
 		
 		private var wordCloudResultsTitleBar:BlockLabelBar;
@@ -122,7 +122,7 @@ package net.localprojects.elements {
 			wordCloud.addEventListener(WordCloud.EVENT_WORD_SELECTED, frequentWordView);
 			wordCloud.addEventListener(WordCloud.EVENT_WORD_DESELECTED, mostDebatedView);
 			
-			wordSearchResults = new WordFrequencyList();
+			wordSearchResults = new WordSearchResults();
 			wordSearchResults.setDefaultTweenIn(1, {alpha: 1, x:0, y: 702});
 			wordSearchResults.setDefaultTweenOut(1, {alpha: 0, x:0, y: 702});
 			addChild(wordSearchResults);
@@ -130,7 +130,7 @@ package net.localprojects.elements {
 			closeWordCloudButton = new IconButton(63, 63, 0x000000, '', 0, 0x000000, null, Assets.getCloseButton());
 			closeWordCloudButton.buttonMode = true;
 			closeWordCloudButton.showBackground(false);
-			closeWordCloudButton.setStrokeWeight(0);			
+			closeWordCloudButton.setOutlineWeight(0);			
 			closeWordCloudButton.showOutline(false, true);
 			closeWordCloudButton.setDefaultTweenIn(1, {alpha: 1, x: 925, y: 234});
 			closeWordCloudButton.setDefaultTweenOut(1, {alpha: 0, x: 925, y: 234});
@@ -151,7 +151,7 @@ package net.localprojects.elements {
 			previousSuperlativeButton = new IconButton(63, 63, 0x000000, '', 0, 0x000000, null, Assets.getLeftArrow());
 			previousSuperlativeButton.buttonMode = true;
 			previousSuperlativeButton.showBackground(false);
-			previousSuperlativeButton.setStrokeWeight(0);			
+			previousSuperlativeButton.setOutlineWeight(0);			
 			previousSuperlativeButton.showOutline(false, true);
 			previousSuperlativeButton.setDefaultTweenIn(1, {alpha: 1, x:244, y: 626});
 			previousSuperlativeButton.setDefaultTweenOut(1, {alpha: 0, x:244, y: 626});
@@ -160,7 +160,7 @@ package net.localprojects.elements {
 			nextSuperlativeButton = new IconButton(63, 63, 0x000000, '', 0, 0x000000, null, Assets.getRightArrow());
 			nextSuperlativeButton.buttonMode = true;
 			nextSuperlativeButton.showBackground(false);			
-			nextSuperlativeButton.setStrokeWeight(0);
+			nextSuperlativeButton.setOutlineWeight(0);
 			nextSuperlativeButton.showOutline(false, true);			
 			nextSuperlativeButton.setDefaultTweenIn(1, {alpha: 1, x: 719, y: 626});
 			nextSuperlativeButton.setDefaultTweenOut(1, {alpha:0, x: 719, y: 626});
@@ -205,12 +205,13 @@ package net.localprojects.elements {
 			// wordFrequencyList.setWord(wordCloud.activeWord);
 			
 			// mutate to use current word
+			wordSearchResults.updateSearch(wordCloud.activeWord.getText());
 			
 			// update based on active word?
 			
 			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
-			wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.getText() + '\u2019 used in '  + wordSearchResults.count + ' Opinions');
+			wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.getText() + '\u2019 used in '  + wordSearchResults.resultCount + Utilities.plural(' Opinion', wordSearchResults.resultCount));
 			
 			
 			// behaviors
