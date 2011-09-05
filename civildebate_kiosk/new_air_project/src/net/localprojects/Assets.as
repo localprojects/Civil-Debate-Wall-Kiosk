@@ -26,6 +26,14 @@ package net.localprojects
 		
 		
 		// Bitmaps
+		[Embed(source = '/assets/graphics/orangeRightCarat.png')] private static const orangeRightCaratClass:Class;
+		public static function getOrangeRightCarat():Bitmap { return new orangeRightCaratClass() as Bitmap; };
+		public static const orangeRightCarat:Bitmap = getOrangeRightCarat();
+
+		[Embed(source = '/assets/graphics/blueRightCarat.png')] private static const blueRightCaratClass:Class;
+		public static function getBlueRightCarat():Bitmap { return new blueRightCaratClass() as Bitmap; };
+		public static const blueRightCarat:Bitmap = getBlueRightCarat();		
+		
 		[Embed(source = '/assets/graphics/dashedBar.png')] private static const dashedBarClass:Class;
 		public static function getDashedBar():Bitmap { return new dashedBarClass() as Bitmap; };
 		public static const dashedBar:Bitmap = getDashedBar();		

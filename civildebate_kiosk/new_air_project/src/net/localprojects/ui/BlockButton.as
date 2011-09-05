@@ -104,7 +104,7 @@ package net.localprojects.ui {
 			}
 		}
 		
-		public function setStrokeWeight(weight:Number):void {
+		public function setOutlineWeight(weight:Number):void {
 			strokeWeight = weight;
 			draw();
 		}
@@ -128,7 +128,7 @@ package net.localprojects.ui {
 			labelField.mouseEnabled = false;
 			labelField.gridFitType = GridFitType.NONE;
 			labelField.antiAliasType = AntiAliasType.ADVANCED;
-			labelField.textColor = 0xffffff;
+			labelField.textColor = _labelColor;
 			labelField.width = _buttonWidth;
 			labelField.autoSize = TextFieldAutoSize.CENTER;
 			labelField.text = text;

@@ -577,7 +577,7 @@ package net.localprojects {
 			bigButton.setText('ADD YOUR OPINION', true);
 			likeButton.setCount(CDW.database.debates[CDW.state.activeDebate].likes);			
 			
-			opinion.setHighlight('quo');
+			//opinion.setHighlight('quo');
 			
 			// state mutations
 			debateOverlay.scrollField.scrollTo(0, 0);			
