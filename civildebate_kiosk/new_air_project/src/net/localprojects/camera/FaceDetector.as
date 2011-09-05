@@ -2,7 +2,6 @@ package net.localprojects.camera {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.events.EventDispatcher;
-	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
@@ -15,7 +14,6 @@ package net.localprojects.camera {
 	
 	// Adapted from Mario Klingemann's code
 	// http://www.quasimondo.com/archives/000687.php
-	// License situation TBA
 	public class FaceDetector extends EventDispatcher 	{
 		
 		private var detector:ObjectDetector;
@@ -37,28 +35,21 @@ package net.localprojects.camera {
 		private function init():void {
 			detector = new ObjectDetector();
 			var options:ObjectDetectorOptions = new ObjectDetectorOptions();
-			options.min_size = 10;
+			options.min_size = 20;
 			detector.options = options;
 			detector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, detectionHandler);
 			
 			faceRect = new Rectangle();
 			
-	
 			// respect aspect ratios
-			// TEMP use SLR
-//			if(CDW.settings.webcamOnly) {
-//				maxSourceWidth = Math.round(190);
-//				maxSourceHeight = Math.round(320);
-//			}
-//			else {
-//				maxSourceWidth = 213;
-//				maxSourceHeight = 320;
-//			}
-			
-			
-			maxSourceWidth = 213;
-			maxSourceHeight = 320;			
-
+			if(CDW.settings.webcamOnly) {
+				maxSourceWidth = Math.round(190);
+				maxSourceHeight = Math.round(320);
+			}
+			else {
+				maxSourceWidth = 213;
+				maxSourceHeight = 320;
+			}
 		}
 		
 		private function detectionHandler(e:ObjectDetectorEvent):void {
@@ -72,19 +63,31 @@ package net.localprojects.camera {
 				}
 				else {
 					// find the rectangle that's closest to the center
-					var closestIndex:int = 0;
+					var closesDistancetIndex:int = 0;
 					var closestDistance:Number = Number.MAX_VALUE;
+					
+					var largestAreaIndex:int = 0;				
+					var largestArea:Number = Number.MIN_VALUE;
 					
 					for (var i:int = 0; i < e.rects.length; i++) {
 							var distance:Number = Point.distance(sourceCenter, Utilities.centerPoint(e.rects[i]));
 							
 							if (distance < closestDistance) {
 								closestDistance = distance;
-								closestIndex = i;
+								closesDistancetIndex = i;
 							}
+							
+							var area:Number = e.rects[i].width * e.rects[i].height;
+							
+							if (area > largestArea) {
+								largestArea = area;
+								largestAreaIndex = i;
+							}						
 					}
 					
-					faceRect = e.rects[closestIndex];
+					// choose by distance, or area?
+					// faceRect = e.rects[closestIndex];
+					faceRect = e.rects[largestAreaIndex];
 				}
 			}
 			else {

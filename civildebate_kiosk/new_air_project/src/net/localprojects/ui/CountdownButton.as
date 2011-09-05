@@ -111,10 +111,16 @@ package net.localprojects.ui {
 			arrow = Assets.getCameraArrow();
 			arrow.alpha = 0;
 			Utilities.centerWithin(arrow, this);
-			arrow.y += 10;			
+			arrow.y += 14;			
 			addChild(arrow);
-			
 		}		
+		
+		override protected function beforeTweenIn():void {
+			super.beforeTweenIn();
+			// reset the arrow
+			TweenMax.killTweensOf(arrow);
+			arrow.alpha = 0;
+		}
 				
 		// run the timer
 		public function start():void {

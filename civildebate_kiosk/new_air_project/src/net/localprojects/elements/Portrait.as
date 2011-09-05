@@ -52,13 +52,17 @@ package net.localprojects.elements {
 				
 				if (i is MetaBitmap) {
 				
-				// TODO figure out thresholf
-				if ((i as MetaBitmap).brightness > 200) {
-					CDW.state.questionTextColor = Assets.COLOR_GRAY_90;
+					// TODO figure out thresholf
+					if ((i as MetaBitmap).brightness > 200) {
+						CDW.state.questionTextColor = Assets.COLOR_GRAY_90;
+					}
+					else {
+						CDW.state.questionTextColor = Assets.COLOR_GRAY_15;					
+					}
 				}
 				else {
-					CDW.state.questionTextColor = Assets.COLOR_GRAY_15;					
-				}
+					// it's the placeholder...
+					CDW.state.questionTextColor = Assets.COLOR_GRAY_90;
 				}
 				
 				

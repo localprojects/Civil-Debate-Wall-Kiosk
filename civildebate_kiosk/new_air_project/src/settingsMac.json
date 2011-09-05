@@ -1,11 +1,10 @@
-{	
+{
 	"phoneNumber": "+13525782609",
 	"characterLimit": 140,
 	"halfSize": false,
-	"startFullScreen": true,
-	"webcamOnly": false,
-	"imagePath": "C:/CDWImages/",
+	"startFullScreen": false,
+	"webcamOnly": true,
+	"imagePath": "/Users/Mika/Desktop/CDWImages/",
 	"serverPath": "http://ec2-50-19-25-31.compute-1.amazonaws.com",
-	"inactivityTimeout": 60,
-	"slrTimeout": 5
+	"inactivityTimeout": 60
 }

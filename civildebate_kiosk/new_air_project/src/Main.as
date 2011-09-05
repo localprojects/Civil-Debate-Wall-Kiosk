@@ -1,105 +1,23 @@
 package {
 	
-	import com.bit101.components.ColorChooser;
-	import com.bit101.components.FPSMeter;
-	import com.bit101.components.HSlider;
-	import com.bit101.components.PushButton;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	
 	import flash.display.*;
-	import flash.display.Sprite;
 	import flash.events.*;
-	import flash.events.Event;
-	import flash.geom.Matrix;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	import flash.net.*;
-	import flash.ui.ContextMenu;
-	import flash.ui.ContextMenuItem;
-	import flash.ui.Mouse;
-	import flash.ui.MouseCursor;
-	import flash.ui.MouseCursorData;
-	
-	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	
 	import net.localprojects.*;
 	import net.localprojects.blocks.*;
 	import net.localprojects.camera.*;
 	import net.localprojects.elements.*;
 	import net.localprojects.keyboard.*;
-	import net.localprojects.text.Text;
 	import net.localprojects.ui.*;
-	
-
-	//import net.localprojects.CDW;
 	
 	[SWF(width="1080", height="1920", frameRate="60")]
 	public class Main extends Sprite	{
-		private var slr:SLRCamera;
-		private var faceDetector:FaceDetector;
-		
-		private function onShutter(e:Event):void {
-			trace("shutter");
-			slr.takePhoto();
-		}
-		
-		var sample:Bitmap;
-		
-		private function onPhotoTaken(e:Event):void {
-			trace("got it");
-			
-			
-			
-			 sample = new Bitmap(Utilities.scaleToFit(slr.image.bitmapData, 500, 500));
-			sample.y = 50;
-			addChild(sample);
-			
-			faceDetector.searchBitmap(slr.image.bitmapData);
-			
-			
-			
-			
-			
-		}
-		
-		private function onFaceDetected(e:Event):void {
-			trace("face detection complete");
-			
-			if(faceDetector.faceRect != null) {
-				
-			
-				
-				trace(faceDetector.faceRect);
-				// Scale the face detector rectangle
-				var scaleFactor:Number = slr.image.height / faceDetector.maxSourceHeight; 
-				var scaledFaceRect:Rectangle = Utilities.scaleRect(faceDetector.faceRect, scaleFactor);			
-				
-				
-				var temp:Bitmap = Utilities.cropToFace(slr.image, scaledFaceRect);		
-				var cropped:Bitmap = new Bitmap(Utilities.scaleToFit(temp.bitmapData, 500, 500));
-				cropped.x = 500;
-				addChild(cropped);
-			}
-			
-
-			
-		}
 		
 		public function Main() {
-			faceDetector = new FaceDetector();
-			faceDetector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onFaceDetected);
-				
-				
-			
-			// SLR test area
-			var button:PushButton = new PushButton(this, 0, 0, "Shutter", onShutter);
-			slr = new SLRCamera();
-
-			slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoTaken);
-			
-	
-			
 			/* 
 			// TEXT DEVELOPMENT ZONE
 			
@@ -143,10 +61,8 @@ package {
 			
 			*/
 			
-			//var civilDebateWall:CDW = new CDW();
-			//addChild(civilDebateWall);
-			
-
+			var civilDebateWall:CDW = new CDW();
+			addChild(civilDebateWall);
 		}
 	}
 }

@@ -4,9 +4,10 @@ package net.localprojects.camera
 	import flash.display.*;
 	import flash.events.*;
 	import flash.filesystem.*;
+	import flash.geom.Matrix;
 	import flash.net.*;
 	import flash.utils.*;
-	import flash.geom.Matrix;
+	
 	import net.localprojects.*;
 	
 	
@@ -14,9 +15,13 @@ package net.localprojects.camera
 	public class SLRCamera extends EventDispatcher 
 	{
 		
+		public static const PHOTO_TIMEOUT_EVENT:String = "photoTimeoutEvent";
+		
 		private var slrProcess:NativeProcess;
 		private var folderWatchTimer:Timer;
 		private var writeDelayTimer:Timer; // wait until the camera is done writing.
+		private var timeoutTimer:Timer;
+		private var onTimeoutFunction:Function;
 		
 		private var imageFile:File;
 		private var imageFolder:File;
@@ -44,7 +49,10 @@ package net.localprojects.camera
 			//var formatButton:PushButton = new PushButton(this, 10, 40, "FORMAT CARD", onFormatButton);
 			
 			folderWatchTimer = new Timer(100);
-			folderWatchTimer.addEventListener(TimerEvent.TIMER, onCheckFolder);				
+			folderWatchTimer.addEventListener(TimerEvent.TIMER, onCheckFolder);
+			
+			timeoutTimer = new Timer(CDW.settings.slrTimeout * 1000); // go back to photo page after five seconds... assume focus is lost
+			timeoutTimer.addEventListener(TimerEvent.TIMER, onTimeout);
 		}
 		
 		// move this to utils
@@ -52,6 +60,10 @@ package net.localprojects.camera
 		public function fileToWindowsPath(f:File):String {
 			// double the slashes and add trailing
 			return f.nativePath.replace('\\', '//') + '//';
+		}
+		
+		public function setOnTimeout(f:Function):void {
+			onTimeoutFunction = f;
 		}
 		
 		private function listImages():Array {
@@ -117,6 +129,9 @@ package net.localprojects.camera
 		}
 		
 		public function takePhoto():void {
+			CDW.dashboard.log("Starting timeout timer");
+			timeoutTimer.reset();
+			timeoutTimer.start();
 			slrProcess.standardInput.writeUTFBytes('p\n');
 		}
 		
@@ -149,6 +164,11 @@ package net.localprojects.camera
 			// TODO now move or delete the image!
 		}
 		
+		private function onTimeout(e:TimerEvent):void {
+			timeoutTimer.stop();
+			timeoutTimer.reset();
+			onTimeoutFunction();
+		}
 		
 		
 		private function onOutputData(event:ProgressEvent):void 	{
@@ -168,6 +188,9 @@ package net.localprojects.camera
 						onDownloadComplete();	
 					}
 					else if (line.indexOf("Saving image") > -1) {
+						CDW.dashboard.log("Stopping timeout timer");
+						timeoutTimer.stop();
+						
 						var fileName:String = line.split(' ')[2];
 						trace("Creating file: " + fileName);
 						imageFile = new File();
