@@ -30,6 +30,10 @@ package net.localprojects
 		public static function getDashedBar():Bitmap { return new dashedBarClass() as Bitmap; };
 		public static const dashedBar:Bitmap = getDashedBar();		
 		
+		[Embed(source = '/assets/graphics/closeButton.png')] private static const closeButtonClass:Class;
+		public static function getCloseButton():Bitmap { return new closeButtonClass() as Bitmap; };
+		public static const closeButton:Bitmap = getCloseButton();		
+		
 		[Embed(source = '/assets/graphics/roundColon.png')] private static const roundColonClass:Class;
 		public static function getRoundColon():Bitmap { return new roundColonClass() as Bitmap; };
 		public static const roundColon:Bitmap = getRoundColon();		

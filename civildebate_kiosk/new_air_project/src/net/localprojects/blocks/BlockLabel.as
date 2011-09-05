@@ -223,6 +223,10 @@ package net.localprojects.blocks {
 			return w;
 		}
 		
+		
+		public function getText():String {
+			return textField.text;
+		}
 			
 		
 		public function afterFade():void {

@@ -83,7 +83,33 @@ package net.localprojects {
 			}
 			
 			return file;
-		}	
+		}
+		
+		
+		// returns a 2D array of start / end indexes for the search term
+		public static function searchString(needle:String, haystack:String, caseSensitive:Boolean = false):Array {
+			
+			if (!caseSensitive) {
+				needle = needle.toLowerCase();
+				haystack = haystack.toLowerCase();				
+			}
+			
+			var indexes:Array = [];
+			var startIndex:int = 0;
+			
+			while (startIndex < haystack.length) {
+				var tempIndex:int = haystack.indexOf(needle, startIndex);
+				if (tempIndex >= 0) {
+					indexes.push(new Array(tempIndex, tempIndex + needle.length));
+					startIndex += tempIndex + needle.length;					
+				}
+				else {
+					break;
+				}
+			}
+			
+			return indexes;
+		}		
 		
 		//Returns a string in the format
 		//200831415144243
