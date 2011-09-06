@@ -32,7 +32,7 @@ package net.localprojects.blocks {
 		
 
 		protected var _leading:Number;
-		protected var background:Shape;
+		public var background:Shape;
 		protected var highlightLayer:Shape;
 
 		
