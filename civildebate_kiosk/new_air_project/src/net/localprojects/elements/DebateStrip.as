@@ -110,6 +110,7 @@ package net.localprojects.elements {
 			targetThumbnail.setBackgroundColor(targetThumbnail.downBackgroundColor, true);
 		}
 		
+		private var before:Boolean;
 		
 		private function onThumbnailMouseUp(e:MouseEvent):void {
 			targetThumbnail = e.currentTarget as ThumbnailButton;
@@ -122,22 +123,23 @@ package net.localprojects.elements {
 					//setActiveThumbnail(targetThumbnail.debateID);
 					
 					// is it to the left, or the right?
-					var before:Boolean = true;
+					before = true;
 					
 					for (var debateID:* in CDW.database.debates) {
 						if (debateID == CDW.state.activeDebate) before = false;
 						if (debateID == targetThumbnail.debateID) break;
 					}
 					
-					// transition to it
-					if (before) {
-						CDW.state.setActiveDebate(CDW.state.activeDebate, targetThumbnail.debateID, CDW.state.nextDebate);
-						CDW.view.previousDebate();						
+					if (CDW.state.debateOverlayOpen) {
+						// go home, then transition
+						CDW.view.homeView();
+						TweenMax.delayedCall(1, finishTransition);
 					}
-					else {						
-						CDW.state.setActiveDebate(CDW.state.activeDebate, CDW.state.previousDebate, targetThumbnail.debateID);
-						CDW.view.nextDebate();
+					else {
+						// get right to it
+						finishTransition();
 					}
+
 						
 				}
 			}
@@ -147,6 +149,18 @@ package net.localprojects.elements {
 
 			// Like nothing happened (unless it's active!)
 			if (activeThumbnail != targetThumbnail) targetThumbnail.setBackgroundColor(0xffffff);			
+		}
+		
+		private function finishTransition():void {
+			// transition to it
+			if (before) {
+				CDW.state.setActiveDebate(CDW.state.activeDebate, targetThumbnail.debateID, CDW.state.nextDebate);
+				CDW.view.previousDebate();						
+			}
+			else {						
+				CDW.state.setActiveDebate(CDW.state.activeDebate, CDW.state.previousDebate, targetThumbnail.debateID);
+				CDW.view.nextDebate();
+			}			
 		}
 		
 		

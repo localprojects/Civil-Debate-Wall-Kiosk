@@ -121,7 +121,7 @@ package net.localprojects.elements {
 			flagButton.setStrokeColor(Assets.COLOR_GRAY_15);
 			flagButton.visible = true;
 			flagButton.x = 791;
-			flagButton.y = 0;
+			flagButton.y = 8;
 			
 			addChild(flagButton);
 			flagButton.setOnDown(onDown);			

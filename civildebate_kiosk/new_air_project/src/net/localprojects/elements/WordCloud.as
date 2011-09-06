@@ -156,23 +156,14 @@ package net.localprojects.elements {
 			
 			if (selectedWord == activeWord) {
 				// un-toggle
-				for (var n:int = 0; n < words.length; n++) {
-					words[n].tween(0.5, {colorTransform: {tint: 0xffffff, tintAmount: 0}});
-				}
-				
-				trace("deselected");
-				this.dispatchEvent(new Event(EVENT_WORD_DESELECTED, true, true));
-				activeWord = null;				
+				deselect();
+				this.dispatchEvent(new Event(EVENT_WORD_DESELECTED, true, true));			
 			}			
 			else {
 				activeWord = selectedWord;
 				
 				for (var m:int = 0; m < words.length; m++) {
 					if (words[m] != activeWord) {
-						
-						
-						
-						
 						words[m].tween(0.5, {colorTransform: {tint: 0xffffff, tintAmount: 0.85}});
 					}
 					else {
@@ -186,6 +177,14 @@ package net.localprojects.elements {
 			
 			
 			
+		}
+		
+		
+		public function deselect():void {
+			for (var n:int = 0; n < words.length; n++) {
+				words[n].tween(0.5, {colorTransform: {tint: 0xffffff, tintAmount: 0}});
+			}
+			activeWord = null;
 		}
 		
 		private function onUp(e:MouseEvent):void {

@@ -15,7 +15,7 @@ package net.localprojects.blocks {
 		
 		private var _backgroundWidth:Number;
 		private var _backgroundHeight:Number;
-		private var bar:Bitmap;
+		public var bar:Bitmap;
 		
 		public function BlockLabelBar(text:String, textSize:Number, textColor:uint, backgroundWidth:Number, backgroundHeight:Number, backgroundColor:uint, font:String=null) {
 			_backgroundColor = backgroundColor;
