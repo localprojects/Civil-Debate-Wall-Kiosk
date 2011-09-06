@@ -412,6 +412,7 @@ package net.localprojects {
 			addChild(editTextButton);
 			
 			// y is dynamic
+			// disabled per latest indesign file
 			editTextInstructions = new BlockLabel('EDITING TEXT...', 26, 0xffffff, 0x000000, Assets.FONT_HEAVY);
 			editTextInstructions.setDefaultTweenIn(1, {x: 525});
 			editTextInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});
@@ -625,7 +626,9 @@ package net.localprojects {
 			}
 			
 			
-			opinion.y = 1347 - opinion.height;
+
+			
+			
 			leftOpinion.y = 1347 - leftOpinion.height;
 			rightOpinion.y = 1347 - rightOpinion.height;			
 						
@@ -726,7 +729,7 @@ package net.localprojects {
 			rightNametag.tweenIn();
 			leftQuote.tweenIn();
 			rightQuote.tweenIn();
-			opinion.tweenIn();
+			
 			rightOpinion.tweenIn();
 			leftOpinion.tweenIn();
 			bigButton.tweenIn();
@@ -739,13 +742,24 @@ package net.localprojects {
 			// is it a transition?
 			if (CDW.state.activeView == CDW.state.lastView) {
 				// it's a transition
-				debateButton.tweenIn(-1, {y: opinion.y - 195});
+
+				debateButton.tweenIn(-1, {y: (1347 - opinion.height) - 195});
 			}
 			else {
 				// we're landing here from somewhere else, snap to it
-				debateButton.y = opinion.y - 195;
+								
+				debateButton.y = (1347 - opinion.height) - 195;
 				debateButton.tweenIn();				
 			}
+			
+			if (CDW.state.activeView == CDW.state.lastView) {
+				opinion.y = 1347 - opinion.height;
+				opinion.tweenIn();				
+			}
+			else {
+				opinion.tweenIn(-1, {y: 1347 - opinion.height});				
+			}
+			
 			
 			
 			// Fire the debate overlay?
@@ -771,6 +785,9 @@ package net.localprojects {
 		
 		public function nextDebate():void {
 			if (CDW.state.nextDebate != null) { 	
+				
+				
+				
 				trace('Transition to next.');
 				CDW.state.setActiveDebate(CDW.state.nextDebate);
 				CDW.view.leftOpinion.x += stageWidth;
@@ -789,7 +806,9 @@ package net.localprojects {
 		}
 		
 		public function previousDebate():void {
-			if (CDW.state.previousDebate != null) {			
+			if (CDW.state.previousDebate != null) {		
+				
+
 				trace('Transition to previous.');
 				CDW.state.setActiveDebate(CDW.state.previousDebate);
 				CDW.view.leftOpinion.x -= stageWidth;
@@ -848,7 +867,7 @@ package net.localprojects {
 			// TODO set stance etc?
 			portrait.setImage(CDW.database.getActivePortrait());
 			question.setTextColor(CDW.state.questionTextColor);			
-			byline.y = 410 + opinion.height + 30;
+			byline.y = 410 + opinion.height + 38;
 			byline.setBackgroundColor(CDW.state.activeStanceColorMedium, true);
 			
 			debateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
@@ -955,7 +974,7 @@ package net.localprojects {
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
 		}
 		
-		private function removeFlagOverlayView():void {
+		private function removeFlagOverlayView(e:Event):void {
 			CDW.state.activeView = CDW.state.lastView; // revert the view, since it was just an overlay
 			CDW.state.lastView = flagOverlayView;
 						
@@ -1061,6 +1080,8 @@ package net.localprojects {
 			CDW.inactivityTimer.arm();
 			
 			// mutations
+			opinion.y = 1347 - opinion.height; // return opinion to starting location (for entry via "debate me" button)
+			
 			portrait.setImage(Assets.portraitPlaceholder);
 			question.setTextColor(CDW.state.questionTextColor);
 			
@@ -1739,7 +1760,7 @@ package net.localprojects {
 			saveButton.tweenIn(-1, {x: 589});
 			
 			editTextInstructions.y = editOpinion.y - editTextInstructions.height - 30; 
-			editTextInstructions.tweenIn();
+			//editTextInstructions.tweenIn(); // disabled per latest design
 			keyboard.tweenIn();
 			
 			opinion.tweenOut(0);

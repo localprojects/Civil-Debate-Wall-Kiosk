@@ -12,6 +12,7 @@ package net.localprojects {
 		private var testOverlayCheckbox:CheckBox;
 		private var overlaySlider:Slider;
 		private var focalLengthSlider:Slider;
+		private var barTestSlider:Slider;		
 		
 		
 		private var testImages:Array;
@@ -36,7 +37,12 @@ package net.localprojects {
 			focalLengthSlider = new Slider("horizontal", this, 120, 120, onFocalLengthSlider);
 			focalLengthSlider.minimum = 1;
 			focalLengthSlider.maximum = 3;
-			focalLengthSlider.value = 1;			
+			focalLengthSlider.value = 1;	
+			
+			barTestSlider = new Slider("horizontal", this, 120, 130, onBarTestSlider);
+			barTestSlider.minimum = 0;
+			barTestSlider.maximum = 100;
+			barTestSlider.value = 50;				
 			
 			viewChooser = new ComboBox(this, 5, 140, 'View');
 			viewChooser.addItem('Home');
@@ -69,6 +75,12 @@ package net.localprojects {
 		private function onFocalLengthSlider(e:Event):void {
 			CDW.view.portraitCamera.setFocalLength(focalLengthSlider.value);
 		}
+		
+		private function onBarTestSlider(e:Event):void {
+			CDW.view.statsOverlay.voteStatBar.setLabels(Math.round(barTestSlider.value * 10), Math.round(barTestSlider.value * 100));
+			CDW.view.statsOverlay.voteStatBar.barPercent = barTestSlider.value;
+			
+		}		
 		
 		private function onOverlayToggle(e:Event):void {
 			CDW.testOverlay.visible = testOverlayCheckbox.selected;

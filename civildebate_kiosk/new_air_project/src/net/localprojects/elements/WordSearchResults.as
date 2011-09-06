@@ -10,9 +10,8 @@ package net.localprojects.elements {
 	
 	public class WordSearchResults extends BlockBase {
 		
-		private var scrollField:InertialScrollField;		
-		public var resultCount:int = 3;
-		
+		public var scrollField:InertialScrollField;		
+		public var resultCount:int = 3;		
 		
 		public function WordSearchResults()	{
 			super();
@@ -26,7 +25,7 @@ package net.localprojects.elements {
 			resultCount = 0;
 			scrollField.scrollSheet.y = 0;
 			
-			var paddingBottom:Number = 30;
+			var paddingBottom:Number = 15;
 			var yOffset:Number = 0;
 			
 			for each (var debate:Object in CDW.database.debates) {

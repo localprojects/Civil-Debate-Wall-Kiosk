@@ -19,13 +19,9 @@ package net.localprojects.elements {
 		private var arrowWidth:Number = 24;
 		private var midPoint:Number = 0;
 		
-		
 		private var overlay:Sprite;
-		private var leftLabel:BlockButton; // use button for now, better text transitions
-		private var rightLabel:BlockButton; // use button for now, better text transitions		
-		private var leftDash:Bitmap;
-		private var rightDash:Bitmap;
-		
+		private var yesLabel:BarLabel;
+		private var noLabel:BarLabel;		
 		
 		public function VoteStatBar()	{
 			super();
@@ -50,32 +46,16 @@ package net.localprojects.elements {
 			
 			overlay = new Sprite();
 			
-			leftDash = Assets.getDashedBar();
-			overlay.addChild(leftDash);			
+			yesLabel = new BarLabel('YES!', 255);
+			yesLabel.visible = true;
+			overlay.addChild(yesLabel);
 			
+			noLabel = new BarLabel('NO!', 5);
+			noLabel.visible = true;
+			noLabel.x = yesLabel.width + 30;
+			overlay.addChild(noLabel);
 			
-			leftLabel = new BlockButton(160, 57, 0x000000, 'Left', 26);
-			leftLabel.setOutlineWeight(0);
-			leftLabel.shiftBaseline(0);
-			leftLabel.showOutline(false);
-			leftLabel.showBackground(false);
-			leftLabel.visible = true;
-			overlay.addChild(leftLabel);
-			
-			rightLabel = new BlockButton(160, 57, 0x000000, 'Right', 26);
-			rightLabel.setOutlineWeight(0);
-			rightLabel.shiftBaseline(0);
-			rightLabel.showOutline(false);
-			rightLabel.showBackground(false);
-			rightLabel.visible = true;
-			rightLabel.x = 160;
-			overlay.addChild(rightLabel);			
-
-			rightDash = Assets.getDashedBar();
-			rightDash.x = 320;
-			overlay.addChild(rightDash);
-	
-			overlay.y = (barHeight - overlay.height) / 2;
+			overlay.y = 36;
 			addChild(overlay);
 			
 			barPercent = 50;
@@ -83,8 +63,8 @@ package net.localprojects.elements {
 		
 		public function get barPercent():Number {
 			return _barPercent;
-			
 		}
+		
 		public function set barPercent(n:Number):void {
 			_barPercent = n; // limit to 0 - 100
 			
@@ -103,17 +83,22 @@ package net.localprojects.elements {
 			bar.graphics.lineTo(-arrowWidth, 0);
 			bar.graphics.endFill();
 			
-			overlay.x = midPoint - 150;
+			overlay.x = midPoint - 88;
 			
 			
 			if(overlay.x < 20) overlay.x = 20;
-			if(overlay.x + overlay.width > barWidth - 20) overlay.x = barWidth - 20 - overlay.width;			
+			if(overlay.x + overlay.width > barWidth - 20) overlay.x = barWidth - 20 - overlay.width;
+			
+			// figure out the ratio?
+			yesLabel.setSize(_barPercent);
+			noLabel.setSize(Math.abs(100 - _barPercent));			
+			
+			
 		}
 		
-		
-		public function setLabels(ls:String, rs:String):void {
-			leftLabel.setLabel(ls);
-			rightLabel.setLabel(rs);			
+		public function setLabels(yesValue:uint, noValue:uint):void {
+			yesLabel.setCount(yesValue);
+			noLabel.setCount(noValue);
 		}
 		
 		

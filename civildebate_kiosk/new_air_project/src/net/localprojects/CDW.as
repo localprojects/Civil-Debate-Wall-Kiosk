@@ -2,13 +2,13 @@ package net.localprojects {
 
 	import com.bit101.components.FPSMeter;
 	import com.greensock.*;
-	import com.greensock.plugins.*;	
 	import com.greensock.easing.*;
-	
+	import com.greensock.plugins.*;
 	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
+	import flash.system.Capabilities;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	import flash.ui.Mouse;
@@ -20,12 +20,13 @@ package net.localprojects {
 	import net.localprojects.elements.*;
 	import net.localprojects.keyboard.*;
 	import net.localprojects.ui.*;
-	import flash.system.Capabilities;
 	
 	// Greensock plugins
 	TweenPlugin.activate([ThrowPropsPlugin]);
 	TweenPlugin.activate([MotionBlurPlugin]);			
 	TweenPlugin.activate([CacheAsBitmapPlugin]);	
+	TweenPlugin.activate([TransformAroundCenterPlugin]);
+		
 	FastEase.activate([Linear, Quad, Cubic, Quart, Quint, Strong]);
 	
 	public class CDW extends Sprite {

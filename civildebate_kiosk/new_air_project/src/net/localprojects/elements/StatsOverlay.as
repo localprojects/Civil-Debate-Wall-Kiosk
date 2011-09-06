@@ -17,25 +17,18 @@ package net.localprojects.elements {
 		
 
 		// blocks		
-		public var homeButton:BlockButton;
-		
-		
-
-		
 		private var voteTitleBar:BlockLabelBar;
 		private var voteTitleLeftDot:Shape;
 		private var voteTitleRightDot:Shape;		
-		private var voteStatBar:VoteStatBar;
+		public var voteStatBar:VoteStatBar;
 		
 		private var wordTitleBar:BlockLabelBar;
 		private var wordTitleLeftDot:Shape;
 		private var wordTitleRightDot:Shape;				
 		private var wordCloud:WordCloud;
-		private var wordSearchResults:WordSearchResults;
-		private var closeWordCloudButton:IconButton;
-		
 		private var wordCloudResultsTitleBar:BlockLabelBar;
-		
+		private var closeWordCloudButton:IconButton;		
+		private var wordSearchResults:WordSearchResults;
 		
 		private var superlativesTitleBar:BlockLabelBar;
 		private var nextSuperlativeButton:IconButton;
@@ -43,6 +36,8 @@ package net.localprojects.elements {
 		private var superlativesPortrait:Portrait;
 		
 		private var mostDebatedPanel:MostDebatedPanel;
+		
+		public var homeButton:BlockButton;		
 		
 		
 		public function StatsOverlay() {
@@ -63,32 +58,18 @@ package net.localprojects.elements {
 			this.graphics.drawRect(0, 0, 1022, 1626);
 			this.graphics.endFill();
 			
-			
-			// no animation for this at the moment
-			// TODO put it in the parent block instead?
-			homeButton = new BlockButton(1022, 63, 0x000000, 'BACK TO DEBATE', 34, 0xffffff, Assets.FONT_HEAVY);
-			
-			homeButton.setStrokeColor(Assets.COLOR_GRAY_15);
-			homeButton.setDefaultTweenIn(0, {x:0, y: 1563});
-			homeButton.setDefaultTweenOut(0, {x:0, y: 1563});
-			addChild(homeButton);
-					
-			
 			// Voting bar
 			voteTitleBar = new BlockLabelBar("Total Number of Votes", 26, 0xffffff, 1022, 63, 0x000000, Assets.FONT_BOLD);
 			voteTitleBar.setDefaultTweenIn(0, {x:0, y: 0});
-			voteTitleBar.setDefaultTweenOut(0, {x:0, y: 0});
-			
+			voteTitleBar.setDefaultTweenOut(0, {x:0, y: 0});			
 			voteTitleLeftDot = generateDot(Assets.COLOR_YES_LIGHT);
 			voteTitleLeftDot.x = 248;
 			voteTitleLeftDot.y = 27;
 			voteTitleBar.addChild(voteTitleLeftDot);
-			
 			voteTitleRightDot = generateDot(Assets.COLOR_NO_LIGHT);
 			voteTitleRightDot.x = 764;
 			voteTitleRightDot.y = 27;
 			voteTitleBar.addChild(voteTitleRightDot);			
-
 			addChild(voteTitleBar);			
 			
 			voteStatBar = new VoteStatBar();
@@ -119,12 +100,16 @@ package net.localprojects.elements {
 			wordCloud.setDefaultTweenOut(0, {x:0, y: 312});
 			addChild(wordCloud);						
 			
-			wordCloud.addEventListener(WordCloud.EVENT_WORD_SELECTED, frequentWordView);
+			wordCloud.addEventListener(WordCloud.EVENT_WORD_SELECTED, onWordSelected);
 			wordCloud.addEventListener(WordCloud.EVENT_WORD_DESELECTED, mostDebatedView);
 			
 			wordSearchResults = new WordSearchResults();
 			wordSearchResults.setDefaultTweenIn(1, {alpha: 1, x:0, y: 702});
-			wordSearchResults.setDefaultTweenOut(1, {alpha: 0, x:0, y: 702});
+			wordSearchResults.setDefaultTweenOut(1, {alpha: 1, x:0, y: BlockBase.OFF_BOTTOM_EDGE});
+			wordSearchResults.scrollField.scrollSheet.addEventListener(SearchResult.EVENT_GOTO_DEBATE, onGoToDebate, true);
+			wordSearchResults.scrollField.scrollSheet.addEventListener(Comment.EVENT_FLAG, onFlag, true);			
+			wordSearchResults.scrollField.scrollSheet.addEventListener(Comment.EVENT_BUTTON_DOWN, onDown, true);
+			wordSearchResults.scrollField.scrollSheet.addEventListener(Comment.EVENT_DEBATE, onDown, true);			
 			addChild(wordSearchResults);
 
 			closeWordCloudButton = new IconButton(63, 63, 0x000000, '', 0, 0x000000, null, Assets.getCloseButton());
@@ -173,7 +158,6 @@ package net.localprojects.elements {
 			superlativesPortrait.setImage(Assets.getMostDebatedPortraitPlaceholder(), true);			
 			superlativesPortrait.setDefaultTweenIn(1, {x: 0, y: 705});
 			superlativesPortrait.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 705});			
-			
 			addChild(superlativesPortrait);
 			
 			mostDebatedPanel = new MostDebatedPanel();
@@ -181,13 +165,19 @@ package net.localprojects.elements {
 			mostDebatedPanel.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 705});			
 			addChild(mostDebatedPanel);			
 			
+			homeButton = new BlockButton(1022, 63, 0x000000, 'BACK TO DEBATE', 34, 0xffffff, Assets.FONT_HEAVY);
+			homeButton.setStrokeColor(Assets.COLOR_GRAY_15);
+			homeButton.setDefaultTweenIn(0, {x:0, y: 1563});
+			homeButton.setDefaultTweenOut(0, {x:0, y: 1563});
+			addChild(homeButton);			
+			
+			
 			// start with word frequency
 			update();
 			mostDebatedView();
-			
 			showDebateTotals();
 			
-			this.addEventListener(Event.ENTER_FRAME, onFrame);
+			//this.addEventListener(Event.ENTER_FRAME, onFrame);
 		}
 		
 		private function onFrame(e:Event):void {
@@ -197,42 +187,68 @@ package net.localprojects.elements {
 		
 		public function frequentWordView(...args):void {
 			markAllInactive();
-
-			
 			trace("Frequent word view");
-			
-			
-			// wordFrequencyList.setWord(wordCloud.activeWord);
-			
+						
 			// mutate to use current word
 			wordSearchResults.updateSearch(wordCloud.activeWord.getText());
 			
-			// update based on active word?
 			
-			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
 			wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.getText() + '\u2019 used in '  + wordSearchResults.resultCount + Utilities.plural(' Opinion', wordSearchResults.resultCount));
 			
+			// update based on active word?			
+			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			//wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.getText() + '\u2019 used in '  + wordSearchResults.resultCount + Utilities.plural(' Opinion', wordSearchResults.resultCount));
 			
 			// behaviors
 			closeWordCloudButton.setOnClick(mostDebatedView);
-			
 			
 			// blocks
 			voteTitleBar.tweenIn();
 			voteStatBar.tweenIn();
 
 			wordTitleBar.tweenIn();
-			closeWordCloudButton.tweenIn();			
+			closeWordCloudButton.tweenIn();
 			wordCloud.tweenIn();
 			wordCloudResultsTitleBar.tweenIn();			
 			wordSearchResults.tweenIn();
-			homeButton.tweenIn();			
+			homeButton.tweenIn();
 			
-			
-			tweenOutInactive();			
+			tweenOutInactive();	
 		}
 		
+		private function onWordSelected(e:Event):void {
+			wordCloudResultsTitleBar.setText('');			
+				
+			if (wordSearchResults.visible) {
+				// switching words				
+				wordSearchResults.tweenOut(0.5, {onComplete: frequentWordView});
+			}
+			else {
+				// opening for first time
+				frequentWordView();
+			}
+		}
+		
+		
+		private function onGoToDebate(e:Event):void {
+			// TODO	
+		}
+		
+		private function onDebate(e:Event):void {
+			// TODO
+		}
+		
+		private function onFlag(e:Event):void {
+			// TODO			
+		}
+		
+		private function onDown(e:Event):void {
+			// TODO			
+		}
+		
+		
+
 		public function mostDebatedView(...args):void {
 			markAllInactive();
 			
@@ -240,6 +256,7 @@ package net.localprojects.elements {
 			superlativesTitleBar.setText('Most Debated Opinions');
 			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			wordCloud.deselect();
 			
 			previousSuperlativeButton.setOnClick(null);
 			nextSuperlativeButton.setOnClick(mostLikedView);
@@ -315,23 +332,6 @@ package net.localprojects.elements {
 			tweenOutInactive();					
 		}				
 		
-
-
-		// like overlays
-		public function showLikeTotals(...args):void {			
-			// behaviors
-						
-			
-			// mutation
-			voteTitleBar.setText('Total Number of Votes');
-			var yesCount:int = parseInt(CDW.database.stats['likeTotals']['yes']);
-			var noCount:int = parseInt(CDW.database.stats['likeTotals']['no']);			
-			var targetPercent:Number = (yesCount / (noCount + yesCount)) * 100;
-
-			// tween in
-			voteStatBar.setLabels(yesCount + ' ' + Utilities.plural('Like', yesCount), noCount + ' ' + Utilities.plural('Like', noCount));
-			TweenMax.to(voteStatBar, 1, {barPercent: targetPercent, ease: Quart.easeInOut});
-		}
 		
 		public function showDebateTotals(...args):void {			
 			// behaviors;			
@@ -343,7 +343,7 @@ package net.localprojects.elements {
 			var targetPercent:Number = (yesCount / (noCount + yesCount)) * 100;
 			
 			// tween in
-			voteStatBar.setLabels(yesCount + ' Yes', noCount + ' No');
+			voteStatBar.setLabels(yesCount, noCount);
 			TweenMax.to(voteStatBar, 1, {barPercent: targetPercent, ease: Quart.easeInOut});
 		}
 		
