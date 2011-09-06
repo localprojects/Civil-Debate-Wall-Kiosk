@@ -2,8 +2,6 @@ package net.localprojects.elements {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
-	import fl.motion.Color;
-	
 	import flash.display.Shape;
 	import flash.events.Event;
 	
@@ -15,13 +13,13 @@ package net.localprojects.elements {
 	
 	public class StatsOverlay extends BlockBase {
 		
-
-		// blocks		
+		// vote bar
 		private var voteTitleBar:BlockLabelBar;
 		private var voteTitleLeftDot:Shape;
 		private var voteTitleRightDot:Shape;		
 		public var voteStatBar:VoteStatBar;
 		
+		// word cloud and search results
 		private var wordTitleBar:BlockLabelBar;
 		private var wordTitleLeftDot:Shape;
 		private var wordTitleRightDot:Shape;				
@@ -30,13 +28,18 @@ package net.localprojects.elements {
 		private var closeWordCloudButton:IconButton;		
 		private var wordSearchResults:WordSearchResults;
 		
+		// superlatives
 		private var superlativesTitleBar:BlockLabelBar;
 		private var nextSuperlativeButton:IconButton;
 		private var previousSuperlativeButton:IconButton;
-		private var superlativesPortrait:Portrait;
+		private var superlativesPortrait:SuperlativesPortrait;
 		
-		private var mostDebatedPanel:MostDebatedPanel;
 		
+		
+		private var mostDebatedList:DebateList;
+		private var mostLikedList:DebateList;
+		
+		// home
 		public var homeButton:BlockButton;		
 		
 		
@@ -45,13 +48,6 @@ package net.localprojects.elements {
 			init();
 		}
 		
-		private function generateDot(c:uint):Shape {
-			var shape:Shape = new Shape();
-			shape.graphics.beginFill(c);
-			shape.graphics.drawCircle(0, 0, 3.6);
-			shape.graphics.endFill();
-			return shape;
-		}
 		
 		private function init():void {
 			this.graphics.beginFill(0xffffff);
@@ -151,19 +147,20 @@ package net.localprojects.elements {
 			nextSuperlativeButton.setDefaultTweenOut(1, {alpha:0, x: 719, y: 626});
 			addChild(nextSuperlativeButton);		
 			
-			superlativesPortrait = new Portrait();
-			// TODO pass width and height into constructor?
-//			superlativesPortrait.width = 504;
-//			superlativesPortrait.height= 844;
-			superlativesPortrait.setImage(Assets.getMostDebatedPortraitPlaceholder(), true);			
+			superlativesPortrait = new SuperlativesPortrait();
 			superlativesPortrait.setDefaultTweenIn(1, {x: 0, y: 705});
 			superlativesPortrait.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 705});			
 			addChild(superlativesPortrait);
 			
-			mostDebatedPanel = new MostDebatedPanel();
-			mostDebatedPanel.setDefaultTweenIn(1, {x: 519, y: 705});
-			mostDebatedPanel.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 705});			
-			addChild(mostDebatedPanel);			
+			mostDebatedList = new DebateList();
+			mostDebatedList.setDefaultTweenIn(1, {x: 519, y: 705});
+			mostDebatedList.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 705});			
+			addChild(mostDebatedList);
+			
+			mostLikedList = new DebateList();
+			mostLikedList.setDefaultTweenIn(1, {x: 519, y: 705});
+			mostLikedList.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 705});			
+			addChild(mostLikedList);			
 			
 			homeButton = new BlockButton(1022, 63, 0x000000, 'BACK TO DEBATE', 34, 0xffffff, Assets.FONT_HEAVY);
 			homeButton.setStrokeColor(Assets.COLOR_GRAY_15);
@@ -252,14 +249,18 @@ package net.localprojects.elements {
 		public function mostDebatedView(...args):void {
 			markAllInactive();
 			
-
 			superlativesTitleBar.setText('Most Debated Opinions');
 			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
 			wordCloud.deselect();
 			
+			// set the first item by default
+			(mostDebatedList.getChildAt(0) as DebateListItem).activate();
+			superlativesPortrait.setPost(CDW.database.getMostDebatedList()[0], true);			
+			
 			previousSuperlativeButton.setOnClick(null);
 			nextSuperlativeButton.setOnClick(mostLikedView);
+			mostDebatedList.setOnSelected(onMostDebatedSelected);
 			
 			voteTitleBar.tweenIn();
 			voteStatBar.tweenIn();
@@ -271,43 +272,72 @@ package net.localprojects.elements {
 			nextSuperlativeButton.tweenIn();
 			
 			superlativesPortrait.tweenIn();
-			mostDebatedPanel.tweenIn();
+			mostDebatedList.tweenIn();			
+			
 			homeButton.tweenIn();				
 			
 			tweenOutInactive();					
 		}
 		
+		private function onMostDebatedSelected(item:DebateListItem):void {
+			trace("Selected item " + item.debateID);
+			superlativesPortrait.setPost(item.debateID);
+		}
+		
+		
+		
+		// REDO BASED ON MOST DEBATED
 		public function mostLikedView(...args):void {
 			markAllInactive();
 			
-
-			superlativesTitleBar.setText('Most Liked Debates');
+			superlativesTitleBar.setText('Most Liked Opinions');
 			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			wordCloud.deselect();
+			
+			// set the first item by default
+			
+			//mostLikedList.deactivateAll();
+			(mostLikedList.getChildAt(0) as DebateListItem).activate();
+			superlativesPortrait.setPost(CDW.database.getMostLikedList()[0], true);			
 			
 			previousSuperlativeButton.setOnClick(mostDebatedView);
-			nextSuperlativeButton.setOnClick(mostActiveUsersView);			
-			
+			nextSuperlativeButton.setOnClick(null);
+			mostLikedList.setOnSelected(onMostLikedSelected);
 			
 			voteTitleBar.tweenIn();
 			voteStatBar.tweenIn();
 			wordTitleBar.tweenIn();
 			wordCloud.tweenIn();
 			superlativesTitleBar.tweenIn();
-			nextSuperlativeButton.tweenIn();
-			previousSuperlativeButton.tweenIn();			
+			
+			previousSuperlativeButton.tweenIn();
+			nextSuperlativeButton.tweenIn(1, {alpha: 0.25});		
+			
+			
 			superlativesPortrait.tweenIn();
-			mostDebatedPanel.tweenIn();
+			mostLikedList.tweenIn();			
+			
 			homeButton.tweenIn();				
 			
 			tweenOutInactive();					
-		}		
+		}
 		
+		private function onMostLikedSelected(item:DebateListItem):void {
+			trace("Selected item " + item.debateID);
+			superlativesPortrait.setPost(item.debateID);
+		}
+		
+		
+		
+		
+		
+		
+		
+		// REDO BASED ON MOST DEBATED		
 		public function mostActiveUsersView(...args):void {
 			markAllInactive();
-			
 
-			
 			superlativesTitleBar.setText('Most Active Users');
 			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
 			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
@@ -326,15 +356,16 @@ package net.localprojects.elements {
 			nextSuperlativeButton.tweenIn(1, {alpha: 0.25});		
 		
 			superlativesPortrait.tweenIn();
-			mostDebatedPanel.tweenIn();
+			mostDebatedList.tweenIn();
 			homeButton.tweenIn();				
 			
 			tweenOutInactive();					
 		}				
 		
 		
+		// default bar behavior, just this one for now
 		public function showDebateTotals(...args):void {			
-			// behaviors;			
+			// behaviors			
 			
 			// mutation
 			voteTitleBar.setText('Total Number of Opinions');			
@@ -347,22 +378,27 @@ package net.localprojects.elements {
 			TweenMax.to(voteStatBar, 1, {barPercent: targetPercent, ease: Quart.easeInOut});
 		}
 		
-		
-				
-		
-		
-		
 		public function update():void {
 			// anything to do here?
 			trace("Updating stats");
 			wordCloud.setWords(CDW.database.stats['frequentWords']);
-			
-		}
+			mostDebatedList.setItems(CDW.database.getMostDebatedList());
+			trace("most liked: " + CDW.database.getMostLikedList());
+			mostLikedList.setItems(CDW.database.getMostLikedList());
+		}		
+		
+				
+		// Utiliteis and helpers
+		private function generateDot(c:uint):Shape {
+			var shape:Shape = new Shape();
+			shape.graphics.beginFill(c);
+			shape.graphics.drawCircle(0, 0, 3.6);
+			shape.graphics.endFill();
+			return shape;
+		}		
 		
 		
-		// TOdo inherit these from a container class... or just put it in block base!?
 		private function markAllInactive():void {
-
 			
 			// marks all FIRST LEVEL blocks as inactive
 			for (var i:int = 0; i < this.numChildren; i++) {

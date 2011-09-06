@@ -122,6 +122,23 @@ package net.localprojects
 		public static function getStatsPlaceholder():Bitmap { return new statsPlaceholderClass() as Bitmap; };
 		public static const statsPlaceholder:Bitmap = getStatsPlaceholder();
 				
+		[Embed(source = '/assets/graphics/bubblePerimeter.png')] private static const bubblePerimeterClass:Class;
+		public static function getBubblePerimeter():Bitmap { return new bubblePerimeterClass() as Bitmap; };
+		public static const bubblePerimeter:Bitmap = getBubblePerimeter();
+		
+		[Embed(source = '/assets/graphics/bubbleBackground.png')] private static const bubbleBackgroundClass:Class;
+		public static function getBubbleBackground():Bitmap { return new bubbleBackgroundClass() as Bitmap; };
+		public static const bubbleBackground:Bitmap = getBubbleBackground();
+		
+		[Embed(source = '/assets/graphics/circleBackground.png')] private static const circleBackgroundClass:Class;
+		public static function getCircleBackground():Bitmap { return new circleBackgroundClass() as Bitmap; };
+		public static const circleBackground:Bitmap = getCircleBackground();
+		
+		[Embed(source = '/assets/graphics/circlePerimeter.png')] private static const circlePerimeterClass:Class;
+		public static function getCirclePerimeter():Bitmap { return new circlePerimeterClass() as Bitmap; };
+		public static const circlePerimeter:Bitmap = getCirclePerimeter();
+		
+		
 		
 		// Vectors
 		[Embed(source = '/assets/graphics/quotation.svg')] private static const quotationClass:Class;

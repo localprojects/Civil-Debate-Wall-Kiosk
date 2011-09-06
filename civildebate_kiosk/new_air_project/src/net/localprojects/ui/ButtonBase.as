@@ -27,7 +27,7 @@ package net.localprojects.ui {
 		protected var _disabledColor:uint = 0;		
 		
 		protected var timeout:Number; // time between presses
-		private var timer:Timer;
+		protected var timer:Timer;
 		public var locked:Boolean;
 	
 		public function ButtonBase() {
@@ -75,6 +75,8 @@ package net.localprojects.ui {
 				TweenMax.to(background, 0, {colorTransform: {tint: _backgroundDownColor, tintAmount: 1}});
 			}
 		}
+		
+		
 		
 		protected function onMouseUp(e:MouseEvent):void {
 			

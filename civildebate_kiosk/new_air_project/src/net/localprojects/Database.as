@@ -12,6 +12,7 @@ package net.localprojects {
 	import flash.geom.Rectangle;
 	import flash.net.*;
 	
+	import sekati.layout.Arrange;
 	import sekati.utils.ColorUtil;
 	
 	public class Database extends EventDispatcher {
@@ -199,6 +200,28 @@ package net.localprojects {
 		public function cloneDebateAuthorPortrait(debateID:String):Bitmap {
 			return new MetaBitmap(portraits[getDebateAuthor(debateID)].bitmapData.clone());
 		}
+		
+		// returns list of IDs of most debated posts
+		public function getMostDebatedList():Array {
+			var mostDebated:Array = [];
+			
+			for each (var row:Object in stats['mostDebatedOpinions']) {
+				mostDebated.push(row['id']);
+			}
+			
+			return mostDebated;
+		}
+		
+		// returns list of IDs of most debated posts
+		public function getMostLikedList():Array {
+			var mostLiked:Array = [];
+			
+			for each (var row:Object in stats['mostLikedDebates']) {
+				mostLiked.push(row['id']);
+			}
+			
+			return mostLiked;
+		}		
 		
 		
 		public function getNextDebate():String {

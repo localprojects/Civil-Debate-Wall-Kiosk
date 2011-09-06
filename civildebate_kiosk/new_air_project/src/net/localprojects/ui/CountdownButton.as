@@ -14,7 +14,7 @@ package net.localprojects.ui {
 		// time keeping
 		private var duration:Number;		
 		private var progress:Number; // normalized
-		private var timer:Timer;
+		private var countdownTimer:Timer;
 		private var startTime:int;
 		
 		// text
@@ -43,7 +43,7 @@ package net.localprojects.ui {
 		}
 		
 		public function isCountingDown():Boolean {
-			return timer.running;
+			return countdownTimer.running;
 		}
 
 		private function init():void {
@@ -52,9 +52,9 @@ package net.localprojects.ui {
 			outerRingRadius = 74;
 			
 			// set up timer
-			timer = new Timer(1000, duration);
-			timer.addEventListener(TimerEvent.TIMER, onTimerSecond);
-			timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
+			countdownTimer = new Timer(1000, duration);
+			countdownTimer.addEventListener(TimerEvent.TIMER, onTimerSecond);
+			countdownTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
 			
 			// inner circle background		
 			addChild(background);
@@ -129,8 +129,8 @@ package net.localprojects.ui {
 				
 		// run the timer
 		public function start():void {
-			timer.reset();
-			timer.start();
+			countdownTimer.reset();
+			countdownTimer.start();
 			
 			startTime = getTimer();
 			countText.text = duration.toString();
@@ -154,14 +154,14 @@ package net.localprojects.ui {
 			// update the count, then bring back the text
 			icon.visible = false;
 			countText.visible = true;
-			countText.text = (duration - (timer.currentCount + 2)).toString();
+			countText.text = (duration - (countdownTimer.currentCount + 2)).toString();
 			
-			if (timer.currentCount < 4) {
+			if (countdownTimer.currentCount < 4) {
 				//onAlmostFinish();
 				// spin up a new number
 				TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 1, scaleY: 1});	
 			}
-			else if (timer.currentCount == 4) {
+			else if (countdownTimer.currentCount == 4) {
 				// stop spinning numbers, show the icon
 				trace("Showing icon");
 				TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 0, scaleY: 0});
