@@ -20,12 +20,13 @@ package com.civildebatewall.ui {
 		private var roundedPortrait:Sprite;
 		private var _selected:Boolean;
 		private var textField:BlockLabel;
-		public var downBackgroundColor:uint;		
+		public var downBackgroundColor:uint = 0xffffff;		
 		private var textBackground:Sprite;
 		public var leftDot:Shape;
 		public  var rightDot:Shape;		
 		
 		public function ThumbnailButton(thread:Thread) {
+			_thread = thread;
 			_selected = false;
 			
 			background = new Sprite();
@@ -53,7 +54,8 @@ package com.civildebatewall.ui {
 			textField.visible = true;
 
 			
-			downBackgroundColor = _thread.firstPost.stanceColorWatermark; 
+
+			downBackgroundColor = _thread.firstPost.stanceColorWatermark;
 			textField.setText('YES!', true);			
 			
 

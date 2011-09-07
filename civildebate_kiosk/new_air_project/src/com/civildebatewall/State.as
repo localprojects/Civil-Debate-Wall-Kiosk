@@ -28,6 +28,7 @@ package com.civildebatewall {
 		public var userImageFull:Bitmap = new Bitmap();		
 		public var latestSMSID:String = ''; // TODO get this from matt
 		public var userStanceText:String = ''; // add exclamation point		
+		public var userRespondingTo:Post; // which post we're debating
 		
 		// color state
 		public var userStanceColorLight:uint;

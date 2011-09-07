@@ -45,7 +45,7 @@ package com.civildebatewall.elements {
 		
 		public function StatsOverlay() {
 			super();
-			init();
+			//init();
 		}
 		
 		
@@ -193,8 +193,8 @@ package com.civildebatewall.elements {
 			wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.getText() + '\u2019 used in '  + wordSearchResults.resultCount + Utilities.plural(' Opinion', wordSearchResults.resultCount));
 			
 			// update based on active word?			
-			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			homeButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
+			homeButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);			
 			//wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.getText() + '\u2019 used in '  + wordSearchResults.resultCount + Utilities.plural(' Opinion', wordSearchResults.resultCount));
 			
 			// behaviors
@@ -250,13 +250,13 @@ package com.civildebatewall.elements {
 			markAllInactive();
 			
 			superlativesTitleBar.setText('Most Debated Opinions');
-			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			homeButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorLight, true);
+			homeButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);			
 			wordCloud.deselect();
 			
 			// set the first item by default
 			(mostDebatedList.getChildAt(0) as DebateListItem).activate();
-			superlativesPortrait.setPost(CDW.database.getMostDebatedList()[0], true);			
+			superlativesPortrait.setPost(CDW.database.mostDebatedThreads[0], true);			
 			
 			previousSuperlativeButton.setOnClick(null);
 			nextSuperlativeButton.setOnClick(mostLikedView);
@@ -280,8 +280,8 @@ package com.civildebatewall.elements {
 		}
 		
 		private function onMostDebatedSelected(item:DebateListItem):void {
-			trace("Selected item " + item.debateID);
-			superlativesPortrait.setPost(item.debateID);
+			trace("Selected item " + item.thread);
+			superlativesPortrait.setPost(item.thread.firstPost);
 		}
 		
 		
@@ -291,15 +291,15 @@ package com.civildebatewall.elements {
 			markAllInactive();
 			
 			superlativesTitleBar.setText('Most Liked Opinions');
-			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			homeButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
+			homeButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);			
 			wordCloud.deselect();
 			
 			// set the first item by default
 			
 			//mostLikedList.deactivateAll();
 			(mostLikedList.getChildAt(0) as DebateListItem).activate();
-			superlativesPortrait.setPost(CDW.database.getMostLikedList()[0], true);			
+			superlativesPortrait.setPost(CDW.database.mostLikedThreads[0], true);			
 			
 			previousSuperlativeButton.setOnClick(mostDebatedView);
 			nextSuperlativeButton.setOnClick(null);
@@ -324,43 +324,37 @@ package com.civildebatewall.elements {
 		}
 		
 		private function onMostLikedSelected(item:DebateListItem):void {
-			trace("Selected item " + item.debateID);
-			superlativesPortrait.setPost(item.debateID);
+			trace("Selected item " + item.thread);
+			superlativesPortrait.setPost(item.thread.firstPost);
 		}
-		
-		
-		
-		
-		
-		
-		
-		// REDO BASED ON MOST DEBATED		
-		public function mostActiveUsersView(...args):void {
-			markAllInactive();
 
-			superlativesTitleBar.setText('Most Active Users');
-			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
-			
-			previousSuperlativeButton.setOnClick(mostLikedView);
-			nextSuperlativeButton.setOnClick(null);			
-			
-			voteTitleBar.tweenIn();
-			voteStatBar.tweenIn();
-						
-			wordTitleBar.tweenIn();
-			wordCloud.tweenIn();
-			superlativesTitleBar.tweenIn();
-			
-			previousSuperlativeButton.tweenIn();
-			nextSuperlativeButton.tweenIn(1, {alpha: 0.25});		
-		
-			superlativesPortrait.tweenIn();
-			mostDebatedList.tweenIn();
-			homeButton.tweenIn();				
-			
-			tweenOutInactive();					
-		}				
+//		// REDO BASED ON MOST DEBATED		
+//		public function mostActiveUsersView(...args):void {
+//			markAllInactive();
+//
+//			superlativesTitleBar.setText('Most Active Users');
+//			homeButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+//			homeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+//			
+//			previousSuperlativeButton.setOnClick(mostLikedView);
+//			nextSuperlativeButton.setOnClick(null);			
+//			
+//			voteTitleBar.tweenIn();
+//			voteStatBar.tweenIn();
+//						
+//			wordTitleBar.tweenIn();
+//			wordCloud.tweenIn();
+//			superlativesTitleBar.tweenIn();
+//			
+//			previousSuperlativeButton.tweenIn();
+//			nextSuperlativeButton.tweenIn(1, {alpha: 0.25});		
+//		
+//			superlativesPortrait.tweenIn();
+//			mostDebatedList.tweenIn();
+//			homeButton.tweenIn();				
+//			
+//			tweenOutInactive();					
+//		}				
 		
 		
 		// default bar behavior, just this one for now
@@ -381,13 +375,12 @@ package com.civildebatewall.elements {
 		public function update():void {
 			// anything to do here?
 			trace("Updating stats");
-			wordCloud.setWords(CDW.database.stats['frequentWords']);
-			mostDebatedList.setItems(CDW.database.getMostDebatedList());
-			trace("most liked: " + CDW.database.getMostLikedList());
-			mostLikedList.setItems(CDW.database.getMostLikedList());
+			wordCloud.setWords(CDW.database.frequentWords);
+			mostDebatedList.setItems(CDW.database.mostDebatedThreads);
+			trace("most liked: " + CDW.database.mostLikedThreads);
+			mostLikedList.setItems(CDW.database.mostLikedThreads);
 		}		
 		
-				
 		// Utiliteis and helpers
 		private function generateDot(c:uint):Shape {
 			var shape:Shape = new Shape();

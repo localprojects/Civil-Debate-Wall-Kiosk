@@ -2,6 +2,7 @@ package com.civildebatewall {
 	import com.adobe.serialization.json.*;
 	import com.civildebatewall.blocks.*;
 	import com.civildebatewall.camera.*;
+	import com.civildebatewall.data.*;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.elements.*;
 	import com.civildebatewall.keyboard.*;
@@ -19,7 +20,6 @@ package com.civildebatewall {
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.Timer;
-	import com.civildebatewall.data.*;
 	
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	
@@ -340,7 +340,7 @@ package com.civildebatewall {
 			// broken apart for easy measurability
 			var smsInstrucitonPrefix:String = 'What would you say to convince others of your opinion?\nText ';
 			var smsInstrucitonPostfix:String = ' with your statement.';			
-			var smsPhoneNumber:String = Utilities.formatPhoneNumber(CDW.settings.phoneNumber);
+			var smsPhoneNumber:String = Utilities.formatPhoneNumber(CDW.database.smsNumber);
 			var smsInstructionText:String = smsInstrucitonPrefix + smsPhoneNumber + smsInstrucitonPostfix;
 			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_REGULAR);
 			smsInstructions.textField.setTextFormat(new TextFormat(Assets.FONT_HEAVY), smsInstrucitonPrefix.length, smsInstrucitonPrefix.length + smsPhoneNumber.length);			
@@ -812,6 +812,7 @@ package com.civildebatewall {
 		}		
 		
 		private function onDebateButton(e:Event):void {
+			CDW.state.userRespondingTo = CDW.state.activeThread.firstPost;
 			CDW.state.userIsResponding = true;
 			pickStanceView();
 		}
@@ -821,19 +822,12 @@ package com.civildebatewall {
 			pickStanceView();
 		}		
 		
-		
 		private function incrementLikes(e:Event):void {
-			CDW.database.debates[CDW.state.activeThread].likes = likeButton.getCount() + 1; // update local db			
-			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/like', {'id': CDW.state.activeThread, 'count': likeButton.getCount()}, onLikePosted);
+			// also uploads
+			CDW.state.activeThread.firstPost.incrementLikes();
+			CDW.state.activeThread.firstPost.likes = likeButton.getCount() + 1;
+			likeButton.setCount(CDW.state.activeThread.firstPost.likes);			
 		}
-		
-		
-		private function onLikePosted(response:Object):void {
-			likeButton.setCount(parseInt(response.toString()));
-		}
-		
-		
-
 
 		// =========================================================================
 		
@@ -857,7 +851,7 @@ package com.civildebatewall {
 			viewDebateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);			
 			
 			// use the full capitalize name for the byline
-			byline.setText('Said by ' + StringUtils.capitalize(CDW.database.debates[CDW.state.activeThread].author.firstName, true), true);
+			byline.setText('Said by ' + CDW.state.activeThread.firstPost.user.usernameFormatted, true);
 			viewDebateButton.setFont(Assets.FONT_HEAVY);
 			viewDebateButton.setLabel('BACK TO HOME SCREEN', false);
 			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 + 5 - letsDebateUnderlay.y; // height depends on opinion
@@ -954,11 +948,10 @@ package com.civildebatewall {
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
 		}
 		
-		private function removeFlagOverlayView(e:Event):void {
+		private function removeFlagOverlayView(...args):void {
 			CDW.state.activeView = CDW.state.lastView; // revert the view, since it was just an overlay
 			CDW.state.lastView = flagOverlayView;
 						
-			
 			flagOverlay.tweenOut();
 			flagTimerBar.tweenOut();			
 			flagInstructions.tweenOut();
@@ -966,15 +959,14 @@ package com.civildebatewall {
 			flagNoButton.tweenOut();			
 		}
 		
-		
-		
-		
 		private function incrementFlags(e:Event):void {
 			// stop the bar
-			flagInstructions.setText("FLAGGED FOR REVIEW. WE WILL LOOK INTO IT.");
+			flagInstructions.setText('FLAGGED FOR REVIEW. WE WILL LOOK INTO IT.');
 			flagTimerBar.pause();
 			flagTimerBar.tweenOut(-1, {alpha: 0, y: flagTimerBar.y}); // just fade out 
-			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/flag', {'id': CDW.state.activeThread}, onFlagPosted);
+			
+			// modify it on the server
+			CDW.state.activeThread.firstPost.incrementFlags();
 			
 			flagYesButton.disable();
 			flagYesButton.showOutline(false);
@@ -986,11 +978,6 @@ package com.civildebatewall {
 			// Wait and then go back
 			Utilities.doAfterDelay(removeFlagOverlayView, 2000);
 		}
-		
-		
-		private function onFlagPosted(response:Object):void {
-			trace('bumping flags to  ' + response.toString());
-		}		
 				
 		
 		
@@ -1196,32 +1183,32 @@ package com.civildebatewall {
 			
 			// TODO handle nothing in SMS chain
 			
-			// first time? save the id so we can compare
-			if (CDW.state.latestSMSID == null) {
-				trace('first time, setting id');
-				CDW.state.latestSMSID = response['_id']['$oid'];
-				smsCheckTimer.reset();
-				smsCheckTimer.start();
-			}
-			else if (CDW.state.latestSMSID != response['_id']['$oid'] &&
-				(response['To'] == CDW.settings.phoneNumber)) {
-				
-				// write some stuff down	
-				CDW.state.userPhoneNumber = response['From'];
-				CDW.state.userOpinion = response['Body'];
-				
-				trace('got new SMS from number: ' + CDW.state.userPhoneNumber);				
-				
-				// create or find the user
-				Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser); 
-			}
-			else {
-				// For debug								
-				trace('no new sms, keep trying');
-				CDW.state.latestSMSID = response['_id']['$oid'];					
-				smsCheckTimer.reset();
-				smsCheckTimer.start();			
-			}			
+//			// first time? save the id so we can compare
+//			if (CDW.state.latestSMSID == null) {
+//				trace('first time, setting id');
+//				CDW.state.latestSMSID = response['_id']['$oid'];
+//				smsCheckTimer.reset();
+//				smsCheckTimer.start();
+//			}
+//			else if (CDW.state.latestSMSID != response['_id']['$oid'] &&
+//				(response['To'] == CDW.settings.phoneNumber)) {
+//				
+//				// write some stuff down	
+//				CDW.state.userPhoneNumber = response['From'];
+//				CDW.state.userOpinion = response['Body'];
+//				
+//				trace('got new SMS from number: ' + CDW.state.userPhoneNumber);				
+//				
+//				// create or find the user
+//				Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser); 
+//			}
+//			else {
+//				// For debug								
+//				trace('no new sms, keep trying');
+//				CDW.state.latestSMSID = response['_id']['$oid'];					
+//				smsCheckTimer.reset();
+//				smsCheckTimer.start();			
+//			}			
 		}
 		
 		private function onAddOrUpdateUser(user:Object):void {
@@ -1259,7 +1246,6 @@ package com.civildebatewall {
 			portrait.setImage(CDW.state.userImage);
 			question.setTextColor(CDW.state.questionTextColor);			
 		}
-		
 		
 		public function simulateSMS(e:Event):void {
 			smsCheckTimer.stop();
@@ -1609,15 +1595,17 @@ package com.civildebatewall {
 			
 			if (CDW.state.userIsResponding) {
 				// create and upload new comment
-				trace("Uploading comment");
-				payload = {'author': CDW.state.userID, 'question': CDW.state.activeQuestion, 'debate': CDW.state.activeThread, 'comment': CDW.state.userOpinion, 'stance': CDW.state.userStance, 'origin': 'kiosk'};
-				Utilities.postRequest(CDW.settings.serverPath + '/api/comments/add', payload, onDebateUploaded);				
+				trace("Uploading response post");
+				
+				// TODO "userInProgress" and "postInProgress" objects in state
+				// TODO need to set "CDW.state.userRespondingTo"
+				
+				CDW.database.uploadResponse(CDW.state.activeThread.id, CDW.state.userRespondingTo.id, CDW.state.userID, CDW.state.userOpinion, CDW.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
 			}
 			else {
 				// create and upload new debate
-				trace("Uploading new debate");				
-				payload = {'author': CDW.state.userID, 'question': CDW.state.activeQuestion, 'opinion': CDW.state.userOpinion, 'stance': CDW.state.userStance, 'origin': 'kiosk'};
-				Utilities.postRequest(CDW.settings.serverPath + '/api/debates/add', payload, onDebateUploaded);
+				trace("Uploading new thread");				
+				CDW.database.uploadThread(CDW.database.question.id, CDW.state.userID, CDW.state.userOpinion, CDW.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
 			}
 		}
 		

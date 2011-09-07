@@ -2,6 +2,7 @@ package com.civildebatewall.data {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CDW;
+	import com.civildebatewall.Utilities;
 		
 	
 	public class Post extends Object {
@@ -41,7 +42,7 @@ package com.civildebatewall.data {
 			_text = jsonObject['text'];
 			_origin = ORIGIN_KIOSK; // todo support other origins
 			_user = CDW.database.getUserByID(jsonObject['author']['id']);
-			_created = new Date(jsonObject['created']['$date']);
+			_created = new Date(jsonObject['created']);
 			
 			
 			// A bunch of conveniences
@@ -70,7 +71,31 @@ package com.civildebatewall.data {
 		}
 
 		public function get id():String	{ return _id;	}
+		
 		public function get likes():uint{	return _likes; }
+		public function set likes(n:uint):void { _likes = n; }
+
+		
+		
+		public function incrementLikes():void {
+			Utilities.postRequest(CDW.settings.serverPath + '/api/posts/' + _id + '/like', {}, onLikeUpdated);						
+		}
+		
+		private function onLikeUpdated(r:Object):void {
+			trace("likes updated server side for post " + _id);
+			// TODo bring it back down
+		}
+		
+		public function incrementFlags():void {
+			Utilities.postRequest(CDW.settings.serverPath + '/api/posts/' + _id + '/flag', {}, onFlagUpdated);						
+		}		
+		
+		private function onFlagUpdated(r:Object):void {
+			trace("flags updated server side for post " + _id);
+			// TODo bring it back down
+		}
+		
+		
 		public function get flags():uint { return _flags; }
 		public function get stance():String { return _stance;	}		
 		public function get origin():String{ return _origin; }				

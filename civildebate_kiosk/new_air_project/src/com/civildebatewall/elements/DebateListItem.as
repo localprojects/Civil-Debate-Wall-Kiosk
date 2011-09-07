@@ -21,7 +21,7 @@ package com.civildebatewall.elements {
 	
 	public class DebateListItem extends ButtonBase {
 		
-		public var _thread:Thread;
+		private var _thread:Thread;
 		private var _itemIndex:int;
 		private var _foregroundColor:uint;		
 		public var toggledOn:Boolean;
@@ -182,7 +182,8 @@ package com.civildebatewall.elements {
 			TweenMax.to(circleFill, 0.5, {alpha: 1});			
 		}
 		
-
+		
+		public function get thread():Thread { return _thread; }
 		
 		
 		public function setForegroundColor(c:uint, instant:Boolean = false):void {
