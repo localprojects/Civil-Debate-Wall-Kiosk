@@ -223,34 +223,34 @@ package com.civildebatewall.data {
 		// mutate server
 		public function uploadResponse(threadID:String, responseTo:String, userID:String, opinion:String, stance:String, origin:String, callback:Function):void {
 			var yesno:uint = (stance == Post.STANCE_YES) ? 1 : 0;
-			var params:Object = {'yesno': yesno, 'test': opinion, 'responseTo': responseTo, 'author': userID, 'origin': origin};
-			Utilities.postRequest(CDW.settings.serverPath + '/api/threads/' + threadID + '/posts', params, callback);
+			var params:Object = {'yesno': yesno, 'text': opinion, 'responseTo': responseTo, 'author': userID, 'origin': origin};
+			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/threads/' + threadID + '/posts', params, callback);
 		}
 					
-			
 		public function uploadThread(questionId:String, userID:String, opinion:String, stance:String, origin:String, callback:Function):void {
 			var yesno:uint = (stance == Post.STANCE_YES) ? 1 : 0;
-			var params:Object = {'yesno': yesno, 'test': opinion, 'author': userID, 'origin': origin}; 
-			Utilities.postRequest(CDW.settings.serverPath + '/api/questions/' + questionId + '/threads', params, callback);			
+			var params:Object = {'yesno': yesno, 'text': opinion, 'author': userID, 'origin': origin}; 
+			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/questions/' + questionId + '/threads', params, callback);			
 		}		
 		
-				
+		public function createUser(username:String, phoneNumber:String, callback:Function):void {
+			trace("Creating user with phone: " + phoneNumber);
+			trace("Creating user with username: " + username);			
+			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users', {'phonenumber': phoneNumber, 'username': username}, callback);			
+		}	
 		
-		
+		public function checkForUser(phoneNumber:String, callback:Function):void {
+			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/search', {'phone': phoneNumber}, callback); // TODO no need, grab it when we check the recents on SMS prompt page?			
+		}
+
 		// NEW STUFF
 		
 		// User stuff
 		
-		public function createUser(username:String, phoneNumber:String, callback:Function):void {
-			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/', {'phone': phoneNumber, 'username': username}, callback); // TODO no need, grab it when we check the recents on SMS prompt page?			
-		}
+
 		
 		
-		public function checkForUser(phoneNumber:String, callback:Function):void {
-			// WHY DOES THIS STREAM ERROR?
-			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/search', {'phone': phoneNumber}, callback); // TODO no need, grab it when we check the recents on SMS prompt page?			
-		}
-		
+
 		
 		
 		// SMS fetching

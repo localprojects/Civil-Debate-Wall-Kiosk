@@ -711,7 +711,7 @@ package com.civildebatewall {
 			statsButton.setOnClick(statsView);
 			debateButton.setOnClick(onDebateButton);
 			likeButton.setOnClick(incrementLikes);
-			flagButton.setOnClick(flagOverlayView);
+			flagButton.setOnClick(onFlagClick);
 			
 			
 			// blocks
@@ -776,6 +776,11 @@ package com.civildebatewall {
 			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design);
 		}
 		
+		private function onFlagClick(e:Event):void {
+			CDW.state.activePost = CDW.state.activeThread.firstPost;
+			flagOverlayView();
+		}
+		
 		private function onDebateViewButton(e:Event):void {
 			CDW.state.threadOverlayOpen = true;
 			debateOverlayView();			
@@ -827,6 +832,7 @@ package com.civildebatewall {
 		}
 		
 		private function onAddOpinionButton():void {
+			CDW.state.userRespondingTo = null;			
 			CDW.state.userIsResponding = false;
 			pickStanceView();
 		}		
@@ -975,7 +981,7 @@ package com.civildebatewall {
 			flagTimerBar.tweenOut(-1, {alpha: 0, y: flagTimerBar.y}); // just fade out 
 			
 			// modify it on the server
-			CDW.state.activeThread.firstPost.incrementFlags();
+			CDW.state.activePost.incrementFlags();
 			
 			flagYesButton.disable();
 			flagYesButton.showOutline(false);
@@ -1220,7 +1226,7 @@ package com.civildebatewall {
 			CDW.state.userOpinion = CDW.state.textMessage.text; // TODO truncate this?			
 			CDW.state.userPhoneNumber = CDW.state.textMessage.phoneNumber;
 			
-			var tempUser:User = CDW.database.getUserByPhoneNumber(sms.phoneNumber);
+			var tempUser:User = CDW.database.getUserByPhoneNumber(sms.phoneNumber); // TODO check server instead
 			
 			if (tempUser != null) {
 				trace("user exists");
@@ -1245,7 +1251,7 @@ package com.civildebatewall {
 			}
 			else {
 				trace("no user");
-				// no user, go to name
+				// no user, go to photo booth
 				photoBoothView();
 			}
 		}
@@ -1262,16 +1268,10 @@ package com.civildebatewall {
 		
 		public function simulateSMS(e:Event):void {
 			smsCheckTimer.stop();
-			var testTextMessage:TextMessage = new TextMessage({'message': Utilities.dummyText(100), 'phoneNumber': '555' + Utilities.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});
-			//handleSMS(testTextMessage);
-	CDW.database.checkForUser(onGot);		
-//Utilities.getRequest('http://ec2-184-73-127-164.compute-1.amazonaws.com/api/users', onGot);
+			var testTextMessage:TextMessage = new TextMessage({'message': Utilities.dummyText(100), 'phoneNumber': '415' + Utilities.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});
+			handleSMS(testTextMessage);
 		}
-		
-		private function onGot(r:*) {
-			trace("response");
-			trace(r);
-		}
+
 		
 		
 		// =========================================================================		
@@ -1517,18 +1517,23 @@ package com.civildebatewall {
 				// Save name to RAM
 				CDW.state.userName = nameEntryField.getTextField().text;
 				
-				// Try to create the user
+				// Try to create the user, check for existing username
 				CDW.database.createUser(CDW.state.userName, CDW.state.userPhoneNumber, onUserCreated);				
-				
-				// Update the name on the server (lazy)
-				//Utilities.postRequest(CDW.settings.serverPath + '/api/users/add-or-update', {'id': CDW.state.userID, 'firstName': CDW.state.userName}, onNameUpdated);
-				
-				//verifyOpinionView();
 			}
 		}
 		
 		private function onUserCreated(r:Object):void {
-			trace('User created on server:' + r);
+			if (r['error'] == null) {
+				// It worked!
+				var tempUser:User = new User(r);
+				CDW.state.userID = tempUser.id;
+				verifyOpinionView();
+			}
+			else {
+				// there was an error, the name probably already existed!
+				usernameTakenWarning.tweenIn();
+				TweenMax.delayedCall(5, function():void { usernameTakenWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE}); });
+			}
 		}
 		
 		
@@ -1607,7 +1612,7 @@ package com.civildebatewall {
 			// Syncs state up to the cloud
 						
 			// save the images to disk, one full res and one scaled and cropped 
-			Utilities.saveImageToDisk(CDW.state.userImageFull, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');			
+			if(CDW.state.userImageFull != null) Utilities.saveImageToDisk(CDW.state.userImageFull, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');			
 			var imageName:String = Utilities.saveImageToDisk(CDW.state.userImage, CDW.settings.imagePath, CDW.state.userID + '.jpg');
 			var payload:Object;
 			
@@ -1617,6 +1622,8 @@ package com.civildebatewall {
 				
 				// TODO "userInProgress" and "postInProgress" objects in state
 				// TODO need to set "CDW.state.userRespondingTo"
+				
+				trace("Responding to: " + CDW.state.userRespondingTo.id);
 				
 				CDW.database.uploadResponse(CDW.state.activeThread.id, CDW.state.userRespondingTo.id, CDW.state.userID, CDW.state.userOpinion, CDW.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
 			}
@@ -1631,11 +1638,16 @@ package com.civildebatewall {
 			
 			if (CDW.state.userIsResponding) {
 				trace('comment uploaded: ' + r);
+				Utilities.traceObject(r);				
+				// Existing active thread is correct
+				CDW.state.activePostID = r['id'];				
 			}
 			else {
 				trace('debate uploaded: ' + r);
+				
 				// set the current debate to the one that was just saved				
-				CDW.state.activeThread = r.toString();
+				CDW.state.activeThreadID = r['id'];
+				CDW.state.activePostID = r['posts'][0]['id'];				
 			}
 			
 			// grab the latest from the db

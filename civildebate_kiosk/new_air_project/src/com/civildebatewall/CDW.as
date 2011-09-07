@@ -184,10 +184,10 @@ package com.civildebatewall {
 				// set the starting view
 				CDW.state.setActiveDebate(CDW.state.activeThread);
 				view.debateStrip.update();
-				view.statsOverlay.update();
+				//view.statsOverlay.update();
 				
 				// jump to home view
-			  database.threads.length() > 0 ? view.homeView() : view.noOpinionView();
+			  database.threads.length > 0 ? view.homeView() : view.noOpinionView();
 			}
 		}
 		

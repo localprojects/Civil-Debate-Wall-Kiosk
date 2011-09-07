@@ -109,7 +109,9 @@ package com.civildebatewall.elements
 			
 			if (scrollField.isClick) {
 				trace("Debate with post: " + targetComment.post);
-				// TODO HOOK THIS UP
+				CDW.state.userIsResponding = true;
+				CDW.state.userRespondingTo = targetComment.post;				
+				CDW.view.pickStanceView();
 			}
 			else {
 				trace('Not a real click.');
@@ -123,7 +125,9 @@ package com.civildebatewall.elements
 			
 			if (scrollField.isClick) {
 				trace("Flag post: " + targetComment.post);
-				// TODO HOOK THIS UP				
+				// pull in the flag overlay
+				CDW.state.activePost = targetComment.post;
+				CDW.view.flagOverlayView();
 			}
 			else {
 				trace('Not a real click.');

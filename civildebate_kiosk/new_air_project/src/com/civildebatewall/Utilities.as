@@ -5,6 +5,7 @@ package com.civildebatewall {
 	
 	import flash.display.*;
 	import flash.events.Event;
+	import flash.events.HTTPStatusEvent;
 	import flash.events.TimerEvent;
 	import flash.filesystem.*;
 	import flash.geom.*;
@@ -415,8 +416,12 @@ package com.civildebatewall {
 			
 			request.data = variables;  
 			
+			trace('sending variables: ' + variables.toString());
+			
 			// Handlers
-			loader.addEventListener(Event.COMPLETE, function(e:Event):void { callback(e.target.data); });  
+			loader.addEventListener(Event.COMPLETE, function(e:Event):void { callback(e.target.data); });
+			loader.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent):void { trace('HTTP Status: ' + e.status); });
+			
 			loader.load(request);	
 		}
 		

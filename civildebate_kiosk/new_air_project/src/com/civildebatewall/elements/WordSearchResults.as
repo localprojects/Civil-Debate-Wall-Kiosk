@@ -5,20 +5,29 @@ package com.civildebatewall.elements {
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.blocks.BlockBase;
 	import com.civildebatewall.data.Post;
+	import com.civildebatewall.ui.ButtonBase;
 	import com.civildebatewall.ui.InertialScrollField;
-	import com.civildebatewall.data.Post;
 	
 	import flash.display.*;
+	import flash.events.*;
 	
 	public class WordSearchResults extends BlockBase {
 		
 		public var scrollField:InertialScrollField;		
 		public var resultCount:uint;		
 		
+		private var targetSearchResult:SearchResult;
+		private var targetButton:ButtonBase;
+		
 		public function WordSearchResults()	{
 			super();
 			scrollField = new InertialScrollField(1022, 843);
 			addChild(scrollField);
+			
+			scrollField.scrollSheet.addEventListener(Comment.EVENT_DEBATE, onDebate, true);
+			scrollField.scrollSheet.addEventListener(Comment.EVENT_FLAG, onFlag, true);			
+			scrollField.scrollSheet.addEventListener(Comment.EVENT_BUTTON_DOWN, onDown, true);
+			scrollField.scrollSheet.addEventListener(SearchResult.EVENT_GOTO_DEBATE, onGoToDebate, true);
 		}
 		
 		
@@ -46,7 +55,7 @@ package com.civildebatewall.elements {
 					resultRow.visible = true;
 					
 					yOffset += resultRow.height + paddingBottom;
-					scrollField.scrollSheet.addChild(resultRow);					
+					scrollField.scrollSheet.addChild(resultRow);	
 				}				
 			}
 			
@@ -56,6 +65,46 @@ package com.civildebatewall.elements {
 			
 			// do we need to scroll?
 			scrollField.scrollAllowed = (scrollField.scrollSheet.height > 843);			
+		}
+		
+		private function onDown(e:Event):void {
+			targetSearchResult = e.target as SearchResult;
+		}
+		
+				
+		private function onDebate(e:Event):void {
+			targetButton = e.currentTarget as ButtonBase;
+			targetSearchResult = e.target as SearchResult;			
+			
+			if (scrollField.isClick) {
+				trace("Debate with post: " + targetSearchResult.post);
+				CDW.state.userIsResponding = true;
+				CDW.state.userRespondingTo = targetSearchResult.post;				
+				CDW.view.pickStanceView();
+			}
+			else {
+				trace('Not a real click.');
+			}
+		}
+		
+		
+		private function onFlag(e:Event):void {
+			targetButton = e.currentTarget as ButtonBase;
+			targetSearchResult = e.target as SearchResult;			
+			
+			if (scrollField.isClick) {
+				trace("Flag post: " + targetSearchResult.post);
+				// pull in the flag overlay
+				CDW.state.activePost = targetSearchResult.post;
+				CDW.view.flagOverlayView();
+			}
+			else {
+				trace('Not a real click.');
+			}
+		}		
+		
+		private function onGoToDebate(e:Event):void {
+			trace("TODO...");
 		}
 		
 		
