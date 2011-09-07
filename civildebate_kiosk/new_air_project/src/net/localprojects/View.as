@@ -511,8 +511,8 @@ package net.localprojects {
 			addChild(submitOverlayMessage);			
 			
 			submitOverlayContinueButton = new BlockButton(202, 65, 0x000000, 'CONTINUE', 25, 0xffffff, Assets.FONT_HEAVY);
-			submitOverlayContinueButton.setDefaultTweenIn(1, {x: 779, y: 1243});
-			submitOverlayContinueButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
+			submitOverlayContinueButton.setDefaultTweenIn(1, {alpha: 1, x: 779, y: 1243});
+			submitOverlayContinueButton.setDefaultTweenOut(1, {alpha: 1, x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
 			addChild(submitOverlayContinueButton);						
 
 			// Camera Overlays
@@ -1724,7 +1724,6 @@ package net.localprojects {
 			keyboard.target = editOpinion.getTextField();
 			
 			editTextInstructions.setBackgroundColor(CDW.state.userStanceColorDark, true);
-			
 			
 			saveButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
 			saveButton.setDownColor(CDW.state.userStanceColorMedium);			

@@ -58,13 +58,22 @@ package net.localprojects.elements {
 			video = new Video(cameraWidth, cameraHeight);
 			
 			// rotate and crop
+			
+			
+			
 			combinedMatrix = new Matrix();
 			baseMatrix = new Matrix();
 			baseMatrix.scale(undersampleFactor, undersampleFactor);
 			baseMatrix.rotate(Utilities.degToRad(-90));
-			baseMatrix.scale(-1, 1);
-			baseMatrix.tx = 1080;			
-			baseMatrix.ty = 1920;	
+			
+			if (CDW.settings.flipWebcamVertical) {
+				baseMatrix.scale(1, -1);
+			}
+			else {
+				baseMatrix.scale(-1, 1);
+				baseMatrix.tx = 1080;           
+				baseMatrix.ty = 1920;  
+			}
 			
 			video.transform.matrix = baseMatrix;
 			

@@ -147,8 +147,8 @@ package net.localprojects.ui {
 			// strip to stop it from inertially scrolling
 			
 
-			//isClick = (!TweenMax.isTweening(scrollSheet));
-			isClick = true;
+			isClick = (!TweenMax.isTweening(scrollSheet));
+			//isClick = true;
 			
 			// stop any coasting, this is the "poke"
 			TweenMax.killTweensOf(scrollSheet);
@@ -196,7 +196,6 @@ package net.localprojects.ui {
 				
 				// detect scroll vs. click			
 				if (mouseTravel > wiggleThreshold) {
-					// TODO FIRE "NOT_CLICK" EVENT
 					this.dispatchEvent(new Event(EVENT_NOT_CLICK));	
 					
 					// cancel the click

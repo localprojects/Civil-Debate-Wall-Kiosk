@@ -4,6 +4,7 @@
 	"halfSize": false,
 	"startFullScreen": false,
 	"webcamOnly": true,
+	"flipWebcamVertical": true,	
 	"imagePath": "/Users/Mika/Desktop/CDWImages/",
 	"serverPath": "http://ec2-50-19-25-31.compute-1.amazonaws.com",
 	"inactivityTimeout": 60,

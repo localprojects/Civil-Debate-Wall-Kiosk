@@ -26,7 +26,7 @@ package net.localprojects.elements {
 		private var targetThumbnail:ThumbnailButton;		
 		
 		public function DebateStrip()	{
-			super();
+			super();scrollField
 			scrollField = new InertialScrollField(1080, 141, InertialScrollField.SCROLL_X);
 			scrollField.setBackgroundColor(0xffffff, 1.0);
 			scrollField.addEventListener(InertialScrollField.EVENT_NOT_CLICK, onNotClick);

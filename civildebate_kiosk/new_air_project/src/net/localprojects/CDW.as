@@ -5,6 +5,7 @@ package net.localprojects {
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
 	
+	import flash.desktop.NativeApplication;
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
@@ -105,6 +106,15 @@ package net.localprojects {
 			var alignBottomItem:ContextMenuItem = new ContextMenuItem("Align to Bottom");
 			myContextMenu.customItems.push(alignBottomItem);
 			alignBottomItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onAlignBottom);				
+			
+			var toggleDashboardItem:ContextMenuItem = new ContextMenuItem("Toggle Dashboard");
+			myContextMenu.customItems.push(toggleDashboardItem);
+			toggleDashboardItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onToggleDashboard);				
+			
+			var quitItem:ContextMenuItem = new ContextMenuItem("Quit");
+			myContextMenu.customItems.push(quitItem);
+			quitItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onQuitSelect);				
+						
 			
 			contextMenu = myContextMenu;
 			
@@ -210,13 +220,21 @@ package net.localprojects {
 		
 		private function toggleFullScreen():void {
 			if (stage.displayState == StageDisplayState.NORMAL) {
-				stage.displayState = StageDisplayState.FULL_SCREEN;
+				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 				Mouse.hide();
 			}
 			else {
 				stage.displayState = StageDisplayState.NORMAL;
 				Mouse.show();
 			}
+		}
+		
+		private function onToggleDashboard(e:Event):void {
+			dashboard.visible = !dashboard.visible;
+		}
+		
+		private function onQuitSelect(e:Event):void {
+			NativeApplication.nativeApplication.exit();
 		}
 		
 		
