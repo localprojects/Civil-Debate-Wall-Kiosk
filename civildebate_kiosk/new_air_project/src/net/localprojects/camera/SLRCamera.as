@@ -165,9 +165,10 @@ package net.localprojects.camera
 		}
 		
 		private function onTimeout(e:TimerEvent):void {
+			CDW.dashboard.log("timeout!");
 			timeoutTimer.stop();
 			timeoutTimer.reset();
-			onTimeoutFunction();
+			onTimeoutFunction(e);
 		}
 		
 		
