@@ -9,10 +9,13 @@ package com.civildebatewall {
 	import com.civildebatewall.ui.*;
 	import com.greensock.*;
 	import com.greensock.easing.*;
+	import com.greensock.loading.DataLoader;
+	import com.greensock.loading.LoaderMax;
 	import com.greensock.plugins.*;
 	
 	import flash.display.*;
 	import flash.events.*;
+	import flash.filesystem.File;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.*;
@@ -51,6 +54,7 @@ package com.civildebatewall {
 		private var letsDebateUnderlay:BlockBitmap;
 		private var pickStanceInstructions:BlockLabelBar;
 		private var characterLimitWarning:BlockLabel;
+		private var usernameTakenWarning:BlockLabel;		
 		private var cameraTimeoutWarning:BlockLabel;
 		private var noNameWarning:BlockLabel;
 		private var noOpinionWarning:BlockLabel;				
@@ -438,7 +442,12 @@ package com.civildebatewall {
 			noNameWarning = new BlockLabel('Please enter your name!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
 			noNameWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
 			noNameWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (noNameWarning.height / 2) - 10});
-			addChild(noNameWarning);	
+			addChild(noNameWarning);
+			
+			usernameTakenWarning = new BlockLabel('That username is already taken!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
+			usernameTakenWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
+			usernameTakenWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (noNameWarning.height / 2) - 10});
+			addChild(usernameTakenWarning);			
 			
 			noOpinionWarning = new BlockLabel('Please enter your opinion!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
 			noOpinionWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (noOpinionWarning.height / 2) - 10});	
@@ -1135,10 +1144,7 @@ package com.civildebatewall {
 			skipTextButton.setOnClick(simulateSMS);
 			
 			// start polling to see if the user has sent their opinion yet
-			CDW.state.latestSMSID = null;
-			smsCheckTimer = new Timer(1000);
-			smsCheckTimer.addEventListener(TimerEvent.TIMER, onSmsCheckTimer);
-			smsCheckTimer.start();
+			CDW.database.fetchLatestTextMessages(onLatestMessagesFetched);
 			
 			// blocks
 			portrait.tweenIn();
@@ -1155,107 +1161,116 @@ package com.civildebatewall {
 			skipTextButton.tweenIn(); // TEMP for debug, TODO put on setting switch
 			
 			
-			
-			
 			// push the character limit down
 			pickStanceInstructions.tweenOut(-1, {x: BlockBase.OFF_LEFT_EDGE, y: pickStanceInstructions.y});
 			
-			
+	
 			tweenOutInactive();
 			
 			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design10);			
 		}
 		
+		private function onLatestMessagesFetched():void {
+			trace("latest baseline messages fetched...");
+			
+			if(CDW.database.latestTextMessages.length > 0) {
+				CDW.state.lastTextMessageTime = CDW.database.latestTextMessages[0].created;	
+			}
+			else {
+				// edge case, no messages, anything will be newer
+				trace("No messages yet.");
+				CDW.state.lastTextMessageTime = new Date(1900, 1, 1, 12, 0, 0, 0); // the distant past...
+			}
+
+			// start checking for new messages every second
+			smsCheckTimer = new Timer(1000);
+			smsCheckTimer.addEventListener(TimerEvent.TIMER, onSmsCheckTimer);
+			smsCheckTimer.start();			
+		}
+
 		
 		private function onSmsCheckTimer(e:TimerEvent):void {
-			trace('checking for SMS received');
-			var latestMessageLoader:URLLoader = new URLLoader();
-			latestMessageLoader.addEventListener(Event.COMPLETE, onSMSCheckResponse);
-			latestMessageLoader.load(new URLRequest("http://ec2-50-19-25-31.compute-1.amazonaws.com/api/sms/latest"));			
-			
+			trace('fetcheding latest sms');
+			CDW.database.fetchLatestTextMessages(onSMSCheckResponse);
 			smsCheckTimer.stop();
 		}
 		
 		
-		private function onSMSCheckResponse(e:Event):void {
-			trace('check sms response received');
-			var response:* = JSON.decode(e.target.data);			
+		private function onSMSCheckResponse():void {
+			trace('latest sms fetched');
 			
-			// TODO handle nothing in SMS chain
-			
-//			// first time? save the id so we can compare
-//			if (CDW.state.latestSMSID == null) {
-//				trace('first time, setting id');
-//				CDW.state.latestSMSID = response['_id']['$oid'];
-//				smsCheckTimer.reset();
-//				smsCheckTimer.start();
-//			}
-//			else if (CDW.state.latestSMSID != response['_id']['$oid'] &&
-//				(response['To'] == CDW.settings.phoneNumber)) {
-//				
-//				// write some stuff down	
-//				CDW.state.userPhoneNumber = response['From'];
-//				CDW.state.userOpinion = response['Body'];
-//				
-//				trace('got new SMS from number: ' + CDW.state.userPhoneNumber);				
-//				
-//				// create or find the user
-//				Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser); 
-//			}
-//			else {
-//				// For debug								
-//				trace('no new sms, keep trying');
-//				CDW.state.latestSMSID = response['_id']['$oid'];					
-//				smsCheckTimer.reset();
-//				smsCheckTimer.start();			
-//			}			
-		}
-		
-		private function onAddOrUpdateUser(user:Object):void {
-			trace('User added or updated');
-			
-			CDW.state.userID = user['_id']['$oid'];
-			
-			// does the user have a photo?
-			if (user['photo'] == null) {
-				// no photo
-				trace('no photo! go take one!');
-				photoBoothView();
+			// Grab a newer message
+			if ((CDW.database.latestTextMessages.length > 0) && (CDW.database.latestTextMessages[0].created > CDW.state.lastTextMessageTime)) {
+				trace("got SMS");
+				handleSMS(CDW.database.latestTextMessages[0]);
 			}
 			else {
-				// have a photo, load it // TODO handle missing file
-				Utilities.loadImageFromDisk(CDW.settings.imagePath + CDW.state.userID + '-full.jpg', onUserImageLoaded);
-				
-				//how about a name?
-				if (user['firstName'] == null) {
-					// go get a name
-					nameEntryView();
-				}
-				else {
-					// you have a name and a photo! go to review page
-					CDW.state.userName = user['firstName'];
-					
-					verifyOpinionView();
-				}
+				trace("no new SMS, keep trying");
+				smsCheckTimer.reset();
+				smsCheckTimer.start();						
 			}
 		}
 		
+		
+		private function handleSMS(sms:TextMessage):void {
+			// check for user
+			CDW.state.textMessage = sms; // save for later
+			trace("Checking for " + sms.phoneNumber);
+			
+			CDW.state.userOpinion = CDW.state.textMessage.text; // TODO truncate this?			
+			CDW.state.userPhoneNumber = CDW.state.textMessage.phoneNumber;
+			
+			var tempUser:User = CDW.database.getUserByPhoneNumber(sms.phoneNumber);
+			
+			if (tempUser != null) {
+				trace("user exists");
+				// user exists...
+				// they must have a username
+				// but do they have a photo?
+				CDW.state.userName = tempUser.username;
+				CDW.state.userPhoneNumber = tempUser.phoneNumber;
+				CDW.state.userID = tempUser.id;
+				
+				var imageFile:File = new File(CDW.settings.imagePath + CDW.state.userID + '.jpg');
+				
+				if (imageFile.exists) {
+					// have a photo, load it
+					// TODO jsut pull it from user object...
+					Utilities.loadImageFromDisk(imageFile.url, onUserImageLoaded);					
+				}
+				else {
+					// no photo, go take one
+					photoBoothView();
+				}
+			}
+			else {
+				trace("no user");
+				// no user, go to name
+				photoBoothView();
+			}
+		}
+		
+
 		
 		private function onUserImageLoaded(b:Bitmap):void {
 			CDW.state.userImage = b;
 			portrait.setImage(CDW.state.userImage);
-			question.setTextColor(CDW.state.questionTextColor);			
+			question.setTextColor(CDW.state.questionTextColor);
+			//go straight to verification;
+			verifyOpinionView();
 		}
 		
 		public function simulateSMS(e:Event):void {
 			smsCheckTimer.stop();
-			
-			// write some stuff down	
-			CDW.state.userPhoneNumber = '+1555' + Utilities.randRange(1000000, 9999999).toString();
-			CDW.state.userOpinion = Utilities.dummyText(100);						
-			
-			// create or find the user
-			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/add-or-update', {'phoneNumber': escape(CDW.state.userPhoneNumber)}, onAddOrUpdateUser);			
+			var testTextMessage:TextMessage = new TextMessage({'message': Utilities.dummyText(100), 'phoneNumber': '555' + Utilities.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});
+			//handleSMS(testTextMessage);
+	CDW.database.checkForUser(onGot);		
+//Utilities.getRequest('http://ec2-184-73-127-164.compute-1.amazonaws.com/api/users', onGot);
+		}
+		
+		private function onGot(r:*) {
+			trace("response");
+			trace(r);
 		}
 		
 		
@@ -1502,15 +1517,18 @@ package com.civildebatewall {
 				// Save name to RAM
 				CDW.state.userName = nameEntryField.getTextField().text;
 				
-				// Update the name on the server (lazy)
-				Utilities.postRequest(CDW.settings.serverPath + '/api/users/add-or-update', {'id': CDW.state.userID, 'firstName': CDW.state.userName}, onNameUpdated);
+				// Try to create the user
+				CDW.database.createUser(CDW.state.userName, CDW.state.userPhoneNumber, onUserCreated);				
 				
-				verifyOpinionView();
+				// Update the name on the server (lazy)
+				//Utilities.postRequest(CDW.settings.serverPath + '/api/users/add-or-update', {'id': CDW.state.userID, 'firstName': CDW.state.userName}, onNameUpdated);
+				
+				//verifyOpinionView();
 			}
 		}
 		
-		private function onNameUpdated(r:Object):void {
-			trace('Name updated on server:' + r);
+		private function onUserCreated(r:Object):void {
+			trace('User created on server:' + r);
 		}
 		
 		
@@ -1824,12 +1842,10 @@ package com.civildebatewall {
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
 		}
 		
-
 		
 		private function onContinue(e:Event):void {
 			CDW.state.activeView = CDW.state.lastView ;
 			CDW.state.lastView = inactivityOverlayView; // revert since it's an overlay
-			
 			
 			CDW.inactivityTimer.arm();
 			inactivityOverlay.tweenOut();

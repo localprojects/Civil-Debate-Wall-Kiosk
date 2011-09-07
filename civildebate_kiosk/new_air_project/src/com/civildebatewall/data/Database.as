@@ -1,4 +1,5 @@
 package com.civildebatewall.data {
+	import com.adobe.protocols.dict.Response;
 	import com.adobe.serialization.json.*;
 	import com.civildebatewall.CDW;
 	import com.civildebatewall.Utilities;
@@ -30,6 +31,9 @@ package com.civildebatewall.data {
 		public var mostLikedThreads:Array; // TODO
 		public var frequentWords:Array; // TODO		
 		
+		// sms
+		public var latestTextMessages:Array;
+		
 		public var stats:Object;
 		
 		public var smsNumber:String;
@@ -50,6 +54,7 @@ package com.civildebatewall.data {
 			mostDebatedThreads = [];
 			mostLikedThreads = [];
 			frequentWords = [];
+			latestTextMessages = [];
 			
 			
 			trace('Loading from DB');
@@ -232,7 +237,43 @@ package com.civildebatewall.data {
 				
 		
 		
-		// NEW STUFF	
+		// NEW STUFF
+		
+		// User stuff
+		
+		public function createUser(username:String, phoneNumber:String, callback:Function):void {
+			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/', {'phone': phoneNumber, 'username': username}, callback); // TODO no need, grab it when we check the recents on SMS prompt page?			
+		}
+		
+		
+		public function checkForUser(phoneNumber:String, callback:Function):void {
+			// WHY DOES THIS STREAM ERROR?
+			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/search', {'phone': phoneNumber}, callback); // TODO no need, grab it when we check the recents on SMS prompt page?			
+		}
+		
+		
+		
+		// SMS fetching
+		private var textCallback:Function;
+		public function fetchLatestTextMessages(callback:Function = null):void {
+			textCallback = callback;
+			Utilities.getRequestJSON(CDW.settings.serverPath + '/api/sms/kiosk' + CDW.settings.kioskNumber, onLatestTextMessages); // TODO no need, grab it when we check the recents on SMS prompt page?			
+		}
+		
+		public function onLatestTextMessages(r:Object):void {
+			trace("got latest text messages");
+			latestTextMessages = [];
+			
+			var newMessages:Array = r['recentMessages'];
+			
+			// turn them into objects
+			for (var i:uint = 0; i < newMessages.length; i++) {
+				latestTextMessages.push(new TextMessage(newMessages[i]));				
+			}
+			
+			if (textCallback != null) textCallback();
+			textCallback = null;
+		}
 
 		
 		public function getNextThread():Thread {
@@ -275,6 +316,16 @@ package com.civildebatewall.data {
 			return null;
 			// todo else raise error
 		}
+		
+		public function getUserByPhoneNumber(phoneNumber:String):User {
+			phoneNumber = phoneNumber.replace('+1', '');
+			
+			for each (var user:User in users) {
+				if (user.phoneNumber == phoneNumber) return user;
+			}
+			return null;
+			// todo else raise error
+		}		
 		
 	}
 }
