@@ -1,12 +1,13 @@
 package com.civildebatewall.elements
 {
-	import flash.display.*;
-	import flash.events.*;
-	import flash.text.*;
-	
 	import com.civildebatewall.*;
 	import com.civildebatewall.blocks.*;
+	import com.civildebatewall.data.Post;
 	import com.civildebatewall.ui.*;
+	
+	import flash.display.*;
+	import flash.events.*;
+	import flash.text.*;	
 	
 	public class DebateOverlay extends BlockBase	{
 		
@@ -49,23 +50,9 @@ package com.civildebatewall.elements
 			var yOffset:int = 30;
 			var paddingBottom:int = 35;
 			
-			var index:int = 0;
-			var numComments:uint = Utilities.objectLength(CDW.database.debates[CDW.state.activeDebate]['comments']);
-			
-			for each (var comment:Object in CDW.database.debates[CDW.state.activeDebate]['comments']) {
-				//Utilities.traceObject(comment);
-				
-				// portrait
-				var userID:String = comment['author']['id'];
-				var commentID:String = comment['_id']['$oid'];
-				var portrait:Bitmap = CDW.database.getPortrait(userID);
-				var stance:String = comment['stance'];
-				var authorName:String = comment['author']['firstName'].toString();
-				var commentNumber:int = index + 1;
-				var created:Date = new Date(comment['created']['$date']);
-				var opinion:String = comment['comment'];
-				
-				var commentRow:Comment = new Comment(commentID, commentNumber, portrait, stance, authorName, created, opinion);
+			for (var i:uint = 1; i < CDW.state.activeThread.posts.length; i++) {
+				// the row...
+				var commentRow:Comment = new Comment(CDW.state.activeThread.posts[i], i);
 				
 				commentRow.x = 30;
 				commentRow.y = yOffset;
@@ -74,11 +61,8 @@ package com.civildebatewall.elements
 				yOffset += commentRow.height + paddingBottom;
 				scrollField.scrollSheet.addChild(commentRow);
 				
-				
-				index++;
-				
 				// add the lines between the comments				
-				if (index < numComments) {
+				if (i < CDW.state.activeThread.postCount) {
 					var line:Shape = new Shape();
 					line.graphics.lineStyle(1, Assets.COLOR_GRAY_25, 1.0, true);
 					line.graphics.moveTo(0, 0);
@@ -108,7 +92,6 @@ package com.civildebatewall.elements
 			trace('Max Height: ' + _maxHeight);			
 		}
 		
-
 	
 		private function onDown(e:Event):void {
 			targetComment = e.target as Comment;
@@ -125,7 +108,7 @@ package com.civildebatewall.elements
 			targetComment = e.target as Comment;			
 			
 			if (scrollField.isClick) {
-				trace("Debate with comment ID: " + targetComment.commentID);
+				trace("Debate with post: " + targetComment.post);
 				// TODO HOOK THIS UP
 			}
 			else {
@@ -139,7 +122,7 @@ package com.civildebatewall.elements
 			targetComment = e.target as Comment;			
 			
 			if (scrollField.isClick) {
-				trace("Flag comment ID: " + targetComment.commentID);
+				trace("Flag post: " + targetComment.post);
 				// TODO HOOK THIS UP				
 			}
 			else {

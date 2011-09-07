@@ -3,10 +3,10 @@ package com.civildebatewall {
 	import com.bit101.components.FPSMeter;
 	import com.civildebatewall.blocks.*;
 	import com.civildebatewall.camera.*;
+	import com.civildebatewall.data.Database;
 	import com.civildebatewall.elements.*;
 	import com.civildebatewall.keyboard.*;
 	import com.civildebatewall.ui.*;
-	import com.civildebatewall.web.api.Question;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -15,20 +15,15 @@ package com.civildebatewall {
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
-	import flash.system.Capabilities;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	import flash.ui.Mouse;
-	import flash.ui.MouseCursor;
-	import flash.ui.MouseCursorData;
-	import com.civildebatewall.data.Database;
 	
 	// Greensock plugins
 	TweenPlugin.activate([ThrowPropsPlugin]);
 	TweenPlugin.activate([MotionBlurPlugin]);			
 	TweenPlugin.activate([CacheAsBitmapPlugin]);	
 	TweenPlugin.activate([TransformAroundCenterPlugin]);
-		
 	FastEase.activate([Linear, Quad, Cubic, Quart, Quint, Strong]);
 	
 	public class CDW extends Sprite {
@@ -121,14 +116,11 @@ package com.civildebatewall {
 			
 			contextMenu = myContextMenu;
 			
-			if (settings.startFullScreen) {
-				toggleFullScreen();
-			}
+			if (settings.startFullScreen)	toggleFullScreen();
 			
 			// inactivity timer
 			inactivityTimer = new InactivityTimer(stage, settings.inactivityTimeout);
 			inactivityTimer.addEventListener(InactivityEvent.INACTIVE, onInactive);
-			
 		}
 		
 		private function onInactive(e:InactivityEvent):void {
@@ -144,13 +136,8 @@ package com.civildebatewall {
 				
 				// set active debate to first in list
 				// set the active debate to the first one
-				
-				
-				
-				for (var debateID:String in CDW.database.debates) {			
-					CDW.state.setActiveDebate(debateID);
-					break;
-				}
+				CDW.state.setActiveDebate(CDW.database.threads[0]);
+
 				
 				trace("database loaded");
 				
@@ -165,12 +152,8 @@ package com.civildebatewall {
 				addChild(view);
 				
 				// set the starting view
-				if(database.getDebateCount() > 0) {
-					view.homeView();
-				}
-				else {
-					view.noOpinionView();
-				}
+				database.threads.length() >  0 ? view.homeView() : view.noOpinionView();
+				
 				
 				// FPS meter
 				var fps:FPSMeter = new FPSMeter(this, stage.stageWidth - 50, 0);		
@@ -189,19 +172,13 @@ package com.civildebatewall {
 			else {
 				trace('updated db')
 				// set the starting view
-				CDW.state.setActiveDebate(CDW.state.activeDebate);
+				CDW.state.setActiveDebate(CDW.state.activeThread);
 				view.debateStrip.update();
 				view.statsOverlay.update();
 				
-				if(database.getDebateCount() > 0) {
-					view.homeView();
-				}
-				else {
-					view.noOpinionView();
-				}
+				// jump to home view
+			  database.threads.length() > 0 ? view.homeView() : view.noOpinionView();
 			}
-			
-
 		}
 		
 		
@@ -239,8 +216,6 @@ package com.civildebatewall {
 		private function onQuitSelect(e:Event):void {
 			NativeApplication.nativeApplication.exit();
 		}
-		
-		
-		
+
 	}
 }

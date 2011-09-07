@@ -2,6 +2,7 @@ package com.civildebatewall.data {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CDW;
+		
 	
 	public class Post extends Object {
 		
@@ -26,6 +27,9 @@ package com.civildebatewall.data {
 		public var stanceColorOverlay:uint;
 		public var stanceColorDisabled:uint;
 		public var stanceColorExtraLight:uint;
+		public var stanceColorWatermark:uint;
+		
+		public var stanceFormatted:String;
 
 		// link back to thread, too?
 		
@@ -39,6 +43,8 @@ package com.civildebatewall.data {
 			_user = CDW.database.getUserByID(jsonObject['author']['id']);
 			_created = new Date(jsonObject['created']['$date']);
 			
+			
+			// A bunch of conveniences
 			if (stance == STANCE_YES) {
 				stanceColorExtraLight = Assets.COLOR_YES_EXTRA_LIGHT;
 				stanceColorLight = Assets.COLOR_YES_LIGHT;
@@ -46,6 +52,7 @@ package com.civildebatewall.data {
 				stanceColorDark = Assets.COLOR_YES_DARK;
 				stanceColorOverlay = Assets.COLOR_YES_OVERLAY;
 				stanceColorDisabled = Assets.COLOR_YES_DISABLED;
+				stanceColorWatermark = Assets.COLOR_YES_WATERMARK;				
 			}
 			else {
 				stanceColorExtraLight = Assets.COLOR_NO_EXTRA_LIGHT;				
@@ -54,7 +61,10 @@ package com.civildebatewall.data {
 				stanceColorDark = Assets.COLOR_NO_DARK;
 				stanceColorOverlay = Assets.COLOR_NO_OVERLAY;
 				stanceColorDisabled = Assets.COLOR_NO_DISABLED;
+				stanceColorWatermark = Assets.COLOR_NO_WATERMARK;				
 			}
+			
+			stanceFormatted = _stance.toUpperCase() + '!';			
 			
 			// anything else? capitalization... dates
 		}
@@ -67,6 +77,7 @@ package com.civildebatewall.data {
 		public function get text():String{ return _text; }		
 		public function get user():User {	return _user;	}
 		public function get created():Date { return _created; }
+		
 		
 	}
 }	
