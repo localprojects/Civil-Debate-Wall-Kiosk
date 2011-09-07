@@ -24,6 +24,12 @@ package com.civildebatewall.data {
 		public var users:Array;
 		public var threads:Array;
 		public var posts:Array;
+		
+		// stats
+		public var mostDebatedThreads:Array; // TODO
+		public var mostLikedThreads:Array; // TODO
+		public var frequentWords:Array; // TODO		
+		
 		public var stats:Object;
 		
 		public var smsNumber:String;
@@ -41,6 +47,9 @@ package com.civildebatewall.data {
 			posts = [];
 			stats = {};			
 			smsNumber = '';
+			mostDebatedThreads = [];
+			mostLikedThreads = [];
+			frequentWords = [];
 			
 			
 			trace('Loading from DB');
@@ -117,7 +126,7 @@ package com.civildebatewall.data {
 			trace('posts',posts);				
 				
 			// ready to start
-			// this.dispatchEvent(new Event(Event.COMPLETE));
+			this.dispatchEvent(new Event(Event.COMPLETE));
 		}		
 		
 		
@@ -205,6 +214,22 @@ package com.civildebatewall.data {
 //		}		
 //		
 //		
+		
+		// mutate server
+		public function uploadResponse(threadID:String, responseTo:String, userID:String, opinion:String, stance:String, origin:String, callback:Function):void {
+			var yesno:uint = (stance == Post.STANCE_YES) ? 1 : 0;
+			var params:Object = {'yesno': yesno, 'test': opinion, 'responseTo': responseTo, 'author': userID, 'origin': origin};
+			Utilities.postRequest(CDW.settings.serverPath + '/api/threads/' + threadID + '/posts', params, callback);
+		}
+					
+			
+		public function uploadThread(questionId:String, userID:String, opinion:String, stance:String, origin:String, callback:Function):void {
+			var yesno:uint = (stance == Post.STANCE_YES) ? 1 : 0;
+			var params:Object = {'yesno': yesno, 'test': opinion, 'author': userID, 'origin': origin}; 
+			Utilities.postRequest(CDW.settings.serverPath + '/api/questions/' + questionId + '/threads', params, callback);			
+		}		
+		
+				
 		
 		
 		// NEW STUFF	

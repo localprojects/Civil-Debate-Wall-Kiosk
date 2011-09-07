@@ -37,6 +37,7 @@ package com.civildebatewall {
 		public static var testOverlay:Bitmap;
 		public static var inactivityTimer:InactivityTimer;
 		
+		private var fps:FPSMeter;
 		
 		public function CDW() {
 			ref = this;
@@ -107,7 +108,11 @@ package com.civildebatewall {
 			
 			var toggleDashboardItem:ContextMenuItem = new ContextMenuItem("Toggle Dashboard");
 			myContextMenu.customItems.push(toggleDashboardItem);
-			toggleDashboardItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onToggleDashboard);				
+			toggleDashboardItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onToggleDashboard);
+			
+			var toggleFPSItem:ContextMenuItem = new ContextMenuItem("Toggle FPS");
+			myContextMenu.customItems.push(toggleFPSItem);
+			toggleFPSItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onToggleFPS);			
 			
 			var quitItem:ContextMenuItem = new ContextMenuItem("Quit");
 			myContextMenu.customItems.push(quitItem);
@@ -152,11 +157,16 @@ package com.civildebatewall {
 				addChild(view);
 				
 				// set the starting view
-				database.threads.length() >  0 ? view.homeView() : view.noOpinionView();
+				if (database.threads.length >  0) {
+					view.homeView();
+				}
+				else {
+					view.noOpinionView();					
+				}
 				
 				
 				// FPS meter
-				var fps:FPSMeter = new FPSMeter(this, stage.stageWidth - 50, 0);		
+				fps = new FPSMeter(this, stage.stageWidth - 50, 0);		
 				
 				if (settings.halfSize) {
 					fps.scaleX = 2;
@@ -212,6 +222,10 @@ package com.civildebatewall {
 		private function onToggleDashboard(e:Event):void {
 			dashboard.visible = !dashboard.visible;
 		}
+		
+		private function onToggleFPS(e:Event):void {
+			fps.visible = !fps.visible;
+		}		
 		
 		private function onQuitSelect(e:Event):void {
 			NativeApplication.nativeApplication.exit();

@@ -1,16 +1,16 @@
 package com.civildebatewall.elements {
-	import com.greensock.TweenMax;
-	
-	import flash.display.Bitmap;
-	import flash.display.Shape;
-	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CDW;
 	import com.civildebatewall.StringUtils;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.blocks.BlockBase;
 	import com.civildebatewall.blocks.BlockParagraph;
+	import com.civildebatewall.data.Post;
 	import com.civildebatewall.ui.BalloonButton;
+	import com.greensock.TweenMax;
+	
+	import flash.display.Bitmap;
+	import flash.display.Shape;
 	
 	public class SuperlativesPortrait extends BlockBase {
 		
@@ -92,13 +92,13 @@ package com.civildebatewall.elements {
 		}
 		
 		
-		private var targetID:String;
+		private var _post:Post;
 		
 		
-		public function setPost(id:String, instant:Boolean = false):void {
-			targetID = id;
+		public function setPost(post:Post, instant:Boolean = false):void {
+			post = _post;
 			
-			portrait.setImage(new Bitmap(Utilities.scaleToFill(CDW.database.getDebateAuthorPortrait(id).bitmapData, 503, 844), "auto", true), instant);
+			portrait.setImage(new Bitmap(Utilities.scaleToFill(_post.user.photo.bitmapData, 503, 844), "auto", true), instant);
 			
 			if (instant) {
 				finishSettingPost(true);
@@ -110,61 +110,25 @@ package com.civildebatewall.elements {
 				debateButton.tweenOut();
 				nametag.tweenOut();
 				opinion.tweenOut();
-				///TweenMax.delayedCall(1, finishSettingPost);
 			}
-			
-		}
-		
-		
-		public var stanceColorLight:uint;
-		public var stanceColorMedium:uint;
-		public var stanceColorDark:uint;
-		public var stanceColorOverlay:uint;
-		public var stanceColorDisabled:uint;
-		public var stanceColorExtraLight:uint; 				
+		} 				
 		
 		private function finishSettingPost(instant:Boolean = false):void {
 			// mutations go here
-			var debate:Object = CDW.database.debates[targetID];
-			
-			if (debate['stance'] == 'yes') {
-				stanceColorLight = Assets.COLOR_YES_LIGHT;
-				stanceColorMedium = Assets.COLOR_YES_MEDIUM;
-				stanceColorDark = Assets.COLOR_YES_DARK;
-				stanceColorOverlay = Assets.COLOR_YES_OVERLAY;
-				stanceColorDisabled = Assets.COLOR_YES_DISABLED;
-				stanceColorExtraLight = Utilities.color(190, 225, 250);
-			}
-			else {
-				stanceColorLight = Assets.COLOR_NO_LIGHT;
-				stanceColorMedium = Assets.COLOR_NO_MEDIUM;
-				stanceColorDark = Assets.COLOR_NO_DARK;
-				stanceColorOverlay = Assets.COLOR_NO_OVERLAY;
-				stanceColorDisabled = Assets.COLOR_NO_DISABLED;
-				stanceColorExtraLight = Utilities.color(247, 201, 181);				
-			}
-			
-			leftQuote.setColor(stanceColorLight, true);
-			rightQuote.setColor(stanceColorLight, true);
-			debateButton.setBackgroundColor(stanceColorDark, true);
-			nametag.setBackgroundColor(stanceColorMedium, true);
-			nametag.setText(StringUtils.capitalize(debate['author']['firstName']) + ' Says : ', true);
-			opinion.setBackgroundColor(stanceColorLight, true);
-			opinion.setText(debate['opinion']);
+			leftQuote.setColor(_post.stanceColorLight, true);
+			rightQuote.setColor(_post.stanceColorLight, true);
+			debateButton.setBackgroundColor(_post.stanceColorDark, true);
+			nametag.setBackgroundColor(_post.stanceColorMedium, true);
+			nametag.setText(_post.user.usernameFormatted + ' Says : ', true);
+			opinion.setBackgroundColor(_post.stanceColorLight, true);
+			opinion.setText(_post.text);
 			//rightQuote.y = opinion.y + opinion.height
-			
 			
 			leftQuote.tweenIn();
 			rightQuote.tweenIn();								
 			debateButton.tweenIn();
 			nametag.tweenIn();
 			opinion.tweenIn();
-			
-			
-		}
-			
-
-
-		
+		}		
 	}
 }

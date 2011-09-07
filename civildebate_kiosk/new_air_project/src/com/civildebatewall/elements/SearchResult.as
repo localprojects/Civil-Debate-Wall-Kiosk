@@ -1,10 +1,11 @@
 package com.civildebatewall.elements {
-	import flash.display.*;
-	import flash.events.Event;
-	
 	import com.civildebatewall.*;
 	import com.civildebatewall.blocks.*;
+	import com.civildebatewall.data.Post;
 	import com.civildebatewall.ui.*;
+	
+	import flash.display.*;
+	import flash.events.Event;
 	
 	// TODO change aesthetics
 	public class SearchResult extends Comment {
@@ -20,9 +21,9 @@ package com.civildebatewall.elements {
 		protected var _highlight:String;
 		protected var background:Shape;
 		
-		public function SearchResult(commentID:String, portrait:Bitmap, stance:String, authorName:String, created:Date, opinion:String, highlight:String) {
+		public function SearchResult(post:Post, highlight:String) {
 			_highlight = highlight;
-			super(commentID, 0, portrait, stance, authorName, created, opinion);
+			super(post, 0);
 		}
 		
 		override protected function init():void {
@@ -32,7 +33,7 @@ package com.civildebatewall.elements {
 			
 			// draw the portrait
 			portrait = new Sprite();
-			portrait.graphics.beginBitmapFill(_portraitData, null, false, true);
+			portrait.graphics.beginBitmapFill(_post.user.photo.bitmapData, null, false, true); // TODO resize?
 			portrait.graphics.drawRoundRect(0, 0, portraitWidth, portraitHeight, 15, 15);
 			portrait.graphics.endFill();
 			
@@ -41,25 +42,17 @@ package com.civildebatewall.elements {
 			stanceLabel.setPadding(0, 0, 0, 0);
 			stanceLabel.visible = true;
 			
-			if (_stance == 'yes') {
-				stanceColorLight = Assets.COLOR_YES_LIGHT;
-				stanceColorMedium = Assets.COLOR_YES_MEDIUM;
-				stanceColorDark = Assets.COLOR_YES_DARK;
-				stanceLabel.setText('YES!', true);
-				
-				goToDebateButton = new IconButton(120, 30, Assets.COLOR_GRAY_5, 'Go To Debate', 14, Assets.COLOR_YES_LIGHT, Assets.FONT_BOLD, Assets.getBlueRightCarat(), IconButton.ICON_RIGHT);
-				
+			var carat:Bitmap;
+			if (_post.stance == Post.STANCE_YES) {
+				carat = Assets.getBlueRightCarat();
 			}
 			else {
-				stanceColorLight = Assets.COLOR_NO_LIGHT;
-				stanceColorMedium = Assets.COLOR_NO_MEDIUM;
-				stanceColorDark = Assets.COLOR_NO_DARK;					
-				stanceLabel.setText('NO!', true);
-				
-				goToDebateButton = new IconButton(120, 30, Assets.COLOR_GRAY_5, 'Go To Debate', 14, Assets.COLOR_NO_LIGHT, Assets.FONT_BOLD, Assets.getOrangeRightCarat(), IconButton.ICON_RIGHT);				
+				carat = Assets.getOrangeRightCarat();				
 			}
 			
-			portrait.graphics.beginFill(stanceColorLight);				
+			goToDebateButton = new IconButton(120, 30, Assets.COLOR_GRAY_5, 'Go To Debate', 14, _post.stanceColorLight, Assets.FONT_BOLD, carat, IconButton.ICON_RIGHT);
+			
+			portrait.graphics.beginFill(_post.stanceColorLight);				
 			portrait.graphics.drawRect(0, 131, portraitWidth, 38);
 			portrait.graphics.endFill();
 			
@@ -73,8 +66,8 @@ package com.civildebatewall.elements {
 			addChild(portrait);
 			
 			// add the byline
-			var authorText:String = _authorName.toUpperCase() + '\u0027S REBUTTAL STATEMENT';
-			var authorLabel:BlockLabel = new BlockLabel(authorText, 17, stanceColorLight, 0x000000, Assets.FONT_HEAVY, false);
+			var authorText:String = _post.user.usernameFormatted + '\u0027S REBUTTAL STATEMENT';
+			var authorLabel:BlockLabel = new BlockLabel(authorText, 17, _post.stanceColorLight, 0x000000, Assets.FONT_HEAVY, false);
 			authorLabel.setPadding(0, 0, 0, 0);
 			authorLabel.visible = true;
 			
@@ -84,12 +77,12 @@ package com.civildebatewall.elements {
 			addChild(authorLabel);
 			
 			// add the timestamp
-			var timeString:String = Utilities.zeroPad(_created.hours, 2) + Utilities.zeroPad(_created.minutes, 2);
-			var dateString:String = Utilities.zeroPad(_created.month, 2) + Utilities.zeroPad(_created.date, 2) + (_created.fullYear - 2000);
+			var timeString:String = Utilities.zeroPad(_post.created.hours, 2) + Utilities.zeroPad(_post.created.minutes, 2);
+			var dateString:String = Utilities.zeroPad(_post.created.month, 2) + Utilities.zeroPad(_post.created.date, 2) + (_post.created.fullYear - 2000);
 			
 			var timestamp:String = 'Posted at ' + timeString + ' hours on ' + dateString;
 			
-			var timeLabel:BlockLabel = new BlockLabel(timestamp, 12, stanceColorMedium, 0x000000, Assets.FONT_BOLD_ITALIC, false);
+			var timeLabel:BlockLabel = new BlockLabel(timestamp, 12, _post.stanceColorMedium, 0x000000, Assets.FONT_BOLD_ITALIC, false);
 			timeLabel.setPadding(0, 0, 0, 0);
 			timeLabel.visible = true;				
 			
@@ -99,8 +92,8 @@ package com.civildebatewall.elements {
 			addChild(timeLabel);
 			
 			// add the flag button
-			var flagButton:IconButton = new IconButton(34, 33, stanceColorDark, '', 0, 0x000000, null, Assets.getSmallFlagIcon());
-			flagButton.setDownColor(stanceColorMedium);
+			var flagButton:IconButton = new IconButton(34, 33, _post.stanceColorDark, '', 0, 0x000000, null, Assets.getSmallFlagIcon());
+			flagButton.setDownColor(_post.stanceColorMedium);
 			flagButton.setOutlineWeight(2);
 			flagButton.visible = true;
 			flagButton.x = 817;
@@ -112,7 +105,7 @@ package com.civildebatewall.elements {
 			
 			// add the hairline
 			var hairline:Shape = new Shape();
-			hairline.graphics.lineStyle(1, stanceColorLight, 0.6, true); // some alpha to make it appear thinner
+			hairline.graphics.lineStyle(1, _post.stanceColorLight, 0.6, true); // some alpha to make it appear thinner
 			hairline.graphics.moveTo(0, 0);
 			hairline.graphics.lineTo(650, 0);
 			
@@ -122,7 +115,7 @@ package com.civildebatewall.elements {
 			addChild(hairline);
 			
 			// Add the opinoin
-			var opinion:BlockParagraph = new BlockParagraph(650, stanceColorLight, _opinion, 23);
+			var opinion:BlockParagraph = new BlockParagraph(650, _post.stanceColorLight, _post.text, 23);
 			opinion.setPadding(11, 18, 14, 18);
 			opinion.visible = true;
 			opinion.x = 196;
@@ -153,8 +146,8 @@ package com.civildebatewall.elements {
 			debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
 			debateButton.scaleX = 0.67;  
 			debateButton.scaleY = 0.67;				
-			debateButton.setBackgroundColor(stanceColorDark, true);
-			debateButton.setDownColor(stanceColorMedium);
+			debateButton.setBackgroundColor(_post.stanceColorDark, true);
+			debateButton.setDownColor(_post.stanceColorMedium);
 			goToDebateButton.setOutlineWeight(0);
 			goToDebateButton.showOutline(false);
 			debateButton.visible = true;
