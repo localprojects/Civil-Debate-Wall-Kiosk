@@ -3,6 +3,7 @@ package com.civildebatewall.data {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CDW;
 	import com.civildebatewall.MetaBitmap;
+	import com.civildebatewall.StringUtils;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.ImageLoader;
 	import com.greensock.loading.LoaderMax;
@@ -43,7 +44,6 @@ package com.civildebatewall.data {
 			
 			trace("Loaded user " + _username);
 		}
-
 		
 		private function onImageLoaded(e:LoaderEvent):void {
 			trace("Loaded image for " + _username);
@@ -51,23 +51,11 @@ package com.civildebatewall.data {
 		}
 		
 		// TODO set photo...
-		
 		// TODo save photo...
-		
-		public function get username():String {
-			return _username;
-		}
-		
-		public function get phoneNumber():String {
-			return _phoneNumber;
-		}		
-		
-		public function get id():String {
-			return _id;
-		}				
-		
-		public function get photo():MetaBitmap {
-			return _photo;
-		}
+		public function get username():String {	return _username;	}
+		public function get phoneNumber():String { return _phoneNumber; }		
+		public function get id():String { return _id; }				
+		public function get photo():MetaBitmap { return _photo;	}
+		public function get usernameFormatted():String { return StringUtils.capitalize(_username); }		
 	}
 }

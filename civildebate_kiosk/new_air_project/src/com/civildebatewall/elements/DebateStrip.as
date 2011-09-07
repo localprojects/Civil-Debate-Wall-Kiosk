@@ -1,19 +1,20 @@
 package com.civildebatewall.elements {
+	import com.civildebatewall.*;
+	import com.civildebatewall.CDW;
+	import com.civildebatewall.blocks.BlockBase;
+	import com.civildebatewall.data.Thread;
+	import com.civildebatewall.ui.*;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.ThrowPropsPlugin;
 	
+	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	import flash.ui.Mouse;
 	import flash.utils.getTimer;
-	
-	import com.civildebatewall.*;
-	import com.civildebatewall.CDW;
-	import com.civildebatewall.blocks.BlockBase;
-	import com.civildebatewall.ui.*;
 	
 	import sekati.converters.BoolConverter;
 	
@@ -40,32 +41,30 @@ package com.civildebatewall.elements {
 			// Clean up the kids, could do a diff instead...
 			Utilities.removeChildren(scrollField.scrollSheet);
 
-			var i:int = 0;
-			for (var debateID:* in CDW.database.debates) {
-				var debate:Object = CDW.database.debates[debateID];
-				var debateThumbnail:ThumbnailButton = new ThumbnailButton(CDW.database.cloneDebateAuthorPortrait(debateID), debate.stance, debateID);
-				debateThumbnail.x = (debateThumbnail.width - 6) * i; // compensate for dots
-				debateThumbnail.y = 0;
+			for (var i:uint = 0; i < CDW.database.threads.length; i++) {
+				var threadThumbnail:ThumbnailButton = new ThumbnailButton(CDW.database.threads[i]);
 				
-				debateThumbnail.addEventListener(MouseEvent.MOUSE_DOWN, onThumbnailMouseDown);
-				debateThumbnail.addEventListener(MouseEvent.MOUSE_UP, onThumbnailMouseUp);				
+				threadThumbnail.x = (threadThumbnail.width - 6) * i; // compensate for dots
+				threadThumbnail.y = 0;
+				
+				threadThumbnail.addEventListener(MouseEvent.MOUSE_DOWN, onThumbnailMouseDown);
+				threadThumbnail.addEventListener(MouseEvent.MOUSE_UP, onThumbnailMouseUp);				
 				
 				// remove the left dot from the first one
-				if (i == 0) debateThumbnail.removeChild(debateThumbnail.leftDot);
-				scrollField.scrollSheet.addChild(debateThumbnail);
-				i++;
+				if (i == 0) threadThumbnail.removeChild(threadThumbnail.leftDot);
+				
+				// remove the right dot from the last one				
+				if (i == CDW.database.threads.length - 1) threadThumbnail.removeChild(threadThumbnail.rightDot);
+				
+				scrollField.scrollSheet.addChild(threadThumbnail);
 			}
 			
-			// remove the right dot from the last one
-			debateThumbnail.removeChild(debateThumbnail.rightDot);
-
 			// update the scroll field limits to acommodate the growing strip...
 			scrollField.xMin = -scrollField.scrollSheet.width + 594;
 			scrollField.xMax = 450; 	
 		}
 		
 		
-
 		public function setActiveThumbnail(id:String):void {
 			
 			for (var i:int = 0; i < scrollField.scrollSheet.numChildren; i++) {
@@ -74,10 +73,10 @@ package com.civildebatewall.elements {
 				
 					var tempThumb:ThumbnailButton = scrollField.scrollSheet.getChildAt(i) as ThumbnailButton;
 					
-					
-					if (tempThumb.debateID == id) {
-						// deactivate the old one
+					// TODO use whole object?
+					if (tempThumb.thread.id == id) {
 						
+						// deactivate the old on
 						if (activeThumbnail != null) {						
 							activeThumbnail.selected = false;
 							activeThumbnail.setBackgroundColor(0xffffff);
@@ -123,14 +122,9 @@ package com.civildebatewall.elements {
 					//setActiveThumbnail(targetThumbnail.debateID);
 					
 					// is it to the left, or the right?
-					before = true;
+					before = targetThumbnail.x < activeThumbnail.x;
 					
-					for (var debateID:* in CDW.database.debates) {
-						if (debateID == CDW.state.activeDebate) before = false;
-						if (debateID == targetThumbnail.debateID) break;
-					}
-					
-					if (CDW.state.debateOverlayOpen) {
+					if (CDW.state.threadOverlayOpen) {
 						// go home, then transition
 						CDW.view.homeView();
 						TweenMax.delayedCall(1, finishTransition);
@@ -140,7 +134,6 @@ package com.civildebatewall.elements {
 						finishTransition();
 					}
 
-						
 				}
 			}
 			else {
@@ -154,11 +147,11 @@ package com.civildebatewall.elements {
 		private function finishTransition():void {
 			// transition to it
 			if (before) {
-				CDW.state.setActiveDebate(CDW.state.activeDebate, targetThumbnail.debateID, CDW.state.nextDebate);
+				CDW.state.setActiveDebate(CDW.state.activeThread, targetThumbnail.thread, CDW.state.nextThread);
 				CDW.view.previousDebate();						
 			}
 			else {						
-				CDW.state.setActiveDebate(CDW.state.activeDebate, CDW.state.previousDebate, targetThumbnail.debateID);
+				CDW.state.setActiveDebate(CDW.state.activeThread, CDW.state.previousThread, targetThumbnail.thread);
 				CDW.view.nextDebate();
 			}			
 		}

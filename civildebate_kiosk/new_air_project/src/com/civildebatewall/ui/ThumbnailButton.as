@@ -1,36 +1,32 @@
 package com.civildebatewall.ui {
+	import com.civildebatewall.*;
+	import com.civildebatewall.Assets;
+	import com.civildebatewall.blocks.BlockBase;
+	import com.civildebatewall.blocks.BlockLabel;
+	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.Thread;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	
 	import flash.display.*;
 	import flash.text.*;
 	
-	import com.civildebatewall.*;
-	import com.civildebatewall.Assets;
-	import com.civildebatewall.blocks.BlockBase;
-	import com.civildebatewall.blocks.BlockLabel;
-	
 	public class ThumbnailButton extends BlockBase {
 	
+		private var _thread:Thread;
 		private var _backgroundColor:uint;
 		private var background:Sprite;
 		private var lines:Sprite;
 		private var roundedPortrait:Sprite;
-		private var portrait:Bitmap;
 		private var _selected:Boolean;
 		private var textField:BlockLabel;
-		public var debateID:String;
-		private var stanceColorLight:uint;
 		public var downBackgroundColor:uint;		
-		
 		private var textBackground:Sprite;
-		
 		public var leftDot:Shape;
 		public  var rightDot:Shape;		
 		
-		public function ThumbnailButton(image:Bitmap, stance:String, debate:String) {
+		public function ThumbnailButton(thread:Thread) {
 			_selected = false;
-			
 			
 			background = new Sprite();
 			background.graphics.beginFill(0xffffff);
@@ -38,23 +34,18 @@ package com.civildebatewall.ui {
 			background.graphics.endFill();
 			addChild(background);
 			
-			debateID = debate;
-			portrait = image;
 			roundedPortrait = new Sprite();
 			
-			portrait.width = 71;
-			portrait.height = 96;
-			portrait.bitmapData = Utilities.scaleToFill(portrait.bitmapData, 71, 96)
+
+			var scaledPhotoData:BitmapData = Utilities.scaleToFill(thread.firstPost.user.photo.bitmapData, 71, 96)
 			
-			roundedPortrait.graphics.beginBitmapFill(portrait.bitmapData, null, false, true);
+			roundedPortrait.graphics.beginBitmapFill(scaledPhotoData, null, false, true);
 			roundedPortrait.graphics.drawRoundRect(0, 0, 71, 96, 15, 15);
 			roundedPortrait.graphics.endFill();			
-			roundedPortrait.cacheAsBitmap = false;
+      // roundedPortrait.cacheAsBitmap = false;
 			this.cacheAsBitmap = false;
 			Utilities.centerWithin(roundedPortrait, this);			
-			
-
-			
+						
 			//  the text
 			textField = new BlockLabel('', 14, 0xffffff, 0x000000, Assets.FONT_BOLD, true);
 			textField.background.alpha = 0;
@@ -62,30 +53,19 @@ package com.civildebatewall.ui {
 			textField.visible = true;
 
 			
+			downBackgroundColor = _thread.firstPost.stanceColorWatermark; 
+			textField.setText('YES!', true);			
 			
-			if (stance == 'yes') {
-				stanceColorLight = Assets.COLOR_YES_LIGHT;
-				downBackgroundColor = Assets.COLOR_YES_WATERMARK; 
-				textField.setText('YES!', true);
-			}
-			else if (stance == 'no') {
-				stanceColorLight = Assets.COLOR_NO_LIGHT;
-				downBackgroundColor = Assets.COLOR_NO_WATERMARK;				
-				textField.setText('NO!', true);				
-			}
-			else {
-				trace('unknown stance "' + stance + '"');
-			}			
-			
+
 			// top line
 			lines = new Sprite();
 			
-			lines.graphics.beginFill(stanceColorLight);
+			lines.graphics.beginFill(_thread.firstPost.stanceColorLight);
 			lines.graphics.drawRect(2, 4, 169, 3);			
 			lines.graphics.endFill();
 			
 			// bottom line
-			lines.graphics.beginFill(stanceColorLight);
+			lines.graphics.beginFill(_thread.firstPost.stanceColorLight);
 			lines.graphics.drawRect(2, 132, 169, 3);			
 			lines.graphics.endFill();		
 			
@@ -93,7 +73,7 @@ package com.civildebatewall.ui {
 
 			// text background			
 			textBackground = new Sprite();
-			textBackground.graphics.beginFill(stanceColorLight);
+			textBackground.graphics.beginFill(_thread.firstPost.stanceColorLight);
 			textBackground.graphics.drawRect(0, 0, 71, 24);
 			textBackground.graphics.endFill();
 			textBackground.x = roundedPortrait.x;
@@ -158,7 +138,7 @@ package com.civildebatewall.ui {
 				// saturate
 				TweenMax.to(roundedPortrait, 1, {colorMatrixFilter:{saturation: 1}, ease: Quart.easeInOut});
 				TweenMax.to(textBackground, 0.5, {y: this.height, alpha: 0, ease: Quart.easeOut});				
-				setDotColor(stanceColorLight);
+				setDotColor(_thread.firstPost.stanceColorLight);
 			}
 			else {
 				// desaturate
@@ -167,6 +147,8 @@ package com.civildebatewall.ui {
 				setDotColor(Assets.COLOR_GRAY_50);				
 			}
 		}
+		
+		public function get thread():Thread { return _thread; }
 		
 		public function get selected():Boolean {
 			return _selected;

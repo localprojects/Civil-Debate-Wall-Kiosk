@@ -1,10 +1,11 @@
 package com.civildebatewall.elements {
-	import flash.display.*;
-	import flash.events.Event;
-	
 	import com.civildebatewall.*;
 	import com.civildebatewall.blocks.*;
+	import com.civildebatewall.data.Post;
 	import com.civildebatewall.ui.*;
+	
+	import flash.display.*;
+	import flash.events.Event;
 
 	public class Comment extends BlockBase {
 		
@@ -14,49 +15,30 @@ package com.civildebatewall.elements {
 		public static const EVENT_BUTTON_DOWN:String = 'eventButtonDown';
 		
 		
-		protected var _commentID:String;
-		protected var _commentNumber:int;		
-		protected var _portraitData:BitmapData;
-		protected var _stance:String;
-		protected var _authorName:String;
-		protected var _created:Date;
-		protected var _opinion:String;
+		protected var _post:Post;
+		protected var _postNumber:uint;
 		
 		public var activeButton:ButtonBase;
-		
 		protected var portraitWidth:int;
 		protected var portraitHeight:int;
 		protected var portrait:Sprite;
-		public var stanceColorLight:uint;
-		public var stanceColorMedium:uint;
-		public var stanceColorDark:uint;
-		
 		protected var stanceLabel:BlockLabel;
 		
-		public function Comment(commentID:String, commentNumber:int, portrait:Bitmap, stance:String, authorName:String, created:Date, opinion:String) {
+		public function Comment(post:Post, postNumber:uint) {
 			super();
-			
 			portraitWidth = 137;
 			portraitHeight = 188;			
 			
-			_commentID = commentID;
-			_commentNumber = commentNumber;
-			_portraitData = Utilities.scaleToFill(portrait.bitmapData, portraitWidth, portraitHeight);
-			_stance = stance;
-			_authorName = authorName;
-			_created = created;
-			_opinion = opinion;
+			_post = post;
+			_postNumber = postNumber;
 			
 			init();
 		}
 		
 		protected function init():void {
-			
-			
-			
 			// draw the portrait
 			portrait = new Sprite();
-			portrait.graphics.beginBitmapFill(_portraitData, null, false, true);
+			portrait.graphics.beginBitmapFill(_post.user.photo.bitmapData, null, false, true);
 			portrait.graphics.drawRoundRect(0, 0, portraitWidth, portraitHeight, 15, 15);
 			portrait.graphics.endFill();
 			
@@ -64,21 +46,9 @@ package com.civildebatewall.elements {
 			stanceLabel = new BlockLabel('', 28, 0xffffff, 0x000000, Assets.FONT_BOLD, false);
 			stanceLabel.setPadding(0, 0, 0, 0);
 			stanceLabel.visible = true;
-
-			if (_stance == 'yes') {
-				stanceColorLight = Assets.COLOR_YES_LIGHT;
-				stanceColorMedium = Assets.COLOR_YES_MEDIUM;
-				stanceColorDark = Assets.COLOR_YES_DARK;
-				stanceLabel.setText('YES!', true);
-			}
-			else {
-				stanceColorLight = Assets.COLOR_NO_LIGHT;
-				stanceColorMedium = Assets.COLOR_NO_MEDIUM;
-				stanceColorDark = Assets.COLOR_NO_DARK;					
-				stanceLabel.setText('NO!', true);					
-			}
+			stanceLabel.setText(_post.stanceFormatted, true);
 			
-			portrait.graphics.beginFill(stanceColorLight);				
+			portrait.graphics.beginFill(_post.stanceColorLight);				
 			portrait.graphics.drawRect(0, 131, portraitWidth, 38);
 			portrait.graphics.endFill();
 			
@@ -89,8 +59,8 @@ package com.civildebatewall.elements {
 			addChild(portrait);
 			
 			// add the byline
-			var authorText:String = _commentNumber + '. ' + _authorName.toUpperCase() + '\u0027S REBUTTAL STATEMENT';
-			var authorLabel:BlockLabel = new BlockLabel(authorText, 17, stanceColorLight, 0x000000, Assets.FONT_HEAVY, false);
+			var authorText:String = _postNumber + '. ' + _post.user.usernameFormatted + '\u0027S REBUTTAL STATEMENT';
+			var authorLabel:BlockLabel = new BlockLabel(authorText, 17, _post.stanceColorLight, 0x000000, Assets.FONT_HEAVY, false);
 			authorLabel.setPadding(0, 0, 0, 0);
 			authorLabel.visible = true;
 			
@@ -100,12 +70,12 @@ package com.civildebatewall.elements {
 			addChild(authorLabel);
 			
 			// add the timestamp
-			var timeString:String = Utilities.zeroPad(_created.hours, 2) + Utilities.zeroPad(_created.minutes, 2);
-			var dateString:String = Utilities.zeroPad(_created.month, 2) + Utilities.zeroPad(_created.date, 2) + (_created.fullYear - 2000);
+			var timeString:String = Utilities.zeroPad(_post.created.hours, 2) + Utilities.zeroPad(_post.created.minutes, 2);
+			var dateString:String = Utilities.zeroPad(_post.created.month, 2) + Utilities.zeroPad(_post.created.date, 2) + (_post.created.fullYear - 2000);
 			
 			var timestamp:String = 'Posted at ' + timeString + ' hours on ' + dateString;
 			
-			var timeLabel:BlockLabel = new BlockLabel(timestamp, 12, stanceColorMedium, 0x000000, Assets.FONT_BOLD_ITALIC, false);
+			var timeLabel:BlockLabel = new BlockLabel(timestamp, 12, _post.stanceColorMedium, 0x000000, Assets.FONT_BOLD_ITALIC, false);
 			timeLabel.setPadding(0, 0, 0, 0);
 			timeLabel.visible = true;				
 			
@@ -115,8 +85,8 @@ package com.civildebatewall.elements {
 			addChild(timeLabel);
 			
 			// add the flag button
-			var flagButton:IconButton = new IconButton(33, 32, stanceColorDark, '', 0, 0x000000, null, Assets.getSmallFlagIcon());
-			flagButton.setDownColor(stanceColorMedium);
+			var flagButton:IconButton = new IconButton(33, 32, _post.stanceColorDark, '', 0, 0x000000, null, Assets.getSmallFlagIcon());
+			flagButton.setDownColor(_post.stanceColorMedium);
 			flagButton.setOutlineWeight(2);
 			flagButton.setStrokeColor(Assets.COLOR_GRAY_15);
 			flagButton.visible = true;
@@ -129,7 +99,7 @@ package com.civildebatewall.elements {
 			
 			// add the hairline
 			var hairline:Shape = new Shape();
-			hairline.graphics.lineStyle(1, stanceColorLight, 0.6, true); // some alpha to make it appear thinner
+			hairline.graphics.lineStyle(1, _post.stanceColorLight, 0.6, true); // some alpha to make it appear thinner
 			hairline.graphics.moveTo(0, 0);
 			hairline.graphics.lineTo(652, 0);
 			
@@ -139,7 +109,7 @@ package com.civildebatewall.elements {
 			addChild(hairline);
 			
 			// Add the opinoin
-			var opinion:BlockParagraph = new BlockParagraph(652, stanceColorLight, _opinion, 23);
+			var opinion:BlockParagraph = new BlockParagraph(652, _post.stanceColorLight, _post.text, 23);
 			opinion.setPadding(11, 18, 14, 18);
 			opinion.visible = true;
 			opinion.x = 167;
@@ -154,8 +124,8 @@ package com.civildebatewall.elements {
 			debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
 			debateButton.scaleX = 0.75;  
 			debateButton.scaleY = 0.75;				
-			debateButton.setBackgroundColor(stanceColorDark, true);
-			debateButton.setDownColor(stanceColorMedium);				
+			debateButton.setBackgroundColor(_post.stanceColorDark, true);
+			debateButton.setDownColor(_post.stanceColorMedium);				
 			debateButton.setStrokeColor(Assets.COLOR_GRAY_15);				
 			debateButton.visible = true;
 			
@@ -171,16 +141,12 @@ package com.civildebatewall.elements {
 		}
 		
 		public function unClick():void {
-			activeButton.setBackgroundColor(stanceColorDark);
+			activeButton.setBackgroundColor(_post.stanceColorDark);
 		}
 		
-		public function get commentID():String {
-			return _commentID;
+		public function get post():Post {
+			return _post;
 		}
-		
-		public function set commentID(s:String):void {
-			_commentID = s;
-		}			
 		
 		protected function onDebate(e:Event):void {
 			// forward to parent

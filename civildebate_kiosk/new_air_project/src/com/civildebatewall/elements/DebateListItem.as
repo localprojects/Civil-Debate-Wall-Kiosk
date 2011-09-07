@@ -1,4 +1,13 @@
 package com.civildebatewall.elements {
+	import com.civildebatewall.Assets;
+	import com.civildebatewall.CDW;
+	import com.civildebatewall.StringUtils;
+	import com.civildebatewall.Utilities;
+	import com.civildebatewall.blocks.BlockLabel;
+	import com.civildebatewall.blocks.BlockLabelBar;
+	import com.civildebatewall.blocks.BlockParagraph;
+	import com.civildebatewall.data.Thread;
+	import com.civildebatewall.ui.ButtonBase;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
@@ -10,25 +19,13 @@ package com.civildebatewall.elements {
 	
 	import mx.states.AddChild;
 	
-	import com.civildebatewall.Assets;
-	import com.civildebatewall.CDW;
-	import com.civildebatewall.StringUtils;
-	import com.civildebatewall.Utilities;
-	import com.civildebatewall.blocks.BlockLabel;
-	import com.civildebatewall.blocks.BlockLabelBar;
-	import com.civildebatewall.blocks.BlockParagraph;
-	import com.civildebatewall.ui.ButtonBase;
-	
 	public class DebateListItem extends ButtonBase {
 		
-		public var debateID:String;
+		public var _thread:Thread;
+		private var _itemIndex:int;
+		private var _foregroundColor:uint;		
 		public var toggledOn:Boolean;
-		public var stanceColorLight:uint;
-		public var stanceColorMedium:uint;
-		public var stanceColorDark:uint;
-		public var stanceColorOverlay:uint;
-		public var stanceColorDisabled:uint;
-		public var stanceColorExtraLight:uint; 		
+
 		
 		private var tintGroup:Sprite;
 		private var opinionExcerpt:BlockParagraph;
@@ -40,49 +37,21 @@ package com.civildebatewall.elements {
 		private var circleFill:Bitmap;
 		private var bubbleFill:Bitmap;		
 		
-		
-		
-		
-		
-		private var _itemIndex:int;
-		
-		private var _foregroundColor:uint;
-		
+
 		private var horizontalRule:Shape;
 		
-		public function DebateListItem(_debateID:String, itemIndex:int = 0) {
-			debateID = _debateID;
+		public function DebateListItem(thread:Thread, itemIndex:int = 0) {
+			_thread = thread;
 			_itemIndex = itemIndex;
 			super();
 			
 			toggledOn = false;
-			
-			var debate:Object = CDW.database.debates[debateID];
-			
-			if (debate['stance'] == 'yes') {
-				stanceColorLight = Assets.COLOR_YES_LIGHT;
-				stanceColorMedium = Assets.COLOR_YES_MEDIUM;
-				stanceColorDark = Assets.COLOR_YES_DARK;
-				stanceColorOverlay = Assets.COLOR_YES_OVERLAY;
-				stanceColorDisabled = Assets.COLOR_YES_DISABLED;
-				stanceColorExtraLight = Utilities.color(190, 225, 250);
-			}
-			else {
-				stanceColorLight = Assets.COLOR_NO_LIGHT;
-				stanceColorMedium = Assets.COLOR_NO_MEDIUM;
-				stanceColorDark = Assets.COLOR_NO_DARK;
-				stanceColorOverlay = Assets.COLOR_NO_OVERLAY;
-				stanceColorDisabled = Assets.COLOR_NO_DISABLED;
-				stanceColorExtraLight = Utilities.color(247, 201, 181);				
-			}
-			
 
 			background.graphics.beginFill(0xffffff);
 			background.graphics.drawRect(0, 0, 503, 157);
 			background.graphics.endFill();
 			addChild(background);
 			
-
 			tintGroup = new Sprite();
 			
 			horizontalRule = new Shape();
@@ -109,7 +78,7 @@ package com.civildebatewall.elements {
 			indexNumber.y = 33 - 1;
 			tintGroup.addChild(indexNumber);
 			
-			opinionExcerpt = new BlockParagraph(406, 0x000000, StringUtils.truncate(debate['opinion'],  100), 14);
+			opinionExcerpt = new BlockParagraph(406, 0x000000, StringUtils.truncate(thread.firstPost.text,  100), 14);
 			opinionExcerpt.background.visible = false;
 			opinionExcerpt.setPadding(0, 0, 0, 0);
 			opinionExcerpt.visible = true;
@@ -128,7 +97,7 @@ package com.civildebatewall.elements {
 			bubble.y = 110;
 			tintGroup.addChild(bubble);		
 			
-			var responseCount:int = Utilities.objectLength(debate['comments']);
+			var responseCount:int = Utilities.objectLength(thread.postCount - 1);
 			
 			responseNumber = new BlockLabelBar(responseCount.toString(), 11, 0xffffff, 28, 28, 0x000000, Assets.FONT_BOLD);
 			responseNumber.visible = true;
@@ -138,11 +107,11 @@ package com.civildebatewall.elements {
 			tintGroup.addChild(responseNumber);			
 			
 			
-			var created:Date = new Date(debate['created']['$date']);
+			var created:Date = thread.firstPost.created;
 			var day:String =  Utilities.zeroPad(created.month, 2) + '/' + Utilities.zeroPad(created.date, 2) + '/' + (created.fullYear - 2000); 
 			var ampm:String = (created.hours < 12) ? 'am' : 'pm';
 			var time:String = (created.hours % 12) + ':' + created.minutes + ampm;
-			var bylineText:String = StringUtils.capitalize(debate['author']['firstName']) + ' said this on ' + day + ' at ' + time;
+			var bylineText:String = thread.firstPost.user.usernameFormatted + ' said this on ' + day + ' at ' + time;
 			
 			byline = new BlockLabel(bylineText, 14, 0xffffff, 0x000000, null, false);
 			byline.visible = true;
@@ -152,9 +121,9 @@ package com.civildebatewall.elements {
 
 			addChild(tintGroup);
 
-			setDownColor(stanceColorMedium);
+			setDownColor(thread.firstPost.stanceColorMedium);
 			setBackgroundColor(Assets.COLOR_GRAY_5, true);
-			setForegroundColor(stanceColorExtraLight, true);	
+			setForegroundColor(_thread.firstPost.stanceColorExtraLight, true);	
 		}
 		
 		override protected function onMouseDown(e:MouseEvent):void {
@@ -201,7 +170,7 @@ package com.civildebatewall.elements {
 		
 		public function activate():void {
 			toggledOn = true;
-			setBackgroundColor(stanceColorLight, true);
+			setBackgroundColor(_thread.firstPost.stanceColorLight, true);
 			TweenMax.to(bubbleFill, 0.5, {alpha: 0});
 			TweenMax.to(circleFill, 0.5, {alpha: 0});			
 		}

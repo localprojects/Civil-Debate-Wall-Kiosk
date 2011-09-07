@@ -104,11 +104,11 @@ package com.civildebatewall.ui {
 			if (mouseDown) {
 				
 				// edge limits
-				if ((leftEdge < 0) && (CDW.state.nextDebate == null)) {
+				if ((leftEdge < 0) && (CDW.state.nextThread == null)) {
 					leftEdge = 0;
 					difference = 0;
 				}
-				else if ((leftEdge > 0) && (CDW.state.previousDebate == null)) {
+				else if ((leftEdge > 0) && (CDW.state.previousThread == null)) {
 					leftEdge = 0;
 					difference = 0;
 				}
@@ -148,47 +148,47 @@ package com.civildebatewall.ui {
 
 				if (leftEdge < 0) {
 					// going to next
-					CDW.view.portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.nextDebate), Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
+					CDW.view.portrait.setIntermediateImage(CDW.state.nextThread.firstPost.user.photo, Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
 					
 					// No tween if no change!
-					if (CDW.state.nextStanceText != CDW.state.activeStanceText) {
+					if (CDW.state.nextThread.firstPost.stance != CDW.state.activeThread.firstPost.stance) {
 
-						CDW.view.leftQuote.setColor(Color.interpolateColor(CDW.state.activeStanceColorLight, CDW.state.nextStanceColorLight, amount), true);
-						CDW.view.rightQuote.setColor(Color.interpolateColor(CDW.state.activeStanceColorLight, CDW.state.nextStanceColorLight, amount), true);
-						CDW.view.flagButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
-						CDW.view.statsButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
-						CDW.view.likeButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);					
-						CDW.view.viewDebateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
-						CDW.view.debateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);						
-//						CDW.view.leftQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorLight, CDW.state.nextStanceColorLight, amount), true);
-//						CDW.view.rightQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorLight, CDW.state.nextStanceColorLight, amount), true);
-//						CDW.view.flagButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
-//						CDW.view.statsButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
-//						CDW.view.likeButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);					
-//						CDW.view.viewDebateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
-//						CDW.view.debateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.nextStanceColorDark, amount), true);
+						CDW.view.leftQuote.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.nextThread.firstPost.stanceColorLight, amount), true);
+						CDW.view.rightQuote.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.nextThread.firstPost.stanceColorLight, amount), true);
+						CDW.view.flagButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);
+						CDW.view.statsButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);
+						CDW.view.likeButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);					
+						CDW.view.viewDebateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);
+						CDW.view.debateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);						
+//						CDW.view.leftQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.nextThread.firstPost.stanceColorLight, amount), true);
+//						CDW.view.rightQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.nextThread.firstPost.stanceColorLight, amount), true);
+//						CDW.view.flagButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);
+//						CDW.view.statsButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);
+//						CDW.view.likeButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);					
+//						CDW.view.viewDebateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);
+//						CDW.view.debateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);
 					}
 					
 				}
 				else if (leftEdge > 0) {
 					// going to previous
-					CDW.view.portrait.setIntermediateImage(CDW.database.getDebateAuthorPortrait(CDW.state.previousDebate), Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
+					CDW.view.portrait.setIntermediateImage(CDW.state.previousThread.firstPost.user.photo, Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
 					
-					if (CDW.state.previousStanceText != CDW.state.activeStanceText) { 						
-						CDW.view.leftQuote.setColor(Color.interpolateColor(CDW.state.activeStanceColorLight, CDW.state.previousStanceColorLight, amount), true);
-						CDW.view.rightQuote.setColor(Color.interpolateColor(CDW.state.activeStanceColorLight, CDW.state.previousStanceColorLight, amount), true);
-						CDW.view.flagButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
-						CDW.view.statsButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
-						CDW.view.likeButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);					
-						CDW.view.viewDebateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
-						CDW.view.debateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
-//						CDW.view.leftQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorLight, CDW.state.previousStanceColorLight, amount), true);
-//						CDW.view.rightQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorLight, CDW.state.previousStanceColorLight, amount), true);
-//						CDW.view.flagButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
-//						CDW.view.statsButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
-//						CDW.view.likeButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);					
-//						CDW.view.viewDebateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
-//						CDW.view.debateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeStanceColorDark, CDW.state.previousStanceColorDark, amount), true);
+					if (CDW.state.previousThread.firstPost.stance != CDW.state.previousThread.firstPost.stance) { 						
+						CDW.view.leftQuote.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.previousThread.firstPost.stanceColorLight, amount), true);
+						CDW.view.rightQuote.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.previousThread.firstPost.stanceColorLight, amount), true);
+						CDW.view.flagButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
+						CDW.view.statsButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
+						CDW.view.likeButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);					
+						CDW.view.viewDebateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
+						CDW.view.debateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
+//						CDW.view.leftQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.previousThread.firstPost.stanceColorLight, amount), true);
+//						CDW.view.rightQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.previousThread.firstPost.stanceColorLight, amount), true);
+//						CDW.view.flagButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
+//						CDW.view.statsButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
+//						CDW.view.likeButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);					
+//						CDW.view.viewDebateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
+//						CDW.view.debateButton.setBackgroundColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
 					}					
 				}
 									
@@ -207,10 +207,10 @@ package com.civildebatewall.ui {
 				trace('Mouse up. Velocity average: ' + vxAverage);
 
 				// see if we need to transition
-				if ((CDW.state.nextDebate != null) &&(vxAverage < -vxThreshold) || (leftEdge < (stageWidth / -2))) {
+				if ((CDW.state.nextThread != null) &&(vxAverage < -vxThreshold) || (leftEdge < (stageWidth / -2))) {
 					CDW.view.nextDebate();
 				}
-				if ((CDW.state.previousDebate != null) && (vxAverage > vxThreshold) || (leftEdge > (stageWidth / 2))) {
+				if ((CDW.state.previousThread != null) && (vxAverage > vxThreshold) || (leftEdge > (stageWidth / 2))) {
 					CDW.view.previousDebate();			
 				}
 				else {

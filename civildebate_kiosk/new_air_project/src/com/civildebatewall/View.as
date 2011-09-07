@@ -1,5 +1,11 @@
 package com.civildebatewall {
 	import com.adobe.serialization.json.*;
+	import com.civildebatewall.blocks.*;
+	import com.civildebatewall.camera.*;
+	import com.civildebatewall.data.Post;
+	import com.civildebatewall.elements.*;
+	import com.civildebatewall.keyboard.*;
+	import com.civildebatewall.ui.*;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -13,14 +19,9 @@ package com.civildebatewall {
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.Timer;
+	import com.civildebatewall.data.*;
 	
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
-	
-	import com.civildebatewall.blocks.*;
-	import com.civildebatewall.camera.*;
-	import com.civildebatewall.elements.*;
-	import com.civildebatewall.keyboard.*;
-	import com.civildebatewall.ui.*;
 	
 	import sekati.converters.BoolConverter;
 	
@@ -167,7 +168,7 @@ package com.civildebatewall {
 			question = new QuestionText();
 			question.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 123});
 			question.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});
-			question.setText(CDW.database.getQuestionText());
+			question.setText(CDW.database.question.text);
 			addChild(question);
 			
 			// triple stances
@@ -564,110 +565,99 @@ package com.civildebatewall {
 			CDW.state.lastView = CDW.state.activeView;
 			CDW.state.activeView = homeView;
 			markAllInactive();
-			
 			CDW.inactivityTimer.disarm();
 			
-			
-			
 			// content mutations
-			portrait.setImage(CDW.database.getActivePortrait());
-			question.setText(CDW.database.getQuestionText(), true);
-			nametag.setText(CDW.database.getDebateAuthorName(CDW.state.activeDebate) + ' Says :', true);
-			stance.setText(CDW.state.activeStanceText, true);
-			opinion.setText(CDW.database.getOpinion(CDW.state.activeDebate));
+			portrait.setImage(CDW.state.activeThread.firstPost.user.photo); // TODO need to copy?
+			question.setText(CDW.database.question.text, true);
+			nametag.setText(CDW.state.activeThread.firstPost.user.usernameFormatted + ' Says :', true);
+			stance.setText(CDW.state.activeThread.firstPost.stanceFormatted, true);
+			opinion.setText(CDW.state.activeThread.firstPost.text);
 			bigButton.setText('ADD YOUR OPINION', true);
-			likeButton.setCount(CDW.database.debates[CDW.state.activeDebate].likes);			
-			
-			//opinion.setHighlight('quo');
+			likeButton.setCount(CDW.state.activeThread.firstPost.likes);			
 			
 			// state mutations
 			debateOverlay.scrollField.scrollTo(0, 0);			
 			CDW.state.clearUser(); // Reset user info
-			debateStrip.setActiveThumbnail(CDW.state.activeDebate);
+			debateStrip.setActiveThumbnail(CDW.state.activeThread.id); // TODO just pass object?
 			
 			// aesthetic mutations
 			question.setTextColor(CDW.state.questionTextColor);
 			debateButton.setStrokeColor(0xffffff);
-			(CDW.state.activeStanceText == 'YES!') ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);			
+			CDW.state.activeThread.firstPost.stance == Post.STANCE_YES ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);			
 			
 			// disabled colors
-			likeButton.setDisabledColor(CDW.state.activeStanceColorDisabled);
-			flagButton.setDisabledColor(CDW.state.activeStanceColorDisabled);
-			viewDebateButton.setDisabledColor(CDW.state.activeStanceColorDisabled);
-			
-
-
-			
-			var commentCount:int = CDW.database.getCommentCount(CDW.state.activeDebate);
+			likeButton.setDisabledColor(CDW.state.activeThread.firstPost.stanceColorDisabled);
+			flagButton.setDisabledColor(CDW.state.activeThread.firstPost.stanceColorDisabled);
+			viewDebateButton.setDisabledColor(CDW.state.activeThread.firstPost.stanceColorDisabled);
+						
 			
 			// Set up previous and next overlay
-			if (CDW.state.previousDebate != null) {
+			if (CDW.state.previousThread != null) {
 				// set the previous debate				
-				leftOpinion.setText(CDW.database.getOpinion(CDW.state.previousDebate), true);				
-				leftStance.setText(CDW.state.previousStanceText, true);
-				(CDW.state.previousStanceText == 'YES!') ? leftStance.setLetterSpacing(yesLetterSpacing) : leftStance.setLetterSpacing(noLetterSpacing);				
-				leftNametag.setText(CDW.database.getDebateAuthorName(CDW.state.previousDebate) + ' Says :', true);				
+				leftOpinion.y = 1347 - leftOpinion.height;
 				
-				leftStance.setBackgroundColor(CDW.state.previousStanceColorLight, true);
-				leftOpinion.setBackgroundColor(CDW.state.previousStanceColorLight, true);
-				leftNametag.setBackgroundColor(CDW.state.previousStanceColorDark, true);					
+				leftOpinion.setText(CDW.state.previousThread.firstPost.text, true);				
+				leftStance.setText(CDW.state.previousThread.firstPost.stanceFormatted, true);
+				CDW.state.previousThread.firstPost.stance == Post.STANCE_YES ? leftStance.setLetterSpacing(yesLetterSpacing) : leftStance.setLetterSpacing(noLetterSpacing);				
+				leftNametag.setText(CDW.state.previousThread.firstPost.user.usernameFormatted + ' Says :', true);				
+				
+				leftStance.setBackgroundColor(CDW.state.previousThread.firstPost.stanceColorLight, true);
+				leftOpinion.setBackgroundColor(CDW.state.previousThread.firstPost.stanceColorLight, true);
+				leftNametag.setBackgroundColor(CDW.state.previousThread.firstPost.stanceColorDark, true);				
 			}
 			
-			if (CDW.state.nextDebate != null) {
-				// set the previous debate
-				rightOpinion.setText(CDW.database.debates[CDW.state.nextDebate].opinion);				
-				rightStance.setText(CDW.state.nextStanceText, true);
-				(CDW.state.nextStanceText == 'YES!') ? rightStance.setLetterSpacing(yesLetterSpacing) : rightStance.setLetterSpacing(noLetterSpacing);				
-				rightNametag.setText(CDW.database.getDebateAuthorName(CDW.state.nextDebate) + ' Says :', true);				
+			if (CDW.state.nextThread != null) {
+				// set the next debate
+				rightOpinion.y = 1347 - rightOpinion.height;
 				
-				rightStance.setBackgroundColor(CDW.state.nextStanceColorLight, true);				
-				rightOpinion.setBackgroundColor(CDW.state.nextStanceColorLight, true);
-				rightNametag.setBackgroundColor(CDW.state.nextStanceColorDark, true);
+				rightOpinion.setText(CDW.state.nextThread.firstPost.text, true);				
+				rightStance.setText(CDW.state.nextThread.firstPost.stanceFormatted, true);
+				CDW.state.nextThread.firstPost.stance == Post.STANCE_YES ? rightStance.setLetterSpacing(yesLetterSpacing) : rightStance.setLetterSpacing(noLetterSpacing);				
+				rightNametag.setText(CDW.state.nextThread.firstPost.user.usernameFormatted + ' Says :', true);				
+				
+				rightStance.setBackgroundColor(CDW.state.nextThread.firstPost.stanceColorLight, true);
+				rightOpinion.setBackgroundColor(CDW.state.nextThread.firstPost.stanceColorLight, true);
+				rightNametag.setBackgroundColor(CDW.state.nextThread.firstPost.stanceColorDark, true);	
 			}
 			
-			
-
-			
-			
-			leftOpinion.y = 1347 - leftOpinion.height;
-			rightOpinion.y = 1347 - rightOpinion.height;			
-						
 			
 			// ease if we're transitioning
 			var instant:Boolean = true;
 			if (CDW.state.activeView == CDW.state.lastView) instant = false;
 			
-			stance.setBackgroundColor(CDW.state.activeStanceColorLight, true);
-			leftQuote.setColor(CDW.state.activeStanceColorLight, instant);
-			rightQuote.setColor(CDW.state.activeStanceColorLight, instant);				
-			nametag.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			opinion.setBackgroundColor(CDW.state.activeStanceColorLight, true);
-			debateButton.setBackgroundColor(CDW.state.activeStanceColorDark, instant);
-			debateButton.setDownColor(CDW.state.activeStanceColorMedium);
-			statsButton.setBackgroundColor(CDW.state.activeStanceColorDark, instant);
-			statsButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			stance.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorLight, true);
+			leftQuote.setColor(CDW.state.activeThread.firstPost.stanceColorLight, instant);
+			rightQuote.setColor(CDW.state.activeThread.firstPost.stanceColorLight, instant);				
+			nametag.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
+			opinion.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorLight, true);
+			debateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, instant);
+			debateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);
+			statsButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, instant);
+			statsButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);			
 			
 			
 			// respect locked buttons
-			likeButton.setBackgroundColor(CDW.state.activeStanceColorDark, instant);			
-//			if (likeButton.locked) likeButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, instant); 
-			likeButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			likeButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, instant);			
+			//	if (likeButton.locked) likeButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, instant); 
+			likeButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);			
 			
-			flagButton.setBackgroundColor(CDW.state.activeStanceColorDark), instant;
-			if (flagButton.locked) flagButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, instant);
-			flagButton.setDownColor(CDW.state.activeStanceColorMedium);
+			flagButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark), instant;
+			if (flagButton.locked) flagButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDisabled, instant);
+			flagButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);
 						
-			
 			flagButton.unlock();
 			likeButton.unlock();
-			
+
 			// view debate button
-			viewDebateButton.setDownColor(CDW.state.activeStanceColorMedium);
+			viewDebateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);
 			
-			if (commentCount == 0) {
+			var responseCount:int = CDW.state.activeThread.postCount - 1;			
+			
+			if (responseCount == 0) {
 				viewDebateButton.setFont(Assets.FONT_BOLD); // actually sets after call to set label
 				viewDebateButton.setLabel('No responses yet. Be the first!', false);
-				viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, true);				
+				viewDebateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDisabled, true);				
 				viewDebateButton.showOutline(false);				
 			}
 			else {
@@ -676,8 +666,8 @@ package com.civildebatewall {
 				
 				// Show as much comment as possible... truncate what we can't
 				viewDebateButton.setFont(Assets.FONT_BOLD);
-				var firstCommentText:String = CDW.database.debates[CDW.state.activeDebate]['comments'][0]['comment'];
-				var newLabel:String = '\u201C' + firstCommentText + '\u201D + ' + commentCount + ' ' + Utilities.plural('response', commentCount);				
+				var firstCommentText:String = CDW.state.activeThread.posts[1].text;
+				var newLabel:String = '\u201C' + firstCommentText + '\u201D + ' + responseCount + ' ' + Utilities.plural('response', responseCount);				
 				var commentLength:int = firstCommentText.length;
 				var commentPreview:String = firstCommentText;				
 				var previewWidth:Number = viewDebateButton.measureText(newLabel);
@@ -685,25 +675,25 @@ package com.civildebatewall {
 				while (previewWidth > 460) {
 					commentLength--;
 					commentPreview = StringUtils.truncate(firstCommentText, commentLength, '...');
-					newLabel = '\u201C' + commentPreview + '\u201D + ' + commentCount + ' ' + Utilities.plural('response', commentCount);					
+					newLabel = '\u201C' + commentPreview + '\u201D + ' + responseCount + ' ' + Utilities.plural('response', responseCount);					
 					previewWidth = viewDebateButton.measureText(newLabel);
 				}
 				
 				viewDebateButton.setLabel(newLabel); // finally, tween it in
-				viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
+				viewDebateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
 				viewDebateButton.showOutline(true);								
 			}			
 			
 			
 			// behaviors
-			if (commentCount == 0) {			
+			if (responseCount == 0) {			
 				viewDebateButton.setOnClick(null);
-				CDW.state.debateOverlayOpen = false;
+				CDW.state.threadOverlayOpen = false;
 			}
 			else {
 				viewDebateButton.setOnClick(onDebateViewButton);
 				
-				if (CDW.state.debateOverlayOpen) {
+				if (CDW.state.threadOverlayOpen) {
 					TweenMax.delayedCall(1.0, debateOverlayView);
 				}
 			}
@@ -778,18 +768,15 @@ package com.civildebatewall {
 		}
 		
 		private function onDebateViewButton(e:Event):void {
-			CDW.state.debateOverlayOpen = true;
+			CDW.state.threadOverlayOpen = true;
 			debateOverlayView();			
 		}
 		
 		
 		public function nextDebate():void {
-			if (CDW.state.nextDebate != null) { 	
-				
-				
-				
+			if (CDW.state.nextThread != null) { 	
 				trace('Transition to next.');
-				CDW.state.setActiveDebate(CDW.state.nextDebate);
+				CDW.state.setActiveDebate(CDW.state.nextThread);
 				CDW.view.leftOpinion.x += stageWidth;
 				CDW.view.opinion.x += stageWidth;
 				CDW.view.rightOpinion.x += stageWidth;
@@ -806,11 +793,9 @@ package com.civildebatewall {
 		}
 		
 		public function previousDebate():void {
-			if (CDW.state.previousDebate != null) {		
-				
-
+			if (CDW.state.previousThread != null) {
 				trace('Transition to previous.');
-				CDW.state.setActiveDebate(CDW.state.previousDebate);
+				CDW.state.setActiveDebate(CDW.state.previousThread);
 				CDW.view.leftOpinion.x -= stageWidth;
 				CDW.view.opinion.x -= stageWidth;
 				CDW.view.rightOpinion.x -= stageWidth;
@@ -838,8 +823,8 @@ package com.civildebatewall {
 		
 		
 		private function incrementLikes(e:Event):void {
-			CDW.database.debates[CDW.state.activeDebate].likes = likeButton.getCount() + 1; // update local db			
-			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/like', {'id': CDW.state.activeDebate, 'count': likeButton.getCount()}, onLikePosted);
+			CDW.database.debates[CDW.state.activeThread].likes = likeButton.getCount() + 1; // update local db			
+			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/like', {'id': CDW.state.activeThread, 'count': likeButton.getCount()}, onLikePosted);
 		}
 		
 		
@@ -857,27 +842,22 @@ package com.civildebatewall {
 			CDW.state.lastView = CDW.state.activeView;
 			CDW.state.activeView = debateOverlayView;			
 			markAllInactive();			
-			
-			
-			
-			// services
 			CDW.inactivityTimer.disarm();
 			
 			// mutations
-			// TODO set stance etc?
-			portrait.setImage(CDW.database.getActivePortrait());
+			portrait.setImage(CDW.state.activeThread.firstPost.user.photo);
 			question.setTextColor(CDW.state.questionTextColor);			
 			byline.y = 410 + opinion.height + 38;
-			byline.setBackgroundColor(CDW.state.activeStanceColorMedium, true);
+			byline.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorMedium, true);
 			
-			debateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			debateButton.setDownColor(CDW.state.activeStanceColorMedium);
+			debateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
+			debateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);
 			
-			viewDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			viewDebateButton.setDownColor(CDW.state.activeStanceColorMedium);			
+			viewDebateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
+			viewDebateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);			
 			
 			// use the full capitalize name for the byline
-			byline.setText('Said by ' + StringUtils.capitalize(CDW.database.debates[CDW.state.activeDebate].author.firstName, true), true);
+			byline.setText('Said by ' + StringUtils.capitalize(CDW.database.debates[CDW.state.activeThread].author.firstName, true), true);
 			viewDebateButton.setFont(Assets.FONT_HEAVY);
 			viewDebateButton.setLabel('BACK TO HOME SCREEN', false);
 			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 + 5 - letsDebateUnderlay.y; // height depends on opinion
@@ -907,8 +887,8 @@ package com.civildebatewall {
 			
 			secondaryDebateButton.setOnClick(onDebateButton);
 			
-			secondaryDebateButton.setBackgroundColor(CDW.state.activeStanceColorDark, true);
-			secondaryDebateButton.setDownColor(CDW.state.activeStanceColorMedium);
+			secondaryDebateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
+			secondaryDebateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);
 			
 			secondaryDebateButton.y = 410 + opinion.height + 15;
 			secondaryDebateButton.tweenIn();
@@ -926,7 +906,7 @@ package com.civildebatewall {
 		}
 		
 		private function onCloseDebateOverlay(e:Event):void {
-			CDW.state.debateOverlayOpen = false;
+			CDW.state.threadOverlayOpen = false;
 			homeView();
 		}
 		
@@ -994,7 +974,7 @@ package com.civildebatewall {
 			flagInstructions.setText("FLAGGED FOR REVIEW. WE WILL LOOK INTO IT.");
 			flagTimerBar.pause();
 			flagTimerBar.tweenOut(-1, {alpha: 0, y: flagTimerBar.y}); // just fade out 
-			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/flag', {'id': CDW.state.activeDebate}, onFlagPosted);
+			Utilities.postRequest(CDW.settings.serverPath + '/api/debates/flag', {'id': CDW.state.activeThread}, onFlagPosted);
 			
 			flagYesButton.disable();
 			flagYesButton.showOutline(false);
@@ -1630,7 +1610,7 @@ package com.civildebatewall {
 			if (CDW.state.userIsResponding) {
 				// create and upload new comment
 				trace("Uploading comment");
-				payload = {'author': CDW.state.userID, 'question': CDW.state.activeQuestion, 'debate': CDW.state.activeDebate, 'comment': CDW.state.userOpinion, 'stance': CDW.state.userStance, 'origin': 'kiosk'};
+				payload = {'author': CDW.state.userID, 'question': CDW.state.activeQuestion, 'debate': CDW.state.activeThread, 'comment': CDW.state.userOpinion, 'stance': CDW.state.userStance, 'origin': 'kiosk'};
 				Utilities.postRequest(CDW.settings.serverPath + '/api/comments/add', payload, onDebateUploaded);				
 			}
 			else {
@@ -1649,7 +1629,7 @@ package com.civildebatewall {
 			else {
 				trace('debate uploaded: ' + r);
 				// set the current debate to the one that was just saved				
-				CDW.state.activeDebate = r.toString();
+				CDW.state.activeThread = r.toString();
 			}
 			
 			// grab the latest from the db

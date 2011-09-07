@@ -1,5 +1,7 @@
 package com.civildebatewall.data {
 	import com.adobe.serialization.json.*;
+	import com.civildebatewall.CDW;
+	import com.civildebatewall.Utilities;
 	import com.greensock.*;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.*;
@@ -14,8 +16,6 @@ package com.civildebatewall.data {
 	
 	import sekati.layout.Arrange;
 	import sekati.utils.ColorUtil;
-	import com.civildebatewall.CDW;
-	import com.civildebatewall.Utilities;
 	
 	public class Database extends EventDispatcher {
 		
@@ -165,13 +165,7 @@ package com.civildebatewall.data {
 //			return debates[debateID]['stance'];
 //		}
 //		
-//		public function getDebateCount():int {
-//			var i:int = 0;
-//			for (var debateID:String in debates) {
-//				i++;
-//			}
-//			return i;
-//		}
+
 //		
 //		public function getCommentCount(debateID:String):int {
 //			var i:int = 0;
@@ -211,42 +205,43 @@ package com.civildebatewall.data {
 //		}		
 //		
 //		
-//		public function getNextDebate():String {
-//			var grabNext:Boolean;
-//			
-//			// walk the object
-//			for (var debateID:String in debates) {
-//				
-//				if (grabNext) {
-//					return debateID;
-//				}
-//				
-//				if (debateID == CDW.state.activeDebate) {
-//					grabNext = true;
-//				}
-//			}
-//			
-//			return null;
-//		}		
-//		
-//		public function getPreviousDebate():String {
-//			var lastID:String = null;
-//			
-//			// walk the object
-//			for (var debateID:String in debates) {
-//				if (debateID == CDW.state.activeDebate) {
-//					return lastID;
-//				}
-//				else {
-//					lastID = debateID;
-//				}
-//			}
-//			
-//			return null;
-//		}
-//		
 		
-		// NEW STUFF
+		
+		// NEW STUFF	
+
+		
+		public function getNextThread():Thread {
+			var grabNext:Boolean;
+			
+			// walk the object
+			for each (var thread:Thread in threads) {
+				if (grabNext) {
+					return thread;
+				}
+				
+				if (thread.id == CDW.state.activeThread.id) {
+					grabNext = true;
+				}
+			}
+			
+			return null;
+		}		
+
+		public function getPreviousThread():Thread {
+			var lastThread:Thread = null;
+			
+			// walk the object
+			for each (var thread:Thread in threads) {
+				if (thread.id == CDW.state.activeThread.id) {
+					return lastThread;
+				}
+				else {
+					lastThread = thread;
+				}
+			}
+			
+			return null;
+		}
 		
 		public function getUserByID(id:String):User {
 			for each (var user:User in users) {
