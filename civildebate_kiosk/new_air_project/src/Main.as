@@ -7,12 +7,12 @@ package {
 	import flash.events.*;
 	import flash.net.*;
 	
-	import net.localprojects.*;
-	import net.localprojects.blocks.*;
-	import net.localprojects.camera.*;
-	import net.localprojects.elements.*;
-	import net.localprojects.keyboard.*;
-	import net.localprojects.ui.*;
+	import com.civildebatewall.*;
+	import com.civildebatewall.blocks.*;
+	import com.civildebatewall.camera.*;
+	import com.civildebatewall.elements.*;
+	import com.civildebatewall.keyboard.*;
+	import com.civildebatewall.ui.*;
 	
 	[SWF(width="1080", height="1920", frameRate="60")]
 	public class Main extends Sprite	{
