@@ -15,9 +15,14 @@ package com.civildebatewall {
 		
 		public var lastThread:Thread = null;		
 		public var activeThread:Thread = null;
+		public var activePost:Post = null;		
 		public var nextThread:Thread = null;
 		public var previousThread:Thread = null;		
 		public var threadOverlayOpen:Boolean = false;
+		
+		// for reloading
+		public var activeThreadID:String = '';
+		public var activePostID:String = '';		
 		
 		// scratch user... TODO wrap this up in the object?
 		public var userStance:String = 'yes';
@@ -26,7 +31,7 @@ package com.civildebatewall {
 		public var userPhoneNumber:String = '#########';
 		public var userID:String = '';
 		public var userImage:Bitmap = new Bitmap(new BitmapData(1080, 1920));
-		public var userImageFull:Bitmap = new Bitmap();		
+		public var userImageFull:Bitmap = null;		
 		public var lastTextMessageTime:Date;
 		public var textMessage:TextMessage; // the message we're working with
 		public var userStanceText:String = ''; // add exclamation point		
@@ -53,6 +58,7 @@ package com.civildebatewall {
 			userPhoneNumber = '';
 			userOpinion = '';
 			userIsResponding = false;
+			userImageFull = null;
 		}
 		
 		public function setStance(s:String):void {

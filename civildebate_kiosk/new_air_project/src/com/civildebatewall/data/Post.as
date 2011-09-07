@@ -36,7 +36,8 @@ package com.civildebatewall.data {
 		
 		public function Post(jsonObject:Object)	{
 			_id = jsonObject['id'];
-			_stance = jsonObject['yesNo'] ? STANCE_NO : STANCE_YES; // todo use static const?
+		
+			_stance = jsonObject['yesNo'] ? STANCE_YES : STANCE_NO;
 			_flags = jsonObject['flags'];
 			_likes = jsonObject['likes'];
 			_text = jsonObject['text'];
