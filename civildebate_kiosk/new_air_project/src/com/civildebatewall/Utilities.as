@@ -39,6 +39,10 @@ package com.civildebatewall {
 		}
 		
 		
+		public static function parseJsonDate(s:String):Date {
+			return DateUtil.parseW3CDTF(s.replace(' ', 'T') + 'Z');			
+		}
+		
 		//Format to save the image
 		public static const FORMAT_JPEG:uint = 0x00;
 		public static const FORMAT_PNG:uint = 0x01;
@@ -46,6 +50,7 @@ package com.civildebatewall {
 		//Extensions for the file
 		private static const EXT_JPEG:String = ".jpg";
 		private static const EXT_PNG:String = ".png";		
+		
 		
 		
 		

@@ -1,5 +1,6 @@
 package com.civildebatewall {
 	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.TextMessage;
 	import com.civildebatewall.data.Thread;
 	
 	import flash.display.Bitmap;
@@ -26,7 +27,8 @@ package com.civildebatewall {
 		public var userID:String = '';
 		public var userImage:Bitmap = new Bitmap(new BitmapData(1080, 1920));
 		public var userImageFull:Bitmap = new Bitmap();		
-		public var latestSMSID:String = ''; // TODO get this from matt
+		public var lastTextMessageTime:Date;
+		public var textMessage:TextMessage; // the message we're working with
 		public var userStanceText:String = ''; // add exclamation point		
 		public var userRespondingTo:Post; // which post we're debating
 		
