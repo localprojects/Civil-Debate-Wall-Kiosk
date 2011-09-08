@@ -14,7 +14,8 @@ package com.civildebatewall.data {
 		private var _firstPost:Post;
 		private var _postCount:uint;
 		private var _created:Date;
-		public var createdRaw:Number;		
+		public var createdRaw:Number;
+		
 		
 		public function Thread(jsonObject:Object)	{
 			_id = jsonObject['id'];
@@ -40,6 +41,7 @@ package com.civildebatewall.data {
 			createdRaw = _created.time;
 			
 			_firstPost = _posts[0];
+			_firstPost.isThreadStarter = true;
 			
 			// sort by date, newest last
 			_posts.sortOn('created');		

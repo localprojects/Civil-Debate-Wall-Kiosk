@@ -584,7 +584,26 @@ package com.civildebatewall {
 			opinion.setText(CDW.state.activeThread.firstPost.text);
 			bigButton.setText('ADD YOUR OPINION', true);
 			likeButton.setCount(CDW.state.activeThread.firstPost.likes);			
-			debateOverlay.update();
+			
+			
+			// hilite
+			trace("Hilite state: " + CDW.state.highlightWord);
+			if (CDW.state.highlightWord != null) {
+				trace("Hiliting!" + CDW.state.highlightWord);
+				opinion.setHighlightColor(CDW.state.activeThread.firstPost.stanceColorHighlight);
+				opinion.setHighlight(CDW.state.highlightWord);
+			}
+			else {
+				// 
+				trace("unhilite");
+				opinion.setHighlight('');				
+			}
+			
+			// hilite these to, if we need to
+			debateOverlay.update();			
+			
+			CDW.state.highlightWord = null;
+			
 			
 			// state mutations
 			debateOverlay.scrollField.scrollTo(0, 0);			

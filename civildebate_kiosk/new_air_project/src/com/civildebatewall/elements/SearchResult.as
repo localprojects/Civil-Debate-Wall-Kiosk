@@ -18,12 +18,11 @@ package com.civildebatewall.elements {
 		protected var bottomPadding:Number = 22;		
 		
 		protected var goToDebateButton:IconButton;
-		protected var _highlight:String;
 		protected var background:Shape;
 		
 		public function SearchResult(post:Post, highlight:String) {
 			_highlight = highlight;
-			super(post, 0);
+			super(post, 0, _highlight);
 		}
 		
 		override protected function init():void {
@@ -122,8 +121,8 @@ package com.civildebatewall.elements {
 			opinion.y = 88;
 			
 			
-			trace("highlighting with: " + _highlight);
-			opinion.setHighlightColor(Assets.COLOR_GRAY_85);
+			
+			opinion.setHighlightColor(_post.stanceColorHighlight);
 			opinion.setHighlight(_highlight);
 			
 			addChild(opinion);

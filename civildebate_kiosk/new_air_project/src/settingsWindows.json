@@ -6,7 +6,7 @@
 	"flipWebcamVertical": true,
 	"webcamOnly": false,
 	"imagePath": "C:/CDWImages/",
-	"serverPath": "http://ec2-50-19-25-31.compute-1.amazonaws.com",
-	"inactivityTimeout": 60,
+	"serverPath": "http://ec2-184-73-127-164.compute-1.amazonaws.com",
+	"inactivityTimeout": 80,
 	"slrTimeout": 5
 }

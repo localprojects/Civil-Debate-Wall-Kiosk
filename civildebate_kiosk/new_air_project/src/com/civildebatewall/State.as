@@ -37,6 +37,8 @@ package com.civildebatewall {
 		public var userStanceText:String = ''; // add exclamation point		
 		public var userRespondingTo:Post; // which post we're debating
 		
+		public var highlightWord:String = null;
+		
 		// color state
 		public var userStanceColorLight:uint;
 		public var userStanceColorMedium:uint;
@@ -62,7 +64,7 @@ package com.civildebatewall {
 			userRespondingTo = null;
 			textMessage = null;
 			lastTextMessageTime = null;
-			
+			//highlightWord = null;
 	
 			
 			

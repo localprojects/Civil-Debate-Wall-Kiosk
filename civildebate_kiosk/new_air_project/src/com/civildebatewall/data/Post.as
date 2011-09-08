@@ -31,7 +31,9 @@ package com.civildebatewall.data {
 		public var stanceColorDisabled:uint;
 		public var stanceColorExtraLight:uint;
 		public var stanceColorWatermark:uint;
+		public var stanceColorHighlight:uint;
 		
+		public var isThreadStarter:Boolean;		
 		public var stanceFormatted:String;
 
 		// link back to thread, too?
@@ -48,7 +50,7 @@ package com.civildebatewall.data {
 			_created = Utilities.parseJsonDate(jsonObject['created']);
 			_thread = parentThread;
 			responseToID = jsonObject['responseTo'];
-			
+			isThreadStarter = false; // set later
 			
 
 			
@@ -60,7 +62,8 @@ package com.civildebatewall.data {
 				stanceColorDark = Assets.COLOR_YES_DARK;
 				stanceColorOverlay = Assets.COLOR_YES_OVERLAY;
 				stanceColorDisabled = Assets.COLOR_YES_DISABLED;
-				stanceColorWatermark = Assets.COLOR_YES_WATERMARK;				
+				stanceColorWatermark = Assets.COLOR_YES_WATERMARK;
+				stanceColorHighlight = Assets.COLOR_YES_HIGHLIGHT;
 			}
 			else {
 				stanceColorExtraLight = Assets.COLOR_NO_EXTRA_LIGHT;				
@@ -69,7 +72,8 @@ package com.civildebatewall.data {
 				stanceColorDark = Assets.COLOR_NO_DARK;
 				stanceColorOverlay = Assets.COLOR_NO_OVERLAY;
 				stanceColorDisabled = Assets.COLOR_NO_DISABLED;
-				stanceColorWatermark = Assets.COLOR_NO_WATERMARK;				
+				stanceColorWatermark = Assets.COLOR_NO_WATERMARK;
+				stanceColorHighlight = Assets.COLOR_NO_HIGHLIGHT;				
 			}
 			
 			stanceFormatted = _stance.toUpperCase() + '!';			
@@ -110,9 +114,9 @@ package com.civildebatewall.data {
 		public function get textAt():String{ 
 			if (responseTo != null) {
 				trace ('TEXT iS AT!!!');
-				return '@' + responseTo.user.usernameFormatted + _text;
+				return '@' + responseTo.user.usernameFormatted + ' ' +  _text;
 			}
-			return _text;
+			return 	_text;
 		
 		}		
 		public function get user():User {	return _user;	}
