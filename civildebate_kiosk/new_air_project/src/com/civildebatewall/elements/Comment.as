@@ -17,6 +17,7 @@ package com.civildebatewall.elements {
 		
 		protected var _post:Post;
 		protected var _postNumber:uint;
+		public var _highlight:String;
 		
 		public var activeButton:ButtonBase;
 		protected var portraitWidth:int;
@@ -24,13 +25,14 @@ package com.civildebatewall.elements {
 		protected var portrait:Sprite;
 		protected var stanceLabel:BlockLabel;
 		
-		public function Comment(post:Post, postNumber:uint) {
+		public function Comment(post:Post, postNumber:uint, highlight:String = null) {
 			super();
 			portraitWidth = 137;
 			portraitHeight = 188;			
 			
 			_post = post;
 			_postNumber = postNumber;
+			_highlight = highlight;
 			
 			init();
 		}
@@ -114,6 +116,11 @@ package com.civildebatewall.elements {
 			opinion.visible = true;
 			opinion.x = 167;
 			opinion.y = 60;
+			
+			if (_highlight != null) {
+				opinion.setHighlightColor(_post.stanceColorHighlight);
+				opinion.setHighlight(_highlight);
+			}
 			
 			addChild(opinion);
 			

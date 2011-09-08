@@ -8,7 +8,7 @@ package com.civildebatewall.elements {
 	import com.civildebatewall.data.Word;
 	import com.civildebatewall.ui.ButtonBase;
 	import com.civildebatewall.ui.InertialScrollField;
-	import com.civildebatewall.data.Word;
+	import com.civildebatewall.ui.WordButton;
 	
 	import flash.display.*;
 	import flash.events.*;
@@ -20,6 +20,7 @@ package com.civildebatewall.elements {
 		
 		private var targetSearchResult:SearchResult;
 		private var targetButton:ButtonBase;
+		public var word:Word;
 		
 		public function WordSearchResults()	{
 			super();
@@ -33,7 +34,8 @@ package com.civildebatewall.elements {
 		}
 		
 		
-		public function updateSearch(word:Word):void {
+		public function updateSearch(_word:Word):void {
+			word = _word;
 			Utilities.removeChildren(scrollField.scrollSheet);
 			scrollField.scrollSheet.y = 0;
 			resultCount = word.posts.length;
@@ -99,8 +101,21 @@ package com.civildebatewall.elements {
 			}
 		}		
 		
-		private function onGoToDebate(e:Event):void {
-			trace("TODO...");
+		private function onGoToDebate(e:Event):void {			
+			targetSearchResult = e.target as SearchResult;
+
+			CDW.state.highlightWord =  targetSearchResult._highlight;
+			CDW.state.setActiveDebate(targetSearchResult.post.thread);
+			CDW.state.activePost = targetSearchResult.post;
+			
+			if (targetSearchResult.post.isThreadStarter) {
+				// it's an original
+				CDW.view.homeView();
+			}
+			else {
+				// it's a response
+				CDW.view.debateOverlayView();
+			}
 		}
 		
 		
