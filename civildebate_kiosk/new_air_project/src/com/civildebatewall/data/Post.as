@@ -22,7 +22,7 @@ package com.civildebatewall.data {
 		private var _user:User;
 		private var _created:Date;
 		private var _thread:Thread;
-		private var responseToID:String; // turns into responseTo Post object on get
+		public var responseToID:String; // turns into responseTo Post object on get
 		
 		public var stanceColorLight:uint;
 		public var stanceColorMedium:uint;
@@ -49,7 +49,12 @@ package com.civildebatewall.data {
 			_user = CDW.database.getUserByID(jsonObject['author']['id']);
 			_created = Utilities.parseJsonDate(jsonObject['created']);
 			_thread = parentThread;
+			
+			
 			responseToID = jsonObject['responseTo'];
+			
+
+			
 			isThreadStarter = false; // set later
 			
 

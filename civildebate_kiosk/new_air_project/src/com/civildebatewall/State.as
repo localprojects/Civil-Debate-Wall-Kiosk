@@ -96,6 +96,24 @@ package com.civildebatewall {
 			lastThread = activeThread;
 			activeThread = thread;
 			
+			// logs backwards... ugh
+			
+			
+			CDW.dashboard.log('---------------------------------');			
+			
+			
+			
+			for (var i:uint = activeThread.posts.length - 1; i > 0; i--) {
+				trace(i);
+				CDW.dashboard.log(activeThread.posts[i].id);
+			}
+			CDW.dashboard.log(activeThread.posts[0].id);
+			
+			CDW.dashboard.log('Posts:');			
+			CDW.dashboard.log("Active thread:\n\t" + activeThread.id);			
+			
+			CDW.dashboard.log('---------------------------------');			
+			
 			// funky overrides for big-jump transitions
 			if (overridePrevious != null) {
 				previousThread = overridePrevious; 
