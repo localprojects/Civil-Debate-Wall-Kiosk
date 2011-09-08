@@ -37,6 +37,9 @@ package com.civildebatewall.data {
 				CDW.database.posts.push(tempPost); // and one copy globally
 			}
 			
+			
+			_posts.sortOn('created', Array.NUMERIC);
+			
 			_created = _posts[0].created; // use the first post as the created date...
 			createdRaw = _created.time;
 			
