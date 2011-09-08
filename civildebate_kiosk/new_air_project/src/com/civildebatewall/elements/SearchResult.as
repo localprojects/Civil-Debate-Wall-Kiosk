@@ -65,7 +65,14 @@ package com.civildebatewall.elements {
 			addChild(portrait);
 			
 			// add the byline
-			var authorText:String = _post.user.usernameFormatted + '\u0027S REBUTTAL STATEMENT';
+			var authorText:String;
+			if (_post.isThreadStarter) {
+				authorText = _postNumber + '. ' + _post.user.usernameFormatted.toUpperCase() + '\u0027S OPINION';
+			}
+			else {
+				authorText = _postNumber + '. ' + _post.user.usernameFormatted.toUpperCase() + '\u0027S REBUTTAL';				
+			}
+			
 			var authorLabel:BlockLabel = new BlockLabel(authorText, 17, _post.stanceColorLight, 0x000000, Assets.FONT_HEAVY, false);
 			authorLabel.setPadding(0, 0, 0, 0);
 			authorLabel.visible = true;

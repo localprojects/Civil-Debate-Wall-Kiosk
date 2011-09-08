@@ -56,7 +56,7 @@ package com.civildebatewall.ui {
 			
 
 			downBackgroundColor = _thread.firstPost.stanceColorWatermark;
-			textField.setText('YES!', true);			
+			textField.setText(_thread.firstPost.stanceFormatted, true);			
 			
 
 			// top line
