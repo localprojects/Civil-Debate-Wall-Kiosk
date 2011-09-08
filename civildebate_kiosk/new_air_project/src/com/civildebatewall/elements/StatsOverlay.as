@@ -34,8 +34,6 @@ package com.civildebatewall.elements {
 		private var previousSuperlativeButton:IconButton;
 		private var superlativesPortrait:SuperlativesPortrait;
 		
-		
-		
 		private var mostDebatedList:DebateList;
 		private var mostLikedList:DebateList;
 		
@@ -149,7 +147,7 @@ package com.civildebatewall.elements {
 			
 			superlativesPortrait = new SuperlativesPortrait();
 			superlativesPortrait.setDefaultTweenIn(1, {x: 0, y: 705});
-			superlativesPortrait.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 705});			
+			superlativesPortrait.setDefaultTweenOut(1, {x: -superlativesPortrait.width - 50, y: 705});			
 			addChild(superlativesPortrait);
 			
 			mostDebatedList = new DebateList();

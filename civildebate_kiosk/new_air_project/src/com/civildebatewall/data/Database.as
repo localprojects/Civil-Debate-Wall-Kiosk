@@ -169,9 +169,14 @@ package com.civildebatewall.data {
 				corpus = Utilities.mergeUnique(corpus, post.text.toLowerCase().match(wordSearch));
 			}
 			
+			
+			
 			frequentWords = [];
 			for each (var corpusWord:String in corpus) {
-				frequentWords.push(new Word(corpusWord));
+				// filter out small words
+				if (corpusWord.length > 2) {			
+					frequentWords.push(new Word(corpusWord));
+				}
 			}
 			
 			

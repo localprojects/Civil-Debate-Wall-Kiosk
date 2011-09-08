@@ -57,7 +57,10 @@ package com.civildebatewall {
 		private var usernameTakenWarning:BlockLabel;		
 		private var cameraTimeoutWarning:BlockLabel;
 		private var noNameWarning:BlockLabel;
-		private var noOpinionWarning:BlockLabel;				
+		private var noOpinionWarning:BlockLabel;
+		
+		private var smsReceivedProfanityWarning:BlockLabel;
+		private var smsSubmittedProfanityWarning:BlockLabel;		
 		
 		// mutable (e.g. color changes)
 		private var nameEntryInstructions:BlockLabel;		
@@ -456,6 +459,21 @@ package com.civildebatewall {
 			noOpinionWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (noOpinionWarning.height / 2) - 10});
 			addChild(noOpinionWarning);				
 			
+
+			smsReceivedProfanityWarning = new BlockLabel('Please choose words that will encourage a civil debate and re-send your message!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
+			smsReceivedProfanityWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 576});	
+			smsReceivedProfanityWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 576});
+			addChild(smsReceivedProfanityWarning);
+			
+			
+			smsSubmittedProfanityWarning = new BlockLabel('Please choose words that will encourage a civil debate and re-submit your message!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
+			smsSubmittedProfanityWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 576});	
+			smsSubmittedProfanityWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 576});
+			addChild(smsSubmittedProfanityWarning);			
+			
+			 
+			
+			
 			// TODO update from database
 			statsOverlay = new StatsOverlay();
 			statsOverlay.setDefaultTweenIn(1, {x: 29, y: 264});
@@ -517,9 +535,9 @@ package com.civildebatewall {
 			submitOverlay.setDefaultTweenOut(1, {alpha: 0});
 			addChild(submitOverlay);
 			
-			submitOverlayMessage = new BlockParagraph(800, 0x000000, 'Thank you for your participation.\nKeep up with the latest at civildebatewall.com', 31, 0xffffff, Assets.FONT_BOLD);
-			submitOverlayMessage.setDefaultTweenIn(1, {x: 101, y: 1093});
-			submitOverlayMessage.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1093});					
+			submitOverlayMessage = new BlockParagraph(900, 0x000000, 'Thank you for your participation.\nKeep up with the latest at greatcivildebatewall.com', 31, 0xffffff, Assets.FONT_BOLD);
+			submitOverlayMessage.setDefaultTweenIn(1, {x: 101, y: 993});
+			submitOverlayMessage.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 993});					
 			addChild(submitOverlayMessage);			
 			
 			submitOverlayContinueButton = new BlockButton(202, 65, 0x000000, 'CONTINUE', 25, 0xffffff, Assets.FONT_HEAVY);
@@ -1245,8 +1263,26 @@ package com.civildebatewall {
 			
 			// Grab a newer message
 			if ((CDW.database.latestTextMessages.length > 0) && (CDW.database.latestTextMessages[0].created > CDW.state.lastTextMessageTime)) {
-				trace("got SMS");
-				handleSMS(CDW.database.latestTextMessages[0]);
+				trace("got SMS");		
+				
+				// check for profanity
+				if (CDW.database.latestTextMessages[0].profane) {
+					// scold for five seconds
+					smsReceivedProfanityWarning.tweenIn();
+					TweenMax.delayedCall(5, function():void { smsReceivedProfanityWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE})});					
+					
+					// reset time baseline
+					CDW.state.lastTextMessageTime = CDW.database.latestTextMessages[0].created; 
+					
+					// keep checking
+					trace("Bad words! keep trying");
+					smsCheckTimer.reset();
+					smsCheckTimer.start();						
+				}
+				else {
+					trace("it's clean");
+					handleSMS(CDW.database.latestTextMessages[0]);
+				}
 			}
 			else {
 				trace("no new SMS, keep trying");
@@ -1485,6 +1521,7 @@ package com.civildebatewall {
 			CDW.state.activeView = nameEntryView;			
 			markAllInactive();
 			flashOverlay.active = true; // needs to tween out itself
+			usernameTakenWarning.active = true;
 			
 			CDW.inactivityTimer.arm();
 			
@@ -1556,7 +1593,8 @@ package com.civildebatewall {
 				CDW.state.userName = nameEntryField.getTextField().text;
 				
 				// Try to create the user, check for existing username
-				CDW.database.createUser(CDW.state.userName, CDW.state.userPhoneNumber, onUserCreated);				
+				CDW.database.createUser(CDW.state.userName, CDW.state.userPhoneNumber, onUserCreated);
+				
 			}
 		}
 		
@@ -1571,6 +1609,8 @@ package com.civildebatewall {
 				// there was an error, the name probably already existed!
 				usernameTakenWarning.tweenIn();
 				TweenMax.delayedCall(5, function():void { usernameTakenWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE}); });
+				nameEntryView(); // make sure we stay here!
+				
 			}
 		}
 		
