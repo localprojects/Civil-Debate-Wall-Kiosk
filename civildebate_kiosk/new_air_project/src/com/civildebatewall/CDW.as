@@ -81,6 +81,7 @@ package com.civildebatewall {
 			
 			// set up gui overlay
 			dashboard = new Dashboard(this.stage, 5, 5);
+			dashboard.visible = false;
 			
 			if (settings.halfSize) {			
 				dashboard.scaleX = 2;
@@ -168,6 +169,7 @@ package com.civildebatewall {
 				
 				// FPS meter
 				fps = new FPSMeter(this, stage.stageWidth - 50, 0);		
+				fps.visible = false;
 				
 				if (settings.halfSize) {
 					fps.scaleX = 2;
