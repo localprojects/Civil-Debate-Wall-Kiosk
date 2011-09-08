@@ -1,4 +1,5 @@
 package com.civildebatewall.data {
+	import com.adobe.protocols.dict.Database;
 	import com.adobe.serialization.json.JSON;
 	import com.civildebatewall.CDW;
 	import com.greensock.events.LoaderEvent;
@@ -12,6 +13,7 @@ package com.civildebatewall.data {
 		private var _posts:Array;
 		private var _firstPost:Post;
 		private var _postCount:uint;
+		private var _created:Date;
 		
 		public function Thread(jsonObject:Object)	{
 			_id = jsonObject['id'];
@@ -33,13 +35,19 @@ package com.civildebatewall.data {
 				CDW.database.posts.push(tempPost); // and one copy globally
 			}
 			
-			// TODO sort by date
+			_created = _posts[0].created; // use the first post as the created date...
+			
+			// sort by date, newest last
+			_posts.sortOn('created');		
+			
+			_postCount = _posts.length;
 			
 		}
 		
 		public function get id():String { return _id;	}
 		public function get posts():Array { return _posts;	}
 		public function get firstPost():Post { return _posts[0];	}
-		public function get postCount():uint { return _posts.length; }
+		public function get postCount():uint { return _postCount; }
+		public function get created():Date { return _created; }	
 	}
 }

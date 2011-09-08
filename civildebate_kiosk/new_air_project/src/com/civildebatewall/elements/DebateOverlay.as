@@ -50,6 +50,8 @@ package com.civildebatewall.elements
 			var yOffset:int = 30;
 			var paddingBottom:int = 35;
 			
+			CDW.state.activeThread.posts.sortOn('created');
+			
 			for (var i:uint = 1; i < CDW.state.activeThread.posts.length; i++) {
 				// the row...
 				var commentRow:Comment = new Comment(CDW.state.activeThread.posts[i], i);
