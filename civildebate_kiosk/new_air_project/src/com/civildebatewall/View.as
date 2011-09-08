@@ -59,7 +59,7 @@ package com.civildebatewall {
 		private var noNameWarning:BlockLabel;
 		private var noOpinionWarning:BlockLabel;
 		
-		private var smsReceivedProfanityWarning:BlockLabel;
+		private var smsReceivedProfanityWarning:BlockParagraph;
 		private var smsSubmittedProfanityWarning:BlockLabel;		
 		
 		// mutable (e.g. color changes)
@@ -459,19 +459,19 @@ package com.civildebatewall {
 			noOpinionWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (noOpinionWarning.height / 2) - 10});
 			addChild(noOpinionWarning);				
 			
-
-			smsReceivedProfanityWarning = new BlockLabel('Please choose words that will encourage a civil debate and re-send your message!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
+			
+			var profanityNagIncoming:String = 'Please choose words that will encourage a civil debate and re-send your message!';
+			smsReceivedProfanityWarning = new BlockParagraph(800, Assets.COLOR_GRAY_50, profanityNagIncoming, 26, 0xffffff, Assets.FONT_BOLD); 
 			smsReceivedProfanityWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 576});	
 			smsReceivedProfanityWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 576});
 			addChild(smsReceivedProfanityWarning);
 			
 			
+			// TODO HOOK THIS UP?
 			smsSubmittedProfanityWarning = new BlockLabel('Please choose words that will encourage a civil debate and re-submit your message!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
 			smsSubmittedProfanityWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 576});	
 			smsSubmittedProfanityWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 576});
-			addChild(smsSubmittedProfanityWarning);			
-			
-			 
+			addChild(smsSubmittedProfanityWarning);			 
 			
 			
 			// TODO update from database
@@ -1265,7 +1265,7 @@ package com.civildebatewall {
 			if ((CDW.database.latestTextMessages.length > 0) && (CDW.database.latestTextMessages[0].created > CDW.state.lastTextMessageTime)) {
 				trace("got SMS");		
 				
-				// check for profanity
+				// check for profanity, TODO move this to check SMS
 				if (CDW.database.latestTextMessages[0].profane) {
 					// scold for five seconds
 					smsReceivedProfanityWarning.tweenIn();
@@ -1341,7 +1341,7 @@ package com.civildebatewall {
 		}
 		
 		public function simulateSMS(e:Event):void {
-			smsCheckTimer.stop();
+			if(smsCheckTimer != null) smsCheckTimer.stop();
 			var testTextMessage:TextMessage = new TextMessage({'message': Utilities.dummyText(100), 'phoneNumber': '415' + Utilities.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});
 			handleSMS(testTextMessage);
 		}
@@ -1533,6 +1533,7 @@ package com.civildebatewall {
 			saveButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
 			saveButton.setDownColor(CDW.state.userStanceColorMedium);			
 			keyboard.setColor(CDW.state.userStanceColorLight, true);
+			keyboard.showSpacebar(false);
 			nameEntryField.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			portrait.setImage(CDW.state.userImage, true);
 			question.setTextColor(CDW.state.questionTextColor);			
@@ -1809,6 +1810,7 @@ package com.civildebatewall {
 			editOpinion.setText(CDW.state.userOpinion);
 
 			keyboard.target = editOpinion.getTextField();
+			keyboard.showSpacebar(true);
 			
 			editTextInstructions.setBackgroundColor(CDW.state.userStanceColorDark, true);
 			
