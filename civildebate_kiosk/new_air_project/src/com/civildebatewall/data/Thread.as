@@ -34,10 +34,11 @@ package com.civildebatewall.data {
 			for each (var jsonPost:Object in jsonObject['posts']) {
 				var tempPost:Post = new Post(jsonPost, this);
 				_posts.push(tempPost); // one copy in the thread
+				trace("Created: " + tempPost.text); 				
 				CDW.database.posts.push(tempPost); // and one copy globally
 			}
 			
-			
+
 			_posts.sortOn('created', Array.NUMERIC);
 			
 			_created = _posts[0].created; // use the first post as the created date...
@@ -50,6 +51,16 @@ package com.civildebatewall.data {
 			_posts.sortOn('created');		
 			
 			_postCount = _posts.length;
+			
+			
+			// disable first level at replies
+			// null out the response to for first level respondents
+			// @replies for first level seems overkill
+			for each (tempPost in _posts) {
+				if ((tempPost.responseToID != null) && (tempPost.responseToID == _firstPost.id)) {
+					tempPost.responseToID = null;
+				}			
+			}			
 			
 		}
 		

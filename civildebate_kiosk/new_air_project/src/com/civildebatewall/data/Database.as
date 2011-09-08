@@ -126,9 +126,7 @@ package com.civildebatewall.data {
 		private function onPostsLoaded(event:LoaderEvent):void {
 			trace("posts loaded, generating stats");
 	
-			
 			// get stats
-			
 			// Use client side for this stuff for now
 			
 			// most liked debates
@@ -308,7 +306,7 @@ package com.civildebatewall.data {
 		// mutate server
 		public function uploadResponse(threadID:String, responseTo:String, userID:String, opinion:String, stance:String, origin:String, callback:Function):void {
 			var yesno:uint = (stance == Post.STANCE_YES) ? 1 : 0;
-			var params:Object = {'yesno': yesno, 'text': opinion, 'responseTo': responseTo, 'author': userID, 'origin': origin};
+			var params:Object = {'yesno': yesno, 'text': opinion, 'responseto': responseTo, 'author': userID, 'origin': origin};
 			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/threads/' + threadID + '/posts', params, callback);
 		}
 					

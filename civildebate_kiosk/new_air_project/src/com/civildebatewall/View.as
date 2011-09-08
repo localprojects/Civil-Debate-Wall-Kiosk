@@ -572,6 +572,9 @@ package com.civildebatewall {
 		
 		// =========================================================================
 		
+		
+
+		
 		public function homeView(...args):void {
 			CDW.state.lastView = CDW.state.activeView;
 			CDW.state.activeView = homeView;
@@ -669,6 +672,8 @@ package com.civildebatewall {
 			debateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);
 			statsButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, instant);
 			statsButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);			
+			
+			
 			
 			
 			// respect locked buttons
@@ -882,9 +887,13 @@ package com.civildebatewall {
 			
 			// mutations
 			portrait.setImage(CDW.state.activeThread.firstPost.user.photo);
+			stance.setText(CDW.state.activeThread.firstPost.stanceFormatted, true);
+			opinion.setText(CDW.state.activeThread.firstPost.text);			
 			question.setTextColor(CDW.state.questionTextColor);			
 			byline.y = 410 + opinion.height + 38;
 			byline.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorMedium, true);
+			opinion.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorLight, true);			
+			stance.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorLight, true);			
 			
 			secondaryDebateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
 			secondaryDebateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);
@@ -1840,9 +1849,7 @@ package com.civildebatewall {
 		
 		// =========================================================================
 		
-		
-		
-		
+
 		
 		public function statsView(...args):void {
 			CDW.state.lastView = CDW.state.activeView;

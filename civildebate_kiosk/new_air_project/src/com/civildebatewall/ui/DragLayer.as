@@ -44,7 +44,7 @@ package com.civildebatewall.ui {
 
 		private function onMouseDown(e:MouseEvent):void {
 			
-			if(!TweenMax.isTweening(CDW.view.nametag)) {
+			//if(!TweenMax.isTweening(CDW.view.nametag)) {
 			
 			mouseDown = true;
 			vxSamples = new Array(); // clear the history
@@ -56,7 +56,6 @@ package com.civildebatewall.ui {
 			
 			// Stop tweens
 			// TweenMax.killAll();
-			
 			TweenMax.killTweensOf(CDW.view.nametag);
 			TweenMax.killTweensOf(CDW.view.leftNametag);
 			TweenMax.killTweensOf(CDW.view.rightNametag);			
@@ -71,7 +70,7 @@ package com.civildebatewall.ui {
 			TweenMax.killChildTweensOf(CDW.view.rightQuote);
 			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			}
+			//}
 
 			
 		}

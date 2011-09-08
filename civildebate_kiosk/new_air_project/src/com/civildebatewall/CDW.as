@@ -191,13 +191,30 @@ package com.civildebatewall {
 			else {
 				trace('updated db')
 				// set the starting view
-				CDW.state.setActiveDebate(CDW.database.getThreadByID(CDW.state.activeThreadID));
+				
+				if (CDW.state.userIsResponding) {
+					// go to post to which you responded
+					CDW.state.setActiveDebate(CDW.database.getThreadByID(CDW.state.activeThreadID));
+				}
+				else {
+					// go to latest post
+					CDW.state.setActiveDebate(CDW.database.threads[0]);
+					CDW.state.activeThreadID = CDW.state.activeThread.id;					
+				}
+				
 				view.debateStrip.update();
 				view.statsOverlay.update();
 				view.debateOverlay.update();
 				
-				// jump to home view
-			  database.threads.length > 0 ? view.homeView() : view.noOpinionView();
+				
+				if (CDW.state.userIsResponding) {
+					// jump to debate overlay
+					view.debateOverlayView(); // TODO put scroll-to functionality in debate overlay (checks for active post)
+				}
+				else {
+					// jump to home view					
+			  	database.threads.length > 0 ? view.homeView() : view.noOpinionView();
+				}
 			}
 		}
 		
