@@ -59,6 +59,8 @@ package com.civildebatewall.elements {
 				// remove the right dot from the last one				
 				if (i == CDW.database.threads.length - 1) threadThumbnail.removeChild(threadThumbnail.rightDot);
 				
+				threadThumbnail.update();
+				
 				scrollField.scrollSheet.addChild(threadThumbnail);
 			}
 			
