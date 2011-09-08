@@ -180,16 +180,16 @@ package com.civildebatewall
 
 		
 		// Colors
-		public static const COLOR_YES_EXTRA_LIGHT:uint = Utilities.color(199, 255, 250);
+		public static const COLOR_YES_EXTRA_LIGHT:uint = Utilities.color(109, 207, 246);
 		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 185, 255);
 		public static const COLOR_YES_MEDIUM:uint = Utilities.color(0, 155, 255);
 		public static const COLOR_YES_DARK:uint = Utilities.color(0, 115, 255);
 		public static const COLOR_YES_OVERLAY:uint = Utilities.color(53, 124, 146);
 		public static const COLOR_YES_WATERMARK:uint = Utilities.color(239, 249, 254);
-		public static const COLOR_YES_DISABLED:uint = Utilities.color(34, 63, 110);
+		public static const COLOR_YES_DISABLED:uint = Utilities.color(34, 63, 110); 
 		public static const COLOR_YES_HIGHLIGHT:uint = COLOR_YES_DISABLED; // TBD		
 	
-		public static const COLOR_NO_EXTRA_LIGHT:uint = Utilities.color(247, 201, 181);
+		public static const COLOR_NO_EXTRA_LIGHT:uint = Utilities.color(247, 150, 121);
 		public static const COLOR_NO_LIGHT:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the design template!
 		public static const COLOR_NO_MEDIUM:uint = Utilities.color(255, 75, 0); // TODO medium and light are identical in the designtemplate!
 		public static const COLOR_NO_DARK:uint = Utilities.color(255, 60, 0);
