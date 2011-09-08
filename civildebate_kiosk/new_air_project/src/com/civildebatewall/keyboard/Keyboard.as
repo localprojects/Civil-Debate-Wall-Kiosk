@@ -1,6 +1,10 @@
 package com.civildebatewall.keyboard {
 	
 	import com.adobe.utils.StringUtil;
+	import com.civildebatewall.Assets;
+	import com.civildebatewall.CDW;
+	import com.civildebatewall.Utilities;
+	import com.civildebatewall.blocks.BlockBase;
 	
 	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
@@ -8,10 +12,6 @@ package com.civildebatewall.keyboard {
 	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.ui.Mouse;
-	
-	import com.civildebatewall.Assets;
-	import com.civildebatewall.CDW;
-	import com.civildebatewall.blocks.BlockBase;
 	
 	
 	
@@ -102,7 +102,9 @@ package com.civildebatewall.keyboard {
 		}
 		
 
-
+		public function showSpacebar(b:Boolean):void {
+			keys[' '].visible = b;
+		}
 		
 		private function upperCase():void {
 			for each (var key:Key in keys) {
@@ -145,8 +147,48 @@ package com.civildebatewall.keyboard {
 				// backspace
 				if (this.stage.focus is TextField) {
 					var tf:TextField = this.stage.focus as TextField;
-					tf.text = tf.text.substring(0, tf.selectionBeginIndex - 1) + tf.text.substring(tf.selectionEndIndex);
-					tf.setSelection(tf.selectionBeginIndex, tf.selectionBeginIndex);
+					
+					if (tf.length > 0) {
+						
+						var firstHalf:String;
+						var secondHalf:String;		
+						var insertionPoint:int;
+						
+						if (tf.selectionBeginIndex == tf.selectionEndIndex) {
+							// insertion edit, kind of drawn out for debugging
+							firstHalf = tf.text.substring(0, tf.selectionBeginIndex - 1);
+							secondHalf = tf.text.substr(tf.selectionEndIndex);
+							tf.text = firstHalf + secondHalf;
+							
+						}
+						else {
+							// block edit
+							firstHalf = tf.text.substring(0, tf.selectionBeginIndex);							
+							secondHalf = tf.text.substr(tf.selectionEndIndex);
+						}
+						
+						tf.text = firstHalf + secondHalf;						
+						insertionPoint = Utilities.clamp(firstHalf.length, 0, tf.text.length);						
+						tf.setSelection(insertionPoint, insertionPoint);						
+						
+					}
+					else {
+						trace("nothing to delete");
+					}
+					
+//					// TODO FIX THIS, check if selection is at the end?
+//					if (tf.selectionBeginIndex == tf.selectionEndIndex) {
+//						// insertion edits
+//						trace('insertion');
+//						tf.text = tf.text.substring(0, tf.selectionBeginIndex - 1) + tf.text.substr(tf.selectionEndIndex);
+//						tf.setSelection(tf.selectionBeginIndex - 1, tf.selectionBeginIndex - 1);						
+//					}
+//					else {
+//						// block edits
+//						trace('block');
+//						tf.text = tf.text.substring(0, tf.selectionBeginIndex - 1) + tf.text.substring(tf.selectionEndIndex);
+//						tf.setSelection(tf.selectionBeginIndex - 1, tf.selectionBeginIndex - 1);
+//					}
 				}
 			}
 			else {

@@ -41,6 +41,8 @@ package com.civildebatewall.data {
 
 			_posts.sortOn('created', Array.NUMERIC);
 			
+			trace("Posts: " + _posts.length);
+			
 			_created = _posts[0].created; // use the first post as the created date...
 			createdRaw = _created.time;
 			

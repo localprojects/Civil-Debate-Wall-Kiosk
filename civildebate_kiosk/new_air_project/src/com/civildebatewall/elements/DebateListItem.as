@@ -123,7 +123,7 @@ package com.civildebatewall.elements {
 
 			setDownColor(_post.stanceColorMedium);
 			setBackgroundColor(Assets.COLOR_GRAY_5, true);
-			setForegroundColor(_post.stanceColorExtraLight, true);	
+			setForegroundColor(_post.stanceColorLight, true);	
 		}
 		
 		override protected function onMouseDown(e:MouseEvent):void {
