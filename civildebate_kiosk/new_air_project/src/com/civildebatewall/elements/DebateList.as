@@ -58,16 +58,22 @@ package com.civildebatewall.elements {
 			for(var i:int = 0; i < this.numChildren; i++) {
 				var item:DebateListItem = this.getChildAt(i) as DebateListItem;
 				
-				if (item.thread.id != item.thread.id) {
+				if (clickedItem.post.id != item.post.id) {
 					item.deactivate();
 				}
 			}
 			
-			// activate the new one
-			clickedItem.activate();
 			
-			// send event
-			if(onSelected != null) onSelected(clickedItem);
+			if (!clickedItem.toggledOn) {
+				// activate the new one id it's not already				
+				clickedItem.activate();
+				
+				// send event				
+				if(onSelected != null) onSelected(clickedItem);				
+			}
+			
+			
+			
 		}
 		
 	}

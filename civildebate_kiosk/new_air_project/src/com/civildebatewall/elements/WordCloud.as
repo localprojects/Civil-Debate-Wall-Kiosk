@@ -1,11 +1,11 @@
 package com.civildebatewall.elements {
+	import com.civildebatewall.*;
+	import com.civildebatewall.blocks.BlockBase;
+	import com.civildebatewall.data.Word;
+	import com.civildebatewall.ui.WordButton;
 	import com.greensock.TweenMax;
 	
 	import flash.events.*;
-	
-	import com.civildebatewall.*;
-	import com.civildebatewall.blocks.BlockBase;
-	import com.civildebatewall.ui.WordButton;
 	
 	public class WordCloud extends BlockBase {
 		
@@ -20,7 +20,7 @@ package com.civildebatewall.elements {
 		private var row3:Array;
 		private var row4:Array;		
 		
-		private var words:Array;
+		private var wordButtons:Array = [];
 		
 		public function WordCloud()	{
 			super();
@@ -38,6 +38,12 @@ package com.civildebatewall.elements {
 		
 		public function setWords(source:Array):void {
 			
+			
+			row1 = [];
+			row2 = [];
+			row3 = [];
+			row4 = [];					
+			
 			this.graphics.clear();
 			this.drawBackground();
 			
@@ -50,59 +56,46 @@ package com.civildebatewall.elements {
 			}					
 			
 			trace("Setting words from : " + source);
-			
-			row1 = []; 
-			row2 = []; 
-			row3 = []; 
-			row4 = [];
-			
-			words = [];
-			
+			var word:Word;						
 			var maxDifference:Number = Number.MIN_VALUE;
 			var minDifference:Number = Number.MAX_VALUE;			
-			var wordInfo:Object;			
 			var difference:Number;
 			
+			var wordLimit:uint = 30; // too high?
+			
 			// get ratio			
-			for (var i:int = 0; i < source.length; i++) {
-				
-				wordInfo = source[i];
+			for (var i:int = 0; i < Math.min(wordLimit, source.length); i++) {
+				word = source[i];
 				
 				// raw yes - no difference, will get normalized later
-				difference = wordInfo['yesCases'] - wordInfo['noCases']; // higher number is more "yes", more left
-				wordInfo['difference'] = difference;
+				difference = word.yesCases - word.noCases; // higher number is more "yes", more left
+				word.difference = difference;
 				maxDifference = Math.max(difference, maxDifference);
 				minDifference = Math.min(difference, minDifference);				
 			}
 			
 			// normalalize ratio and create objects
-			for(var j:int = 0; j < source.length; j++) {
-				wordInfo = source[j];
-				
-				var normalDifference:Number = Utilities.map(wordInfo['difference'], minDifference, maxDifference, 0, 1);
-				words.push(new WordButton(wordInfo['word'], normalDifference, wordInfo['threads']));			
+			for(var j:int = 0; j < Math.min(wordLimit, source.length); j++) {
+				word = source[j];
+				word.normalDifference = Utilities.map(word.difference, minDifference, maxDifference, 0, 1);
+				wordButtons.push(new WordButton(word));			
 			}
 			
 			
 			// sort them by difference
-			words = words.sortOn('_normalDifference');
+			wordButtons = wordButtons.sortOn('normalDifference', Array.DESCENDING | Array.NUMERIC);
 			
 			// do the fitting
-			
-			
-			
-			trace("Words: " + words.length);
-			for (var k:int = 0; k < words.length; k += 4) {
+			trace("Words: " + wordButtons.length);
+			for (var k:int = 0; k < wordButtons.length - 4; k += 4) {
 				trace("pushing " + k);
-				row1.push(words[k]);
-				row2.push(words[k + 1]);
-				row3.push(words[k + 2]);
-				row4.push(words[k + 3]);				
+				row1.push(wordButtons[k]);
+				row2.push(wordButtons[k + 1]);
+				row3.push(wordButtons[k + 2]);
+				row4.push(wordButtons[k + 3]);				
 			}
 			
-			
-			
-			
+
 			positionRow(row1, 1);
 			positionRow(row2, 2);
 			positionRow(row3, 3);
@@ -118,9 +111,9 @@ package com.civildebatewall.elements {
 
 			
 			// Add Listeners
-			for (var m:int = 0; m < words.length; m++) {
-				words[m].addEventListener(MouseEvent.MOUSE_DOWN, onDown);
-				words[m].addEventListener(MouseEvent.MOUSE_DOWN, onUp);				
+			for (var m:int = 0; m < wordButtons.length; m++) {
+				wordButtons[m].addEventListener(MouseEvent.MOUSE_DOWN, onDown);
+				wordButtons[m].addEventListener(MouseEvent.MOUSE_DOWN, onUp);				
 			}
 			
 			
@@ -162,12 +155,12 @@ package com.civildebatewall.elements {
 			else {
 				activeWord = selectedWord;
 				
-				for (var m:int = 0; m < words.length; m++) {
-					if (words[m] != activeWord) {
-						words[m].tween(0.5, {colorTransform: {tint: 0xffffff, tintAmount: 0.85}});
+				for (var m:int = 0; m < wordButtons.length; m++) {
+					if (wordButtons[m] != activeWord) {
+						wordButtons[m].tween(0.5, {colorTransform: {tint: 0xffffff, tintAmount: 0.85}});
 					}
 					else {
-						words[m].tween(0, {colorTransform: {tint: 0xffffff, tintAmount: 0}});						
+						wordButtons[m].tween(0, {colorTransform: {tint: 0xffffff, tintAmount: 0}});						
 					}
 				}
 				
@@ -181,8 +174,8 @@ package com.civildebatewall.elements {
 		
 		
 		public function deselect():void {
-			for (var n:int = 0; n < words.length; n++) {
-				words[n].tween(0.5, {colorTransform: {tint: 0xffffff, tintAmount: 0}});
+			for (var n:int = 0; n < wordButtons.length; n++) {
+				wordButtons[n].tween(0.5, {colorTransform: {tint: 0xffffff, tintAmount: 0}});
 			}
 			activeWord = null;
 		}
@@ -199,12 +192,16 @@ package com.civildebatewall.elements {
 			var xAccumulator:Number = 0;
 			
 			for(var i:int = 0; i < row.length; i++) {
-				if (!this.contains(row[i])) addChild(row[i]);				
+				trace(i + " / " + row.length);
 				
-				row[i].x = xAccumulator;
-				xAccumulator += row[i].width + 15;
-				row[i].y = (row[i].height + 15) * (rowNumber) + 15;
-				row[i].visible = true;
+	
+				
+					if (!this.contains(row[i])) addChild(row[i]);				
+					
+					row[i].x = xAccumulator;
+					xAccumulator += row[i].width + 15;
+					row[i].y = (row[i].height + 15) * (rowNumber) + 15;
+					row[i].visible = true;
 				
 			}
 			

@@ -6,7 +6,7 @@ package com.civildebatewall.elements {
 	import com.civildebatewall.blocks.BlockLabel;
 	import com.civildebatewall.blocks.BlockLabelBar;
 	import com.civildebatewall.blocks.BlockParagraph;
-	import com.civildebatewall.data.Thread;
+	import com.civildebatewall.data.Post;
 	import com.civildebatewall.ui.ButtonBase;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
@@ -21,7 +21,7 @@ package com.civildebatewall.elements {
 	
 	public class DebateListItem extends ButtonBase {
 		
-		private var _thread:Thread;
+		private var _post:Post;
 		private var _itemIndex:int;
 		private var _foregroundColor:uint;		
 		public var toggledOn:Boolean;
@@ -40,8 +40,8 @@ package com.civildebatewall.elements {
 
 		private var horizontalRule:Shape;
 		
-		public function DebateListItem(thread:Thread, itemIndex:int = 0) {
-			_thread = thread;
+		public function DebateListItem(post:Post, itemIndex:int = 0) {
+			_post = post;
 			_itemIndex = itemIndex;
 			super();
 			
@@ -78,7 +78,7 @@ package com.civildebatewall.elements {
 			indexNumber.y = 33 - 1;
 			tintGroup.addChild(indexNumber);
 			
-			opinionExcerpt = new BlockParagraph(406, 0x000000, StringUtils.truncate(thread.firstPost.text,  100), 14);
+			opinionExcerpt = new BlockParagraph(406, 0x000000, StringUtils.truncate(_post.text,  100), 14);
 			opinionExcerpt.background.visible = false;
 			opinionExcerpt.setPadding(0, 0, 0, 0);
 			opinionExcerpt.visible = true;
@@ -97,7 +97,7 @@ package com.civildebatewall.elements {
 			bubble.y = 110;
 			tintGroup.addChild(bubble);		
 			
-			var responseCount:int = Utilities.objectLength(thread.postCount - 1);
+			var responseCount:int = Utilities.objectLength(_post.thread.postCount - 1); // TODO, something better?
 			
 			responseNumber = new BlockLabelBar(responseCount.toString(), 11, 0xffffff, 28, 28, 0x000000, Assets.FONT_BOLD);
 			responseNumber.visible = true;
@@ -107,11 +107,11 @@ package com.civildebatewall.elements {
 			tintGroup.addChild(responseNumber);			
 			
 			
-			var created:Date = thread.firstPost.created;
-			var day:String =  Utilities.zeroPad(created.month, 2) + '/' + Utilities.zeroPad(created.date, 2) + '/' + (created.fullYear - 2000); 
-			var ampm:String = (created.hours < 12) ? 'am' : 'pm';
-			var time:String = (created.hours % 12) + ':' + created.minutes + ampm;
-			var bylineText:String = thread.firstPost.user.usernameFormatted + ' said this on ' + day + ' at ' + time;
+
+			var day:String =  Utilities.zeroPad(_post.created.month, 2) + '/' + Utilities.zeroPad(_post.created.date, 2) + '/' + (_post.created.fullYear - 2000); 
+			var ampm:String = (_post.created.hours < 12) ? 'am' : 'pm';
+			var time:String = (_post.created.hours % 12) + ':' + _post.created.minutes + ampm;
+			var bylineText:String = _post.user.usernameFormatted + ' said this on ' + day + ' at ' + time;
 			
 			byline = new BlockLabel(bylineText, 14, 0xffffff, 0x000000, null, false);
 			byline.visible = true;
@@ -121,9 +121,9 @@ package com.civildebatewall.elements {
 
 			addChild(tintGroup);
 
-			setDownColor(thread.firstPost.stanceColorMedium);
+			setDownColor(_post.stanceColorMedium);
 			setBackgroundColor(Assets.COLOR_GRAY_5, true);
-			setForegroundColor(_thread.firstPost.stanceColorExtraLight, true);	
+			setForegroundColor(_post.stanceColorExtraLight, true);	
 		}
 		
 		override protected function onMouseDown(e:MouseEvent):void {
@@ -170,7 +170,7 @@ package com.civildebatewall.elements {
 		
 		public function activate():void {
 			toggledOn = true;
-			setBackgroundColor(_thread.firstPost.stanceColorLight, true);
+			setBackgroundColor(_post.stanceColorLight, true);
 			TweenMax.to(bubbleFill, 0.5, {alpha: 0});
 			TweenMax.to(circleFill, 0.5, {alpha: 0});			
 		}
@@ -183,7 +183,7 @@ package com.civildebatewall.elements {
 		}
 		
 		
-		public function get thread():Thread { return _thread; }
+		public function get post():Post { return _post; }
 		
 		
 		public function setForegroundColor(c:uint, instant:Boolean = false):void {

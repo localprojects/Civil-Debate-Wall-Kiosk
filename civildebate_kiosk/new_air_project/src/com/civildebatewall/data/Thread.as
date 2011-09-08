@@ -14,6 +14,7 @@ package com.civildebatewall.data {
 		private var _firstPost:Post;
 		private var _postCount:uint;
 		private var _created:Date;
+		public var createdRaw:Number;		
 		
 		public function Thread(jsonObject:Object)	{
 			_id = jsonObject['id'];
@@ -30,12 +31,15 @@ package com.civildebatewall.data {
 			var jsonObject:Object = JSON.decode(LoaderMax.getContent(_id));	
 				
 			for each (var jsonPost:Object in jsonObject['posts']) {
-				var tempPost:Post = new Post(jsonPost);
+				var tempPost:Post = new Post(jsonPost, this);
 				_posts.push(tempPost); // one copy in the thread
 				CDW.database.posts.push(tempPost); // and one copy globally
 			}
 			
 			_created = _posts[0].created; // use the first post as the created date...
+			createdRaw = _created.time;
+			
+			_firstPost = _posts[0];
 			
 			// sort by date, newest last
 			_posts.sortOn('created');		
@@ -46,8 +50,8 @@ package com.civildebatewall.data {
 		
 		public function get id():String { return _id;	}
 		public function get posts():Array { return _posts;	}
-		public function get firstPost():Post { return _posts[0];	}
+		public function get firstPost():Post { return _firstPost;	}
 		public function get postCount():uint { return _postCount; }
-		public function get created():Date { return _created; }	
+		public function get created():Date { return _created; }		
 	}
 }

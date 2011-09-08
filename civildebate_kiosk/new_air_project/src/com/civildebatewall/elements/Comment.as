@@ -38,7 +38,7 @@ package com.civildebatewall.elements {
 		protected function init():void {
 			// draw the portrait
 			portrait = new Sprite();
-			portrait.graphics.beginBitmapFill(_post.user.photo.bitmapData, null, false, true);
+			portrait.graphics.beginBitmapFill(Utilities.scaleToFill(_post.user.photo.bitmapData, portraitWidth, portraitHeight), null, false, true);
 			portrait.graphics.drawRoundRect(0, 0, portraitWidth, portraitHeight, 15, 15);
 			portrait.graphics.endFill();
 			
@@ -109,7 +109,7 @@ package com.civildebatewall.elements {
 			addChild(hairline);
 			
 			// Add the opinoin
-			var opinion:BlockParagraph = new BlockParagraph(652, _post.stanceColorLight, _post.text, 23);
+			var opinion:BlockParagraph = new BlockParagraph(652, _post.stanceColorLight, _post.textAt, 23);
 			opinion.setPadding(11, 18, 14, 18);
 			opinion.visible = true;
 			opinion.x = 167;

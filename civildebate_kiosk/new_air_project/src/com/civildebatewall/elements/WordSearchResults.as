@@ -5,8 +5,10 @@ package com.civildebatewall.elements {
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.blocks.BlockBase;
 	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.Word;
 	import com.civildebatewall.ui.ButtonBase;
 	import com.civildebatewall.ui.InertialScrollField;
+	import com.civildebatewall.data.Word;
 	
 	import flash.display.*;
 	import flash.events.*;
@@ -31,32 +33,26 @@ package com.civildebatewall.elements {
 		}
 		
 		
-		public function updateSearch(s:String):void {
+		public function updateSearch(word:Word):void {
 			Utilities.removeChildren(scrollField.scrollSheet);
-			resultCount = 0;
 			scrollField.scrollSheet.y = 0;
+			resultCount = word.posts.length;
 			
 			var paddingBottom:Number = 15;
 			var yOffset:Number = 0;
-			
-			for (var i:uint = 0; i < CDW.database.posts.length; i++) {
-				var post:Post = CDW.database.posts[i];
+
+			for (var i:uint = 0; i < word.posts.length; i++) {
+				var post:Post = word.posts[i];
+						
+				// create object and add it to the scroll field
+				var resultRow:SearchResult = new SearchResult(post, word.word);
 				
-				// todo better word bounding
-				if (post.text.toLowerCase().indexOf(s.toLowerCase()) >= 0) {
-					resultCount++;					
-					
-					// create object and add it to the scroll field
-					// Temp kludge for nameless authors // TODO get rid of this
-					var resultRow:SearchResult = new SearchResult(post, s);
-					
-					resultRow.x = 0;
-					resultRow.y = yOffset;
-					resultRow.visible = true;
-					
-					yOffset += resultRow.height + paddingBottom;
-					scrollField.scrollSheet.addChild(resultRow);	
-				}				
+				resultRow.x = 0;
+				resultRow.y = yOffset;
+				resultRow.visible = true;
+				
+				yOffset += resultRow.height + paddingBottom;
+				scrollField.scrollSheet.addChild(resultRow);	
 			}
 			
 			// set scroll bounds

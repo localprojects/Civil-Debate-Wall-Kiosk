@@ -114,7 +114,7 @@ package com.civildebatewall {
 		}
 		
 		
-		// returns a 2D array of start / end indexes for the search term
+		// returns a 2D array of start / end indexes for the search WORD
 		public static function searchString(needle:String, haystack:String, caseSensitive:Boolean = false):Array {
 			
 			if (!caseSensitive) {
@@ -122,19 +122,28 @@ package com.civildebatewall {
 				haystack = haystack.toLowerCase();				
 			}
 			
-			var indexes:Array = [];
-			var startIndex:int = 0;
+
+			// goodness gracious, this syntax...
+			// http://stackoverflow.com/questions/6657179/using-a-variable-in-an-as3-regexp
+			var regex:RegExp = new RegExp(/\b/.source + needle +  /\b/.source, 'g');
 			
-			while (startIndex < haystack.length) {
-				var tempIndex:int = haystack.indexOf(needle, startIndex);
-				if (tempIndex >= 0) {
-					indexes.push(new Array(tempIndex, tempIndex + needle.length));
-					startIndex += tempIndex + needle.length;					
-				}
-				else {
-					break;
-				}
+			var indexes:Array = [];
+			
+			var offset:uint = 0;
+			var substack:String = haystack; // this gets lopped off
+			
+			trace("Index: " + substack.search(regex));
+			
+			while (substack.search(regex) >= 0) {
+				var leftIndex:uint = substack.search(regex);
+				
+				indexes.push([offset + leftIndex, offset + leftIndex + needle.length]);
+				
+				offset += leftIndex + needle.length;
+				
+				substack = substack.substr(leftIndex + needle.length);
 			}
+			
 			
 			return indexes;
 		}		

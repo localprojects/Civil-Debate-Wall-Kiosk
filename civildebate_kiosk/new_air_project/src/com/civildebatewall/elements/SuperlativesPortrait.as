@@ -96,7 +96,7 @@ package com.civildebatewall.elements {
 		
 		
 		public function setPost(post:Post, instant:Boolean = false):void {
-			post = _post;
+			_post = post;
 			
 			portrait.setImage(new Bitmap(Utilities.scaleToFill(_post.user.photo.bitmapData, 503, 844), "auto", true), instant);
 			
