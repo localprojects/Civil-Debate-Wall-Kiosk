@@ -1,7 +1,9 @@
 package com.civildebatewall.data {
 	import com.adobe.protocols.dict.Response;
 	import com.adobe.serialization.json.*;
+	import com.adobe.utils.StringUtil;
 	import com.civildebatewall.CDW;
+	import com.civildebatewall.StringUtils;
 	import com.civildebatewall.Utilities;
 	import com.greensock.*;
 	import com.greensock.events.LoaderEvent;
@@ -28,8 +30,10 @@ package com.civildebatewall.data {
 		
 		// stats
 		public var mostDebatedThreads:Array; // TODO
-		public var mostLikedThreads:Array; // TODO
-		public var frequentWords:Array; // TODO		
+		public var mostLikedPosts:Array; // TODO
+		public var frequentWords:Array; // TODO
+		public var likeTotals:Object;
+		public var stanceTotals:Object;		
 		
 		// sms
 		public var latestTextMessages:Array;
@@ -52,8 +56,11 @@ package com.civildebatewall.data {
 			stats = {};			
 			smsNumber = '';
 			mostDebatedThreads = [];
-			mostLikedThreads = [];
+			mostLikedPosts = [];
 			frequentWords = [];
+			likeTotals = {};
+			stanceTotals = {};
+			
 			latestTextMessages = [];
 			
 			
@@ -116,20 +123,84 @@ package com.civildebatewall.data {
 		
 		private function onPostsLoaded(event:LoaderEvent):void {
 			trace("posts loaded");
-
-			// TODO STATS, client or server side?
-			// Utilities.postRequestJSON(CDW.settings.serverPath + '/api/stats/get', {'question': '4e2755b50f2e420354000001'}, onStatsReceived);
-			stats = {}
 			
 			// that's everything
+			
+			// get stats
+			
+			// most liked debates
+			posts.sortOn('likes', Array.DESCENDING | Array.NUMERIC);
+			for (var i:uint = 0; i < Math.min(posts.length, 5); i++) {
+				mostLikedPosts.push(posts[i]);
+				trace("#" + (i + 1) + " Liked: " + posts[i].likes);
+			}
+			
+			// most debated threads
+			threads.sortOn('postCount', Array.DESCENDING | Array.NUMERIC);
+			threads.sorton
+			for (var j:uint = 0; j < Math.min(threads.length, 5); j++) {
+				mostDebatedThreads.push(threads[j]);
+				trace("#" + (j + 1) + " Debated: " + threads[j].postCount);
+			}
+			
+			var yesLikes:uint = 0;
+			var noLikes:uint = 0;
+			var yesPosts:uint = 0;
+			var noPosts:uint = 0;			
+			
+			for each (var post:Post in posts) {
+				if (post.stance == Post.STANCE_YES) {
+					yesLikes += post.likes;
+					yesPosts++;
+				}
+				else {
+					noLikes += post.likes;				
+					noPosts++;
+				}
+			}
+						
+			likeTotals = {'yes': yesLikes, 'no': noLikes};
+			stanceTotals = {'yes': yesPosts, 'no': noPosts};
+				
+			// build the corpus
+			
+			var wordSearch:RegExp = new RegExp(/\w*\w/g);
+			var corpus:Array = [];
+			for each (post in posts) {
+				
+				
+				corpus = Utilities.mergeUnique(corpus, post.text.toLowerCase().match(wordSearch));
+			}
+			trace("Corpus: ");
+			trace(corpus);
+			
+			//Utilities.pushUnique(
+			
+			
+			
+			// end stats
+			
+			
+			
+			
 			// now sort by date
-			
-			
+			threads.sortOn('created', Array.DESCENDING); // newest first // Is this working?
+			//posts.sortOn('created', Array.DESCENDING); // newest first			
+				
 			trace('question',question);
 			trace('users',users);
 			trace('threads',threads);
 			trace('posts',posts);				
+
+			
+			// TODO STATS, client or server side?
+			// Utilities.postRequestJSON(CDW.settings.serverPath + '/api/stats/get', {'question': '4e2755b50f2e420354000001'}, onStatsReceived);
+			stats = {}
+			
 				
+				
+			
+			
 			// ready to start
 			this.dispatchEvent(new Event(Event.COMPLETE));
 		}		

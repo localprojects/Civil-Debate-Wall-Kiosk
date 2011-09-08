@@ -12,6 +12,8 @@ package com.civildebatewall {
 	import flash.utils.*;
 	import flash.utils.ByteArray;
 	
+	import flashx.textLayout.elements.BreakElement;
+	
 	import mx.graphics.codec.JPEGEncoder;
 	import mx.graphics.codec.PNGEncoder;
 	
@@ -52,7 +54,27 @@ package com.civildebatewall {
 		private static const EXT_JPEG:String = ".jpg";
 		private static const EXT_PNG:String = ".png";		
 		
+		public static function pushUnique(array:Array, item:*):uint {
+			for each (var existingItem:* in array) {
+				if (item == existingItem) return array.length;
+			}
+			return array.push(item);
+		}
 		
+		public static function mergeUnique(a1:Array, a2:Array):Array {
+			var aOut:Array = [];
+			
+			for each (var item1:* in a1) {
+				pushUnique(aOut, item1);
+			}			
+			
+			for each (var item2:* in a2) {
+				pushUnique(aOut, item2);
+			}
+			
+			return aOut;
+			
+		}
 		
 		
 		public static function interpolateColorThroughWhite(start:uint, end:uint, step:Number):uint {

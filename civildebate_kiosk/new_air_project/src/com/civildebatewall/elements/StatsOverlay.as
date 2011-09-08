@@ -299,7 +299,7 @@ package com.civildebatewall.elements {
 			
 			//mostLikedList.deactivateAll();
 			(mostLikedList.getChildAt(0) as DebateListItem).activate();
-			superlativesPortrait.setPost(CDW.database.mostLikedThreads[0], true);			
+			superlativesPortrait.setPost(CDW.database.mostLikedPosts[0], true);			
 			
 			previousSuperlativeButton.setOnClick(mostDebatedView);
 			nextSuperlativeButton.setOnClick(null);
@@ -377,8 +377,8 @@ package com.civildebatewall.elements {
 			trace("Updating stats");
 			wordCloud.setWords(CDW.database.frequentWords);
 			mostDebatedList.setItems(CDW.database.mostDebatedThreads);
-			trace("most liked: " + CDW.database.mostLikedThreads);
-			mostLikedList.setItems(CDW.database.mostLikedThreads);
+			trace("most liked: " + CDW.database.mostLikedPosts);
+			mostLikedList.setItems(CDW.database.mostLikedPosts);
 		}		
 		
 		// Utiliteis and helpers

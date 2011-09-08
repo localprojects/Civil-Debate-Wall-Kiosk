@@ -79,7 +79,7 @@ package com.civildebatewall.camera
 			}
 			
 			if(imageFiles.length > 0) {
-				imageFiles = imageFiles.sortOn('creationDate', Array.DESCENDING);
+				imageFiles.sortOn('creationDate', Array.DESCENDING);
 				trace(imageFiles.length + ' images');
 				trace('Latest is: ' + imageFiles[0].name);
 				return imageFiles;
