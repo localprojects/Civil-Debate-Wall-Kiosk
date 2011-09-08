@@ -32,12 +32,12 @@ package com.civildebatewall.elements {
 			
 			// draw the portrait
 			portrait = new Sprite();
-			portrait.graphics.beginBitmapFill(_post.user.photo.bitmapData, null, false, true); // TODO resize?
+			portrait.graphics.beginBitmapFill(Utilities.scaleToFill(_post.user.photo.bitmapData, portraitWidth, portraitHeight), null, false, true); // TODO resize?
 			portrait.graphics.drawRoundRect(0, 0, portraitWidth, portraitHeight, 15, 15);
 			portrait.graphics.endFill();
 			
 			// draw the stance banner
-			stanceLabel = new BlockLabel('', 28, 0xffffff, 0x000000, Assets.FONT_BOLD, false);
+			stanceLabel = new BlockLabel(_post.stanceFormatted, 28, 0xffffff, 0x000000, Assets.FONT_BOLD, false);
 			stanceLabel.setPadding(0, 0, 0, 0);
 			stanceLabel.visible = true;
 			

@@ -42,7 +42,7 @@ package com.civildebatewall {
 		private var continueButton:BlockButton;
 		private var flashOverlay:BlockBitmap;
 		private var blackOverlay:BlockBitmap;
-		private var skipTextButton:BlockButton; // debug only
+		public var skipTextButton:BlockButton; // debug only
 		private var smsInstructions:BlockParagraph;
 		private var dragLayer:DragLayer;
 		private var flagOverlay:BlockBitmap;
@@ -339,6 +339,8 @@ package com.civildebatewall {
 			skipTextButton = new BlockButton(200, 100, Assets.COLOR_GRAY_85, 'SIMULATE SMS', 20);
 			skipTextButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 500});
 			skipTextButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 500});
+			skipTextButton.alpha = 0; // start hidden
+			skipTextButton.setOnClick(null); // start off
 			addChild(skipTextButton);
 
 			// broken apart for easy measurability
@@ -596,8 +598,11 @@ package com.civildebatewall {
 			else {
 				// 
 				trace("unhilite");
-				opinion.setHighlight('');				
+				opinion.clearHighlight();				
 			}
+			
+			leftOpinion.clearHighlight();
+			rightOpinion.clearHighlight();
 			
 			// hilite these to, if we need to
 			debateOverlay.update();			
@@ -1171,7 +1176,7 @@ package com.civildebatewall {
 			question.setTextColor(CDW.state.questionTextColor);			
 			yesButton.setOnClick(null);
 			noButton.setOnClick(null);
-			skipTextButton.setOnClick(simulateSMS);
+			//
 			
 			// start polling to see if the user has sent their opinion yet
 			CDW.database.fetchLatestTextMessages(onLatestMessagesFetched);

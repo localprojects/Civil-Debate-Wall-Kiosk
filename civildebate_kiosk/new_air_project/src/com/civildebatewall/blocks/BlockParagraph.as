@@ -144,6 +144,9 @@ package com.civildebatewall.blocks {
 					highlightPosition(locations[i][0], locations[i][1]);
 				}
 			}
+			else {
+				clearHighlight();
+			}
 		}
 		
 		public function clearHighlight():void {

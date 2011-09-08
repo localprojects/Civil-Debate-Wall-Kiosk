@@ -9,6 +9,7 @@ package com.civildebatewall.elements {
 	
 	import flash.display.Shape;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	public class StatsOverlay extends BlockBase {
 		
@@ -258,7 +259,7 @@ package com.civildebatewall.elements {
 			
 						
 			
-			superlativesPortrait.setPost(CDW.database.mostDebatedThreads[0].firstPost, true);			
+			superlativesPortrait.setPost(CDW.database.mostDebatedThreads[0].firstPost, true);
 			
 			previousSuperlativeButton.setOnClick(null);
 			nextSuperlativeButton.setOnClick(mostLikedView);
@@ -280,6 +281,8 @@ package com.civildebatewall.elements {
 			
 			tweenOutInactive();					
 		}
+		
+
 		
 		private function onMostDebatedSelected(item:DebateListItem):void {
 			trace("Selected item " + item.post);

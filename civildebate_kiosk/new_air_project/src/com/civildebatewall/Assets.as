@@ -187,7 +187,7 @@ package com.civildebatewall
 		public static const COLOR_YES_OVERLAY:uint = Utilities.color(53, 124, 146);
 		public static const COLOR_YES_WATERMARK:uint = Utilities.color(239, 249, 254);
 		public static const COLOR_YES_DISABLED:uint = Utilities.color(34, 63, 110);
-		public static const COLOR_YES_HIGHLIGHT:uint = COLOR_YES_DARK; // TBD		
+		public static const COLOR_YES_HIGHLIGHT:uint = COLOR_YES_DISABLED; // TBD		
 	
 		public static const COLOR_NO_EXTRA_LIGHT:uint = Utilities.color(247, 201, 181);
 		public static const COLOR_NO_LIGHT:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the design template!
@@ -196,7 +196,7 @@ package com.civildebatewall
 		public static const COLOR_NO_OVERLAY:uint = Utilities.color(255, 60, 0);
 		public static const COLOR_NO_WATERMARK:uint = Utilities.color(255, 242, 235);
 		public static const COLOR_NO_DISABLED:uint = Utilities.color(140, 41, 4);		
-		public static const COLOR_NO_HIGHLIGHT:uint = COLOR_NO_DARK; // TBD		
+		public static const COLOR_NO_HIGHLIGHT:uint = COLOR_NO_DISABLED; // TBD		
 		
 		public static const COLOR_GRAY_5:uint = Utilities.color(241, 242, 242); // 5% K
 		public static const COLOR_GRAY_15:uint = Utilities.color(220, 221, 222); // 15% K		

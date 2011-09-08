@@ -11,6 +11,7 @@ package com.civildebatewall.elements {
 	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
+	import flash.events.Event;
 	
 	public class SuperlativesPortrait extends BlockBase {
 		
@@ -60,7 +61,8 @@ package com.civildebatewall.elements {
 			debateButton.setDefaultTweenIn(1, {x: 361, y: 368});
 			debateButton.setDefaultTweenOut(1, {x: width + 10, y: 368});
 			debateButton.scaleX = 0.75;
-			debateButton.scaleY = 0.75;				
+			debateButton.scaleY = 0.75;
+			debateButton.setOnClick(onDebateClick);
 			addChild(debateButton);			
 			
 			nametag = new NameTag('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);	
@@ -100,6 +102,7 @@ package com.civildebatewall.elements {
 			
 			portrait.setImage(new Bitmap(Utilities.scaleToFill(_post.user.photo.bitmapData, 503, 844), "auto", true), instant);
 			
+
 			if (instant) {
 				finishSettingPost(true);
 			}
@@ -111,12 +114,21 @@ package com.civildebatewall.elements {
 				nametag.tweenOut();
 				opinion.tweenOut();
 			}
-		} 				
+		}
+		
+		private function onDebateClick(e:Event):void {
+			// Respond to debate
+			trace("Debate with post: " + _post);
+			CDW.state.userIsResponding = true;
+			CDW.state.userRespondingTo = _post;				
+			CDW.view.pickStanceView();			
+		}
 		
 		private function finishSettingPost(instant:Boolean = false):void {
 			// mutations go here
 			leftQuote.setColor(_post.stanceColorLight, true);
 			rightQuote.setColor(_post.stanceColorLight, true);
+			debateButton.setDownColor(_post.stanceColorMedium);
 			debateButton.setBackgroundColor(_post.stanceColorDark, true);
 			nametag.setBackgroundColor(_post.stanceColorMedium, true);
 			nametag.setText(_post.user.usernameFormatted + ' Says : ', true);
