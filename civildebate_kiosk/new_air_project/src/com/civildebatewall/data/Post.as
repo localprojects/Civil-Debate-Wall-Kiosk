@@ -21,6 +21,8 @@ package com.civildebatewall.data {
 		private var _text:String;
 		private var _user:User;
 		private var _created:Date;
+		private var _thread:Thread;
+		private var responseToID:String; // turns into responseTo Post object on get
 		
 		public var stanceColorLight:uint;
 		public var stanceColorMedium:uint;
@@ -34,7 +36,7 @@ package com.civildebatewall.data {
 
 		// link back to thread, too?
 		
-		public function Post(jsonObject:Object)	{
+		public function Post(jsonObject:Object, parentThread:Thread = null)	{
 			_id = jsonObject['id'];
 		
 			_stance = jsonObject['yesNo'] ? STANCE_YES : STANCE_NO;
@@ -43,8 +45,12 @@ package com.civildebatewall.data {
 			_text = jsonObject['text'];
 			_origin = ORIGIN_KIOSK; // todo support other origins
 			_user = CDW.database.getUserByID(jsonObject['author']['id']);
-			_created = new Date(jsonObject['created']);
+			_created = Utilities.parseJsonDate(jsonObject['created']);
+			_thread = parentThread;
+			responseToID = jsonObject['responseTo'];
 			
+			
+
 			
 			// A bunch of conveniences
 			if (stance == STANCE_YES) {
@@ -100,9 +106,24 @@ package com.civildebatewall.data {
 		public function get flags():uint { return _flags; }
 		public function get stance():String { return _stance;	}		
 		public function get origin():String{ return _origin; }				
-		public function get text():String{ return _text; }		
+		public function get text():String{ return _text; }
+		public function get textAt():String{ 
+			if (responseTo != null) {
+				trace ('TEXT iS AT!!!');
+				return '@' + responseTo.user.usernameFormatted + _text;
+			}
+			return _text;
+		
+		}		
 		public function get user():User {	return _user;	}
 		public function get created():Date { return _created; }
+		public function get responseTo():Post {
+			if (responseToID != null) {	
+				return CDW.database.getPostByID(responseToID);
+			}
+			return null;
+		}
+		public function get thread():Thread { return _thread; }		
 		
 		
 	}

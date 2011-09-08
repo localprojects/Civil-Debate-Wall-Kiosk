@@ -142,14 +142,15 @@ package com.civildebatewall {
 				// set active debate to first in list
 				// set the active debate to the first one
 				CDW.state.setActiveDebate(CDW.database.threads[0]);
-
-				
+				CDW.state.activeThreadID = CDW.state.activeThread.id; 
 				trace("database loaded");
 				
 				// set up test overlay
 				testOverlay = new Bitmap(new BitmapData(1080, 1920));
 				testOverlay.visible = false;
 				testOverlay.alpha = 0.5;			
+				
+				
 				
 				// create the view, this is where
 				// all of the visuals come from
@@ -177,14 +178,17 @@ package com.civildebatewall {
 				
 				// Add test overlay
 				addChild(testOverlay);				
-							
+				
+		
+				
 			}
 			else {
 				trace('updated db')
 				// set the starting view
-				CDW.state.setActiveDebate(CDW.state.activeThread);
+				CDW.state.setActiveDebate(CDW.database.getThreadByID(CDW.state.activeThreadID));
 				view.debateStrip.update();
-				//view.statsOverlay.update();
+				view.statsOverlay.update();
+				view.debateOverlay.update();
 				
 				// jump to home view
 			  database.threads.length > 0 ? view.homeView() : view.noOpinionView();

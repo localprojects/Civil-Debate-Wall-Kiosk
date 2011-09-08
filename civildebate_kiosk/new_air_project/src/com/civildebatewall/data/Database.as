@@ -9,6 +9,7 @@ package com.civildebatewall.data {
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.*;
 	import com.greensock.loading.display.*;
+	import com.civildebatewall.*;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -63,6 +64,7 @@ package com.civildebatewall.data {
 			
 			latestTextMessages = [];
 			
+
 			
 			trace('Loading from DB');
 			trace('Loading question');
@@ -98,7 +100,7 @@ package com.civildebatewall.data {
 		}
 			
 		private function progressHandler(event:LoaderEvent):void {
-			trace("progress: " + event.target.progress);
+			//trace("progress: " + event.target.progress);
 		}
 		
 		private function errorHandler(event:LoaderEvent):void {
@@ -122,17 +124,17 @@ package com.civildebatewall.data {
 		}
 		
 		private function onPostsLoaded(event:LoaderEvent):void {
-			trace("posts loaded");
-			
-			// that's everything
+			trace("posts loaded, generating stats");
+	
 			
 			// get stats
+			
+			// Use client side for this stuff for now
 			
 			// most liked debates
 			posts.sortOn('likes', Array.DESCENDING | Array.NUMERIC);
 			for (var i:uint = 0; i < Math.min(posts.length, 5); i++) {
 				mostLikedPosts.push(posts[i]);
-				trace("#" + (i + 1) + " Liked: " + posts[i].likes);
 			}
 			
 			// most debated threads
@@ -140,7 +142,6 @@ package com.civildebatewall.data {
 			threads.sorton
 			for (var j:uint = 0; j < Math.min(threads.length, 5); j++) {
 				mostDebatedThreads.push(threads[j]);
-				trace("#" + (j + 1) + " Debated: " + threads[j].postCount);
 			}
 			
 			var yesLikes:uint = 0;
@@ -162,45 +163,58 @@ package com.civildebatewall.data {
 			likeTotals = {'yes': yesLikes, 'no': noLikes};
 			stanceTotals = {'yes': yesPosts, 'no': noPosts};
 				
+			// get this from server instead
 			// build the corpus
-			
 			var wordSearch:RegExp = new RegExp(/\w*\w/g);
 			var corpus:Array = [];
 			for each (post in posts) {
-				
-				
 				corpus = Utilities.mergeUnique(corpus, post.text.toLowerCase().match(wordSearch));
 			}
-			trace("Corpus: ");
-			trace(corpus);
 			
-			//Utilities.pushUnique(
+			frequentWords = [];
+			for each (var corpusWord:String in corpus) {
+				frequentWords.push(new Word(corpusWord));
+			}
 			
 			
+			// find frequency, store in json for easy plug-in to future server side implementation
+			for each (var word:Word in frequentWords) {
+				// search all posts
+				for each (post in posts) {
+					
+					
+					var regex:RegExp = new RegExp(/\b/.source + word +  /\b/.source, 'g');					
+					
+					var wordsInPost:Array = post.text.toLowerCase().match(wordSearch);
+					
+					
+					
+					for each (var wordInPost:String in wordsInPost) {
+						
+						if (wordInPost === word.word) {
+							if (post.stance == Post.STANCE_YES) {
+								word.yesCases++;
+							}
+							else {
+								word.noCases++;
+							}
+							
+							Utilities.pushUnique(word.posts, post);
+							word.total++;
+						}
+					}
+				}
+			}			
+			
+			frequentWords.sortOn('total', Array.DESCENDING, Array.NUMERIC);
 			
 			// end stats
 			
-			
-			
-			
+
 			// now sort by date
-			threads.sortOn('created', Array.DESCENDING); // newest first // Is this working?
+			threads.sortOn('created', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?
 			//posts.sortOn('created', Array.DESCENDING); // newest first			
 				
-			trace('question',question);
-			trace('users',users);
-			trace('threads',threads);
-			trace('posts',posts);				
-
-			
-			// TODO STATS, client or server side?
-			// Utilities.postRequestJSON(CDW.settings.serverPath + '/api/stats/get', {'question': '4e2755b50f2e420354000001'}, onStatsReceived);
-			stats = {}
-			
-				
-				
-			
-			
 			// ready to start
 			this.dispatchEvent(new Event(Event.COMPLETE));
 		}		
@@ -379,6 +393,22 @@ package com.civildebatewall.data {
 			
 			return null;
 		}
+		
+		public function getThreadByID(id:String):Thread {
+			for each (var thread:Thread in threads) {
+				if (thread.id == id) return thread;
+			}
+			return null;
+			// todo else raise error
+		}			
+
+		public function getPostByID(id:String):Post {
+			for each (var post:Post in posts) {
+				if (post.id == id) return post;
+			}
+			return null;
+			// todo else raise error
+		}		
 		
 		public function getUserByID(id:String):User {
 			for each (var user:User in users) {

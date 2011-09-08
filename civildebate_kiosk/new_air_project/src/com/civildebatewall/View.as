@@ -96,7 +96,7 @@ package com.civildebatewall {
 		// containers, have lots of nested content
 		public var statsOverlay:StatsOverlay;
 		public var debateStrip:DebateStrip;
-		private var debateOverlay:DebateOverlay;		
+		public var debateOverlay:DebateOverlay;		
 
 		// multiples of these for the drag transitions
 		public var stance:BlockLabel;
@@ -584,6 +584,7 @@ package com.civildebatewall {
 			opinion.setText(CDW.state.activeThread.firstPost.text);
 			bigButton.setText('ADD YOUR OPINION', true);
 			likeButton.setCount(CDW.state.activeThread.firstPost.likes);			
+			debateOverlay.update();
 			
 			// state mutations
 			debateOverlay.scrollField.scrollTo(0, 0);			
@@ -853,11 +854,16 @@ package com.civildebatewall {
 			markAllInactive();			
 			CDW.inactivityTimer.disarm();
 			
+							
+			
 			// mutations
 			portrait.setImage(CDW.state.activeThread.firstPost.user.photo);
 			question.setTextColor(CDW.state.questionTextColor);			
 			byline.y = 410 + opinion.height + 38;
 			byline.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorMedium, true);
+			
+			secondaryDebateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
+			secondaryDebateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);
 			
 			debateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
 			debateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);
@@ -876,8 +882,8 @@ package com.civildebatewall {
 			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 + 5 - letsDebateUnderlay.y; // height depends on opinion				
 			debateOverlay.setMaxHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));				
 			
-			debateOverlay.update();			
-			
+					
+			debateOverlay.update();
 			
 			// behaviors
 			viewDebateButton.setOnClick(onCloseDebateOverlay);
@@ -896,8 +902,7 @@ package com.civildebatewall {
 			
 			secondaryDebateButton.setOnClick(onDebateButton);
 			
-			secondaryDebateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
-			secondaryDebateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);
+
 			
 			secondaryDebateButton.y = 410 + opinion.height + 15;
 			secondaryDebateButton.tweenIn();
@@ -1702,6 +1707,17 @@ package com.civildebatewall {
 		private function onSubmitContinue(e:Event):void {
 			trace("submitting");
 			submitOverlayContinueButton.tweenOut(-1, {alpha: 0, x: submitOverlayContinueButton.x, y: submitOverlayContinueButton.y});
+			
+			if (CDW.state.activeThread != null) {
+				CDW.state.activeThreadID = CDW.state.activeThread.id; // store the strings since objects will be wiped
+				CDW.state.activeThread = null;
+			}
+			
+			if (CDW.state.activePost != null) {			
+				CDW.state.activePostID = CDW.state.activePost.id; // store the strings since objects will be wiped				
+				CDW.state.activePost = null;			
+			}			
+			
 			CDW.database.load();			
 		}
 		

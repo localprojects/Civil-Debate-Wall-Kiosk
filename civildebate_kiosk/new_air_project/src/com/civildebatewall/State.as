@@ -59,6 +59,13 @@ package com.civildebatewall {
 			userOpinion = '';
 			userIsResponding = false;
 			userImageFull = null;
+			userRespondingTo = null;
+			textMessage = null;
+			lastTextMessageTime = null;
+			
+	
+			
+			
 		}
 		
 		public function setStance(s:String):void {

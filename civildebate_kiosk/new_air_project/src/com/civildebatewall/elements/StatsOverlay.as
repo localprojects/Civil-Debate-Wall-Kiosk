@@ -1,15 +1,14 @@
 package com.civildebatewall.elements {
-	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
-	
-	import flash.display.Shape;
-	import flash.events.Event;
-	
 	import com.civildebatewall.*;
 	import com.civildebatewall.blocks.BlockBase;
 	import com.civildebatewall.blocks.BlockLabelBar;
 	import com.civildebatewall.ui.BlockButton;
 	import com.civildebatewall.ui.IconButton;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
+	
+	import flash.display.Shape;
+	import flash.events.Event;
 	
 	public class StatsOverlay extends BlockBase {
 		
@@ -45,7 +44,7 @@ package com.civildebatewall.elements {
 		
 		public function StatsOverlay() {
 			super();
-			//init();
+			init();
 		}
 		
 		
@@ -187,7 +186,7 @@ package com.civildebatewall.elements {
 			trace("Frequent word view");
 						
 			// mutate to use current word
-			wordSearchResults.updateSearch(wordCloud.activeWord.getText());
+			wordSearchResults.updateSearch(wordCloud.activeWord.word);
 			
 			
 			wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.getText() + '\u2019 used in '  + wordSearchResults.resultCount + Utilities.plural(' Opinion', wordSearchResults.resultCount));
@@ -256,7 +255,10 @@ package com.civildebatewall.elements {
 			
 			// set the first item by default
 			(mostDebatedList.getChildAt(0) as DebateListItem).activate();
-			superlativesPortrait.setPost(CDW.database.mostDebatedThreads[0], true);			
+			
+						
+			
+			superlativesPortrait.setPost(CDW.database.mostDebatedThreads[0].firstPost, true);			
 			
 			previousSuperlativeButton.setOnClick(null);
 			nextSuperlativeButton.setOnClick(mostLikedView);
@@ -280,8 +282,8 @@ package com.civildebatewall.elements {
 		}
 		
 		private function onMostDebatedSelected(item:DebateListItem):void {
-			trace("Selected item " + item.thread);
-			superlativesPortrait.setPost(item.thread.firstPost);
+			trace("Selected item " + item.post);
+			superlativesPortrait.setPost(item.post);
 		}
 		
 		
@@ -324,8 +326,8 @@ package com.civildebatewall.elements {
 		}
 		
 		private function onMostLikedSelected(item:DebateListItem):void {
-			trace("Selected item " + item.thread);
-			superlativesPortrait.setPost(item.thread.firstPost);
+			trace("Selected item " + item.post);
+			superlativesPortrait.setPost(item.post);
 		}
 
 //		// REDO BASED ON MOST DEBATED		
@@ -363,8 +365,8 @@ package com.civildebatewall.elements {
 			
 			// mutation
 			voteTitleBar.setText('Total Number of Opinions');			
-			var yesCount:int = parseInt(CDW.database.stats['debateTotals']['yes']);
-			var noCount:int = parseInt(CDW.database.stats['debateTotals']['no']);			
+			var yesCount:uint = CDW.database.stanceTotals['yes'];
+			var noCount:uint = CDW.database.stanceTotals['no'];			
 			var targetPercent:Number = (yesCount / (noCount + yesCount)) * 100;
 			
 			// tween in
@@ -376,7 +378,15 @@ package com.civildebatewall.elements {
 			// anything to do here?
 			trace("Updating stats");
 			wordCloud.setWords(CDW.database.frequentWords);
-			mostDebatedList.setItems(CDW.database.mostDebatedThreads);
+			
+			// pull out the first posts so we're working with posts instead of threads
+			var mostDebatedFirstPosts:Array = [];
+			for (var i:uint = 0; i < CDW.database.mostDebatedThreads.length; i++) {
+				mostDebatedFirstPosts.push(CDW.database.mostDebatedThreads[i].firstPost);
+			}
+			
+			
+			mostDebatedList.setItems(mostDebatedFirstPosts);
 			trace("most liked: " + CDW.database.mostLikedPosts);
 			mostLikedList.setItems(CDW.database.mostLikedPosts);
 		}		

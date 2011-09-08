@@ -40,9 +40,12 @@ package com.civildebatewall.elements {
 			
 			// Clean up the kids, could do a diff instead...
 			Utilities.removeChildren(scrollField.scrollSheet);
+			
 
+			
 			for (var i:uint = 0; i < CDW.database.threads.length; i++) {
 				var threadThumbnail:ThumbnailButton = new ThumbnailButton(CDW.database.threads[i]);
+				
 				
 				threadThumbnail.x = (threadThumbnail.width - 6) * i; // compensate for dots
 				threadThumbnail.y = 0;
