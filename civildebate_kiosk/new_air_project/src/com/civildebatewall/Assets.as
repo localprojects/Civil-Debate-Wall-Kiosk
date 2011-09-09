@@ -180,7 +180,7 @@ package com.civildebatewall
 
 		
 		// Colors
-		public static const COLOR_YES_EXTRA_LIGHT:uint = Utilities.color(109, 207, 246);
+		public static const COLOR_YES_EXTRA_LIGHT:uint = Utilities.color(185, 229, 250); //Utilities.color(109, 207, 246);
 		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 185, 255);
 		public static const COLOR_YES_MEDIUM:uint = Utilities.color(0, 155, 255);
 		public static const COLOR_YES_DARK:uint = Utilities.color(0, 115, 255);
@@ -189,7 +189,7 @@ package com.civildebatewall
 		public static const COLOR_YES_DISABLED:uint = Utilities.color(34, 63, 110); 
 		public static const COLOR_YES_HIGHLIGHT:uint = COLOR_YES_DISABLED; // TBD		
 	
-		public static const COLOR_NO_EXTRA_LIGHT:uint = Utilities.color(247, 150, 121);
+		public static const COLOR_NO_EXTRA_LIGHT:uint = Utilities.color(251, 200, 180); //Utilities.color(247, 150, 121);
 		public static const COLOR_NO_LIGHT:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the design template!
 		public static const COLOR_NO_MEDIUM:uint = Utilities.color(255, 75, 0); // TODO medium and light are identical in the designtemplate!
 		public static const COLOR_NO_DARK:uint = Utilities.color(255, 60, 0);
@@ -198,6 +198,7 @@ package com.civildebatewall
 		public static const COLOR_NO_DISABLED:uint = Utilities.color(140, 41, 4);		
 		public static const COLOR_NO_HIGHLIGHT:uint = COLOR_NO_DISABLED; // TBD		
 		
+		public static const COLOR_GRAY_2:uint = Utilities.color(248, 248, 248); // ?% K
 		public static const COLOR_GRAY_5:uint = Utilities.color(241, 242, 242); // 5% K
 		public static const COLOR_GRAY_15:uint = Utilities.color(220, 221, 222); // 15% K		
 		public static const COLOR_GRAY_20:uint = Utilities.color(230, 231, 232); // 20% K

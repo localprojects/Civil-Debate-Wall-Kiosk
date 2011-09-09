@@ -122,7 +122,7 @@ package com.civildebatewall.elements {
 			addChild(tintGroup);
 
 			setDownColor(_post.stanceColorMedium);
-			setBackgroundColor(Assets.COLOR_GRAY_5, true);
+			setBackgroundColor(Assets.COLOR_GRAY_2, true);
 			setForegroundColor(_post.stanceColorExtraLight, true);	
 		}
 		
@@ -177,7 +177,7 @@ package com.civildebatewall.elements {
 		
 		public function deactivate():void {
 			toggledOn = false;
-			setBackgroundColor(Assets.COLOR_GRAY_5, false);
+			setBackgroundColor(Assets.COLOR_GRAY_2, false);
 			TweenMax.to(bubbleFill, 0.5, {alpha: 1});
 			TweenMax.to(circleFill, 0.5, {alpha: 1});			
 		}
