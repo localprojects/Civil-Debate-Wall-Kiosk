@@ -73,7 +73,7 @@ package com.civildebatewall.ui {
 			
 			// draw the tail outline
 			tailOutline.graphics.clear();
-			tailOutline.graphics.lineStyle(strokeWeight * 2, strokeColor, 1, true, scaleMode, CapsStyle.SQUARE, JointStyle.MITER, 2);
+			tailOutline.graphics.lineStyle(strokeWeight * 2, strokeColor, 1, true, scaleMode, CapsStyle.SQUARE, JointStyle.ROUND, 1);
 			tailOutline.graphics.moveTo((_buttonWidth / 2) - (tailWidth / 2), 0);
 			tailOutline.graphics.lineTo((_buttonWidth / 2) + (tailWidth / 2), 0);
 			tailOutline.graphics.lineTo((_buttonWidth / 2), tailHeight);

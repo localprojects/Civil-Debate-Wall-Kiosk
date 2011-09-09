@@ -444,7 +444,7 @@ package com.civildebatewall {
 			cameraTimeoutWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: BlockBase.CENTER});
 			addChild(cameraTimeoutWarning);
 			
-			noNameWarning = new BlockLabel('Please enter your name!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
+			noNameWarning = new BlockLabel('Please enter a username!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
 			noNameWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
 			noNameWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (noNameWarning.height / 2) - 10});
 			addChild(noNameWarning);
