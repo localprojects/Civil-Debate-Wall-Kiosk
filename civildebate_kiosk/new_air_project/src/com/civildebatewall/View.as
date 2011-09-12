@@ -128,8 +128,8 @@ package com.civildebatewall {
 		
 		private function init():void {
 			// for convenience
-			stageWidth = CDW.ref.stage.stageWidth;
-			stageHeight = CDW.ref.stage.stageHeight;
+			stageWidth = 1080;
+			stageHeight = 1920;
 			yesLetterSpacing = -4;
 			noLetterSpacing = -7;			
 			
@@ -342,8 +342,9 @@ package com.civildebatewall {
 			skipTextButton = new BlockButton(200, 100, Assets.COLOR_GRAY_85, 'SIMULATE SMS', 20);
 			skipTextButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 500});
 			skipTextButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 500});
-			skipTextButton.alpha = 0; // start hidden
-			skipTextButton.setOnClick(null); // start off
+			skipTextButton.alpha = 1; // start hidden
+			skipTextButton.setOnClick(simulateSMS);				
+			//skipTextButton.setOnClick(null); // start off
 			addChild(skipTextButton);
 
 			// broken apart for easy measurability
@@ -1342,7 +1343,8 @@ package com.civildebatewall {
 		
 		public function simulateSMS(e:Event):void {
 			if(smsCheckTimer != null) smsCheckTimer.stop();
-			var testTextMessage:TextMessage = new TextMessage({'message': Utilities.dummyText(100), 'phoneNumber': '415' + Utilities.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});
+			//var testTextMessage:TextMessage = new TextMessage({'message': Utilities.dummyText(100), 'phoneNumber': '415' + Utilities.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});
+			var testTextMessage:TextMessage = new TextMessage({'message': '', 'phoneNumber': '555' + Utilities.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});			
 			handleSMS(testTextMessage);
 		}
 

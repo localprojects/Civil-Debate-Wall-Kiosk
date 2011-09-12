@@ -44,7 +44,7 @@ package com.civildebatewall.data {
 		public var smsNumber:String;
 		
 		// a bunch of boring 3+ letter words (TODO get from server)
-		private const boringWords:Array = ["not", "for", "this", "and", "are", "but", "your"];		
+		private const boringWords:Array = ["not", "for", "this", "and", "are", "but", "your", "has", "have", "the", "that", "they", "with"];		
 			
 		public function Database() {
 			super();

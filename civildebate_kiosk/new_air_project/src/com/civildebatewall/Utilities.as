@@ -98,6 +98,16 @@ package com.civildebatewall {
 		}
 		
 		
+		public static function removeItemFromArray(thearray:Array, theItem:*):void{
+			for(var i:int=0; i < thearray.length;i++){
+				if(thearray[i]==theItem){
+					thearray.splice(i,1);
+					i-=1;
+				}
+			}
+		}
+		
+		
 		public static function interpolateColorThroughWhite(start:uint, end:uint, step:Number):uint {
 			
 			if(step <= 0.5) {
