@@ -15,7 +15,7 @@ package com.civildebatewall {
 			brightness = 0;
 			// TEMP off ofr perofrmance
 			brightness = ColorUtil.averageLightness(this, 0.001, new Rectangle(29, 117, 1022, 117)); // indexed on bitmap reference
-			trace("Brightness: " + brightness); 
+			//trace("Brightness: " + brightness); 
 		}
 	}
 }

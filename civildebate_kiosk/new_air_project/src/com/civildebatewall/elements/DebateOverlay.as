@@ -50,31 +50,24 @@ package com.civildebatewall.elements
 			var yOffset:int = 30;
 			var paddingBottom:int = 35;
 			
-			CDW.state.activeThread.posts.sortOn('created', Array.NUMERIC);
+			// sort
+			CDW.state.activeThread.posts.sortOn('created', Array.DESCENDING | Array.NUMERIC);
 			
 			
-
 			// set up highlight
 			var highlight:String = null;
 			if (CDW.state.highlightWord != null) highlight = CDW.state.highlightWord;
 			CDW.state.highlightWord = null; // clear it for subsequent loads
 			
 
-			
-			for (var i:uint = 1; i < CDW.state.activeThread.posts.length; i++) {
-				// the row...
-				
-
-				
-				
+			// skip the last one since it's the original post
+			for (var i:uint = 0; i < CDW.state.activeThread.posts.length - 1; i++) {
+				// create rows
 				var commentRow:Comment = new Comment(CDW.state.activeThread.posts[i], i, highlight);
 				
 				commentRow.x = 30;
 				commentRow.y = yOffset;
 				commentRow.visible = true;
-				
-
-				
 				
 				yOffset += commentRow.height + paddingBottom;
 				scrollField.scrollSheet.addChild(commentRow);

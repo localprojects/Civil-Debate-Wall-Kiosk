@@ -24,6 +24,27 @@ package com.civildebatewall {
 		public function Utilities()	{
 		}
 		
+		// looks through numerical values of an, finds max and min
+		public static function maxInCollection(array:Array, field:String):Number {
+			var maxValue:Number = Number.MIN_VALUE;
+			
+			for each (var o:Object in array) {
+				if (o[field] > maxValue) maxValue = o[field];
+			}
+			
+			return maxValue;
+		}
+		
+		public static function minInCollection(array:Array, field:String):Number {
+			var minValue:Number = Number.MAX_VALUE;
+			
+			for each (var o:Object in array) {
+				if (o[field] < minValue) minValue = o[field];
+			}
+			
+			return minValue;
+		}		
+		
 		public static function setRegistrationPoint(s:Sprite, regx:Number, regy:Number, showRegistration:Boolean):void {
 			//translate movieclip 
 			s.transform.matrix = new Matrix(1, 0, 0, 1, -regx, -regy);

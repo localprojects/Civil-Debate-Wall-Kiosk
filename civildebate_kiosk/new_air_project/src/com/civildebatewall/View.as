@@ -314,7 +314,7 @@ package com.civildebatewall {
 			addChild(debateOverlay);			
 			
 			debateStrip = new DebateStrip();
-			debateStrip.setDefaultTweenIn(1, {x: 0, y: 1748});
+			debateStrip.setDefaultTweenIn(1, {x: 0, y: 1714});
 			debateStrip.setDefaultTweenOut(1, {x: 0, y: BlockBase.OFF_BOTTOM_EDGE});			
 			debateStrip.update();
 			addChild(debateStrip);
@@ -1665,7 +1665,7 @@ package com.civildebatewall {
 			retakePhotoButton.setOnClick(photoBoothView);
 			editTextButton.setOnClick(editOpinionView);
 			exitButton.setOnClick(homeView);
-			bigButton.setOnClick(onSubmitOpinion);
+			bigButton.setOnClick(submitOverlayView);
 			
 			// blocks
 			leftQuote.tweenIn();
@@ -1686,10 +1686,54 @@ package com.civildebatewall {
 			tweenOutInactive();
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design17);			
 		}
+	
 		
-		private function onSubmitOpinion():void {
+		// =========================================================================
+		
+		
+		public function submitOverlayView(...args):void {
+			CDW.state.lastView = CDW.state.activeView;
+			CDW.state.activeView = submitOverlayView;
+			
+			// mutations			
+			// TODO HOW TO HANDLE OVERLAYS ON OVERLAYS? IS IT ALREADY SUBMITTED AT THIS POINT/
+			CDW.inactivityTimer.arm();
+			
+			// mutations
+			submitOverlayMessage.setBackgroundColor(CDW.state.userStanceColorLight, true);
+			//submitOverlayContinueButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
+			//submitOverlayContinueButton.setDownColor(CDW.state.userStanceColorMedium);			
+			
+			// behaviors
+			//submitOverlayContinueButton.setOnClick(onSubmitContinue);
+			
+			// blocks
+			submitOverlay.tweenIn();
+			
+			submitOverlayMessage.tweenIn(-1, {onComplete: submitDebate}); // submit it automatically after animation
+			//submitOverlayContinueButton.tweenIn();
+			
+			
+			leftQuote.tweenOut();
+			rightQuote.tweenOut();			
+			stance.tweenOut();
+			bigButton.tweenOut();
+			nametag.tweenOut();
+			opinion.tweenOut();
+			retakePhotoButton.tweenOut();
+			editTextButton.tweenOut();
+			exitButton.tweenOut();	
+			
+			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
+			
+			
+		}
+		
+		
+		
+		private function submitDebate():void {
 			// Syncs state up to the cloud
-						
+			
 			// save the images to disk, one full res and one scaled and cropped 
 			if(CDW.state.userImageFull != null) Utilities.saveImageToDisk(CDW.state.userImageFull, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');			
 			var imageName:String = Utilities.saveImageToDisk(CDW.state.userImage, CDW.settings.imagePath, CDW.state.userID + '.jpg');
@@ -1710,77 +1754,13 @@ package com.civildebatewall {
 				// create and upload new debate
 				trace("Uploading new thread");				
 				CDW.database.uploadThread(CDW.database.question.id, CDW.state.userID, CDW.state.userOpinion, CDW.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
-			}
+			}			
 		}
+		
 		
 		private function onDebateUploaded(r:Object):void {
-			
-			if (CDW.state.userIsResponding) {
-				trace('comment uploaded: ' + r);
-				Utilities.traceObject(r);				
-				// Existing active thread is correct
-				CDW.state.activePostID = r['id'];				
-			}
-			else {
-				trace('debate uploaded: ' + r);
-				
-				// set the current debate to the one that was just saved				
-				CDW.state.activeThreadID = r['id'];
-				CDW.state.activePostID = r['posts'][0]['id'];				
-			}
-			
-			// grab the latest from the db
-			// this will go to home view
-			// TODO fire a passed in callback function instead?
-			submitOverlayView();
-		}
-		
-		
-		// =========================================================================
-		
-		
-
-		
-		
-		public function submitOverlayView(...args):void {
-			CDW.state.lastView = CDW.state.activeView;
-			CDW.state.activeView = submitOverlayView;
-			
-			// mutations			
-			// TODO HOW TO HANDLE OVERLAYS ON OVERLAYS? IS IT ALREADY SUBMITTED AT THIS POINT/
-			CDW.inactivityTimer.arm();
-			
-			// mutations
-			submitOverlayMessage.setBackgroundColor(CDW.state.userStanceColorLight, true);
-			submitOverlayContinueButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
-			submitOverlayContinueButton.setDownColor(CDW.state.userStanceColorMedium);			
-			
-			// behaviors
-			submitOverlayContinueButton.setOnClick(onSubmitContinue);
-			
-			// blocks
-			submitOverlay.tweenIn();
-			submitOverlayMessage.tweenIn();
-			submitOverlayContinueButton.tweenIn();
-			
-			
-			leftQuote.tweenOut();
-			rightQuote.tweenOut();			
-			stance.tweenOut();
-			bigButton.tweenOut();
-			nametag.tweenOut();
-			opinion.tweenOut();
-			retakePhotoButton.tweenOut();
-			editTextButton.tweenOut();
-			exitButton.tweenOut();	
-			
-			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
-		}
-		
-		
-		private function onSubmitContinue(e:Event):void {
 			trace("submitting");
-			submitOverlayContinueButton.tweenOut(-1, {alpha: 0, x: submitOverlayContinueButton.x, y: submitOverlayContinueButton.y});
+			//submitOverlayContinueButton.tweenOut(-1, {alpha: 0, x: submitOverlayContinueButton.x, y: submitOverlayContinueButton.y});
 			
 			if (CDW.state.activeThread != null) {
 				CDW.state.activeThreadID = CDW.state.activeThread.id; // store the strings since objects will be wiped

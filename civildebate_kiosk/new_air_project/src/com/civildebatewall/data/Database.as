@@ -30,9 +30,9 @@ package com.civildebatewall.data {
 		public var posts:Array;
 		
 		// stats
-		public var mostDebatedThreads:Array; // TODO
-		public var mostLikedPosts:Array; // TODO
-		public var frequentWords:Array; // TODO
+		public var mostDebatedThreads:Array;
+		public var mostLikedPosts:Array;
+		public var frequentWords:Array;
 		public var likeTotals:Object;
 		public var stanceTotals:Object;		
 		
@@ -43,6 +43,8 @@ package com.civildebatewall.data {
 		
 		public var smsNumber:String;
 		
+		// a bunch of boring 3+ letter words (TODO get from server)
+		private const boringWords:Array = ["not", "for", "this", "and", "are", "but", "your"];		
 			
 		public function Database() {
 			super();
@@ -65,8 +67,6 @@ package com.civildebatewall.data {
 			latestTextMessages = [];
 			
 
-			
-			trace('Loading from DB');
 			trace('Loading question');
 			Utilities.getRequestJSON(CDW.settings.serverPath + '/api/sms/kiosk' + CDW.settings.kioskNumber, onPhoneNumberReceived); // TODO no need, grab it when we check the recents on SMS prompt page?
 		}
@@ -74,7 +74,6 @@ package com.civildebatewall.data {
 		private function onPhoneNumberReceived(r:Object):void {
 			trace('Got phone number, loading users');
 			smsNumber = r['number'];
-			trace('sms number: ' + smsNumber);
 			Utilities.getRequestJSON(CDW.settings.serverPath + '/api/questions/current', onQuestionReceived);			
 		}
 		
@@ -108,7 +107,7 @@ package com.civildebatewall.data {
 		}		
 		
 		private function completeHandler(event:LoaderEvent):void {
-			trace(event.target + " is complete!");
+			//trace(event.target + " is complete!");
 			trace("loading threads");
 			Utilities.getRequestJSON(CDW.settings.serverPath + '/api/questions/' + question.id + '/threads', onThreadsReceived);
 		}
@@ -174,8 +173,15 @@ package com.civildebatewall.data {
 			frequentWords = [];
 			for each (var corpusWord:String in corpus) {
 				// filter out small words
-				if (corpusWord.length > 2) {			
-					frequentWords.push(new Word(corpusWord));
+				if (corpusWord.length > 2) {
+					// filter out boring words
+					// ignore boring words
+					if (boringWords.indexOf(corpusWord) > - 1) {
+						trace(corpusWord + " is boring, skipping it");
+					}
+					else {
+						frequentWords.push(new Word(corpusWord));
+					}
 				}
 			}
 			
@@ -221,13 +227,6 @@ package com.civildebatewall.data {
 			// ready to start
 			this.dispatchEvent(new Event(Event.COMPLETE));
 		}		
-		
-		
-		
-		
-		
-		
-		
 		
 
 		

@@ -19,7 +19,7 @@ package com.civildebatewall.data {
 		
 		public function Thread(jsonObject:Object)	{
 			_id = jsonObject['id'];
-			trace("creating thread " + _id);
+			//trace("creating thread " + _id);
 			_posts = [];
 			
 			// queue up post loading
@@ -27,14 +27,14 @@ package com.civildebatewall.data {
 		}
 		
 		private function onPostsLoaded(e:LoaderEvent):void {
-			trace("Loaded posts for " + _id);
+			//trace("Loaded posts for " + _id);
 
 			var jsonObject:Object = JSON.decode(LoaderMax.getContent(_id));	
 				
 			for each (var jsonPost:Object in jsonObject['posts']) {
 				var tempPost:Post = new Post(jsonPost, this);
 				_posts.push(tempPost); // one copy in the thread
-				trace("Created: " + tempPost.text); 				
+				//trace("Created: " + tempPost.text); 				
 				CDW.database.posts.push(tempPost); // and one copy globally
 			}
 			
