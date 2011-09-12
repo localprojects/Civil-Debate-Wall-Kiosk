@@ -20,9 +20,9 @@ package com.civildebatewall.elements {
 		protected var goToDebateButton:IconButton;
 		protected var background:Shape;
 		
-		public function SearchResult(post:Post, highlight:String) {
+		public function SearchResult(post:Post, index:int, highlight:String) {
 			_highlight = highlight;
-			super(post, 0, _highlight);
+			super(post, index, _highlight);
 		}
 		
 		override protected function init():void {

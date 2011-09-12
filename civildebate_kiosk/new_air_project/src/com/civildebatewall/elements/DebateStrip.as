@@ -28,9 +28,21 @@ package com.civildebatewall.elements {
 		
 		public function DebateStrip()	{
 			super();scrollField
-			scrollField = new InertialScrollField(1080, 141, InertialScrollField.SCROLL_X);
-			scrollField.setBackgroundColor(0xffffff, 1.0);
+			
+			// overdraw for a more friendly hit-zone
+			scrollField = new InertialScrollField(1080, 206, InertialScrollField.SCROLL_X);
+			
+			
+			scrollField.setBackgroundColor(0xff0000, 0.0);
 			scrollField.addEventListener(InertialScrollField.EVENT_NOT_CLICK, onNotClick);
+			
+			
+			// background strip
+			scrollField.graphics.beginFill(0xffffff, 1.0);			
+			scrollField.graphics.drawRect(0, 34, 1080, 141);
+			scrollField.graphics.endFill();
+			
+			
 			// min and max get updated in update			
 			addChild(scrollField);
 		}
@@ -41,14 +53,15 @@ package com.civildebatewall.elements {
 			// Clean up the kids, could do a diff instead...
 			Utilities.removeChildren(scrollField.scrollSheet);
 			
-
+			
+			
 			
 			for (var i:uint = 0; i < CDW.database.threads.length; i++) {
 				var threadThumbnail:ThumbnailButton = new ThumbnailButton(CDW.database.threads[i]);
 				
 				
 				threadThumbnail.x = (threadThumbnail.width - 6) * i; // compensate for dots
-				threadThumbnail.y = 0;
+				threadThumbnail.y = 34;
 				
 				threadThumbnail.addEventListener(MouseEvent.MOUSE_DOWN, onThumbnailMouseDown);
 				threadThumbnail.addEventListener(MouseEvent.MOUSE_UP, onThumbnailMouseUp);				
@@ -65,8 +78,8 @@ package com.civildebatewall.elements {
 			}
 			
 			// update the scroll field limits to acommodate the growing strip...
-			scrollField.xMin = -scrollField.scrollSheet.width + 594;
-			scrollField.xMax = 450; 	
+			scrollField.xMin = -scrollField.scrollSheet.width + 1080;
+			scrollField.xMax = 0; 	
 		}
 		
 		
@@ -105,6 +118,10 @@ package com.civildebatewall.elements {
 		
 		public function scrollToActive():void {
 			var activeThumbnailX:Number = -activeThumbnail.x + ((1080 - activeThumbnail.width) / 2);
+			
+			// handle literal edge cases (don't scroll past bounds)
+			activeThumbnailX = Utilities.clamp(activeThumbnailX, scrollField.xMin, scrollField.xMax); 
+			
 			scrollField.scrollTo(activeThumbnailX, 0);
 		}
 		

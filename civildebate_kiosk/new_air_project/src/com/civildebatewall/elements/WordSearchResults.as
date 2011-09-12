@@ -47,7 +47,7 @@ package com.civildebatewall.elements {
 				var post:Post = word.posts[i];
 						
 				// create object and add it to the scroll field
-				var resultRow:SearchResult = new SearchResult(post, word.word);
+				var resultRow:SearchResult = new SearchResult(post, i + 1, word.word);
 				
 				resultRow.x = 0;
 				resultRow.y = yOffset;

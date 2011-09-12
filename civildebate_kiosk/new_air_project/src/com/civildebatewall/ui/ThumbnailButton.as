@@ -53,8 +53,6 @@ package com.civildebatewall.ui {
 			textField.setPadding(0, 0, 0, 0);
 			textField.visible = true;
 
-			
-
 			downBackgroundColor = _thread.firstPost.stanceColorWatermark;
 			textField.setText(_thread.firstPost.stanceFormatted, true);			
 			
@@ -89,10 +87,10 @@ package com.civildebatewall.ui {
 			setDotColor(Assets.COLOR_GRAY_50);
 			
 			leftDot.y = 70;
-			leftDot.x = 0;
+			leftDot.x = 1;
 						
 			rightDot.y = 70;
-			rightDot.x = width;			
+			rightDot.x = width + 1;			
 			
 				
 			addChild(roundedPortrait);

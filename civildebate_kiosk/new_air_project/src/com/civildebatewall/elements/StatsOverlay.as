@@ -214,7 +214,11 @@ package com.civildebatewall.elements {
 		
 		private function onWordSelected(e:Event):void {
 			wordCloudResultsTitleBar.setText('');			
-				
+			
+			
+			trace("Normal Difference: " + wordCloud.activeWord.normalDifference);
+			trace("Difference: " + wordCloud.activeWord.difference);			
+			
 			if (wordSearchResults.visible) {
 				// switching words				
 				wordSearchResults.tweenOut(0.5, {onComplete: frequentWordView});

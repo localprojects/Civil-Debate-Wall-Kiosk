@@ -87,8 +87,6 @@ package com.civildebatewall.blocks {
 			
 			var leftStringExclusive:String = theLineText.substring(0, start - lineLeftIndex);
 			
-			trace("leftStringExclusive: " + leftStringExclusive);
-			
 			textField.text = leftStringExclusive;
 			
 			var leftExclusiveMetrics:TextLineMetrics = textField.getLineMetrics(0);			
@@ -100,17 +98,12 @@ package com.civildebatewall.blocks {
 			// right bounds, string up to and including the highlighted word
 			var leftStringInclusive:String = theLineText.substring(0, end - lineLeftIndex);
 			
-			trace("leftStringInclusive: " + leftStringInclusive);
-			
 			textField.text = leftStringInclusive;
 			var leftInclusiveMetrics:TextLineMetrics = textField.getLineMetrics(0);
 			highlightArea.width = (leftInclusiveMetrics.x + leftInclusiveMetrics.width + paddingLeft) - highlightArea.x;
 			highlightArea.height = leftInclusiveMetrics.height;						
 			
-			trace("existingText: " + existingText);
 			setText(existingText, true);
-			
-			trace("highlightArea", highlightArea);
 
 			// apply padding
 			highlightArea.y -= highlightPaddingTop;			
