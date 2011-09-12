@@ -13,7 +13,6 @@ package com.civildebatewall.elements {
 		public static const EVENT_WORD_SELECTED:String = "eventWordSelected";
 		public static const EVENT_WORD_DESELECTED:String = "eventWordDeselected";		
 		
-		
 		public var activeWord:WordButton;
 		private var row1:Array;
 		private var row2:Array;
@@ -21,13 +20,8 @@ package com.civildebatewall.elements {
 		private var row4:Array;		
 		private var wordButtons:Array = [];
 		
-		
-
-		
-		
 		public function WordCloud()	{
 			super();
-			
 			drawBackground();
 		}
 		
@@ -50,7 +44,6 @@ package com.civildebatewall.elements {
 			
 			// remove existing
 			Utilities.removeChildren(this);
-			
 
 			var wordLimit:uint = 30; // too high?
 
@@ -59,6 +52,8 @@ package com.civildebatewall.elements {
 			source.sortOn('total', Array.DESCENDING | Array.NUMERIC);
 			
 			// turn words into buttons
+			wordButtons = [];
+			
 			for(var j:int = 0; j < Math.min(wordLimit, source.length); j++) {
 				wordButtons.push(new WordButton(source[j]));			
 			}
@@ -93,11 +88,32 @@ package com.civildebatewall.elements {
 			positionRow(row3, 3);
 			positionRow(row4, 4);			
 			
+			
+			// get the buttons that survived
+			wordButtons = [];
+			
+			for (var p:int = 0; p < numChildren; p++) {
+				wordButtons.push(getChildAt(p));
+			}
+			
+			
+			
+			
 			// NOW we have the final list of words, normalize
 			// recalculate color based on new max and min
 			// find limits
+			trace("Buttons: " + wordButtons.length);	
 			var maxDifference:Number = Utilities.maxInCollection(wordButtons, 'difference');
 			var minDifference:Number = Utilities.minInCollection(wordButtons, 'difference');
+	
+			trace("Max difference: " + maxDifference);
+			trace("Min difference: " + minDifference);
+			trace("Mapping -10: " + Utilities.map(-10, minDifference, maxDifference, 0, 1));			
+			trace("Mapping -5: " + Utilities.map(-5, minDifference, maxDifference, 0, 1));
+			trace("Mapping 2: " + Utilities.map(2, minDifference, maxDifference, 0, 1));			
+			
+			
+			
 			
 			for each (wordButton in wordButtons) {
 				// set the new difference and add listeners
@@ -108,22 +124,13 @@ package com.civildebatewall.elements {
 				wordButton.addEventListener(MouseEvent.MOUSE_DOWN, onDown);
 				wordButton.addEventListener(MouseEvent.MOUSE_DOWN, onUp);				
 			}			
-			
-			
-			
-		
-			
-			
-			
-			
+
 			
 			// Add gray boxes
 			addGrayBoxes(row1);
 			addGrayBoxes(row2);
 			addGrayBoxes(row3);
 			addGrayBoxes(row4);
-			
-
 			
 			// TODO some kind of weighting system to find out which row combinations make the most sense
 			//words.push(new WordButton(wordInfo['word'], 
@@ -221,6 +228,7 @@ package com.civildebatewall.elements {
 				// too big, recurse
 				// TODO does this work?
 				trace("trimming");
+				
 				removeChild(row.pop());
 				positionRow(row, ++rowNumber);
 			}

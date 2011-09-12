@@ -63,7 +63,7 @@ package com.civildebatewall.elements
 			// skip the last one since it's the original post
 			for (var i:uint = 0; i < CDW.state.activeThread.posts.length - 1; i++) {
 				// create rows
-				var commentRow:Comment = new Comment(CDW.state.activeThread.posts[i], i, highlight);
+				var commentRow:Comment = new Comment(CDW.state.activeThread.posts[i], i + 1, highlight);
 				
 				commentRow.x = 30;
 				commentRow.y = yOffset;
@@ -73,7 +73,7 @@ package com.civildebatewall.elements
 				scrollField.scrollSheet.addChild(commentRow);
 				
 				// add the lines between the comments				
-				if (i < CDW.state.activeThread.postCount - 1) {
+				if (i < CDW.state.activeThread.postCount - 2) {
 					var line:Shape = new Shape();
 					line.graphics.lineStyle(1, Assets.COLOR_GRAY_25, 1.0, true);
 					line.graphics.moveTo(0, 0);
