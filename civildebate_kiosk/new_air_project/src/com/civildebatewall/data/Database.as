@@ -344,7 +344,7 @@ package com.civildebatewall.data {
 		private var textCallback:Function;
 		public function fetchLatestTextMessages(callback:Function = null):void {
 			textCallback = callback;
-			Utilities.getRequestJSON(CDW.settings.serverPath + '/api/sms/kiosk' + CDW.settings.kioskNumber, onLatestTextMessages); // TODO no need, grab it when we check the recents on SMS prompt page?			
+			Utilities.getRequestJSON(CDW.settings.serverPath + '/api/sms/kiosk/' + CDW.settings.kioskNumber, onLatestTextMessages); // TODO no need, grab it when we check the recents on SMS prompt page?			
 		}
 		
 		public function onLatestTextMessages(r:Object):void {
