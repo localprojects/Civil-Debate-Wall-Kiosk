@@ -138,12 +138,13 @@ package com.civildebatewall
 		public static function getCirclePerimeter():Bitmap { return new circlePerimeterClass() as Bitmap; };
 		public static const circlePerimeter:Bitmap = getCirclePerimeter();
 		
+		[Embed(source = '/assets/graphics/quoteRight.png')] private static const quoteRightClass:Class;
+		public static function getQuoteRight():Bitmap { return new quoteRightClass() as Bitmap; };
+		public static const quoteRight:Bitmap = getQuoteRight();
 		
-		
-		// Vectors
-		[Embed(source = '/assets/graphics/quotation.svg')] private static const quotationClass:Class;
-		public static function getQuotation():Sprite { return new quotationClass() as Sprite; };
-		public static const quotation:Sprite = getQuotation();		
+		[Embed(source = '/assets/graphics/quoteLeft.png')] private static const quoteLeftClass:Class;
+		public static function getQuoteLeft():Bitmap { return new quoteLeftClass() as Bitmap; };
+		public static const quoteLeft:Bitmap = getQuoteLeft();
 
 		
 		// Generators

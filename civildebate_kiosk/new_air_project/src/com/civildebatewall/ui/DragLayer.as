@@ -66,8 +66,8 @@ package com.civildebatewall.ui {
 			TweenMax.killTweensOf(CDW.view.leftOpinion);
 			TweenMax.killTweensOf(CDW.view.rightOpinion);			
 			TweenMax.killChildTweensOf(CDW.view.portrait);
-			TweenMax.killChildTweensOf(CDW.view.leftQuote);
-			TweenMax.killChildTweensOf(CDW.view.rightQuote);
+			TweenMax.killChildTweensOf(CDW.view.quoteLeft);
+			TweenMax.killChildTweensOf(CDW.view.quoteRight);
 			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			//}
@@ -152,8 +152,8 @@ package com.civildebatewall.ui {
 					// No tween if no change!
 					if (CDW.state.nextThread.firstPost.stance != CDW.state.activeThread.firstPost.stance) {
 
-						CDW.view.leftQuote.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.nextThread.firstPost.stanceColorLight, amount), true);
-						CDW.view.rightQuote.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.nextThread.firstPost.stanceColorLight, amount), true);
+						CDW.view.quoteLeft.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.nextThread.firstPost.stanceColorLight, amount), true);
+						CDW.view.quoteRight.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.nextThread.firstPost.stanceColorLight, amount), true);
 						CDW.view.flagButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);
 						CDW.view.statsButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);
 						CDW.view.likeButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);					
@@ -174,8 +174,8 @@ package com.civildebatewall.ui {
 					CDW.view.portrait.setIntermediateImage(CDW.state.previousThread.firstPost.user.photo, Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
 					
 					if (CDW.state.previousThread.firstPost.stance != CDW.state.previousThread.firstPost.stance) { 						
-						CDW.view.leftQuote.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.previousThread.firstPost.stanceColorLight, amount), true);
-						CDW.view.rightQuote.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.previousThread.firstPost.stanceColorLight, amount), true);
+						CDW.view.quoteLeft.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.previousThread.firstPost.stanceColorLight, amount), true);
+						CDW.view.quoteRight.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.previousThread.firstPost.stanceColorLight, amount), true);
 						CDW.view.flagButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
 						CDW.view.statsButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
 						CDW.view.likeButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);					
