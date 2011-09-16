@@ -32,7 +32,7 @@ package com.civildebatewall {
 	public class View extends Sprite {
 				
 		// immutable
-		private var header:Header;
+		private var header:BlockBitmap;
 		private var divider:BlockBitmap;
 		private var smsDisclaimer:BlockParagraph;
 		public var portraitCamera:PortraitCamera; // public for dashboard
@@ -69,8 +69,8 @@ package com.civildebatewall {
 		private var editTextButton:BlockButton;
 		private var editTextInstructions:BlockLabel;
 		private var cameraOverlay:CameraOverlay;
-		public var leftQuote:QuotationMark;
-		public var rightQuote:QuotationMark
+		public var quoteLeft:BlockBitmapPlus;
+		public var quoteRight:BlockBitmapPlus;
 		public var statsButton:IconButton;
 		public var flagButton:IconButton;		
 		public var debateButton:BalloonButton;
@@ -162,7 +162,8 @@ package com.civildebatewall {
 			letsDebateUnderlay.setDefaultTweenOut(1, {alpha: 0, ease: Quart.easeOut});
 			addChild(letsDebateUnderlay);				
 			
-			header = new Header();
+			
+			header = new BlockBitmap(Assets.getHeaderBackground());			
 			header.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 30});
 			header.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});
 			addChild(header);
@@ -222,17 +223,15 @@ package com.civildebatewall {
 			byline.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE	});			
 			addChild(byline);
 			
-			leftQuote = new QuotationMark();
-			leftQuote.setDefaultTweenIn(1, {x: 114, y: 545});
-			leftQuote.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 545});	
-			leftQuote.setStyle(QuotationMark.OPENING);
-			addChild(leftQuote);
+			quoteLeft = new BlockBitmapPlus(Assets.getQuoteLeft());
+			quoteLeft.setDefaultTweenIn(1, {x: 114, y: 545});
+			quoteLeft.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 545});	
+			addChild(quoteLeft);
 			
-			rightQuote = new QuotationMark();
-			rightQuote.setDefaultTweenIn(1, {x: 660, y: 1636});
-			rightQuote.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1636});				
-			rightQuote.setStyle(QuotationMark.CLOSING);
-			addChild(rightQuote);
+			quoteRight = new BlockBitmapPlus(Assets.getQuoteRight());
+			quoteRight.setDefaultTweenIn(1, {x: 660, y: 1636});
+			quoteRight.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1636});				
+			addChild(quoteRight);
 			
 			// triple opinions
 			opinion = new BlockParagraph(915, 0x000000, '', 42);	
@@ -683,8 +682,9 @@ package com.civildebatewall {
 			if (CDW.state.activeView == CDW.state.lastView) instant = false;
 			
 			stance.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorLight, true);
-			leftQuote.setColor(CDW.state.activeThread.firstPost.stanceColorLight, instant);
-			rightQuote.setColor(CDW.state.activeThread.firstPost.stanceColorLight, instant);				
+			
+			quoteLeft.setColor(CDW.state.activeThread.firstPost.stanceColorLight, instant);
+			quoteRight.setColor(CDW.state.activeThread.firstPost.stanceColorLight, instant);				
 			nametag.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
 			opinion.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorLight, true);
 			debateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, instant);
@@ -775,8 +775,8 @@ package com.civildebatewall {
 			nametag.tweenIn();
 			leftNametag.tweenIn();
 			rightNametag.tweenIn();
-			leftQuote.tweenIn();
-			rightQuote.tweenIn();
+			quoteLeft.tweenIn();
+			quoteRight.tweenIn();
 			
 			rightOpinion.tweenIn();
 			leftOpinion.tweenIn();
@@ -1656,8 +1656,8 @@ package com.civildebatewall {
 			exitButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
 			exitButton.setDownColor(CDW.state.userStanceColorMedium);
 			
-			leftQuote.setColor(CDW.state.userStanceColorLight, true);
-			rightQuote.setColor(CDW.state.userStanceColorLight, true);				
+			quoteLeft.setColor(CDW.state.userStanceColorLight, true);
+			quoteRight.setColor(CDW.state.userStanceColorLight, true);				
 			
 			stance.setText(CDW.state.userStanceText);
 			stance.setBackgroundColor(CDW.state.userStanceColorLight);
@@ -1670,8 +1670,8 @@ package com.civildebatewall {
 			bigButton.setOnClick(submitOverlayView);
 			
 			// blocks
-			leftQuote.tweenIn();
-			rightQuote.tweenIn();			
+			quoteLeft.tweenIn();
+			quoteRight.tweenIn();			
 			portrait.tweenIn();			
 			header.tweenIn();
 			divider.tweenIn();
@@ -1716,8 +1716,8 @@ package com.civildebatewall {
 			//submitOverlayContinueButton.tweenIn();
 			
 			
-			leftQuote.tweenOut();
-			rightQuote.tweenOut();			
+			quoteLeft.tweenOut();
+			quoteRight.tweenOut();			
 			stance.tweenOut();
 			bigButton.tweenOut();
 			nametag.tweenOut();
@@ -1813,8 +1813,8 @@ package com.civildebatewall {
 			
 			
 			//blocks
-			leftQuote.tweenIn();
-			rightQuote.tweenIn(); // stays under keyboard		
+			quoteLeft.tweenIn();
+			quoteRight.tweenIn(); // stays under keyboard		
 			portrait.tweenIn();	
 			header.tweenIn();
 			divider.tweenIn();
