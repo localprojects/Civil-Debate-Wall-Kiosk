@@ -576,6 +576,15 @@ package com.civildebatewall {
 			return StringUtils.capitalize(StringUtils.trim(s.split(' ')[0]))			
 		}
 		
+		public static function createFolderIfNecessary(path:String):void {
+			var directory:File = new File(path);
+			
+			if (!directory.exists) {
+				trace('Directory "' + path + '" does not exist. Creating it.');
+				directory.createDirectory();
+			}
+		}
+		
 		
 		public static function cropToFace(sourceBitmap:Bitmap, sourceFaceRectangle:Rectangle):Bitmap {
 			// lots of stuff hard coded here... dimensions of target, location of face in target

@@ -31,7 +31,7 @@ package com.civildebatewall.camera
 		{
 			// set the image folder, will come from settings
 			imageFolder = new File();
-			imageFolder.nativePath = "c:/temp/";
+			imageFolder.nativePath = CDW.settings.tempImagePath;
 			
 			var slrControlApp:File = File.applicationDirectory.resolvePath('native/slrcontrol/GCDWFoto.exe');	
 			

@@ -15,6 +15,7 @@ package com.civildebatewall {
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
+	import flash.system.Capabilities;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	import flash.ui.Mouse;
@@ -65,6 +66,16 @@ package com.civildebatewall {
 				stage.nativeWindow.width = 1080;
 				stage.nativeWindow.height = 1920;				
 			}
+			
+			// make sure image folders exist
+			if ((Capabilities.os.indexOf("Windows") >= 0)) {
+				Utilities.createFolderIfNecessary(settings.imagePath);
+				Utilities.createFolderIfNecessary(settings.tempImagePath);				
+			}
+			else if ((Capabilities.os.indexOf("Mac") >= 0)) {
+				Utilities.createFolderIfNecessary(settings.imagePath);
+			}  
+			
 			
 			// create local state
 			state = new State();

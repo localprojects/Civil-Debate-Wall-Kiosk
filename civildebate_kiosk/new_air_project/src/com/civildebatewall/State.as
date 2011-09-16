@@ -6,8 +6,6 @@ package com.civildebatewall {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	
-	import sekati.converters.BoolConverter;
-	
 	public class State extends Object {
 		
 		public var activeView:Function;
@@ -46,7 +44,6 @@ package com.civildebatewall {
 		public var userStanceColorOverlay:uint;
 		public var userStanceColorDisabled:uint;		
 		
-
 		public var activeComment:String = null;
 		public var userIsResponding:Boolean = false; // true if we're entering a debate through the "let's debate" button
 		
