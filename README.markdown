@@ -46,7 +46,7 @@ There is currently no automated build process (See the "Native Code" section bel
 
 For testing and development on the Mac, import the project into Flash Builder.
 
-For compilation and deployment on Windows, import the project into Flash Builder, then run "Export Release Build", be sure the "signed native installed" radio button is selected. Use something moew descriptive than "Main" for the "Base Filename" field, I like "CivilDebateWallInstaller". Use the "lpcert" file in the "/certificate" folder when prompted for a signing certificate. This will create an .exe binary installation file. Double click on this and follow the on-screen instructions to install the program on the target machine.
+For compilation and deployment on Windows, import the project into Flash Builder, then run "Export Release Build", be sure the "signed native installed" radio button is selected. Use something more descriptive than "Main" for the "Base Filename" field, I like "CivilDebateWallInstaller". Use the "lpcert" file in the "/certificate" folder when prompted for a signing certificate. This will create an .exe binary installation file. Double click on this and follow the on-screen instructions to install the program on the target machine.
 
 
 ### Dependencies
