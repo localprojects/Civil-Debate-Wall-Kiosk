@@ -73,3 +73,52 @@ The Air app communicates with a custom SLR Control program to take high-resoluti
 #### Screen Synchronization
 
 TODO
+
+## For System Administrators
+
+### READYNAS Network Accessible Store
+
+The ReadyNAS is the default storage unit that the client and server systems use as the central media repository. The specific version is the ReadyNAS Pro, which is x86-based (other ReadyNAS lines are SPARC-based).  The ReadyNAS Pro uses the Debian Linux operating system, and is version Etch 4.x
+
+Connection to the ReadyNAS the first time can be via the Raidar tool, which attempts to identify the ReadyNAS on the local network, or via a known IP address. The system will come pre-configured with an IP address defined in the final documentation.
+
+Since the system is Debian-based, the Pro series comes with "apt" pre-installed. This makes the installation of additional services and tools very convenient. In order to use "apt", the system needs to have SSH and root-access enabled, by installing the ToggleSSH and EnableRootSSH add-ons.
+
+#### PreConfiguration and AddOns
+
+The ReadyNAS is provided by LocalProjects with the following add-ons:
+* EnableRootSSH_1.0-x86.bin
+* ToggleSSH_1.0-x86.bin
+* gitscm_1.7.1-readypro-0.1.2.bin
+* automatic_0.6.4-readynas-0.9.7.bin
+
+Apt-hosted packages have also been installed on the system, as detailed in the shell output below:
+    
+    apt-get clean && apt-get update
+    apt-get install python2.5 python2.5-minimal python2.5-dev
+    # Install python2.5-setuptools manually, since it's not in a repo
+    cd /tmp
+    wget http://pypi.python.org/packages/2.5/s/setuptools/setuptools-0.6c9-py2.5.egg
+    sh setuptools-0.6c9-py2.5.egg
+
+    # Install s3cmd manually from github:
+    cd /tmp
+    git clone https://github.com/s3tools/s3cmd.git
+    cd s3cmd
+    python setup.py install
+
+
+#### Setup
+
+NOTE: The credentials below are the default values. These will probably be changed by the time of deployment and the most current credentials will be available only as a GPG encrypted file in the source bundle.
+
+The ReadyNAS is accessible via the following protocols and credentials:
+
+* HTTP: admin / netgear1
+* SSH : root / netgear1
+* CIFS: cdwmedia / cdwmedia
+
+#### Access 
+
+cdwuser / 
+
