@@ -3,20 +3,16 @@ package com.civildebatewall {
 	import com.civildebatewall.blocks.*;
 	import com.civildebatewall.camera.*;
 	import com.civildebatewall.data.*;
-	import com.civildebatewall.data.Post;
 	import com.civildebatewall.elements.*;
 	import com.civildebatewall.keyboard.*;
 	import com.civildebatewall.ui.*;
 	import com.greensock.*;
 	import com.greensock.easing.*;
-	import com.greensock.loading.DataLoader;
-	import com.greensock.loading.LoaderMax;
 	import com.greensock.plugins.*;
 	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.filesystem.File;
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.*;
 	import flash.text.TextFormat;
@@ -25,9 +21,6 @@ package com.civildebatewall {
 	import flash.utils.Timer;
 	
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
-	
-	import sekati.converters.BoolConverter;
-	
 
 	public class View extends Sprite {
 				
