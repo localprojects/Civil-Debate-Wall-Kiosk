@@ -1,7 +1,6 @@
 package com.civildebatewall
 {
 	import flash.display.*;
-	import flash.media.Sound;
 	
 	public final class Assets	{
 		
