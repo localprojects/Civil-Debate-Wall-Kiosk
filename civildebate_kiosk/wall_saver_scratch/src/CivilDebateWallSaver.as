@@ -9,13 +9,17 @@ package {
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
+	import com.greensock.layout.AlignMode;
 	
 	import flash.display.Bitmap;
+	import flash.display.BlendMode;
+	import flash.display.Shader;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	
 	import org.osmf.events.TimeEvent;
@@ -61,8 +65,9 @@ package {
 //			MonsterDebugger.trace(this, "Hello World!");
 			
 			// resize the window for development
-			stage.scaleMode = StageScaleMode.EXACT_FIT;
-			//stage.align = StageAlign.TOP_LEFT;
+			//stage.scaleMode = StageScaleMode.EXACT_FIT;
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
 			stage.nativeWindow.width = totalWidth / stageScaleFactor;
 			stage.nativeWindow.height = (totalHeight / stageScaleFactor) + 20;
 			
@@ -145,9 +150,32 @@ package {
 			addChild(dashboard);
 			dashboard.scaleX = stageScaleFactor;
 			dashboard.scaleY = stageScaleFactor;
-				
-			buildTimeline();
 			
+			
+			addChild(Assets.blueArrowHead);
+			
+			testImage = Assets.getYesPlaceholderWhite();
+			
+			// use a custom shader to handle the text color masking...
+			var shader:Shader = Assets.getMaskBlendFilter();
+			shader.data.targetColor.value[0] = 50 / 255;
+			shader.data.targetColor.value[1] = 182 / 255;
+			shader.data.targetColor.value[2] = 255 / 255;
+			testImage.blendShader = shader;
+			
+			addChild(testImage);
+		
+			
+			addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			
+			//buildTimeline();
+		}
+		
+		private var testImage:Bitmap;
+		
+		private function onMouseMove(e:MouseEvent):void {
+			testImage.x = e.stageX;
+			testImage.y = e.stageY;
 		}
 		
 
@@ -227,6 +255,60 @@ package {
 			
 			canvas.addChild(question);
 			
+			
+			// build the graph
+			var yesResponses:int = 215; // TODO get these from back end
+			var noResponses:int = 15; // TODO get these from back end
+			var totalResponses:int = yesResponses + noResponses;
+			
+			// raw width
+			var yesWidth:int = Math.round((yesResponses / totalResponses) * totalWidth);
+			var noWidth:int = Math.round((noResponses / totalResponses) * totalWidth);
+			
+			// TODO add text
+			
+			// no points left
+			var noBar:Sprite = new Sprite();
+			var noHead:Bitmap = Assets.getOrangeArrowHead();
+			noHead.scaleX = -1;
+			noHead.x += noHead.width;
+			var noTail:Bitmap = Assets.getOrangeArrowTail();
+			noTail.scaleX = -1;
+			noBar.addChild(noHead);
+			noBar.graphics.beginFill(0xf75e00);
+			noBar.graphics.drawRect(noHead.width, 0, noWidth, noHead.height);
+			noBar.graphics.endFill();
+			noTail.x = noTail.width + noBar.width;
+			noBar.addChild(noTail);	
+			canvas.addChild(noBar);			
+			
+			
+			// yes points right
+			var yesBar:Sprite = new Sprite();
+			var yesHead:Bitmap = Assets.getBlueArrowHead();
+			var yesTail:Bitmap = Assets.getBlueArrowTail();
+			yesBar.addChild(yesTail);
+			yesBar.graphics.beginFill(0x32b6ff);
+			yesBar.graphics.drawRect(yesTail.width, 0, yesWidth, yesTail.height);
+			yesBar.graphics.endFill();
+			yesHead.x = yesBar.width;
+			yesBar.addChild(yesHead);
+			canvas.addChild(yesBar);
+			
+
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			// build the banners and their masks (TODO use blit thing?)
 			var joinBanner1:MessageBanner = new MessageBanner(Assets.getJoinTheDebateText(), MessageBanner.BLUE);
 			var screen1Mask:Sprite = generateScreenMask(0);
@@ -285,6 +367,83 @@ package {
 			
 			// question
 			timeline.append(TweenMax.fromTo(question, 60 * 10, {x: totalWidth, y: 125, ease: Linear.easeNone}, {x: -question.width, ease: Linear.easeNone}));
+			
+			
+			
+			
+			
+			// Text in, where should text go?
+			var borderIndex:int = Math.floor(yesWidth / (screenWidth + bezelPixelWidth))
+			var labelIndex:int;
+			
+			// usually, put the label one screen to the left of the border
+			if (borderIndex > 0) {
+				labelIndex = borderIndex - 1;
+			}
+			else {
+				// otherwise, put it one to the right
+				labelIndex = borderIndex + 1;
+			}
+			
+			// TODO, dynamic text
+			var yesTextColor:Bitmap = Assets.getYesPlaceholderBlue();
+			var yesTextWhite:Bitmap = Assets.getYesPlaceholderWhite();
+			var noTextColor:Bitmap = Assets.getNoPlaceholderOrange();
+			var noTextWhite:Bitmap = Assets.getNoPlaceholderWhite();
+			
+			// Set text position
+			yesTextColor.x = yesTextWhite.x = noTextColor.x = noTextWhite.x = screens[labelIndex].x + 189;
+			yesTextColor.y = yesTextWhite.y = noTextColor.y = noTextWhite.y = screens[labelIndex].y + 633;
+			
+			//addChild(yesTextWhite);
+			addChild(noTextColor);
+			addChild(yesTextColor);			
+			
+			addChild(noTextWhite);
+			addChild(yesTextWhite);
+			
+			// graphs also mask black / white
+			var yesMask:Bitmap = new Bitmap();
+			
+			
+			
+			
+			// no graph in
+			timeline.append(TweenMax.fromTo(noBar, 400, {x: totalWidth, y: 125}, {x: totalWidth - noWidth - noHead.width}));
+			
+			// no text in
+			timeline.appendMultiple([TweenMax.fromTo(noTextWhite, 100, {alpha: 0}, {alpha: 1}),
+															 TweenMax.fromTo(noTextColor, 100, {alpha: 0}, {alpha: 1})], - 20, TweenAlign.START, 0);
+			
+			
+			// yes text in
+			timeline.appendMultiple([TweenMax.to(noTextWhite, 100, {alpha: 0}),
+															 TweenMax.to(noTextColor, 100, {alpha: 0}),
+															 TweenMax.fromTo(yesTextWhite, 100, {alpha: 0}, {alpha: 1}),
+															 TweenMax.fromTo(yesTextColor, 100, {alpha: 0}, {alpha: 1})] , 300, TweenAlign.START, 0);
+			
+			// yes graph in
+			timeline.append(TweenMax.fromTo(yesBar, 400, {x: -yesBar.width, y: 125}, {x: -yesTail.width}));
+			
+			
+
+			
+			
+			
+			
+			
+			
+			
+			
+			// TODO graph text
+			
+			// graphs out
+			timeline.appendMultiple([TweenMax.to(noBar, 400, {x: -noBar.width}),
+															 TweenMax.to(yesBar, 400, {x: totalWidth})], 100, TweenAlign.START, 0);			
+			
+			
+			
+			
 			
 			// join banners in
 			timeline.appendMultiple([TweenMax.fromTo(joinBanner1, 100, {x: screens[0].x - joinBanner1.width, y: 125}, {x: "1372"}),

@@ -3,6 +3,7 @@ package {
 	public final class Assets {
 		
 		import flash.display.*;		
+		import flash.utils.ByteArray;
 		
 		[Embed(source = '/assets/graphics/title.png')] private static const titleClass:Class;
 		public static function getTitle():Bitmap { return new titleClass() as Bitmap; };
@@ -51,8 +52,24 @@ package {
 		[Embed(source = '/assets/graphics/orangeArrowTail.png')] private static const orangeArrowTailClass:Class;
 		public static function getOrangeArrowTail():Bitmap { return new orangeArrowTailClass() as Bitmap; };
 		public static const orangeArrowTail:Bitmap = getOrangeArrowTail();
+		
+		
+		
+		// Temp
+		[Embed(source = '/assets/graphics/yesPlaceholderWhite.png')] private static const yesPlaceholderWhiteClass:Class;
+		public static function getYesPlaceholderWhite():Bitmap { return new yesPlaceholderWhiteClass() as Bitmap; };
+		public static const yesPlaceholderWhite:Bitmap = getYesPlaceholderWhite();
+
+
+		[Embed(source = '/assets/graphics/noPlaceholderWhite.png')] private static const noPlaceholderWhiteClass:Class;
+		public static function getNoPlaceholderWhite():Bitmap { return new noPlaceholderWhiteClass() as Bitmap; };
+		public static const noPlaceholderWhite:Bitmap = getNoPlaceholderWhite();
+		
 
 		
+		// Shaders
+		[Embed(source="/assets/shaders/maskBlend.pbj", mimeType="application/octet-stream")] public static const MaskBlendFilter:Class;
+		public static function getMaskBlendFilter():Shader { return new Shader(new MaskBlendFilter() as ByteArray); };
 		
 		
 		
