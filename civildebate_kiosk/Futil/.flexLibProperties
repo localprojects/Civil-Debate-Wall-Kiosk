@@ -3,7 +3,10 @@
   <includeClasses>
     <classEntry path="com.kitschpatrol.futil.DefaultAssets"/>
     <classEntry path="com.kitschpatrol.futil.Padding"/>
-    <classEntry path="com.kitschpatrol.futil.TextSizeOffset"/>
+    <classEntry path="com.kitschpatrol.futil.TextSize"/>
+    <classEntry path="com.kitschpatrol.futil.Utilities"/>
+    <classEntry path="com.kitschpatrol.futil.Math2"/>
+    <classEntry path="com.kitschpatrol.futil.NestTest"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
