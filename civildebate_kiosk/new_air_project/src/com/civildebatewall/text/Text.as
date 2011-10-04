@@ -1,13 +1,69 @@
 package com.civildebatewall.text {
+	import com.civildebatewall.*;
 	import com.greensock.easing.*;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.text.*;
-	
-	import com.civildebatewall.*;
+	import flash.text.engine.TextBlock;
 	
 	public class Text extends Sprite {
+		
+		
+		// background colors
+		
+		// background padding
+		
+		// rounded background border
+		
+		// line spacing
+		
+		// anchor left, center, right
+		
+		// 
+		
+		// string hiliting (multiline)
+		
+		// states (defined with object style set...), e.g. setOverState(duration, {background:Color, red}); // AND tweenable
+		
+		// EVERYTHING tweenable. Set transitions between states, duration, easing.
+		
+		// minimal html support (bold, italic)... no worry about size yet?
+		
+		// ignore baseline
+		
+		// built in tweening, or create tweenMax plugin.
+		
+		// pixel perfect height, padding, etc, based on _pixels_ from entire character set... might cost some initialization
+		
+		// NO tween font...
+		
+		//var textBlock:TextBlock = new TextBlock(string, settings);
+		
+		
+		// Static
+		// Buttons
+		// Input
+		// Icons?
+		
+		// alternate "selection" representation
+		
+		
+		// Background MODES
+		// RAGGED_HUG (ragged), CONTAINMENT_RECT ( rectangle that includes everything)
+		// has to be define
+		
+		
+		
+		
+		// also nice
+		// truncation
+		// smarty pants
+		
+		
+		
+		// background is its own class just something that draws a rectangle around, so we can use it to build custom icon buttons, etc.
+		// same for border
 		
 		
 		
@@ -59,7 +115,7 @@ package com.civildebatewall.text {
 		
 		
 		
-		
+			
 		// Constants
 		public static const BOUNDS_FIXED:String = 'boundsFixed';
 		public static const BOUNDS_GROW:String = 'boundsGrow'; // in which case width and height specify truncation...		
@@ -76,8 +132,7 @@ package com.civildebatewall.text {
 		protected var _textLetterSpacing:Number = 0; // tweens
 		protected var _textAlign:String = LEFT; // set to tween
 		
-		
-		
+
 		// Metrics
 		protected var _bounds:String = BOUNDS_GROW; // set to tween
 		protected var _boundsWidth:Number = Number.MAX_VALUE; // tweens
