@@ -25,8 +25,19 @@ package {
 			//MonsterDebugger.initialize(this);
 			//MonsterDebugger.trace(this, "Hello World!");			
 			
-			var civilDebateWall:CDW = new CDW();
-			addChild(civilDebateWall);
+			// Run the face batch tester
+			
+			// load all the faces from the disk
+			
+			
+			
+			
+			
+			
+			
+			
+			//var civilDebateWall:CDW = new CDW();
+			//addChild(civilDebateWall);
 		}
 	}
 }

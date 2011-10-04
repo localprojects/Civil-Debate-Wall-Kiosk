@@ -20,6 +20,7 @@ package {
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import org.osmf.events.TimeEvent;
@@ -65,8 +66,8 @@ package {
 //			MonsterDebugger.trace(this, "Hello World!");
 			
 			// resize the window for development
-			//stage.scaleMode = StageScaleMode.EXACT_FIT;
-			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.scaleMode = StageScaleMode.EXACT_FIT;
+			//stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.nativeWindow.width = totalWidth / stageScaleFactor;
 			stage.nativeWindow.height = (totalHeight / stageScaleFactor) + 20;
@@ -152,32 +153,11 @@ package {
 			dashboard.scaleY = stageScaleFactor;
 			
 			
-			addChild(Assets.blueArrowHead);
-			
-			testImage = Assets.getYesPlaceholderWhite();
-			
-			// use a custom shader to handle the text color masking...
-			var shader:Shader = Assets.getMaskBlendFilter();
-			shader.data.targetColor.value[0] = 50 / 255;
-			shader.data.targetColor.value[1] = 182 / 255;
-			shader.data.targetColor.value[2] = 255 / 255;
-			testImage.blendShader = shader;
-			
-			addChild(testImage);
-		
-			
-			addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			
-			//buildTimeline();
+
+			buildTimeline();
 		}
 		
-		private var testImage:Bitmap;
-		
-		private function onMouseMove(e:MouseEvent):void {
-			testImage.x = e.stageX;
-			testImage.y = e.stageY;
-		}
-		
+
 
 		
 		private function onTimeSlider(e:Event):void {	
@@ -205,6 +185,43 @@ package {
 			
 			return maskSprite;
 		}
+		
+		// TODO put this into FlashSpan, returns screen index, or -1 if it's in the gutter or off the screen
+		private function pointIsOnScreen(p:Point):int {
+			for (var i:int = 0; i < screens.length; i++) {
+				if (screens[i].containsPoint(p)) return i;
+			}
+			return -1;
+		}
+		
+		// TODO put this in flashspan, too
+		private function pointIsNearScreen(p:Point):int {
+			var onScreen:int = pointIsOnScreen(p);
+			
+			if (onScreen > -1) {
+				return onScreen;
+			}
+			else {
+				var minDistance:Number = Number.MAX_VALUE;
+				var minDistanceIndex:int = -1;
+				
+				for (var i:int = 0; i < screens.length; i++) {
+					var screenCenter:Point = new Point(screens[i].x + (screens[i].width / 2), screens[i].y + (screens[i].height / 2));
+					var distance:Number = Point.distance(p, screenCenter);
+					
+					if (distance < minDistance) {
+						minDistance = distance;
+						minDistanceIndex = i;
+					}
+				}
+				
+				return minDistanceIndex;
+			}
+			
+			// should never get here
+			return -1;
+		}
+		
 		
 		
 		private function buildTimeline():void {
@@ -265,8 +282,52 @@ package {
 			var yesWidth:int = Math.round((yesResponses / totalResponses) * totalWidth);
 			var noWidth:int = Math.round((noResponses / totalResponses) * totalWidth);
 			
-			// TODO add text
+			// text
+			// Text in, where should text go?
+			// get screenIndex
 			
+			// first, find where the division between the graphs falls
+			var borderIndex:int = pointIsNearScreen(new Point(yesWidth, totalHeight / 2));
+			var labelIndex:int;
+			
+			if (noWidth <= yesWidth) {
+				// no is first, and no comes in from the right, so put it one screen to the left of the no border screen
+				labelIndex = Math.max(Math.min(borderIndex - 1, 4), 0);
+			}
+			else {
+				// yes is first, and yes comes in from the left, so put it one screen to the right of the yes border screen
+				labelIndex = Math.max(Math.min(borderIndex + 1, 4), 0);
+			}
+			
+			trace("borderIndex" + borderIndex);
+			trace("labelIndex" + labelIndex);			
+			
+			
+			// TODO, dynamic text
+			var yesTextWhite:Bitmap = Assets.getYesPlaceholderWhite();
+			var noTextWhite:Bitmap = Assets.getNoPlaceholderWhite();
+			
+			// Set text position
+			yesTextWhite.x = noTextWhite.x = screens[labelIndex].x + 189;
+			
+			
+			addChild(noTextWhite);
+			addChild(yesTextWhite);
+			
+			// set text blending modes
+			var yesShader:Shader = Assets.getMaskBlendFilter();
+			yesShader.data.targetColor.value[0] = 50 / 255;
+			yesShader.data.targetColor.value[1] = 182 / 255;
+			yesShader.data.targetColor.value[2] = 255 / 255;
+			yesTextWhite.blendShader = yesShader;
+			
+			var noShader:Shader = Assets.getMaskBlendFilter();
+			noShader.data.targetColor.value[0] = 247 / 255;
+			noShader.data.targetColor.value[1] = 94 / 255;
+			noShader.data.targetColor.value[2] = 0 / 255;
+			noTextWhite.blendShader = noShader;			
+			
+			 			
 			// no points left
 			var noBar:Sprite = new Sprite();
 			var noHead:Bitmap = Assets.getOrangeArrowHead();
@@ -280,7 +341,7 @@ package {
 			noBar.graphics.endFill();
 			noTail.x = noTail.width + noBar.width;
 			noBar.addChild(noTail);	
-			canvas.addChild(noBar);			
+			
 			
 			
 			// yes points right
@@ -293,20 +354,43 @@ package {
 			yesBar.graphics.endFill();
 			yesHead.x = yesBar.width;
 			yesBar.addChild(yesHead);
-			canvas.addChild(yesBar);
+			
+			
+			
+			// which one goes when? 
+			// Put smaller one first!			
+			var firstGraphText:Bitmap;
+			var secondGraphText:Bitmap;
+			var firstBar:Sprite;
+			var secondBar:Sprite;
+			var yesBarTweenIn:TweenMax;
+			var noBarTweenIn:TweenMax; 
+			var firstBarTweenIn:TweenMax; // gets overwritten later to keep all animation settings in one place
+			var secondBarTweenIn:TweenMax; // gets overwritten later to keep all animation settings in one place			
+			
+			if (noResponses <= yesResponses) {
+				firstGraphText = noTextWhite;
+				secondGraphText = yesTextWhite;
+				firstBar = noBar;
+				secondBar = yesBar;
+				
+			}
+			else {
+				firstGraphText = yesTextWhite;
+				secondGraphText = noTextWhite;				
+				firstBar = yesBar;
+				secondBar = noBar;		
+			}
+			
+			
+			canvas.addChild(firstBar);
+			canvas.addChild(secondBar);			
+			canvas.addChild(firstGraphText);
+			canvas.addChild(secondGraphText);
 			
 
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+
 			
 			
 			// build the banners and their masks (TODO use blit thing?)
@@ -341,10 +425,7 @@ package {
 			joinBanner3.mask = screen5Mask;			
 			
 			
-			
-			
-			
-			
+
 			
 			// build the timeline
 			
@@ -368,74 +449,38 @@ package {
 			// question
 			timeline.append(TweenMax.fromTo(question, 60 * 10, {x: totalWidth, y: 125, ease: Linear.easeNone}, {x: -question.width, ease: Linear.easeNone}));
 			
+			// define the bar in animations, pick which one is first
+			yesBarTweenIn = TweenMax.fromTo(yesBar, 400, {x: -yesBar.width, y: 125}, {x: -yesTail.width});
+			noBarTweenIn = TweenMax.fromTo(noBar, 400, {x: totalWidth, y: 125}, {x: totalWidth - noWidth - noHead.width});
 			
-			
-			
-			
-			// Text in, where should text go?
-			var borderIndex:int = Math.floor(yesWidth / (screenWidth + bezelPixelWidth))
-			var labelIndex:int;
-			
-			// usually, put the label one screen to the left of the border
-			if (borderIndex > 0) {
-				labelIndex = borderIndex - 1;
+			if (noResponses <= yesResponses) {			
+				firstBarTweenIn = noBarTweenIn;
+				secondBarTweenIn = yesBarTweenIn;
 			}
 			else {
-				// otherwise, put it one to the right
-				labelIndex = borderIndex + 1;
+				firstBarTweenIn = yesBarTweenIn;
+				secondBarTweenIn = noBarTweenIn;				
 			}
 			
-			// TODO, dynamic text
-			var yesTextColor:Bitmap = Assets.getYesPlaceholderBlue();
-			var yesTextWhite:Bitmap = Assets.getYesPlaceholderWhite();
-			var noTextColor:Bitmap = Assets.getNoPlaceholderOrange();
-			var noTextWhite:Bitmap = Assets.getNoPlaceholderWhite();
-			
-			// Set text position
-			yesTextColor.x = yesTextWhite.x = noTextColor.x = noTextWhite.x = screens[labelIndex].x + 189;
-			yesTextColor.y = yesTextWhite.y = noTextColor.y = noTextWhite.y = screens[labelIndex].y + 633;
-			
-			//addChild(yesTextWhite);
-			addChild(noTextColor);
-			addChild(yesTextColor);			
-			
-			addChild(noTextWhite);
-			addChild(yesTextWhite);
-			
-			// graphs also mask black / white
-			var yesMask:Bitmap = new Bitmap();
-			
-			
-			
-			
-			// no graph in
-			timeline.append(TweenMax.fromTo(noBar, 400, {x: totalWidth, y: 125}, {x: totalWidth - noWidth - noHead.width}));
-			
-			// no text in
-			timeline.appendMultiple([TweenMax.fromTo(noTextWhite, 100, {alpha: 0}, {alpha: 1}),
-															 TweenMax.fromTo(noTextColor, 100, {alpha: 0}, {alpha: 1})], - 20, TweenAlign.START, 0);
-			
-			
-			// yes text in
-			timeline.appendMultiple([TweenMax.to(noTextWhite, 100, {alpha: 0}),
-															 TweenMax.to(noTextColor, 100, {alpha: 0}),
-															 TweenMax.fromTo(yesTextWhite, 100, {alpha: 0}, {alpha: 1}),
-															 TweenMax.fromTo(yesTextColor, 100, {alpha: 0}, {alpha: 1})] , 300, TweenAlign.START, 0);
-			
-			// yes graph in
-			timeline.append(TweenMax.fromTo(yesBar, 400, {x: -yesBar.width, y: 125}, {x: -yesTail.width}));
-			
-			
+			// first graph in
+			timeline.append(firstBarTweenIn);
 
 			
+			// first text in
+			timeline.append(TweenMax.fromTo(firstGraphText, 100, {y: -firstGraphText.height}, {y: 633}), -20);
+			
+			// first text out, second text in
+			timeline.appendMultiple([TweenMax.to(firstGraphText, 100, {y: screenHeight}),
+															 TweenMax.fromTo(secondGraphText, 100, {y: -secondGraphText.height}, {y: 633})], 300, TweenAlign.START, 0);
+			
+			// second graph in
+			timeline.append(secondBarTweenIn);
 			
 			
+ 
 			
-			
-			
-			
-			
-			// TODO graph text
+			// second text out
+			timeline.append(TweenMax.to(secondGraphText, 100, {y: screenHeight}), 100);
 			
 			// graphs out
 			timeline.appendMultiple([TweenMax.to(noBar, 400, {x: -noBar.width}),

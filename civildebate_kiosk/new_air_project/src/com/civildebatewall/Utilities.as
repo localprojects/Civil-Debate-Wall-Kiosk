@@ -263,8 +263,6 @@ package com.civildebatewall {
 		}
 		
 		
-		
-		
 		// loads a bitmap, passes it to the callback
 		public static function loadImageFromDisk(path:String, callback:Function):void {
 			trace("loading");
