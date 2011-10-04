@@ -58,14 +58,11 @@ package com.kitschpatrol.futil {
 		private var _textColor:uint;
 		private var _textSizePixels:Number;
 		private var _textFont:String;
-		private var _textLetterSpacing:Number;
-		
+		private var _letterSpacing:Number;
 		
 		private var _boundingMode:String;
 		public static const OPTICAL_BOUNDING:String = "opticalBounding"; // use actual pixel measurement
 		public static const METRIC_BOUNDING:String = "metricBounding"; // use text metrics
-		
-		
 		
 		
 		// Interaction
@@ -79,8 +76,8 @@ package com.kitschpatrol.futil {
 		private var textFormat:TextFormat;
 		
 		// sizing
-		private var sizeMap:Vector.<TextSizeOffset>;
-		private var textSizeField:int; // the text size to use in the actual field, actually index in sizeMap
+		private var sizeMap:Vector.<TextSize>;
+		private var textSizeOffset:TextSize; // the text size to use in the actual field, actually index in sizeMap
 		private var cropRectangle:Rectangle;
 		
 		
@@ -95,17 +92,21 @@ package com.kitschpatrol.futil {
 			textFormat = new TextFormat();			
 			changedBounds = true;
 			changedFormat = true;
+			textSizeOffset = new TextSize();
+			
+			// Initialization
+			maxTextPixelSize = 0;
 			
 			// Sensible defaults.
 			_textAlignmentMode = ALIGN_LEFT;
 			_textColor = 0x000000;
-			_text = "Sample";
+			_text = "AA";
 			_textFont = DefaultAssets.DEFAULT_FONT
 			_sizeFactorGlyphs = TextBlock.SET_OF_ASCENT_LETTERS;
 			_boundingMode = OPTICAL_BOUNDING;
 			_textSizePixels = 20;		
 			_selectable = false;	
-			_textLetterSpacing = 0; 
+			_letterSpacing = 0; 
 			
 			textField = generateTextField(_text, _textSizePixels);
 			
@@ -139,13 +140,14 @@ package com.kitschpatrol.futil {
 		// should it take a params object instead?
 		public function generateTextField(t:String = null, s:Number = -1):TextField {
 			if (t == null) t = _text;
-			if (s == -1) s = textSizeField; // TODO change to field?
+			if (s == -1) s = textSizeOffset.textFieldSize; // TODO change to field?
 
 			// format persists (for adjustment after the fact)
 			textFormat.font =  _textFont;
 			textFormat.align = _textAlignmentMode;
 			textFormat.size = s;
-			textFormat.letterSpacing = _textLetterSpacing;
+			textFormat.letterSpacing = _letterSpacing;
+			//textFormat.kerning = true;
 			
 			
 			// field is overwritte
@@ -196,8 +198,8 @@ package com.kitschpatrol.futil {
 				
 				trace("Changed bounds");
 				
-				textField.x = contentOffsetX - 2;
-				textField.y = contentOffsetY - sizeMap[_textSizePixels].topWhitespace;
+				textField.x = contentOffsetX - 2; //textSizeOffset.leftWhitespace; // It's offically 2 pixels
+				textField.y = contentOffsetY - textSizeOffset.topWhitespace;
 				
 
 				
@@ -276,7 +278,6 @@ package com.kitschpatrol.futil {
 		public function set sizeFactorGlyphs(setOfLetters:String):void {
 			
 			// TODO filter duplicates
-			
 			_sizeFactorGlyphs = setOfLetters;
 			
 			// could schedule a bunch of functions to avoid duplicate execution?
@@ -291,6 +292,8 @@ package com.kitschpatrol.futil {
 		
 		
 		
+		private var maxTextPixelSize:int;
+		
 		
 		private function updateSizeMap():void {
 			trace("Building size map");
@@ -299,16 +302,17 @@ package com.kitschpatrol.futil {
 			// start at biggest size, generate a text field at that size
 			
 			// height is maximum character height (in pixels) for a given internal size
-			sizeMap = new Vector.<TextSizeOffset>(128); // TODO cut this down
+			sizeMap = new Vector.<TextSize>(128); // TODO cut this down
 			
 			var glyphCanvas:BitmapData;
 			var testField:TextField;
 			var originalColor:uint = _textColor;
 			var bounds:Rectangle;
+			var pixelHeight:int;
 			_textColor = 0x000000;
 			
 			
-			sizeMap[0] = new TextSizeOffset(0, 0, 0);
+			sizeMap[0] = new TextSize();
 			
 			
 			trace("Measuring  " + _sizeFactorGlyphs);
@@ -334,11 +338,22 @@ package com.kitschpatrol.futil {
 				
 				// index the field height to the pixel height
 				bounds = glyphCanvas.getColorBoundsRect(0xffffff, 0xffffff, false);
-				var pixelHeight:int = bounds.height;
-				sizeMap[pixelHeight] = new TextSizeOffset(i, int(bounds.top), int(bounds.bottom));
+				pixelHeight = bounds.height;
+				trace("w: " + glyphCanvas.width);
+				trace(bounds);
+				
+				
+				
+				sizeMap[pixelHeight] = new TextSize(pixelHeight, i, bounds.y, glyphCanvas.width - bounds.width - bounds.x, glyphCanvas.height - bounds.y - bounds.height, bounds.x);
+
 				
 				
 				trace("Pixel Height: " + pixelHeight + " Field Size: " + i);
+				
+				if (i == 127) {
+					maxTextPixelSize = pixelHeight;
+				}
+				
 			}
 			
 			_textColor = originalColor;
@@ -380,37 +395,82 @@ package com.kitschpatrol.futil {
 		// Format updates
 		public function get textSizePixels():Number	{	return _textSizePixels;	}		
 		public function set textSizePixels(size:Number):void  {
-			_textSizePixels = Math.round(size); // bounds checking
-			trace("Pixel Size: " + _textSizePixels); 
+			
+			
+			// Clamp it (for now)
+			_textSizePixels = Math2.clamp(size, 0, maxTextPixelSize);
+			
+			
+			
+			//trace("Pixel Size Rounded: " + _textSizePixels + " Exact: " + size); 
 			// TODO handle fractions
+			
+			// Is it whole?
+			
+			
+			
 			// TODO handle oversize scaling
+
+
+			if (_textSizePixels % 1 == 0) {
+				// it's whole, grab it right from the array
+				textSizeOffset = sizeMap[_textSizePixels];  
+			}
+			else {
+				// it's fractional, lerp the array
+				
+
+				var leftIndex:int = Math.floor(_textSizePixels);
+				var rightIndex:int = Math.ceil(_textSizePixels);
+				
+				trace("Finding size between " + leftIndex + " / " + sizeMap[leftIndex].textFieldSize + " and " + rightIndex + " / " + sizeMap[rightIndex].textFieldSize);
+				
+				trace("Raw size: " + _textSizePixels);
+				textSizeOffset = lerpTextOffsets(_textSizePixels - leftIndex, sizeMap[leftIndex], sizeMap[rightIndex]);
+				
+				//textSizeField = Math2.map(_textSizePixels, leftIndex, rightIndex, sizeMap[leftIndex].textFieldSize, sizeMap[rightIndex].textFieldSize);
+				
+				
+
+			}
 			
 			
-			textSizeField = sizeMap[_textSizePixels].textFieldSize;
+			textFormat.size = textSizeOffset.textFieldSize; 
 			
-			textFormat.size = textSizeField; 
+			
+			Utilities.traceObject(textSizeOffset);
 			
 			//textFieldtextField.size = textSizeField;
 			
 			
-			trace("Field size: " + textSizeField );
+			trace("Field size: " + textSizeOffset.textFieldSize);
 			
 			changedFormat = true;
 			changedBounds = true;
 			update();
 		}
 		
-		public function get textLetterSpacing():Number	{	return _textLetterSpacing;	}		
-		public function set textLetterSpacing(spacing:Number):void  {
-			_textLetterSpacing = spacing;
-			textFormat.letterSpacing = _textLetterSpacing; // requires format reapplication			
+		public function get letterSpacing():Number	{	return _letterSpacing;	}		
+		public function set letterSpacing(spacing:Number):void  {
+			_letterSpacing = spacing;
+			textFormat.letterSpacing = _letterSpacing; // requires format reapplication			
 			changedFormat = true;
 			changedBounds = true;
 			update();
 		}
 		
 		
-		
+		private function lerpTextOffsets(amount:Number, low:TextSize, high:TextSize):TextSize {
+			trace("Amount : " + amount);
+			var tempOffset:TextSize = new TextSize();
+			tempOffset.textPixelSize = Math2.map(amount, 0, 1, low.textPixelSize, high.textPixelSize);
+			tempOffset.textFieldSize = Math2.map(amount, 0, 1, low.textFieldSize, high.textFieldSize);
+			tempOffset.topWhitespace = Math2.map(amount, 0, 1, low.topWhitespace, high.topWhitespace);
+			tempOffset.rightWhitespace = Math2.map(amount, 0, 1, low.rightWhitespace, high.rightWhitespace);
+			tempOffset.bottomWhitespace = Math2.map(amount, 0, 1, low.bottomWhitespace, high.bottomWhitespace);
+			tempOffset.leftWhitespace = Math2.map(amount, 0, 1, low.leftWhitespace, high.leftWhitespace);
+			return tempOffset;
+		}
 		
 		
 		
@@ -456,7 +516,12 @@ package com.kitschpatrol.futil {
 		
 		// compensate fot the overdraw
 		override public function get width():Number {
-			return this.getBounds(this).width - 4;
+			
+			
+			trace("Left whitespace: " + textSizeOffset.leftWhitespace);
+			trace("Right whitespace: " + textSizeOffset.rightWhitespace);
+			
+			return this.getBounds(this).width - _letterSpacing - 4; //extSizeOffset.leftWhitespace - textSizeOffset.rightWhitespace - 4;
 		}
 		
 		override public function get height():Number {

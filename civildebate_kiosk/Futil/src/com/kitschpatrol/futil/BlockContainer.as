@@ -1,8 +1,5 @@
 package com.kitschpatrol.futil {
-	
-	
-	
-	
+
 	import flash.display.CapsStyle;
 	import flash.display.DisplayObject;
 	import flash.display.JointStyle;
@@ -12,8 +9,6 @@ package com.kitschpatrol.futil {
 	import flash.events.Event;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
-	
-	
 	
 	public class BlockContainer extends Sprite {
 		
@@ -77,6 +72,15 @@ package com.kitschpatrol.futil {
 				
 		internal var lockUpdates:Boolean; // prevents update from firing... useful when queueing a bunch of changes // TODO getter and setter?
 		
+		// manage origin
+		private var originMode:String;
+		public static const GLOBAL_ORIGIN:String = "globalOrigin"; // TODO implement this...? No it's the registration point, not the translation point
+		public static const LOCAL_ORIGIN:String = "localOrigin";
+		
+		private var _origin:Point;
+		private var lastOrigin:Point;
+
+		
 		public function BlockContainer(params:Object = null)	{
 			super();
 			
@@ -102,11 +106,16 @@ package com.kitschpatrol.futil {
 			_maxHeight = Number.MAX_VALUE;
 			_maxSizeBehavior = MAX_SIZE_OVERFLOWS;			
 			
-			// Content alignment (top left by default)
+			// Content alignment (top left by default) // TODO change to point
 			_contentOffsetNormalX = 0;
 			_contentOffsetNormalY = 0;
 			lastContentOffsetX = 0;
-			lastContentOffsetY = 0;			
+			lastContentOffsetY = 0;
+			
+			// origin
+			originMode = LOCAL_ORIGIN;
+			_origin = new Point();
+			lastOrigin = new Point();
 			
 			// Background
 			_backgroundColor = 0xcccccc;
@@ -117,7 +126,6 @@ package com.kitschpatrol.futil {
 			_borderColor = 0x000000;
 			showBorder = false;
 			_borderThickness = 5;
-			
 
 			// call set vars on constructor input
 			setParams(params);
@@ -208,7 +216,21 @@ package com.kitschpatrol.futil {
 					var borderIndex:int = getChildIndex(this.border);				
 					// optimization issue?
 					// skip 1, it's always the background?
-					// or set skip index when we add / remove children instead?							
+					// or set skip index when we add / remove children instead?
+					
+					
+					
+//					var originMatrix:Matrix = new Matrix();
+//					originMatrix.tx = _originX;
+//					originMatrix.ty = _originY;
+//					this.transform.matrix = originMatrix;
+//					
+//					this
+//					
+//					trace(originMatrix);
+					
+
+					
 					for (var i:int = 0; i < this.numChildren; i++) {
 						if (i != backgroundIndex && i != borderIndex) {
 							this.getChildAt(i).x -= lastContentOffsetX;
@@ -221,13 +243,17 @@ package com.kitschpatrol.futil {
 					
 					lastContentOffsetX = contentOffsetX;
 					lastContentOffsetY = contentOffsetY;
+
 				}
-	
+				
+
 				
 				// Updates over!
 				
 				// Draw the new background
 				background.graphics.beginFill(_backgroundColor);
+				
+				trace("Background pos: " + background.x);				
 				
 				if (_backgroundRadius > 0) {
 					background.graphics.drawRoundRect(0, 0, backgroundWidth, backgroundHeight, _backgroundRadius * 2, _backgroundRadius * 2);				
@@ -239,8 +265,8 @@ package com.kitschpatrol.futil {
 				background.graphics.endFill();
 				
 				// Draw the new border, flash centers the border on the line, but we want it on the inside
-				border.x = _borderThickness / 2;
-				border.y = _borderThickness / 2;	
+				border.x = background.x + (_borderThickness / 2);
+				border.y = background.y + (_borderThickness / 2);	
 				border.graphics.lineStyle(_borderThickness, _borderColor, 1, false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER); // TODO sort these out
 				
 				if (_backgroundRadius > 0) {
@@ -260,14 +286,30 @@ package com.kitschpatrol.futil {
 				
 				
 				
-				// show padding for debug
-				background.graphics.beginFill(0x000000);
-				background.graphics.drawRect(0, 0, backgroundWidth, _padding.top);
-				background.graphics.drawRect(0, _padding.top, _padding.left, backgroundHeight - _padding.top - _padding.bottom);
-				background.graphics.drawRect(backgroundWidth - _padding.left, _padding.top, _padding.right, backgroundHeight- _padding.top - _padding.bottom);
-				background.graphics.drawRect(0, backgroundHeight - _padding.top, backgroundWidth, _padding.bottom);			
-				background.graphics.endFill();
-	
+//				// show padding for debug
+//				background.graphics.beginFill(0x000000);
+//				background.graphics.drawRect(0, 0, backgroundWidth, _padding.top);
+//				background.graphics.drawRect(0, _padding.top, _padding.left, backgroundHeight - _padding.top - _padding.bottom);
+//				background.graphics.drawRect(backgroundWidth - _padding.left, _padding.top, _padding.right, backgroundHeight- _padding.top - _padding.bottom);
+//				background.graphics.drawRect(0, backgroundHeight - _padding.top, backgroundWidth, _padding.bottom);			
+//				background.graphics.endFill();
+				
+				
+//				// Apply changes to the origin, but only if we have to
+//				if ((_originX != lastOriginX) || (_originY != lastOriginY)) {
+//					
+//					trace("setting origin:" + _originY);
+//					
+//					for (var i:int = 0; i < this.numChildren; i++) {
+//						this.getChildAt(i).x -= _originX;
+//						this.getChildAt(i).x -= _originY;
+//					}
+//					
+//					
+//					lastOriginX = _originX;
+//					lastOriginY = _originY;
+//				}				
+//	
 				// origin for debug
 				originMarker.x = 0;
 				originMarker.y = 0;
@@ -422,7 +464,44 @@ package com.kitschpatrol.futil {
 		}
 		
 		
+		
+		public function get originX():Number { return _origin.x; }
+		public function set originX(offset:Number):void {
+			_origin.x = offset
+			origin = _origin;
+		}		
+		
+		public function get originY():Number { return _origin.y; }
+		public function set originY(offset:Number):void {
+			_origin.y = offset;
+			origin = _origin;
+		}
+		
+		
+		public function get origin():Point { return _origin; }
+		public function set origin(point:Point):void {
+			_origin = point;
+			
+			trace("Setting origin to " + _origin);
+			
+			for (var i:int = 0; i < this.numChildren; i++) {
+				// everything, including background
+				trace("child " + i);
+				
+				this.getChildAt(i).x += lastOrigin.x;
+				this.getChildAt(i).x = -_origin.x;
+				this.getChildAt(i).y += lastOrigin.y;
+				this.getChildAt(i).y = -_origin.y;						
+				// getting rounding errorors if i don't do these a la carte	// weird.
+			}			
+			
+			lastOrigin = _origin.clone();
+		}
+
+		
+
 		// Content offset accessors, note weird normalized implementation
+		// TODO pixel implementation? just X and y?
 		public function get contentOffsetNormalX():Number { return _contentOffsetNormalX; }
 		public function set contentOffsetNormalX(offset:Number):void {
 			_contentOffsetNormalX = offset;
