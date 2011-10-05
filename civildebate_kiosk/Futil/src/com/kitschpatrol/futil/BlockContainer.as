@@ -10,25 +10,29 @@ package com.kitschpatrol.futil {
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	
-	public class BlockContainer extends Sprite {
+	public class BlockContainer extends BlockBase {
 		
-		private var background:Shape;
-		private var border:Shape;
-		private var originMarker:Shape;
 
-		
-		// Padding, note convenience getters and setters for all, top/bottom, and left/right
-		private var _padding:Padding;
+		private var _padding:Padding; // Padding, note convenience getters and setters for all, top/bottom, and left/right
 		// private var paddingChanged:Boolean; // TODO flags to speed up the draw call?
-		
-		
-		
+				
 		// Background
+		private var background:Shape;		
 		private var _showBackground:Boolean;
 		private var _backgroundColor:uint;
+		private var _paddingColor:uint;
 		private var _backgroundRadius:Number;
+		private var changedBackground:Boolean;
+		private var lastBackgroundWidth:Number;
+		private var lastBackgroundHeight:Number;
+		private var backgroundWidth:Number;
+		private var backgroundHeight:Number;		
+		
+		
+
 		
 		// Border
+		private var border:Shape;		
 		private var _showBorder:Boolean;
 		private var _borderColor:uint;
 		private var _borderThickness:Number; // pixels
@@ -59,7 +63,8 @@ package com.kitschpatrol.futil {
 		public static const CONTENT_ALIGN_BOTTOM_LEFT:String = "contentAlignBottomLeft"
 		public static const CONTENT_ALIGN_LEFT:String = "contentAlignLeft"			
 
-		
+			
+			// CHANGE this to POINT? move it to nesttest?
 		// normalized, where to pin the content relative to the container ("0" is all the way to the left, "1" is all the way to the right)
 		private var _contentOffsetNormalX:Number; // getters and setters for these!
 		private var _contentOffsetNormalY:Number;
@@ -72,13 +77,6 @@ package com.kitschpatrol.futil {
 				
 		internal var lockUpdates:Boolean; // prevents update from firing... useful when queueing a bunch of changes // TODO getter and setter?
 		
-		// manage origin
-		private var originMode:String;
-		public static const GLOBAL_ORIGIN:String = "globalOrigin"; // TODO implement this...? No it's the registration point, not the translation point
-		public static const LOCAL_ORIGIN:String = "localOrigin";
-		
-		private var _origin:Point;
-		private var lastOrigin:Point;
 
 		
 		public function BlockContainer(params:Object = null)	{
@@ -86,18 +84,18 @@ package com.kitschpatrol.futil {
 			
 			background = new Shape();			
 			addChild(background);
+			changedBackground = true;
+			lastBackgroundWidth = 0;
+			lastBackgroundHeight = 0;			
 			
 			border = new Shape();
 			addChild(border);
 			
-			originMarker = new Shape();
-			originMarker.graphics.beginFill(0xff0000);
-			originMarker.graphics.drawCircle(0, 0, 2);
-			originMarker.graphics.endFill();	
-			addChild(originMarker);
 			
+			// Defaults Settings
 			// Padding
 			_padding = new Padding();
+			_paddingColor = 0x00000000; // starts transparent
 			
 			// Size
 			_minWidth = 0;
@@ -112,19 +110,15 @@ package com.kitschpatrol.futil {
 			lastContentOffsetX = 0;
 			lastContentOffsetY = 0;
 			
-			// origin
-			originMode = LOCAL_ORIGIN;
-			_origin = new Point();
-			lastOrigin = new Point();
-			
 			// Background
 			_backgroundColor = 0xcccccc;
-			showBackground = true;
+			_showBackground = true;
 			_backgroundRadius = 0;
+
 			
 			// Border
 			_borderColor = 0x000000;
-			showBorder = false;
+			_showBorder = false;
 			_borderThickness = 5;
 
 			// call set vars on constructor input
@@ -138,10 +132,7 @@ package com.kitschpatrol.futil {
 				lockUpdates = true;
 				
 				// set multiple settings in one pass
-							
 				for (var key:String in params) {
-					// look for any special shortcuts
-					
 					if (this.hasOwnProperty(key)) {
 						// set local
 						trace("Setting " + key + " to " + params[key]);
@@ -153,54 +144,56 @@ package com.kitschpatrol.futil {
 					}
 				}
 		
-				
 				lockUpdates = false;
 				update();
 			}
+			// TODO update anyway?
 		}
 
 		// split update and draw? (e.g. for color changes?)
+		
+		
+			
+		
+		
 		internal function update():void {
 			if (!lockUpdates) {
 				trace("container update");
-				
-				removeChild(originMarker);
 	
 				// clear background to measure foreground content
-				background.graphics.clear();	
-				border.graphics.clear();
+				if (_showBackground) background.visible = false;
+				if (_showBorder) border.visible = false;
+
 				
 				// TODO scope these to the class?
 				var contentWidth:Number = this.width;
 				var contentHeight:Number = this.height;
-				var backgroundWidth:Number;
-				var backgroundHeight:Number;	
+
 				
 				// Update size
-				// First the width
-				if (contentWidth > maxWidth) {
+				// first the width
+				if (contentWidth > _maxWidth) {
 					// bunch of conditionals for different overflow behavior TODO
-					if (maxSizeBehavior == MAX_SIZE_OVERFLOWS) backgroundWidth = maxWidth;
+					if (_maxSizeBehavior == MAX_SIZE_OVERFLOWS) backgroundWidth = _maxWidth;
 				}
-				else if (contentWidth < minWidth) {
-					backgroundWidth = minWidth;
+				else if (contentWidth < _minWidth) {
+					backgroundWidth = _minWidth;
 				}
 				else {
 					backgroundWidth = contentWidth;
 				}
 				
 				// Then the height
-				if (contentHeight > maxHeight) {
-					if (maxSizeBehavior == MAX_SIZE_OVERFLOWS) backgroundHeight = maxHeight;
+				if (contentHeight > _maxHeight) {
+					if (_maxSizeBehavior == MAX_SIZE_OVERFLOWS) backgroundHeight = _maxHeight;
 				}
-				else if (contentHeight < minHeight) {
-					backgroundHeight = minHeight;
+				else if (contentHeight < _minHeight) {
+					backgroundHeight = _minHeight;
 				}
 				else {
 					backgroundHeight = contentHeight;
 				}
 	
-			
 				// Calculate offset due to padding and content alignment
 				contentOffsetX = _padding.left + ((backgroundWidth - contentWidth) * _contentOffsetNormalX);
 				contentOffsetY = _padding.right + ((backgroundHeight - contentHeight) * _contentOffsetNormalY);
@@ -218,19 +211,6 @@ package com.kitschpatrol.futil {
 					// skip 1, it's always the background?
 					// or set skip index when we add / remove children instead?
 					
-					
-					
-//					var originMatrix:Matrix = new Matrix();
-//					originMatrix.tx = _originX;
-//					originMatrix.ty = _originY;
-//					this.transform.matrix = originMatrix;
-//					
-//					this
-//					
-//					trace(originMatrix);
-					
-
-					
 					for (var i:int = 0; i < this.numChildren; i++) {
 						if (i != backgroundIndex && i != borderIndex) {
 							this.getChildAt(i).x -= lastContentOffsetX;
@@ -243,77 +223,32 @@ package com.kitschpatrol.futil {
 					
 					lastContentOffsetX = contentOffsetX;
 					lastContentOffsetY = contentOffsetY;
-
-				}
-				
-
-				
-				// Updates over!
-				
-				// Draw the new background
-				background.graphics.beginFill(_backgroundColor);
-				
-				trace("Background pos: " + background.x);				
-				
-				if (_backgroundRadius > 0) {
-					background.graphics.drawRoundRect(0, 0, backgroundWidth, backgroundHeight, _backgroundRadius * 2, _backgroundRadius * 2);				
-				}
-				else {
-					background.graphics.drawRect(0, 0, backgroundWidth, backgroundHeight);
-				}
-				
-				background.graphics.endFill();
-				
-				// Draw the new border, flash centers the border on the line, but we want it on the inside
-				border.x = background.x + (_borderThickness / 2);
-				border.y = background.y + (_borderThickness / 2);	
-				border.graphics.lineStyle(_borderThickness, _borderColor, 1, false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER); // TODO sort these out
-				
-				if (_backgroundRadius > 0) {
-					var borderRadiusCoefficient:Number = (backgroundWidth - _borderThickness * 2) / backgroundWidth;
-					trace("borderRadiusCoefficient: " + borderRadiusCoefficient);
-					var borderRadius:Number = _backgroundRadius * 2 * borderRadiusCoefficient * borderRadiusCoefficient;
-					
-					// TODO really get this right... background shows through sometimes
-					borderRadius = Math.max(0, Math.floor((_backgroundRadius * 2) - _borderThickness));
-					border.graphics.drawRoundRect(0, 0, backgroundWidth - _borderThickness, backgroundHeight - _borderThickness, borderRadius, borderRadius);				
-				}
-				else {
-					border.graphics.drawRect(0, 0, backgroundWidth - _borderThickness, backgroundHeight - _borderThickness);				
 				}
 				
 				
+				// ====== TODO Split into separate draw method here? =======
 				
 				
+				// Updates over! Now draw.
+				changedBackground = ((backgroundWidth != lastBackgroundWidth) || (backgroundHeight != lastBackgroundHeight));				
 				
-//				// show padding for debug
-//				background.graphics.beginFill(0x000000);
-//				background.graphics.drawRect(0, 0, backgroundWidth, _padding.top);
-//				background.graphics.drawRect(0, _padding.top, _padding.left, backgroundHeight - _padding.top - _padding.bottom);
-//				background.graphics.drawRect(backgroundWidth - _padding.left, _padding.top, _padding.right, backgroundHeight- _padding.top - _padding.bottom);
-//				background.graphics.drawRect(0, backgroundHeight - _padding.top, backgroundWidth, _padding.bottom);			
-//				background.graphics.endFill();
+				if (_showBackground) background.visible = true;	
+				if (_showBorder) border.visible = true;
 				
+				if (changedBackground) {
+					drawBackground();
+					drawBorder();
+				}				
+			
+				updateOrigin();
 				
-//				// Apply changes to the origin, but only if we have to
-//				if ((_originX != lastOriginX) || (_originY != lastOriginY)) {
-//					
-//					trace("setting origin:" + _originY);
-//					
-//					for (var i:int = 0; i < this.numChildren; i++) {
-//						this.getChildAt(i).x -= _originX;
-//						this.getChildAt(i).x -= _originY;
-//					}
-//					
-//					
-//					lastOriginX = _originX;
-//					lastOriginY = _originY;
-//				}				
-//	
-				// origin for debug
-				originMarker.x = 0;
-				originMarker.y = 0;
-				addChild(originMarker);
+				lastBackgroundHeight = backgroundHeight;
+				lastBackgroundWidth = backgroundWidth;				
+				
+//
+//				originMarker.x = 0;
+//				originMarker.y = 0;
+//				addChild(originMarker);
 			}
 			else {
 				//trace("Update prevented by lock.");
@@ -321,11 +256,57 @@ package com.kitschpatrol.futil {
 		}
 		
 		
-		// public function setVars() // TODO, one line thing
-
-		// override this
-
+		// Draws the background, but doesn't update dimensions. Good for color changes.
+		private function drawBackground():void {
+			background.graphics.clear();
+			background.graphics.beginFill(_backgroundColor);
+			
+			// Curved or rectangular.
+			if (_backgroundRadius > 0)
+				background.graphics.drawRoundRect(0, 0, backgroundWidth, backgroundHeight, _backgroundRadius * 2, _backgroundRadius * 2);				
+			else	
+				background.graphics.drawRect(0, 0, backgroundWidth, backgroundHeight);
+					
+			background.graphics.endFill();
+					
+			// Optionally hilite the padding region in a different color.
+			// But only if it's alpha is greater than 0. By default, alpha is 0 so padding color is effectively disabled. 
+			if (((_paddingColor >>> 24) > 0) && (_paddingColor != _backgroundColor)) {
+			 background.graphics.beginFill(_backgroundColor);
+			 background.graphics.drawRect(0, 0, backgroundWidth, _padding.top);
+			 background.graphics.drawRect(0, _padding.top, _padding.left, backgroundHeight - _padding.top - _padding.bottom);
+			 background.graphics.drawRect(backgroundWidth - _padding.left, _padding.top, _padding.right, backgroundHeight- _padding.top - _padding.bottom);
+			 background.graphics.drawRect(0, backgroundHeight - _padding.top, backgroundWidth, _padding.bottom);			
+			 background.graphics.endFill();
+			}
+		}
 		
+		// Draws the border, but doesn't update dimensions. Good for color changes and border thickness changes.
+		private function drawBorder():void {
+			border.graphics.clear();
+			border.x = _borderThickness / 2;
+			border.y = _borderThickness / 2;
+			
+			// TODO, best settings here?
+			border.graphics.lineStyle(_borderThickness, _borderColor, 1, false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER);		
+			
+			if (_backgroundRadius > 0) {
+				var borderRadiusCoefficient:Number = (backgroundWidth - _borderThickness * 2) / backgroundWidth;
+				trace("borderRadiusCoefficient: " + borderRadiusCoefficient);
+				var borderRadius:Number = _backgroundRadius * 2 * borderRadiusCoefficient * borderRadiusCoefficient;
+				
+				// TODO really get this right... background shows through sometimes
+				borderRadius = Math.max(0, Math.floor((_backgroundRadius * 2) - _borderThickness));
+				border.graphics.drawRoundRect(0, 0, backgroundWidth - _borderThickness, backgroundHeight - _borderThickness, borderRadius, borderRadius);				
+			}
+			else {
+				border.graphics.drawRect(0, 0, backgroundWidth - _borderThickness, backgroundHeight - _borderThickness);				
+			}
+			
+		}
+		
+
+
 		// override with vertex list based backgeround!
 		
 		
@@ -339,6 +320,7 @@ package com.kitschpatrol.futil {
 		public function get backgroundColor():uint { return _backgroundColor; }
 		public function set backgroundColor(color:uint):void {
 			_backgroundColor = color;
+			drawBackground();
 			update();
 		}
 		
@@ -352,23 +334,24 @@ package com.kitschpatrol.futil {
 		public function get borderThickness():Number { return _borderThickness; }
 		public function set borderThickness(thickness:Number):void {
 			_borderThickness = thickness;
-			update();
+			
+			// Just redraw the border, no need to update.
+			// Borders are always internal, so they don't change bounding box.
+			drawBorder();
 		}
 		
 		public function get borderColor():uint { return _borderColor; }
 		public function set borderColor(color:uint):void {
 			_borderColor = color;
-			update();
+			drawBorder();
 		}
 		
 		public function get showBorder():Boolean { return _showBorder; }
 		public function set showBorder(show:Boolean):void {
 			_showBorder = show;
 			border.visible = _showBorder;
-		}		
-		
+		}
 
-		
 		
 		
 		// Size
@@ -454,52 +437,24 @@ package com.kitschpatrol.futil {
 			update();
 		}
 		
-		public function get padding():Number {
-			return (paddingTopBottom == paddingLeftRight) ? _padding.left : -1;
-		}
+		public function get padding():Number { return (paddingTopBottom == paddingLeftRight) ? _padding.left : -1;	}
 		public function set padding(amount:Number):void {
 			_padding.horizontal = amount;
 			_padding.vertical = amount;
 			update();
 		}
 		
-		
-		
-		public function get originX():Number { return _origin.x; }
-		public function set originX(offset:Number):void {
-			_origin.x = offset
-			origin = _origin;
-		}		
-		
-		public function get originY():Number { return _origin.y; }
-		public function set originY(offset:Number):void {
-			_origin.y = offset;
-			origin = _origin;
+		public function get paddingColor():uint { return _paddingColor }
+		public function set paddingColor(color:uint):void {
+			_paddingColor = color;
+			drawBackground();
 		}
 		
 		
-		public function get origin():Point { return _origin; }
-		public function set origin(point:Point):void {
-			_origin = point;
-			
-			trace("Setting origin to " + _origin);
-			
-			for (var i:int = 0; i < this.numChildren; i++) {
-				// everything, including background
-				trace("child " + i);
-				
-				this.getChildAt(i).x += lastOrigin.x;
-				this.getChildAt(i).x = -_origin.x;
-				this.getChildAt(i).y += lastOrigin.y;
-				this.getChildAt(i).y = -_origin.y;						
-				// getting rounding errorors if i don't do these a la carte	// weird.
-			}			
-			
-			lastOrigin = _origin.clone();
-		}
-
 		
 
+		// TODO MOVE content alignment to NestTest?
+		
 		// Content offset accessors, note weird normalized implementation
 		// TODO pixel implementation? just X and y?
 		public function get contentOffsetNormalX():Number { return _contentOffsetNormalX; }

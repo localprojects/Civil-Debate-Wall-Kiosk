@@ -10,10 +10,7 @@ package com.kitschpatrol.futil {
 		public function TestShape(params:Object = null)	{
 			super();
 
-			
 
-
-			
 			var shape:Shape = new Shape();
 			shape.graphics.beginFill(0xff0000);
 			shape.graphics.drawRect(0, 0, 100, 100);
