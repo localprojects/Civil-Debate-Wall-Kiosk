@@ -6,6 +6,7 @@ package com.kitschpatrol.futil {
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	// Nested display object approach to registration management.
 	
@@ -15,88 +16,70 @@ package com.kitschpatrol.futil {
 	
 	// TODO what about translation point vs. registration point?
 	// Just use TweenMax for translation point manipulations?
-	
-	// merge this with block container?
-	
-	
-	
-	
+
 	
 	public class BlockBase extends Sprite {
 		
-		// registration point
-		private var _registrationPoint:Point; // this is relative to the actual top left of the content
-		internal var contentPane:Sprite;
+		// Hidden children keep things in alignment while presenting
+		// a pure display object container elsewhere.
+		internal var content:Sprite;
+		internal var background:BlockShape; // note special block shape class for background and border
 		private var registrationMarker:Shape;
-		private var _showRegistrationMarker:Boolean;
-		internal var lockUpdates:Boolean; // prevents update from firing... useful when queueing a bunch of changes // TODO getter and setter?
-		
-		// internal alignment point, normalized relative to width of background
-		private var _alignmentPoint:Point;
 
+		private var _padding:Padding; // Padding, note convenience getters and setters for all, top/bottom, and left/right
+		private var _alignmentPoint:Point; // the alignment of the content relative to the background (less padding)
+		private var _registrationPoint:Point; // the origin of the block, normalized relative to the top left of the background
+		private var _showRegistrationMarker:Boolean;
+			
 		// Size (padding is additive)
-		internal var _maxSizeBehavior:String; // TODO scope to private?
+		internal var _maxSizeBehavior:String; // TODO scope to private?, implement!
 		public static const MAX_SIZE_CLIPS:String = "maxSizeClips"; // masks off
 		public static const MAX_SIZE_TRUNCATES:String = "maxSizeTruncates"; // ellipses or whatever
 		public static const MAX_SIZE_OVERFLOWS:String = "maxSizeOverflows"; // nothing happen, text just sticks out
 		public static const MAX_SIZE_BREAKS_LINE:String = "maxSizeBreaksLine"; // nothing happen, text just sticks out			
 		
-		// TODO Scope to private?
-		internal var _minWidth:Number;
-		internal var _minHeight:Number;
-		internal var _maxWidth:Number;
-		internal var _maxHeight:Number;						
+		private var _minWidth:Number;
+		private var _minHeight:Number;
+		private var _maxWidth:Number;
+		private var _maxHeight:Number;
+		
+		private var _contentCrop:Padding;
+		
+		
+		internal var lockUpdates:Boolean; // prevents update from firing... useful when queueing a bunch of changes // TODO getter and setter?		
 			
-		// Background
-		private var background:BlockShape;
-		
-		// Padding
-		private var _padding:Padding; // Padding, note convenience getters and setters for all, top/bottom, and left/right
-		
-
-		
-			
-		// TODO pass in params
+	
 		public function BlockBase(params:Object = null)	{
-			super();
+			//super();
 
 			background = new BlockShape();
-			super.addChild(background);
+			super.addChild(background); // call super since the content sprite intercepts display list calls to .this
 			
-			contentPane = new Sprite();
-			super.addChild(contentPane);
-			
-			
-			_padding = new Padding();
-			
-			// background and border panes... put them in their own classes? override width and height to redraw to scale?
+			content = new Sprite();
+			super.addChild(content);
 
-			_showRegistrationMarker = false;			
-			registrationMarker = new Shape();
+			registrationMarker = new Shape(); // TODO add for detecting rotation?
 			registrationMarker.graphics.beginFill(0xff0000);
-			// Add crosshair
-			registrationMarker.graphics.drawCircle(0, 0, 10);
-			registrationMarker.graphics.endFill();
-
+			registrationMarker.graphics.drawCircle(0, 0, 5);
+			registrationMarker.graphics.endFill();			
 			
-			_alignmentPoint = new Point(0, 0);
-			_registrationPoint = new Point(0, 0);
-			
-			// Size
+			// Sensible defaults
+			_padding = new Padding();
+			_showRegistrationMarker = false;
+			_registrationPoint = Alignment.TOP_LEFT;
+			_alignmentPoint = Alignment.TOP_LEFT;
 			_minWidth = 0;
 			_minHeight = 0;
 			_maxWidth = Number.MAX_VALUE;
 			_maxHeight = Number.MAX_VALUE;
-			_maxSizeBehavior = MAX_SIZE_OVERFLOWS;	
-			
-			
-			
+			_maxSizeBehavior = MAX_SIZE_OVERFLOWS;
+			_contentCrop = new Padding();
 			
 			// TODO devise and flip the update booleans (e.g. invalidate everything)
 
-			// overwrites defaults
+			// overwrites defaults and calls update
 			setParams(params);
-			update();
+			
 		}
 		
 		// set a bunch of fields at once
@@ -118,48 +101,52 @@ package com.kitschpatrol.futil {
 				}
 				
 				lockUpdates = false;
-				update();
 			}
-			// TODO update anyway?
+			
+			
+			// update regardless
+			update();
 		}		
-		
-		
-		// scope to private? use object dimensions instead?
-		internal var lastBackgroundWidth:Number;
-		internal var lastBackgroundHeight:Number;
-		internal var backgroundWidth:Number;
-		internal var backgroundHeight:Number;		
 		
 		
 		public function update():void {
 			if (!lockUpdates) {
-
-				
 				// only if needed
-				background.width = Math2.clamp(contentPane.width, _minWidth, _maxWidth + _padding.horizontal) + _padding.horizontal; // stretch max for padding
-				background.height = Math2.clamp(contentPane.height, _minHeight, _maxHeight + _padding.vertical) + _padding.vertical;
+				background.width = Math2.clamp(content.width - _contentCrop.horizontal, _minWidth, _maxWidth + _padding.horizontal) + _padding.horizontal; // stretch max for padding
+				background.height = Math2.clamp(content.height - _contentCrop.vertical, _minHeight, _maxHeight + _padding.vertical) + _padding.vertical;
 				
-				//contentPane.x = _padding.left; // positioning offset
-				//contentPane.y = _padding.top; // plus positioning offset
+				// Compensate for padding, which always accumulates on the outsize of the content
+				content.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
+				content.y = -(_registrationPoint.y * (background.height - _padding.vertical));
+				background.x = content.x - _padding.left;
+				background.y = content.y - _padding.top;  			
 				
-					
-				// only if bounds changed... TODO
-				updateOrigin();
+				// Align content
+				content.x += _alignmentPoint.x * ((background.width - _padding.horizontal) - (content.width - _contentCrop.horizontal));
+				content.y += _alignmentPoint.y * ((background.height - _padding.vertical) - (content.height - _contentCrop.vertical));
 				
+				// Crop if we need to
+				content.x -= _contentCrop.left;
+				content.y -= _contentCrop.top;
 				
-			}
-			else {
+				// Hilite the content area for debug
+//				content.graphics.clear();
+//				content.graphics.beginFill(0xfff000);
+//				content.graphics.drawRect(0, 0, content.width, content.height);
+//				content.graphics.endFill();
 				
 			}
 		}
 		
 		
-		// Draws the background, but doesn't update dimensions. Good for color changes.
-		private function drawBackground():void {
-
-		}		
 		
 
+		
+		
+		
+		// Getters and Setters
+		
+		public function get showRegistrationMarker():Boolean { return _showRegistrationMarker; }
 		public function set showRegistrationMarker(show:Boolean):void {
 			_showRegistrationMarker = show;
 			if (_showRegistrationMarker)
@@ -169,127 +156,101 @@ package com.kitschpatrol.futil {
 		}
 		
 		
-
-		
-		
 		// registration point
-		private var lastRegistrationPoint:Point = new Point();
 		public function get registrationPoint():Point { return _registrationPoint };
 		public function set registrationPoint(point:Point):void {
-			_registrationPoint = point;
-			updateOrigin();
-		}
-		
-
-		
-		
-		internal function updateOrigin():void {
-			// Compensate for padding, which always accumulates on the outsize of the content
-			
-			contentPane.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
-			contentPane.y = -(_registrationPoint.y * (background.height - _padding.vertical));
-			background.x = contentPane.x - _padding.left;
-			background.y = contentPane.y - _padding.top;  			
-			
-			// align content
-			contentPane.x += _alignmentPoint.x * ((background.width - _padding.horizontal) - contentPane.width);
-			contentPane.y += _alignmentPoint.y * ((background.height - _padding.vertical) - contentPane.height);
-			//contentPane.y += (_alignmentPoint.y * (contentPane.height - (background.height - _padding.vertical)));			
-			
-			//this.x += (_registrationPoint.x * (background.width - _padding.horizontal));
-			
-//			
-//			var lastX:Number = this.x;
-//			
-//			
-//			// Set content position based on both the registration point and the alignment point relative to the background
-//			contentPane.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
-//			contentPane.y = -(_registrationPoint.y * (background.height - _padding.vertical))
-//			
-//			//contentPane.x += (_alignmentPoint.x * (contentPane.width - (background.width - _padding.horizontal)));
-//			//contentPane.y += (_alignmentPoint.y * (contentPane.height - (background.height - _padding.vertical)));
-//			
-//			// Set background position based on registration point 
-//			//background.x = -(_registrationPoint.x * background.width) - _padding.left;
-//			//background.y = -(_registrationPoint.y * background.height) - _padding.top;
-//			
-//			
-//				this.x += 25;
-//				
-//			//this.x += background.x - lastX;
-			
-		}
-		
-
-		// TODO AUTOMATIC ALIGNMENT!!!
-		
-		
-		
-		// Content alignment
-		// TODO, tween plugin for this? TO TWEEN, look up the constant and use contentOffsetNormalX and contentOffsetNormalY to actually tween there.
-		public function get alignmentPoint():Point { return _alignmentPoint; }
-		public function set alignmentPoint(point:Point):void {
-			_alignmentPoint = point;
+			_registrationPoint = point.clone();
 			update();
 		}
 		
 
-	
+		// Content alignment
+		public function get alignmentPoint():Point { return _alignmentPoint; }
+		public function set alignmentPoint(point:Point):void {
+			trace("Set point to: " + point);
+			_alignmentPoint = point.clone();
+			update();
+		}
+		
+
 		// Size
 		public function get minWidth():Number { return _minWidth; }
-		public function set minWidth(w:Number):void {
-			_minWidth = w;
+		public function set minWidth(width:Number):void {
+			_minWidth = width;
 			if (_minWidth > _maxWidth) _maxWidth = _minWidth; 
-			update(); // resize
+			update();
 		}
 		
 		public function get minHeight():Number { return _minHeight; }
-		public function set minHeight(h:Number):void {
-			_minHeight = h;
+		public function set minHeight(height:Number):void {
+			_minHeight = height;
 			if (_minHeight > _maxHeight) _maxHeight = _minHeight;			
-			update(); // resize
+			update();
 		}		
 		
 		public function get maxWidth():Number { return _maxWidth; }
-		public function set maxWidth(w:Number):void {
-			_maxWidth = w;
+		public function set maxWidth(width:Number):void {
+			_maxWidth = width;
 			if (_maxWidth < _minWidth) _minWidth = _maxWidth;
-			update(); // resize
+			update();
 		}
 		
 		public function get maxHeight():Number { return _maxHeight; }
-		public function set maxHeight(w:Number):void {
-			_maxHeight = w;
+		public function set maxHeight(width:Number):void {
+			_maxHeight = width;
 			if (_maxHeight < _minHeight) _minHeight = _maxHeight;
-			update(); // resize
+			update();
 		}		
 		
 		
-		// TODO, tween plugin for this?
+		// TODO, implement, then tween plugin for this?
 		public function get maxSizeBehavior():String { return _maxSizeBehavior; }
 		public function set maxSizeBehavior(behavior:String):void {
 			_maxSizeBehavior = behavior;
+			update();
+		}	
+		
+		
+		// Mostly for dealing with sloppy text fields, this can make the content sprite
+		// Appear smaller than it actually is to the background generator
+		public function get contentCropTop():Number { return _contentCrop.top; }
+		public function set contentCropTop(amount:Number):void {
+			_contentCrop.top = amount;
+			update();
+		}
+		
+		public function get contentCropRight():Number { return _contentCrop.right; }
+		public function set contentCropRight(amount:Number):void {
+			_contentCrop.right = amount;
+			update();
+		}		
+		
+		public function get contentCropBottom():Number { return _contentCrop.bottom; }
+		public function set contentCropBottom(amount:Number):void {
+			_contentCrop.bottom = amount;
+			update();
+		}				
+		
+		public function get contentCropLeft():Number { return _contentCrop.left; }
+		public function set contentCropLeft(amount:Number):void {
+			_contentCrop.left = amount;
 			update();
 		}		
 		
 		
 		// Padding Proxy
+		// TODO tween plugin for this?
 		public function get paddingTop():Number { return _padding.top; }
 		public function set paddingTop(amount:Number):void {
-			
 			_padding.top = amount;
-			// bounds changed TODO
-			
 			update();
 		}
 		
 		public function get paddingRight():Number { return _padding.right; }
 		public function set paddingRight(amount:Number):void {
 			_padding.right = amount;
-			// bounds changed TODO			
 			update();
 		}		
-		
 		
 		public function get paddingBottom():Number { return _padding.bottom; }
 		public function set paddingBottom(amount:Number):void {
@@ -302,10 +263,8 @@ package com.kitschpatrol.futil {
 			_padding.left = amount;
 			update();
 		}
-		
 
-		
-		public function get padding():Number { return _padding.top;	} // TODO fix this
+		public function get padding():Number { return _padding.top;	} // TODO fix this, should really return object
 		public function set padding(amount:Number):void {
 			_padding.horizontal = amount;
 			_padding.vertical = amount;
@@ -323,11 +282,24 @@ package com.kitschpatrol.futil {
 			update();
 		}		
 		
+		
+		public function get borderColor():uint { return background.borderColor; }
+		public function set borderColor(color:uint):void {
+			background.borderColor = color;
+			update();
+		}				
+		
 		public function get borderThickness():Number { return background.borderThickness; }
 		public function set borderThickness(thickness:Number):void {
 			background.borderThickness = thickness;
 			update();
 		}		
+		
+		public function get showBorder():Boolean { return background.showBorder; }
+		public function set showBorder(show:Boolean):void {
+			background.showBorder = show;
+			update();
+		}				
 		
 		
 		// This class acts as a transparent proxy to the content pane.
@@ -349,15 +321,15 @@ package com.kitschpatrol.futil {
 		}
 
 		// Overrides to proxy out container.
-		override public function addChild(child:DisplayObject):DisplayObject { return contentPane.addChild(child);	}
-		override public function addChildAt(child:DisplayObject, index:int):DisplayObject { return contentPane.addChildAt(child, index); }
-		override public function getChildAt(index:int):DisplayObject { return contentPane.getChildAt(index);	} 
-		override public function getChildByName(name:String):DisplayObject { return contentPane.getChildByName(name);	}
-		override public function getChildIndex(child:DisplayObject):int { return contentPane.getChildIndex(child); }
-		override public function removeChild(child:DisplayObject):DisplayObject { return contentPane.removeChild(child); }
-		override public function removeChildAt(index:int):DisplayObject { return contentPane.removeChildAt(index); }
-		override public function setChildIndex(child:DisplayObject, index:int):void { contentPane.setChildIndex(child, index); }
-		override public function swapChildren(child1:DisplayObject, child2:DisplayObject):void { contentPane.swapChildren(child1, child2); }
-		override public function swapChildrenAt(index1:int, index2:int):void { contentPane.swapChildrenAt(index1, index2); }
+		override public function addChild(child:DisplayObject):DisplayObject { return content.addChild(child);	}
+		override public function addChildAt(child:DisplayObject, index:int):DisplayObject { return content.addChildAt(child, index); }
+		override public function getChildAt(index:int):DisplayObject { return content.getChildAt(index);	} 
+		override public function getChildByName(name:String):DisplayObject { return content.getChildByName(name);	}
+		override public function getChildIndex(child:DisplayObject):int { return content.getChildIndex(child); }
+		override public function removeChild(child:DisplayObject):DisplayObject { return content.removeChild(child); }
+		override public function removeChildAt(index:int):DisplayObject { return content.removeChildAt(index); }
+		override public function setChildIndex(child:DisplayObject, index:int):void { content.setChildIndex(child, index); }
+		override public function swapChildren(child1:DisplayObject, child2:DisplayObject):void { content.swapChildren(child1, child2); }
+		override public function swapChildrenAt(index1:int, index2:int):void { content.swapChildrenAt(index1, index2); }
 	}
 }

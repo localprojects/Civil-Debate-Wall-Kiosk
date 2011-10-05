@@ -1,42 +1,21 @@
 package com.kitschpatrol.futil {
-	import flash.display.Bitmap;
+	import com.kitschpatrol.futil.constants.CharacterSet;
+	
 	import flash.display.BitmapData;
 	import flash.geom.Rectangle;
 	import flash.text.AntiAliasType;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
-	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
-	import flash.text.engine.Kerning;
 	
-	
-	
-	
-	
-	
-		
-	
-	
-	public class TextBlock extends BlockContainer {
+	public class TextBlock extends BlockBase {
 
 		// TODO write tween plugin
 		private var _textAlignmentMode:String;
-		public static const ALIGN_LEFT:String = TextFormatAlign.LEFT;
-		public static const ALIGN_RIGHT:String = TextFormatAlign.RIGHT;
-		public static const ALIGN_CENTER:String = TextFormatAlign.CENTER;
-		public static const ALIGN_JUSTIFIED:String = TextFormatAlign.JUSTIFY;
-		
 		
 		// size should ALWAYS be in pixels
 		private var _sizeFactorGlyphs:String;
-		
-		// set what we will factor into size based on combination of sets
-		public static const SET_OF_UPPERCASE_LETTERS:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		public static const SET_OF_LOWERCASE_LETTERS:String = "abcdefghijklmnopqrstuvwxyz";
-		public static const SET_OF_NUMBERS:String = "1234567890";
-		public static const SET_OF_PUNCTUATION:String = "!;':\",.?";
-		public static const SET_OF_SYMBOLS:String = "-=@#$%^&*()_+{}|[]\/<>`~";
 		
 		
 		// Optically derrived text metrics? TODO
@@ -44,22 +23,13 @@ package com.kitschpatrol.futil {
 		private var _descentHeight:Number; // read only
 		private var _xHeight:Number; // read only
 		
-		public static const SET_OF_ASCENT_LETTERS:String = "AEFHIKLMNTVWXYZ"; // NO TOP OR BOTTOM ROUNDED characters that would break the baseline
-		public static const SET_OF_DESCENT_LETTERS:String = "gjpqy";
-		
-		// The above encompas all of ascii, here are some subsets
-		public static const SET_OF_ALPHABET:String = SET_OF_UPPERCASE_LETTERS + SET_OF_LOWERCASE_LETTERS;
-		public static const SET_OF_ALPHANUMERIC:String = SET_OF_ALPHABET + SET_OF_NUMBERS;
-		public static const SET_OF_ASCENDERS_ONLY:String = SET_OF_UPPERCASE_LETTERS + "abcdefghiklmnorstuvwxz";
-		public static const SET_OF_ALL_CHARACTERS:String = SET_OF_ALPHANUMERIC + SET_OF_PUNCTUATION + SET_OF_SYMBOLS;
-		public static const SET_OF_CURRENT_CONTENT:String = "sizeForCustonSet"; // TODO resizes dynamically based on content of the text field					
-
 		private var _text:String;
 		private var _textColor:uint;
 		private var _textSizePixels:Number;
 		private var _textFont:String;
 		private var _letterSpacing:Number;
 		
+		// TODO Implement this
 		private var _boundingMode:String;
 		public static const OPTICAL_BOUNDING:String = "opticalBounding"; // use actual pixel measurement
 		public static const METRIC_BOUNDING:String = "metricBounding"; // use text metrics
@@ -78,17 +48,14 @@ package com.kitschpatrol.futil {
 		// sizing
 		private var sizeMap:Vector.<TextSize>;
 		private var textSizeOffset:TextSize; // the text size to use in the actual field, actually index in sizeMap
-		private var cropRectangle:Rectangle;
-		
 		
 		
 		
 		// Constructor
 		public function TextBlock(params:Object=null)	{
-			super();
+			//super(null); // get the default block base, we'll pass params laters
 			
 			// Required Objects
-			cropRectangle = new Rectangle();
 			textFormat = new TextFormat();			
 			changedBounds = true;
 			changedFormat = true;
@@ -98,17 +65,19 @@ package com.kitschpatrol.futil {
 			maxTextPixelSize = 0;
 			
 			// Sensible defaults.
-			_textAlignmentMode = ALIGN_LEFT;
+			_textAlignmentMode = TextFormatAlign.LEFT;
 			_textColor = 0x000000;
 			_text = "AA";
 			_textFont = DefaultAssets.DEFAULT_FONT
-			_sizeFactorGlyphs = TextBlock.SET_OF_ASCENT_LETTERS;
+			_sizeFactorGlyphs = CharacterSet.SET_OF_ASCENT_LETTERS;
 			_boundingMode = OPTICAL_BOUNDING;
-			_textSizePixels = 20;		
+			_textSizePixels = 20;
 			_selectable = false;	
 			_letterSpacing = 0; 
 			
 			textField = generateTextField(_text, _textSizePixels);
+			
+			trace("textField");
 			
 			updateSizeMap();	
 				
@@ -116,24 +85,13 @@ package com.kitschpatrol.futil {
 
 			//regenerateTextField();
 			
-			// generates size map
-			
-
-			
 			
 			addChild(textField);
-	
 
+			
 			setParams(params); // TODO doesn't update if null? // Get params?
 		}
 		
-		
-		override public function setParams(params:Object):void {
-			// hard update
-			changedBounds = true;
-			changedFormat = true;
-			super.setParams(params);
-		}
 		
 		
 		// clones the current text field, allow for overrides so we can probe alternative configs
@@ -147,8 +105,9 @@ package com.kitschpatrol.futil {
 			textFormat.align = _textAlignmentMode;
 			textFormat.size = s;
 			textFormat.letterSpacing = _letterSpacing;
-			//textFormat.kerning = true;
 			
+			
+			//textFormat.kerning = true;
 			
 			// field is overwritte
 			var tempTextField:TextField = new TextField();
@@ -160,77 +119,56 @@ package com.kitschpatrol.futil {
 			//tempTextField.gridFitType = GridFitType.PIXEL;
 			tempTextField.antiAliasType = AntiAliasType.ADVANCED;
 			tempTextField.autoSize = TextFieldAutoSize.LEFT;
+			tempTextField.condenseWhite = true;
 			
-
 			
 			tempTextField.textColor = _textColor;			
 			tempTextField.text = t;
 
 			return tempTextField;
 		}
-		
-		
-		
-		
+
 		
 		override public function update():void {
-			trace("Updating text");
-	
 			
 			if (!lockUpdates) {
 			
 			// TODO empty text is NOT width zero!!!!
+
+			
+			if (changedBounds) {
+				// update the crop
+				
+				// compensate for flash's overdraw, without masking content
+				trace("Changed bounds");
+				//textField.x = -2; //textSizeOffset.leftWhitespace; // It's offically 2 pixels
+				//textField.y = -textSizeOffset.topWhitespace;
+				
+				// this is terrifying
+				lockUpdates = true;
+				contentCropTop = textSizeOffset.topWhitespace;
+				contentCropRight = 2;
+				contentCropLeft = 2;
+				contentCropBottom =textSizeOffset.bottomWhitespace;
+				lockUpdates = false;
+				
+				textField.cacheAsBitmap = true;
+				changedBounds = false;	
+			}
 			
 			
 			if (changedFormat) {
 				trace("Changed format");
-				textField.defaultTextFormat = textFormat;			
+				textField.defaultTextFormat = textFormat;
+			
 				textField.setTextFormat(textFormat);
 				changedFormat = false;
-			}
+			}	
 			
-			
-			if (changedBounds) {
-				// do something? different? to the parent?
-				// update the crop
-				
-				// compensate for flash's overdraw, without masking content
-				
-				trace("Changed bounds");
-				
-				textField.x = contentOffsetX - 2; //textSizeOffset.leftWhitespace; // It's offically 2 pixels
-				textField.y = contentOffsetY - textSizeOffset.topWhitespace;
-				
 
-				
-				
-//				cropRectangle.x = 2; // constant
-//				cropRectangle.y = sizeMap[_textSizePixels].topWhitespace; 
-//				cropRectangle.width = _textSizePixels * 10; //textField.textWidth; //textField.getBounds(this).width - 4;
-//				cropRectangle.height = _textSizePixels;
-//				textField.cacheAsBitmap = true;
-//				textField.scrollRect = cropRectangle;
-				
-					
-				
-				
-				
-				
-				changedBounds = false;	
-				
-				
-			}
-			
-			
 			
 			super.update();			
-			
-			
-			}
-			else {
-				trace("update was locked");
-			}
-			
+			}			
 		}		
 		
 		
@@ -396,53 +334,69 @@ package com.kitschpatrol.futil {
 		public function get textSizePixels():Number	{	return _textSizePixels;	}		
 		public function set textSizePixels(size:Number):void  {
 			
-			
-			// Clamp it (for now)
-			_textSizePixels = Math2.clamp(size, 0, maxTextPixelSize);
-			
-			
-			
-			//trace("Pixel Size Rounded: " + _textSizePixels + " Exact: " + size); 
-			// TODO handle fractions
-			
-			// Is it whole?
+			// ignore negatives
+			_textSizePixels = size;
+			if (_textSizePixels < 0) _textSizePixels = 0; 
 			
 			
 			
-			// TODO handle oversize scaling
-
-
-			if (_textSizePixels % 1 == 0) {
-				// it's whole, grab it right from the array
-				textSizeOffset = sizeMap[_textSizePixels];  
+			if (_textSizePixels > maxTextPixelSize) {
+				trace("Drastic measures");
+				
+				// get us 10 pixels (or 1?)
+				textFormat.size = sizeMap[maxTextPixelSize].textFieldSize;				
+				
+				// Scale from the largest true text field sample we have
+				var scaleFactor:Number = _textSizePixels / maxTextPixelSize;
+				
+				textSizeOffset = new TextSize();
+				textSizeOffset.textPixelSize = _textSizePixels;
+				textSizeOffset.textFieldSize = maxTextPixelSize;
+				textSizeOffset.topWhitespace = sizeMap[maxTextPixelSize].topWhitespace * scaleFactor;
+				textSizeOffset.rightWhitespace = sizeMap[maxTextPixelSize].rightWhitespace * scaleFactor;
+				textSizeOffset.bottomWhitespace = sizeMap[maxTextPixelSize].bottomWhitespace * scaleFactor;
+				textSizeOffset.leftWhitespace = sizeMap[maxTextPixelSize].leftWhitespace * scaleFactor;
+				
+				textField.scaleX = scaleFactor;
+				textField.scaleY = scaleFactor;
+				
+				
 			}
 			else {
-				// it's fractional, lerp the array
-				
-
-				var leftIndex:int = Math.floor(_textSizePixels);
-				var rightIndex:int = Math.ceil(_textSizePixels);
-				
-				trace("Finding size between " + leftIndex + " / " + sizeMap[leftIndex].textFieldSize + " and " + rightIndex + " / " + sizeMap[rightIndex].textFieldSize);
-				
-				trace("Raw size: " + _textSizePixels);
-				textSizeOffset = lerpTextOffsets(_textSizePixels - leftIndex, sizeMap[leftIndex], sizeMap[rightIndex]);
-				
-				//textSizeField = Math2.map(_textSizePixels, leftIndex, rightIndex, sizeMap[leftIndex].textFieldSize, sizeMap[rightIndex].textFieldSize);
+				textField.scaleX = 1;
+				textField.scaleY = 1;
+				_textSizePixels = Math2.clamp(size, 0, maxTextPixelSize);
+			
+				//trace("Pixel Size Rounded: " + _textSizePixels + " Exact: " + size); 
 				
 				
-
+				
+				// TODO handle oversize scaling
+	
+	
+				if (_textSizePixels % 1 == 0) {
+					// it's whole, grab it right from the array
+					textSizeOffset = sizeMap[_textSizePixels];  
+				}
+				else {
+					// it's fractional, lerp the array
+					
+	
+					var leftIndex:int = Math.floor(_textSizePixels);
+					var rightIndex:int = Math.ceil(_textSizePixels);
+					
+					trace("Finding size between " + leftIndex + " / " + sizeMap[leftIndex].textFieldSize + " and " + rightIndex + " / " + sizeMap[rightIndex].textFieldSize);
+					
+					trace("Raw size: " + _textSizePixels);
+					textSizeOffset = lerpTextOffsets(_textSizePixels - leftIndex, sizeMap[leftIndex], sizeMap[rightIndex]);
+					
+					//textSizeField = Math2.map(_textSizePixels, leftIndex, rightIndex, sizeMap[leftIndex].textFieldSize, sizeMap[rightIndex].textFieldSize);
+				}
+	
+				
+				textFormat.size = textSizeOffset.textFieldSize; 
 			}
-			
-			
-			textFormat.size = textSizeOffset.textFieldSize; 
-			
-			
-			Utilities.traceObject(textSizeOffset);
-			
-			//textFieldtextField.size = textSizeField;
-			
-			
+
 			trace("Field size: " + textSizeOffset.textFieldSize);
 			
 			changedFormat = true;
@@ -473,6 +427,7 @@ package com.kitschpatrol.futil {
 		}
 		
 		
+
 		
 		// tween plugin overrides
 		public function get textFont():String { return _textFont;	}		
@@ -500,7 +455,6 @@ package com.kitschpatrol.futil {
 			textField.text = _text;
 			
 			// need to resize...
-							
 			changedBounds = true;
 			update();
 		}
@@ -515,18 +469,18 @@ package com.kitschpatrol.futil {
 		
 		
 		// compensate fot the overdraw
-		override public function get width():Number {
-			
-			
-			trace("Left whitespace: " + textSizeOffset.leftWhitespace);
-			trace("Right whitespace: " + textSizeOffset.rightWhitespace);
-			
-			return this.getBounds(this).width - _letterSpacing - 4; //extSizeOffset.leftWhitespace - textSizeOffset.rightWhitespace - 4;
-		}
-		
-		override public function get height():Number {
-			return _textSizePixels;			
-		}
+//		override public function get width():Number {
+//			
+//			
+//			trace("Left whitespace: " + textSizeOffset.leftWhitespace);
+//			trace("Right whitespace: " + textSizeOffset.rightWhitespace);
+//			
+//			return this.getBounds(this).width - _letterSpacing - 4; //extSizeOffset.leftWhitespace - textSizeOffset.rightWhitespace - 4;
+//		}
+//		
+//		override public function get height():Number {
+//			return _textSizePixels;			
+//		}
 
 		
 		

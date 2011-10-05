@@ -10,6 +10,7 @@
     <classEntry path="com.kitschpatrol.futil.BlockShape"/>
     <classEntry path="com.kitschpatrol.futil.constants.Alignment"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.AlignmentPointPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.constants.CharacterSet"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
