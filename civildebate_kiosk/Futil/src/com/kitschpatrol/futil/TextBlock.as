@@ -173,7 +173,7 @@ package com.kitschpatrol.futil {
 		
 		
 		
-		override internal function update():void {
+		override public function update():void {
 			trace("Updating text");
 	
 			

@@ -8,6 +8,8 @@
     <classEntry path="com.kitschpatrol.futil.Math2"/>
     <classEntry path="com.kitschpatrol.futil.BlockBase"/>
     <classEntry path="com.kitschpatrol.futil.BlockShape"/>
+    <classEntry path="com.kitschpatrol.futil.constants.Alignment"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.AlignmentPointPlugin"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
