@@ -7,6 +7,7 @@
     <classEntry path="com.kitschpatrol.futil.Utilities"/>
     <classEntry path="com.kitschpatrol.futil.Math2"/>
     <classEntry path="com.kitschpatrol.futil.BlockBase"/>
+    <classEntry path="com.kitschpatrol.futil.BlockShape"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

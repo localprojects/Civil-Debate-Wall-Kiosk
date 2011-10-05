@@ -3,7 +3,7 @@ package com.kitschpatrol.futil {
 	import flash.display.Sprite;
 	
 	
-	public class TestShape extends BlockContainer {
+	public class TestShape extends BlockBase {
 		
 		
 		
