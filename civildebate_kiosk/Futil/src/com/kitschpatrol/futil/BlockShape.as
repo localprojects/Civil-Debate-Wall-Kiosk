@@ -33,7 +33,7 @@ package com.kitschpatrol.futil {
 			_showBackground = true;
 			_borderColor = 0x00ff00;
 			_borderThickness = 5;
-			_showBorder = true;
+			_showBorder = false;
 			
 			update();
 		}
@@ -108,13 +108,13 @@ package com.kitschpatrol.futil {
 		
 		public function get showBackground():Boolean { return _showBackground; }
 		public function set showBackground(show:Boolean):void {
-			_showBackground = true;
+			_showBackground = show;
 			update();
 		}
 		
 		public function get showBorder():Boolean { return _showBorder; }
 		public function set showBorder(show:Boolean):void {
-			_showBorder = true;
+			_showBorder = show;
 			update();
 		}
 		
@@ -136,10 +136,5 @@ package com.kitschpatrol.futil {
 			_height = value;
 			update();
 		}
-		
-		
-		
-		
-		
 	}
 }
