@@ -1,5 +1,7 @@
 package com.kitschpatrol.futil {
 	
+	import com.kitschpatrol.futil.constants.Alignment;
+	
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.display.Sprite;
@@ -29,20 +31,9 @@ package com.kitschpatrol.futil {
 		private var _showRegistrationMarker:Boolean;
 		internal var lockUpdates:Boolean; // prevents update from firing... useful when queueing a bunch of changes // TODO getter and setter?
 		
-		// Content alignment (offset)
-		private var _contentAlignmentMode:String; // how the text field expands to reflect changes in content
-		
-		// TODO move these to enum class.
-		public static const CONTENT_ALIGN_CENTER:String = "contentAlignCenter";		
-		public static const CONTENT_ALIGN_TOP_LEFT:String = "contentAlignTopLeft";
-		public static const CONTENT_ALIGN_TOP:String = "contentAlignTop";		
-		public static const CONTENT_ALIGN_TOP_RIGHT:String = "contentAlignTopRight";
-		public static const CONTENT_ALIGN_RIGHT:String = "contentAlignRight";		
-		public static const CONTENT_ALIGN_BOTTOM_RIGHT:String = "contentAlignBottomRight";
-		public static const CONTENT_ALIGN_BOTTOM:String = "contentAlignBottom";		
-		public static const CONTENT_ALIGN_BOTTOM_LEFT:String = "contentAlignBottomLeft"
-		public static const CONTENT_ALIGN_LEFT:String = "contentAlignLeft"					
-		
+		// internal alignment point, normalized relative to width of background
+		private var _alignmentPoint:Point;
+
 		// Size (padding is additive)
 		internal var _maxSizeBehavior:String; // TODO scope to private?
 		public static const MAX_SIZE_CLIPS:String = "maxSizeClips"; // masks off
@@ -87,6 +78,10 @@ package com.kitschpatrol.futil {
 			registrationMarker.graphics.drawCircle(0, 0, 10);
 			registrationMarker.graphics.endFill();
 
+			
+			_alignmentPoint = new Point(0, 0);
+			_registrationPoint = new Point(0, 0);
+			
 			// Size
 			_minWidth = 0;
 			_minHeight = 0;
@@ -97,18 +92,11 @@ package com.kitschpatrol.futil {
 			
 			
 			
-			_registrationPoint = new Point(0, 0);
-			
-			// update?
-			
-			// flip the update booleans (e.g. invalidate everything)
-			
-			
-			
-			update();
-		
-			
+			// TODO devise and flip the update booleans (e.g. invalidate everything)
+
+			// overwrites defaults
 			setParams(params);
+			update();
 		}
 		
 		// set a bunch of fields at once
@@ -143,25 +131,9 @@ package com.kitschpatrol.futil {
 		internal var backgroundHeight:Number;		
 		
 		
-		internal function update():void {
+		public function update():void {
 			if (!lockUpdates) {
-				trace("container update");
-				
 
-				// Update size
-				// first the width
-//				if (contentPane.width > _maxWidth) {
-//					// bunch of conditionals for different overflow behavior TODO
-//					if (_maxSizeBehavior == MAX_SIZE_OVERFLOWS) newBackgroundWidth = _maxWidth;
-//				}
-//
-//				
-//				// Then the height
-//				if (contentPane.height > _maxHeight) {
-//					if (_maxSizeBehavior == MAX_SIZE_OVERFLOWS) newBackgroundHeight = _maxHeight;
-//				}
-
-					//drawBackground();
 				
 				// only if needed
 				background.width = Math2.clamp(contentPane.width, _minWidth, _maxWidth + _padding.horizontal) + _padding.horizontal; // stretch max for padding
@@ -197,104 +169,72 @@ package com.kitschpatrol.futil {
 		}
 		
 		
-		// convenience
-		public function set originX(offset:Number):void {
-			_registrationPoint.x = offset;
-			updateOrigin();
-		}
+
 		
-		public function set originY(offset:Number):void {
-			_registrationPoint.y = offset;
-			updateOrigin();
-		}		
 		
-		public function get origin():Point { return origin };
-		public function set origin(point:Point):void {
+		// registration point
+		private var lastRegistrationPoint:Point = new Point();
+		public function get registrationPoint():Point { return _registrationPoint };
+		public function set registrationPoint(point:Point):void {
 			_registrationPoint = point;
-			
 			updateOrigin();
-			
-			//contentOriginMarker.x = contentPane.x;
-			//contentOriginMarker.y = contentPane.y;			
-		}
-		
-		internal function updateOrigin():void {
-			// Compensate for padding, which always accumulates on the outsize of the content
-			contentPane.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
-			contentPane.y = -(_registrationPoint.y * (background.height - _padding.vertical));
-			background.x = -(_registrationPoint.x * background.width) - _padding.left;
-			background.y = -(_registrationPoint.y * background.height) - _padding.top;	
 		}
 		
 
 		
 		
+		internal function updateOrigin():void {
+			// Compensate for padding, which always accumulates on the outsize of the content
+			
+			contentPane.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
+			contentPane.y = -(_registrationPoint.y * (background.height - _padding.vertical));
+			background.x = contentPane.x - _padding.left;
+			background.y = contentPane.y - _padding.top;  			
+			
+			// align content
+			contentPane.x += _alignmentPoint.x * ((background.width - _padding.horizontal) - contentPane.width);
+			contentPane.y += _alignmentPoint.y * ((background.height - _padding.vertical) - contentPane.height);
+			//contentPane.y += (_alignmentPoint.y * (contentPane.height - (background.height - _padding.vertical)));			
+			
+			//this.x += (_registrationPoint.x * (background.width - _padding.horizontal));
+			
+//			
+//			var lastX:Number = this.x;
+//			
+//			
+//			// Set content position based on both the registration point and the alignment point relative to the background
+//			contentPane.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
+//			contentPane.y = -(_registrationPoint.y * (background.height - _padding.vertical))
+//			
+//			//contentPane.x += (_alignmentPoint.x * (contentPane.width - (background.width - _padding.horizontal)));
+//			//contentPane.y += (_alignmentPoint.y * (contentPane.height - (background.height - _padding.vertical)));
+//			
+//			// Set background position based on registration point 
+//			//background.x = -(_registrationPoint.x * background.width) - _padding.left;
+//			//background.y = -(_registrationPoint.y * background.height) - _padding.top;
+//			
+//			
+//				this.x += 25;
+//				
+//			//this.x += background.x - lastX;
+			
+		}
+		
+
+		// TODO AUTOMATIC ALIGNMENT!!!
+		
 		
 		
 		// Content alignment
 		// TODO, tween plugin for this? TO TWEEN, look up the constant and use contentOffsetNormalX and contentOffsetNormalY to actually tween there.
-		public function get contentAlignmentMode():String { return _contentAlignmentMode; }
-		public function set contentAlignmentMode(mode:String):void {
-			_contentAlignmentMode = mode;
-			
-			//contentOffsetNormal = lookupAlignmentMode(_contentAlignmentMode);
+		public function get alignmentPoint():Point { return _alignmentPoint; }
+		public function set alignmentPoint(point:Point):void {
+			_alignmentPoint = point;
+			update();
 		}
 		
-		
-		
-		
-		// Helps out the tween plugin to make this its own function
-		internal function lookupAlignmentMode(name:String):Point {
-			// compensate for growth anchor mode, too
-			var point:Point = new Point();
-			
-			// could use case fall through here, but...
-			switch (name) {
-				case CONTENT_ALIGN_CENTER:
-					point.x = 0.5;
-					point.y = 0.5;
-					break;
-				case CONTENT_ALIGN_TOP_LEFT:
-					point.x = 0;
-					point.y = 0;									
-					break;
-				case CONTENT_ALIGN_TOP:
-					point.x = 0.5;
-					point.y = 0;				
-					break;
-				case CONTENT_ALIGN_TOP_RIGHT:
-					point.x = 1;
-					point.y = 0;
-					break;
-				case CONTENT_ALIGN_RIGHT:
-					point.x = 1;
-					point.y = 0.5;
-					break;
-				case CONTENT_ALIGN_BOTTOM_RIGHT:
-					point.x = 1;
-					point.y = 1;
-					break;
-				case CONTENT_ALIGN_BOTTOM:
-					point.x = 0.5;
-					point.y = 1;
-					break;
-				case CONTENT_ALIGN_BOTTOM_LEFT:
-					point.x = 0;
-					point.y = 1;
-					break;
-				case CONTENT_ALIGN_LEFT:
-					point.x = 0;
-					point.y = 0.5;
-					break;
-				default:
-					// TODO error on invalid anchor mode	
-			}
-			
-			return point;
-		}
-				
-		
-		
+
+	
 		// Size
 		public function get minWidth():Number { return _minWidth; }
 		public function set minWidth(w:Number):void {
@@ -376,8 +316,18 @@ package com.kitschpatrol.futil {
 		// Background Proxy
 		public function get backgroundRadius():Number { return background.radius; }
 		public function set backgroundRadius(radius:Number):void { background.radius = radius; }
+		
 		public function get backgroundColor():uint { return background.backgroundColor; }
-		public function set backgroundColor(color:uint):void { background.backgroundColor = color; }		
+		public function set backgroundColor(color:uint):void {
+			background.backgroundColor = color;
+			update();
+		}		
+		
+		public function get borderThickness():Number { return background.borderThickness; }
+		public function set borderThickness(thickness:Number):void {
+			background.borderThickness = thickness;
+			update();
+		}		
 		
 		
 		// This class acts as a transparent proxy to the content pane.

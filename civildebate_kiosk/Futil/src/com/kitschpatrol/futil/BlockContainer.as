@@ -126,7 +126,7 @@ package com.kitschpatrol.futil {
 			
 		
 		
-		override internal function update():void {
+		override public function update():void {
 			if (!lockUpdates) {
 				trace("container update");
 	
@@ -276,15 +276,7 @@ package com.kitschpatrol.futil {
 			background.visible = _showBackground;
 		}
 		
-		// Border Accessors
-		public function get borderThickness():Number { return _borderThickness; }
-		public function set borderThickness(thickness:Number):void {
-			_borderThickness = thickness;
-			
-			// Just redraw the border, no need to update.
-			// Borders are always internal, so they don't change bounding box.
-			drawBorder();
-		}
+
 		
 		public function get borderColor():uint { return _borderColor; }
 		public function set borderColor(color:uint):void {

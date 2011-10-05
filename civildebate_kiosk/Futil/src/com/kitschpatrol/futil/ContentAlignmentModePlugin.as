@@ -28,7 +28,7 @@ package com.kitschpatrol.futil {
 		
 		public function ContentAlignmentModePlugin()	{
 			super();
-			this.propName = "contentAlignmentMode";
+			this.propName = "contentPoint";
 			this.overwriteProps = ["contentAlignmentMode"];
 		}
 		
