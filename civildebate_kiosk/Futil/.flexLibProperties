@@ -6,7 +6,7 @@
     <classEntry path="com.kitschpatrol.futil.TextSize"/>
     <classEntry path="com.kitschpatrol.futil.Utilities"/>
     <classEntry path="com.kitschpatrol.futil.Math2"/>
-    <classEntry path="com.kitschpatrol.futil.NestTest"/>
+    <classEntry path="com.kitschpatrol.futil.BlockBase"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
