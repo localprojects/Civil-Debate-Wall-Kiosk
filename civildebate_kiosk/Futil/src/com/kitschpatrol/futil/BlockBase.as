@@ -29,7 +29,7 @@ package com.kitschpatrol.futil {
 		private var _padding:Padding; // Padding, note convenience getters and setters for all, top/bottom, and left/right
 		private var _alignmentPoint:Point; // the alignment of the content relative to the background (less padding)
 		private var _registrationPoint:Point; // the origin of the block, normalized relative to the top left of the background
-		private var _showRegistrationMarker:Boolean;
+		private var _showRegistrationPoint:Boolean;
 			
 		// Size (padding is additive)
 		internal var _maxSizeBehavior:String; // TODO scope to private?, implement!
@@ -65,7 +65,7 @@ package com.kitschpatrol.futil {
 			
 			// Sensible defaults
 			_padding = new Padding();
-			_showRegistrationMarker = false;
+			_showRegistrationPoint = false;
 			_registrationPoint = Alignment.TOP_LEFT;
 			_alignmentPoint = Alignment.TOP_LEFT;
 			_minWidth = 0;
@@ -74,6 +74,9 @@ package com.kitschpatrol.futil {
 			_maxHeight = Number.MAX_VALUE;
 			_maxSizeBehavior = MAX_SIZE_OVERFLOWS;
 			_contentCrop = new Padding();
+			
+			// Other initializations
+						
 			
 			// TODO devise and flip the update booleans (e.g. invalidate everything)
 
@@ -106,14 +109,19 @@ package com.kitschpatrol.futil {
 			
 			// update regardless
 			update();
-		}		
+		}
 		
 		
-		public function update():void {
+		public function update(contentWidth:Number = -1, contentHeight:Number = -1):void {
 			if (!lockUpdates) {
+				
+				// allow override of content width and height (for animation)
+				if (contentWidth == -1) contentWidth = content.width;
+				if (contentHeight == -1) contentHeight = content.height;
+				
 				// only if needed
-				background.width = Math2.clamp(content.width - _contentCrop.horizontal, _minWidth, _maxWidth + _padding.horizontal) + _padding.horizontal; // stretch max for padding
-				background.height = Math2.clamp(content.height - _contentCrop.vertical, _minHeight, _maxHeight + _padding.vertical) + _padding.vertical;
+				background.width = Math2.clamp(contentWidth - _contentCrop.horizontal, _minWidth, _maxWidth + _padding.horizontal) + _padding.horizontal; // stretch max for padding
+				background.height = Math2.clamp(contentHeight - _contentCrop.vertical, _minHeight, _maxHeight + _padding.vertical) + _padding.vertical;
 				
 				// Compensate for padding, which always accumulates on the outsize of the content
 				content.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
@@ -122,8 +130,8 @@ package com.kitschpatrol.futil {
 				background.y = content.y - _padding.top;  			
 				
 				// Align content
-				content.x += _alignmentPoint.x * ((background.width - _padding.horizontal) - (content.width - _contentCrop.horizontal));
-				content.y += _alignmentPoint.y * ((background.height - _padding.vertical) - (content.height - _contentCrop.vertical));
+				content.x += _alignmentPoint.x * ((background.width - _padding.horizontal) - (contentWidth - _contentCrop.horizontal));
+				content.y += _alignmentPoint.y * ((background.height - _padding.vertical) - (contentHeight - _contentCrop.vertical));
 				
 				// Crop if we need to
 				content.x -= _contentCrop.left;
@@ -146,10 +154,10 @@ package com.kitschpatrol.futil {
 		
 		// Getters and Setters
 		
-		public function get showRegistrationMarker():Boolean { return _showRegistrationMarker; }
-		public function set showRegistrationMarker(show:Boolean):void {
-			_showRegistrationMarker = show;
-			if (_showRegistrationMarker)
+		public function get showRegistrationPoint():Boolean { return _showRegistrationPoint; }
+		public function set showRegistrationPoint(show:Boolean):void {
+			_showRegistrationPoint = show;
+			if (_showRegistrationPoint)
 				super.addChild(registrationMarker);
 			else
 				super.removeChild(registrationMarker);
@@ -159,9 +167,28 @@ package com.kitschpatrol.futil {
 		// registration point
 		public function get registrationPoint():Point { return _registrationPoint };
 		public function set registrationPoint(point:Point):void {
+			var lastRegistrationPoint:Point = _registrationPoint;			
 			_registrationPoint = point.clone();
+			
+			// nudge the parent to keep X and Y anchored globally
+			// TODO move to update()?
+			// TODO wrap in modal conditional?
+			x += (_registrationPoint.x - lastRegistrationPoint.x) * width;
+			y += (_registrationPoint.y - lastRegistrationPoint.y) * height;
+			
 			update();
 		}
+		
+		public function get registrationPointX():Number { return _registrationPoint.x; }
+		public function set registrationPointX(value:Number):void {
+			registrationPoint = new Point(value, _registrationPoint.y); 			
+		}
+		
+		public function get registrationPointY():Number { return _registrationPoint.y; }
+		public function set registrationPointY(value:Number):void {
+			registrationPoint = new Point(_registrationPoint.x, value); 
+		}		
+				
 		
 
 		// Content alignment
@@ -171,6 +198,19 @@ package com.kitschpatrol.futil {
 			_alignmentPoint = point.clone();
 			update();
 		}
+		
+		public function get alignmentPointX():Number { return _alignmentPoint.x; }
+		public function set alignmentPointX(value:Number):void {
+			_alignmentPoint.x = value;
+			alignmentPoint = _alignmentPoint; 
+		}
+		
+		public function get alignmentPointY():Number { return _alignmentPoint.y; }
+		public function set alignmentPointY(value:Number):void {
+			_alignmentPoint.y = value;
+			alignmentPoint = _alignmentPoint; 
+		}		
+		
 		
 
 		// Size
@@ -306,6 +346,9 @@ package com.kitschpatrol.futil {
 		// It should seem as though we're just manipulating the content pane directly.
 		
 		// Overrides to show true width.
+		public function get contentWidth():Number { return content.width; }
+		public function get contentHeight():Number { return content.height; }
+		
 		override public function get width():Number { return background.width; }
 		override public function set width(value:Number):void { 
 			_minWidth = value;

@@ -11,6 +11,10 @@
     <classEntry path="com.kitschpatrol.futil.constants.Alignment"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.AlignmentPointPlugin"/>
     <classEntry path="com.kitschpatrol.futil.constants.CharacterSet"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.BackgroundColorPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.FutilBlockPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.BaseColorPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.TextColorPlugin"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
