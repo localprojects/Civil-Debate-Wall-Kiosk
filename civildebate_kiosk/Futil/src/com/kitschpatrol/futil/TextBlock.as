@@ -48,7 +48,7 @@ package com.kitschpatrol.futil {
 		// sizing
 		private var sizeMap:Vector.<TextSize>;
 		private var textSizeOffset:TextSize; // the text size to use in the actual field, actually index in sizeMap
-		
+		private var maxTextPixelSize:int;
 		
 		
 		// Constructor
@@ -65,7 +65,7 @@ package com.kitschpatrol.futil {
 			maxTextPixelSize = 0;
 			
 			// Sensible defaults.
-			_textAlignmentMode = TextFormatAlign.LEFT;
+			_textAlignmentMode = TextFormatAlign.RIGHT;
 			_textColor = 0x000000;
 			_text = "AA";
 			_textFont = DefaultAssets.DEFAULT_FONT
@@ -96,7 +96,7 @@ package com.kitschpatrol.futil {
 		
 		// clones the current text field, allow for overrides so we can probe alternative configs
 		// should it take a params object instead?
-		public function generateTextField(t:String = null, s:Number = -1):TextField {
+		public function generateTextField(t:String = null, s:Number = -1, wordWrap:Boolean = true):TextField {
 			if (t == null) t = _text;
 			if (s == -1) s = textSizeOffset.textFieldSize; // TODO change to field?
 
@@ -107,6 +107,7 @@ package com.kitschpatrol.futil {
 			textFormat.letterSpacing = _letterSpacing;
 			
 			
+			
 			//textFormat.kerning = true;
 			
 			// field is overwritte
@@ -114,8 +115,9 @@ package com.kitschpatrol.futil {
 			tempTextField.defaultTextFormat = textFormat;
 			tempTextField.embedFonts = true;
 			tempTextField.selectable = _selectable;
+			tempTextField.wordWrap = wordWrap;
 			//tempTextField.mouseEnabled = false;
-			//tempTextField.multiline = false;
+			tempTextField.multiline = true;
 			//tempTextField.gridFitType = GridFitType.PIXEL;
 			tempTextField.antiAliasType = AntiAliasType.ADVANCED;
 			tempTextField.autoSize = TextFieldAutoSize.LEFT;
@@ -133,76 +135,90 @@ package com.kitschpatrol.futil {
 			
 			if (!lockUpdates) {
 			
-			// TODO empty text is NOT width zero!!!!
+				// TODO empty text is NOT width zero!!!!
+	
+				if (changedBounds) {
+					// update the crop
+					
+					// compensate for flash's overdraw, without masking content
+					lockUpdates = true;
+					contentCropTop = textSizeOffset.topWhitespace;
+					contentCropRight = 2;
+					contentCropLeft = 2;
+					contentCropBottom =textSizeOffset.bottomWhitespace;
+					lockUpdates = false;
+					
+					// update text field dimensions
+	
+					// Turn auto size on and off depending on dimensinos
+					
+					textField.autoSize = TextFieldAutoSize.NONE;
+					
+					if (textField.width < minWidth) {
+						
 
-			if (changedBounds) {
-				// update the crop
-				
-				// compensate for flash's overdraw, without masking content
-				lockUpdates = true;
-				contentCropTop = textSizeOffset.topWhitespace;
-				contentCropRight = 2;
-				contentCropLeft = 2;
-				contentCropBottom =textSizeOffset.bottomWhitespace;
-				lockUpdates = false;
-				
-				textField.cacheAsBitmap = true;
-				changedBounds = false;	
-			}
-			
-			
-			if (changedFormat) {
-				trace("Changed format");
-				textField.defaultTextFormat = textFormat;
-			
-				textField.setTextFormat(textFormat);
-				changedFormat = false;
-			}	
-			
+						
+						//textField.autoSize = TextFieldAutoSize.NONE;
+						textField.width = minWidth;	
+					}
+					else if (textField.width >= maxWidth) {
+						//textField.autoSize = TextFieldAutoSize.NONE;
+						textField.width = maxWidth;						
+					}
+					else {
+						// between limits,
+						
+						
+						// seems to work, but need to handle zero case
+					
+						// shrink to min limit so long as it's on one line
+						while((textField.numLines == 1) && (textField.width > minWidth)) {
+							textField.width--;
+							textField.text = textField.text; // forces dimensions update							
+						}
+						textField.width++;
+						
+						
+						// grow to max limit so long as it's one one line
+						while ((textField.numLines > 1) && (textField.width < maxWidth)) {
+							trace("Lines: " + textField.numLines);
+							trace("Width: " + textField.width);
+							textField.width++;
+							textField.text = textField.text; // forces dimensions update
+							trace("bumping...");
+						}
+						textField.width--;
+					}				
+					
+					
 
-			super.update(contentWidth, contentHeight); // TODO pass bounds vector instead?
+					
+					textField.height = 500;
+					
+					
+					
+					textField.cacheAsBitmap = true;
+					changedBounds = false;
+				}
+				
+				
+				if (changedFormat) {
+					trace("Changed format");
+					textField.defaultTextFormat = textFormat;
+				
+					textField.setTextFormat(textFormat);
+					changedFormat = false;
+				}	
+				
+	
+				super.update(contentWidth, contentHeight); // TODO pass bounds vector instead?
+				
+
+			
 			}			
 		}		
 		
 		
-		// TODO REIMPLEMENT PIXEL SIZE SETTER!!!
-		
-		
-//		// Getters and setters
-//		public function get textSizePixels():Number { return _textSizePixels;	}		
-//		public function set textSizePixels(size:Number):void {		
-//			
-//			// TODO catch bounds and throw error suggesting an increase to maxSize
-//			
-////			// update from size map
-////			var closestSize:int;
-////			var closestDistance:Number = Number.MAX_VALUE;
-////			var closestIndex:int;
-////			
-////			for (var i:int = 1; i < sizeMap.length; i++) {
-////				var distance:Number = Math.abs(size - sizeMap[i].height);
-////				
-////				if (distance < closestDistance) {
-////					closestDistance = distance;
-////					closestIndex = i;
-////				}
-////				
-////				//
-////			}
-////			
-////			trace("Setting to field size: " + size + " via "  + closestIndex);			
-////			
-////			xOffset = sizeMap[closestIndex].x;
-////			yOffset = sizeMap[closestIndex].y;
-////			widthOffset = sizeMap[closestIndex].width; // already calculated to represent diff
-////			textSizeField = closestIndex;
-////			_textSizePixels = sizeMap[closestIndex].height; 
-//			textSizeField = size;
-//			//race("xOffset: " + sizeMap[closestIndex]);
-//			
-//			update();
-//		}		
-//		
 		
 		// which glyphs should we consider in defining the "pixel size" of the text field?
 		public function get sizeFactorGlyphs():String { return _sizeFactorGlyphs; }
@@ -223,7 +239,7 @@ package com.kitschpatrol.futil {
 		
 		
 		
-		private var maxTextPixelSize:int;
+		
 		
 		
 		private function updateSizeMap():void {
@@ -255,7 +271,7 @@ package com.kitschpatrol.futil {
 				
 				// create the text
 				
-				testField = generateTextField(_sizeFactorGlyphs, i);
+				testField = generateTextField(_sizeFactorGlyphs, i, false);
 				trace(testField.textHeight);
 				
 				//testField.type = TextFieldType.DYNAMIC;
@@ -371,9 +387,9 @@ package com.kitschpatrol.futil {
 					var leftIndex:int = Math.floor(_textSizePixels);
 					var rightIndex:int = Math.ceil(_textSizePixels);
 					
-					trace("Finding size between " + leftIndex + " / " + sizeMap[leftIndex].textFieldSize + " and " + rightIndex + " / " + sizeMap[rightIndex].textFieldSize);
+					//trace("Finding size between " + leftIndex + " / " + sizeMap[leftIndex].textFieldSize + " and " + rightIndex + " / " + sizeMap[rightIndex].textFieldSize);
 					
-					trace("Raw size: " + _textSizePixels);
+					//trace("Raw size: " + _textSizePixels);
 					textSizeOffset = lerpTextOffsets(_textSizePixels - leftIndex, sizeMap[leftIndex], sizeMap[rightIndex]);
 					
 					//textSizeField = Math2.map(_textSizePixels, leftIndex, rightIndex, sizeMap[leftIndex].textFieldSize, sizeMap[rightIndex].textFieldSize);
@@ -383,7 +399,7 @@ package com.kitschpatrol.futil {
 				textFormat.size = textSizeOffset.textFieldSize; 
 			}
 
-			trace("Field size: " + textSizeOffset.textFieldSize);
+			//trace("Field size: " + textSizeOffset.textFieldSize);
 			
 			changedFormat = true;
 			changedBounds = true;
@@ -434,6 +450,7 @@ package com.kitschpatrol.futil {
 		}
 		
 		
+		
 		// Tween plugin can override this (but only if duration > 0)
 		public function get text():String { return _text; }
 		public function set text(textContent:String):void {
@@ -449,9 +466,32 @@ package com.kitschpatrol.futil {
 		public function set textAlignmentMode(align:String):void {
 			_textAlignmentMode = align;	
 			// TODO animation
+			changedFormat = true;
 			update();
 		}
 		
+		
+		
+		// Size, override to make sure the text udpates
+		override public function set minWidth(width:Number):void {
+			changedBounds = true;
+			super.minWidth = width;
+		}
+		
+		override public function set minHeight(height:Number):void {
+			changedBounds = true;
+			super.minHeight = height;
+		}		
+		
+		override public function set maxWidth(width:Number):void {
+			changedBounds = true;
+			super.maxWidth = width;
+		}
+		
+		override public function set maxHeight(width:Number):void {
+			changedBounds = true;
+			super.maxHeight = height;
+		}				
 		
 		
 		// compensate fot the overdraw
