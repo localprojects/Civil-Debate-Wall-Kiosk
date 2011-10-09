@@ -129,22 +129,16 @@ package com.kitschpatrol.futil {
 		}
 
 		
-		override public function update():void {
+		override public function update(contentWidth:Number = -1, contentHeight:Number = -1):void {
 			
 			if (!lockUpdates) {
 			
 			// TODO empty text is NOT width zero!!!!
 
-			
 			if (changedBounds) {
 				// update the crop
 				
 				// compensate for flash's overdraw, without masking content
-				trace("Changed bounds");
-				//textField.x = -2; //textSizeOffset.leftWhitespace; // It's offically 2 pixels
-				//textField.y = -textSizeOffset.topWhitespace;
-				
-				// this is terrifying
 				lockUpdates = true;
 				contentCropTop = textSizeOffset.topWhitespace;
 				contentCropRight = 2;
@@ -166,8 +160,7 @@ package com.kitschpatrol.futil {
 			}	
 			
 
-			
-			super.update();			
+			super.update(contentWidth, contentHeight); // TODO pass bounds vector instead?
 			}			
 		}		
 		
@@ -352,10 +345,10 @@ package com.kitschpatrol.futil {
 				textSizeOffset = new TextSize();
 				textSizeOffset.textPixelSize = _textSizePixels;
 				textSizeOffset.textFieldSize = maxTextPixelSize;
-				textSizeOffset.topWhitespace = sizeMap[maxTextPixelSize].topWhitespace * scaleFactor;
-				textSizeOffset.rightWhitespace = sizeMap[maxTextPixelSize].rightWhitespace * scaleFactor;
-				textSizeOffset.bottomWhitespace = sizeMap[maxTextPixelSize].bottomWhitespace * scaleFactor;
-				textSizeOffset.leftWhitespace = sizeMap[maxTextPixelSize].leftWhitespace * scaleFactor;
+				textSizeOffset.topWhitespace = Math.ceil(sizeMap[maxTextPixelSize].topWhitespace * scaleFactor);
+				textSizeOffset.rightWhitespace = Math.ceil(sizeMap[maxTextPixelSize].rightWhitespace * scaleFactor);
+				textSizeOffset.bottomWhitespace = Math.ceil(sizeMap[maxTextPixelSize].bottomWhitespace * scaleFactor);
+				textSizeOffset.leftWhitespace = Math.ceil(sizeMap[maxTextPixelSize].leftWhitespace * scaleFactor);
 				
 				textField.scaleX = scaleFactor;
 				textField.scaleY = scaleFactor;
@@ -363,25 +356,18 @@ package com.kitschpatrol.futil {
 				
 			}
 			else {
+				// In normal TextField size range.
 				textField.scaleX = 1;
 				textField.scaleY = 1;
 				_textSizePixels = Math2.clamp(size, 0, maxTextPixelSize);
 			
-				//trace("Pixel Size Rounded: " + _textSizePixels + " Exact: " + size); 
-				
-				
-				
-				// TODO handle oversize scaling
-	
-	
+
 				if (_textSizePixels % 1 == 0) {
 					// it's whole, grab it right from the array
 					textSizeOffset = sizeMap[_textSizePixels];  
 				}
 				else {
 					// it's fractional, lerp the array
-					
-	
 					var leftIndex:int = Math.floor(_textSizePixels);
 					var rightIndex:int = Math.ceil(_textSizePixels);
 					
