@@ -13,7 +13,6 @@ package com.kitschpatrol.futil.tweenPlugins {
 		public function TextColorPlugin() {
 			super();
 			this.propName = "textColor";
-			this.overwriteProps = ["textColor"];
 		}
 		
 		
