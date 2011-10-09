@@ -11,7 +11,6 @@ package com.kitschpatrol.futil.tweenPlugins {
 		public function BackgroundColorPlugin() {
 			super();
 			this.propName = "backgroundColor";
-			this.overwriteProps = ["backgroundColor"];
 		}
 	}
 	

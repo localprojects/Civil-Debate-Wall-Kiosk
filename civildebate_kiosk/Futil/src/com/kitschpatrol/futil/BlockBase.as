@@ -31,6 +31,12 @@ package com.kitschpatrol.futil {
 		private var _registrationPoint:Point; // the origin of the block, normalized relative to the top left of the background
 		private var _showRegistrationPoint:Boolean;
 			
+		// Padding mode
+		private var  _paddingMode:String;
+		public static const PADDING_INSIDE:String = "paddingIndside";
+		public static const PADDING_OUTSIDE:String = "paddingOutside";
+		
+		
 		// Size (padding is additive)
 		internal var _maxSizeBehavior:String; // TODO scope to private?, implement!
 		public static const MAX_SIZE_CLIPS:String = "maxSizeClips"; // masks off
@@ -74,6 +80,7 @@ package com.kitschpatrol.futil {
 			_maxHeight = Number.MAX_VALUE;
 			_maxSizeBehavior = MAX_SIZE_OVERFLOWS;
 			_contentCrop = new Padding();
+			_paddingMode = PADDING_INSIDE;
 			
 			// Other initializations
 						
@@ -119,15 +126,35 @@ package com.kitschpatrol.futil {
 				if (contentWidth == -1) contentWidth = content.width;
 				if (contentHeight == -1) contentHeight = content.height;
 				
-				// only if needed
-				background.width = Math2.clamp(contentWidth - _contentCrop.horizontal, _minWidth, _maxWidth + _padding.horizontal) + _padding.horizontal; // stretch max for padding
-				background.height = Math2.clamp(contentHeight - _contentCrop.vertical, _minHeight, _maxHeight + _padding.vertical) + _padding.vertical;
 				
-				// Compensate for padding, which always accumulates on the outsize of the content
-				content.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
-				content.y = -(_registrationPoint.y * (background.height - _padding.vertical));
-				background.x = content.x - _padding.left;
-				background.y = content.y - _padding.top;  			
+				if (_paddingMode == PADDING_OUTSIDE) {
+					// only if needed
+					background.width = Math2.clamp(contentWidth - _contentCrop.horizontal, _minWidth, _maxWidth + _padding.horizontal) + _padding.horizontal; // stretch max for padding
+					background.height = Math2.clamp(contentHeight - _contentCrop.vertical, _minHeight, _maxHeight + _padding.vertical) + _padding.vertical;
+					
+					// Compensate for padding, which always accumulates on the outsize of the content
+					content.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
+					content.y = -(_registrationPoint.y * (background.height - _padding.vertical));
+					
+					background.x = content.x - _padding.left;
+					background.y = content.y - _padding.top;					
+				}				
+				else {
+					// padding internal!
+					
+					// only if needed
+					background.width = Math2.clamp(contentWidth - _contentCrop.horizontal + _padding.horizontal, _minWidth, _maxWidth); // do not stretch max for padding
+					background.height = Math2.clamp(contentHeight - _contentCrop.vertical + _padding.vertical, _minHeight, _maxHeight);
+					
+					// Compensate for padding, which always accumulates on the outsize of the content
+					content.x =  -(_registrationPoint.x * background.width) + _padding.left;
+					content.y = -(_registrationPoint.y * background.height) + _padding.top;
+					
+					background.x = -(_registrationPoint.x * background.width);
+					background.y = -(_registrationPoint.y * background.height);				
+				}
+				
+  			
 				
 				// Align content
 				content.x += _alignmentPoint.x * ((background.width - _padding.horizontal) - (contentWidth - _contentCrop.horizontal));
@@ -173,6 +200,7 @@ package com.kitschpatrol.futil {
 			// nudge the parent to keep X and Y anchored globally
 			// TODO move to update()?
 			// TODO wrap in modal conditional?
+			// TODO this accumulates rounding errors....
 			x += (_registrationPoint.x - lastRegistrationPoint.x) * width;
 			y += (_registrationPoint.y - lastRegistrationPoint.y) * height;
 			
@@ -340,6 +368,12 @@ package com.kitschpatrol.futil {
 			background.showBorder = show;
 			update();
 		}				
+		
+		public function get paddingMOde():String { return _paddingMode; }
+		public function set paddingMode(mode:String):void {
+			_paddingMode = mode;
+			update();
+		}
 		
 		
 		// This class acts as a transparent proxy to the content pane.

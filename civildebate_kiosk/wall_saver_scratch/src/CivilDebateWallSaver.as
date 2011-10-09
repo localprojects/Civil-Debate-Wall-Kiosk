@@ -10,6 +10,7 @@ package {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.greensock.layout.AlignMode;
+	import com.kitschpatrol.futil.TextBlock;
 	
 	import flash.display.Bitmap;
 	import flash.display.BlendMode;
@@ -230,6 +231,9 @@ package {
 			// takes latest data, builds the timeline, TODO auto kill children for performance?
 			timeline = new TimelineMax({useFrames: true, onUpdate: onTimelineUpdate});			
 			
+			
+			var scrollVelocity:Number = 5; // used to calculate duration for variable-width screen crawlers
+			
 			//timeline.append(TweenMax.to(
 			
 			
@@ -257,19 +261,8 @@ package {
 			canvas.addChild(button5);
 			
 			// build the question, text pending
-			var questionHead:Bitmap = Assets.getQuestionArrowHead();
-			var questionTail:Bitmap = Assets.getQuestionArrowTail();
-			
-			var question:Sprite = new Sprite();
-			question.addChild(questionHead);
-			
-			question.graphics.beginFill(0x322f31);
-			question.graphics.drawRect(questionHead.width, 0, 5000, questionHead.height);
-			question.graphics.endFill();
-			
-			questionTail.x = question.width;
-			question.addChild(questionTail);
-			
+			var question:QuestionBanner = new QuestionBanner("Is the federal government doing enough about the unemployment crisis?"); // TODO get form back end
+
 			canvas.addChild(question);
 			
 			
@@ -444,14 +437,20 @@ package {
 			
 			
 			// title
-			timeline.append(TweenMax.fromTo(title, 60 * 10, {x: totalWidth, y: 125, ease: Linear.easeNone}, {x: -title.width, ease: Linear.easeNone}));
+			var titleScrollDuration:Number = (totalWidth + title.width)  / scrollVelocity;
+			timeline.append(TweenMax.fromTo(title, titleScrollDuration, {x: totalWidth, y: 125, ease: Linear.easeNone}, {x: -title.width, ease: Linear.easeNone}));
 			
 			// question
-			timeline.append(TweenMax.fromTo(question, 60 * 10, {x: totalWidth, y: 125, ease: Linear.easeNone}, {x: -question.width, ease: Linear.easeNone}));
+			var questionScrollDuration:Number = (totalWidth + question.width)  / scrollVelocity;
+			timeline.append(TweenMax.fromTo(question, questionScrollDuration, {x: totalWidth, y: 125, ease: Linear.easeNone}, {x: -question.width, ease: Linear.easeNone}));
 			
 			// define the bar in animations, pick which one is first
-			yesBarTweenIn = TweenMax.fromTo(yesBar, 400, {x: -yesBar.width, y: 125}, {x: -yesTail.width});
-			noBarTweenIn = TweenMax.fromTo(noBar, 400, {x: totalWidth, y: 125}, {x: totalWidth - noWidth - noHead.width});
+			
+			var yesBarScrollDuration:Number = (yesBar.width - yesTail.width)  / scrollVelocity;			
+			yesBarTweenIn = TweenMax.fromTo(yesBar, yesBarScrollDuration, {x: -yesBar.width, y: 125}, {x: -yesTail.width});
+			
+			var noBarScrollDuration:Number = (totalWidth - noWidth - noHead.width)  / scrollVelocity;						
+			noBarTweenIn = TweenMax.fromTo(noBar, noBarScrollDuration, {x: totalWidth, y: 125}, {x: totalWidth - noWidth - noHead.width});
 			
 			if (noResponses <= yesResponses) {			
 				firstBarTweenIn = noBarTweenIn;
@@ -483,6 +482,9 @@ package {
 			timeline.append(TweenMax.to(secondGraphText, 100, {y: screenHeight}), 100);
 			
 			// graphs out
+			//var noBarOutDuration:Number = 
+			//var yesBarOutDuration:Number = 
+			
 			timeline.appendMultiple([TweenMax.to(noBar, 400, {x: -noBar.width}),
 															 TweenMax.to(yesBar, 400, {x: totalWidth})], 100, TweenAlign.START, 0);			
 			
