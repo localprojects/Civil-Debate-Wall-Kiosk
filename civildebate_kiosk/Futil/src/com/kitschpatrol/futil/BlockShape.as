@@ -1,4 +1,5 @@
 package com.kitschpatrol.futil {
+	import flash.display.BitmapData;
 	import flash.display.CapsStyle;
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
@@ -15,6 +16,7 @@ package com.kitschpatrol.futil {
 		// Background
 		private var _backgroundColor:uint;
 		private var _showBackground:Boolean;
+		private var _backgroundImage:BitmapData;
 		
 		// Border
 		private var _borderColor:uint;
@@ -43,14 +45,18 @@ package com.kitschpatrol.futil {
 
 			// Background
 			if (_showBackground) {
-				graphics.beginFill(_backgroundColor);
 				
-				if (_radius > 0) {
+				if (_backgroundImage != null)
+					graphics.beginBitmapFill(_backgroundImage, null, true, true);
+				else
+					graphics.beginFill(_backgroundColor);
+				
+				
+				if (_radius > 0)
 					graphics.drawRoundRect(0, 0, _width, _height, _radius * 2, _radius * 2);
-				}
-				else {
+				else
 					graphics.drawRect(0, 0, _width, _height);
-				}
+				
 				
 				graphics.endFill();
 			}
@@ -99,6 +105,29 @@ package com.kitschpatrol.futil {
 			_backgroundColor = color;
 			update();
 		}
+		
+		
+		public function get backgroundImage():BitmapData { return _backgroundImage; }
+		public function set backgroundImage(image:BitmapData):void {
+			_backgroundImage = image;
+			update();
+		}
+		
+		
+		// generic accessor
+		public function get background():* { 
+			return (_backgroundImage != null) ? _backgroundImage : _backgroundColor;
+		}
+		public function set background(colorOrImage:*):void {
+			if (colorOrImage is BitmapData)
+				_backgroundImage = colorOrImage;
+			else if (colorOrImage is uint)
+				_backgroundColor = colorOrImage;
+			else
+				throw new Error("Invalid argument type. Background can only take BitmapData or uint types.");
+		}
+		
+		
 		
 		public function get borderColor():uint { return _borderColor; }
 		public function set borderColor(color:uint):void {

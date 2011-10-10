@@ -76,8 +76,8 @@ package com.kitschpatrol.futil {
 			_alignmentPoint = Alignment.TOP_LEFT;
 			_minWidth = 0;
 			_minHeight = 0;
-			_maxWidth = 1024; // Number.MAX_VALUE;
-			_maxHeight = 768; // Number.MAX_VALUE;
+			_maxWidth = Number.MAX_VALUE;
+			_maxHeight = Number.MAX_VALUE;
 			_maxSizeBehavior = MAX_SIZE_OVERFLOWS;
 			_contentCrop = new Padding();
 			_paddingMode = PADDING_INSIDE;

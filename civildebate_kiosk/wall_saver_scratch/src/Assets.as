@@ -54,6 +54,26 @@ package {
 		public static const orangeArrowTail:Bitmap = getOrangeArrowTail();
 		
 		
+		[Embed(source = '/assets/graphics/quoteYesOpen.png')] private static const quoteYesOpenClass:Class;
+		public static function getQuoteYesOpen():Bitmap { return new quoteYesOpenClass() as Bitmap; };
+		public static const quoteYesOpen:Bitmap = getQuoteYesOpen();
+		
+		[Embed(source = '/assets/graphics/quoteYesClose.png')] private static const quoteYesCloseClass:Class;
+		public static function getQuoteYesClose():Bitmap { return new quoteYesCloseClass() as Bitmap; };
+		public static const quoteYesClose:Bitmap = getQuoteYesClose();
+		
+		[Embed(source = '/assets/graphics/quoteNoOpen.png')] private static const quoteNoOpenClass:Class;
+		public static function getQuoteNoOpen():Bitmap { return new quoteNoOpenClass() as Bitmap; };
+		public static const quoteNoOpen:Bitmap = getQuoteNoOpen();
+		
+		[Embed(source = '/assets/graphics/quoteNoClose.png')] private static const quoteNoCloseClass:Class;
+		public static function getQuoteNoClose():Bitmap { return new quoteNoCloseClass() as Bitmap; };
+		public static const quoteNoClose:Bitmap = getQuoteNoClose();
+		
+
+
+		
+		
 		
 		// Temp
 		[Embed(source = '/assets/graphics/yesPlaceholderWhite.png')] private static const yesPlaceholderWhiteClass:Class;
