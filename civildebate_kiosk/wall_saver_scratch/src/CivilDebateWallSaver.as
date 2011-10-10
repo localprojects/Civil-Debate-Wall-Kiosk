@@ -10,7 +10,9 @@ package {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.greensock.layout.AlignMode;
+	import com.kitschpatrol.futil.LipsumUtil;
 	import com.kitschpatrol.futil.TextBlock;
+	import com.kitschpatrol.futil.Utilities;
 	
 	import flash.display.Bitmap;
 	import flash.display.BlendMode;
@@ -25,6 +27,8 @@ package {
 	import flash.geom.Rectangle;
 	
 	import org.osmf.events.TimeEvent;
+	
+	import sekati.layout.Arrange;
 	
 	
 	[SWF(width="5720", height="1920", frameRate="60")]	
@@ -261,7 +265,7 @@ package {
 			canvas.addChild(button5);
 			
 			// build the question, text pending
-			var question:QuestionBanner = new QuestionBanner("Is the federal government doing enough about the unemployment crisis?"); // TODO get form back end
+			var question:QuestionBanner = new QuestionBanner("Do you feel our public education provides our children with a thorough education these days?"); // TODO get form back end
 
 			canvas.addChild(question);
 			
@@ -380,6 +384,68 @@ package {
 			canvas.addChild(secondBar);			
 			canvas.addChild(firstGraphText);
 			canvas.addChild(secondGraphText);
+			
+
+			
+			
+			
+			
+			
+			
+			// Scrolling Quotes
+			
+			
+			// TODO replace with backend
+			var quotesDesired:int = 20;
+			var quotes:Array = [];
+			
+			while (quotes.length < quotesDesired) {
+				var dummyQuote:String = Utilities.dummyText(Utilities.randRange(20, 140));
+				
+				if (Math.random() > 0.5)
+					quotes.push([dummyQuote,  "yes"]);
+				else
+					quotes.push([dummyQuote, "no"]);			
+			}
+			
+			
+			// generate the display quotes
+			var displayQuotes:Array = [];
+			for each (var quoteSource:Array in quotes) {
+			displayQuotes.push(new QuotationBanner(quoteSource[0], quoteSource[1]));
+			}
+			
+			// add them to rows
+			
+			// Generate the quote rows
+			var quoteRows:Vector.<Sprite> = new Vector.<Sprite>(5);
+			
+			for (var i:int = 0; i < quoteRows.length; i++) {
+				var quoteLine:Sprite = new Sprite();
+				quoteLine.x = 0;
+				quoteLine.y = 120 + (i * (240 + 120));
+				addChild(quoteLine);
+				quoteRows[i] = quoteLine;
+			}			
+			
+			while (displayQuotes.length > 0) {
+				// find the shortest row
+				var shortestRowIndex:int = 0;
+				var minWidth:Number = Number.MAX_VALUE;
+				for (var j:int = 0; j < quoteRows.length; j++) {
+					if (quoteRows[j].width < minWidth) {
+						minWidth = quoteRows[j].width;
+						shortestRowIndex = j;
+					}
+				}
+				
+				// add to it
+				var tempQuotationBanner:QuotationBanner = displayQuotes.pop();
+				tempQuotationBanner.x = minWidth + 120;
+				tempQuotationBanner.y = 0;
+				quoteRows[shortestRowIndex].addChild(tempQuotationBanner);
+			}
+			
 			
 
 			

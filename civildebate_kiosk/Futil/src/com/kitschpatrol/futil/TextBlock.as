@@ -8,6 +8,7 @@ package com.kitschpatrol.futil {
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
+	import flash.utils.getTimer;
 	
 	public class TextBlock extends BlockBase {
 
@@ -29,6 +30,12 @@ package com.kitschpatrol.futil {
 		public static const OPTICAL_BOUNDING:String = "opticalBounding"; // use actual pixel measurement
 		public static const METRIC_BOUNDING:String = "metricBounding"; // use text metrics
 		
+		
+		// Growth prioririty
+		private var _growthMode:String;
+		public static const MAXIMIZE_WIDTH:String = "maximizeWidth";
+		public static const MAXIMIZE_HEIGHT:String = "maximizeHeight";
+		
 		// Interaction
 		private var _selectable:Boolean;		
 		
@@ -49,6 +56,9 @@ package com.kitschpatrol.futil {
 		private var changedBounds:Boolean;
 		private var changedFormat:Boolean;	
 		
+		// size caching, automatic singleton?
+		public static var sizeMaps:Object = {};
+		
 		// Constructor
 		public function TextBlock(params:Object=null)	{
 			//super(null); // get the default block base, we'll pass params laters
@@ -64,7 +74,7 @@ package com.kitschpatrol.futil {
 			fieldLeading = 0;
 			
 			// Sensible defaults.
-			_textAlignmentMode = TextFormatAlign.RIGHT;
+			_textAlignmentMode = TextFormatAlign.LEFT;
 			_textColor = 0x000000;
 			_text = "AA";
 			_textFont = DefaultAssets.DEFAULT_FONT
@@ -74,6 +84,7 @@ package com.kitschpatrol.futil {
 			_selectable = false;	
 			_letterSpacing = 0;
 			_leading = 0;
+			_growthMode = MAXIMIZE_WIDTH;
 			
 			textField = generateTextField(_text, _textSizePixels);
 
@@ -98,84 +109,128 @@ package com.kitschpatrol.futil {
 			textFormat.font =  _textFont;
 			textFormat.align = _textAlignmentMode;
 			textFormat.size = s;
-			textFormat.letterSpacing = _letterSpacing;
-			textFormat.leading = fieldLeading; // adjusted for white space
+			
+			if (forMeasurement) {
+				textFormat.leading = 0;
+				textFormat.letterSpacing = 0;				
+			}
+			else {
+				textFormat.leading = fieldLeading; // adjusted for white space
+				textFormat.letterSpacing = _letterSpacing;
+			}
 			
 			// field is overwritte
 			var tempTextField:TextField = new TextField();
 			tempTextField.defaultTextFormat = textFormat;
 			tempTextField.embedFonts = true;			
 			tempTextField.selectable = _selectable;
-			tempTextField.wordWrap = !forMeasurement;			
 			tempTextField.multiline = true;
 			tempTextField.antiAliasType = AntiAliasType.ADVANCED;
 			//tempTextField.mouseEnabled = false;			
 			//tempTextField.gridFitType = GridFitType.PIXEL;			
-			//tempTextField.condenseWhite = true;
-			tempTextField.textColor = _textColor;			
+			tempTextField.condenseWhite = true;
 			
-			if (forMeasurement)
+
+			if (forMeasurement) {
 				tempTextField.autoSize = TextFieldAutoSize.LEFT;
-			else
+				tempTextField.textColor = 0x000000;
+				tempTextField.wordWrap = false;				
+			}
+			else {
 				tempTextField.autoSize = TextFieldAutoSize.NONE;
+				tempTextField.textColor = _textColor;
+				tempTextField.wordWrap = true;
+			}
 			
 			tempTextField.text = t;
 
 			return tempTextField;
 		}
-
+		
 		
 		// width overrides are used for animation
 		override public function update(contentWidth:Number = -1, contentHeight:Number = -1):void {
 			if (!lockUpdates) {
-			
+				
 				// TODO empty text is NOT width zero!!!!
 				if (changedFormat) {
 					trace("Changed format");
 					textField.defaultTextFormat = textFormat;
 					textField.setTextFormat(textFormat);
 					changedFormat = false;
-				}	
+				}
 				
 				
 				if (changedBounds) {
-					trace("cahnged bounds");
-
-					// size the text field
-					if (textField.width < ((minWidth - _padding.horizontal) / textField.scaleX)) {
-						// minimum size
-						textField.width = (minWidth - _padding.horizontal) / textField.scaleX;
-					}
-					else if (textField.width > ((maxWidth - _padding.horizontal) / textField.scaleX)) {
-						// maximum size
-						textField.width = (maxWidth - _padding.horizontal) / textField.scaleX;						
-					}
+					trace("changed bounds");
+					var start:int = getTimer();
+					
+					if (_minWidth == _maxWidth) {
+						// TODO what about MAXIMIZE_HEIGHT mode?
+						textField.width = _minWidth - _padding.horizontal;
+					}	
 					else {
-						// between limits...
+						// grow while we still have have one line (if possible)
+						// var explicitLineBreaks:int = numExplicitLines();
 						
-						// use all the space by default
-						textField.width = (maxWidth - _padding.horizontal); // / textField.scaleX;
-						textField.text = textField.text;
+						// for some reason can't increment text field width gracefully
+						// while textfield is scaled, so temporarily unscale
+						var originalScale:Number = textField.scaleX;
+						textField.scaleX = 1;
+						textField.scaleY = 1;
+						textField.text = textField.text;					
 						
-						// shrink while we still have have one line (if possible)
-						// TODO this has some issues with very short strings beyond the native sizes (scaleX issue?)
-						var explicitLineBreaks:int = numExplicitLines();
 						
-						if (textField.numLines == explicitLineBreaks) {
-							while((textField.numLines == explicitLineBreaks) && (textField.width > (_minWidth - _padding.horizontal)) && (textField.width > 1)) {
+						if (_growthMode == MAXIMIZE_HEIGHT) {
+							// normal preparations
+							textField.width = _maxWidth - _padding.horizontal;
+							textField.text = textField.text;
+							textField.width = Math2.clamp(getMaxLineWidth() + 5, _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal);
+							textField.text = textField.text;
+							
+							var desiredLines:int = int((_leading + (_minHeight - _padding.vertical)) / (_leading + _textSizePixels));
+							
+							// roughly divide the text width to get started
+							if (desiredLines > textField.numLines) {
+								// jump to roughly the right width
+								textField.width /= desiredLines / textField.numLines; // TODO better squaring alogithm instead of dividing
+								textField.text = textField.text;
+					
+								
+								// shirnk if needed
+								while ((textField.numLines < desiredLines) && (textField.width > 4) && (textField.width > (_minWidth - _padding.horizontal))) {
 									textField.width--;
-									textField.text = textField.text; // forces dimensions update
+									textField.text = textField.text;
+								}
+								
+								// grow if needed
+								while ((textField.numLines > desiredLines) && (textField.width < (_maxWidth - _padding.horizontal))) {
+									textField.width++;
+									textField.text = textField.text;
+								}	
 							}
-							textField.width++;
-							//textField.width = Math.min(textField.width, maxWidth - 1);
+							
+							// clamp it off
+							textField.width = Math2.clamp(getMaxLineWidth() + 5, _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal);
+							textField.text = textField.text;							
 						}
-										
-					}				
+						else if (_growthMode == MAXIMIZE_WIDTH) {
+							textField.width = _maxWidth - _padding.horizontal;
+							textField.text = textField.text;
+							textField.width = Math2.clamp(getMaxLineWidth() + 5, _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal);
+						}
+						
+						
+						// rescale
+						textField.scaleX = originalScale;
+						textField.scaleY = originalScale;
+					}
 					
 					// text height
 					textField.text = textField.text;
 					textField.height = ((textSizeOffset.fieldHeight / textField.scaleX) * textField.numLines) + (fieldLeading * (textField.numLines - 1));
 					textField.text = textField.text;
+					
 					
 					// compensate for flash's overdraw, without masking content
 					lockUpdates = true;
@@ -187,59 +242,160 @@ package com.kitschpatrol.futil {
 					
 					//textField.cacheAsBitmap = true;
 					changedBounds = false;
-				}
 					
+					var elapsed:int = getTimer() - start;
+					trace("Changing bounds took " + elapsed + " ms");
+					
+				}
+				
 				super.update(contentWidth, contentHeight); // TODO pass bounds vector instead?
 			}			
 		}		
+		
+		
+		private function getMaxLineWidth():Number {
+			var maxLineWidth:Number = 0;
+			for (var i:int = 0; i < textField.numLines; i++) {
+				maxLineWidth = Math.max(maxLineWidth, textField.getLineMetrics(i).width);
+			}
+			return maxLineWidth;
+		}
 
 		
+		// Without caching
+//		private function updateSizeMap():void {
+//			trace("Building size map");
+//			
+//			// rebuilds size set maping pixel sizes to flash TextField sizes
+//			// height is maximum character height (in pixels) for a given internal size
+//			sizeMap = new Vector.<TextSize>(maxTextSize);
+//			
+//			var glyphCanvas:BitmapData;
+//			var testField:TextField;
+//			var bounds:Rectangle;
+//			var pixelHeight:int;
+//
+//			sizeMap[0] = new TextSize(); // zeros
+//			
+//			trace("Measuring  " + _sizeFactorGlyphs);
+//			// key: pixel size, value: field size
+//			for(var i:int = 1; i < maxTextSize; i++) {
+//				
+//				// create the text
+//				testField = generateTextField(_sizeFactorGlyphs, i, true);
+//				
+//				// render it into a bitmap and measure the margins 
+//				glyphCanvas = new BitmapData(testField.width, testField.height, false, 0xffffff);	
+//				glyphCanvas.draw(testField);
+//				
+//				// index the field height to the pixel height
+//				bounds = glyphCanvas.getColorBoundsRect(0xffffff, 0xffffff, false);
+//				pixelHeight = bounds.height;
+//				//trace(bounds);
+//				
+//				sizeMap[pixelHeight] = new TextSize(pixelHeight, i, bounds.y, glyphCanvas.width - bounds.width - bounds.x, glyphCanvas.height - bounds.y - bounds.height, bounds.x);
+//				
+//				//trace("Pixel Height: " + pixelHeight + " Field Size: " + i);
+//				
+//				// keep track of pixel size at max field size, will need
+//				// this to know when to resort to scaling
+//				if (i == 127)	maxTextPixelSize = pixelHeight;		
+//			}
+//			
+//			// fill holes
+//			for(i = 1; i < maxTextPixelSize; i++) {
+//				if (sizeMap[i] == null) {
+//					trace("Hole at " + i);
+//					// TODO implement lerp for this, for now just use last
+//					sizeMap[i] = sizeMap[i - 1]; 
+//				}
+//			}
+//			
+//			// make sure it sticks
+//			lockUpdates = true;
+//			textSizePixels = _textSizePixels;
+//			lockUpdates = false;
+//		}				
+		
+		
+		// With caching (broken?)
 		private function updateSizeMap():void {
 			trace("Building size map");
-			// rebuilds size set maping pixel sizes to flash TextField sizes
-			// height is maximum character height (in pixels) for a given internal size
-			sizeMap = new Vector.<TextSize>(maxTextSize);
 			
-			var glyphCanvas:BitmapData;
-			var testField:TextField;
-			var originalColor:uint = _textColor;
-			var bounds:Rectangle;
-			var pixelHeight:int;
-			_textColor = 0x000000;
+			// check cache, note weird string index
+			var cacheKey:String = _textFont + _sizeFactorGlyphs;
 			
-			sizeMap[0] = new TextSize(); // zeros
-			
-			trace("Measuring  " + _sizeFactorGlyphs);
-			// key: pixel size, value: field size
-			for(var i:int = 1; i < maxTextSize; i++) {
+			if (TextBlock.sizeMaps.hasOwnProperty(cacheKey)) {
+				trace("In the cache, load that: " + cacheKey);
+				sizeMap = TextBlock.sizeMaps[cacheKey]['sizeMap'];
+				maxTextPixelSize = TextBlock.sizeMaps[cacheKey]['maxTextPixelSize'];
+			}
+			else {
+				trace("Not cached! Generating: " + cacheKey);
 				
-				// for each requested size
-				// test all glyphs to establish bounds				
+				// rebuilds size set maping pixel sizes to flash TextField sizes
+				// height is maximum character height (in pixels) for a given internal size
+				TextBlock.sizeMaps[cacheKey] = {};
+				TextBlock.sizeMaps[cacheKey]['sizeMap'] = new Vector.<TextSize>(maxTextSize);
 				
-				// create the text
-				testField = generateTextField(_sizeFactorGlyphs, i, true);
+				var glyphCanvas:BitmapData;
+				var testField:TextField;
+				var bounds:Rectangle;
+				var pixelHeight:int;
 				
-				// render it into a bitmap and measure the margins 
-				glyphCanvas = new BitmapData(testField.width, testField.height, false, 0xffffff);	
-				glyphCanvas.draw(testField);
+				TextBlock.sizeMaps[cacheKey]['sizeMap'][0] = new TextSize(); // zeros in the first position
 				
-				// index the field height to the pixel height
-				bounds = glyphCanvas.getColorBoundsRect(0xffffff, 0xffffff, false);
-				pixelHeight = bounds.height;
-				// trace(bounds);
+				trace("Measuring  " + _sizeFactorGlyphs);
+				// key: pixel size, value: field size
+				for(var i:int = 1; i < maxTextSize; i++) {
+					
+					// TODO cache these
+					// for each requested size
+					// test all glyphs to establish bounds				
+					
+					// create the text
+					testField = generateTextField(_sizeFactorGlyphs, i, true);
+					
+					// render it into a bitmap and measure the margins 
+					glyphCanvas = new BitmapData(testField.width, testField.height, false, 0xffffff);	
+					glyphCanvas.draw(testField);
+					
+					// index the field height to the pixel height
+					bounds = glyphCanvas.getColorBoundsRect(0xffffff, 0xffffff, false);
+					pixelHeight = bounds.height;
+					// trace(bounds);
+					
+					TextBlock.sizeMaps[cacheKey]['sizeMap'][pixelHeight] = new TextSize(pixelHeight, i, bounds.y, glyphCanvas.width - bounds.width - bounds.x, glyphCanvas.height - bounds.y - bounds.height, bounds.x);
+					
+					//trace("Pixel Height: " + pixelHeight + " Field Size: " + i);
+					
+					// keep track of pixel size at max field size, will need
+					// this to know when to resort to scaling
+					if (i == 127)	maxTextPixelSize = pixelHeight;		
+				}
 				
-				sizeMap[pixelHeight] = new TextSize(pixelHeight, i, bounds.y, glyphCanvas.width - bounds.width - bounds.x, glyphCanvas.height - bounds.y - bounds.height, bounds.x);
+				// fill holes
+				for(i = 1; i < maxTextPixelSize; i++) {
+					if (TextBlock.sizeMaps[cacheKey]['sizeMap'][i] == null) {
+						trace("Hole at " + i);
+						// TODO implement lerp for this, for now just use last
+						TextBlock.sizeMaps[cacheKey]['sizeMap'][i] = TextBlock.sizeMaps[cacheKey]['sizeMap'][i - 1]; 
+					}
+				}
+					
 				
-				//trace("Pixel Height: " + pixelHeight + " Field Size: " + i);
-				
-				// keep track of pixel size at max field size, will need
-				// this to know when to resort to scaling
-				if (i == 127)	maxTextPixelSize = pixelHeight;
+				// Cache it
+				//TextBlock.sizeMaps[cacheKey] = newSizeMap;
+				sizeMap = TextBlock.sizeMaps[cacheKey]['sizeMap'];
+				TextBlock.sizeMaps[cacheKey]['maxTextPixelSize'] = maxTextPixelSize;
 			}
 			
-			_textColor = originalColor;
+			// make sure it sticks
+		 	lockUpdates = true;
+			textSizePixels = _textSizePixels;
+		 	lockUpdates = false;		
 		}				
-
+		
 		
 		// Utilities
 		
@@ -285,6 +441,13 @@ package com.kitschpatrol.futil {
 			// no need to update
 		}
 		
+		public function get growthMode():String { return _growthMode; }
+		public function set growthMode(mode:String):void {
+			_growthMode = mode;
+			
+			changedBounds = true;
+			update();
+		}
 		
 		// Format updates
 		public function get textSizePixels():Number	{	return _textSizePixels;	}		
@@ -396,6 +559,7 @@ package com.kitschpatrol.futil {
 			textField.text = _text;
 			
 			// need to resize...
+			changedFormat = true;
 			changedBounds = true;
 			update();			
 		}
