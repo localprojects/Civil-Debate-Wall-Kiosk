@@ -18,6 +18,15 @@ package com.kitschpatrol.futil {
 			this.rightWhitespace = rightWhitespace;
 			this.bottomWhitespace = bottomWhitespace;
 			this.leftWhitespace = leftWhitespace;
+			
+		}
+		
+		public function get fieldHeight():Number {
+			return topWhitespace + textPixelSize + bottomWhitespace;
+		}
+		
+		public function get leadingOffset():Number {
+			return -((bottomWhitespace - 2) + (topWhitespace - 2));			
 		}
 		
 	}
