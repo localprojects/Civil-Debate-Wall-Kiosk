@@ -26,7 +26,7 @@ package com.kitschpatrol.futil {
 		internal var background:BlockShape; // note special block shape class for background and border
 		private var registrationMarker:Shape;
 
-		private var _padding:Padding; // Padding, note convenience getters and setters for all, top/bottom, and left/right
+		internal var _padding:Padding; // Padding, note convenience getters and setters for all, top/bottom, and left/right
 		private var _alignmentPoint:Point; // the alignment of the content relative to the background (less padding)
 		private var _registrationPoint:Point; // the origin of the block, normalized relative to the top left of the background
 		private var _showRegistrationPoint:Boolean;
@@ -44,10 +44,10 @@ package com.kitschpatrol.futil {
 		public static const MAX_SIZE_OVERFLOWS:String = "maxSizeOverflows"; // nothing happen, text just sticks out
 		public static const MAX_SIZE_BREAKS_LINE:String = "maxSizeBreaksLine"; // nothing happen, text just sticks out			
 		
-		private var _minWidth:Number;
-		private var _minHeight:Number;
-		private var _maxWidth:Number;
-		private var _maxHeight:Number;
+		internal var _minWidth:Number;
+		internal var _minHeight:Number;
+		internal var _maxWidth:Number;
+		internal var _maxHeight:Number;
 		
 		private var _contentCrop:Padding;
 		
@@ -76,8 +76,8 @@ package com.kitschpatrol.futil {
 			_alignmentPoint = Alignment.TOP_LEFT;
 			_minWidth = 0;
 			_minHeight = 0;
-			_maxWidth = Number.MAX_VALUE;
-			_maxHeight = Number.MAX_VALUE;
+			_maxWidth = 1024; // Number.MAX_VALUE;
+			_maxHeight = 768; // Number.MAX_VALUE;
 			_maxSizeBehavior = MAX_SIZE_OVERFLOWS;
 			_contentCrop = new Padding();
 			_paddingMode = PADDING_INSIDE;
@@ -131,6 +131,8 @@ package com.kitschpatrol.futil {
 					// only if needed
 					background.width = Math2.clamp(contentWidth - _contentCrop.horizontal, _minWidth, _maxWidth + _padding.horizontal) + _padding.horizontal; // stretch max for padding
 					background.height = Math2.clamp(contentHeight - _contentCrop.vertical, _minHeight, _maxHeight + _padding.vertical) + _padding.vertical;
+				
+					
 					
 					// Compensate for padding, which always accumulates on the outsize of the content
 					content.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
