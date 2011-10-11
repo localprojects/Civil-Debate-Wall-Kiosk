@@ -217,7 +217,7 @@ package com.kitschpatrol.futil {
 						else if (_growthMode == MAXIMIZE_WIDTH) {
 							textField.width = _maxWidth - _padding.horizontal;
 							textField.text = textField.text;
-							textField.width = Math2.clamp(getMaxLineWidth() + 5, _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal);
+							textField.width = Math2.clamp(getMaxLineWidth() + 6, _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal); // TODO FIGURE OUT THE +6 BUSINESS...
 						}
 						
 						

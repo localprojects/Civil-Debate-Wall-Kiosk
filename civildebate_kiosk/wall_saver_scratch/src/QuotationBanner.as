@@ -42,11 +42,11 @@ package {
 																 textColor: 0xffffff,
 																 height: 240});
 			
-			textBlock.x = openQuote.width + 120;
+			textBlock.x = openQuote.width + 52;
 			textBlock.y = 0;
 			addChild(textBlock);
 			
-			closeQuote.x = textBlock.x + textBlock.width + 120;; 
+			closeQuote.x = textBlock.x + textBlock.width + 52; 
 			closeQuote.y = 120;
 			addChild(closeQuote);
 		}

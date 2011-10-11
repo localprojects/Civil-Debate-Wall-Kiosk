@@ -16,6 +16,8 @@
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.BaseColorPlugin"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.TextColorPlugin"/>
     <classEntry path="com.kitschpatrol.futil.LipsumUtil"/>
+    <classEntry path="com.kitschpatrol.futil.easing.EaseMap"/>
+    <classEntry path="com.kitschpatrol.futil.easing.Ease"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
