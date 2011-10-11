@@ -9,7 +9,9 @@ package {
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
+	import com.greensock.easing.CustomEase;
 	import com.greensock.layout.AlignMode;
+	import com.greensock.plugins.*;
 	import com.kitschpatrol.futil.LipsumUtil;
 	import com.kitschpatrol.futil.TextBlock;
 	import com.kitschpatrol.futil.Utilities;
@@ -30,6 +32,8 @@ package {
 	
 	import sekati.layout.Arrange;
 	
+	
+	TweenPlugin.activate([DynamicPropsPlugin]);	
 	
 	[SWF(width="5720", height="1920", frameRate="60")]	
 	public class CivilDebateWallSaver extends Sprite {
@@ -166,7 +170,8 @@ package {
 
 		
 		private function onTimeSlider(e:Event):void {	
-			timeline.currentTime = Math.round(timeSlider.value); 
+			
+			timeline.currentTime = Math.min(timeline.duration, Math.round(timeSlider.value)); 
 		}
 		
 		private function onPlayButton(e:Event):void {
@@ -418,15 +423,16 @@ package {
 			// add them to rows
 			
 			// Generate the quote rows
-			var quoteRows:Vector.<Sprite> = new Vector.<Sprite>(5);
+			var quoteRows:Vector.<QuotationRow> = new Vector.<QuotationRow>(5);
 			
 			for (var i:int = 0; i < quoteRows.length; i++) {
-				var quoteLine:Sprite = new Sprite();
+				var quoteLine:QuotationRow = new QuotationRow();
 				quoteLine.x = 0;
 				quoteLine.y = 120 + (i * (240 + 120));
-				addChild(quoteLine);
+				canvas.addChild(quoteLine);
 				quoteRows[i] = quoteLine;
 			}			
+			
 			
 			while (displayQuotes.length > 0) {
 				// find the shortest row
@@ -440,9 +446,15 @@ package {
 				}
 				
 				// add to it
+				
+				trace("Min width: " + minWidth);
 				var tempQuotationBanner:QuotationBanner = displayQuotes.pop();
-				tempQuotationBanner.x = minWidth + 120;
-				tempQuotationBanner.y = 0;
+				
+				if (minWidth > 0) {
+					tempQuotationBanner.x = minWidth + 130;
+					tempQuotationBanner.y = 0;
+				}
+				
 				quoteRows[shortestRowIndex].addChild(tempQuotationBanner);
 			}
 			
@@ -558,6 +570,46 @@ package {
 			
 			
 			
+			
+			
+			
+			
+			// Quotation field
+			// Generated at http://www.greensock.com/customease/
+			//CustomEase.create("myCustomEase", [{s:0,cp:0.28799,e:0.368},{s:0.368,cp:0.448,e:0.49},{s:0.49,cp:0.532,e:0.652},{s:0.652,cp:0.772,e:1}]);
+			
+			
+			// in... length determines velocity... 
+			//timeline.appendMultiple([TweenMax.fromTo(quoteRows[0], 500, {x: -quoteRows[0].width}, {physicsProps:{x:{velocity:500, acceleration: -10}}})], 0, TweenAlign.START, 0);				
+				
+			
+			//quotationFieldTimeline = new TimelineMax({useFrames: true});
+			
+			
+			//quotationFieldTimeline.timeScale = 0.1;	
+									
+			//quotationFieldTimeline.append(TweenMax.fromTo(quoteRows[0], 500, {x: -quoteRows[0].width}, {x: totalWidth, ease: Quad.easeOut}));
+			
+			
+		
+			
+			timeline.appendMultiple([TweenMax.fromTo(quoteRows[0], 2000, {step: 0, ease: Linear.easeNone}, {step: 1, ease: Linear.easeNone}),
+															 TweenMax.fromTo(quoteRows[1], 2000, {step: 1, ease: Linear.easeNone}, {step: 0, ease: Linear.easeNone}),
+															 TweenMax.fromTo(quoteRows[2], 2000, {step: 0, ease: Linear.easeNone}, {step: 1, ease: Linear.easeNone}),
+															 TweenMax.fromTo(quoteRows[3], 2000, {step: 1, ease: Linear.easeNone}, {step: 0, ease: Linear.easeNone}),
+															 TweenMax.fromTo(quoteRows[4], 2000, {step: 0, ease: Linear.easeNone}, {step: 1, ease: Linear.easeNone})], 0, TweenAlign.START, 0);			
+			
+			
+			
+			
+			//timeline.append(TweenMax.fromTo(quoteRows[0], 1000, {step: 0, ease: Linear.easeNone}, {step: 1, ease: Linear.easeNone}));
+
+			
+			
+			
+			
+			
+			
 			// join banners in
 			timeline.appendMultiple([TweenMax.fromTo(joinBanner1, 100, {x: screens[0].x - joinBanner1.width, y: 125}, {x: "1372"}),
 															 TweenMax.fromTo(joinBanner2, 100, {x: screens[2].x - joinBanner2.width, y: 125}, {x: "1372"}),
@@ -599,6 +651,8 @@ package {
 			
 			// TODO fill this up
 		}
+		
+
 		
 		private function onTimelineUpdate():void {
 			frameCountLabel.text = "Frame: " + timeline.currentTime + " / " + 	timeline.totalDuration + "\tFPS: " + fpsMeter.fps;
