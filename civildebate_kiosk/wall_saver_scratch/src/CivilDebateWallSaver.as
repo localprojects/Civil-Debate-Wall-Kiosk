@@ -5,6 +5,13 @@ package {
 	import com.bit101.components.Label;
 	import com.bit101.components.PushButton;
 	import com.bit101.components.Slider;
+	import com.civildebatewall.wallsaver.elements.MessageBanner;
+	import com.civildebatewall.wallsaver.elements.QuestionBanner;
+	import com.civildebatewall.wallsaver.sequences.BarGraphSequence;
+	import com.civildebatewall.wallsaver.sequences.ButtonSequence;
+	import com.civildebatewall.wallsaver.sequences.CallToActionSequence;
+	import com.civildebatewall.wallsaver.sequences.QuestionSequence;
+	import com.civildebatewall.wallsaver.sequences.TitleSequence;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -26,6 +33,7 @@ package {
 	import flashx.textLayout.elements.BreakElement;
 	
 	import sekati.layout.Arrange;
+	import com.civildebatewall.wallsaver.elements.GraphLabel;
 	
 	
 	//TweenPlugin.activate([]);	
@@ -35,15 +43,19 @@ package {
 		
 		private var canvas:Sprite;
 		
-		private const screenWidth:int = 1080;
-		private const screenHeight:int = 1920;
-		private const screenCount:int = 5;
-		private const bezelPixelWidth:int = 40;
-		private const stageScaleFactor:Number = 4;
-		private const totalWidth:int = (screenWidth * screenCount) + (bezelPixelWidth * 2 * (screenCount - 1));
-		private const totalHeight:int = screenHeight;
+		// These will come in from FlashSpan
+		public static const screenWidth:int = 1080;
+		public static const screenHeight:int = 1920;
+		public static const screenCount:int = 5;
+		public static const bezelPixelWidth:int = 40;
+		public static const totalWidth:int = (screenWidth * screenCount) + (bezelPixelWidth * 2 * (screenCount - 1));
+		public static const totalHeight:int = screenHeight;
+		public static var screens:Vector.<Rectangle> = new Vector.<Rectangle>(screenCount);
+		public static var bezels:Vector.<Rectangle> = new Vector.<Rectangle>;
 		
-		private var timeline:TimelineMax;
+		
+		// Timeline
+		private var timeline:TimelineMax;		
 		
 		// GUI
 		private var timeSlider:Slider;
@@ -51,10 +63,10 @@ package {
 		private var fpsMeter:FPSMeter;
 		
 		
-		// Content		
-		private var screens:Vector.<Rectangle> = new Vector.<Rectangle>(screenCount);
-		private var bezels:Vector.<Rectangle> = new Vector.<Rectangle>;		
-
+		// Debug
+		private const stageScaleFactor:Number = 4;		
+		
+		// Sample Content
 		private var interactiveScreen1:Bitmap = Assets.getSampleKiosk1();
 		private var interactiveScreen2:Bitmap = Assets.getSampleKiosk2();	
 		private var interactiveScreen3:Bitmap = Assets.getSampleKiosk1();
@@ -62,7 +74,6 @@ package {
 		private var interactiveScreen5:Bitmap = Assets.getSampleKiosk1();
 		
 
-		
 		public function CivilDebateWallSaver() {
 			
 			// Start the MonsterDebugger
@@ -71,27 +82,18 @@ package {
 			
 			// resize the window for development
 			stage.scaleMode = StageScaleMode.EXACT_FIT;
-			//stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.nativeWindow.width = totalWidth / stageScaleFactor;
 			stage.nativeWindow.height = (totalHeight / stageScaleFactor) + 20;
 			
 			// syncing is controlled with a tweenMax timeline
 			
-			//questionScroller();
-			trace(totalWidth);
-			
-			
-
-			
+	
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
-		
-
-		
 		private function onAddedToStage(e:Event):void {
-			// screen offsets
+			// screen offsets, this comes in from FlashSpan
 			for (var i:int = 0; i < screenCount; i++) {
 				screens[i] = new Rectangle((i * screenWidth) + (i * 2 * bezelPixelWidth), 0, screenWidth, screenHeight);			
 			}
@@ -111,21 +113,21 @@ package {
 				}
 			}			
 			
+			// Add static screens
 			for (var k:int = 0; k < screenCount; k++) {			
 				this['interactiveScreen' + (k + 1)].x = screens[k].x;
 				this['interactiveScreen' + (k + 1)].y = screens[k].y;			
 				addChild(this['interactiveScreen' + (k + 1)]);
-				
-				// and the button
 			}
 			
-			
+			// The wallsaver canvas
 			canvas = new Sprite();
-			canvas.graphics.beginFill(0xffffff);
-			canvas.graphics.drawRect(0, 0, totalWidth, totalHeight);
-			canvas.graphics.endFill();
+//			canvas.graphics.beginFill(0xffffff);
+//			canvas.graphics.drawRect(0, 0, totalWidth, totalHeight);
+//			canvas.graphics.endFill();
 			addChild(canvas);
 			
+			// Draw the bezels (Debug)
 			for each (var bezel:Rectangle in bezels) {
 				var shape:Shape = new Shape();
 				shape.graphics.beginFill(0x000000);
@@ -136,8 +138,7 @@ package {
 				addChild(shape);
 			}
 
-			
-
+			// Timeline controls (debug)
 			var dashboard:Sprite = new Sprite();
 			timeSlider = new Slider("horizontal", dashboard, 5, 5, onTimeSlider);
 			timeSlider.width = 300;
@@ -152,13 +153,13 @@ package {
 			new PushButton(dashboard, 5, 30, "Play", onPlayButton);
 			new PushButton(dashboard, 110, 30, "Pause", onPauseButton);	
 			
-			
 			addChild(dashboard);
 			dashboard.scaleX = stageScaleFactor;
 			dashboard.scaleY = stageScaleFactor;
 			
 			
-
+			
+			
 			buildTimeline();
 		}
 		
@@ -166,7 +167,6 @@ package {
 
 		
 		private function onTimeSlider(e:Event):void {	
-			
 			timeline.currentTime = Math.min(timeline.duration, Math.round(timeSlider.value)); 
 		}
 		
@@ -193,7 +193,7 @@ package {
 		}
 		
 		// TODO put this into FlashSpan, returns screen index, or -1 if it's in the gutter or off the screen
-		private function pointIsOnScreen(p:Point):int {
+		public static function pointIsOnScreen(p:Point):int {
 			for (var i:int = 0; i < screens.length; i++) {
 				if (screens[i].containsPoint(p)) return i;
 			}
@@ -201,7 +201,7 @@ package {
 		}
 		
 		// TODO put this in flashspan, too
-		private function pointIsNearScreen(p:Point):int {
+		public static function pointIsNearScreen(p:Point):int {
 			var onScreen:int = pointIsOnScreen(p);
 			
 			if (onScreen > -1) {
@@ -229,8 +229,108 @@ package {
 		}
 		
 		
-		
 		private function buildTimeline():void {
+			timeline = new TimelineMax({useFrames: true, onUpdate: onTimelineUpdate});
+			
+			// Create display objects
+			var buttonSequence:ButtonSequence = new ButtonSequence();
+			canvas.addChild(buttonSequence);
+			
+			var titleSequence:TitleSequence = new TitleSequence();
+			//canvas.addChild(titleSequence);
+			
+			var questionSequence:QuestionSequence = new QuestionSequence();
+			//canvas.addChild(questionSequence);
+			
+			var barGraphSequence:BarGraphSequence = new BarGraphSequence();
+			canvas.addChild(barGraphSequence);			
+			
+			var callToActionSequence:CallToActionSequence = new CallToActionSequence();
+			//canvas.addChild(callToActionSequence);
+			
+			// Assemble the timeline
+			timeline.append(buttonSequence.getTimelineIn());
+			timeline.append(barGraphSequence.getTimeline());
+			//timeline.append(titleSequence.getTimeline());
+			//timeline.append(callToActionSequence.getTimeline());
+			//timeline.append(questionSequence.getTimeline());
+			timeline.append(buttonSequence.getTimelineOut());			
+			
+
+			//		responseGraph
+			//		
+			//		
+			//		responseScroller
+			//		
+			//		faceGrid
+
+			// make sure all of the froms are in position
+			timeline.goto(timeline.totalDuration); 
+			timeline.goto(0);			
+			timeline.stop();
+			
+			// reconfigure gui
+			timeSlider.value = 0;
+			timeSlider.maximum = timeline.totalDuration;			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+				
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+				
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		private function buildTimelineOle():void {
 			
 
 			// takes latest data, builds the timeline, TODO auto kill children for performance?
@@ -251,26 +351,7 @@ package {
 			var title:Bitmap = Assets.getTitle();
 			canvas.addChild(title);
 			
-			
-			// add the join debate buttons
-			var button1:Bitmap = Assets.getJoinDebateButton();
-			var button2:Bitmap = Assets.getJoinDebateButton();
-			var button3:Bitmap = Assets.getJoinDebateButton();
-			var button4:Bitmap = Assets.getJoinDebateButton();
-			var button5:Bitmap = Assets.getJoinDebateButton();
-			
-			canvas.addChild(button1);
-			canvas.addChild(button2);
-			canvas.addChild(button3);
-			canvas.addChild(button4);
-			canvas.addChild(button5);
-			
-			// build the question, text pending
-			var question:QuestionBanner = new QuestionBanner("Do you feel our public education provides our children with a thorough education these days?"); // TODO get form back end
 
-			canvas.addChild(question);
-			
-			
 			// build the graph
 			var yesResponses:int = 215; // TODO get these from back end
 			var noResponses:int = 15; // TODO get these from back end
@@ -389,6 +470,14 @@ package {
 			canvas.addChild(secondGraphText);
 			
 
+			
+			
+			// Objects
+			
+			
+			
+			
+			// Sequences
 			
 			
 			
@@ -587,23 +676,11 @@ package {
 			
 			
 			
-			
 			// tween in the canvas overlay
 			timeline.append(TweenMax.fromTo(canvas, 60, {alpha: 0}, {alpha: 1}));
 			
-			// bring the buttons up
-			var buttonXOffset:int = 567;
-			var buttonYOffset:int = 1826;
-			
-			timeline.appendMultiple([TweenMax.fromTo(button1, 100, {x: screens[0].x + buttonXOffset, y: totalHeight}, {y: buttonYOffset}),
-															 TweenMax.fromTo(button2, 100, {x: screens[1].x + buttonXOffset, y: totalHeight}, {y: buttonYOffset}),
-															 TweenMax.fromTo(button3, 100, {x: screens[2].x + buttonXOffset, y: totalHeight}, {y: buttonYOffset}),
-															 TweenMax.fromTo(button4, 100, {x: screens[3].x + buttonXOffset, y: totalHeight}, {y: buttonYOffset}),
-															 TweenMax.fromTo(button5, 100, {x: screens[4].x + buttonXOffset, y: totalHeight}, {y: buttonYOffset})], 0, TweenAlign.START, 15);
-			
-			
-			
-			
+
+
 			// Face Grid
 			// TODO
 			// get a flat array of portraits
@@ -629,56 +706,8 @@ package {
 			var titleScrollDuration:int = (totalWidth + title.width)  / scrollVelocity;
 			timeline.append(TweenMax.fromTo(title, titleScrollDuration, {x: totalWidth, y: 125, ease: Linear.easeNone}, {x: -title.width, ease: Linear.easeNone}));
 			
-			// question
-			var questionScrollDuration:int = (totalWidth + question.width)  / scrollVelocity;
-			timeline.append(TweenMax.fromTo(question, questionScrollDuration, {x: totalWidth, y: 125, ease: Linear.easeNone}, {x: -question.width, ease: Linear.easeNone}));
-			
-			// define the bar in animations, pick which one is first
-			
-			var yesBarScrollDuration:int = (yesBar.width - yesTail.width)  / scrollVelocity;			
-			yesBarTweenIn = TweenMax.fromTo(yesBar, yesBarScrollDuration, {x: -yesBar.width, y: 125}, {x: -yesTail.width});
-			
-			var noBarScrollDuration:int = (totalWidth - noWidth - noHead.width)  / scrollVelocity;						
-			noBarTweenIn = TweenMax.fromTo(noBar, noBarScrollDuration, {x: totalWidth, y: 125}, {x: totalWidth - noWidth - noHead.width});
-			
-			if (noResponses <= yesResponses) {			
-				firstBarTweenIn = noBarTweenIn;
-				secondBarTweenIn = yesBarTweenIn;
-			}
-			else {
-				firstBarTweenIn = yesBarTweenIn;
-				secondBarTweenIn = noBarTweenIn;				
-			}
-			
-			// first graph in
-			timeline.append(firstBarTweenIn);
 
-			
-			// first text in
-			timeline.append(TweenMax.fromTo(firstGraphText, 100, {y: -firstGraphText.height, count: 0}, {y: 633, count: firstBarCount}), -20);
-			
-			// first text out, second text in
-			timeline.appendMultiple([TweenMax.to(firstGraphText, 100, {y: screenHeight}),
-															 TweenMax.fromTo(secondGraphText, 100, {y: -secondGraphText.height, count: 0}, {y: 633, count: firstBarCount})], 300, TweenAlign.START, 0);
-			
-			// second graph in
-			timeline.append(secondBarTweenIn);
-			
-			
-			
-			
- 
-			
-			// second text out
-			timeline.append(TweenMax.to(secondGraphText, 100, {alpha: 0}), 100);
-			
-			// graphs out
-			// var yesBarOutDuration:int = (yesBar.width - yesTail.width)  / scrollVelocity;			
-			// var noBarOutDuration:int = (totalWidth - noWidth - noHead.width)  / scrollVelocity;				
-			
-			timeline.appendMultiple([TweenMax.to(secondGraphText, 100, {alpha: 0}),
-															 TweenMax.to(noBar, 400, {x: -noBar.width}),
-															 TweenMax.to(yesBar, 400, {x: totalWidth})], 100, TweenAlign.START, 100);			
+			// define the bar in animations, pick which one is first
 			
 
 			
@@ -701,38 +730,12 @@ package {
 	
 
 			
-			// join banners in
-			timeline.appendMultiple([TweenMax.fromTo(joinBanner1, 100, {x: screens[0].x - joinBanner1.width, y: 125}, {x: "1372"}),
-															 TweenMax.fromTo(joinBanner2, 100, {x: screens[2].x - joinBanner2.width, y: 125}, {x: "1372"}),
-															 TweenMax.fromTo(joinBanner3, 100, {x: screens[4].x - joinBanner3.width, y: 125}, {x: "1372"})], 0, TweenAlign.START, 0);
-			
-			
-			// join banners out, touch banners in
-			timeline.appendMultiple([TweenMax.to(joinBanner1, 100, {x: screens[0].x + screens[0].width}),
-															 TweenMax.fromTo(touchBanner1, 100, {x: screens[1].x - touchBanner1.width, y: 125}, {x: "1372"}),				
-															 TweenMax.to(joinBanner2, 100, {x: screens[2].x + screens[2].width}),
-															 TweenMax.fromTo(touchBanner2, 100, {x: screens[3].x - touchBanner1.width, y: 125}, {x: "1372"}),															 
-															 TweenMax.to(joinBanner3, 100, {x: screens[4].x + screens[4].width})
-															], 150, TweenAlign.START, 0);			
-			
-			
-			// touch banners out
-			timeline.appendMultiple([TweenMax.to(touchBanner1, 100, {x: screens[1].x + screens[1].width}),
-															 TweenMax.to(touchBanner2, 100, {x: screens[3].x + screens[3].width}),
-															], 150, TweenAlign.START, 0);			
+
 			
 			
 			
 			
-			
-			// reconfigure gui
-			timeSlider.value = 0;
-			timeSlider.maximum = timeline.totalDuration;
-			
-			
-			timeline.goto(timeline.totalDuration); // make sure all of the froms are in position
-			timeline.goto(0);			
-			timeline.stop();
+
 			
 			//timeline.start();
 			// sync server advances time (or just resyncs now and then?)
@@ -742,6 +745,15 @@ package {
 			// TODO fill this up
 		}
 		
+		
+		// clear everything
+		
+		// build everything
+		
+		// animate
+		
+		
+
 
 		
 		private function onTimelineUpdate():void {

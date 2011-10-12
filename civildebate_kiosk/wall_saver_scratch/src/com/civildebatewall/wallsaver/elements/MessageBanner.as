@@ -1,4 +1,4 @@
-package {
+package com.civildebatewall.wallsaver.elements {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	

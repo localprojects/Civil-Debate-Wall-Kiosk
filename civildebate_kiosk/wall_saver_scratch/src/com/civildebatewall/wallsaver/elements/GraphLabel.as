@@ -1,4 +1,4 @@
-package {
+package com.civildebatewall.wallsaver.elements {
 	import com.bit101.components.Text;
 	import com.kitschpatrol.futil.TextBlock;
 	import com.kitschpatrol.futil.constants.Alignment;

@@ -28,9 +28,6 @@ package {
 			
 			
 			// tint the portrait based on stance
-			
-			//{colorMatrixFilter:{colorize:0x3399cc, amount:0.9, contrast:1.5, brightness:1.4, saturation:0}
-			
 			background = new BlockShape();
 			background.width = 232;
 			background.height = 310;
