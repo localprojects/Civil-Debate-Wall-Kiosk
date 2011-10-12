@@ -105,7 +105,7 @@ package com.kitschpatrol.futil {
 						this[key] = params[key];
 					}
 					else {
-						trace("NO SUCH PROPERTY: " + key);
+						throw new Error("NO SUCH PROPERTY: " + key + " on " + this);
 						// TODO throw error. This is a big problem?
 					}
 				}
