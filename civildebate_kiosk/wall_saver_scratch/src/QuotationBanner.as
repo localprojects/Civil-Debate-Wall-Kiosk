@@ -14,9 +14,11 @@ package {
 		private var closeQuote:Bitmap;
 		private var textBlock:TextBlock;
 		private var backgroundColor:uint;
+		public var stance:String;
 		
 		public function QuotationBanner(quote:String, stance:String) {
 			super();
+			this.stance = stance;
 			
 			if (stance == "yes") {
 				openQuote = Assets.getQuoteYesOpen();

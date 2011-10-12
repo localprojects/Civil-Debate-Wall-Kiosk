@@ -70,8 +70,34 @@ package {
 		public static function getQuoteNoClose():Bitmap { return new quoteNoCloseClass() as Bitmap; };
 		public static const quoteNoClose:Bitmap = getQuoteNoClose();
 		
+		[Embed(source = '/assets/graphics/graphLabelNo.png')] private static const graphLabelNoClass:Class;
+		public static function getGraphLabelNo():Bitmap { return new graphLabelNoClass() as Bitmap; };
+		public static const graphLabelNo:Bitmap = getGraphLabelNo();
+		
+		[Embed(source = '/assets/graphics/graphLabelYes.png')] private static const graphLabelYesClass:Class;
+		public static function getGraphLabelYes():Bitmap { return new graphLabelYesClass() as Bitmap; };
+		public static const graphLabelYes:Bitmap = getGraphLabelYes();
 
 
+		
+		// Sample Portraits
+		[Embed(source = '/assets/graphics/samplePortrait1.jpg')] private static const samplePortrait1Class:Class;
+		public static function getSamplePortrait1():Bitmap { return new samplePortrait1Class() as Bitmap; };
+		public static const samplePortrait1:Bitmap = getSamplePortrait1();
+		
+		[Embed(source = '/assets/graphics/samplePortrait2.jpg')] private static const samplePortrait2Class:Class;
+		public static function getSamplePortrait2():Bitmap { return new samplePortrait2Class() as Bitmap; };
+		public static const samplePortrait2:Bitmap = getSamplePortrait2();
+		
+		[Embed(source = '/assets/graphics/samplePortrait3.jpg')] private static const samplePortrait3Class:Class;
+		public static function getSamplePortrait3():Bitmap { return new samplePortrait3Class() as Bitmap; };
+		public static const samplePortrait3:Bitmap = getSamplePortrait3();
+		
+		[Embed(source = '/assets/graphics/samplePortrait4.jpg')] private static const samplePortrait4Class:Class;
+		public static function getSamplePortrait4():Bitmap { return new samplePortrait4Class() as Bitmap; };
+		public static const samplePortrait4:Bitmap = getSamplePortrait4();
+		
+		
 		
 		
 		

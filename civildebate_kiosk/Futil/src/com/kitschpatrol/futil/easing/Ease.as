@@ -19,8 +19,7 @@ package com.kitschpatrol.futil.easing {
 		}
 		
 		
-		
-		
+
 		// Out and ins
 		// Via http://forums.greensock.com/viewtopic.php?f=1&t=2648
 		
@@ -39,17 +38,17 @@ package com.kitschpatrol.futil.easing {
 			return c/2 * (2-Math.sqrt(1 - --t*t) ) + b;
 		}
 		
-		public static function easeOutInBack(t:Number, b:Number, c:Number, d:Number, s:Number):Number {
-			if (s == undefined) s = 1.70158;
+		public static function easeOutInBack(t:Number, b:Number, c:Number, d:Number, s:Number = 1.70158):Number {
 			if ((t/=d/2) < 1) return c/2*(--t*t*(((s*=(1.525))+1)*t + s) + 1) + b;
 			return c/2*(--t*t*(((s*=(1.525))+1)*t - s) + 1) + b;
 		}		
 		
 		
 		public static function easeOutInElastic(t:Number, b:Number, c:Number, d:Number, a:Number, p:Number):Number {
+			var s:Number;
 			if (t==0) return b;  if ((t/=d/2)==2) return b+c;  if (!p) p=d*(.3*1.5);
-			if (!a ||a < Math.abs(c)) {a=c; var s=p/4;}
-			else var s = p/(2*Math.PI) * Math.asin (c/a);
+			if (!a ||a < Math.abs(c)) {a=c; s = p/4;}
+			else s = p/(2*Math.PI) * Math.asin (c/a);
 			if (t < 1) return .5*(a*Math.pow(2,-10*t) * Math.sin((t*d-s)*(2*Math.PI)/p))+c/2+b;
 			return c/2 +.5*(a*Math.pow(2,10*(t-2)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
 		}		

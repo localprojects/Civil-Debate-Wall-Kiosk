@@ -350,8 +350,13 @@ package com.kitschpatrol.futil {
 		public function set backgroundColor(color:uint):void {
 			background.backgroundColor = color;
 			update();
-		}		
+		}
 		
+		public function get showBackground():Boolean { return background.showBackground; }
+		public function set showBackground(show:Boolean):void {
+			background.showBackground = show;
+			update();
+		}
 		
 		public function get borderColor():uint { return background.borderColor; }
 		public function set borderColor(color:uint):void {
