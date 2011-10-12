@@ -1,8 +1,10 @@
 package {
 	import com.kitschpatrol.futil.Math2;
-	import com.kitschpatrol.futil.easing.EaseMap;
+	
+	import fl.motion.BezierSegment;
 	
 	import flash.display.Sprite;
+	import flash.geom.Point;
 	
 	
 	
@@ -10,7 +12,7 @@ package {
 		
 		// TODO Move the data
 		
-
+		public var lastStance:String;
 		private var _step:Number;
 
 		// where the in / out points are in the graph
@@ -80,11 +82,36 @@ package {
 			
 		}
 		
+
+		
+		// Custom Easing Function for TweenMax
+		public static var easeOutIn:Function = function(t:Number, b:Number, c:Number, d:Number):Number{
+			var points:Array = [
+				{point:[0,0],pre:[0,0],post:[0,0.5]},
+				{point:[1,1],pre:[1,0.5],post:[1,1]},
+			];
+			var bezier:BezierSegment = null;
+			for (var i:int = 0; i < points.length - 1; i++) {
+				if (t / d >= points[i].point[0] && t / d <= points[i+1].point[0]) {
+					bezier = new BezierSegment(
+						new Point(points[i].point[0], points[i].point[1]),
+						new Point(points[i].post[0], points[i].post[1]),
+						new Point(points[i+1].pre[0], points[i+1].pre[1]),
+						new Point(points[i+1].point[0], points[i+1].point[1]));
+					break;
+				}
+			}
+			return c * bezier.getYForX(t / d) + b;
+		};
+		
+		
+		
+		
 		private function vectorLerp(normalIndex:Number, vector:Vector.<Number>):Number {
 			var realIndex:Number = Math2.mapClamp(normalIndex, 0, 1, 0, vector.length - 1); // decimal index
 			var lowIndex:int = int(realIndex);
 			var highIndex:int = Math.min(lowIndex + 1, vector.length - 1);
-			return Math2.map(realIndex - lowIndex, 0, 1, vector[lowIndex], vector[highIndex]);
+			return Math2.mapClamp(realIndex - lowIndex, 0, 1, vector[lowIndex], vector[highIndex]);
 		}
 		
 		// Generated from image, TODO port generator to python and pad the numbers

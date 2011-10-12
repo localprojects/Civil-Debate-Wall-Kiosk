@@ -1,39 +1,34 @@
 package {
 
+	
 	import com.bit101.components.FPSMeter;
 	import com.bit101.components.Label;
 	import com.bit101.components.PushButton;
 	import com.bit101.components.Slider;
 	import com.greensock.*;
-	import com.greensock.BlitMask;
-	import com.greensock.TimelineMax;
-	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
-	import com.greensock.easing.CustomEase;
-	import com.greensock.layout.AlignMode;
 	import com.greensock.plugins.*;
-	import com.kitschpatrol.futil.LipsumUtil;
-	import com.kitschpatrol.futil.TextBlock;
+	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.Utilities;
+	import com.kitschpatrol.futil.utilitites.ArrayUtil;
+	import com.kitschpatrol.futil.utilitites.NumberUtil;
 	
 	import flash.display.Bitmap;
-	import flash.display.BlendMode;
 	import flash.display.Shader;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import org.osmf.events.TimeEvent;
+	import flashx.textLayout.elements.BreakElement;
 	
 	import sekati.layout.Arrange;
 	
 	
-	TweenPlugin.activate([DynamicPropsPlugin]);	
+	//TweenPlugin.activate([]);	
 	
 	[SWF(width="5720", height="1920", frameRate="60")]	
 	public class CivilDebateWallSaver extends Sprite {
@@ -87,6 +82,7 @@ package {
 			trace(totalWidth);
 			
 			
+
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -301,33 +297,30 @@ package {
 				labelIndex = Math.max(Math.min(borderIndex + 1, 4), 0);
 			}
 			
-			trace("borderIndex" + borderIndex);
-			trace("labelIndex" + labelIndex);			
-			
-			
-			// TODO, dynamic text
-			var yesTextWhite:Bitmap = Assets.getYesPlaceholderWhite();
-			var noTextWhite:Bitmap = Assets.getNoPlaceholderWhite();
+
+			var yesGraphLabel:GraphLabel = new GraphLabel("yes");
+			var noGraphLabel:GraphLabel = new GraphLabel("no");
 			
 			// Set text position
-			yesTextWhite.x = noTextWhite.x = screens[labelIndex].x + 189;
+			yesGraphLabel.x = screens[labelIndex].x + 189;
+			noGraphLabel.x = screens[labelIndex].x + 189;
 			
 			
-			addChild(noTextWhite);
-			addChild(yesTextWhite);
+			addChild(yesGraphLabel);
+			addChild(noGraphLabel);
 			
 			// set text blending modes
 			var yesShader:Shader = Assets.getMaskBlendFilter();
 			yesShader.data.targetColor.value[0] = 50 / 255;
 			yesShader.data.targetColor.value[1] = 182 / 255;
 			yesShader.data.targetColor.value[2] = 255 / 255;
-			yesTextWhite.blendShader = yesShader;
+			yesGraphLabel.blendShader = yesShader;
 			
 			var noShader:Shader = Assets.getMaskBlendFilter();
 			noShader.data.targetColor.value[0] = 247 / 255;
 			noShader.data.targetColor.value[1] = 94 / 255;
 			noShader.data.targetColor.value[2] = 0 / 255;
-			noTextWhite.blendShader = noShader;			
+			noGraphLabel.blendShader = noShader;			
 			
 			 			
 			// no points left
@@ -361,9 +354,11 @@ package {
 			
 			// which one goes when? 
 			// Put smaller one first!			
-			var firstGraphText:Bitmap;
-			var secondGraphText:Bitmap;
+			var firstGraphText:GraphLabel;
+			var secondGraphText:GraphLabel;
 			var firstBar:Sprite;
+			var firstBarCount:int;
+			var secondBarCount:int;
 			var secondBar:Sprite;
 			var yesBarTweenIn:TweenMax;
 			var noBarTweenIn:TweenMax; 
@@ -371,17 +366,20 @@ package {
 			var secondBarTweenIn:TweenMax; // gets overwritten later to keep all animation settings in one place			
 			
 			if (noResponses <= yesResponses) {
-				firstGraphText = noTextWhite;
-				secondGraphText = yesTextWhite;
+				firstGraphText = noGraphLabel;
+				secondGraphText = yesGraphLabel;
 				firstBar = noBar;
 				secondBar = yesBar;
-				
+				firstBarCount = noResponses;
+				secondBarCount = yesResponses;
 			}
 			else {
-				firstGraphText = yesTextWhite;
-				secondGraphText = noTextWhite;				
+				firstGraphText = yesGraphLabel;
+				secondGraphText = noGraphLabel;				
 				firstBar = yesBar;
-				secondBar = noBar;		
+				secondBar = noBar;
+				firstBarCount = yesResponses;
+				secondBarCount = noResponses;				
 			}
 			
 			
@@ -415,12 +413,18 @@ package {
 			
 			
 			// generate the display quotes
-			var displayQuotes:Array = [];
+			var yesQuotes:Array = [];
+			var noQuotes:Array = [];
 			for each (var quoteSource:Array in quotes) {
-			displayQuotes.push(new QuotationBanner(quoteSource[0], quoteSource[1]));
+				if(quoteSource[1] == "yes") {
+					yesQuotes.push(new QuotationBanner(quoteSource[0], quoteSource[1]));
+				}
+				else {
+					noQuotes.push(new QuotationBanner(quoteSource[0], quoteSource[1]));
+				}
 			}
 			
-			// add them to rows
+			
 			
 			// Generate the quote rows
 			var quoteRows:Vector.<QuotationRow> = new Vector.<QuotationRow>(5);
@@ -430,11 +434,20 @@ package {
 				quoteLine.x = 0;
 				quoteLine.y = 120 + (i * (240 + 120));
 				canvas.addChild(quoteLine);
+				
+				// alternating stances
+//				if (i % 1 == 0) {
+//					quoteLine.lastStance = "yes";
+//				}
+//				else {
+//					quoteLine.lastStance = "no"					
+//				}
+				
 				quoteRows[i] = quoteLine;
 			}			
 			
-			
-			while (displayQuotes.length > 0) {
+			// add them to rows
+			while ((yesQuotes.length > 0) && (noQuotes.length > 0)) {
 				// find the shortest row
 				var shortestRowIndex:int = 0;
 				var minWidth:Number = Number.MAX_VALUE;
@@ -447,18 +460,90 @@ package {
 				
 				// add to it
 				
-				trace("Min width: " + minWidth);
-				var tempQuotationBanner:QuotationBanner = displayQuotes.pop();
-				
+				// alternate stances
+				var tempQuotationBanner:QuotationBanner;
+				if (quoteRows[shortestRowIndex].lastStance == "yes") {
+					 tempQuotationBanner = noQuotes.pop();
+					 quoteRows[shortestRowIndex].lastStance = "no";
+				}
+				else {
+					tempQuotationBanner = yesQuotes.pop();
+					quoteRows[shortestRowIndex].lastStance = "yes";					
+				}
+
 				if (minWidth > 0) {
 					tempQuotationBanner.x = minWidth + 130;
 					tempQuotationBanner.y = 0;
 				}
 				
+				
+				
 				quoteRows[shortestRowIndex].addChild(tempQuotationBanner);
+				//quoteRows[shortestRowIndex].lastStance = tempQuotationBanner.stance;
 			}
+
 			
 			
+			
+			// generate portraits, TODO get from back end
+
+			
+			
+			
+			
+			
+			// build the grid, fill randomly with faces 
+			
+						
+			// build the grid
+			var gridSpacing:Number = 30;
+			var gridRows:int = 5;
+			var gridCols:int = 20;
+			var portraitWidth:int = 232;
+			var portraitHeight:int = 310;
+			
+			var wallsaverPaddingTop:int = 123;
+			
+			
+			// TODO get this part from back end
+			var portraitData:Array = [Assets.getSamplePortrait1(),
+														Assets.getSamplePortrait2(),
+														Assets.getSamplePortrait3(),
+														Assets.getSamplePortrait4()];
+			
+			var portraits:Array = [];			
+			
+			
+			var borderColIndex:int = Math.round(Math2.map(yesResponses / totalResponses, 0, 1, 0, gridCols - 1));			
+			var middleRowIndex:int = Math.floor(gridRows / 2);
+			var centerArrowHeight:int = gridRows - middleRowIndex; // TODO test this
+			
+		
+			for (var col:int = 0; col < gridCols; col++) {
+				portraits[col] = [];
+				
+				var screen:Rectangle = screens[Math.floor(col / (gridCols / screens.length))];
+				var screenCol:int = col % (gridCols / screens.length);
+				var arrowHeight:int = Math2.clamp(centerArrowHeight + ((borderColIndex - col) * 2), 0, gridRows); // find out how high the arrow is in this column
+				
+				for (var row:int = 0; row < gridRows; row++) {
+					
+					// set stance based on border index, create an "arrow" shape
+					var stance:String = "yes";
+					
+					if ((arrowHeight > 0) && (Math.abs(row - middleRowIndex) <= Math.floor(arrowHeight / 2))) {
+						stance = "no";
+					}
+					
+					var tempPortrait:GridPortrait = new GridPortrait(stance, ArrayUtil.getRandomElement(portraitData));
+					tempPortrait.x = (gridSpacing * (screenCol + 1)) + (screenCol * portraitWidth) + screen.x;
+					tempPortrait.y = (gridSpacing * (row + 1)) + (row * portraitHeight) + wallsaverPaddingTop;
+					
+					portraits[col][row] = canvas.addChild(tempPortrait);
+				}
+			}
+		
+		
 
 			
 
@@ -498,7 +583,10 @@ package {
 			
 
 			
-			// build the timeline
+			//  ==================================== // build the timeline // ========================================================================
+			
+			
+			
 			
 			// tween in the canvas overlay
 			timeline.append(TweenMax.fromTo(canvas, 60, {alpha: 0}, {alpha: 1}));
@@ -514,20 +602,43 @@ package {
 															 TweenMax.fromTo(button5, 100, {x: screens[4].x + buttonXOffset, y: totalHeight}, {y: buttonYOffset})], 0, TweenAlign.START, 15);
 			
 			
+			
+			
+			// Face Grid
+			// TODO
+			// get a flat array of portraits
+			var gridCells:Array = ArrayUtil.flatten(portraits);
+			
+			// shuffle it
+			gridCells = ArrayUtil.shuffle(gridCells);
+			
+			// build the tweens
+			var gridTweenIn:Array = [];
+			var gridTweenOut:Array = [];
+			
+			for each (var portrait:GridPortrait in gridCells) {
+				gridTweenIn.push(TweenMax.fromTo(portrait, 750, {step: 0}, {step: 1, ease: Linear.easeNone}));
+				gridTweenOut.push(TweenMax.fromTo(portrait, 800, {step: 1}, {step: 0, ease: Linear.easeNone}));
+			}
+			
+			timeline.appendMultiple(gridTweenIn, 0, TweenAlign.START, 5); // compensate for steppiness
+			timeline.appendMultiple(gridTweenOut, 100, TweenAlign.START, 5);
+			
+			
 			// title
-			var titleScrollDuration:Number = (totalWidth + title.width)  / scrollVelocity;
+			var titleScrollDuration:int = (totalWidth + title.width)  / scrollVelocity;
 			timeline.append(TweenMax.fromTo(title, titleScrollDuration, {x: totalWidth, y: 125, ease: Linear.easeNone}, {x: -title.width, ease: Linear.easeNone}));
 			
 			// question
-			var questionScrollDuration:Number = (totalWidth + question.width)  / scrollVelocity;
+			var questionScrollDuration:int = (totalWidth + question.width)  / scrollVelocity;
 			timeline.append(TweenMax.fromTo(question, questionScrollDuration, {x: totalWidth, y: 125, ease: Linear.easeNone}, {x: -question.width, ease: Linear.easeNone}));
 			
 			// define the bar in animations, pick which one is first
 			
-			var yesBarScrollDuration:Number = (yesBar.width - yesTail.width)  / scrollVelocity;			
+			var yesBarScrollDuration:int = (yesBar.width - yesTail.width)  / scrollVelocity;			
 			yesBarTweenIn = TweenMax.fromTo(yesBar, yesBarScrollDuration, {x: -yesBar.width, y: 125}, {x: -yesTail.width});
 			
-			var noBarScrollDuration:Number = (totalWidth - noWidth - noHead.width)  / scrollVelocity;						
+			var noBarScrollDuration:int = (totalWidth - noWidth - noHead.width)  / scrollVelocity;						
 			noBarTweenIn = TweenMax.fromTo(noBar, noBarScrollDuration, {x: totalWidth, y: 125}, {x: totalWidth - noWidth - noHead.width});
 			
 			if (noResponses <= yesResponses) {			
@@ -544,77 +655,56 @@ package {
 
 			
 			// first text in
-			timeline.append(TweenMax.fromTo(firstGraphText, 100, {y: -firstGraphText.height}, {y: 633}), -20);
+			timeline.append(TweenMax.fromTo(firstGraphText, 100, {y: -firstGraphText.height, count: 0}, {y: 633, count: firstBarCount}), -20);
 			
 			// first text out, second text in
 			timeline.appendMultiple([TweenMax.to(firstGraphText, 100, {y: screenHeight}),
-															 TweenMax.fromTo(secondGraphText, 100, {y: -secondGraphText.height}, {y: 633})], 300, TweenAlign.START, 0);
+															 TweenMax.fromTo(secondGraphText, 100, {y: -secondGraphText.height, count: 0}, {y: 633, count: firstBarCount})], 300, TweenAlign.START, 0);
 			
 			// second graph in
 			timeline.append(secondBarTweenIn);
 			
 			
+			
+			
  
 			
 			// second text out
-			timeline.append(TweenMax.to(secondGraphText, 100, {y: screenHeight}), 100);
+			timeline.append(TweenMax.to(secondGraphText, 100, {alpha: 0}), 100);
 			
 			// graphs out
-			//var noBarOutDuration:Number = 
-			//var yesBarOutDuration:Number = 
+			// var yesBarOutDuration:int = (yesBar.width - yesTail.width)  / scrollVelocity;			
+			// var noBarOutDuration:int = (totalWidth - noWidth - noHead.width)  / scrollVelocity;				
 			
-			timeline.appendMultiple([TweenMax.to(noBar, 400, {x: -noBar.width}),
-															 TweenMax.to(yesBar, 400, {x: totalWidth})], 100, TweenAlign.START, 0);			
+			timeline.appendMultiple([TweenMax.to(secondGraphText, 100, {alpha: 0}),
+															 TweenMax.to(noBar, 400, {x: -noBar.width}),
+															 TweenMax.to(yesBar, 400, {x: totalWidth})], 100, TweenAlign.START, 100);			
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			// Quotation field
-			// Generated at http://www.greensock.com/customease/
-			//CustomEase.create("myCustomEase", [{s:0,cp:0.28799,e:0.368},{s:0.368,cp:0.448,e:0.49},{s:0.49,cp:0.532,e:0.652},{s:0.652,cp:0.772,e:1}]);
-			
-			
-			// in... length determines velocity... 
-			//timeline.appendMultiple([TweenMax.fromTo(quoteRows[0], 500, {x: -quoteRows[0].width}, {physicsProps:{x:{velocity:500, acceleration: -10}}})], 0, TweenAlign.START, 0);				
-				
-			
-			//quotationFieldTimeline = new TimelineMax({useFrames: true});
-			
-			
-			//quotationFieldTimeline.timeScale = 0.1;	
-									
-			//quotationFieldTimeline.append(TweenMax.fromTo(quoteRows[0], 500, {x: -quoteRows[0].width}, {x: totalWidth, ease: Quad.easeOut}));
-			
-			
-		
-			
-			timeline.appendMultiple([TweenMax.fromTo(quoteRows[0], 2000, {step: 0, ease: Linear.easeNone}, {step: 1, ease: Linear.easeNone}),
-															 TweenMax.fromTo(quoteRows[1], 2000, {step: 1, ease: Linear.easeNone}, {step: 0, ease: Linear.easeNone}),
-															 TweenMax.fromTo(quoteRows[2], 2000, {step: 0, ease: Linear.easeNone}, {step: 1, ease: Linear.easeNone}),
-															 TweenMax.fromTo(quoteRows[3], 2000, {step: 1, ease: Linear.easeNone}, {step: 0, ease: Linear.easeNone}),
-															 TweenMax.fromTo(quoteRows[4], 2000, {step: 0, ease: Linear.easeNone}, {step: 1, ease: Linear.easeNone})], 0, TweenAlign.START, 0);			
-			
-			
-			
-			
-			//timeline.append(TweenMax.fromTo(quoteRows[0], 1000, {step: 0, ease: Linear.easeNone}, {step: 1, ease: Linear.easeNone}));
 
 			
 			
+			// Quotation field
+			var quotationScrollDuration:int = (totalWidth + quoteRows[0].width)  / scrollVelocity;
+
+			timeline.appendMultiple([TweenMax.fromTo(quoteRows[0], quotationScrollDuration, {x: -quoteRows[0].width}, {x: totalWidth + 100, 	 ease: QuotationRow.easeOutIn}),
+															 TweenMax.fromTo(quoteRows[1], quotationScrollDuration, {x: totalWidth + 100},		{x: -quoteRows[1].width, ease: QuotationRow.easeOutIn}),
+															 TweenMax.fromTo(quoteRows[2], quotationScrollDuration, {x: -quoteRows[2].width}, {x: totalWidth + 100,		 ease: QuotationRow.easeOutIn}),
+															 TweenMax.fromTo(quoteRows[3], quotationScrollDuration, {x: totalWidth + 100},		{x: -quoteRows[3].width, ease: QuotationRow.easeOutIn}),
+															 TweenMax.fromTo(quoteRows[4], quotationScrollDuration, {x: -quoteRows[4].width}, {x: totalWidth + 100,		 ease: QuotationRow.easeOutIn})], 0, TweenAlign.START, 0);			
 			
-			
-			
+//			timeline.appendMultiple([TweenMax.fromTo(quoteRows[0], quotationScrollDuration, {step: 0}, {step: 1, ease: Linear.easeNone}),
+//															 TweenMax.fromTo(quoteRows[1], quotationScrollDuration, {step: 1}, {step: 0, ease: Linear.easeNone}),
+//															 TweenMax.fromTo(quoteRows[2], quotationScrollDuration, {step: 0}, {step: 1, ease: Linear.easeNone}),
+//															 TweenMax.fromTo(quoteRows[3], quotationScrollDuration, {step: 1}, {step: 0, ease: Linear.easeNone}),
+//															 TweenMax.fromTo(quoteRows[4], quotationScrollDuration, {step: 0}, {step: 1, ease: Linear.easeNone})], 0, TweenAlign.START, 0);			
+
+	
+
 			
 			// join banners in
 			timeline.appendMultiple([TweenMax.fromTo(joinBanner1, 100, {x: screens[0].x - joinBanner1.width, y: 125}, {x: "1372"}),
 															 TweenMax.fromTo(joinBanner2, 100, {x: screens[2].x - joinBanner2.width, y: 125}, {x: "1372"}),
 															 TweenMax.fromTo(joinBanner3, 100, {x: screens[4].x - joinBanner3.width, y: 125}, {x: "1372"})], 0, TweenAlign.START, 0);
-			
 			
 			
 			// join banners out, touch banners in

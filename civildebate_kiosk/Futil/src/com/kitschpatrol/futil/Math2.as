@@ -17,5 +17,17 @@ package com.kitschpatrol.futil {
 			return value;
 		}
 		
+		public static function randRange(low:int, high:int):int {
+			return Math.floor(Math.random() * (high - low + 1) + low);			
+		}			
+		
+		public static function degToRad(degrees:Number):Number {
+			return degrees * Math.PI / 180; 
+		}
+		
+		public static function radToDeg(radians:Number):Number {
+			return radians * 180 / Math.PI; 
+		}		
+		
 	}
 }

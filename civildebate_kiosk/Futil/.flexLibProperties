@@ -18,6 +18,10 @@
     <classEntry path="com.kitschpatrol.futil.LipsumUtil"/>
     <classEntry path="com.kitschpatrol.futil.easing.EaseMap"/>
     <classEntry path="com.kitschpatrol.futil.easing.Ease"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.ArrayUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.BitmapUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.GeomUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.NumberUtil"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
