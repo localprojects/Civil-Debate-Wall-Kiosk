@@ -3,6 +3,7 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
+	import com.greensock.data.TweenMaxVars;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.TextBlock;
 	import com.kitschpatrol.futil.constants.Alignment;
@@ -48,6 +49,8 @@ package com.civildebatewall.wallsaver.sequences {
 			for (var i:int = overlays.length - 1; i >= 0; i--) {
 				overlayTweens.push(TweenMax.fromTo(overlays[i], 90, {alpha: 0}, {alpha: 1, ease: Quad.easeIn}));
 			}
+			
+
 			
 			timelineIn.appendMultiple(overlayTweens, 0, TweenAlign.START, 20);
 			

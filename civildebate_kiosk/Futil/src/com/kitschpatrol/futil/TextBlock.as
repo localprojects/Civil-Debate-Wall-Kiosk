@@ -322,6 +322,8 @@ package com.kitschpatrol.futil {
 		private function updateSizeMap():void {
 			trace("Building size map");
 			
+			var startTime:int = getTimer();
+			
 			// check cache, note weird string index
 			var cacheKey:String = _textFont + _sizeFactorGlyphs;
 			
@@ -332,6 +334,9 @@ package com.kitschpatrol.futil {
 			}
 			else {
 				trace("Not cached! Generating: " + cacheKey);
+				
+				
+				
 				
 				// rebuilds size set maping pixel sizes to flash TextField sizes
 				// height is maximum character height (in pixels) for a given internal size
@@ -344,6 +349,9 @@ package com.kitschpatrol.futil {
 				var pixelHeight:int;
 				
 				TextBlock.sizeMaps[cacheKey]['sizeMap'][0] = new TextSize(); // zeros in the first position
+				
+				
+				
 				
 				trace("Measuring  " + _sizeFactorGlyphs);
 				// key: pixel size, value: field size
@@ -363,7 +371,7 @@ package com.kitschpatrol.futil {
 					// index the field height to the pixel height
 					bounds = glyphCanvas.getColorBoundsRect(0xffffff, 0xffffff, false);
 					pixelHeight = bounds.height;
-					// trace(bounds);
+					//trace(bounds);
 					
 					TextBlock.sizeMaps[cacheKey]['sizeMap'][pixelHeight] = new TextSize(pixelHeight, i, bounds.y, glyphCanvas.width - bounds.width - bounds.x, glyphCanvas.height - bounds.y - bounds.height, bounds.x);
 					
@@ -377,7 +385,7 @@ package com.kitschpatrol.futil {
 				// fill holes
 				for(i = 1; i < maxTextPixelSize; i++) {
 					if (TextBlock.sizeMaps[cacheKey]['sizeMap'][i] == null) {
-						trace("Hole at " + i);
+						//trace("Hole at " + i);
 						// TODO implement lerp for this, for now just use last
 						TextBlock.sizeMaps[cacheKey]['sizeMap'][i] = TextBlock.sizeMaps[cacheKey]['sizeMap'][i - 1]; 
 					}
@@ -393,8 +401,14 @@ package com.kitschpatrol.futil {
 			// make sure it sticks
 		 	lockUpdates = true;
 			textSizePixels = _textSizePixels;
-		 	lockUpdates = false;		
+		 	lockUpdates = false;
+			
+			trace(getTimer() - startTime + " ms to build offset map");
+			
 		}				
+		
+		
+		
 		
 		
 		// Utilities

@@ -98,6 +98,37 @@ package {
 		public static const samplePortrait4:Bitmap = getSamplePortrait4();
 		
 		
+		// Sliced up title
+		[Embed(source = '/assets/graphics/titleSlice_01.png')] private static const titleSlice_01Class:Class;
+		public static function getTitleSlice_01():Bitmap { return new titleSlice_01Class() as Bitmap; };
+		public static const titleSlice_01:Bitmap = getTitleSlice_01();
+		
+		[Embed(source = '/assets/graphics/titleSlice_02.png')] private static const titleSlice_02Class:Class;
+		public static function getTitleSlice_02():Bitmap { return new titleSlice_02Class() as Bitmap; };
+		public static const titleSlice_02:Bitmap = getTitleSlice_02();
+		
+		[Embed(source = '/assets/graphics/titleSlice_03.png')] private static const titleSlice_03Class:Class;
+		public static function getTitleSlice_03():Bitmap { return new titleSlice_03Class() as Bitmap; };
+		public static const titleSlice_03:Bitmap = getTitleSlice_03();
+		
+		[Embed(source = '/assets/graphics/titleSlice_04.png')] private static const titleSlice_04Class:Class;
+		public static function getTitleSlice_04():Bitmap { return new titleSlice_04Class() as Bitmap; };
+		public static const titleSlice_04:Bitmap = getTitleSlice_04();
+		
+		[Embed(source = '/assets/graphics/titleSlice_05.png')] private static const titleSlice_05Class:Class;
+		public static function getTitleSlice_05():Bitmap { return new titleSlice_05Class() as Bitmap; };
+		public static const titleSlice_05:Bitmap = getTitleSlice_05();
+		
+		[Embed(source = '/assets/graphics/titleSlice_06.png')] private static const titleSlice_06Class:Class;
+		public static function getTitleSlice_06():Bitmap { return new titleSlice_06Class() as Bitmap; };
+		public static const titleSlice_06:Bitmap = getTitleSlice_06();
+		
+		[Embed(source = '/assets/graphics/titleSlice_07.png')] private static const titleSlice_07Class:Class;
+		public static function getTitleSlice_07():Bitmap { return new titleSlice_07Class() as Bitmap; };
+		public static const titleSlice_07:Bitmap = getTitleSlice_07();
+		
+
+		
 		
 		
 		

@@ -1,4 +1,5 @@
 package com.kitschpatrol.futil {
+	import flash.display.DisplayObjectContainer;
 	
 	public class Utilities {
 		
@@ -8,7 +9,23 @@ package com.kitschpatrol.futil {
 		
 		
 		
+		// DO stuff
+		// https://github.com/mattupstate/AS3-Toolkit/blob/master/src/net/nobien/utils/DisplayObjectUtil.as		
 		
+		// PENDING PACKAGE CATEGORIZATION
+		
+		
+		
+		
+		// return children removed
+		public static function removeChildren(o:DisplayObjectContainer):uint {
+			var numRemoved:uint = 0;
+			while (o.numChildren > 0) {
+				o.removeChild(o.getChildAt(0));
+				numRemoved++;				
+			}						
+			return numRemoved;
+		}		
 		
 		
 		// via http://www.actionscript.org/forums/showthread.php3?t=158117

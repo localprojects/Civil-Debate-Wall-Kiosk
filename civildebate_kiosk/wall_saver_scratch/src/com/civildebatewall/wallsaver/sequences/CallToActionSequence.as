@@ -10,8 +10,6 @@ package com.civildebatewall.wallsaver.sequences {
 	import flash.display.Sprite;
 	
 	
-	
-	
 	public class CallToActionSequence extends Sprite implements ISequence {
 		
 		private var joinBanner1:MessageBanner;

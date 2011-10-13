@@ -10,7 +10,8 @@ package com.civildebatewall.wallsaver.sequences {
 	public class TitleSequence extends Sprite implements ISequence {
 		
 		private var scrollVelocity:Number;
-		private var title:Bitmap;		
+		private var title:Sprite;		
+		
 		
 		public function TitleSequence()	{
 			super();
@@ -19,10 +20,19 @@ package com.civildebatewall.wallsaver.sequences {
 			scrollVelocity = 20;
 			
 			// Build the title
-			title = Assets.title; // Just pass a reference (saves memory?)
-			title.y = 0; // TBD
+			title = new Sprite();
 			
-			addChild(title);			
+			// stitch together bitmaps, for some reason the single giant one creates graphics flitches
+			for (var i:int = 1; i <= 7; i++) { 
+				Assets["titleSlice_0" + i].x = title.width;
+				title.addChild(Assets["titleSlice_0" + i]);
+			}
+			
+
+			title.y = 123;
+			addChild(title);
+			
+			this.cacheAsBitmap = true;
 		}
 		
 		

@@ -9,6 +9,8 @@ package com.civildebatewall.wallsaver.elements {
 			// TODO Create a new interactive class that extends TextBlock?			
 			// TODO interaction
 			
+
+			
 			super({
 				text: "JOIN THE DEBATE. TOUCH TO BEGIN",
 				backgroundColor: Assets.COLOR_GRAY_85,

@@ -23,6 +23,7 @@
     <classEntry path="com.kitschpatrol.futil.utilitites.GeomUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.NumberUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.GraphicsUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.VectorUtil"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

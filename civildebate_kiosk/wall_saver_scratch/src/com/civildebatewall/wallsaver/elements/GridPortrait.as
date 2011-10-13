@@ -1,4 +1,4 @@
-package {
+package com.civildebatewall.wallsaver.elements {
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.BlockShape;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
@@ -72,7 +72,7 @@ package {
 //			
 			
 			
-			trace("step: " + _step + " value: " + value); 
+			//trace("step: " + _step + " value: " + value); 
 //			trace("step: " + step);
 //			trace("value: " + value);
 			
