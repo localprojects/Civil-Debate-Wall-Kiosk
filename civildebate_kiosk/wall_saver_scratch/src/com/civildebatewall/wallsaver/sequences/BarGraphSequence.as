@@ -167,8 +167,7 @@ package com.civildebatewall.wallsaver.sequences {
 				// TODO after above is solid				
 			}
 
-			
-			
+
 			return timelineIn;
 		}
 		
@@ -185,6 +184,7 @@ package com.civildebatewall.wallsaver.sequences {
 				// No label out
 				// TODO 
 			}
+			
 			
 			// Graphs out
 			var yesBarOutDuration:int = (yesBar.width - yesTail.width)  / scrollVelocity;			
