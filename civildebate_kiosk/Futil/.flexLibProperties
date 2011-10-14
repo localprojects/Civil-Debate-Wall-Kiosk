@@ -24,6 +24,7 @@
     <classEntry path="com.kitschpatrol.futil.utilitites.NumberUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.GraphicsUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.VectorUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.ColorUtil"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

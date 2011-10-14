@@ -2,15 +2,14 @@ package com.civildebatewall.wallsaver.elements {
 	import com.kitschpatrol.futil.TextBlock;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import flash.text.TextFormatAlign;
+	import com.civildebatewall.resources.Assets;
 	
 	public class JoinButton extends TextBlock {
 		public function JoinButton(params:Object=null) {
 			
 			// TODO Create a new interactive class that extends TextBlock?			
 			// TODO interaction
-			
 
-			
 			super({
 				text: "JOIN THE DEBATE. TOUCH TO BEGIN",
 				backgroundColor: Assets.COLOR_GRAY_85,

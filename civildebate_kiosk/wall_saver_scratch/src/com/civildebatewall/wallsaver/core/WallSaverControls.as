@@ -55,6 +55,7 @@ package com.civildebatewall.wallsaver.core {
 			new PushButton(stage, buttonPos += 105, 50, "Sequence A", onSequenceA);
 			new PushButton(stage, buttonPos += 105, 50, "Sequence B", onSequenceB);
 			new PushButton(stage, buttonPos += 105, 50, "Sequence C", onSequenceC);
+			new PushButton(stage, buttonPos += 105, 50, "Sequence All", onSequenceAll);			
 			new PushButton(stage, buttonPos += 105, 50, "End Sequence", endSequence);			
 			
 
@@ -94,6 +95,11 @@ package com.civildebatewall.wallsaver.core {
 			target.playSequenceC();
 			updateTimeSlider();	
 		}
+		
+		private function onSequenceAll(e:Event):void {
+			target.playSequenceAll();
+			updateTimeSlider();	
+		}		
 		
 		
 		private function endSequence(e:Event):void {

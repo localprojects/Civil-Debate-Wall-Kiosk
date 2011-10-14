@@ -6,16 +6,13 @@ package com.civildebatewall.wallsaver.sequences {
 	
 	import flash.display.Sprite;
 	
-	
-	
 	public class QuestionSequence extends Sprite implements ISequence {
 		
 		// TODO get this from back end
 		private var question:String = "Do you feel our public education provides our children with a thorough education these days?";
-		
-		
 		private var scrollVelocity:Number;
 		private var questionBanner:QuestionBanner;
+		
 		
 		public function QuestionSequence()	{
 			// settings
@@ -23,10 +20,13 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// build the question, text pending
 			questionBanner = new QuestionBanner(question);
-			questionBanner.y = 125;
+			questionBanner.y = 123;
 			
 			addChild(questionBanner);
+			
+			//this.cacheAsBitmap = true; // hurts performance?
 		}
+		
 		
 		public function getTimelineIn():TimelineMax	{
 			// No special "in"
@@ -37,6 +37,7 @@ package com.civildebatewall.wallsaver.sequences {
 			// No special "out"
 			return null;
 		}
+		
 		
 		public function getTimeline():TimelineMax {
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});

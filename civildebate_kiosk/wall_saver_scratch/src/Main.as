@@ -17,6 +17,7 @@ package {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.display.Screen;
+	import com.civildebatewall.resources.Assets;
 	
 	[SWF(width="5720", height="1920", frameRate="60")]	
 	public class Main extends Sprite {
@@ -54,11 +55,12 @@ package {
 			// MonsterDebugger.initialize(this);
 			// MonsterDebugger.trace(this, "Hello World!");
 			
-			
 			// Resize the window for development
 			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.nativeWindow.width = totalWidth / stageScaleFactor;
+			
+
 			stage.nativeWindow.height = (totalHeight / stageScaleFactor) + 20; // Compensate for window height?
 			stage.nativeWindow.x = Screen.mainScreen.visibleBounds.left;
 			stage.nativeWindow.y = Screen.mainScreen.visibleBounds.top;

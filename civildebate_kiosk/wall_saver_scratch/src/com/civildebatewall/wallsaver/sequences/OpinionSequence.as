@@ -62,7 +62,7 @@ package com.civildebatewall.wallsaver.sequences {
 			for (var i:int = 0; i < quoteRows.length; i++) {
 				var quoteLine:OpinionRow = new OpinionRow();
 				quoteLine.x = 0;
-				quoteLine.y = 120 + (i * (240 + 120));
+				quoteLine.y = 123 + (i * (247 + 109));
 				addChild(quoteLine);
 				
 				// alternating stances

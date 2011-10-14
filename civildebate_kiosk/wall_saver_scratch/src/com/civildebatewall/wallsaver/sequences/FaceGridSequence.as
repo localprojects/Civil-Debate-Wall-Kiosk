@@ -10,6 +10,7 @@ package com.civildebatewall.wallsaver.sequences {
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	import com.civildebatewall.wallsaver.elements.GridPortrait;
+	import com.civildebatewall.resources.Assets;
 	
 	
 	public class FaceGridSequence extends Sprite implements ISequence {

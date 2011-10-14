@@ -1,11 +1,10 @@
 package com.civildebatewall.wallsaver.sequences {
+	import com.civildebatewall.resources.Assets;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Linear;
 	
-	import flash.display.Bitmap;
 	import flash.display.Sprite;
-	
 	
 	public class TitleSequence extends Sprite implements ISequence {
 		
@@ -28,11 +27,9 @@ package com.civildebatewall.wallsaver.sequences {
 				title.addChild(Assets["titleSlice_0" + i]);
 			}
 			
-
 			title.y = 123;
 			addChild(title);
-			
-			this.cacheAsBitmap = true;
+			// this.cacheAsBitmap = true; // hurts performance?
 		}
 		
 		

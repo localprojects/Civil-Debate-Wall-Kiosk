@@ -9,6 +9,7 @@ package com.civildebatewall.wallsaver.sequences {
 	import flash.display.Sprite;
 	import flash.filters.ShaderFilter;
 	import flash.geom.Point;
+	import com.civildebatewall.resources.Assets;
 	
 	public class BarGraphSequence extends Sprite implements ISequence {
 		
