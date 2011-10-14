@@ -8,6 +8,7 @@ package com.civildebatewall.wallsaver.sequences {
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import com.civildebatewall.resources.Assets;
 	
 	
 	public class CallToActionSequence extends Sprite implements ISequence {

@@ -9,6 +9,7 @@ package com.civildebatewall.wallsaver.elements {
 	
 	import flashx.textLayout.formats.BackgroundColor;
 	import flashx.textLayout.formats.TextAlign;
+	import com.civildebatewall.resources.Assets;
 	
 	
 	public class GraphLabel extends Sprite {

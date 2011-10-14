@@ -7,6 +7,7 @@ package com.civildebatewall.wallsaver.elements {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.filters.ColorMatrixFilter;
+	import com.civildebatewall.resources.Assets;
 	
 	
 	public class GridPortrait extends Sprite {

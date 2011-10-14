@@ -172,7 +172,6 @@ package com.civildebatewall
 		
 		[Embed(source='/assets/fonts/fonts.swf', symbol='RockwellBoldItalic')] public static const FontBoldItalic:Class;
 		public static const FONT_BOLD_ITALIC:String = 'Rockwell Std'; // gets bolded and italicized in textfield?		
-						
 
 		
 		// Colors
