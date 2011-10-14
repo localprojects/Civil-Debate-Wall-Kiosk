@@ -56,8 +56,8 @@ package com.civildebatewall.wallsaver.sequences {
 			for (var col:int = 0; col < gridCols; col++) {
 				portraits[col] = [];
 				
-				var screen:Rectangle = CivilDebateWallSaver.screens[Math.floor(col / (gridCols / CivilDebateWallSaver.screens.length))];
-				var screenCol:int = col % (gridCols / CivilDebateWallSaver.screens.length);
+				var screen:Rectangle = Main.screens[Math.floor(col / (gridCols / Main.screens.length))];
+				var screenCol:int = col % (gridCols / Main.screens.length);
 				var arrowHeight:int = Math2.clamp(centerArrowHeight + ((borderColIndex - col) * 2), 0, gridRows); // find out how high the arrow is in this column
 				
 				for (var row:int = 0; row < gridRows; row++) {

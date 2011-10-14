@@ -23,7 +23,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// build the banners and their masks (TODO use blit thing?)
 			joinBanner1= new MessageBanner(Assets.getJoinTheDebateText(), MessageBanner.BLUE);
-			var screen1Mask:Shape = GraphicsUtil.shapeFromRect(CivilDebateWallSaver.screens[0]);
+			var screen1Mask:Shape = GraphicsUtil.shapeFromRect(Main.screens[0]);
 			
 			addChild(joinBanner1);
 			addChild(screen1Mask);
@@ -31,7 +31,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			
 			touchBanner1 = new MessageBanner(Assets.getTouchToBeginText(), MessageBanner.ORANGE);
-			var screen2Mask:Shape = GraphicsUtil.shapeFromRect(CivilDebateWallSaver.screens[1]);
+			var screen2Mask:Shape = GraphicsUtil.shapeFromRect(Main.screens[1]);
 			
 			addChild(touchBanner1);
 			addChild(screen2Mask);
@@ -39,7 +39,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			
 			joinBanner2 = new MessageBanner(Assets.getJoinTheDebateText(), MessageBanner.ORANGE);
-			var screen3Mask:Shape = GraphicsUtil.shapeFromRect(CivilDebateWallSaver.screens[2]);
+			var screen3Mask:Shape = GraphicsUtil.shapeFromRect(Main.screens[2]);
 			
 			addChild(joinBanner2);
 			addChild(screen3Mask);
@@ -47,7 +47,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			
 			touchBanner2 = new MessageBanner(Assets.getTouchToBeginText(), MessageBanner.BLUE);			
-			var screen4Mask:Shape = GraphicsUtil.shapeFromRect(CivilDebateWallSaver.screens[3]);
+			var screen4Mask:Shape = GraphicsUtil.shapeFromRect(Main.screens[3]);
 			
 			addChild(touchBanner2);
 			addChild(screen4Mask);
@@ -55,7 +55,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			
 			joinBanner3 = new MessageBanner(Assets.getJoinTheDebateText(), MessageBanner.BLUE);
-			var screen5Mask:Shape = GraphicsUtil.shapeFromRect(CivilDebateWallSaver.screens[4]);
+			var screen5Mask:Shape = GraphicsUtil.shapeFromRect(Main.screens[4]);
 			
 			addChild(joinBanner3);
 			addChild(screen5Mask);
@@ -75,26 +75,26 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// join banners in
 			timeline.appendMultiple([
-				TweenMax.fromTo(joinBanner1, 120, {x: CivilDebateWallSaver.screens[0].x - joinBanner1.width}, {x: "1372", ease: Expo.easeOut, roundProps: ["x"]}),
-				TweenMax.fromTo(joinBanner2, 120, {x: CivilDebateWallSaver.screens[2].x - joinBanner2.width}, {x: "1372", ease: Expo.easeOut, roundProps: ["x"]}),
-				TweenMax.fromTo(joinBanner3, 120, {x: CivilDebateWallSaver.screens[4].x - joinBanner3.width}, {x: "1372", ease: Expo.easeOut, roundProps: ["x"]})
+				TweenMax.fromTo(joinBanner1, 120, {x: Main.screens[0].x - joinBanner1.width}, {x: "1372", ease: Expo.easeOut, roundProps: ["x"]}),
+				TweenMax.fromTo(joinBanner2, 120, {x: Main.screens[2].x - joinBanner2.width}, {x: "1372", ease: Expo.easeOut, roundProps: ["x"]}),
+				TweenMax.fromTo(joinBanner3, 120, {x: Main.screens[4].x - joinBanner3.width}, {x: "1372", ease: Expo.easeOut, roundProps: ["x"]})
 			], 0, TweenAlign.START, 0);
 			
 			
 			// join banners out, touch banners in
 			timeline.appendMultiple([
-				TweenMax.to(joinBanner1, 120, {x: CivilDebateWallSaver.screens[0].x + CivilDebateWallSaver.screens[0].width, ease: Expo.easeInOut, roundProps: ["x"]}),
-				TweenMax.fromTo(touchBanner1, 120, {x: CivilDebateWallSaver.screens[1].x - touchBanner1.width}, {x: "1372", ease: Expo.easeInOut, roundProps: ["x"]}),				
-				TweenMax.to(joinBanner2, 120, {x: CivilDebateWallSaver.screens[2].x + CivilDebateWallSaver.screens[2].width, ease: Expo.easeInOut, roundProps: ["x"]}),
-				TweenMax.fromTo(touchBanner2, 120, {x: CivilDebateWallSaver.screens[3].x - touchBanner1.width}, {x: "1372", ease: Expo.easeInOut, roundProps: ["x"]}),															 
-				TweenMax.to(joinBanner3, 120, {x: CivilDebateWallSaver.screens[4].x + CivilDebateWallSaver.screens[4].width, ease: Expo.easeInOut, roundProps: ["x"]})
+				TweenMax.to(joinBanner1, 120, {x: Main.screens[0].x + Main.screens[0].width, ease: Expo.easeInOut, roundProps: ["x"]}),
+				TweenMax.fromTo(touchBanner1, 120, {x: Main.screens[1].x - touchBanner1.width}, {x: "1372", ease: Expo.easeInOut, roundProps: ["x"]}),				
+				TweenMax.to(joinBanner2, 120, {x: Main.screens[2].x + Main.screens[2].width, ease: Expo.easeInOut, roundProps: ["x"]}),
+				TweenMax.fromTo(touchBanner2, 120, {x: Main.screens[3].x - touchBanner1.width}, {x: "1372", ease: Expo.easeInOut, roundProps: ["x"]}),															 
+				TweenMax.to(joinBanner3, 120, {x: Main.screens[4].x + Main.screens[4].width, ease: Expo.easeInOut, roundProps: ["x"]})
 			], 150, TweenAlign.START, 0);			
 			
 			
 			// touch banners out
 			timeline.appendMultiple([
-				TweenMax.to(touchBanner1, 120, {x: CivilDebateWallSaver.screens[1].x + CivilDebateWallSaver.screens[1].width, ease: Expo.easeIn, roundProps: ["x"]}),
-				TweenMax.to(touchBanner2, 120, {x: CivilDebateWallSaver.screens[3].x + CivilDebateWallSaver.screens[3].width, ease: Expo.easeIn, roundProps: ["x"]}),
+				TweenMax.to(touchBanner1, 120, {x: Main.screens[1].x + Main.screens[1].width, ease: Expo.easeIn, roundProps: ["x"]}),
+				TweenMax.to(touchBanner2, 120, {x: Main.screens[3].x + Main.screens[3].width, ease: Expo.easeIn, roundProps: ["x"]}),
 			], 150, TweenAlign.START, 0);			
 			
 			return timeline;

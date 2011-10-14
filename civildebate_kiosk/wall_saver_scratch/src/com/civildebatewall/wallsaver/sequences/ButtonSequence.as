@@ -24,14 +24,14 @@ package com.civildebatewall.wallsaver.sequences {
 			// Build objects
 		
 			// Draw the white overlays
-			overlays = new Vector.<Shape>(CivilDebateWallSaver.screens.length);
-			buttons = new Vector.<TextBlock>(CivilDebateWallSaver.screens.length);
+			overlays = new Vector.<Shape>(Main.screens.length);
+			buttons = new Vector.<TextBlock>(Main.screens.length);
 			
-			for (var i:int = 0; i < CivilDebateWallSaver.screens.length; i++) {
-				overlays[i] = GraphicsUtil.shapeFromRect(CivilDebateWallSaver.screens[i], 0xffffff);
+			for (var i:int = 0; i < Main.screens.length; i++) {
+				overlays[i] = GraphicsUtil.shapeFromRect(Main.screens[i], 0xffffff);
 				
 				buttons[i] = new JoinButton();
-				buttons[i].x = CivilDebateWallSaver.screens[i].right; // issues with inconsistent initial X? check futil?
+				buttons[i].x = Main.screens[i].right - 30; // issues with inconsistent initial X? check futil?
 			}
 		
 			
@@ -57,7 +57,7 @@ package com.civildebatewall.wallsaver.sequences {
 			// Buttons
 			var buttonTweens:Array = [];
 			for (var j:int = 0; j < buttons.length; j++) {
-				buttonTweens.push(TweenMax.fromTo(buttons[j], 60, {y: CivilDebateWallSaver.totalHeight + buttons[j].height}, {y: CivilDebateWallSaver.totalHeight - 30, ease: Quint.easeOut, roundProps: ["y"]}));
+				buttonTweens.push(TweenMax.fromTo(buttons[j], 60, {y: Main.totalHeight + buttons[j].height}, {y: Main.totalHeight - 30, ease: Quint.easeOut, roundProps: ["y"]}));
 			}
 			
 			timelineIn.appendMultiple(buttonTweens, -25, TweenAlign.START, 10);

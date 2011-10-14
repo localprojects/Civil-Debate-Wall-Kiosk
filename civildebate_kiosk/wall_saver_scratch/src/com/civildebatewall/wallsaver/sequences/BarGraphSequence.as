@@ -47,11 +47,11 @@ package com.civildebatewall.wallsaver.sequences {
 			var totalResponses:int = yesResponses + noResponses;
 			
 			// raw width
-			yesWidth = Math.round((yesResponses / totalResponses) * CivilDebateWallSaver.totalWidth);
-			noWidth = Math.round((noResponses / totalResponses) * CivilDebateWallSaver.totalWidth);			
+			yesWidth = Math.round((yesResponses / totalResponses) * Main.totalWidth);
+			noWidth = Math.round((noResponses / totalResponses) * Main.totalWidth);			
 			
 			// first, find where the division between the graphs falls
-			var borderIndex:int = CivilDebateWallSaver.pointIsNearScreen(new Point(yesWidth, CivilDebateWallSaver.totalHeight / 2));
+			var borderIndex:int = Main.pointIsNearScreen(new Point(yesWidth, Main.totalHeight / 2));
 			var labelIndex:int;
 			
 			
@@ -69,8 +69,8 @@ package com.civildebatewall.wallsaver.sequences {
 			noGraphLabel = new GraphLabel("no");
 			
 			// Set text position
-			yesGraphLabel.x = CivilDebateWallSaver.screens[labelIndex].x + 189;
-			noGraphLabel.x = CivilDebateWallSaver.screens[labelIndex].x + 189;
+			yesGraphLabel.x = Main.screens[labelIndex].x + 189;
+			noGraphLabel.x = Main.screens[labelIndex].x + 189;
 			
 			addChild(yesGraphLabel);
 			addChild(noGraphLabel);
@@ -142,8 +142,8 @@ package com.civildebatewall.wallsaver.sequences {
 			var yesBarScrollDuration:int = (yesBar.width - yesTail.width)  / scrollVelocity;			
 			var yesBarTweenIn:TweenMax = TweenMax.fromTo(yesBar, yesBarScrollDuration, {x: -yesBar.width}, {x: -yesTail.width});
 			
-			var noBarScrollDuration:int = (CivilDebateWallSaver.totalWidth - noWidth - noHead.width)  / scrollVelocity;						
-			var noBarTweenIn:TweenMax = TweenMax.fromTo(noBar, noBarScrollDuration, {x: CivilDebateWallSaver.totalWidth}, {x: CivilDebateWallSaver.totalWidth - noWidth - noHead.width});			
+			var noBarScrollDuration:int = (Main.totalWidth - noWidth - noHead.width)  / scrollVelocity;						
+			var noBarTweenIn:TweenMax = TweenMax.fromTo(noBar, noBarScrollDuration, {x: Main.totalWidth}, {x: Main.totalWidth - noWidth - noHead.width});			
 
 			// Smalles bar scrolls in first
 			if (noResponses <= yesResponses) {
@@ -156,7 +156,7 @@ package com.civildebatewall.wallsaver.sequences {
 				
 				// No label out, yes label in
 				timelineIn.appendMultiple([
-					TweenMax.to(noGraphLabel, 100, {y: CivilDebateWallSaver.screenHeight}),
+					TweenMax.to(noGraphLabel, 100, {y: Main.screenHeight}),
 					TweenMax.fromTo(yesGraphLabel, 100, {y: -yesGraphLabel.height, count: 0}, {y: 633, count: yesResponses})
 				], 300, TweenAlign.START, 0);
 				
@@ -188,11 +188,11 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// Graphs out
 			var yesBarOutDuration:int = (yesBar.width - yesTail.width)  / scrollVelocity;			
-			var noBarOutDuration:int = (CivilDebateWallSaver.totalWidth - noWidth - noHead.width)  / scrollVelocity;
+			var noBarOutDuration:int = (Main.totalWidth - noWidth - noHead.width)  / scrollVelocity;
 			
 			timelineOut.appendMultiple([
 				TweenMax.to(noBar, 400, {x: -noBar.width}),
-				TweenMax.to(yesBar, 400, {x: CivilDebateWallSaver.totalWidth})
+				TweenMax.to(yesBar, 400, {x: Main.totalWidth})
 			], 0, TweenAlign.START, 100);			
 			
 

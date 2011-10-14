@@ -128,24 +128,24 @@ package com.civildebatewall.wallsaver.sequences {
 		public function getTimeline():TimelineMax	{
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
 			// Quotation field
-			var quotationScrollDuration:int = (CivilDebateWallSaver.totalWidth + quoteRows[0].width)  / scrollVelocity;
+			var quotationScrollDuration:int = (Main.totalWidth + quoteRows[0].width)  / scrollVelocity;
 			
 			timeline.appendMultiple([
 				TweenMax.fromTo(quoteRows[0], quotationScrollDuration,
 					{x: -quoteRows[0].width},
-					{x: CivilDebateWallSaver.totalWidth + 100, 	 ease: OpinionSequence.easeOutIn, roundProps: ["x"]}),
+					{x: Main.totalWidth + 100, 	 ease: OpinionSequence.easeOutIn, roundProps: ["x"]}),
 				TweenMax.fromTo(quoteRows[1], quotationScrollDuration,
-					{x: CivilDebateWallSaver.totalWidth + 100},
+					{x: Main.totalWidth + 100},
 					{x: -quoteRows[1].width, ease: OpinionSequence.easeOutIn, roundProps: ["x"]}),
 				TweenMax.fromTo(quoteRows[2], quotationScrollDuration,
 					{x: -quoteRows[2].width},
-					{x: CivilDebateWallSaver.totalWidth + 100,ease: OpinionSequence.easeOutIn, roundProps: ["x"]}),
+					{x: Main.totalWidth + 100,ease: OpinionSequence.easeOutIn, roundProps: ["x"]}),
 				TweenMax.fromTo(quoteRows[3], quotationScrollDuration,
-					{x: CivilDebateWallSaver.totalWidth + 100},
+					{x: Main.totalWidth + 100},
 					{x: -quoteRows[3].width, ease: OpinionSequence.easeOutIn, roundProps: ["x"]}),
 				TweenMax.fromTo(quoteRows[4], quotationScrollDuration,
 					{x: -quoteRows[4].width},
-					{x: CivilDebateWallSaver.totalWidth + 100, ease: OpinionSequence.easeOutIn, roundProps: ["x"]})
+					{x: Main.totalWidth + 100, ease: OpinionSequence.easeOutIn, roundProps: ["x"]})
 			], 0, TweenAlign.START, 0);			
 			
 			return timeline;
