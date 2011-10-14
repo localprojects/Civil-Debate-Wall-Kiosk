@@ -41,8 +41,8 @@ package com.civildebatewall.wallsaver.sequences {
 		public function getTimeline():TimelineMax {
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
 			
-			var duration:int = (CivilDebateWallSaver.totalWidth + questionBanner.width)  / scrollVelocity;
-			timeline.append(TweenMax.fromTo(questionBanner, duration, {x: CivilDebateWallSaver.totalWidth}, {x: -questionBanner.width, ease: Linear.easeNone, roundProps: ["x"]}));
+			var duration:int = (Main.totalWidth + questionBanner.width)  / scrollVelocity;
+			timeline.append(TweenMax.fromTo(questionBanner, duration, {x: Main.totalWidth}, {x: -questionBanner.width, ease: Linear.easeNone, roundProps: ["x"]}));
 
 			return timeline;
 		}		
