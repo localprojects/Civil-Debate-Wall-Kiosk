@@ -1,4 +1,5 @@
 package com.civildebatewall.wallsaver.sequences {
+	import com.civildebatewall.resources.Assets;
 	import com.civildebatewall.wallsaver.elements.MessageBanner;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
@@ -8,7 +9,6 @@ package com.civildebatewall.wallsaver.sequences {
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
-	import com.civildebatewall.resources.Assets;
 	
 	
 	public class CallToActionSequence extends Sprite implements ISequence {
@@ -22,6 +22,8 @@ package com.civildebatewall.wallsaver.sequences {
 		public function CallToActionSequence() {
 			super();
 			
+			var yOffset:Number = 123;
+			
 			// build the banners and their masks (TODO use blit thing?)
 			joinBanner1= new MessageBanner(Assets.getJoinTheDebateText(), MessageBanner.BLUE);
 			var screen1Mask:Shape = GraphicsUtil.shapeFromRect(Main.screens[0]);
@@ -29,7 +31,7 @@ package com.civildebatewall.wallsaver.sequences {
 			addChild(joinBanner1);
 			addChild(screen1Mask);
 			joinBanner1.mask = screen1Mask;
-			
+			joinBanner1.y = yOffset;
 			
 			touchBanner1 = new MessageBanner(Assets.getTouchToBeginText(), MessageBanner.ORANGE);
 			var screen2Mask:Shape = GraphicsUtil.shapeFromRect(Main.screens[1]);
@@ -37,7 +39,7 @@ package com.civildebatewall.wallsaver.sequences {
 			addChild(touchBanner1);
 			addChild(screen2Mask);
 			touchBanner1.mask = screen2Mask;
-			
+			touchBanner1.y = yOffset;			
 			
 			joinBanner2 = new MessageBanner(Assets.getJoinTheDebateText(), MessageBanner.ORANGE);
 			var screen3Mask:Shape = GraphicsUtil.shapeFromRect(Main.screens[2]);
@@ -45,7 +47,7 @@ package com.civildebatewall.wallsaver.sequences {
 			addChild(joinBanner2);
 			addChild(screen3Mask);
 			joinBanner2.mask = screen3Mask;
-			
+			joinBanner2.y = yOffset;	
 			
 			touchBanner2 = new MessageBanner(Assets.getTouchToBeginText(), MessageBanner.BLUE);			
 			var screen4Mask:Shape = GraphicsUtil.shapeFromRect(Main.screens[3]);
@@ -53,7 +55,7 @@ package com.civildebatewall.wallsaver.sequences {
 			addChild(touchBanner2);
 			addChild(screen4Mask);
 			touchBanner2.mask = screen4Mask;			
-			
+			touchBanner2.y = yOffset;
 			
 			joinBanner3 = new MessageBanner(Assets.getJoinTheDebateText(), MessageBanner.BLUE);
 			var screen5Mask:Shape = GraphicsUtil.shapeFromRect(Main.screens[4]);
@@ -61,6 +63,7 @@ package com.civildebatewall.wallsaver.sequences {
 			addChild(joinBanner3);
 			addChild(screen5Mask);
 			joinBanner3.mask = screen5Mask;
+			joinBanner3.y = yOffset;			
 		}
 		
 		public function getTimelineIn():TimelineMax	{
@@ -79,7 +82,7 @@ package com.civildebatewall.wallsaver.sequences {
 				TweenMax.fromTo(joinBanner1, 120, {x: Main.screens[0].x - joinBanner1.width}, {x: "1372", ease: Expo.easeOut, roundProps: ["x"]}),
 				TweenMax.fromTo(joinBanner2, 120, {x: Main.screens[2].x - joinBanner2.width}, {x: "1372", ease: Expo.easeOut, roundProps: ["x"]}),
 				TweenMax.fromTo(joinBanner3, 120, {x: Main.screens[4].x - joinBanner3.width}, {x: "1372", ease: Expo.easeOut, roundProps: ["x"]})
-			], 0, TweenAlign.START, 0);
+			], 50, TweenAlign.START, 0);
 			
 			
 			// join banners out, touch banners in

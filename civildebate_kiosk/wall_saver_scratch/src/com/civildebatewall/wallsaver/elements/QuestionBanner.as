@@ -26,7 +26,6 @@ package com.civildebatewall.wallsaver.elements {
 																				 textSizePixels: 274,
 																				 leading: 196,
 																		 		 textColor: 0xffffff,
-																		 		 minWidth: 500,
 																				 alignmentPoint: Alignment.CENTER,
 																		 		 height: questionHead.height,
 																				 growthMode: TextBlock.MAXIMIZE_HEIGHT,

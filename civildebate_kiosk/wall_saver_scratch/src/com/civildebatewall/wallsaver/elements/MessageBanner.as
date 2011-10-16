@@ -41,7 +41,7 @@ package com.civildebatewall.wallsaver.elements {
 			addChild(textBitmap);
 			
 			head.x = width;
-			addChild(head);			
+			addChild(head);		
 		}
 	}
 }
