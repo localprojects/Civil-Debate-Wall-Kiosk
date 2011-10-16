@@ -1,95 +1,121 @@
 package com.civildebatewall.wallsaver.elements {
-	import com.kitschpatrol.futil.Math2;
-	
-	import fl.motion.BezierSegment;
+
+	import com.kitschpatrol.futil.easing.EaseMap;
 	
 	import flash.display.Sprite;
-	import flash.geom.Point;
 	
-	
-	
-	public class OpinionRow extends Sprite {
-		
-		// TODO Move the data
-		
-		public var lastStance:String;
-		private var _step:Number;
 
-		// where the in / out points are in the graph
-		private var graphMidStart:Number = 0.2;
-		private var graphMidEnd:Number = 0.8;
+	public class OpinionRow extends Sprite {
+				
+		public var lastStance:String;
+		private var _frame:int;
+
+		public var xPositions:Vector.<int>;
+		public var totalFrames:int;
+		public var introFrameCount:int;
+		public var outroFrameCount:int;
 		
-		// how long they last as a percentage of the animation
-		private var inDuration:Number = 0.4;
-		private var outDuration:Number = 0.4;		
-		
-		
+		// pop these out?
+		private var easeIntroDuration:Number; // frames of easing between intro velocity and middle velocity
+		private var easeOutroDuration:Number; // frames of easing between middle velocity and outro velocity		
+				
+
 		public function OpinionRow() {
 			super();
-			step = 0; 
+			_frame = 0; 
+			
+			// pop these out!
+			easeIntroDuration = 200;
+			easeOutroDuration = 200;
 		}
 		
 		
-		public function get step():Number { return _step; }
-		public function set step(n:Number):void {
-			_step = n;
+		// Create X Position lookup table.
+		// Mix of velocity and duration bound animation makes this unweildy to do directly in TweenMax.
+		// Technically the right custom easing curve could do it, but that proved too imprecise.		
+		public function calculateFrames(vxIntro:Number, vxMiddle:Number, vxOutro:Number, easeIntroFrames:int, easeOutroFrames:int, targetFrameCount:int = -1):void {			
+			introFrameCount = Main.totalWidth / vxIntro;
+			outroFrameCount = Main.totalWidth / vxOutro;			
 			
-//			if (n == 0) {
-//				// init
-//				this.x = -this.width;
-//			}
-//			else if (n == 1) {
-//				// end 
-//				this.x = 5720;
-//			}			
-//			else if (n <= inDuration) {
-//				// lerp in
-//				//var introPosition:Number = Math2.map(n, 0, inDuration, 0, graphMidStart); // allows time control over intro and outro
-//				//this.x = Math2.map(vectorLerp(introPosition, map), 0, graphMidStart, -this.width, -this.width + 5720); // TODO pass in total width
-//				
-//				var introPosition:Number = Math2.map(n, 0, inDuration, 0, graphMidStart); // allows time control over intro and outro
-//				this.x = Math2.map(vectorLerp(introPosition, map), 0, 1, -this.width, 5720); // TODO pass in total width				
-//			}
-//			else if (n >= (1 - outDuration)) {
-//				// lerp out
-//				//var outroPosition:Number = Math2.map(n, 1 - outDuration, 1, graphMidEnd, 1); // allows time control over intro and outro
-//				//this.x = Math2.map(vectorLerp(outroPosition, map), graphMidEnd, 1, 0, 5720); // TODO pass in total width
-//				
-//				var outroPosition:Number = Math2.map(n, 1 - outDuration, 1, graphMidEnd, 1); // allows time control over intro and outro
-//				this.x = Math2.map(vectorLerp(outroPosition, map), 0, 1, -this.width, 5720); // TODO pass in total width				
-//			}
-//			else {
-//				// middle
-//				var middlePosition:Number = Math2.map(n, inDuration, 1 - outDuration, graphMidStart, graphMidEnd);
-//				this.x = Math2.map(vectorLerp(middlePosition, map), 0, 1, -this.width, 5720); // TODO pass in total width				
-//				//this.x = Math2.map(n, inDuration, 1 - outDuration, -this.width + 5720, 0); // TODO pass in total width				
-//			}
+			// First, calculate the frames for the longest row
+			// Left to right
+			var introFrames:Vector.<int> = new Vector.<int>(0);
+			var middleFrames:Vector.<int> = new Vector.<int>(0);
+			var outroFrames:Vector.<int> = new Vector.<int>(0);
+			
 
+			// Recalculate VX if required (to match total travel time of the longest row)
+			if (targetFrameCount > -1) {
+				//trace(vxMiddle);
+				vxMiddle -= 0.01; // smaller is more accurate... but a performance sink
+			}
 			
-			if (n == 0) {
-				// init
-				this.x = -this.width;
+			// Calculate intro frames, from the left
+			var tempX:Number;
+			
+			tempX = -this.width - 25; // a little off-screen padding
+			while (introFrames.length < (introFrameCount - easeIntroFrames)) {
+				introFrames.push(tempX);
+				tempX += vxIntro;
 			}
-			else if (n == 1) {
-				// end 
-				this.x = 5720;
+			
+			// Ease intro
+			while (introFrames.length < introFrameCount) {
+				introFrames.push(tempX);
+				tempX += EaseMap.easeInOutExpo(introFrames.length, introFrameCount - easeIntroFrames, introFrameCount, vxIntro, vxMiddle);
 			}
-			else {
-				// middle
-				//this.x = Math2.map(vectorLerp(n, map), 0, 1, -this.width, 5720); // TODO pass in total width				
-			}			
-	
+						
+			
+			// Calculate outro frames, from the right
+			tempX = Main.totalWidth + 25; // a little off-screen padding
+			while (outroFrames.length < (outroFrameCount - easeOutroFrames)) {
+				outroFrames.push(tempX);
+				tempX -= vxOutro;
+			}
+			
+			// Ease outro, <= since tempX is going to change below
+			while (outroFrames.length < outroFrameCount) {
+				tempX -= EaseMap.easeInOutExpo(outroFrames.length, outroFrameCount - easeOutroFrames, outroFrameCount, vxOutro, vxMiddle);				
+				outroFrames.push(tempX);
+			}	
+						
+			
+			// now flip the outro, so the easing comes first
+			outroFrames = outroFrames.reverse();
+			
+			// And fill in the middle, needs to move from the last frame in the intro to the first frame in the outro
+			tempX = introFrames[introFrames.length - 1];
+			
+			while (tempX < outroFrames[0]) {
+				tempX += vxMiddle;
+				middleFrames.push(tempX);
+			}
+			middleFrames.pop();
+			
+			// Glue frame sets together
+			this.xPositions = introFrames.concat(middleFrames).concat(outroFrames);
+			
+			this.totalFrames = this.xPositions.length - 1;
+			
+			// If we weren't the longest line, we'll need to adjust our middle velocity until
+			// the total frame count roughtly matches the longest
+			if (targetFrameCount > -1) {
+				if (totalFrames < targetFrameCount) {
+					// recurse! note vxMiddle is incremented at top
+					calculateFrames(vxIntro, vxMiddle, vxOutro, easeIntroFrames, easeOutroFrames, targetFrameCount)
+				}
+			}
 			
 		}
 		
-
+		// Set the frame... tweened with TweenMax in OpinionSequence.
+		public function get frame():Number { return _frame; }
+		public function set frame(n:Number):void {
+			_frame = Math.round(n); // faster way?
+			this.x = xPositions[_frame];
+			//trace("Frame: " + _frame + "\tPosition: " + this.xPositions[_frame]);
+		}
 		
-
-		
-		
-		
-		
-
 
 	}
 }

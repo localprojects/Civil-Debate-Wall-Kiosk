@@ -1,16 +1,20 @@
 package com.civildebatewall.wallsaver.sequences {
+	import com.adobe.utils.StringUtil;
 	import com.civildebatewall.wallsaver.elements.OpinionBanner;
 	import com.civildebatewall.wallsaver.elements.OpinionRow;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
+	import com.greensock.easing.Linear;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.Utilities;
+	import com.kitschpatrol.futil.easing.EaseMap;
 	
 	import fl.motion.BezierSegment;
 	
 	import flash.display.Sprite;
 	import flash.geom.Point;
+	import flash.utils.getTimer;
 	
 	// Scrolling Quotes
 	public class OpinionSequence extends Sprite implements ISequence {
@@ -28,9 +32,8 @@ package com.civildebatewall.wallsaver.sequences {
 		public function OpinionSequence()	{
 			super();
 			
-			
 			while (quotes.length < quotesDesired) {
-				var dummyQuote:String = Utilities.dummyText(Math2.randRange(20, 140));
+				var dummyQuote:String = StringUtil.trim(Utilities.dummyText(Math2.randRange(20, 140)));
 				
 				if (Math.random() > 0.5)
 					quotes.push([dummyQuote,  "yes"]);
@@ -111,9 +114,49 @@ package com.civildebatewall.wallsaver.sequences {
 				//quoteRows[shortestRowIndex].lastStance = tempQuotationBanner.stance;
 			}
 			
-						
+			
+			
+			// Contruction done, now pre-calculate animation
+
+			
+			// Find longest row 
+			var longestRow:OpinionRow = quoteRows[0];
+			for (var l:int = 1; l < quoteRows.length; l++) {			
+				if (quoteRows[l].width > longestRow.width) longestRow = quoteRows[l];
+			}			
+			
+			trace("Longest row is " + longestRow.width);
+			
+			
+			// Animation configuration (tweak these, and these alone!) // TODO move to constructor
+			var vxIntro:Number = 25;
+			var vxMiddle:Number = 5; // but only for the longest row, all others are slower!
+			var vxOutro:Number = 25;
+			var easeIntroFrames:int = 300;
+			var easeOutroFrames:int = 300;
+			
+			
+			var start:int = getTimer();
+			
+			// First, calculate the longest row, since it determines the middle velocity of the rest
+			longestRow.calculateFrames(vxIntro, vxMiddle, vxOutro, easeIntroFrames, easeOutroFrames);
+			
+			// Now calculate the rest, based on the longest row's total duration
+			for (var k:int = 0; k < quoteRows.length; k++) {			
+				if (quoteRows[k] != longestRow) {
+					//vxMiddle = (quoteRows[k].width) / (longestRow.totalFrames - longestRow.introFrameCount - longestRow.outroFrameCount);
+					// TODO a better guess at the vxMiddle before iterating towards it?
+					quoteRows[k].calculateFrames(vxIntro, vxMiddle, vxOutro, easeIntroFrames, easeOutroFrames, longestRow.totalFrames);
+				}
+			}
+			
+			trace("calculated opinion rows in " + (getTimer() - start) + "ms");
+			for each(var row:OpinionRow in quoteRows) {
+				trace("Frames: " + row.totalFrames);
+			}
 			
 		}
+		
 		
 		public function getTimelineIn():TimelineMax	{
 			return null;
@@ -128,50 +171,28 @@ package com.civildebatewall.wallsaver.sequences {
 		public function getTimeline():TimelineMax	{
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
 			// Quotation field
-			var quotationScrollDuration:int = (Main.totalWidth + quoteRows[0].width)  / scrollVelocity;
 			
 			timeline.appendMultiple([
-				TweenMax.fromTo(quoteRows[0], quotationScrollDuration,
-					{x: -quoteRows[0].width},
-					{x: Main.totalWidth + 100, 	 ease: OpinionSequence.easeOutIn, roundProps: ["x"]}),
-				TweenMax.fromTo(quoteRows[1], quotationScrollDuration,
-					{x: Main.totalWidth + 100},
-					{x: -quoteRows[1].width, ease: OpinionSequence.easeOutIn, roundProps: ["x"]}),
-				TweenMax.fromTo(quoteRows[2], quotationScrollDuration,
-					{x: -quoteRows[2].width},
-					{x: Main.totalWidth + 100,ease: OpinionSequence.easeOutIn, roundProps: ["x"]}),
-				TweenMax.fromTo(quoteRows[3], quotationScrollDuration,
-					{x: Main.totalWidth + 100},
-					{x: -quoteRows[3].width, ease: OpinionSequence.easeOutIn, roundProps: ["x"]}),
-				TweenMax.fromTo(quoteRows[4], quotationScrollDuration,
-					{x: -quoteRows[4].width},
-					{x: Main.totalWidth + 100, ease: OpinionSequence.easeOutIn, roundProps: ["x"]})
+				TweenMax.fromTo(quoteRows[0], quoteRows[0].totalFrames,
+					{frame: 0},
+					{frame: quoteRows[0].totalFrames, ease: Linear.easeNone}),
+				TweenMax.fromTo(quoteRows[1], quoteRows[1].totalFrames,
+					{frame: quoteRows[1].totalFrames},
+					{frame: 0, ease: Linear.easeNone}),
+				TweenMax.fromTo(quoteRows[2], quoteRows[2].totalFrames,
+					{frame: 0},
+					{frame: quoteRows[2].totalFrames, ease: Linear.easeNone}),
+				TweenMax.fromTo(quoteRows[3], quoteRows[3].totalFrames,
+					{frame: quoteRows[3].totalFrames},
+					{frame: 0, ease: Linear.easeNone}),
+				TweenMax.fromTo(quoteRows[4], quoteRows[4].totalFrames,
+					{frame: 0},
+					{frame: quoteRows[4].totalFrames, ease: Linear.easeNone})
 			], 0, TweenAlign.START, 0);			
 			
 			return timeline;
 		}
 		
-		
-		// Custom ease
-		// Custom Easing Function for TweenMax
-		public static var easeOutIn:Function = function(t:Number, b:Number, c:Number, d:Number):Number{
-			var points:Array = [
-				{point:[0,0],pre:[0,0],post:[0,0.5]},
-				{point:[1,1],pre:[1,0.5],post:[1,1]},
-			];
-			var bezier:BezierSegment = null;
-			for (var i:int = 0; i < points.length - 1; i++) {
-				if (t / d >= points[i].point[0] && t / d <= points[i+1].point[0]) {
-					bezier = new BezierSegment(
-						new Point(points[i].point[0], points[i].point[1]),
-						new Point(points[i].post[0], points[i].post[1]),
-						new Point(points[i+1].pre[0], points[i+1].pre[1]),
-						new Point(points[i+1].point[0], points[i+1].point[1]));
-					break;
-				}
-			}
-			return c * bezier.getYForX(t / d) + b;
-		};		
-				
+	
 	}
 }

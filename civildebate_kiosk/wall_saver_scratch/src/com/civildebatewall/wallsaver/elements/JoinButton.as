@@ -1,8 +1,9 @@
 package com.civildebatewall.wallsaver.elements {
+	import com.civildebatewall.resources.Assets;
 	import com.kitschpatrol.futil.TextBlock;
 	import com.kitschpatrol.futil.constants.Alignment;
+	
 	import flash.text.TextFormatAlign;
-	import com.civildebatewall.resources.Assets;
 	
 	public class JoinButton extends TextBlock {
 		public function JoinButton(params:Object=null) {
@@ -11,8 +12,9 @@ package com.civildebatewall.wallsaver.elements {
 			// TODO interaction
 
 			super({
-				text: "JOIN THE DEBATE. TOUCH TO BEGIN",
+				text: "JOIN THE DEBATE. TOUCH TO BEGIN.",
 				backgroundColor: Assets.COLOR_GRAY_85,
+				textFont: Assets.FONT_BOLD,
 				textSizePixels: 17,
 				textColor: 0xffffff,
 				backgroundRadius: 11,																		

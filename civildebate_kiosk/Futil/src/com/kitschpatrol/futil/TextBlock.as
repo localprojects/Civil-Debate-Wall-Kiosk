@@ -126,6 +126,7 @@ package com.kitschpatrol.futil {
 			tempTextField.selectable = _selectable;
 			tempTextField.multiline = true;
 			tempTextField.antiAliasType = AntiAliasType.ADVANCED;
+			
 			//tempTextField.mouseEnabled = false;			
 			//tempTextField.gridFitType = GridFitType.PIXEL;			
 			tempTextField.condenseWhite = true;
@@ -218,7 +219,7 @@ package com.kitschpatrol.futil {
 							textField.width = _maxWidth - _padding.horizontal;
 							textField.text = textField.text;
 							textField.width = Math2.clamp(getMaxLineWidth() + 6, _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal); // TODO FIGURE OUT THE +6 BUSINESS...
-						}
+						}	
 						
 						
 						// rescale
@@ -226,11 +227,15 @@ package com.kitschpatrol.futil {
 						textField.scaleY = originalScale;
 					}
 					
+					
+					// Handle extreme width case?
+					// 3360 width limit?
+					
 					// text height
 					textField.text = textField.text;
 					textField.height = ((textSizeOffset.fieldHeight / textField.scaleX) * textField.numLines) + (fieldLeading * (textField.numLines - 1));
 					textField.text = textField.text;
-					
+				
 					
 					// compensate for flash's overdraw, without masking content
 					lockUpdates = true;
@@ -510,6 +515,9 @@ package com.kitschpatrol.futil {
 	
 				textFormat.size = textSizeOffset.textFieldSize; 
 			}
+			
+			
+			
 			
 			
 			// update leading
