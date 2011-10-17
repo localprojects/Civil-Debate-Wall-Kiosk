@@ -16,5 +16,17 @@ package com.kitschpatrol.futil.easing {
 			return Ease.easeInOutExpo(value - low1, low2, high2 - low2, high1 - low1);
 		}
 		
+		public static function easeOutQuart(value:Number, low1:Number, high1:Number, low2:Number, high2:Number):Number {
+			return Ease.easeOutQuart(value - low1, low2, high2 - low2, high1 - low1);
+		}
+		
+		public static function easeInQuart(value:Number, low1:Number, high1:Number, low2:Number, high2:Number):Number {
+			return Ease.easeInQuart(value - low1, low2, high2 - low2, high1 - low1);
+		}	
+		
+		public static function easeInOutQuart(value:Number, low1:Number, high1:Number, low2:Number, high2:Number):Number {
+			return Ease.easeInOutQuart(value - low1, low2, high2 - low2, high1 - low1);
+		}		
+		
 	}
 }

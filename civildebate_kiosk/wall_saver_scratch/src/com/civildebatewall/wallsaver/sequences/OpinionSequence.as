@@ -8,30 +8,33 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.greensock.easing.Linear;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.Utilities;
-	import com.kitschpatrol.futil.easing.EaseMap;
-	
-	import fl.motion.BezierSegment;
 	
 	import flash.display.Sprite;
-	import flash.geom.Point;
 	import flash.utils.getTimer;
 	
-	// Scrolling Quotes
+	// Scrolling User Opinions
 	public class OpinionSequence extends Sprite implements ISequence {
-		
 		
 		// TODO replace with backend
 		private var quotesDesired:int = 20;
 		private var quotes:Array = [];
+		// END Back end		
 		
 		// Settings
-		private var scrollVelocity:Number;
-		private var quoteRows:Vector.<OpinionRow>;		
+		private var vxIntro:Number;
+		private var vxMiddle:Number;
+		private var vxOutro:Number;
+		private var easeIntroFrames:int;
+		private var easeOutroFrames:int;		
+		
+		// Internal
+		private var opinionRows:Vector.<OpinionRow>;		
 		
 		
 		public function OpinionSequence()	{
 			super();
 			
+			// TODO replace with backend			
 			while (quotes.length < quotesDesired) {
 				var dummyQuote:String = StringUtil.trim(Utilities.dummyText(Math2.randRange(20, 140)));
 				
@@ -44,7 +47,11 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			
 			// Settings
-			scrollVelocity = 10;	
+			vxIntro = 30;
+			vxMiddle = 10; // but only for the longest row, all others are slower!
+			vxOutro = 30;
+			easeIntroFrames = 300;
+			easeOutroFrames = 300;
 			
 			
 			// generate the display quotes
@@ -60,23 +67,23 @@ package com.civildebatewall.wallsaver.sequences {
 			}
 			
 			// Generate the quote rows
-			quoteRows = new Vector.<OpinionRow>(5);
+			opinionRows = new Vector.<OpinionRow>(5);
 			
-			for (var i:int = 0; i < quoteRows.length; i++) {
+			for (var i:int = 0; i < opinionRows.length; i++) {
 				var quoteLine:OpinionRow = new OpinionRow();
 				quoteLine.x = 0;
 				quoteLine.y = 123 + (i * (247 + 109));
 				addChild(quoteLine);
 				
-				// alternating stances
-				//				if (i % 1 == 0) {
-				//					quoteLine.lastStance = "yes";
-				//				}
-				//				else {
-				//					quoteLine.lastStance = "no"					
-				//				}
+				 //alternating stances
+				if (i % 1 == 0) {
+					quoteLine.lastStance = "no";
+				}
+				else {
+					quoteLine.lastStance = "yes"					
+				}
 				
-				quoteRows[i] = quoteLine;
+				opinionRows[i] = quoteLine;
 			}			
 			
 			// add them to rows
@@ -84,24 +91,24 @@ package com.civildebatewall.wallsaver.sequences {
 				// find the shortest row
 				var shortestRowIndex:int = 0;
 				var minWidth:Number = Number.MAX_VALUE;
-				for (var j:int = 0; j < quoteRows.length; j++) {
-					if (quoteRows[j].width < minWidth) {
-						minWidth = quoteRows[j].width;
+				for (var j:int = 0; j < opinionRows.length; j++) {
+					if (opinionRows[j].width < minWidth) {
+						minWidth = opinionRows[j].width;
 						shortestRowIndex = j;
 					}
 				}
 				
-				// add to it
+				// add opinions to the row
 				
 				// alternate stances
 				var tempQuotationBanner:OpinionBanner;
-				if (quoteRows[shortestRowIndex].lastStance == "yes") {
+				if (opinionRows[shortestRowIndex].lastStance == "yes") {
 					tempQuotationBanner = noQuotes.pop();
-					quoteRows[shortestRowIndex].lastStance = "no";
+					opinionRows[shortestRowIndex].lastStance = "no";
 				}
 				else {
 					tempQuotationBanner = yesQuotes.pop();
-					quoteRows[shortestRowIndex].lastStance = "yes";					
+					opinionRows[shortestRowIndex].lastStance = "yes";					
 				}
 				
 				if (minWidth > 0) {
@@ -109,31 +116,21 @@ package com.civildebatewall.wallsaver.sequences {
 					tempQuotationBanner.y = 0;
 				}
 				
-				
-				quoteRows[shortestRowIndex].addChild(tempQuotationBanner);
-				//quoteRows[shortestRowIndex].lastStance = tempQuotationBanner.stance;
+				opinionRows[shortestRowIndex].addChild(tempQuotationBanner);
 			}
 			
+			// flip first, third, and fourth so they start as yes? Can't guarantee that a row will end on a "yes" or "no"
+			// just keep them random for now,
+
 			
 			
 			// Contruction done, now pre-calculate animation
 
-			
-			// Find longest row 
-			var longestRow:OpinionRow = quoteRows[0];
-			for (var l:int = 1; l < quoteRows.length; l++) {			
-				if (quoteRows[l].width > longestRow.width) longestRow = quoteRows[l];
-			}			
-			
-			trace("Longest row is " + longestRow.width);
-			
-			
-			// Animation configuration (tweak these, and these alone!) // TODO move to constructor
-			var vxIntro:Number = 25;
-			var vxMiddle:Number = 5; // but only for the longest row, all others are slower!
-			var vxOutro:Number = 25;
-			var easeIntroFrames:int = 300;
-			var easeOutroFrames:int = 300;
+			// Find longest row, this sets bounds for the rest of the 
+			var longestRow:OpinionRow = opinionRows[0];
+			for (var l:int = 1; l < opinionRows.length; l++) {			
+				if (opinionRows[l].width > longestRow.width) longestRow = opinionRows[l];
+			}
 			
 			
 			var start:int = getTimer();
@@ -142,16 +139,17 @@ package com.civildebatewall.wallsaver.sequences {
 			longestRow.calculateFrames(vxIntro, vxMiddle, vxOutro, easeIntroFrames, easeOutroFrames);
 			
 			// Now calculate the rest, based on the longest row's total duration
-			for (var k:int = 0; k < quoteRows.length; k++) {			
-				if (quoteRows[k] != longestRow) {
+			for (var k:int = 0; k < opinionRows.length; k++) {			
+				if (opinionRows[k] != longestRow) {
 					//vxMiddle = (quoteRows[k].width) / (longestRow.totalFrames - longestRow.introFrameCount - longestRow.outroFrameCount);
 					// TODO a better guess at the vxMiddle before iterating towards it?
-					quoteRows[k].calculateFrames(vxIntro, vxMiddle, vxOutro, easeIntroFrames, easeOutroFrames, longestRow.totalFrames);
+					opinionRows[k].calculateFrames(vxIntro, vxMiddle, vxOutro, easeIntroFrames, easeOutroFrames, longestRow.totalFrames);
 				}
 			}
 			
-			trace("calculated opinion rows in " + (getTimer() - start) + "ms");
-			for each(var row:OpinionRow in quoteRows) {
+			// Debug, review how long it took to generate velocities.
+			trace("Calculated opinion rows middle velocities in " + (getTimer() - start) + "ms.");
+			for each(var row:OpinionRow in opinionRows) {
 				trace("Frames: " + row.totalFrames);
 			}
 			
@@ -170,24 +168,23 @@ package com.civildebatewall.wallsaver.sequences {
 		
 		public function getTimeline():TimelineMax	{
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
-			// Quotation field
 			
 			timeline.appendMultiple([
-				TweenMax.fromTo(quoteRows[0], quoteRows[0].totalFrames,
+				TweenMax.fromTo(opinionRows[0], opinionRows[0].totalFrames,
 					{frame: 0},
-					{frame: quoteRows[0].totalFrames, ease: Linear.easeNone}),
-				TweenMax.fromTo(quoteRows[1], quoteRows[1].totalFrames,
-					{frame: quoteRows[1].totalFrames},
+					{frame: opinionRows[0].totalFrames, ease: Linear.easeNone}),
+				TweenMax.fromTo(opinionRows[1], opinionRows[1].totalFrames,
+					{frame: opinionRows[1].totalFrames},
 					{frame: 0, ease: Linear.easeNone}),
-				TweenMax.fromTo(quoteRows[2], quoteRows[2].totalFrames,
+				TweenMax.fromTo(opinionRows[2], opinionRows[2].totalFrames,
 					{frame: 0},
-					{frame: quoteRows[2].totalFrames, ease: Linear.easeNone}),
-				TweenMax.fromTo(quoteRows[3], quoteRows[3].totalFrames,
-					{frame: quoteRows[3].totalFrames},
+					{frame: opinionRows[2].totalFrames, ease: Linear.easeNone}),
+				TweenMax.fromTo(opinionRows[3], opinionRows[3].totalFrames,
+					{frame: opinionRows[3].totalFrames},
 					{frame: 0, ease: Linear.easeNone}),
-				TweenMax.fromTo(quoteRows[4], quoteRows[4].totalFrames,
+				TweenMax.fromTo(opinionRows[4], opinionRows[4].totalFrames,
 					{frame: 0},
-					{frame: quoteRows[4].totalFrames, ease: Linear.easeNone})
+					{frame: opinionRows[4].totalFrames, ease: Linear.easeNone})
 			], 0, TweenAlign.START, 0);			
 			
 			return timeline;

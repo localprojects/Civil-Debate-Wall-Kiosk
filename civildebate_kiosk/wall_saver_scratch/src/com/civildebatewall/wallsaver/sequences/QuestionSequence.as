@@ -9,7 +9,7 @@ package com.civildebatewall.wallsaver.sequences {
 	public class QuestionSequence extends Sprite implements ISequence {
 		
 		// TODO get this from back end
-		private var question:String = "Do you feel our public education provides our children with a thorough education in this day and age?";
+		private var question:String = "Do you feel our public education provides our children with a thorough education?";
 		private var scrollVelocity:Number;
 		private var questionBanner:QuestionBanner;
 		

@@ -19,7 +19,6 @@ package com.civildebatewall.wallsaver.elements {
 			questionHead = Assets.getQuestionArrowHead();
 			addChild(questionHead);
 			
-			// TODO make padding internal by default?
 			questionTextBlock = new TextBlock({text: questionText,
 																				 textFont: Assets.FONT_BOLD,
 																		 		 backgroundColor: 0x322f31,

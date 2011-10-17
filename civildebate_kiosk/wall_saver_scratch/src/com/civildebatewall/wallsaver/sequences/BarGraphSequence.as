@@ -1,25 +1,24 @@
 package com.civildebatewall.wallsaver.sequences {
+	import com.civildebatewall.resources.Assets;
 	import com.civildebatewall.wallsaver.elements.GraphLabel;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
+	import com.greensock.easing.Linear;
+	import com.greensock.easing.Quart;
 	
 	import flash.display.Bitmap;
 	import flash.display.Shader;
 	import flash.display.Sprite;
-	import flash.filters.ShaderFilter;
 	import flash.geom.Point;
-	import com.civildebatewall.resources.Assets;
 	
+	// Yes / No bar graphs
 	public class BarGraphSequence extends Sprite implements ISequence {
-		
-		
 		
 		// TODO get these from back end
 		private var yesResponses:int = 215;
 		private var noResponses:int = 15;
-		
-		
+		// END back end
 		
 		private var scrollVelocity:Number;		
 		private var yesWidth:int;
@@ -29,13 +28,10 @@ package com.civildebatewall.wallsaver.sequences {
 		private var yesHead:Bitmap;
 		private var yesTail:Bitmap;
 		
-		
 		private var yesBar:Sprite;
 		private var noBar:Sprite;		
 		private var yesGraphLabel:GraphLabel;
 		private var noGraphLabel:GraphLabel;
-		
-		
 		
 		
 		public function BarGraphSequence() {
@@ -103,6 +99,7 @@ package com.civildebatewall.wallsaver.sequences {
 			noBar.graphics.drawRect(noHead.width, 0, noWidth, noHead.height);
 			noBar.graphics.endFill();
 			noTail.x = noTail.width + noBar.width;
+			noBar.y = 123;
 			noBar.addChild(noTail);	
 			
 			// yes points right
@@ -114,6 +111,7 @@ package com.civildebatewall.wallsaver.sequences {
 			yesBar.graphics.drawRect(yesTail.width, 0, yesWidth, yesTail.height);
 			yesBar.graphics.endFill();
 			yesHead.x = yesBar.width;
+			yesBar.y = 123;			
 			yesBar.addChild(yesHead);
 			
 			
@@ -121,13 +119,13 @@ package com.civildebatewall.wallsaver.sequences {
 			// in the correct order
 			if (noResponses <= yesResponses) {
 				// no is first
-				addChild(yesBar);
 				addChild(noBar);
+				addChild(yesBar);				
 			}
 			else {
 				// yes is first
-				addChild(noBar);
 				addChild(yesBar);
+				addChild(noBar);				
 			}			
 
 			// depth index doesn't matter
@@ -141,28 +139,33 @@ package com.civildebatewall.wallsaver.sequences {
 
 			
 			var yesBarScrollDuration:int = (yesBar.width - yesTail.width)  / scrollVelocity;			
-			var yesBarTweenIn:TweenMax = TweenMax.fromTo(yesBar, yesBarScrollDuration, {x: -yesBar.width}, {x: -yesTail.width});
+			var yesBarTweenIn:TweenMax = TweenMax.fromTo(yesBar, yesBarScrollDuration, {x: -yesBar.width}, {x: -yesTail.width, ease: Quart.easeOut});
 			
 			var noBarScrollDuration:int = (Main.totalWidth - noWidth - noHead.width)  / scrollVelocity;						
-			var noBarTweenIn:TweenMax = TweenMax.fromTo(noBar, noBarScrollDuration, {x: Main.totalWidth}, {x: Main.totalWidth - noWidth - noHead.width});			
+			var noBarTweenIn:TweenMax = TweenMax.fromTo(noBar, noBarScrollDuration, {x: Main.totalWidth}, {x: Main.totalWidth - noWidth - noHead.width, ease: Quart.easeOut});			
 
 			// Smalles bar scrolls in first
 			if (noResponses <= yesResponses) {
 				
-				// No bar in
-				timelineIn.append(noBarTweenIn);
-				
-				// No label in
-				timelineIn.append(TweenMax.fromTo(noGraphLabel, 100, {y: -noGraphLabel.height, count: 0}, {y: 633, count: noResponses}), -20);
-				
-				// No label out, yes label in
+				// No bar and label in (Design calls for steps, look sbetter simultaneously.
 				timelineIn.appendMultiple([
-					TweenMax.to(noGraphLabel, 100, {y: Main.screenHeight}),
-					TweenMax.fromTo(yesGraphLabel, 100, {y: -yesGraphLabel.height, count: 0}, {y: 633, count: yesResponses})
-				], 300, TweenAlign.START, 0);
+					noBarTweenIn,
+					TweenMax.fromTo(noGraphLabel, 100, {count: 0}, {count: noResponses}),					
+					TweenMax.fromTo(noGraphLabel, 100, {y: -noGraphLabel.height}, {y: 633, ease: Quart.easeOut})
+				], 0, TweenAlign.START, 0);
 				
-				// Yes bar in
-				timelineIn.append(yesBarTweenIn);				
+				// No label out, yes bar and label in
+				
+				timelineIn.appendMultiple([				
+					TweenMax.to(noGraphLabel, 100, {y: Main.screenHeight, ease: Quart.easeOut}),
+					TweenMax.fromTo(yesGraphLabel, 100, {count: 0}, {count: yesResponses}),					
+					TweenMax.fromTo(yesGraphLabel, 100, {y: -yesGraphLabel.height}, {y: 633, ease: Quart.easeOut})				
+				], 300, TweenAlign.START, 0);
+					
+				timelineIn.appendMultiple([
+					yesBarTweenIn
+				], -50, TweenAlign.START, 0);
+				
 			}
 			else {
 				// TODO after above is solid				
@@ -179,22 +182,22 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			if (noResponses <= yesResponses) {
 				// Yes Label out
-				timelineOut.append(TweenMax.to(yesGraphLabel, 100, {alpha: 0}), 100);
+				timelineOut.append(TweenMax.to(yesGraphLabel, 100, {alpha: 0, ease: Quart.easeIn}), 100);
 			}
 			else {
 				// No label out
-				// TODO 
+				timelineOut.append(TweenMax.to(noGraphLabel, 100, {alpha: 0, ease: Quart.easeIn}), 100); 
 			}
 			
 			
 			// Graphs out
-			var yesBarOutDuration:int = (yesBar.width - yesTail.width)  / scrollVelocity;			
-			var noBarOutDuration:int = (Main.totalWidth - noWidth - noHead.width)  / scrollVelocity;
+			var yesBarOutDuration:int = (yesBar.width - yesTail.width)  / (scrollVelocity - 10); // a bit slower to compensate for easing
+			var noBarOutDuration:int = (Main.totalWidth - noWidth - noHead.width)  / (scrollVelocity - 10);
 			
 			timelineOut.appendMultiple([
-				TweenMax.to(noBar, 400, {x: -noBar.width}),
-				TweenMax.to(yesBar, 400, {x: Main.totalWidth})
-			], 0, TweenAlign.START, 100);			
+				TweenMax.to(noBar, noBarOutDuration, {x: -noBar.width, ease: Quart.easeIn}),
+				TweenMax.to(yesBar, yesBarOutDuration, {x: Main.totalWidth, ease: Quart.easeIn})
+			], 100, TweenAlign.START, 0);			
 			
 
 			return timelineOut;

@@ -1,4 +1,5 @@
 package com.civildebatewall.wallsaver.elements {
+	import com.civildebatewall.resources.Assets;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.BlockShape;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
@@ -6,33 +7,25 @@ package com.civildebatewall.wallsaver.elements {
 	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
-	import flash.filters.ColorMatrixFilter;
-	import com.civildebatewall.resources.Assets;
 	
 	
 	public class GridPortrait extends Sprite {
-		
-		
-	
+
 		private var portrait:Bitmap;
 		private var background:BlockShape;		
 		private var _step:Number;
 		
 		public function GridPortrait(stance:String, portrait:Bitmap)	{
 			
+			this.portrait = new Bitmap(BitmapUtil.scaleToFill(portrait.bitmapData, 233, 311));
 
-			this.portrait = new Bitmap(BitmapUtil.scaleToFill(portrait.bitmapData, 232, 310));
-
-			
-			_step = 0;
-			
+			_step = 0;			
 			
 			
 			// tint the portrait based on stance
 			background = new BlockShape();
-			background.width = 232;
-			background.height = 310;
-			
+			background.width = 233;
+			background.height = 311;
 			
 			if (stance == "yes") {
 				background.backgroundColor = Assets.COLOR_YES_MEDIUM;
@@ -45,9 +38,7 @@ package com.civildebatewall.wallsaver.elements {
 				
 			addChild(background);
 			addChild(this.portrait);
-			
 		}
-		
 		
 		
 		// normalized animation abstraction
