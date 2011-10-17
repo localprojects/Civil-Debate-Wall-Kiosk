@@ -14,15 +14,15 @@ package com.civildebatewall.wallsaver.elements {
 			super({text: quote,
 						 textFont: Assets.FONT_BOLD,
 						 maxWidth: Number.MAX_VALUE,
-						 paddingTop: 34 / 2,
-						 paddingLeft: 97 / 2,
-						 paddingRight: 97 / 2,
-						 textSizePixels: 140 / 2,
+						 paddingTop: 34 / 4,
+						 paddingLeft: 97 / 4,
+						 paddingRight: 97 / 4,
+						 textSizePixels: 140 / 4,
 						 textColor: 0xffffff,
-						 height: 247 / 2});
+						 height: 247 / 4});
 			
-			this.scaleX = 2;
-			this.scaleY = 2;
+			this.scaleX = 4;
+			this.scaleY = 4;
 			
 			if (stance == "yes") {
 				backgroundColor = Assets.COLOR_YES_LIGHT;
