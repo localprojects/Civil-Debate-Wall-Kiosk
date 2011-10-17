@@ -221,7 +221,6 @@ package com.kitschpatrol.futil {
 							textField.width = Math2.clamp(getMaxLineWidth() + 6, _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal); // TODO FIGURE OUT THE +6 BUSINESS...
 						}	
 						
-						
 						// rescale
 						textField.scaleX = originalScale;
 						textField.scaleY = originalScale;

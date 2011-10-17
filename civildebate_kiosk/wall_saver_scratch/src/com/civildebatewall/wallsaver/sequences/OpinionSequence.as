@@ -47,9 +47,9 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			
 			// Settings
-			vxIntro = 30;
-			vxMiddle = 10; // but only for the longest row, all others are slower!
-			vxOutro = 30;
+			vxIntro = 50;
+			vxMiddle = 20; // but only for the longest row, all others are slower!
+			vxOutro = 50;
 			easeIntroFrames = 300;
 			easeOutroFrames = 300;
 			

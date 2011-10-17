@@ -120,24 +120,25 @@ package {
 			
 //			// Height Constrained
 //			var textField:TextField = new TextField();
-//			textField.text = "sdfsD Fasd fasd fas dfasd fas dfasdfdfasdf";
+//			textField.text = "sdfsD Fasd fasd fas dfasd fas dfasdfdfasdf sdfsD Fasd fasd fas dfasd fas dfasdfdfasdf";
 //			textField.wordWrap = true;
 //			textField.multiline = true;
-//			textField.height = 300;
+//			textField.height = 5;
 //			textField.autoSize = TextFieldAutoSize.LEFT;
 //			addChild(textField);
-//			
+////			
 //			// Width Constrained
 //			var textField:TextField = new TextField();
 //			textField.text = "sdfsD Fasd fasd fas dfasd fas dfasdfdfasdf";
 //			textField.wordWrap = true;
 //			textField.multiline = true;
-//			textField.width = 50;
+//			textField.width = 5000;
+//			//textField.width = 50;
 //			textField.autoSize = TextFieldAutoSize.LEFT;
 //			addChild(textField);			
-			
-
-			
+//			
+//			textField.scaleX = 10;
+//			textField.scaleY = 10;
 		}
 		
 
