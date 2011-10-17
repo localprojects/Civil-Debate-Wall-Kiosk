@@ -153,35 +153,35 @@ package com.civildebatewall.wallsaver.core {
 			// Create display objects
 			var buttonSequence:ButtonSequence = new ButtonSequence();
 			canvas.addChild(buttonSequence);
-//
-//			var titleSequence:TitleSequence = new TitleSequence();
-//			canvas.addChild(titleSequence);			
-//			
-//			var questionSequence:QuestionSequence = new QuestionSequence();
-//			canvas.addChild(questionSequence);
-//			
+
+			var titleSequence:TitleSequence = new TitleSequence();
+			canvas.addChild(titleSequence);			
+			
+			var questionSequence:QuestionSequence = new QuestionSequence();
+			canvas.addChild(questionSequence);
+			
 			var opinionSequence:OpinionSequence = new OpinionSequence();
 			canvas.addChild(opinionSequence);			
 
-//			var barGraphSequence:BarGraphSequence = new BarGraphSequence();
-//			canvas.addChild(barGraphSequence);			
-//			
-//			var faceGridSequence:FaceGridSequence = new FaceGridSequence();
-//			canvas.addChild(faceGridSequence);
-//			
-//			var callToActionSequence:CallToActionSequence = new CallToActionSequence();
-//			canvas.addChild(callToActionSequence);
+			var barGraphSequence:BarGraphSequence = new BarGraphSequence();
+			canvas.addChild(barGraphSequence);			
+			
+			var faceGridSequence:FaceGridSequence = new FaceGridSequence();
+			canvas.addChild(faceGridSequence);
+			
+			var callToActionSequence:CallToActionSequence = new CallToActionSequence();
+			canvas.addChild(callToActionSequence);
 			
 			
 			// Assemble the timeline
 			timeline.appendMultiple([
 				buttonSequence.getTimelineIn(),
-//				titleSequence.getTimeline(),
-//				questionSequence.getTimeline(),
+				titleSequence.getTimeline(),
+				questionSequence.getTimeline(),
 				opinionSequence.getTimeline(),
-//				barGraphSequence.getTimeline(),
-//				faceGridSequence.getTimeline(),				
-//				callToActionSe	quence.getTimeline(),
+				barGraphSequence.getTimeline(),
+				faceGridSequence.getTimeline(),				
+				callToActionSequence.getTimeline(),
 				buttonSequence.getTimelineOut()				
 			], 0, TweenAlign.SEQUENCE, 50);
 			
@@ -190,11 +190,13 @@ package com.civildebatewall.wallsaver.core {
 		
 		// Ends the sequence early, usually when someone touches the screen... move this to parent?
 		// TODO make the fade flow "out" from the touched screen.
+		// TODO interactive button.
 		public function endSequence():void {
 			TweenMax.to(canvas, 1.5, {alpha: 0, onComplete: postAnimationTasks});
 		}
 		
 		private function postAnimationTasks():void {
+			timeline.stop();
 			canvas.visible = false;
 		}
 		

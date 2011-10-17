@@ -1,4 +1,6 @@
 package com.civildebatewall.wallsaver.sequences {
+	import com.civildebatewall.resources.Assets;
+	import com.civildebatewall.wallsaver.elements.GridPortrait;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
@@ -9,12 +11,9 @@ package com.civildebatewall.wallsaver.sequences {
 	
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
-	import com.civildebatewall.wallsaver.elements.GridPortrait;
-	import com.civildebatewall.resources.Assets;
 	
 	
 	public class FaceGridSequence extends Sprite implements ISequence {
-		
 		
 		// TODO get these from back end
 		private var yesResponses:int = 215;
@@ -22,9 +21,9 @@ package com.civildebatewall.wallsaver.sequences {
 		private var portraitData:Array = [Assets.getSamplePortrait1(),
 			Assets.getSamplePortrait2(),
 			Assets.getSamplePortrait3(),
-			Assets.getSamplePortrait4()];
-		
-		
+			Assets.getSamplePortrait4()
+		];
+		// END back end
 		
 		// Internal
 		private var gridCells:Array;
@@ -33,16 +32,12 @@ package com.civildebatewall.wallsaver.sequences {
 		public function FaceGridSequence()	{
 			super();
 			
-			// build the grid, fill randomly with faces 
-
-			
 			// build the grid
 			var gridSpacing:Number = 30;
 			var gridRows:int = 5;
 			var gridCols:int = 20;
-			var portraitWidth:int = 232;
-			var portraitHeight:int = 310;
-			
+			var portraitWidth:int = 233;
+			var portraitHeight:int = 311;
 			var wallsaverPaddingTop:int = 123;
 			
 			var totalResponses:int = yesResponses + noResponses;
@@ -71,7 +66,7 @@ package com.civildebatewall.wallsaver.sequences {
 					
 					var tempPortrait:GridPortrait = new GridPortrait(stance, ArrayUtil.getRandomElement(portraitData));
 					tempPortrait.x = (gridSpacing * (screenCol + 1)) + (screenCol * portraitWidth) + screen.x;
-					tempPortrait.y = (gridSpacing * (row + 1)) + (row * portraitHeight) + wallsaverPaddingTop;
+					tempPortrait.y = (gridSpacing * row) + (row * portraitHeight) + wallsaverPaddingTop;
 					
 					portraits[col][row] = addChild(tempPortrait);
 				}

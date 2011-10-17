@@ -1,5 +1,5 @@
 package com.civildebatewall.wallsaver.elements {
-	import com.bit101.components.Text;
+	import com.civildebatewall.resources.Assets;
 	import com.kitschpatrol.futil.TextBlock;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.constants.CharacterSet;
@@ -7,9 +7,7 @@ package com.civildebatewall.wallsaver.elements {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	
-	import flashx.textLayout.formats.BackgroundColor;
 	import flashx.textLayout.formats.TextAlign;
-	import com.civildebatewall.resources.Assets;
 	
 	
 	public class GraphLabel extends Sprite {
@@ -36,6 +34,7 @@ package com.civildebatewall.wallsaver.elements {
 			// vote counter
 			countText = new TextBlock({text: "0",
 																 textColor: 0xffffff,
+																 textFont: Assets.FONT_BOLD,
 																 sizeFactorGlyphs: CharacterSet.SET_OF_NUMBERS,															 
 																 textSizePixels: 225,
 																 alignmentPoint: Alignment.CENTER,																 

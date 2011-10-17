@@ -1,6 +1,7 @@
 package {	
 	
 	import com.bit101.components.FPSMeter;
+	import com.civildebatewall.resources.Assets;
 	import com.civildebatewall.wallsaver.core.WallSaver;
 	import com.civildebatewall.wallsaver.core.WallSaverControls;
 	import com.civildebatewall.wallsaver.sequences.*;
@@ -10,14 +11,15 @@ package {
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.Bitmap;
+	import flash.display.Screen;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.display.Screen;
-	import com.civildebatewall.resources.Assets;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
 	
 	[SWF(width="5720", height="1920", frameRate="60")]	
 	public class Main extends Sprite {
@@ -114,6 +116,28 @@ package {
 			for each (var bezel:Rectangle in bezels) {
 				addChild(GraphicsUtil.shapeFromRect(bezel));
 			}
+			
+			
+//			// Height Constrained
+//			var textField:TextField = new TextField();
+//			textField.text = "sdfsD Fasd fasd fas dfasd fas dfasdfdfasdf";
+//			textField.wordWrap = true;
+//			textField.multiline = true;
+//			textField.height = 300;
+//			textField.autoSize = TextFieldAutoSize.LEFT;
+//			addChild(textField);
+//			
+//			// Width Constrained
+//			var textField:TextField = new TextField();
+//			textField.text = "sdfsD Fasd fasd fas dfasd fas dfasdfdfasdf";
+//			textField.wordWrap = true;
+//			textField.multiline = true;
+//			textField.width = 50;
+//			textField.autoSize = TextFieldAutoSize.LEFT;
+//			addChild(textField);			
+			
+
+			
 		}
 		
 

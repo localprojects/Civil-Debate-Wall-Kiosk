@@ -15,18 +15,10 @@ package com.civildebatewall.wallsaver.elements {
 		public var introFrameCount:int;
 		public var outroFrameCount:int;
 		
-		// pop these out?
-		private var easeIntroDuration:Number; // frames of easing between intro velocity and middle velocity
-		private var easeOutroDuration:Number; // frames of easing between middle velocity and outro velocity		
-				
 
 		public function OpinionRow() {
 			super();
 			_frame = 0; 
-			
-			// pop these out!
-			easeIntroDuration = 200;
-			easeOutroDuration = 200;
 		}
 		
 		
@@ -53,7 +45,7 @@ package com.civildebatewall.wallsaver.elements {
 			// Calculate intro frames, from the left
 			var tempX:Number;
 			
-			tempX = -this.width - 25; // a little off-screen padding
+			tempX = -this.width - vxIntro; // a little off-screen padding
 			while (introFrames.length < (introFrameCount - easeIntroFrames)) {
 				introFrames.push(tempX);
 				tempX += vxIntro;
@@ -62,12 +54,12 @@ package com.civildebatewall.wallsaver.elements {
 			// Ease intro
 			while (introFrames.length < introFrameCount) {
 				introFrames.push(tempX);
-				tempX += EaseMap.easeInOutExpo(introFrames.length, introFrameCount - easeIntroFrames, introFrameCount, vxIntro, vxMiddle);
+				tempX += EaseMap.easeInQuart(introFrames.length, introFrameCount - easeIntroFrames, introFrameCount, vxIntro, vxMiddle);
 			}
 						
 			
 			// Calculate outro frames, from the right
-			tempX = Main.totalWidth + 25; // a little off-screen padding
+			tempX = Main.totalWidth + vxOutro; // a little off-screen padding
 			while (outroFrames.length < (outroFrameCount - easeOutroFrames)) {
 				outroFrames.push(tempX);
 				tempX -= vxOutro;
@@ -75,7 +67,7 @@ package com.civildebatewall.wallsaver.elements {
 			
 			// Ease outro, <= since tempX is going to change below
 			while (outroFrames.length < outroFrameCount) {
-				tempX -= EaseMap.easeInOutExpo(outroFrames.length, outroFrameCount - easeOutroFrames, outroFrameCount, vxOutro, vxMiddle);				
+				tempX -= EaseMap.easeInQuart(outroFrames.length, outroFrameCount - easeOutroFrames, outroFrameCount, vxOutro, vxMiddle);				
 				outroFrames.push(tempX);
 			}	
 						
