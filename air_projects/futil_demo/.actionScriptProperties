@@ -31,7 +31,7 @@
         </excludedEntries>
       </libraryPathEntry>
       <libraryPathEntry kind="1" linkType="1" path="libs"/>
-      <libraryPathEntry kind="3" linkType="1" path="/Futil/bin/Futil.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="/futil/bin/futil.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
