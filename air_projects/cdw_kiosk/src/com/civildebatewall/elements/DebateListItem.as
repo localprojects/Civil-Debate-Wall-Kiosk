@@ -131,7 +131,7 @@ package com.civildebatewall.elements {
 		override protected function onMouseDown(e:MouseEvent):void {
 			if (!locked) {
 				if (onDown != null) onDown(e);
-				CDW.ref.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				CDW.self.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				TweenMax.to(background, 0, {colorTransform: {tint: _backgroundDownColor, tintAmount: 1}});
 				TweenMax.to(bubbleFill, 0, {alpha: 0});
 				TweenMax.to(circleFill, 0, {alpha: 0});		
@@ -165,7 +165,7 @@ package com.civildebatewall.elements {
 				TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
 			}
 			
-			CDW.ref.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
+			CDW.self.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
 			
 			
 		}			

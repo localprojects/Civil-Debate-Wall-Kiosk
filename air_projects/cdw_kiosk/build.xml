@@ -1,0 +1,38 @@
+<?xml version="1.0"?> 
+<project name="Civil Debate Wall Kiosk Build and Deployment" basedir="." default="build">
+
+	<!-- Load properties -->
+	<property file="${basedir}/build.properties" description="Subjective properties." />	
+	
+	<!-- Load the third party ant tasks dynamically -->
+	<taskdef resource="flexTasks.tasks" classpath="${SDK_HOME}/ant/lib/flexTasks.jar" />
+	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpath="${basedir}/libs-build/xmltask.jar" />
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${basedir}/libs-build/ant-contrib-1.0b3.jar" />
+	
+	
+
+<target name="chkOS" description="if switch to set OS specific settings">
+	<condition property="isWindows">
+		<os family="windows" />
+	</condition>
+	<condition property="isMac">
+		<os family="mac" />
+	</condition>		
+	<antcall target="setUnixEnv" />
+	<antcall target="setWindowsEnv" />
+</target>
+	
+<target name="setUnixEnv" if="isMac">
+	<echo>This is an Mac machine.</echo>
+</target>
+
+<target name="setWindowsEnv" if="isWindows">
+	  <echo>This is a Windows machine.</echo>
+	</target>	
+
+	
+	
+    <target name="build" depends="chkOS"> 
+    	<echo message="In build" />
+    </target> 
+</project>

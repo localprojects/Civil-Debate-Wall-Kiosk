@@ -1,0 +1,29 @@
+{
+
+	"common" : {
+		"kioskNumber": 1,
+		"characterLimit": 140,
+		"flipWebcamVertical": true,	
+		"inactivityTimeout": 60,
+		"slrTimeout": 5,
+		"secretKey": "something_secret"
+	},
+	
+	"windows": {
+		"halfSize": true,
+		"startFullScreen": true,
+		"webcamOnly": false,
+		"imagePath": "",
+		"tempImagePath": "C:/temp/",
+		"serverPath": "http://0.0.0.0:8080"			
+	},
+	
+	"mac": {
+		"halfSize": true,
+		"startFullScreen": false,
+		"webcamOnly": true,
+		"imagePath": "/Users/Mika/Desktop/CDWImages/",		
+		"serverPath": "http://0.0.0.0:8080"	
+	}
+	
+}

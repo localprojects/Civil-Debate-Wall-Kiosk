@@ -262,7 +262,7 @@ package com.civildebatewall.elements {
 			
 						
 			
-			superlativesPortrait.setPost(CDW.database.mostDebatedThreads[0].firstPost, true);
+			superlativesPortrait.setPost(CDW.data.mostDebatedThreads[0].firstPost, true);
 			
 			previousSuperlativeButton.setOnClick(null);
 			nextSuperlativeButton.setOnClick(mostLikedView);
@@ -307,7 +307,7 @@ package com.civildebatewall.elements {
 			
 			//mostLikedList.deactivateAll();
 			(mostLikedList.getChildAt(0) as DebateListItem).activate();
-			superlativesPortrait.setPost(CDW.database.mostLikedPosts[0], true);			
+			superlativesPortrait.setPost(CDW.data.mostLikedPosts[0], true);			
 			
 			previousSuperlativeButton.setOnClick(mostDebatedView);
 			nextSuperlativeButton.setOnClick(null);
@@ -371,8 +371,8 @@ package com.civildebatewall.elements {
 			
 			// mutation
 			voteTitleBar.setText('Total Number of Opinions');			
-			var yesCount:uint = CDW.database.stanceTotals['yes'];
-			var noCount:uint = CDW.database.stanceTotals['no'];			
+			var yesCount:uint = CDW.data.stanceTotals['yes'];
+			var noCount:uint = CDW.data.stanceTotals['no'];			
 			var targetPercent:Number = (yesCount / (noCount + yesCount)) * 100;
 			
 			// tween in
@@ -383,18 +383,18 @@ package com.civildebatewall.elements {
 		public function update():void {
 			// anything to do here?
 			trace("Updating stats");
-			wordCloud.setWords(CDW.database.frequentWords);
+			wordCloud.setWords(CDW.data.frequentWords);
 			
 			// pull out the first posts so we're working with posts instead of threads
 			var mostDebatedFirstPosts:Array = [];
-			for (var i:uint = 0; i < CDW.database.mostDebatedThreads.length; i++) {
-				mostDebatedFirstPosts.push(CDW.database.mostDebatedThreads[i].firstPost);
+			for (var i:uint = 0; i < CDW.data.mostDebatedThreads.length; i++) {
+				mostDebatedFirstPosts.push(CDW.data.mostDebatedThreads[i].firstPost);
 			}
 			
 			
 			mostDebatedList.setItems(mostDebatedFirstPosts);
-			trace("most liked: " + CDW.database.mostLikedPosts);
-			mostLikedList.setItems(CDW.database.mostLikedPosts);
+			trace("most liked: " + CDW.data.mostLikedPosts);
+			mostLikedList.setItems(CDW.data.mostLikedPosts);
 		}		
 		
 		// Utiliteis and helpers

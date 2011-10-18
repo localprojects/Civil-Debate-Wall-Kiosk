@@ -46,8 +46,8 @@ package com.civildebatewall.elements {
 			GraphicsUtil.removeChildren(scrollField.scrollSheet);
 
 			
-			for (var i:uint = 0; i < CDW.database.threads.length; i++) {
-				var threadThumbnail:ThumbnailButton = new ThumbnailButton(CDW.database.threads[i]);
+			for (var i:uint = 0; i < CDW.data.threads.length; i++) {
+				var threadThumbnail:ThumbnailButton = new ThumbnailButton(CDW.data.threads[i]);
 				
 				
 				threadThumbnail.x = (threadThumbnail.width - 6) * i; // compensate for dots
@@ -60,7 +60,7 @@ package com.civildebatewall.elements {
 				if (i == 0) threadThumbnail.removeChild(threadThumbnail.leftDot);
 				
 				// remove the right dot from the last one				
-				if (i == CDW.database.threads.length - 1) threadThumbnail.removeChild(threadThumbnail.rightDot);
+				if (i == CDW.data.threads.length - 1) threadThumbnail.removeChild(threadThumbnail.rightDot);
 				
 				threadThumbnail.update();
 				

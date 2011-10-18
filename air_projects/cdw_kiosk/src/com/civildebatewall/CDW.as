@@ -1,21 +1,21 @@
 package com.civildebatewall {
 
-	import com.bit101.components.FPSMeter;
+	
 	import com.civildebatewall.blocks.*;
 	import com.civildebatewall.camera.*;
-	import com.civildebatewall.data.Database;
+	import com.civildebatewall.data.Data;
 	import com.civildebatewall.elements.*;
 	import com.civildebatewall.keyboard.*;
 	import com.civildebatewall.ui.*;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
+	import com.kitschpatrol.futil.utilitites.PlatformUtil;
 	
 	import flash.desktop.NativeApplication;
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
-	import flash.system.Capabilities;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	import flash.ui.Mouse;
@@ -29,8 +29,8 @@ package com.civildebatewall {
 	
 	public class CDW extends Sprite {
 		
-		public static var ref:CDW;
-		public static var database:Database;
+		public static var self:CDW;
+		public static var data:Data;
 		public static var dashboard:Dashboard;
 		public static var state:State;
 		public static var settings:Object;
@@ -38,18 +38,17 @@ package com.civildebatewall {
 		public static var testOverlay:Bitmap;
 		public static var inactivityTimer:InactivityTimer;
 		
-		private var fps:FPSMeter;
-		
+	
 		public function CDW() {
-			ref = this;
-			
-			
+			self = this;
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 
 		private function onAddedToStage(event:Event):void {
-			// load settings from a local JSON file
-			settings = Settings.load();
+			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);			
+			
+			// load settings from a local JSON file			
+			settings = Settings.load();						
 			
 			// set up the stage
 			stage.quality = StageQuality.BEST;
@@ -64,37 +63,39 @@ package com.civildebatewall {
 				stage.scaleMode = StageScaleMode.NO_SCALE;
 				stage.align = StageAlign.TOP;
 				stage.nativeWindow.width = 1080;
-				stage.nativeWindow.height = 1920;				
+				stage.nativeWindow.height = 1920;
 			}
 			
 			// make sure image folders exist
-			if ((Capabilities.os.indexOf("Windows") >= 0)) {
+			if (PlatformUtil.isWindows()) {
 				Utilities.createFolderIfNecessary(settings.imagePath);
 				Utilities.createFolderIfNecessary(settings.tempImagePath);				
 			}
-			else if ((Capabilities.os.indexOf("Mac") >= 0)) {
+			else if (PlatformUtil.isWindows()) {
 				Utilities.createFolderIfNecessary(settings.imagePath);
 			}  
 			
+			// fill the background
+			graphics.beginFill(0xffffff);
+			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			graphics.endFill();
 			
 			// create local state
 			state = new State();
 			
 			// load the wall state
-			database = new Database();
-			database.addEventListener(Event.COMPLETE, onDatabaseLoaded);			
-			database.load();
+			data = new Data();
+			data.addEventListener(Event.COMPLETE, onDataLoaded);			
+			data.load();
 			
-			// background
-			graphics.beginFill(0xffffff);
-			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
-			graphics.endFill();
+
+
 			
-			// set up gui overlay
+			// set up gui overlay TODO move to window
 			dashboard = new Dashboard(this.stage, 5, 5);
 			dashboard.visible = false;
 			
-			if (settings.halfSize) {			
+			if (settings.halfSize) {
 				dashboard.scaleX = 2;
 				dashboard.scaleY = 2;
 			}
@@ -126,9 +127,7 @@ package com.civildebatewall {
 			myContextMenu.customItems.push(toggleSMSButtonItem);
 			toggleSMSButtonItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onToggleSMSButton);						
 			
-			var toggleFPSItem:ContextMenuItem = new ContextMenuItem("Toggle FPS");
-			myContextMenu.customItems.push(toggleFPSItem);
-			toggleFPSItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onToggleFPS);			
+			
 			
 			var quitItem:ContextMenuItem = new ContextMenuItem("Quit");
 			myContextMenu.customItems.push(quitItem);
@@ -150,14 +149,14 @@ package com.civildebatewall {
 		}
 		
 		private var firstTime:Boolean = true;
-		private function onDatabaseLoaded(e:Event):void {
+		private function onDataLoaded(e:Event):void {
 			
 			if (firstTime) {
 				firstTime = false;
 				
 				// set active debate to first in list
 				// set the active debate to the first one
-				CDW.state.setActiveDebate(CDW.database.threads[0]);
+				CDW.state.setActiveDebate(CDW.data.threads[0]);
 				CDW.state.activeThreadID = CDW.state.activeThread.id; 
 				trace("database loaded");
 				
@@ -174,7 +173,7 @@ package com.civildebatewall {
 				addChild(view);
 				
 				// set the starting view
-				if (database.threads.length >  0) {
+				if (data.threads.length >  0) {
 					view.homeView();
 				}
 				else {
@@ -182,22 +181,8 @@ package com.civildebatewall {
 				}
 				
 				
-				// FPS meter
-				fps = new FPSMeter(this, stage.stageWidth - 50, 0);		
-				fps.visible = false;
-				
-				if (settings.halfSize) {
-					fps.scaleX = 2;
-					fps.scaleY = 2;			
-					fps.x = stage.stageWidth - 100;
-					fps.y = -5;	
-				}
-				
 				// Add test overlay
 				addChild(testOverlay);				
-				
-		
-				
 			}
 			else {
 				trace('updated db')
@@ -205,11 +190,11 @@ package com.civildebatewall {
 				
 				if (CDW.state.userIsResponding) {
 					// go to post to which you responded
-					CDW.state.setActiveDebate(CDW.database.getThreadByID(CDW.state.activeThreadID));
+					CDW.state.setActiveDebate(CDW.data.getThreadByID(CDW.state.activeThreadID));
 				}
 				else {
 					// go to latest post
-					CDW.state.setActiveDebate(CDW.database.threads[0]);
+					CDW.state.setActiveDebate(CDW.data.threads[0]);
 					CDW.state.activeThreadID = CDW.state.activeThread.id;					
 				}
 				
@@ -224,9 +209,13 @@ package com.civildebatewall {
 				}
 				else {
 					// jump to home view					
-			  	database.threads.length > 0 ? view.homeView() : view.noOpinionView();
+			  	data.threads.length > 0 ? view.homeView() : view.noOpinionView();
 				}
 			}
+			
+			
+			
+			
 		}
 		
 		
@@ -272,9 +261,7 @@ package com.civildebatewall {
 			dashboard.visible = !dashboard.visible;
 		}
 		
-		private function onToggleFPS(e:Event):void {
-			fps.visible = !fps.visible;
-		}		
+
 		
 		private function onQuitSelect(e:Event):void {
 			NativeApplication.nativeApplication.exit();
