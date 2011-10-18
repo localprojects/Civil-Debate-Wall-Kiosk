@@ -7,7 +7,7 @@
 	"flipWebcamVertical": true,	
 	"imagePath": "/Users/Mika/Desktop/CDWImages/",
 	"tempImagePath": "C:/temp/",		
-	"serverPath": "http://ec2-50-17-19-164.compute-1.amazonaws.com",
+	"serverPath": "http://0.0.0.0:8080",
 	"inactivityTimeout": 60,
 	"slrTimeout": 5
 }

@@ -1,5 +1,6 @@
 package com.civildebatewall.data {
 	import com.civildebatewall.Utilities;
+	import com.kitschpatrol.futil.utilitites.DateUtil;
 	
 	public class TextMessage extends Object {
 		
@@ -8,9 +9,11 @@ package com.civildebatewall.data {
 		private var _phoneNumber:String;
 		private var _profane:Boolean;
 		
+		
+		
 		public function TextMessage(jsonObject:Object) {
 			_text = jsonObject['message'];
-			_created = Utilities.parseJsonDate(jsonObject['created']);
+			_created = DateUtil.parseJsonDate(jsonObject['created']);
 			_phoneNumber = jsonObject['phoneNumber'];
 			
 			if (jsonObject['profane'] != null) {

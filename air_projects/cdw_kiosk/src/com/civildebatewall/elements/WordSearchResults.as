@@ -9,6 +9,7 @@ package com.civildebatewall.elements {
 	import com.civildebatewall.ui.ButtonBase;
 	import com.civildebatewall.ui.InertialScrollField;
 	import com.civildebatewall.ui.WordButton;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.*;
 	import flash.events.*;
@@ -36,7 +37,7 @@ package com.civildebatewall.elements {
 		
 		public function updateSearch(_word:Word):void {
 			word = _word;
-			Utilities.removeChildren(scrollField.scrollSheet);
+			GraphicsUtil.removeChildren(scrollField.scrollSheet);
 			scrollField.scrollSheet.y = 0;
 			resultCount = word.posts.length;
 			

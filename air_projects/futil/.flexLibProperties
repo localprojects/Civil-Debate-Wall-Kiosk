@@ -4,7 +4,6 @@
     <classEntry path="com.kitschpatrol.futil.DefaultAssets"/>
     <classEntry path="com.kitschpatrol.futil.Padding"/>
     <classEntry path="com.kitschpatrol.futil.TextSize"/>
-    <classEntry path="com.kitschpatrol.futil.Utilities"/>
     <classEntry path="com.kitschpatrol.futil.Math2"/>
     <classEntry path="com.kitschpatrol.futil.BlockBase"/>
     <classEntry path="com.kitschpatrol.futil.BlockShape"/>
@@ -25,6 +24,11 @@
     <classEntry path="com.kitschpatrol.futil.utilitites.GraphicsUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.VectorUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.ColorUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.NetUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.DateUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.ObjectUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.StringUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.FunctionUtil"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

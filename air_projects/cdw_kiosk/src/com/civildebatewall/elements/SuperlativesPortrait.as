@@ -1,7 +1,6 @@
 package com.civildebatewall.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CDW;
-	import com.civildebatewall.StringUtils;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.blocks.BlockBase;
 	import com.civildebatewall.blocks.BlockBitmapPlus;
@@ -9,6 +8,7 @@ package com.civildebatewall.elements {
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.ui.BalloonButton;
 	import com.greensock.TweenMax;
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
@@ -99,7 +99,7 @@ package com.civildebatewall.elements {
 		public function setPost(post:Post, instant:Boolean = false):void {
 			_post = post;
 			
-			portrait.setImage(new Bitmap(Utilities.scaleToFill(_post.user.photo.bitmapData, 503, 844), "auto", true), instant);
+			portrait.setImage(new Bitmap(BitmapUtil.scaleToFill(_post.user.photo.bitmapData, 503, 844), "auto", true), instant);
 			
 
 			if (instant) {

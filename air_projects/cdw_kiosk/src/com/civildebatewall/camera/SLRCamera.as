@@ -1,5 +1,8 @@
 package com.civildebatewall.camera
 {
+	import com.civildebatewall.*;
+	import com.kitschpatrol.futil.Math2;
+	
 	import flash.desktop.*;
 	import flash.display.*;
 	import flash.events.*;
@@ -7,8 +10,6 @@ package com.civildebatewall.camera
 	import flash.geom.Matrix;
 	import flash.net.*;
 	import flash.utils.*;
-	
-	import com.civildebatewall.*;
 	
 	
 	
@@ -153,7 +154,7 @@ package com.civildebatewall.camera
 			
 			// rotate and flip the image
 			var matrix:Matrix = new Matrix();
-			matrix.rotate(Utilities.degToRad(90));			
+			matrix.rotate(Math2.degToRad(90));			
 			matrix.scale(-1, 1); // flip horizontally
 			
 			image = new Bitmap(new BitmapData(loadedBitmap.height, loadedBitmap.width), "auto", true);

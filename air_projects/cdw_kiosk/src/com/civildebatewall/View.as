@@ -9,6 +9,12 @@ package com.civildebatewall {
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
+	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
+	import com.kitschpatrol.futil.utilitites.FunctionUtil;
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
+	import com.kitschpatrol.futil.utilitites.NumberUtil;
+	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.*;
 	import flash.events.*;
@@ -342,7 +348,7 @@ package com.civildebatewall {
 			// broken apart for easy measurability
 			var smsInstrucitonPrefix:String = 'What would you say to convince others of your opinion?\nText ';
 			var smsInstrucitonPostfix:String = ' with your statement.';			
-			var smsPhoneNumber:String = Utilities.formatPhoneNumber(CDW.database.smsNumber);
+			var smsPhoneNumber:String = NumberUtil.formatPhoneNumber(CDW.database.smsNumber);
 			var smsInstructionText:String = smsInstrucitonPrefix + smsPhoneNumber + smsInstrucitonPostfix;
 			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_REGULAR);
 			smsInstructions.textField.setTextFormat(new TextFormat(Assets.FONT_HEAVY), smsInstrucitonPrefix.length, smsInstrucitonPrefix.length + smsPhoneNumber.length);			
@@ -718,15 +724,15 @@ package com.civildebatewall {
 				// Show as much comment as possible... truncate what we can't
 				viewDebateButton.setFont(Assets.FONT_BOLD);
 				var firstCommentText:String = CDW.state.activeThread.posts[1].text;
-				var newLabel:String = '\u201C' + firstCommentText + '\u201D + ' + responseCount + ' ' + Utilities.plural('response', responseCount);				
+				var newLabel:String = '\u201C' + firstCommentText + '\u201D + ' + responseCount + ' ' + StringUtil.plural('response', responseCount);				
 				var commentLength:int = firstCommentText.length;
 				var commentPreview:String = firstCommentText;				
 				var previewWidth:Number = viewDebateButton.measureText(newLabel);
 				
 				while (previewWidth > 460) {
 					commentLength--;
-					commentPreview = StringUtils.truncate(firstCommentText, commentLength, '...');
-					newLabel = '\u201C' + commentPreview + '\u201D + ' + responseCount + ' ' + Utilities.plural('response', responseCount);					
+					commentPreview = StringUtil.truncate(firstCommentText, commentLength, '...');
+					newLabel = '\u201C' + commentPreview + '\u201D + ' + responseCount + ' ' + StringUtil.plural('response', responseCount);					
 					previewWidth = viewDebateButton.measureText(newLabel);
 				}
 				
@@ -1041,7 +1047,7 @@ package com.civildebatewall {
 			flagNoButton.showOutline(false);
 			
 			// Wait and then go back
-			Utilities.doAfterDelay(removeFlagOverlayView, 2000);
+			FunctionUtil.doAfterDelay(removeFlagOverlayView, 2000);
 		}
 				
 		
@@ -1337,7 +1343,7 @@ package com.civildebatewall {
 		public function simulateSMS(e:Event):void {
 			if(smsCheckTimer != null) smsCheckTimer.stop();
 			//var testTextMessage:TextMessage = new TextMessage({'message': Utilities.dummyText(100), 'phoneNumber': '415' + Utilities.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});
-			var testTextMessage:TextMessage = new TextMessage({'message': '', 'phoneNumber': '555' + Utilities.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});			
+			var testTextMessage:TextMessage = new TextMessage({'message': '', 'phoneNumber': '555' + Math2.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});			
 			handleSMS(testTextMessage);
 		}
 
@@ -1478,7 +1484,7 @@ package com.civildebatewall {
 				
 				// Scale the face detector rectangle
 				var scaleFactor:Number = CDW.state.userImage.height / faceDetector.maxSourceHeight; 
-				var scaledFaceRect:Rectangle = Utilities.scaleRect(faceDetector.faceRect, scaleFactor);
+				var scaledFaceRect:Rectangle = GeomUtil.scaleRect(faceDetector.faceRect, scaleFactor);
 				
 				trace("Scaled face rect: " + scaledFaceRect);
 				
@@ -1486,7 +1492,7 @@ package com.civildebatewall {
 			}
 			else {
 				trace('no face found, saving as is');
-				CDW.state.userImage.bitmapData = Utilities.scaleToFill(CDW.state.userImage.bitmapData, stageWidth, stageHeight);
+				CDW.state.userImage.bitmapData = BitmapUtil.scaleToFill(CDW.state.userImage.bitmapData, stageWidth, stageHeight);
 			}
 			
 			// NOW flash
@@ -1577,7 +1583,7 @@ package com.civildebatewall {
 		
 		private function onSaveName(e:Event):void {
 			// trim white space
-			nameEntryField.getTextField().text = StringUtils.trim(nameEntryField.getTextField().text);
+			nameEntryField.getTextField().text = StringUtil.trim(nameEntryField.getTextField().text);
 			
 			if (nameEntryField.getTextField().length == 0) {
 				noNameWarning.tweenIn();
@@ -1842,7 +1848,7 @@ package com.civildebatewall {
 		
 		private function onSaveOpinionEdit(e:Event):void {
 			// Validate
-			editOpinion.getTextField().text = StringUtils.trim(editOpinion.getTextField().text);
+			editOpinion.getTextField().text = StringUtil.trim(editOpinion.getTextField().text);
 			CDW.state.userOpinion = editOpinion.getTextField().text
 			
 			if (editOpinion.getTextField().length == 0) {

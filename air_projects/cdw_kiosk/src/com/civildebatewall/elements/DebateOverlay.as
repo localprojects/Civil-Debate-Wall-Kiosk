@@ -4,10 +4,11 @@ package com.civildebatewall.elements
 	import com.civildebatewall.blocks.*;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.ui.*;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.*;
 	import flash.events.*;
-	import flash.text.*;	
+	import flash.text.*;
 	
 	public class DebateOverlay extends BlockBase	{
 		
@@ -45,7 +46,7 @@ package com.civildebatewall.elements
 			// rebuild the list
 		
 			// clear children
-			Utilities.removeChildren(scrollField.scrollSheet);
+			GraphicsUtil.removeChildren(scrollField.scrollSheet);
 			
 			var yOffset:int = 30;
 			var paddingBottom:int = 35;

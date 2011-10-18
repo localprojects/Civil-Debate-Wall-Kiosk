@@ -1,13 +1,12 @@
 package com.civildebatewall.blocks {
 
-	import com.greensock.*;
-	import com.greensock.easing.*;
-	
-	import flash.display.Sprite;
-	
 	import com.civildebatewall.CDW;
 	import com.civildebatewall.Utilities;
-	import com.civildebatewall.ui.BlockInputLabel;
+	import com.greensock.*;
+	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.utilitites.ObjectUtil;
+	
+	import flash.display.Sprite;
 	
 	
 	public class BlockBase extends Sprite {
@@ -28,8 +27,8 @@ package com.civildebatewall.blocks {
 			
 			// set some default parameters, can be overriden
 			defaultTweenVars = {cacheAsBitmap: true};
-			defaultTweenInVars = Utilities.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenIn, onComplete: afterTweenIn});
-			defaultTweenOutVars = Utilities.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenOut, onComplete: afterTweenOut});
+			defaultTweenInVars = ObjectUtil.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenIn, onComplete: afterTweenIn});
+			defaultTweenOutVars = ObjectUtil.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenOut, onComplete: afterTweenOut});
 			defaultDuration = 1;
 			defaultInDuration = defaultDuration;
 			defaultOutDuration = defaultDuration;
@@ -46,12 +45,12 @@ package com.civildebatewall.blocks {
 		// TODO add duration control?
 		public function setDefaultTweenIn(duration:Number, params:Object):void {
 			defaultInDuration = duration;
-			defaultTweenInVars = Utilities.mergeObjects(defaultTweenInVars, params);
+			defaultTweenInVars = ObjectUtil.mergeObjects(defaultTweenInVars, params);
 		}
 		
 		public function setDefaultTweenOut(duration:Number, params:Object):void {
 			defaultOutDuration = duration;
-			defaultTweenOutVars = Utilities.mergeObjects(defaultTweenOutVars, params);
+			defaultTweenOutVars = ObjectUtil.mergeObjects(defaultTweenOutVars, params);
 		}				
 
 		
@@ -80,6 +79,7 @@ package com.civildebatewall.blocks {
 			
 			for (var key:String in params) {
 				// look for any special shortcuts
+				// TODO wrap these in animation plugin
 				if ((key == 'x') && (params[key] == CENTER)) Math.round(newParams[key] = (stageWidth / 2) - (width / 2));
 				if ((key == 'y') && (params[key] == CENTER)) Math.round(newParams[key] = (stageHeight / 2) - (height / 2));
 				if ((key == 'x') && (params[key] == OFF_LEFT_EDGE)) newParams[key] = -width - 10;
@@ -88,7 +88,7 @@ package com.civildebatewall.blocks {
 				if ((key == 'y') && (params[key] == OFF_BOTTOM_EDGE))	newParams[key] = stageHeight + 10;
 			}
 			
-			return Utilities.mergeObjects(params, newParams);
+			return ObjectUtil.mergeObjects(params, newParams);
 		}
 		
 		
@@ -124,7 +124,7 @@ package com.civildebatewall.blocks {
 		
 		
 		public function tween(duration:Number, params:Object):void {
-			TweenMax.to(this, duration, Utilities.mergeObjects(defaultTweenVars, params));
+			TweenMax.to(this, duration, ObjectUtil.mergeObjects(defaultTweenVars, params));
 			active = true;
 		}
 		
@@ -143,7 +143,7 @@ package com.civildebatewall.blocks {
 				params = defaultTweenInVars;
 			}
 			else {
-				params = Utilities.mergeObjects(defaultTweenInVars, params);
+				params = ObjectUtil.mergeObjects(defaultTweenInVars, params);
 			}
 			
 			params = preprocessParams(params);
@@ -162,7 +162,7 @@ package com.civildebatewall.blocks {
 				params = defaultTweenOutVars;
 			}
 			else {
-				params = Utilities.mergeObjects(defaultTweenOutVars, params);
+				params = ObjectUtil.mergeObjects(defaultTweenOutVars, params);
 			}
 			
 			params = preprocessParams(params);			

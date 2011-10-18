@@ -3,6 +3,7 @@ package com.civildebatewall.data {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CDW;
 	import com.civildebatewall.Utilities;
+	import com.kitschpatrol.futil.utilitites.DateUtil;
 		
 	
 	public class Post extends Object {
@@ -47,7 +48,7 @@ package com.civildebatewall.data {
 			_text = jsonObject['text'];
 			_origin = ORIGIN_KIOSK; // todo support other origins
 			_user = CDW.database.getUserByID(jsonObject['author']['id']);
-			_created = Utilities.parseJsonDate(jsonObject['created']);
+			_created = DateUtil.parseJsonDate(jsonObject['created']);
 			_thread = parentThread;
 			
 			

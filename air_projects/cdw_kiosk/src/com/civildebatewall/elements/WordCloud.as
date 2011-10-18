@@ -4,6 +4,9 @@ package com.civildebatewall.elements {
 	import com.civildebatewall.data.Word;
 	import com.civildebatewall.ui.WordButton;
 	import com.greensock.TweenMax;
+	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.utilitites.ArrayUtil;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.events.*;
 	
@@ -43,7 +46,7 @@ package com.civildebatewall.elements {
 			this.drawBackground();
 			
 			// remove existing
-			Utilities.removeChildren(this);
+			GraphicsUtil.removeChildren(this);
 
 			var wordLimit:uint = 30; // too high?
 
@@ -103,21 +106,21 @@ package com.civildebatewall.elements {
 			// recalculate color based on new max and min
 			// find limits
 			trace("Buttons: " + wordButtons.length);	
-			var maxDifference:Number = Utilities.maxInCollection(wordButtons, 'difference');
-			var minDifference:Number = Utilities.minInCollection(wordButtons, 'difference');
+			var maxDifference:Number = ArrayUtil.maxInObjectArray(wordButtons, "difference");
+			var minDifference:Number = ArrayUtil.minInObjectArray(wordButtons, "difference");
 	
 			trace("Max difference: " + maxDifference);
 			trace("Min difference: " + minDifference);
-			trace("Mapping -10: " + Utilities.map(-10, minDifference, maxDifference, 0, 1));			
-			trace("Mapping -5: " + Utilities.map(-5, minDifference, maxDifference, 0, 1));
-			trace("Mapping 2: " + Utilities.map(2, minDifference, maxDifference, 0, 1));			
+			trace("Mapping -10: " + Math2.map(-10, minDifference, maxDifference, 0, 1));			
+			trace("Mapping -5: " + Math2.map(-5, minDifference, maxDifference, 0, 1));
+			trace("Mapping 2: " + Math2.map(2, minDifference, maxDifference, 0, 1));			
 			
 			
 			
 			
 			for each (wordButton in wordButtons) {
 				// set the new difference and add listeners
-				wordButton.normalDifference = Utilities.map(wordButton.difference, minDifference, maxDifference, 0, 1);
+				wordButton.normalDifference = Math2.map(wordButton.difference, minDifference, maxDifference, 0, 1);
 				wordButton.updateColor();
 				
 				// also add listeners

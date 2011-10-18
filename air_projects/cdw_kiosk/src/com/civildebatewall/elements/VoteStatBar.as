@@ -1,11 +1,10 @@
 package com.civildebatewall.elements {
-	import flash.display.Bitmap;
-	import flash.display.Shape;
-	import flash.display.Sprite;
-	
 	import com.civildebatewall.*;
 	import com.civildebatewall.blocks.BlockBase;
-	import com.civildebatewall.ui.BlockButton;
+	import com.kitschpatrol.futil.Math2;
+	
+	import flash.display.Shape;
+	import flash.display.Sprite;
 	
 	
 	public class VoteStatBar extends BlockBase {
@@ -68,7 +67,7 @@ package com.civildebatewall.elements {
 		public function set barPercent(n:Number):void {
 			_barPercent = n; // limit to 0 - 100
 			
-			var w:Number = Utilities.mapClamp(_barPercent, 0, 100, -arrowWidth, barWidth);  // limit to 0 - 100
+			var w:Number = Math2.mapClamp(_barPercent, 0, 100, -arrowWidth, barWidth);  // limit to 0 - 100
 			midPoint = w + (arrowWidth / 2);
 			
 			// redraw the bar

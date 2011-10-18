@@ -1,13 +1,13 @@
 package com.civildebatewall.ui {
+	import com.civildebatewall.*;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.text.*;
 	import flash.utils.*;
-	
-	import com.civildebatewall.*;
 	
 	public class CountdownButton extends ButtonBase {
 		
@@ -116,7 +116,7 @@ package com.civildebatewall.ui {
 		private function resetArrow():void {
 			TweenMax.killTweensOf(arrow);			
 			arrow.alpha = 0;
-			Utilities.centerWithin(arrow, this);
+			GeomUtil.centerWithin(arrow, this);
 			arrow.y += 14;	
 			arrow.x += 12;
 		}

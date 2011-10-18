@@ -2,14 +2,14 @@ package com.civildebatewall.data {
 	import com.adobe.protocols.dict.Response;
 	import com.adobe.serialization.json.*;
 	import com.adobe.utils.StringUtil;
+	import com.civildebatewall.*;
 	import com.civildebatewall.CDW;
-	import com.civildebatewall.StringUtils;
 	import com.civildebatewall.Utilities;
 	import com.greensock.*;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.*;
 	import com.greensock.loading.display.*;
-	import com.civildebatewall.*;
+	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -165,7 +165,7 @@ package com.civildebatewall.data {
 			var wordSearch:RegExp = new RegExp(/\w*\w/g);
 			var corpus:Array = [];
 			for each (post in posts) {
-				corpus = Utilities.mergeUnique(corpus, post.text.toLowerCase().match(wordSearch));
+				corpus = ArrayUtil.mergeUnique(corpus, post.text.toLowerCase().match(wordSearch));
 			}
 			
 			
@@ -208,7 +208,7 @@ package com.civildebatewall.data {
 								word.noCases++;
 							}
 							
-							Utilities.pushUnique(word.posts, post);
+							ArrayUtil.pushIfUnique(word.posts, post);
 							word.total++;
 						}
 					}

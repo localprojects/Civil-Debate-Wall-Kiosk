@@ -5,6 +5,7 @@ package com.civildebatewall.keyboard {
 	import com.civildebatewall.CDW;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.blocks.BlockBase;
+	import com.kitschpatrol.futil.Math2;
 	
 	import flash.display.InteractiveObject;
 	import flash.display.Sprite;
@@ -168,7 +169,7 @@ package com.civildebatewall.keyboard {
 						}
 						
 						tf.text = firstHalf + secondHalf;						
-						insertionPoint = Utilities.clamp(firstHalf.length, 0, tf.text.length);						
+						insertionPoint = Math2.clamp(firstHalf.length, 0, tf.text.length);						
 						tf.setSelection(insertionPoint, insertionPoint);						
 						
 					}

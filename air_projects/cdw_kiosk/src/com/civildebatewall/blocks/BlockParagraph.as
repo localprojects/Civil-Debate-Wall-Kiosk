@@ -1,16 +1,16 @@
 package com.civildebatewall.blocks {
-	import com.adobe.utils.StringUtil;
+	
 	import com.bit101.components.Text;
+	import com.civildebatewall.*;
 	import com.greensock.*;
 	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.*;
 	import flash.geom.Rectangle;
 	import flash.text.*;
 	
 	import flashx.textLayout.elements.BreakElement;
-	
-	import com.civildebatewall.*;
 	
 	import sekati.layout.Arrange;
 	
@@ -130,7 +130,9 @@ package com.civildebatewall.blocks {
 				
 				highlightLayer.graphics.clear();
 				
-				var locations:Array = Utilities.searchString(s, textField.text);
+				
+				
+				var locations:Array = StringUtil.searchString(s, textField.text);
 				
 				// highlight each one...
 				for (var i:int = 0; i < locations.length; i++) {

@@ -1,13 +1,13 @@
 package com.civildebatewall.blocks {
 	import com.bit101.components.Text;
+	import com.civildebatewall.Utilities;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
 	import flash.display.*;
 	import flash.geom.Rectangle;
 	import flash.text.*;
-	
-	import com.civildebatewall.Utilities;
 	
 	
 	
@@ -34,7 +34,7 @@ package com.civildebatewall.blocks {
 		}
 		
 		private function postInit():void {
-			Utilities.centerWithin(textField, bar);
+			GeomUtil.centerWithin(textField, bar);
 			bar.pixelSnapping = PixelSnapping.ALWAYS;
 			
 			cacheAsBitmap = true;
