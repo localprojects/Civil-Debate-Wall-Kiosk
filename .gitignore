@@ -1,0 +1,13 @@
+# Mac
+/.DS_Store
+*.DS_Store
+
+# Flash
+/bin-debug
+bin-debug/
+*.air
+*.dmg
+*.exe
+
+# Eclipse
+.metadata/.plugins	
