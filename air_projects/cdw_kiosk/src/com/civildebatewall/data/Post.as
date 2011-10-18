@@ -47,7 +47,7 @@ package com.civildebatewall.data {
 			_likes = jsonObject['likes'];
 			_text = jsonObject['text'];
 			_origin = ORIGIN_KIOSK; // todo support other origins
-			_user = CDW.database.getUserByID(jsonObject['author']['id']);
+			_user = CDW.data.getUserByID(jsonObject['author']['id']);
 			_created = DateUtil.parseJsonDate(jsonObject['created']);
 			_thread = parentThread;
 			
@@ -129,7 +129,7 @@ package com.civildebatewall.data {
 		public function get created():Date { return _created; }
 		public function get responseTo():Post {
 			if (responseToID != null) {	
-				return CDW.database.getPostByID(responseToID);
+				return CDW.data.getPostByID(responseToID);
 			}
 			return null;
 		}

@@ -37,8 +37,8 @@ package com.civildebatewall.blocks {
 			visible = false;
 			
 			// for convenience
-			stageWidth = CDW.ref.stage.stageWidth;
-			stageHeight = CDW.ref.stage.stageHeight;
+			stageWidth = CDW.self.stage.stageWidth;
+			stageHeight = CDW.self.stage.stageHeight;
 		}
 		
 		

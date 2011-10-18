@@ -23,7 +23,7 @@ package com.civildebatewall.data {
 			_posts = [];
 			
 			// queue up post loading
-			CDW.database.postQueue.append(new DataLoader(CDW.settings.serverPath + '/api/threads/' + _id, {name: _id, estimatedBytes:2400, onComplete: onPostsLoaded}) );
+			CDW.data.postQueue.append(new DataLoader(CDW.settings.serverPath + '/api/threads/' + _id, {name: _id, estimatedBytes:2400, onComplete: onPostsLoaded}) );
 		}
 		
 		private function onPostsLoaded(e:LoaderEvent):void {
@@ -35,7 +35,7 @@ package com.civildebatewall.data {
 				var tempPost:Post = new Post(jsonPost, this);
 				_posts.push(tempPost); // one copy in the thread
 				//trace("Created: " + tempPost.text); 				
-				CDW.database.posts.push(tempPost); // and one copy globally
+				CDW.data.posts.push(tempPost); // and one copy globally
 			}
 			
 

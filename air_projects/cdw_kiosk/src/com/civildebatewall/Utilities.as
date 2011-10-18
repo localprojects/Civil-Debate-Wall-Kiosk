@@ -1,6 +1,7 @@
 package com.civildebatewall {
 	import cmodule.aircall.CLibInit;
 	
+	import com.adobe.crypto.SHA1;
 	import com.adobe.serialization.json.*;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.DateUtil;
@@ -190,6 +191,12 @@ package com.civildebatewall {
 			var variables:URLVariables = objectToURLVariables(payload);
 			
 			request.data = variables;  
+			
+			// Security header
+			
+			trace(SHA1.hash(CDW.settings.secretKey));
+			
+			request.requestHeaders.push(new URLRequestHeader("X-Auth-Token", SHA1.hash(CDW.settings.secretKey)));
 			
 			trace('sending variables: ' + variables.toString());
 			

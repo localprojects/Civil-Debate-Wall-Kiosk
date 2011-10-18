@@ -175,7 +175,7 @@ package com.civildebatewall {
 			question = new QuestionText();
 			question.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 123});
 			question.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});
-			question.setText(CDW.database.question.text);
+			question.setText(CDW.data.question.text);
 			addChild(question);
 			
 			// triple stances
@@ -348,7 +348,7 @@ package com.civildebatewall {
 			// broken apart for easy measurability
 			var smsInstrucitonPrefix:String = 'What would you say to convince others of your opinion?\nText ';
 			var smsInstrucitonPostfix:String = ' with your statement.';			
-			var smsPhoneNumber:String = NumberUtil.formatPhoneNumber(CDW.database.smsNumber);
+			var smsPhoneNumber:String = NumberUtil.formatPhoneNumber(CDW.data.smsNumber);
 			var smsInstructionText:String = smsInstrucitonPrefix + smsPhoneNumber + smsInstrucitonPostfix;
 			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_REGULAR);
 			smsInstructions.textField.setTextFormat(new TextFormat(Assets.FONT_HEAVY), smsInstrucitonPrefix.length, smsInstrucitonPrefix.length + smsPhoneNumber.length);			
@@ -600,7 +600,7 @@ package com.civildebatewall {
 			
 			// content mutations
 			portrait.setImage(CDW.state.activeThread.firstPost.user.photo); // TODO need to copy?
-			question.setText(CDW.database.question.text, true);
+			question.setText(CDW.data.question.text, true);
 			nametag.setText(CDW.state.activeThread.firstPost.user.usernameFormatted + ' Says :', true);
 			stance.setText(CDW.state.activeThread.firstPost.stanceFormatted, true);
 			opinion.setText(CDW.state.activeThread.firstPost.text);
@@ -1206,7 +1206,7 @@ package com.civildebatewall {
 			//
 			
 			// start polling to see if the user has sent their opinion yet
-			CDW.database.fetchLatestTextMessages(onLatestMessagesFetched);
+			CDW.data.fetchLatestTextMessages(onLatestMessagesFetched);
 			
 			// blocks
 			portrait.tweenIn();
@@ -1235,8 +1235,8 @@ package com.civildebatewall {
 		private function onLatestMessagesFetched():void {
 			trace("latest baseline messages fetched...");
 			
-			if(CDW.database.latestTextMessages.length > 0) {
-				CDW.state.lastTextMessageTime = CDW.database.latestTextMessages[0].created;	
+			if(CDW.data.latestTextMessages.length > 0) {
+				CDW.state.lastTextMessageTime = CDW.data.latestTextMessages[0].created;	
 			}
 			else {
 				// edge case, no messages, anything will be newer
@@ -1253,7 +1253,7 @@ package com.civildebatewall {
 		
 		private function onSmsCheckTimer(e:TimerEvent):void {
 			trace('fetcheding latest sms');
-			CDW.database.fetchLatestTextMessages(onSMSCheckResponse);
+			CDW.data.fetchLatestTextMessages(onSMSCheckResponse);
 			smsCheckTimer.stop();
 		}
 		
@@ -1262,17 +1262,17 @@ package com.civildebatewall {
 			trace('latest sms fetched');
 			
 			// Grab a newer message
-			if ((CDW.database.latestTextMessages.length > 0) && (CDW.database.latestTextMessages[0].created > CDW.state.lastTextMessageTime)) {
+			if ((CDW.data.latestTextMessages.length > 0) && (CDW.data.latestTextMessages[0].created > CDW.state.lastTextMessageTime)) {
 				trace("got SMS");		
 				
 				// check for profanity, TODO move this to check SMS
-				if (CDW.database.latestTextMessages[0].profane) {
+				if (CDW.data.latestTextMessages[0].profane) {
 					// scold for five seconds
 					smsReceivedProfanityWarning.tweenIn();
 					TweenMax.delayedCall(5, function():void { smsReceivedProfanityWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE})});					
 					
 					// reset time baseline
-					CDW.state.lastTextMessageTime = CDW.database.latestTextMessages[0].created; 
+					CDW.state.lastTextMessageTime = CDW.data.latestTextMessages[0].created; 
 					
 					// keep checking
 					trace("Bad words! keep trying");
@@ -1281,7 +1281,7 @@ package com.civildebatewall {
 				}
 				else {
 					trace("it's clean");
-					handleSMS(CDW.database.latestTextMessages[0]);
+					handleSMS(CDW.data.latestTextMessages[0]);
 				}
 			}
 			else {
@@ -1300,7 +1300,7 @@ package com.civildebatewall {
 			CDW.state.userOpinion = CDW.state.textMessage.text; // TODO truncate this?			
 			CDW.state.userPhoneNumber = CDW.state.textMessage.phoneNumber;
 			
-			var tempUser:User = CDW.database.getUserByPhoneNumber(sms.phoneNumber); // TODO check server instead
+			var tempUser:User = CDW.data.getUserByPhoneNumber(sms.phoneNumber); // TODO check server instead
 			
 			if (tempUser != null) {
 				trace("user exists");
@@ -1595,7 +1595,7 @@ package com.civildebatewall {
 				CDW.state.userName = nameEntryField.getTextField().text;
 				
 				// Try to create the user, check for existing username
-				CDW.database.createUser(CDW.state.userName, CDW.state.userPhoneNumber, onUserCreated);
+				CDW.data.createUser(CDW.state.userName, CDW.state.userPhoneNumber, onUserCreated);
 				
 			}
 		}
@@ -1749,12 +1749,12 @@ package com.civildebatewall {
 				
 				trace("Responding to: " + CDW.state.userRespondingTo.id);
 				
-				CDW.database.uploadResponse(CDW.state.activeThread.id, CDW.state.userRespondingTo.id, CDW.state.userID, CDW.state.userOpinion, CDW.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
+				CDW.data.uploadResponse(CDW.state.activeThread.id, CDW.state.userRespondingTo.id, CDW.state.userID, CDW.state.userOpinion, CDW.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
 			}
 			else {
 				// create and upload new debate
 				trace("Uploading new thread");				
-				CDW.database.uploadThread(CDW.database.question.id, CDW.state.userID, CDW.state.userOpinion, CDW.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
+				CDW.data.uploadThread(CDW.data.question.id, CDW.state.userID, CDW.state.userOpinion, CDW.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
 			}			
 		}
 		
@@ -1773,7 +1773,7 @@ package com.civildebatewall {
 				CDW.state.activePost = null;			
 			}			
 			
-			CDW.database.load();			
+			CDW.data.load();			
 		}
 		
 		

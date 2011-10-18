@@ -21,7 +21,7 @@ package com.civildebatewall.data {
 	import sekati.layout.Arrange;
 	import sekati.utils.ColorUtil;
 	
-	public class Database extends EventDispatcher {
+	public class Data extends EventDispatcher {
 		
 		
 		public var question:Question;
@@ -46,7 +46,7 @@ package com.civildebatewall.data {
 		// a bunch of boring 3+ letter words (TODO get from server)
 		private const boringWords:Array = ["not", "for", "this", "and", "are", "but", "your", "has", "have", "the", "that", "they", "with"];		
 			
-		public function Database() {
+		public function Data() {
 			super();
 		}
 		

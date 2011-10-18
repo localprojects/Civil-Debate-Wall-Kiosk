@@ -157,8 +157,8 @@ package com.civildebatewall.ui {
 			// TODO direction restrictions?
 			mouseTravelX = 0;
 			mouseTravelY = 0;			
-			lastMouseX = CDW.ref.stage.mouseX;
-			lastMouseY = CDW.ref.stage.mouseY;
+			lastMouseX = CDW.self.stage.mouseX;
+			lastMouseY = CDW.self.stage.mouseY;
 			x1 = x2 = scrollSheet.x;
 			y1 = y2 = scrollSheet.y;
 			t1 = t2 = getTimer();
@@ -169,7 +169,7 @@ package com.civildebatewall.ui {
 			}
 			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			CDW.ref.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			CDW.self.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
 		
 		
@@ -177,10 +177,10 @@ package com.civildebatewall.ui {
 			if (_scrollAllowed) {
 				// Odometer for the mouse
 				// Not just distance! cumulative to handle double-back situation
-				mouseTravelX += Math.abs(CDW.ref.stage.mouseX - lastMouseX);
-				mouseTravelY += Math.abs(CDW.ref.stage.mouseY - lastMouseY);			
-				lastMouseX = CDW.ref.stage.mouseX;
-				lastMouseY = CDW.ref.stage.mouseY;
+				mouseTravelX += Math.abs(CDW.self.stage.mouseX - lastMouseX);
+				mouseTravelY += Math.abs(CDW.self.stage.mouseY - lastMouseY);			
+				lastMouseX = CDW.self.stage.mouseX;
+				lastMouseY = CDW.self.stage.mouseY;
 				
 				y2 = y1;
 				x2 = x1;
@@ -212,7 +212,7 @@ package com.civildebatewall.ui {
 			// Hand it over to the throw tween
 			scrollSheet.stopDrag();
 			
-			CDW.ref.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			CDW.self.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
 			var time:Number = (getTimer() - t2) / 1000;

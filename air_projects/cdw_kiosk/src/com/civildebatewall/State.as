@@ -62,9 +62,6 @@ package com.civildebatewall {
 			textMessage = null;
 			lastTextMessageTime = null;
 			//highlightWord = null;
-	
-			
-			
 		}
 		
 		public function setStance(s:String):void {
@@ -116,14 +113,14 @@ package com.civildebatewall {
 				previousThread = overridePrevious; 
 			}
 			else {
-				previousThread = CDW.database.getPreviousThread();
+				previousThread = CDW.data.getPreviousThread();
 			}					
 			
 			if (overrideNext != null) {
 				nextThread =overrideNext; 
 			}
 			else {
-				nextThread = CDW.database.getNextThread();
+				nextThread = CDW.data.getNextThread();
 			}
 
 			trace("Prev: " + previousThread);

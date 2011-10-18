@@ -29,6 +29,7 @@
     <classEntry path="com.kitschpatrol.futil.utilitites.ObjectUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.StringUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.FunctionUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.PlatformUtil"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
