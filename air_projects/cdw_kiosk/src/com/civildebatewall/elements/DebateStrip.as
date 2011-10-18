@@ -1,22 +1,14 @@
 package com.civildebatewall.elements {
 	import com.civildebatewall.*;
-	import com.civildebatewall.CDW;
 	import com.civildebatewall.blocks.BlockBase;
-	import com.civildebatewall.data.Thread;
 	import com.civildebatewall.ui.*;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
-	import com.greensock.plugins.ThrowPropsPlugin;
+	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
-	import flash.display.Bitmap;
-	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.geom.Rectangle;
-	import flash.ui.Mouse;
-	import flash.utils.getTimer;
-	
-	import sekati.converters.BoolConverter;
 	
 	
 	
@@ -51,10 +43,8 @@ package com.civildebatewall.elements {
 			// reads the state and builds the strip
 			
 			// Clean up the kids, could do a diff instead...
-			Utilities.removeChildren(scrollField.scrollSheet);
-			
-			
-			
+			GraphicsUtil.removeChildren(scrollField.scrollSheet);
+
 			
 			for (var i:uint = 0; i < CDW.database.threads.length; i++) {
 				var threadThumbnail:ThumbnailButton = new ThumbnailButton(CDW.database.threads[i]);
@@ -120,7 +110,7 @@ package com.civildebatewall.elements {
 			var activeThumbnailX:Number = -activeThumbnail.x + ((1080 - activeThumbnail.width) / 2);
 			
 			// handle literal edge cases (don't scroll past bounds)
-			activeThumbnailX = Utilities.clamp(activeThumbnailX, scrollField.xMin, scrollField.xMax); 
+			activeThumbnailX = Math2.clamp(activeThumbnailX, scrollField.xMin, scrollField.xMax); 
 			
 			scrollField.scrollTo(activeThumbnailX, 0);
 		}

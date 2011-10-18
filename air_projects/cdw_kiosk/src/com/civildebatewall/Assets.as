@@ -1,5 +1,7 @@
 package com.civildebatewall
 {
+	import com.kitschpatrol.futil.utilitites.ColorUtil;
+	
 	import flash.display.*;
 	
 	public final class Assets	{
@@ -175,32 +177,32 @@ package com.civildebatewall
 
 		
 		// Colors
-		public static const COLOR_YES_EXTRA_LIGHT:uint = Utilities.color(185, 229, 250); //Utilities.color(109, 207, 246);
-		public static const COLOR_YES_LIGHT:uint = Utilities.color(0, 185, 255);
-		public static const COLOR_YES_MEDIUM:uint = Utilities.color(0, 155, 255);
-		public static const COLOR_YES_DARK:uint = Utilities.color(0, 115, 255);
-		public static const COLOR_YES_OVERLAY:uint = Utilities.color(53, 124, 146);
-		public static const COLOR_YES_WATERMARK:uint = Utilities.color(239, 249, 254);
-		public static const COLOR_YES_DISABLED:uint = Utilities.color(34, 63, 110); 
+		public static const COLOR_YES_EXTRA_LIGHT:uint = ColorUtil.rgb(185, 229, 250); //Utilities.color(109, 207, 246);
+		public static const COLOR_YES_LIGHT:uint = ColorUtil.rgb(0, 185, 255);
+		public static const COLOR_YES_MEDIUM:uint = ColorUtil.rgb(0, 155, 255);
+		public static const COLOR_YES_DARK:uint = ColorUtil.rgb(0, 115, 255);
+		public static const COLOR_YES_OVERLAY:uint = ColorUtil.rgb(53, 124, 146);
+		public static const COLOR_YES_WATERMARK:uint = ColorUtil.rgb(239, 249, 254);
+		public static const COLOR_YES_DISABLED:uint = ColorUtil.rgb(34, 63, 110); 
 		public static const COLOR_YES_HIGHLIGHT:uint = COLOR_YES_DISABLED; // TBD		
 	
-		public static const COLOR_NO_EXTRA_LIGHT:uint = Utilities.color(251, 200, 180); //Utilities.color(247, 150, 121);
-		public static const COLOR_NO_LIGHT:uint = Utilities.color(255, 90, 0); // TODO medium and light are identical in the design template!
-		public static const COLOR_NO_MEDIUM:uint = Utilities.color(255, 75, 0); // TODO medium and light are identical in the designtemplate!
-		public static const COLOR_NO_DARK:uint = Utilities.color(255, 60, 0);
-		public static const COLOR_NO_OVERLAY:uint = Utilities.color(255, 60, 0);
-		public static const COLOR_NO_WATERMARK:uint = Utilities.color(255, 242, 235);
-		public static const COLOR_NO_DISABLED:uint = Utilities.color(140, 41, 4);		
+		public static const COLOR_NO_EXTRA_LIGHT:uint = ColorUtil.rgb(251, 200, 180); //Utilities.color(247, 150, 121);
+		public static const COLOR_NO_LIGHT:uint = ColorUtil.rgb(255, 90, 0); // TODO medium and light are identical in the design template!
+		public static const COLOR_NO_MEDIUM:uint = ColorUtil.rgb(255, 75, 0); // TODO medium and light are identical in the designtemplate!
+		public static const COLOR_NO_DARK:uint = ColorUtil.rgb(255, 60, 0);
+		public static const COLOR_NO_OVERLAY:uint = ColorUtil.rgb(255, 60, 0);
+		public static const COLOR_NO_WATERMARK:uint = ColorUtil.rgb(255, 242, 235);
+		public static const COLOR_NO_DISABLED:uint = ColorUtil.rgb(140, 41, 4);		
 		public static const COLOR_NO_HIGHLIGHT:uint = COLOR_NO_DISABLED; // TBD		
 		
-		public static const COLOR_GRAY_2:uint = Utilities.color(248, 248, 248); // ?% K
-		public static const COLOR_GRAY_5:uint = Utilities.color(241, 242, 242); // 5% K
-		public static const COLOR_GRAY_15:uint = Utilities.color(220, 221, 222); // 15% K		
-		public static const COLOR_GRAY_20:uint = Utilities.color(230, 231, 232); // 20% K
-		public static const COLOR_GRAY_25:uint = Utilities.color(199, 200, 202); // 25% K
-		public static const COLOR_GRAY_50:uint = Utilities.color(147, 149, 152); // 50% K
-		public static const COLOR_GRAY_75:uint = Utilities.color(99, 100, 102); // 75% K
-		public static const COLOR_GRAY_85:uint = Utilities.color(77, 77, 79); // 85% K
-		public static const COLOR_GRAY_90:uint = Utilities.color(65, 66, 64); // 90% K		
+		public static const COLOR_GRAY_2:uint = ColorUtil.rgb(248, 248, 248); // ?% K
+		public static const COLOR_GRAY_5:uint = ColorUtil.rgb(241, 242, 242); // 5% K
+		public static const COLOR_GRAY_15:uint = ColorUtil.rgb(220, 221, 222); // 15% K		
+		public static const COLOR_GRAY_20:uint = ColorUtil.rgb(230, 231, 232); // 20% K
+		public static const COLOR_GRAY_25:uint = ColorUtil.rgb(199, 200, 202); // 25% K
+		public static const COLOR_GRAY_50:uint = ColorUtil.rgb(147, 149, 152); // 50% K
+		public static const COLOR_GRAY_75:uint = ColorUtil.rgb(99, 100, 102); // 75% K
+		public static const COLOR_GRAY_85:uint = ColorUtil.rgb(77, 77, 79); // 85% K
+		public static const COLOR_GRAY_90:uint = ColorUtil.rgb(65, 66, 64); // 90% K		
 	}
 }

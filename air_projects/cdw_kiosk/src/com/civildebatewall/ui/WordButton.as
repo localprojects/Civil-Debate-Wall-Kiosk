@@ -2,6 +2,7 @@ package com.civildebatewall.ui {
 	import com.civildebatewall.*;
 	import com.civildebatewall.blocks.BlockLabel;
 	import com.civildebatewall.data.Word;
+	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import fl.motion.Color;
 	
@@ -24,7 +25,7 @@ package com.civildebatewall.ui {
 			yesCases = word.yesCases;			
 			noCases = word.noCases;			
 
-			super(StringUtils.capitalize(word.word), textSize, textColor, backgroundColor, font, showBackground);
+			super(StringUtil.capitalize(word.word), textSize, textColor, backgroundColor, font, showBackground);
 			
 			// set background color
 

@@ -1,9 +1,10 @@
 package com.civildebatewall.elements {
-	import flash.events.Event;
-	
 	import com.civildebatewall.CDW;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.blocks.BlockBase;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
+	
+	import flash.events.Event;
 	
 	public class DebateList extends BlockBase {
 		
@@ -23,7 +24,7 @@ package com.civildebatewall.elements {
 		
 		// takes a bunch of string ids
 		public function setItems(items:Array):void {
-			Utilities.removeChildren(this);
+			GraphicsUtil.removeChildren(this);
 			
 			var yAccumulator:Number = 0;
 			

@@ -1,4 +1,9 @@
 package com.civildebatewall.camera {
+	import com.civildebatewall.CDW;
+	import com.civildebatewall.Utilities;
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.events.EventDispatcher;
@@ -8,9 +13,6 @@ package com.civildebatewall.camera {
 	import jp.maaash.ObjectDetection.ObjectDetector;
 	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 	import jp.maaash.ObjectDetection.ObjectDetectorOptions;
-	
-	import com.civildebatewall.CDW;
-	import com.civildebatewall.Utilities;
 	
 	// Adapted from Mario Klingemann's code
 	// http://www.quasimondo.com/archives/000687.php
@@ -62,7 +64,7 @@ package com.civildebatewall.camera {
 					faceRect = e.rects[0];
 				}
 				else {
-					// find the rectangle that's closest to the center
+					// find the rectangle that's closest to the 2
 					var closesDistancetIndex:int = 0;
 					var closestDistance:Number = Number.MAX_VALUE;
 					
@@ -70,7 +72,7 @@ package com.civildebatewall.camera {
 					var largestArea:Number = Number.MIN_VALUE;
 					
 					for (var i:int = 0; i < e.rects.length; i++) {
-							var distance:Number = Point.distance(sourceCenter, Utilities.centerPoint(e.rects[i]));
+							var distance:Number = Point.distance(sourceCenter, GeomUtil.centerPoint(e.rects[i]));
 							
 							if (distance < closestDistance) {
 								closestDistance = distance;
@@ -100,7 +102,7 @@ package com.civildebatewall.camera {
 		
 		public function searchBitmap(photo:BitmapData):void {
 			// resize
-			photo = Utilities.scaleToFit(photo, maxSourceWidth, maxSourceHeight);
+			photo = BitmapUtil.scaleToFit(photo, maxSourceWidth, maxSourceHeight);
 			sourceCenter = new Point(photo.width / 2, photo.height / 2);
 			detector.detect(photo);
 		}

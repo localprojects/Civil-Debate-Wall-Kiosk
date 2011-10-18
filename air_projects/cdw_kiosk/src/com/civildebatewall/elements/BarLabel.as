@@ -1,14 +1,14 @@
 package com.civildebatewall.elements {
-	import com.greensock.TweenMax;
-	
-	import flash.display.LineScaleMode;
-	import flash.display.Shape;
-	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.blocks.BlockBase;
 	import com.civildebatewall.blocks.BlockLabel;
 	import com.civildebatewall.blocks.BlockLabelBar;
+	import com.greensock.TweenMax;
+	import com.kitschpatrol.futil.Math2;
+	
+	import flash.display.LineScaleMode;
+	import flash.display.Shape;
 	
 	
 	
@@ -56,7 +56,7 @@ package com.civildebatewall.elements {
 		
 		// takes a percentage from 0 to 100
 		public function setSize(n:Number):void {
-			var targetScale:Number = Utilities.mapClamp(n, 0, 100, minScale, 1);	
+			var targetScale:Number = Math2.mapClamp(n, 0, 100, minScale, 1);	
 			TweenMax.to(this, 1, {transformAroundCenter:{scaleX: targetScale, scaleY: targetScale}});
 		}
 		

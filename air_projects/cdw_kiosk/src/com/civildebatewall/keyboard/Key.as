@@ -1,7 +1,10 @@
 package com.civildebatewall.keyboard {
 	import com.adobe.utils.StringUtil;
+	import com.civildebatewall.Assets;
+	import com.civildebatewall.Utilities;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.Math2;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
@@ -9,9 +12,6 @@ package com.civildebatewall.keyboard {
 	import flash.events.TimerEvent;
 	import flash.text.*;
 	import flash.utils.Timer;
-	
-	import com.civildebatewall.Assets;
-	import com.civildebatewall.Utilities;	
 	
 	
 	public class Key extends Sprite {
@@ -96,7 +96,7 @@ package com.civildebatewall.keyboard {
 		private function draw():void {
 			// draw backboard / hit area
 			this.graphics.clear();
-			this.graphics.beginFill(Utilities.randRange(0, int.MAX_VALUE), 0);
+			this.graphics.beginFill(Math2.randRange(0, int.MAX_VALUE), 0);
 			this.graphics.drawRect(0, 0, keyWidth, keyHeight);
 			this.graphics.endFill();
 			

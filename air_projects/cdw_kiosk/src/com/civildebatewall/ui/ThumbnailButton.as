@@ -7,6 +7,8 @@ package com.civildebatewall.ui {
 	import com.civildebatewall.data.Thread;
 	import com.greensock.*;
 	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
 	import flash.display.*;
 	import flash.text.*;
@@ -38,14 +40,14 @@ package com.civildebatewall.ui {
 			roundedPortrait = new Sprite();
 			
 
-			var scaledPhotoData:BitmapData = Utilities.scaleToFill(thread.firstPost.user.photo.bitmapData, 71, 96)
+			var scaledPhotoData:BitmapData = BitmapUtil.scaleToFill(thread.firstPost.user.photo.bitmapData, 71, 96)
 			
 			roundedPortrait.graphics.beginBitmapFill(scaledPhotoData, null, false, true);
 			roundedPortrait.graphics.drawRoundRect(0, 0, 71, 96, 15, 15);
 			roundedPortrait.graphics.endFill();			
       // roundedPortrait.cacheAsBitmap = false;
 			this.cacheAsBitmap = false;
-			Utilities.centerWithin(roundedPortrait, this);			
+			GeomUtil.centerWithin(roundedPortrait, this);			
 						
 			//  the text
 			textField = new BlockLabel('', 14, 0xffffff, 0x000000, Assets.FONT_BOLD, true);

@@ -1,13 +1,14 @@
 package com.civildebatewall.ui {
 	
+	import com.civildebatewall.*;
+	import com.civildebatewall.blocks.BlockBase;
 	import com.greensock.TweenMax;
+	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	
 	import fl.motion.Color;
 	
 	import flash.events.*;
-	
-	import com.civildebatewall.*;
-	import com.civildebatewall.blocks.BlockBase;
 
 	
 	public class DragLayer extends BlockBase {
@@ -115,12 +116,12 @@ package com.civildebatewall.ui {
 				trace("leftEdge: " + leftEdge + " difference: " + difference);
 				
 				
-				difference = Utilities.clamp(difference, -stageWidth, stageWidth);
-				leftEdge = Utilities.clamp(leftEdge, -stageWidth, stageWidth);				
+				difference = Math2.clamp(difference, -stageWidth, stageWidth);
+				leftEdge = Math2.clamp(leftEdge, -stageWidth, stageWidth);				
 				
 				
 				
-				var amount:Number = Utilities.map(Math.abs(leftEdge), 0, stageWidth, 0, 1);
+				var amount:Number = Math2.map(Math.abs(leftEdge), 0, stageWidth, 0, 1);
 				
 				// drag blocks
 				CDW.view.nametag.x = CDW.view.nametag.defaultTweenInVars.x - difference;
@@ -147,7 +148,7 @@ package com.civildebatewall.ui {
 
 				if (leftEdge < 0) {
 					// going to next
-					CDW.view.portrait.setIntermediateImage(CDW.state.nextThread.firstPost.user.photo, Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
+					CDW.view.portrait.setIntermediateImage(CDW.state.nextThread.firstPost.user.photo, Math2.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
 					
 					// No tween if no change!
 					if (CDW.state.nextThread.firstPost.stance != CDW.state.activeThread.firstPost.stance) {
@@ -171,7 +172,7 @@ package com.civildebatewall.ui {
 				}
 				else if (leftEdge > 0) {
 					// going to previous
-					CDW.view.portrait.setIntermediateImage(CDW.state.previousThread.firstPost.user.photo, Utilities.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
+					CDW.view.portrait.setIntermediateImage(CDW.state.previousThread.firstPost.user.photo, Math2.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
 					
 					if (CDW.state.previousThread.firstPost.stance != CDW.state.previousThread.firstPost.stance) { 						
 						CDW.view.quoteLeft.setColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.previousThread.firstPost.stanceColorLight, amount), true);
@@ -201,7 +202,7 @@ package com.civildebatewall.ui {
 				mouseDown = false;
 				this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 				
-				var vxAverage:Number = Utilities.averageArray(vxSamples);
+				var vxAverage:Number = ArrayUtil.average(vxSamples);
 				
 				trace('Mouse up. Velocity average: ' + vxAverage);
 

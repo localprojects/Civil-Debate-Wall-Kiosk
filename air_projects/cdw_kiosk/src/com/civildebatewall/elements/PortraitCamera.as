@@ -1,17 +1,16 @@
 package com.civildebatewall.elements {
 	
 	import com.adobe.images.*;
+	import com.civildebatewall.CDW;
+	import com.civildebatewall.blocks.BlockBase;
+	import com.civildebatewall.camera.*;
 	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.Math2;
 	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.*;
 	import flash.media.*;
-	
-	import com.civildebatewall.CDW;
-	import com.civildebatewall.Utilities;
-	import com.civildebatewall.camera.*;
-	import com.civildebatewall.blocks.BlockBase;
 	
 	public class PortraitCamera extends BlockBase {
 		
@@ -64,7 +63,7 @@ package com.civildebatewall.elements {
 			combinedMatrix = new Matrix();
 			baseMatrix = new Matrix();
 			baseMatrix.scale(undersampleFactor, undersampleFactor);
-			baseMatrix.rotate(Utilities.degToRad(-90));
+			baseMatrix.rotate(Math2.degToRad(-90));
 			
 			if (CDW.settings.flipWebcamVertical) {
 				baseMatrix.scale(1, -1);

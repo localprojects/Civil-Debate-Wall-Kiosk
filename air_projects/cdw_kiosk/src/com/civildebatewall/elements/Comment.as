@@ -3,6 +3,8 @@ package com.civildebatewall.elements {
 	import com.civildebatewall.blocks.*;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.ui.*;
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
+	import com.kitschpatrol.futil.utilitites.NumberUtil;
 	
 	import flash.display.*;
 	import flash.events.Event;
@@ -40,7 +42,7 @@ package com.civildebatewall.elements {
 		protected function init():void {
 			// draw the portrait
 			portrait = new Sprite();
-			portrait.graphics.beginBitmapFill(Utilities.scaleToFill(_post.user.photo.bitmapData, portraitWidth, portraitHeight), null, false, true);
+			portrait.graphics.beginBitmapFill(BitmapUtil.scaleToFill(_post.user.photo.bitmapData, portraitWidth, portraitHeight), null, false, true);
 			portrait.graphics.drawRoundRect(0, 0, portraitWidth, portraitHeight, 15, 15);
 			portrait.graphics.endFill();
 			
@@ -72,8 +74,8 @@ package com.civildebatewall.elements {
 			addChild(authorLabel);
 			
 			// add the timestamp
-			var timeString:String = Utilities.zeroPad(_post.created.hours, 2) + Utilities.zeroPad(_post.created.minutes, 2);
-			var dateString:String = Utilities.zeroPad(_post.created.month, 2) + Utilities.zeroPad(_post.created.date, 2) + (_post.created.fullYear - 2000);
+			var timeString:String = NumberUtil.zeroPad(_post.created.hours, 2) + NumberUtil.zeroPad(_post.created.minutes, 2);
+			var dateString:String = NumberUtil.zeroPad(_post.created.month, 2) + NumberUtil.zeroPad(_post.created.date, 2) + (_post.created.fullYear - 2000);
 			
 			var timestamp:String = 'Posted at ' + timeString + ' hours on ' + dateString;
 			

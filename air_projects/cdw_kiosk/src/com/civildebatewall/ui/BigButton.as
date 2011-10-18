@@ -1,6 +1,9 @@
 package com.civildebatewall.ui {
+	import com.civildebatewall.*;
+	import com.civildebatewall.blocks.BlockLabel;
 	import com.greensock.*;
 	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -10,9 +13,6 @@ package com.civildebatewall.ui {
 	import flash.events.MouseEvent;
 	import flash.geom.*;
 	import flash.text.*;
-	
-	import com.civildebatewall.*;
-	import com.civildebatewall.blocks.BlockLabel;
 	
 	public class BigButton extends ButtonBase	{
 		
@@ -79,7 +79,7 @@ package com.civildebatewall.ui {
 			labelText = new BlockLabel(label, 36, 0x4c4d4f, 0x000000, Assets.FONT_HEAVY, false);
 			labelText.visible = true;
 			labelText.setPadding(0, 0, 0, 0);
-			Utilities.centerWithin(labelText, topPanel);
+			GeomUtil.centerWithin(labelText, topPanel);
 
 			// add children
 			button.addChild(bottomButtonEdge);

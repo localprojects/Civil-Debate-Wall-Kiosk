@@ -6,6 +6,7 @@ package com.civildebatewall.elements {
 	import com.civildebatewall.ui.IconButton;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Shape;
 	import flash.events.Event;
@@ -186,9 +187,9 @@ package com.civildebatewall.elements {
 						
 			// mutate to use current word
 			wordSearchResults.updateSearch(wordCloud.activeWord.word);
+		
 			
-			
-			wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.getText() + '\u2019 used in '  + wordSearchResults.resultCount + Utilities.plural(' Opinion', wordSearchResults.resultCount));
+			wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.getText() + '\u2019 used in '  + wordSearchResults.resultCount + StringUtil.plural(' Opinion', wordSearchResults.resultCount));
 			
 			// update based on active word?			
 			homeButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);

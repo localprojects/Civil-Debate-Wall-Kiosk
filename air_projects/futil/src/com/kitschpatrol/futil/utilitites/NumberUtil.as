@@ -4,6 +4,22 @@ package com.kitschpatrol.futil.utilitites {
 	public class NumberUtil {
 		
 		
+		public static function zeroPad(number:*, width:int):String {
+			var ret:String = ""+ number.toString();
+			while( ret.length < width )
+				ret="0" + ret;
+			return ret;
+		}
+		
+		public static function formatPhoneNumber(s:String):String {
+			// remove country code
+			s = s.replace('+1', '');
+			
+			// put it into US format...
+			return '(' + s.substr(0, 3) + ') ' + s.substr(3, 3) + '-' + s.substr(6);			
+		}		
+		
+		
 		// takes a number between 0 and 1 and steps it by the step value
 		// like adjustring precision, but more flexible
 		public static function quantize(normal:Number, stepSize:Number):Number {

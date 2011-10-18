@@ -1,7 +1,6 @@
 package com.civildebatewall.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CDW;
-	import com.civildebatewall.StringUtils;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.blocks.BlockLabel;
 	import com.civildebatewall.blocks.BlockLabelBar;
@@ -10,6 +9,9 @@ package com.civildebatewall.elements {
 	import com.civildebatewall.ui.ButtonBase;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.utilitites.NumberUtil;
+	import com.kitschpatrol.futil.utilitites.ObjectUtil;
+	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
@@ -78,7 +80,7 @@ package com.civildebatewall.elements {
 			indexNumber.y = 33 - 1;
 			tintGroup.addChild(indexNumber);
 			
-			opinionExcerpt = new BlockParagraph(406, 0x000000, StringUtils.truncate(_post.text,  100), 14);
+			opinionExcerpt = new BlockParagraph(406, 0x000000, StringUtil.truncate(_post.text,  100), 14);
 			opinionExcerpt.background.visible = false;
 			opinionExcerpt.setPadding(0, 0, 0, 0);
 			opinionExcerpt.visible = true;
@@ -97,7 +99,7 @@ package com.civildebatewall.elements {
 			bubble.y = 110;
 			tintGroup.addChild(bubble);		
 			
-			var responseCount:int = Utilities.objectLength(_post.thread.postCount - 1); // TODO, something better?
+			var responseCount:int = ObjectUtil.objectLength(_post.thread.postCount - 1); // TODO, something better?
 			
 			responseNumber = new BlockLabelBar(responseCount.toString(), 11, 0xffffff, 28, 28, 0x000000, Assets.FONT_BOLD);
 			responseNumber.visible = true;
@@ -108,7 +110,7 @@ package com.civildebatewall.elements {
 			
 			
 
-			var day:String =  Utilities.zeroPad(_post.created.month, 2) + '/' + Utilities.zeroPad(_post.created.date, 2) + '/' + (_post.created.fullYear - 2000); 
+			var day:String =  NumberUtil.zeroPad(_post.created.month, 2) + '/' + NumberUtil.zeroPad(_post.created.date, 2) + '/' + (_post.created.fullYear - 2000); 
 			var ampm:String = (_post.created.hours < 12) ? 'am' : 'pm';
 			var time:String = (_post.created.hours % 12) + ':' + _post.created.minutes + ampm;
 			var bylineText:String = _post.user.usernameFormatted + ' said this on ' + day + ' at ' + time;
