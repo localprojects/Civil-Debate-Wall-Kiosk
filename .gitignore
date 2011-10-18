@@ -8,6 +8,3 @@ bin-debug/
 *.air
 *.dmg
 *.exe
-
-# Eclipse
-.metadata/.plugins	
