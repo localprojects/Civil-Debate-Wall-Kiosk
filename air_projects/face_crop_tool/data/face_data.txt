@@ -1,0 +1,4 @@
+samplePortrait4.jpg,50,60,85,85
+samplePortrait2.jpg,40,70,85,85
+samplePortrait3.jpg,50,60,85,85
+samplePortrait1.jpg,56,72,71,71

@@ -1,4 +1,7 @@
-package  {
+package faceCropTool  {
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.events.EventDispatcher;
@@ -71,7 +74,7 @@ package  {
 					var largestArea:Number = Number.MIN_VALUE;
 					
 					for (var i:int = 0; i < e.rects.length; i++) {
-							var distance:Number = Point.distance(sourceCenter, Utilities.centerPoint(e.rects[i]));
+							var distance:Number = Point.distance(sourceCenter, GeomUtil.centerPoint(e.rects[i]));
 							
 							if (distance < closestDistance) {
 								closestDistance = distance;
@@ -101,7 +104,7 @@ package  {
 		
 		public function searchBitmap(photo:BitmapData):void {
 			// resize
-			photo = Utilities.scaleToFit(photo, maxSourceWidth, maxSourceHeight);
+			photo = BitmapUtil.scaleToFit(photo, maxSourceWidth, maxSourceHeight);
 			sourceCenter = new Point(photo.width / 2, photo.height / 2);
 			detector.detect(photo);
 		}

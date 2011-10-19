@@ -9,18 +9,25 @@
 	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpath="${basedir}/libs-build/xmltask.jar" />
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${basedir}/libs-build/ant-contrib-1.0b3.jar" />
 	
-	
-
-<target name="chkOS" description="if switch to set OS specific settings">
-	<condition property="isWindows">
-		<os family="windows" />
+	<!-- Required for OSX 10.6 / Snow Leopard Performance -->
+	<condition property="local.d32" value="-d32" >
+		<and>
+			<equals arg1="${sun.arch.data.model}" arg2="64" />
+			<equals arg1="${os.arch}" arg2="x86_64" />
+			<os family="mac" />
+		</and>
 	</condition>
-	<condition property="isMac">
-		<os family="mac" />
-	</condition>		
-	<antcall target="setUnixEnv" />
-	<antcall target="setWindowsEnv" />
-</target>
+	
+	<target name="chkOS" description="if switch to set OS specific settings">
+		<condition property="isWindows">
+			<os family="windows" />
+		</condition>
+		<condition property="isMac">
+			<os family="mac" />
+		</condition>		
+		<antcall target="setUnixEnv" />
+		<antcall target="setWindowsEnv" />
+	</target>
 	
 <target name="setUnixEnv" if="isMac">
 	<echo>This is an Mac machine.</echo>
@@ -30,6 +37,16 @@
 	  <echo>This is a Windows machine.</echo>
 	</target>	
 
+	
+	<!--//
+	
+	Compile FUTIL and copy it to libs
+	Upload project folder to S3 (rsync?)
+	Launch VM
+	Download from S3 to VM
+	Compile
+	
+	//-->
 	
 	
     <target name="build" depends="chkOS"> 

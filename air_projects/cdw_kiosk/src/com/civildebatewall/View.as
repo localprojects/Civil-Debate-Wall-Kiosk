@@ -11,6 +11,7 @@ package com.civildebatewall {
 	import com.greensock.plugins.*;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
+	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.FunctionUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
@@ -1316,7 +1317,7 @@ package com.civildebatewall {
 				if (imageFile.exists) {
 					// have a photo, load it
 					// TODO jsut pull it from user object...
-					Utilities.loadImageFromDisk(imageFile.url, onUserImageLoaded);					
+					FileUtil.loadImageAsync(imageFile.url, onUserImageLoaded);					
 				}
 				else {
 					// no photo, go take one
@@ -1736,8 +1737,8 @@ package com.civildebatewall {
 			// Syncs state up to the cloud
 			
 			// save the images to disk, one full res and one scaled and cropped 
-			if(CDW.state.userImageFull != null) Utilities.saveImageToDisk(CDW.state.userImageFull, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');			
-			var imageName:String = Utilities.saveImageToDisk(CDW.state.userImage, CDW.settings.imagePath, CDW.state.userID + '.jpg');
+			if(CDW.state.userImageFull != null) FileUtil.saveJpeg(CDW.state.userImageFull, CDW.settings.imagePath, CDW.state.userID + '-full.jpg');			
+			var imageName:String = FileUtil.saveJpeg(CDW.state.userImage, CDW.settings.imagePath, CDW.state.userID + '.jpg');
 			var payload:Object;
 			
 			if (CDW.state.userIsResponding) {

@@ -1,5 +1,5 @@
 package com.civildebatewall {
-	import cmodule.aircall.CLibInit;
+	
 	
 	import com.adobe.crypto.SHA1;
 	import com.adobe.serialization.json.*;
@@ -63,39 +63,7 @@ package com.civildebatewall {
 
 		
 		
-		// faster jpeg encoding
-		// via http://segfaultlabs.com/devlogs/alchemy-asynchronous-jpeg-encoding-2		
-		/// init alchemy object
-		public static var jpeginit:CLibInit = new CLibInit(); // get library			
-		public static var jpeglib:Object = jpeginit.init(); // initialize library exported class to an object					
-		
-		public static function saveImageToDisk(bitmap:Bitmap, path:String, name:String):String {
-			var file:File = new File(path + name);
-			
-			trace("Saving image to " + file.nativePath);
-			
-			var targetBytes:ByteArray = new ByteArray();
-			var sourceBytes:ByteArray = bitmap.bitmapData.getPixels(bitmap.bitmapData.rect);			
-			sourceBytes.position = 0; 			
-			
-			jpeglib.encode(sourceBytes, targetBytes, bitmap.bitmapData.width, bitmap.bitmapData.height, 80);
-			
-			//Use a FileStream to save the bytearray as bytes to the new file
-			var fs:FileStream = new FileStream();
-			try {
-				//open file in write mode
-				fs.open(file, FileMode.WRITE);
-				//write bytes from the byte array
-				fs.writeBytes(targetBytes);
-				//close the file
-				fs.close();
-			} catch(e:Error) {
-				trace(e.message);
-			}
-			
-			return name;
-		}		
-		
+
 		// picking gradient colors from horizontal bitmaps
 		// position is a normal from 0 to 1
 		public static function getPixelGradient(b:Bitmap, position:Number):uint {
@@ -122,20 +90,6 @@ package com.civildebatewall {
 		
 		
 
-
-				
-		// loads a bitmap, passes it to the callback
-		public static function loadImageFromDisk(path:String, callback:Function):void {
-			trace("loading");
-			var file:File = new File(path);
-			
-			var imageLoader:Loader = new Loader();
-			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
-				callback(imageLoader.content as Bitmap);
-			});
-			
-			imageLoader.load(new URLRequest(file.url));
-		}
 		
 		
 		// loads a bitmap, passes it to the callback
