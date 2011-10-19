@@ -1,8 +1,11 @@
 package faceCropTool {
 	
 	import com.bit101.components.Label;
+	import com.bit101.components.NumericStepper;
 	import com.bit101.components.PushButton;
 	import com.bit101.components.RadioButton;
+	import com.bit101.components.Style;
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
@@ -10,6 +13,9 @@ package faceCropTool {
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.PixelSnapping;
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.filesystem.File;
@@ -33,7 +39,10 @@ package faceCropTool {
 		private var targetDirectoryLabel:Label;
 		private var showOriginalRadioButton:RadioButton;
 		private var showCroppedRadioButton:RadioButton;
-		
+		private var rectX:NumericStepper;
+		private var rectY:NumericStepper;
+		private var rectWidth:NumericStepper;
+		private var rectHeight:NumericStepper;		
 		
 		public function FaceCropTool() {
 			super();
@@ -45,6 +54,7 @@ package faceCropTool {
 			State.cachePath = "/Users/Mika/Code/CivilDebateWall/lp-cdw/air_projects/face_crop_tool/data/face_data.txt";
 			State.viewMode = State.SHOW_ORIGINAL;
 			State.faceCropRect = new Rectangle(294, 352, 494, 576);
+			State.showFaceOverlay = true;
 			
 			// 20 pixel padding for crop bars
 			lighttable = new Sprite();
@@ -54,7 +64,7 @@ package faceCropTool {
 			addChild(lighttable);
 			
 			toolbar = new Sprite();
-			toolbar.addChild(GraphicsUtil.shapeFromSize(300, 1000, ColorUtil.grayPercent(50)));
+			toolbar.addChild(GraphicsUtil.shapeFromSize(300, 1000, Style.TEXT_BACKGROUND));
 			toolbar.x = lighttable.width;
 			addChild(toolbar);
 			
@@ -70,19 +80,37 @@ package faceCropTool {
 			showOriginalRadioButton = new RadioButton(toolbar, 5, targetDirectoryButton.y + targetDirectoryButton.height + 5, "Show Original", true, onShowOriginal);
 			showCroppedRadioButton = new RadioButton(toolbar, 5, showOriginalRadioButton.y + showOriginalRadioButton.height + 5, "Show Face Crop", false, onShowCrop);
 			
+			// Face Crop Rectangle Controls
+			var rectControlsY:Number = showCroppedRadioButton.y + showCroppedRadioButton.height + 5;
+			rectX = new NumericStepper(toolbar, 5, rectControlsY, null);
+			rectX.value = State.faceCropRect.x;
+			rectY = new NumericStepper(toolbar, 100, rectControlsY, null);
+			rectY.value = State.faceCropRect.y;
+			rectWidth = new NumericStepper(toolbar, 5, rectControlsY + 20, null);
+			rectWidth.value = State.faceCropRect.width;
+			rectHeight = new NumericStepper(toolbar, 100, rectControlsY + 20, null);
+			rectHeight.value = State.faceCropRect.height;
 			
-			// TODo button to show overlays
+			new PushButton(toolbar, 5, rectHeight.y + rectHeight.height + 5, "Set Face Rect", onRectChange); 
 			
+			// TODO button to show overlays
+		}
+		
+		
+		private function onRectChange(e:Event):void {
+			State.faceCropRect = new Rectangle(rectX.value, rectY.value, rectWidth.value, rectHeight.value);
+			updateFaceCrop();
+			drawFaceGrid();
 		}
 		
 		private function onShowOriginal(e:Event):void {
 			State.viewMode = State.SHOW_ORIGINAL;			
-			drawOriginalGrid();
+			drawFaceGrid();
 		}
 		
 		private function onShowCrop(e:Event):void {
-			State.viewMode = State.SHOW_ORIGINAL;
-			drawFaceCropGrid();
+			State.viewMode = State.SHOW_CROPPED;
+			drawFaceGrid();
 		}		
 			
 		
@@ -144,15 +172,9 @@ package faceCropTool {
 			gridPhotoWidth = resizedImageBounds.width; 
 			gridPhotoHeight = resizedImageBounds.height;
 
+			updateFaceCrop(); // first time			
 			
-			updateFaceCrop();
-			
-			if (State.viewMode == State.SHOW_CROPPED) {
-				drawFaceCropGrid();
-			}
-			else if (State.viewMode == State.SHOW_ORIGINAL) {
-				drawOriginalGrid();
-			}
+			drawFaceGrid();
 			
 		}
 		
@@ -160,34 +182,56 @@ package faceCropTool {
 			trace("Updating face crop");
 			for each (var image:FaceImage in State.images) {
 				image.faceCropBitmap = Utilities.cropToFace(image.originalBitmap, image.faceRect, State.faceCropRect);
+				
+				// Over the face croppped image
+				image.cropBitmapOverlay = new Bitmap(image.originalBitmap.bitmapData.clone(), PixelSnapping.AUTO, true);
+				image.cropBitmapOverlay.bitmapData.draw(GraphicsUtil.shapeFromRect(image.faceRect, 0xff0000), null, null, null, null, true);
+				image.cropBitmapOverlay.bitmapData = BitmapUtil.scaleToFill(image.cropBitmapOverlay.bitmapData, image.cropBitmap.bitmapData.width, image.cropBitmap.bitmapData.height);
+
+				// Face Crop with overlay
+				image.faceCropBitmapOverlay = new Bitmap(image.faceCropBitmap.bitmapData.clone(), PixelSnapping.AUTO, true);
+				image.faceCropBitmapOverlay.bitmapData.draw(GraphicsUtil.shapeFromRect(State.faceCropRect, 0xff0000));
 			}
+			
 		}
 		
 		
 		
-		private function drawFaceCropGrid():void {
+		
+		
+		private function drawFaceGrid():void {
+			var bitmapField:String;
+			if (State.viewMode == State.SHOW_CROPPED) {
+				bitmapField = "faceCropBitmap";
+			}
+			else if (State.viewMode == State.SHOW_ORIGINAL) {
+				bitmapField = "cropBitmap";
+			}			
+			
 			// Update layout
 			GraphicsUtil.removeChildren(lighttable);
 			for (var i:int = 0; i < State.images.length; i++) {
 				var image:FaceImage = State.images[i];
-				image.faceCropBitmap.width = gridPhotoWidth;
-				image.faceCropBitmap.height = gridPhotoHeight;
-				image.faceCropBitmap.x = (i % gridCols) * gridCellWidth + (gridPadding * ((i % gridCols) + 1));
-				image.faceCropBitmap.y = int(i / gridCols) * gridCellHeight + (gridPadding * (int(i / gridCols) + 1));
-				lighttable.addChild(image.faceCropBitmap);
-			}		
-		}
-		
-		
-		private function drawOriginalGrid():void {
-			GraphicsUtil.removeChildren(lighttable);
-			for (var i:int = 0; i < State.images.length; i++) {
-				var image:FaceImage = State.images[i];
-				image.cropBitmap.width = gridPhotoWidth;
-				image.cropBitmap.height = gridPhotoHeight;
-				image.cropBitmap.x = (i % gridCols) * gridCellWidth + (gridPadding * ((i % gridCols) + 1));
-				image.cropBitmap.y = int(i / gridCols) * gridCellHeight + (gridPadding * (int(i / gridCols) + 1));
-				lighttable.addChild(image.cropBitmap);
+				var bitmap:Bitmap = image[bitmapField];
+				bitmap.width = gridPhotoWidth;
+				bitmap.height = gridPhotoHeight;
+				bitmap.x = ((i % gridCols) * gridCellWidth + (gridPadding * ((i % gridCols) + 1))); + ((gridCellWidth - gridPhotoWidth) / 2);
+				bitmap.y = (int(i / gridCols) * gridCellHeight + (gridPadding * (int(i / gridCols) + 1))) + ((gridCellHeight - gridPhotoHeight) / 2);
+				lighttable.addChild(bitmap);
+				
+				// draw the face overlays
+				if (State.showFaceOverlay) {
+					// Over the original cropped image
+					var bitmapOverlay:Bitmap = image[bitmapField + "Overlay"];
+					
+					bitmapOverlay.width = gridPhotoWidth;
+					bitmapOverlay.height = gridPhotoHeight;						
+					bitmapOverlay.alpha = 0.5;
+					bitmapOverlay.x = bitmap.x;
+					bitmapOverlay.y = bitmap.y;
+					lighttable.addChild(bitmapOverlay);					
+				}
+					
 			}
 		}
 

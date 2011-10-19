@@ -66,7 +66,7 @@ package faceCropTool
 					
 					// TODO add MD5 hash to cache index
 					// Cache row is in format "name,x,y,w,h"
-					image.faceRect = new Rectangle(parseInt(cacheRow[1]), parseInt(cacheRow[2]), parseInt(cacheRow[3]), parseInt(cacheRow[4]));
+					image.faceRect = new Rectangle(parseFloat(cacheRow[1]), parseFloat(cacheRow[2]), parseFloat(cacheRow[3]), parseFloat(cacheRow[4]));
 				}
 			}
 			
@@ -107,12 +107,11 @@ package faceCropTool
 		
 		private function onFaceDetected(e:Event):void {
 			trace("found face: " + faceDetector.faceRect + " in " + searchingFace.fileName);
-			 var rawRect:Rectangle = new Rectangle(faceDetector.faceRect.x, faceDetector.faceRect.y, faceDetector.faceRect.width, faceDetector.faceRect.height);
 			
 			 
 			 // scale the face to match the original size of the image
 			var scaleFactor:Number = searchingFace.originalBitmap.bitmapData.height / faceDetector.maxSourceHeight; 
-			searchingFace.faceRect = GeomUtil.scaleRect(rawRect, scaleFactor);								
+			searchingFace.faceRect = GeomUtil.scaleRect(faceDetector.faceRect, scaleFactor);								
 			
 			faceCache.push(searchingFace.fileName + "," + searchingFace.faceRect.x + "," + searchingFace.faceRect.y + "," + searchingFace.faceRect.width + "," + searchingFace.faceRect.height);			
 			
