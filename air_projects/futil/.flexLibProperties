@@ -30,6 +30,8 @@
     <classEntry path="com.kitschpatrol.futil.utilitites.StringUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.FunctionUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.PlatformUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.FileUtil"/>
+    <classEntry path="com.kitschpatrol.futil.JPEGEncoder"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

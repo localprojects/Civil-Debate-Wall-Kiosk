@@ -1,14 +1,14 @@
-package {
+package faceCropTool {
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
+	
 	import flash.display.*;
-	import flash.geom.*;
 	import flash.events.*;
 	import flash.filesystem.*;
+	import flash.geom.*;
 	import flash.net.*;
 	
 	public class Utilities {
-		public function Utilities()
-		{
-		}
+
 		
 		// From CDW Wall Utilities.as
 		public static function cropToFace(sourceBitmap:Bitmap, sourceFaceRectangle:Rectangle, targetFaceRectangle:Rectangle):Bitmap {
@@ -24,12 +24,12 @@ package {
 			var rectScaleRatio:Number = Math.min(rectWidthRatio, rectHeightRatio);
 			
 			// Scale the source stuff so face sizes match
-			var scaledSourceBounds:Rectangle = scaleRect(sourceBounds, rectScaleRatio);			
-			var scaledFaceRectangle:Rectangle = scaleRect(sourceFaceRectangle, rectScaleRatio);
+			var scaledSourceBounds:Rectangle = GeomUtil.scaleRect(sourceBounds, rectScaleRatio);			
+			var scaledFaceRectangle:Rectangle = GeomUtil.scaleRect(sourceFaceRectangle, rectScaleRatio);
 			
 			// align face centers 
-			var targetCenter:Point = centerPoint(targetFaceRectangle);
-			var scaledSourceCenter:Point = centerPoint(scaledFaceRectangle);
+			var targetCenter:Point = GeomUtil.centerPoint(targetFaceRectangle);
+			var scaledSourceCenter:Point = GeomUtil.centerPoint(scaledFaceRectangle);
 			var sourceTranslation:Point = targetCenter.subtract(scaledSourceCenter);
 			
 			scaledSourceBounds.x = sourceTranslation.x; 
@@ -78,40 +78,23 @@ package {
 			return faceCroppedBitmap;
 		}
 		
-		public static function scaleRect(rectangle:Rectangle, scaleFactor:Number):Rectangle {
-			return new Rectangle(rectangle.x * scaleFactor, rectangle.y * scaleFactor, rectangle.width * scaleFactor, rectangle.height * scaleFactor);
-		}
+
 		
-		public static function centerPoint(rect:Rectangle):Point {
-			return new Point(rect.x + (rect.width / 2), rect.y + (rect.height / 2));
-		}
-		
-		// scales down a bitmap data object so it fits with the width and height specified
-		public static function scaleToFit(b:BitmapData, maxWidth:int, maxHeight:int):BitmapData {
-			var widthRatio:Number = maxWidth / b.width;
-			var heightRatio:Number = maxHeight / b.height;
-			var scaleRatio:Number = Math.min(widthRatio, heightRatio);
-			
-			var matrix:Matrix = new Matrix();
-			matrix.scale(scaleRatio, scaleRatio);
-			
-			var o:BitmapData = new BitmapData(b.width * scaleRatio, b.height * scaleRatio);
-			o.draw(b, matrix);
-			return o;
-		}		
-		
-		// loads a bitmap, passes it to the callback
-		public static function loadImageFromDisk(path:String, callback:Function):void {
-			trace("loading");
+		public static function loadImageFaceCrop(path:String, callback:Function):void {
 			var file:File = new File(path);
 			
 			var imageLoader:Loader = new Loader();
 			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
-				callback(imageLoader.content as Bitmap);
+				callback(imageLoader.content as Bitmap, file.name);
 			});
 			
 			imageLoader.load(new URLRequest(file.url));
 		}
+				
+		
+
+		
+
 				
 		
 		
