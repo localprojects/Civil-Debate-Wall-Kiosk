@@ -1489,7 +1489,7 @@ package com.civildebatewall {
 				
 				trace("Scaled face rect: " + scaledFaceRect);
 				
-				CDW.state.userImage = Utilities.cropToFace(CDW.state.userImage, scaledFaceRect);				
+				CDW.state.userImage = Utilities.cropToFace(CDW.state.userImage, scaledFaceRect, new Rectangle(294, 352, 494, 576));				
 			}
 			else {
 				trace('no face found, saving as is');

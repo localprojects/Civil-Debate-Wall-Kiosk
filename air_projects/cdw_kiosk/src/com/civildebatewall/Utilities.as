@@ -208,12 +208,11 @@ package com.civildebatewall {
 		}
 		
 		
-		public static function cropToFace(sourceBitmap:Bitmap, sourceFaceRectangle:Rectangle):Bitmap {
+		public static function cropToFace(sourceBitmap:Bitmap, sourceFaceRectangle:Rectangle, targetFaceRectangle:Rectangle):Bitmap {
 			// lots of stuff hard coded here... dimensions of target, location of face in target
 			
 			// give up if the target face rectangle is too far away?
 			var targetBounds:Rectangle = new Rectangle(0, 0, 1080, 1920);			
-			var targetFaceRectangle:Rectangle = new Rectangle(294, 352, 494, 576);
 			
 			var sourceBounds:Rectangle = sourceBitmap.bitmapData.rect;
 			

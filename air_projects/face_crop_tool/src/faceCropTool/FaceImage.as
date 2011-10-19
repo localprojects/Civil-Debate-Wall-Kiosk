@@ -10,7 +10,8 @@ package faceCropTool
 		public var faceRect:Rectangle;
 		public var fileName:String;
 		public var originalBitmap:Bitmap;
-		public var croppedBitmap:Bitmap;
+		public var cropBitmap:Bitmap;
+		public var faceCropBitmap:Bitmap;
 		
 		public function FaceImage() {
 			faceRect = null;

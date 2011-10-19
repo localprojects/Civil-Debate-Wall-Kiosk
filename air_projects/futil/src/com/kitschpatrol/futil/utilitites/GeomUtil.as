@@ -1,9 +1,10 @@
 package com.kitschpatrol.futil.utilitites {
 	
 	
-	import flash.geom.Rectangle;
 	import flash.display.DisplayObject;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	public class GeomUtil {
 
@@ -20,6 +21,16 @@ package com.kitschpatrol.futil.utilitites {
 		// returns a point at the center of a rectangle
 		public static function centerPoint(rect:Rectangle):Point {
 			return new Point(rect.x + (rect.width / 2), rect.y + (rect.height / 2));
+		}
+		
+		
+		// resizes childrect to fit in targetREct (assumes 0 x and y);
+		public static function scaleToFit(childRect:Rectangle, targetRect:Rectangle):Rectangle {
+			var widthRatio:Number = targetRect.width / childRect.width;
+			var heightRatio:Number = targetRect.height/ childRect.height;
+			var scaleRatio:Number = Math.min(widthRatio, heightRatio);
+			
+			return scaleRect(childRect, scaleRatio);
 		}		
 		
 	}
