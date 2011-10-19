@@ -1,6 +1,7 @@
 package {
 	import faceCropTool.FaceCropTool;
 	import faceCropTool.FaceDetector;
+	import faceCropTool.State;
 	import faceCropTool.Utilities;
 	
 	import flash.display.*;
@@ -29,6 +30,9 @@ package {
 	
 		
 	public function Main() {
+		
+		
+		
 		var faceCropTool:FaceCropTool = new FaceCropTool();
 		addChild(faceCropTool);
 		
@@ -86,10 +90,7 @@ package {
 //		
 //		
 //		
-//		private var gridRows:int;
-//		private var gridCols:int;
-//		private var gridPhotoWidth:Number;
-//		private var gridPhotoHeight:Number;
+
 //		
 //		private function init():void {
 //			trace(init);

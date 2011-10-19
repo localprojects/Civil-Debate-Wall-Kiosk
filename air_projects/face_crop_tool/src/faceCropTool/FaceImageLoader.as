@@ -1,9 +1,12 @@
 package faceCropTool
 {
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Bitmap;
+	import flash.display.PixelSnapping;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.filesystem.File;
@@ -50,6 +53,8 @@ package faceCropTool
 		private function onImageLoad(b:Bitmap, name:String):void {
 			var image:FaceImage = new FaceImage();
 			image.originalBitmap = new Bitmap(b.bitmapData.clone(), "auto", true);
+			image.cropBitmap = new Bitmap(BitmapUtil.scaleToFill(b.bitmapData.clone(), 1080, 1920), PixelSnapping.AUTO, true);
+			
 			image.fileName = name;
 			trace("Loaded " + name);			
 			
@@ -59,6 +64,7 @@ package faceCropTool
 					trace("have cache for " + name + " loading rect");
 					var cacheRow:Array = line.split(",");
 					
+					// TODO add MD5 hash to cache index
 					// Cache row is in format "name,x,y,w,h"
 					image.faceRect = new Rectangle(parseInt(cacheRow[1]), parseInt(cacheRow[2]), parseInt(cacheRow[3]), parseInt(cacheRow[4]));
 				}
@@ -101,7 +107,13 @@ package faceCropTool
 		
 		private function onFaceDetected(e:Event):void {
 			trace("found face: " + faceDetector.faceRect + " in " + searchingFace.fileName);
-			searchingFace.faceRect = new Rectangle(faceDetector.faceRect.x, faceDetector.faceRect.y, faceDetector.faceRect.width, faceDetector.faceRect.height);
+			 var rawRect:Rectangle = new Rectangle(faceDetector.faceRect.x, faceDetector.faceRect.y, faceDetector.faceRect.width, faceDetector.faceRect.height);
+			
+			 
+			 // scale the face to match the original size of the image
+			var scaleFactor:Number = searchingFace.originalBitmap.bitmapData.height / faceDetector.maxSourceHeight; 
+			searchingFace.faceRect = GeomUtil.scaleRect(rawRect, scaleFactor);								
+			
 			faceCache.push(searchingFace.fileName + "," + searchingFace.faceRect.x + "," + searchingFace.faceRect.y + "," + searchingFace.faceRect.width + "," + searchingFace.faceRect.height);			
 			
 			// keep going, kind ugly and GOTO ish...
