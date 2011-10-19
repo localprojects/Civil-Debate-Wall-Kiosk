@@ -213,6 +213,7 @@ package com.civildebatewall {
 			
 			// give up if the target face rectangle is too far away?
 			var targetBounds:Rectangle = new Rectangle(0, 0, 1080, 1920);			
+
 			
 			var sourceBounds:Rectangle = sourceBitmap.bitmapData.rect;
 			
