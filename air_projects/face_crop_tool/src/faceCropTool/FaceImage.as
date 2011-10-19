@@ -12,6 +12,8 @@ package faceCropTool
 		public var originalBitmap:Bitmap;
 		public var cropBitmap:Bitmap;
 		public var faceCropBitmap:Bitmap;
+		public var faceCropBitmapOverlay:Bitmap;
+		public var cropBitmapOverlay:Bitmap;
 		
 		public function FaceImage() {
 			faceRect = null;
