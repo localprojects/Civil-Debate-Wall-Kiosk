@@ -3,9 +3,15 @@ package faceCropTool
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	
+	
+	
 	public class FaceImage extends Sprite {
+	
+		public static const FACE_SELECTED:String = "faceSelected";		
 		
 		public var faceRect:Rectangle;
 		public var fileName:String;
@@ -17,6 +23,14 @@ package faceCropTool
 		
 		public function FaceImage() {
 			faceRect = null;
+			this.buttonMode = true;
+			
+			this.addEventListener(MouseEvent.CLICK, onClicked);
+		}
+		
+		private function onClicked(e:MouseEvent):void {			
+			this.dispatchEvent(new FaceImageEvent(FaceImage.FACE_SELECTED, true));
+			
 		}
 	}
 }

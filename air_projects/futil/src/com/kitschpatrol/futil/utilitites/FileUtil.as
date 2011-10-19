@@ -1,5 +1,7 @@
 package com.kitschpatrol.futil.utilitites
 {
+	import cmodule.aircall.CLibInit;
+	
 	import com.kitschpatrol.futil.JPEGDecoder;
 	import com.kitschpatrol.futil.JPEGEncoder;
 	
@@ -13,7 +15,6 @@ package com.kitschpatrol.futil.utilitites
 	import flash.filesystem.FileStream;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
-		
 	
 	
 	// TODO break this out of Main Futil?
@@ -61,28 +62,62 @@ package com.kitschpatrol.futil.utilitites
 		}
 
 					
-		// Synchronous, uses Alchemy for speed
+//		// Synchronous, uses Alchemy for speed
+//		public static function saveJpeg(bitmap:Bitmap, path:String, name:String, quality:int = 80):String {
+//			var file:File = new File(path + name);
+//			trace("Saving image to " + file.nativePath);			
+//			
+//			var encoder:JPEGEncoder = new JPEGEncoder();
+//			var bytes:ByteArray = encoder.parse(bitmap.bitmapData, quality);
+//			
+//			
+//			//Use a FileStream to save the bytearray as bytes to the new file
+//			var fs:FileStream = new FileStream();
+//			try {
+//				fs.open(file, FileMode.WRITE);
+//				fs.writeBytes(bytes);
+//				fs.close();
+//			}
+//			catch(e:Error) {
+//				trace(e.message);
+//			}
+//			
+//			return name;
+//		}
+		
+		
+		// faster jpeg encoding
+		// via http://segfaultlabs.com/devlogs/alchemy-asynchronous-jpeg-encoding-2		
+		/// init alchemy object
+		public static var jpeginit:CLibInit = new CLibInit(); // get library			
+		public static var jpeglib:Object = jpeginit.init(); // initialize library exported class to an object					
+		
 		public static function saveJpeg(bitmap:Bitmap, path:String, name:String, quality:int = 80):String {
 			var file:File = new File(path + name);
-			trace("Saving image to " + file.nativePath);			
 			
-			var encoder:JPEGEncoder = new JPEGEncoder();
-			var bytes:ByteArray = encoder.parse(bitmap.bitmapData, quality);
+			trace("Saving image to " + file.nativePath);
 			
+			var targetBytes:ByteArray = new ByteArray();
+			var sourceBytes:ByteArray = bitmap.bitmapData.getPixels(bitmap.bitmapData.rect);			
+			sourceBytes.position = 0; 			
+			
+			jpeglib.encode(sourceBytes, targetBytes, bitmap.bitmapData.width, bitmap.bitmapData.height, quality);
 			
 			//Use a FileStream to save the bytearray as bytes to the new file
 			var fs:FileStream = new FileStream();
 			try {
+				//open file in write mode
 				fs.open(file, FileMode.WRITE);
-				fs.writeBytes(bytes);
+				//write bytes from the byte array
+				fs.writeBytes(targetBytes);
+				//close the file
 				fs.close();
-			}
-			catch(e:Error) {
+			} catch(e:Error) {
 				trace(e.message);
 			}
 			
 			return name;
-		}		
+		}			
 				
 
 		public static function loadString(path:String):String {
