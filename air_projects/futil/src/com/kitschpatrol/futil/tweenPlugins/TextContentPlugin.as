@@ -2,7 +2,7 @@ package com.kitschpatrol.futil.tweenPlugins {
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.greensock.plugins.TweenPlugin;
-	import com.kitschpatrol.futil.TextBlock;
+	import com.kitschpatrol.futil.blocks.BlockText;
 	
 	import flash.text.TextField;
 
@@ -12,7 +12,7 @@ package com.kitschpatrol.futil.tweenPlugins {
 		
 		public static const API:Number = 1.0;	
 		
-		protected var target:TextBlock;
+		protected var target:BlockText;
 		protected var oldText:TextField;
 
 		private var oldContentWidth:Number;
@@ -36,9 +36,9 @@ package com.kitschpatrol.futil.tweenPlugins {
 		// How to pass in multiple params?
 		// SEE _propNames usage in BevelFilterPlugin.as
 		override public function onInitTween(target:Object, value:*, tween:TweenLite):Boolean {	
-			if (!(target is TextBlock)) return false;
+			if (!(target is BlockText)) return false;
 			
-			this.target = target as TextBlock;
+			this.target = target as BlockText;
 			
 			// put old text  in a new field
 			oldText = target.generateTextField(this.target.text);

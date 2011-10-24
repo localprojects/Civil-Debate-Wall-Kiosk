@@ -1,21 +1,17 @@
 package com.civildebatewall {
+	
 	import com.adobe.serialization.json.JSON;
+	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	import com.kitschpatrol.futil.utilitites.PlatformUtil;
-	import com.kitschpatrol.futil.utilitites.StringUtil;
+	import flash.filesystem.File;
 	
-	import flash.filesystem.*;
-	import flash.system.Capabilities;
 	
 	public dynamic class Settings extends Object {
 		
 		// Loads settings from a JSON file
 		public static function load():Object {
-			var file:File = File.applicationDirectory.resolvePath("settings.json");
-			var stream:FileStream = new FileStream();
-			stream.open(file, FileMode.READ);
-			var settingsString:String = stream.readUTFBytes(stream.bytesAvailable);
-			stream.close();
+			var settingsString:String = FileUtil.loadString(File.applicationDirectory.resolvePath("settings.json").url);
 
 			var settings:Object = {}; // Holds final settings
 			var rawSettings:Object = JSON.decode(settingsString); // Raw settings from file
@@ -37,9 +33,6 @@ package com.civildebatewall {
 				
 			return settings;
 		}
-		
-		
-		
 		
 	}
 }

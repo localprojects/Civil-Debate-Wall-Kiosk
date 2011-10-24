@@ -1,4 +1,4 @@
-package com.kitschpatrol.futil {
+package com.kitschpatrol.futil.blocks {
 	
 	import com.kitschpatrol.futil.constants.Alignment;
 	
@@ -7,6 +7,7 @@ package com.kitschpatrol.futil {
 	import flash.display.Sprite;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import com.kitschpatrol.futil.Math2;
 	
 	// Nested display object approach to registration management.
 	

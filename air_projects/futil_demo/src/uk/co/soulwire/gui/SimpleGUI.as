@@ -30,7 +30,6 @@ package uk.co.soulwire.gui
 	import com.bit101.components.RangeSlider;
 	import com.bit101.components.Style;
 	import com.bit101.components.TextArea;
-	import com.kitschpatrol.futil.Utilities;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;

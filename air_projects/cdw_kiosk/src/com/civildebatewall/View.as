@@ -1,10 +1,13 @@
 package com.civildebatewall {
+	import ObjectDetection.ObjectDetectorEvent;
+	
 	import com.adobe.serialization.json.*;
 	import com.civildebatewall.blocks.*;
 	import com.civildebatewall.camera.*;
 	import com.civildebatewall.data.*;
 	import com.civildebatewall.elements.*;
 	import com.civildebatewall.keyboard.*;
+	import com.civildebatewall.staging.elements.QuestionHeader;
 	import com.civildebatewall.ui.*;
 	import com.greensock.*;
 	import com.greensock.easing.*;
@@ -26,8 +29,6 @@ package com.civildebatewall {
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.Timer;
-	
-	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
 
 	public class View extends Sprite {
 				
@@ -173,7 +174,7 @@ package com.civildebatewall {
 			divider.setDefaultTweenOut(1, {alpha: 0, x: BlockBase.CENTER, y: 250});
 			addChild(divider);
 			
-			question = new QuestionText();
+			question = new QuestionHeader();
 			question.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 123});
 			question.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});
 			question.setText(CDW.data.question.text);

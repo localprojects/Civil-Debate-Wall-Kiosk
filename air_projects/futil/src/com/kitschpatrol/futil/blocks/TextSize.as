@@ -1,4 +1,4 @@
-package com.kitschpatrol.futil {
+package com.kitschpatrol.futil.blocks {
 	
 	internal class TextSize {
 		
@@ -18,7 +18,6 @@ package com.kitschpatrol.futil {
 			this.rightWhitespace = rightWhitespace;
 			this.bottomWhitespace = bottomWhitespace;
 			this.leftWhitespace = leftWhitespace;
-			
 		}
 		
 		public function get fieldHeight():Number {
@@ -30,5 +29,4 @@ package com.kitschpatrol.futil {
 		}
 		
 	}
-	
 }

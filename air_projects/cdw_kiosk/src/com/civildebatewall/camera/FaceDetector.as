@@ -10,9 +10,9 @@ package com.civildebatewall.camera {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import jp.maaash.ObjectDetection.ObjectDetector;
-	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
-	import jp.maaash.ObjectDetection.ObjectDetectorOptions;
+	import ObjectDetection.ObjectDetector;
+	import ObjectDetection.ObjectDetectorEvent;
+	import ObjectDetection.ObjectDetectorOptions;
 	
 	// Adapted from Mario Klingemann's code
 	// http://www.quasimondo.com/archives/000687.php

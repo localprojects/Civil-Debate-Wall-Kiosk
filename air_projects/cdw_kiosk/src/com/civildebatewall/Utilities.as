@@ -1,6 +1,5 @@
 package com.civildebatewall {
 	
-	
 	import com.adobe.crypto.SHA1;
 	import com.adobe.serialization.json.*;
 	import com.kitschpatrol.futil.Math2;
@@ -17,16 +16,10 @@ package com.civildebatewall {
 	import flash.geom.*;
 	import flash.net.*;
 	import flash.utils.*;
-	
-		
-	
+
 	public class Utilities {
 		
-
-
-		
 		public static function interpolateColorThroughWhite(start:uint, end:uint, step:Number):uint {
-			
 			if (step <= 0.5) {
 				// towards white
 				return Color.interpolateColor(start, 0xffffff, step * 2);				
@@ -49,9 +42,6 @@ package com.civildebatewall {
 			
 			var file:File = File.desktopDirectory.resolvePath(fileName);
 			
-			trace("saving ");
-			trace(file.nativePath);
-			
 			//verify that the file really does not exist
 			if (file.exists) {
 				//if exists , tries to get a new one using recursion
@@ -62,24 +52,9 @@ package com.civildebatewall {
 		}
 
 		
+		// === Line of specificity? Above do not belong in Futil, below does?
 		
 
-		// picking gradient colors from horizontal bitmaps
-		// position is a normal from 0 to 1
-		public static function getPixelGradient(b:Bitmap, position:Number):uint {
-			return b.bitmapData.getPixel(Math.floor(Math2.mapClamp(position, 0, 1, 0, b.width - 1)), 0);
-		}		
-		
-		
-		
-		
-		
-		
-		// === Line of specificity? Above do not belong in Futil 
-		
-		
-		
-		
 		//Format to save the image
 		public static const FORMAT_JPEG:uint = 0x00;
 		public static const FORMAT_PNG:uint = 0x01;
@@ -87,10 +62,7 @@ package com.civildebatewall {
 		//Extensions for the file
 		private static const EXT_JPEG:String = ".jpg";
 		private static const EXT_PNG:String = ".png";		
-		
-		
-
-		
+				
 		
 		// loads a bitmap, passes it to the callback
 		// USE LOADER MAX AGAIN INSTEAD PASSING IN FILE URL?
@@ -110,22 +82,8 @@ package com.civildebatewall {
 
 		
 
-						
-
-		
-		
-		
-
-		
-		
-		
-
-
-		
-
 		
 		// Hmmm....
-
 		public static function traceObject(o:Object):void {
 			trace(JSON.encode(o));
 		}
@@ -147,10 +105,7 @@ package com.civildebatewall {
 			request.data = variables;  
 			
 			// Security header
-			
-			trace(SHA1.hash(CDW.settings.secretKey));
-			
-			request.requestHeaders.push(new URLRequestHeader("X-Auth-Token", SHA1.hash(CDW.settings.secretKey)));
+			request.requestHeaders.push(new URLRequestHeader("X-Auth-Token", CDW.settings.secretKeyHash));
 			
 			trace('sending variables: ' + variables.toString());
 			
@@ -189,10 +144,6 @@ package com.civildebatewall {
 		}		
 		
 
-		
-
-		
-		
 		public static function shortenName(s:String):String {
 			// Capitalized First word 
 			return StringUtil.capitalize(StringUtil.trim(s.split(' ')[0]))			
@@ -207,7 +158,7 @@ package com.civildebatewall {
 			}
 		}
 		
-		
+		// Move to face detection package?
 		public static function cropToFace(sourceBitmap:Bitmap, sourceFaceRectangle:Rectangle, targetFaceRectangle:Rectangle):Bitmap {
 			// lots of stuff hard coded here... dimensions of target, location of face in target
 			
