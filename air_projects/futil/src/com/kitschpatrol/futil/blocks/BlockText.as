@@ -1,4 +1,4 @@
-package com.kitschpatrol.futil {
+package com.kitschpatrol.futil.blocks {
 	import com.kitschpatrol.futil.constants.CharacterSet;
 	
 	import flash.display.BitmapData;
@@ -9,8 +9,10 @@ package com.kitschpatrol.futil {
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.utils.getTimer;
+	import com.kitschpatrol.futil.DefaultAssets;
+	import com.kitschpatrol.futil.Math2;
 	
-	public class TextBlock extends BlockBase {
+	public class BlockText extends BlockBase {
 
 		// TODO write tween plugin
 		private var _textAlignmentMode:String;
@@ -60,7 +62,7 @@ package com.kitschpatrol.futil {
 		public static var sizeMaps:Object = {};
 		
 		// Constructor
-		public function TextBlock(params:Object=null)	{
+		public function BlockText(params:Object=null)	{
 			//super(null); // get the default block base, we'll pass params laters
 			
 			// Required Objects
@@ -331,10 +333,10 @@ package com.kitschpatrol.futil {
 			// check cache, note weird string index
 			var cacheKey:String = _textFont + _sizeFactorGlyphs;
 			
-			if (TextBlock.sizeMaps.hasOwnProperty(cacheKey)) {
+			if (BlockText.sizeMaps.hasOwnProperty(cacheKey)) {
 				trace("In the cache, load that: " + cacheKey);
-				sizeMap = TextBlock.sizeMaps[cacheKey]['sizeMap'];
-				maxTextPixelSize = TextBlock.sizeMaps[cacheKey]['maxTextPixelSize'];
+				sizeMap = BlockText.sizeMaps[cacheKey]['sizeMap'];
+				maxTextPixelSize = BlockText.sizeMaps[cacheKey]['maxTextPixelSize'];
 			}
 			else {
 				trace("Not cached! Generating: " + cacheKey);
@@ -344,15 +346,15 @@ package com.kitschpatrol.futil {
 				
 				// rebuilds size set maping pixel sizes to flash TextField sizes
 				// height is maximum character height (in pixels) for a given internal size
-				TextBlock.sizeMaps[cacheKey] = {};
-				TextBlock.sizeMaps[cacheKey]['sizeMap'] = new Vector.<TextSize>(maxTextSize);
+				BlockText.sizeMaps[cacheKey] = {};
+				BlockText.sizeMaps[cacheKey]['sizeMap'] = new Vector.<TextSize>(maxTextSize);
 				
 				var glyphCanvas:BitmapData;
 				var testField:TextField;
 				var bounds:Rectangle;
 				var pixelHeight:int;
 				
-				TextBlock.sizeMaps[cacheKey]['sizeMap'][0] = new TextSize(); // zeros in the first position
+				BlockText.sizeMaps[cacheKey]['sizeMap'][0] = new TextSize(); // zeros in the first position
 				
 				
 				
@@ -377,7 +379,7 @@ package com.kitschpatrol.futil {
 					pixelHeight = bounds.height;
 					//trace(bounds);
 					
-					TextBlock.sizeMaps[cacheKey]['sizeMap'][pixelHeight] = new TextSize(pixelHeight, i, bounds.y, glyphCanvas.width - bounds.width - bounds.x, glyphCanvas.height - bounds.y - bounds.height, bounds.x);
+					BlockText.sizeMaps[cacheKey]['sizeMap'][pixelHeight] = new TextSize(pixelHeight, i, bounds.y, glyphCanvas.width - bounds.width - bounds.x, glyphCanvas.height - bounds.y - bounds.height, bounds.x);
 					
 					//trace("Pixel Height: " + pixelHeight + " Field Size: " + i);
 					
@@ -388,18 +390,18 @@ package com.kitschpatrol.futil {
 				
 				// fill holes
 				for(i = 1; i < maxTextPixelSize; i++) {
-					if (TextBlock.sizeMaps[cacheKey]['sizeMap'][i] == null) {
+					if (BlockText.sizeMaps[cacheKey]['sizeMap'][i] == null) {
 						//trace("Hole at " + i);
 						// TODO implement lerp for this, for now just use last
-						TextBlock.sizeMaps[cacheKey]['sizeMap'][i] = TextBlock.sizeMaps[cacheKey]['sizeMap'][i - 1]; 
+						BlockText.sizeMaps[cacheKey]['sizeMap'][i] = BlockText.sizeMaps[cacheKey]['sizeMap'][i - 1]; 
 					}
 				}
 					
 				
 				// Cache it
 				//TextBlock.sizeMaps[cacheKey] = newSizeMap;
-				sizeMap = TextBlock.sizeMaps[cacheKey]['sizeMap'];
-				TextBlock.sizeMaps[cacheKey]['maxTextPixelSize'] = maxTextPixelSize;
+				sizeMap = BlockText.sizeMaps[cacheKey]['sizeMap'];
+				BlockText.sizeMaps[cacheKey]['maxTextPixelSize'] = maxTextPixelSize;
 			}
 			
 			// make sure it sticks

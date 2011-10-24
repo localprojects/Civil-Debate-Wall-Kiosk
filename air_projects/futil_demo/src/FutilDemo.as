@@ -3,10 +3,11 @@ package {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.TweenPlugin;
-	
 	import com.kitschpatrol.futil.*;
+	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.tweenPlugins.*;
+	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
 	import flash.display.Sprite;
 	import flash.text.Font;
@@ -20,19 +21,19 @@ package {
 	public class FutilDemo extends Sprite {
 
 		private var gui:SimpleGUI;
-		public var testBlock:TextBlock;
+		public var testBlock:BlockText;
 		public var targets:Object;
 		public var tweenDuration:Number;
 		public var targetTween:Boolean;
 		
 		public function FutilDemo() {
-			TweenPlugin.activate([FutilBlockPlugin]);			
+			TweenPlugin.activate([FutilBlockPlugin, NamedYPlugin]);			
 			
 			
 			//Font.registerFont(Assets.FontLight);
 			
 			// Test Object
-			testBlock = new TextBlock({textFont: Assets.FONT_LIGHT, x: 300, y: 300, showRegistrationPoint: true, maxWidth: 10000, text: "mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret"});
+			testBlock = new BlockText({textFont: Assets.FONT_LIGHT, x: 300, y: 300, showRegistrationPoint: true, maxWidth: 10000, text: "mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret"});
 			
 			
 //			testBlock = new TextBlock({text: "Do you feel our public education provides our children with a thorough education these days?",
@@ -164,7 +165,10 @@ package {
 		
 		private function onRandomText():void {
 			
-			testBlock.text = "Bla bla";
+			TweenMax.to(testBlock, 5, {y: Alignment.OFF_STAGE_BOTTOM});
+			
+			
+			//testBlock.text = "Bla bla";
 		}
 		
 		
@@ -185,7 +189,7 @@ package {
 		
 		
 		private function tweenToTarget():void {
-			Utilities.traceObject(targets);
+			ObjectUtil.traceObject(targets);
 			TweenMax.to(testBlock, tweenDuration, targets);
 		}
 

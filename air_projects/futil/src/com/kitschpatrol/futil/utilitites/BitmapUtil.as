@@ -1,13 +1,13 @@
 package com.kitschpatrol.futil.utilitites {
 	
+	import com.kitschpatrol.futil.Math2;
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Matrix;
-	import flash.geom.Rectangle;
-	
+
 	public class BitmapUtil {
-		
-		
+				
 		// scales down a bitmap data object so it fits with the width and height specified
 		public static function scaleToFit(b:BitmapData, maxWidth:int, maxHeight:int):BitmapData {
 			var widthRatio:Number = maxWidth / b.width;
@@ -41,9 +41,12 @@ package com.kitschpatrol.futil.utilitites {
 			return o;
 		}
 		
-		
-		
-		
+
+		// finds position inside a bitmap using a normal		
+		// useful for picking gradient colors from horizontal bitmaps
+		public static function getPixelAtNormal(b:Bitmap, x:Number, y:Number):uint {
+			return b.bitmapData.getPixel(Math.floor(Math2.mapClamp(x, 0, 1, 0, b.width - 1)), Math.floor(Math2.mapClamp(y, 0, 1, 0, b.height - 1)));
+		}
 		
 	}
 }

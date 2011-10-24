@@ -1,6 +1,6 @@
 package com.civildebatewall {
 
-	
+	import com.adobe.crypto.SHA1;
 	import com.civildebatewall.blocks.*;
 	import com.civildebatewall.camera.*;
 	import com.civildebatewall.data.Data;
@@ -21,8 +21,7 @@ package com.civildebatewall {
 	import flash.ui.Mouse;
 	
 	// Greensock plugins
-	TweenPlugin.activate([ThrowPropsPlugin]);
-	TweenPlugin.activate([MotionBlurPlugin]);			
+	TweenPlugin.activate([ThrowPropsPlugin]);			
 	TweenPlugin.activate([CacheAsBitmapPlugin]);	
 	TweenPlugin.activate([TransformAroundCenterPlugin]);
 	FastEase.activate([Linear, Quad, Cubic, Quart, Quint, Strong]);
@@ -48,7 +47,10 @@ package com.civildebatewall {
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);			
 			
 			// load settings from a local JSON file			
-			settings = Settings.load();						
+			settings = Settings.load();
+			
+			// Hash the secret key (just once)
+			settings.secretKeyHash = SHA1.hash(settings.secretKey);
 			
 			// set up the stage
 			stage.quality = StageQuality.BEST;
@@ -73,7 +75,7 @@ package com.civildebatewall {
 			}
 			else if (PlatformUtil.isWindows()) {
 				Utilities.createFolderIfNecessary(settings.imagePath);
-			}  
+			}
 			
 			// fill the background
 			graphics.beginFill(0xffffff);
@@ -83,7 +85,7 @@ package com.civildebatewall {
 			// create local state
 			state = new State();
 			
-			// load the wall state
+			// load the wall data
 			data = new Data();
 			data.addEventListener(Event.COMPLETE, onDataLoaded);			
 			data.load();

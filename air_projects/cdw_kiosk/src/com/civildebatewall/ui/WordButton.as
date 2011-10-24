@@ -2,6 +2,7 @@ package com.civildebatewall.ui {
 	import com.civildebatewall.*;
 	import com.civildebatewall.blocks.BlockLabel;
 	import com.civildebatewall.data.Word;
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import fl.motion.Color;
@@ -32,11 +33,10 @@ package com.civildebatewall.ui {
 			this.setPadding(14, 15, 10, 15);
 			
 			updateColor();
-			
 		}
 		
 		public function updateColor():void {
-			interpolatedColor = Utilities.getPixelGradient(Assets.wordCloudGradient, normalDifference);
+			interpolatedColor = BitmapUtil.getPixelAtNormal(Assets.wordCloudGradient, normalDifference, 0);
 			this.setBackgroundColor(interpolatedColor, true);			
 		}
 		

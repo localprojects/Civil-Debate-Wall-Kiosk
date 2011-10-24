@@ -1,6 +1,7 @@
 package com.kitschpatrol.futil {
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import com.kitschpatrol.futil.blocks.BlockBase;
 	
 	
 	public class TestShape extends BlockBase {

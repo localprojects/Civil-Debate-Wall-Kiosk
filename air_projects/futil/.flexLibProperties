@@ -2,11 +2,11 @@
 <flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
   <includeClasses>
     <classEntry path="com.kitschpatrol.futil.DefaultAssets"/>
-    <classEntry path="com.kitschpatrol.futil.Padding"/>
-    <classEntry path="com.kitschpatrol.futil.TextSize"/>
+    <classEntry path="com.kitschpatrol.futil.blocks.Padding"/>
+    <classEntry path="com.kitschpatrol.futil.blocks.TextSize"/>
     <classEntry path="com.kitschpatrol.futil.Math2"/>
-    <classEntry path="com.kitschpatrol.futil.BlockBase"/>
-    <classEntry path="com.kitschpatrol.futil.BlockShape"/>
+    <classEntry path="com.kitschpatrol.futil.blocks.BlockBase"/>
+    <classEntry path="com.kitschpatrol.futil.blocks.BlockShape"/>
     <classEntry path="com.kitschpatrol.futil.constants.Alignment"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.AlignmentPointPlugin"/>
     <classEntry path="com.kitschpatrol.futil.constants.CharacterSet"/>
@@ -32,6 +32,8 @@
     <classEntry path="com.kitschpatrol.futil.utilitites.PlatformUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.FileUtil"/>
     <classEntry path="com.kitschpatrol.futil.JPEGEncoder"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.NamedYPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.NamedXPlugin"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

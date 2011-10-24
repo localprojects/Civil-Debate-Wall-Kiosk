@@ -1,4 +1,4 @@
-package com.kitschpatrol.futil {
+package com.kitschpatrol.futil.blocks {
 	import flash.display.BitmapData;
 	import flash.display.CapsStyle;
 	import flash.display.JointStyle;
