@@ -1,4 +1,4 @@
-package faceCropTool
+package faceCropTool.faceImage
 {
 	import flash.events.Event;
 	

@@ -1,4 +1,7 @@
-package faceCropTool {
+package faceCropTool.core {
+	import faceCropTool.faceImage.FaceImage;
+	
+	import flash.display.Bitmap;
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 
@@ -8,7 +11,8 @@ package faceCropTool {
 		public static const SHOW_CROPPED:String = "showCropped";		
 		
 		public static var showZoomOverlay:Boolean;
-		public static var showKioskOverlay:Boolean;
+		public static var showDesignOverlay:Boolean;
+		public static var designOverlay:Bitmap;
 		public static var zoomedFace:FaceImage;
 		public static var showFaceOverlay:Boolean;
 		public static var viewMode:String;
@@ -18,5 +22,9 @@ package faceCropTool {
 		public static var cachePath:String;
 		public static var faceCropRect:Rectangle;
 		public static var fileSuffix:String;
+		
+		public static var targetWidth:int;
+		public static var targetHeight:int;		
+		
 	}
 }

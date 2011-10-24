@@ -14,11 +14,14 @@ package com.kitschpatrol.futil.utilitites {
 			}
 		}
 		
-		// Check!
-		public function popFileExtension(s:String):String {
+		// Check! DESTRUCTIVE
+		public static function popFileExtension(s:String):String {
 			var extension:String = s.substring(s.lastIndexOf("."));
-			s = s.substring(0, s.lastIndexOf("."));
 			return extension;
+		}
+		
+		public static function stripFileExtension(s:String):String {
+			return s.substring(0, s.lastIndexOf("."));
 		}
 		
 		

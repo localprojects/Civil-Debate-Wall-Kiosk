@@ -30,45 +30,27 @@
 // or tort (including negligence or otherwise) arising in any way out of
 // the use of this software, even if advised of the possibility of such damage.
 //
-package jp.maaash.ObjectDetection
+package ObjectDetection
 {
-	public final class HaarRect{
-		public  var dx      :int;	// default values read from xml
-		public  var dy      :int;
-		public  var dw      :int;
-		public  var dh      :int;
-		public  var dweight :Number;
-		public  var sx      :int;	// scaled values
-		public  var sy      :int;
-		public  var sw      :int;
-		public  var sh      :int;
-		public  var sweight :Number;
+	public class FeatureBase{
+		public  var threshold :Number;
+		public  var left_val  :Number;
+		public  var right_val :Number;
+		public var next:FeatureBase;
 		
-		public function HaarRect( d:Array ) 
+		public function FeatureBase( _th:Number, _lv:Number, _rv:Number)
 		{
-			dx      = d[0];
-			dy      = d[1];
-			dw      = d[2];
-			dh      = d[3];
-			dweight = d[4];
+			threshold = _th;
+			left_val  = _lv;
+			right_val = _rv;
 		}
 
-		public function get area():int{
-			return sw*sh;
+		public function getSum( targetImage:TargetImage, x:int, y:int ):Number{
+			return 0;
 		}
 
-		public function set scale(s:Number):void
-		{
-			sx = int( dx * s );
-			sy = int( dy * s );
-			sw = int( dw * s );
-			sh = int( dh * s );
+		public function setScaleAndWeight(s:Number,w:Number):void{
 		}
 
-		public function set scale_weight(s:Number):void
-		{
-			sweight = dweight * s;
-		}
-		
 	}
 }

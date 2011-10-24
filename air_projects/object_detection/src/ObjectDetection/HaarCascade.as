@@ -31,7 +31,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 
-package jp.maaash.ObjectDetection
+package ObjectDetection
 {
 	import flash.geom.Rectangle;
 	

@@ -30,19 +30,27 @@
 // or tort (including negligence or otherwise) arising in any way out of
 // the use of this software, even if advised of the possibility of such damage.
 //
-package jp.maaash.ObjectDetection
+package ObjectDetection
 {
-	public class FeatureTree
-	{
-		public  var stage_threshold :Number;
-		public var next:FeatureTree;
-		public var firstFeature:FeatureBase;
-		
-		public function FeatureTree( $stage_threshold:Number )
-		{
-			stage_threshold = $stage_threshold;
-		
-		}
-		
+	public class ObjectDetectorOptions{
+		public static const SCALE_FACTOR      :Number = 1.2;
+		public static const MIN_SIZE          :int    = 15;
+		public static const MIN_MARGIN_SEARCH :int = 3;
+
+		public static const SEARCH_MODE_DEFAULT    :int = 0;
+		public static const SEARCH_MODE_SOLO       :int = 1;
+		public static const SEARCH_MODE_NO_OVERLAP :int = 2;
+
+		public static const INVALID_POS            :int = -1;
+
+		//public static const search_mode   :int = SEARCH_MODE_DEFAULT;
+		//public static const search_mode   :int = SEARCH_MODE_SOLO;
+		public var search_mode :int    = SEARCH_MODE_NO_OVERLAP;	// about 50% speed up
+		public var scale_factor:Number = SCALE_FACTOR;
+		public var min_size    :int    = MIN_SIZE;
+		public var startx      :int    = INVALID_POS;
+		public var starty      :int    = INVALID_POS;
+		public var endx        :int    = INVALID_POS;
+		public var endy        :int    = INVALID_POS;
 	}
 }

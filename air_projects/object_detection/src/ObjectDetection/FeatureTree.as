@@ -30,27 +30,19 @@
 // or tort (including negligence or otherwise) arising in any way out of
 // the use of this software, even if advised of the possibility of such damage.
 //
-package jp.maaash.ObjectDetection
+package ObjectDetection
 {
-	public class FeatureBase{
-		public  var threshold :Number;
-		public  var left_val  :Number;
-		public  var right_val :Number;
-		public var next:FeatureBase;
+	public class FeatureTree
+	{
+		public  var stage_threshold :Number;
+		public var next:FeatureTree;
+		public var firstFeature:FeatureBase;
 		
-		public function FeatureBase( _th:Number, _lv:Number, _rv:Number)
+		public function FeatureTree( $stage_threshold:Number )
 		{
-			threshold = _th;
-			left_val  = _lv;
-			right_val = _rv;
+			stage_threshold = $stage_threshold;
+		
 		}
-
-		public function getSum( targetImage:TargetImage, x:int, y:int ):Number{
-			return 0;
-		}
-
-		public function setScaleAndWeight(s:Number,w:Number):void{
-		}
-
+		
 	}
 }

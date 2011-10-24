@@ -1,9 +1,14 @@
-package faceCropTool
+package faceCropTool.faceImage
 {
+	import com.adobe.crypto.MD5;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
+	
+	import faceCropTool.core.State;
+	import faceCropTool.utilities.FaceDetector;
+	import faceCropTool.utilities.Utilities;
 	
 	import flash.display.Bitmap;
 	import flash.display.PixelSnapping;
@@ -12,7 +17,7 @@ package faceCropTool
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	
-	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
+	import ObjectDetection.ObjectDetectorEvent;
 
 	// Loads all of the jpegs in a directory, detects faces if they're not in the cache
 	public class FaceImageLoader extends EventDispatcher {
@@ -53,7 +58,7 @@ package faceCropTool
 		private function onImageLoad(b:Bitmap, name:String):void {
 			var image:FaceImage = new FaceImage();
 			image.originalBitmap = new Bitmap(b.bitmapData.clone(), "auto", true);
-			image.cropBitmap = new Bitmap(BitmapUtil.scaleToFill(b.bitmapData.clone(), 1080, 1920), PixelSnapping.AUTO, true);
+			image.cropBitmap = new Bitmap(BitmapUtil.scaleToFill(b.bitmapData.clone(), State.targetWidth, State.targetHeight), PixelSnapping.AUTO, true);
 			
 			image.fileName = name;
 			trace("Loaded " + name);			
@@ -64,7 +69,7 @@ package faceCropTool
 					trace("have cache for " + name + " loading rect");
 					var cacheRow:Array = line.split(",");
 					
-					// TODO add MD5 hash to cache index
+					// TODO add MD5 hash to cache index, no too slow
 					// Cache row is in format "name,x,y,w,h"
 					image.faceRect = new Rectangle(parseFloat(cacheRow[1]), parseFloat(cacheRow[2]), parseFloat(cacheRow[3]), parseFloat(cacheRow[4]));
 				}
@@ -112,6 +117,12 @@ package faceCropTool
 			 // scale the face to match the original size of the image
 			var scaleFactor:Number = searchingFace.originalBitmap.bitmapData.height / faceDetector.maxSourceHeight; 
 			searchingFace.faceRect = GeomUtil.scaleRect(faceDetector.faceRect, scaleFactor);								
+			
+			// Cache row is in format "name,x,y,w,h"			
+			//var hash:String = MD5.hashBinary(searchingFace.originalBitmap.bitmapData.getPixels(searchingFace.originalBitmap.bitmapData.rect));
+			// Too slow!
+			
+			
 			
 			faceCache.push(searchingFace.fileName + "," + searchingFace.faceRect.x + "," + searchingFace.faceRect.y + "," + searchingFace.faceRect.width + "," + searchingFace.faceRect.height);			
 			
