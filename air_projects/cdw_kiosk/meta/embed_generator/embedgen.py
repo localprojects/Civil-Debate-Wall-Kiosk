@@ -3,20 +3,19 @@
 # If it's fed a directory, it wil create embed code for every image file in the directory
 import os, sys
 
+imageExtensions = ['.jpg', '.png', '.gif']
+
 def printEmbed(filename):
 		shortname = filename[0:-4]
 		getname = shortname[0].capitalize() + shortname[1:]
 
-		print '[Embed(source = \'/assets/graphics/' + filename + '\')] private static const ' + shortname + 'Class:Class;'
-		print 'public static function get' + getname + '():Bitmap { return new ' + shortname + 'Class() as Bitmap; };'
-		print 'public static const ' + shortname + ':Bitmap = get' + getname + '();'
-		print ''
-
-imageExtensions = ['.jpg', '.png', '.gif']
+		buffer  = '[Embed(source = \'/assets/graphics/' + filename + '\')] private static const ' + shortname + 'Class:Class;\n'
+		buffer += 'public static function get' + getname + '():Bitmap { return new ' + shortname + 'Class() as Bitmap; };\n'
+		buffer += 'public static const ' + shortname + ':Bitmap = get' + getname + '();\n'
+		return buffer
 
 if (len(sys.argv) > 1):
 		input = sys.argv[1]
-		
 		
 		try:
 			dirList = os.listdir(input)

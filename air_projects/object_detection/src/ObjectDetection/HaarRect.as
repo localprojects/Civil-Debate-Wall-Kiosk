@@ -30,27 +30,45 @@
 // or tort (including negligence or otherwise) arising in any way out of
 // the use of this software, even if advised of the possibility of such damage.
 //
-package jp.maaash.ObjectDetection
+package ObjectDetection
 {
-	public class ObjectDetectorOptions{
-		public static const SCALE_FACTOR      :Number = 1.2;
-		public static const MIN_SIZE          :int    = 15;
-		public static const MIN_MARGIN_SEARCH :int = 3;
+	public final class HaarRect{
+		public  var dx      :int;	// default values read from xml
+		public  var dy      :int;
+		public  var dw      :int;
+		public  var dh      :int;
+		public  var dweight :Number;
+		public  var sx      :int;	// scaled values
+		public  var sy      :int;
+		public  var sw      :int;
+		public  var sh      :int;
+		public  var sweight :Number;
+		
+		public function HaarRect( d:Array ) 
+		{
+			dx      = d[0];
+			dy      = d[1];
+			dw      = d[2];
+			dh      = d[3];
+			dweight = d[4];
+		}
 
-		public static const SEARCH_MODE_DEFAULT    :int = 0;
-		public static const SEARCH_MODE_SOLO       :int = 1;
-		public static const SEARCH_MODE_NO_OVERLAP :int = 2;
+		public function get area():int{
+			return sw*sh;
+		}
 
-		public static const INVALID_POS            :int = -1;
+		public function set scale(s:Number):void
+		{
+			sx = int( dx * s );
+			sy = int( dy * s );
+			sw = int( dw * s );
+			sh = int( dh * s );
+		}
 
-		//public static const search_mode   :int = SEARCH_MODE_DEFAULT;
-		//public static const search_mode   :int = SEARCH_MODE_SOLO;
-		public var search_mode :int    = SEARCH_MODE_NO_OVERLAP;	// about 50% speed up
-		public var scale_factor:Number = SCALE_FACTOR;
-		public var min_size    :int    = MIN_SIZE;
-		public var startx      :int    = INVALID_POS;
-		public var starty      :int    = INVALID_POS;
-		public var endx        :int    = INVALID_POS;
-		public var endy        :int    = INVALID_POS;
+		public function set scale_weight(s:Number):void
+		{
+			sweight = dweight * s;
+		}
+		
 	}
 }

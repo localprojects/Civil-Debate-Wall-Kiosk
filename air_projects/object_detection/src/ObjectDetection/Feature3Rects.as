@@ -30,30 +30,38 @@
 // or tort (including negligence or otherwise) arising in any way out of
 // the use of this software, even if advised of the possibility of such damage.
 //
-package jp.maaash.ObjectDetection
+package ObjectDetection
 {
-	public class Feature2Rects extends FeatureBase {
+	public class Feature3Rects extends FeatureBase {
 		public  var r1 :HaarRect;
 		public  var r2 :HaarRect;
+		public  var r3 :HaarRect;
 
-		public function Feature2Rects(_th:Number, _lv:Number, _rv:Number, _r1:Array, _r2:Array )
+		public function Feature3Rects( _th:Number, _lv:Number, _rv:Number, _r1:Array, _r2:Array, _r3:Array)
 		{
 			super(_th,_lv,_rv);
 			r1 = new HaarRect(_r1);
 			r2 = new HaarRect(_r2);
+			r3 = new HaarRect(_r3);
 		}
 
-		public override function getSum( targetImage:TargetImage, offsetx:int, offsety:int ):Number{
-			return targetImage.getSum( offsetx + r1.sx, offsety + r1.sy, r1.sw, r1.sh ) * r1.sweight +
-				   targetImage.getSum( offsetx + r2.sx, offsety + r2.sy, r2.sw, r2.sh ) * r2.sweight;
+		public override function getSum( targetImage:TargetImage, offsetx:int, offsety:int ):Number
+		{
+			return 	targetImage.getSum( offsetx + r1.sx, offsety + r1.sy, r1.sw, r1.sh ) * r1.sweight +
+				   	targetImage.getSum( offsetx + r2.sx, offsety + r2.sy, r2.sw, r2.sh ) * r2.sweight +
+					targetImage.getSum( offsetx + r3.sx, offsety + r3.sy, r3.sw, r3.sh ) * r3.sweight;
 			
 		}
 
 		public override function setScaleAndWeight(s:Number,w:Number):void{
 			r2.scale = s;
 			r2.scale_weight = w;
+			r3.scale = s;
+			r3.scale_weight = w;
 			r1.scale = s;
-			r1.sweight = - r2.area * r2.sweight / r1.area;
+			r1.sweight = - ( r2.area * r2.sweight + r3.area * r3.sweight ) / r1.area;
 		}
+
+		
 	}
 }

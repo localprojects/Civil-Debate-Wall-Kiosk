@@ -1,21 +1,26 @@
-package faceCropTool {
+package faceCropTool.utilities {
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
-	import flash.display.*;
-	import flash.events.*;
-	import flash.filesystem.*;
-	import flash.geom.*;
-	import flash.net.*;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.Loader;
+	import flash.display.PixelSnapping;
+	import flash.events.Event;
+	import flash.filesystem.File;
+	import flash.geom.Matrix;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import flash.net.URLRequest;
+	
 	
 	public class Utilities {
-
 		
-		// From CDW Wall Utilities.as
-		public static function cropToFace(sourceBitmap:Bitmap, sourceFaceRectangle:Rectangle, targetFaceRectangle:Rectangle):Bitmap {
+		// From CDW Wall Utilities.as, TODO merge them back over?
+		public static function cropToFace(sourceBitmap:Bitmap, sourceFaceRectangle:Rectangle, targetFaceRectangle:Rectangle, targetWidth:int, targetHeight:int):Bitmap {
 			// lots of stuff hard coded here... dimensions of target, location of face in target
 			
 			// give up if the target face rectangle is too far away?
-			var targetBounds:Rectangle = new Rectangle(0, 0, 1080, 1920);			
+			var targetBounds:Rectangle = new Rectangle(0, 0, targetWidth, targetHeight);			
 			var sourceBounds:Rectangle = sourceBitmap.bitmapData.rect;
 			
 			// Figure out scale required to fit face rect in target rect
@@ -44,8 +49,8 @@ package faceCropTool {
 			
 			// TODO abort safety
 			while (!scaledSourceBounds.containsRect(targetBounds)) {
-				trace("Scaling... " + scaledSourceBounds);
-				trace("To fit within: " + targetBounds);
+				//trace("Scaling... " + scaledSourceBounds);
+				//trace("To fit within: " + targetBounds);
 				scaledSourceBounds.width += 1  * aspectRatio;
 				scaledSourceBounds.x -= (scaledSourceCenter.x / originalWidth) * aspectRatio;
 				
@@ -56,15 +61,15 @@ package faceCropTool {
 			var totalScaleX:Number = scaledSourceBounds.width / sourceBitmap.width;
 			var totalScaleY:Number = scaledSourceBounds.height / sourceBitmap.height;			
 			
-			trace("Scaled: " + totalScaleX + " x " + totalScaleY);
+			//trace("Scaled: " + totalScaleX + " x " + totalScaleY);
 			
 			// TODO set some kind of scale threshold
 			
 			// now it fits, we have the the bounds of the final rectangle
-			trace("This fits: " + scaledSourceBounds);
+			//trace("This fits: " + scaledSourceBounds);
 			
 			// draw the face cropped image it into a bitmap
-			var portraitBitmap:Bitmap = new Bitmap(new BitmapData(1080, 1920), PixelSnapping.NEVER, true);
+			var portraitBitmap:Bitmap = new Bitmap(new BitmapData(targetWidth, targetHeight), PixelSnapping.NEVER, true);
 			
 			// turn the rectangle representation of the new position and scale into a matrix
 			var drawMatrix:Matrix = new Matrix();
@@ -73,13 +78,12 @@ package faceCropTool {
 			drawMatrix.ty = Math.floor(scaledSourceBounds.y);			
 			
 			// draw it into a bitmao
-			var faceCroppedBitmap:Bitmap = new Bitmap(new BitmapData(1080, 1920), PixelSnapping.NEVER, true);
+			var faceCroppedBitmap:Bitmap = new Bitmap(new BitmapData(targetWidth, targetHeight), PixelSnapping.NEVER, true);
 			faceCroppedBitmap.bitmapData.draw(sourceBitmap, drawMatrix, null, null, null, true);
 			return faceCroppedBitmap;
 		}
 		
 
-		
 		public static function loadImageFaceCrop(path:String, callback:Function):void {
 			var file:File = new File(path);
 			
@@ -90,14 +94,7 @@ package faceCropTool {
 			
 			imageLoader.load(new URLRequest(file.url));
 		}
-				
-		
 
 		
-
-				
-		
-		
-
 	}
 }

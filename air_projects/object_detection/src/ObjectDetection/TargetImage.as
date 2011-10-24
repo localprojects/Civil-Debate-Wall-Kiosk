@@ -30,7 +30,7 @@
 // or tort (including negligence or otherwise) arising in any way out of
 // the use of this software, even if advised of the possibility of such damage.
 //
-package jp.maaash.ObjectDetection
+package ObjectDetection
 {
 	import flash.display.BitmapData;
 	import flash.utils.ByteArray;

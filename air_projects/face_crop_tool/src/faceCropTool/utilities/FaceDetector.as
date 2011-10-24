@@ -1,4 +1,8 @@
-package faceCropTool  {
+package faceCropTool.utilities  {
+	import ObjectDetection.ObjectDetector;
+	import ObjectDetection.ObjectDetectorEvent;
+	import ObjectDetection.ObjectDetectorOptions;
+	
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
@@ -8,16 +12,7 @@ package faceCropTool  {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import jp.maaash.ObjectDetection.ObjectDetector;
-	import jp.maaash.ObjectDetection.ObjectDetectorEvent;
-	import jp.maaash.ObjectDetection.ObjectDetectorOptions;
 	
-	
-	
-
-	
-	// Adapted from Mario Klingemann's code
-	// http://www.quasimondo.com/archives/000687.php
 	public class FaceDetector extends EventDispatcher 	{
 		
 		private var detector:ObjectDetector;
@@ -36,6 +31,7 @@ package faceCropTool  {
 			init();
 		}
 		
+		
 		private function init():void {
 			detector = new ObjectDetector();
 			var options:ObjectDetectorOptions = new ObjectDetectorOptions();
@@ -44,17 +40,11 @@ package faceCropTool  {
 			detector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, detectionHandler);
 			
 			faceRect = new Rectangle();
-			
-			// respect aspect ratios
-//			if(CDW.settings.webcamOnly) {
-//				maxSourceWidth = Math.round(190);
-//				maxSourceHeight = Math.round(320);
-//			}
-//			else {
-				maxSourceWidth = 213;
-				maxSourceHeight = 320;
-//			}
+	
+			maxSourceWidth = 213;
+			maxSourceHeight = 320;
 		}
+		
 		
 		private function detectionHandler(e:ObjectDetectorEvent):void {
 			
@@ -111,4 +101,3 @@ package faceCropTool  {
 
 	}
 }
-

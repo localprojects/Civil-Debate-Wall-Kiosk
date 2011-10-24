@@ -1,24 +1,20 @@
-package faceCropTool
+package faceCropTool.utilities
 {
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
-	import com.kitschpatrol.futil.utilitites.GeomUtil;
+	
+	import faceCropTool.core.State;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.geom.Rectangle;
 	
-
-	public class CropRect extends Sprite
-	{
-		// Use rect!
+	public class CropRect extends Sprite {
 		
-		
-		
-		
+		// Extend rect instead?
 		private var topLeftHandle:CropHandle;
 		private var topRightHandle:CropHandle;
 		private var bottomRightHandle:CropHandle;
 		private var bottomLeftHandle:CropHandle;
+		
 		
 		public function CropRect()	{
 			super();
@@ -27,9 +23,6 @@ package faceCropTool
 			// TODO adapt for different window sizes
 			this.scaleX = 0.5;
 			this.scaleY = 0.5;
-			
-			
-  
 			
 			topLeftHandle = new CropHandle();
 			addChild(topLeftHandle);
@@ -46,13 +39,12 @@ package faceCropTool
 			draw();
 			
 			// TODO watch for change instead
-	//		this.addEventListener(Event.CHANGE, onChange);	
+			// this.addEventListener(Event.CHANGE, onChange);	
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
+		
 		private function draw():void {
-			
-
 			if (topLeftHandle.active) {
 				State.faceCropRect.left = topLeftHandle.x;
 				State.faceCropRect.top = topLeftHandle.y;				
@@ -89,14 +81,11 @@ package faceCropTool
 				bottomRightHandle.y = State.faceCropRect.bottom;
 			}
 			
-			
 			this.graphics.clear();
 			this.graphics.lineStyle(10, ColorUtil.gray(70));
 			this.graphics.drawRect(State.faceCropRect.x, State.faceCropRect.y, State.faceCropRect.width, State.faceCropRect.height);
 			this.graphics.endFill();
-			
 		}
-		
 		
 		
 		private function onEnterFrame(e:Event):void {
@@ -104,7 +93,5 @@ package faceCropTool
 		}
 		
 		
-		
-		// draw lines between
 	}
 }
