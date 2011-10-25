@@ -1,6 +1,5 @@
-package faceCropTool.faceImage
-{
-	import com.adobe.crypto.MD5;
+package faceCropTool.faceImage {
+
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;

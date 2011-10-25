@@ -1,5 +1,6 @@
 package com.civildebatewall {
 	import com.bit101.components.*;
+	import com.civildebatewall.data.Question;
 	
 	import flash.display.*;
 	import flash.events.Event;
@@ -61,6 +62,9 @@ package com.civildebatewall {
 			
 			viewChooser.addEventListener(Event.SELECT, onViewSelect);
 			viewChooser.width = this.width - 10;
+			
+			new PushButton(this, 5, viewChooser.y + viewChooser.height + 5, "HIt Data", function():void { CDW.data.question = new Question({'id':'32424', 'text':'asdfasdf'}); });
+			
 		}
 		
 		// logs a single line of text to the window

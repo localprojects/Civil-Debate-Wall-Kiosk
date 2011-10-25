@@ -20,6 +20,8 @@ package com.civildebatewall {
 	import flash.ui.ContextMenuItem;
 	import flash.ui.Mouse;
 	
+	import mx.binding.BindingManager;
+	
 	// Greensock plugins
 	TweenPlugin.activate([ThrowPropsPlugin]);			
 	TweenPlugin.activate([CacheAsBitmapPlugin]);	
@@ -29,7 +31,10 @@ package com.civildebatewall {
 	public class CDW extends Sprite {
 		
 		public static var self:CDW;
+		
+		
 		public static var data:Data;
+		
 		public static var dashboard:Dashboard;
 		public static var state:State;
 		public static var settings:Object;
@@ -156,6 +161,9 @@ package com.civildebatewall {
 			if (firstTime) {
 				firstTime = false;
 				
+
+				
+				
 				// set active debate to first in list
 				// set the active debate to the first one
 				CDW.state.setActiveDebate(CDW.data.threads[0]);
@@ -184,7 +192,18 @@ package com.civildebatewall {
 				
 				
 				// Add test overlay
-				addChild(testOverlay);				
+				addChild(testOverlay);
+				
+				// Fire bindings
+				
+				trace("firing bindings");
+				BindingManager.executeBindings(CDW.data, "question", {});
+				
+				
+
+								
+				
+				
 			}
 			else {
 				trace('updated db')

@@ -1,5 +1,5 @@
 package com.civildebatewall.blocks {
-
+	
 	import com.civildebatewall.CDW;
 	import com.civildebatewall.Utilities;
 	import com.greensock.*;
@@ -52,7 +52,7 @@ package com.civildebatewall.blocks {
 			defaultOutDuration = duration;
 			defaultTweenOutVars = ObjectUtil.mergeObjects(defaultTweenOutVars, params);
 		}				
-
+		
 		
 		public function setText(s:String, instant:Boolean = false):void {
 			// override me
@@ -74,9 +74,6 @@ package com.civildebatewall.blocks {
 		// note that it works on a COPY of the parameters so that they can
 		// be re-calculated as the program progresses
 		// could do something similar with the dynaprop plugin...
-		
-		
-		// TODO make it a plugin
 		protected function preprocessParams(params:Object):Object {
 			var newParams:Object = {};
 			
@@ -137,17 +134,39 @@ package com.civildebatewall.blocks {
 			// THIS TRIES TO FIX THE MISSING BLOCK PROBLEM!!! // IT WORKS!s
 			TweenMax.killTweensOf(this); // stop tweening out if we're tweening out, keeps afterTweenOut from firing...
 			active = true;
-			if (duration == -1) duration = defaultOutDuration;			
-			params = (params == null) ? defaultTweenOutVars : ObjectUtil.mergeObjects(defaultTweenInVars, params);			
+			
+			if (duration == -1) {
+				duration = defaultInDuration;
+			}
+			
+			if (params == null) {
+				params = defaultTweenInVars;
+			}
+			else {
+				params = ObjectUtil.mergeObjects(defaultTweenInVars, params);
+			}
+			
 			params = preprocessParams(params);
+			
 			TweenMax.to(this, duration, params);
+			
 		}
 		
-
+		
 		public function tweenOut(duration:Number = -1, params:Object = null):void {
-			if (duration == -1) duration = defaultOutDuration;
-			params = (params == null) ? defaultTweenOutVars : ObjectUtil.mergeObjects(defaultTweenOutVars, params); 
+			if (duration == -1) {
+				duration = defaultOutDuration;
+			}
+			
+			if (params == null) {
+				params = defaultTweenOutVars;
+			}
+			else {
+				params = ObjectUtil.mergeObjects(defaultTweenOutVars, params);
+			}
+			
 			params = preprocessParams(params);			
+			
 			TweenMax.to(this, duration, params);
 			active = true; // TODO WHY WAS THIS FALSE?
 		}		
