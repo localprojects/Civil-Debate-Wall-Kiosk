@@ -24,7 +24,7 @@ package com.civildebatewall.data {
 	public class Data extends EventDispatcher {
 		
 		
-		public var question:Question;
+		[Bindable] public var question:Question;
 		public var users:Array;
 		public var threads:Array;
 		public var posts:Array;

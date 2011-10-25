@@ -30,16 +30,13 @@ package com.kitschpatrol.futil.tweenPlugins {
 			switch (value) {
 				case Alignment.OFF_STAGE_TOP:
 					targetY = -target.height - padding;
-					break;
-				case Alignment.OFF_STAGE_RIGHT:
-					targetY = target.stage.stageWidth + padding;
 					break;				
 				case Alignment.OFF_STAGE_BOTTOM:
 					targetY = target.stage.stageHeight + padding;
 					break;
-				case Alignment.OFF_STAGE_LEFT:
-					targetY = -target.width - padding;
-					break;
+				case Alignment.CENTER_STAGE:
+					targetY = (target.stage.stageHeight - target.height) / 2;
+					break;				
 				default:
 					// Must have been a string for a different reason
 					return false;
