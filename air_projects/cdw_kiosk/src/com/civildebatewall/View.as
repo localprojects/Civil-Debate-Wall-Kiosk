@@ -8,14 +8,11 @@ package com.civildebatewall {
 	import com.civildebatewall.elements.*;
 	import com.civildebatewall.keyboard.*;
 	import com.civildebatewall.staging.elements.QuestionHeader;
-	import com.civildebatewall.staging.futilProxies.BlockTextTweenable;
 	import com.civildebatewall.ui.*;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
 	import com.kitschpatrol.futil.Math2;
-	import com.kitschpatrol.futil.blocks.BlockText;
-	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.FunctionUtil;
@@ -36,8 +33,6 @@ package com.civildebatewall {
 	public class View extends Sprite {
 				
 		// immutable
-		private var header:BlockBitmap;
-		private var divider:BlockBitmap;
 		private var smsDisclaimer:BlockParagraph;
 		public var portraitCamera:PortraitCamera; // public for dashboard
 		private var inactivityOverlay:BlockBitmap;
@@ -105,10 +100,7 @@ package com.civildebatewall {
 		public var debateStrip:DebateStrip;
 		public var debateOverlay:DebateOverlay;		
 
-		// multiples of these for the drag transitions
-		public var stance:BlockLabel;
-		public var leftStance:BlockLabel;
-		public var rightStance:BlockLabel;		
+		// multiples of these for the drag transitions		
 		public var nametag:NameTag;
 		public var leftNametag:NameTag;
 		public var rightNametag:NameTag;		
@@ -121,9 +113,7 @@ package com.civildebatewall {
 		
 		// convenience
 		public var stageWidth:Number;
-		public var stageHeight:Number;
-		private var yesLetterSpacing:Number;
-		private var noLetterSpacing:Number;	
+		public var stageHeight:Number;	
 		
 		
 		
@@ -145,9 +135,7 @@ package com.civildebatewall {
 		private function init():void {
 			// for convenience
 			stageWidth = 1080;
-			stageHeight = 1920;
-			yesLetterSpacing = -4;
-			noLetterSpacing = -7;			
+			stageHeight = 1920;	
 			
 			// Work around for lack of mouse-down events
 			// http://forums.adobe.com/message/2794098?tstart=0
@@ -178,16 +166,7 @@ package com.civildebatewall {
 			letsDebateUnderlay.setDefaultTweenOut(1, {alpha: 0, ease: Quart.easeOut});
 			addChild(letsDebateUnderlay);				
 			
-			
-			header = new BlockBitmap(Assets.getHeaderBackground());			
-			header.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 30});
-			header.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});
-			addChild(header);
-			
-			divider = new BlockBitmap(Assets.divider);
-			divider.setDefaultTweenIn(1, {alpha: 1, x: BlockBase.CENTER, y: 250});
-			divider.setDefaultTweenOut(1, {alpha: 0, x: BlockBase.CENTER, y: 250});
-			addChild(divider);
+
 			
 		questionHeader = new QuestionHeader();
 		questionHeader.setDefaultTweenIn(1, { alpha: 1});
@@ -197,26 +176,7 @@ package com.civildebatewall {
 
 			
 			
-			// triple stances
-			stance= new BlockLabel('', 92, 0xffffff, 0x000000);
-			stance.setPadding(24, 36, 23, 30);
-			
-			stance.considerDescenders = false;
-			stance.setDefaultTweenIn(1, {x: 238, y: 280});
-			stance.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 280});			
-			addChild(stance);			
-			
-			leftStance = new BlockLabel('', 92, 0xffffff, 0x000000);
-			leftStance.setPadding(24, 36, 23, 30);		
-			leftStance.considerDescenders = false;
-			leftStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x - stageWidth, y: stance.defaultTweenInVars.y});						
-			addChild(leftStance);
 
-			rightStance= new BlockLabel('', 92, 0xffffff, 0x000000);
-			rightStance.setPadding(24, 36, 23, 30);
-			rightStance.considerDescenders = false;			
-			rightStance.setDefaultTweenIn(1, {x: stance.defaultTweenInVars.x + stageWidth, y: stance.defaultTweenInVars.y});						
-			addChild(rightStance);			
 			
 			// triple nametags
 			nametag = new NameTag('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);	
@@ -341,19 +301,7 @@ package com.civildebatewall {
 			pickStanceInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
 			addChild(pickStanceInstructions);
 			
-			yesButton = new BlockButton(215, 100, Assets.COLOR_YES_LIGHT, 'YES!', 80);
-			yesButton.shiftBaseline(3);
-			yesButton.setLetterSpacing(yesLetterSpacing);
-			yesButton.setDefaultTweenIn(1, {x: 447, y: 1340});
-			yesButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1340});
-			addChild(yesButton);
-			
-			noButton = new BlockButton(185, 100, Assets.COLOR_NO_LIGHT, 'NO!', 80);
-			noButton.shiftBaseline(3);			
-			noButton.setLetterSpacing(noLetterSpacing);
-			noButton.setDefaultTweenIn(1.2, {x: 677, y: 1340});
-			noButton.setDefaultTweenOut(1.2, {x: BlockBase.OFF_RIGHT_EDGE, y: 1340});
-			addChild(noButton);
+
 			
 			// Temp debug button so we don't have to SMS every time
 			skipTextButton = new BlockButton(200, 100, Assets.COLOR_GRAY_85, 'SIMULATE SMS', 20);
@@ -598,8 +546,6 @@ package com.civildebatewall {
 			
 			// blocks
 			portrait.tweenIn();
-			header.tweenIn();
-			divider.tweenIn();
 			questionHeader.tweenIn();			
 			bigButton.tweenIn();	
 
@@ -621,7 +567,7 @@ package com.civildebatewall {
 			portrait.setImage(CDW.state.activeThread.firstPost.user.photo); // TODO need to copy?
 			//question.setText(CDW.data.question.text, true);
 			nametag.setText(CDW.state.activeThread.firstPost.user.usernameFormatted + ' Says :', true);
-			stance.setText(CDW.state.activeThread.firstPost.stanceFormatted, true);
+			
 			opinion.setText(CDW.state.activeThread.firstPost.text);
 			bigButton.setText('ADD YOUR OPINION', true);
 			likeButton.setCount(CDW.state.activeThread.firstPost.likes);			
@@ -656,8 +602,7 @@ package com.civildebatewall {
 			
 			// aesthetic mutations
 			//question.setTextColor(CDW.state.questionTextColor);
-			debateButton.setStrokeColor(0xffffff);
-			CDW.state.activeThread.firstPost.stance == Post.STANCE_YES ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);			
+			debateButton.setStrokeColor(0xffffff);			
 			
 			// disabled colors
 			likeButton.setDisabledColor(CDW.state.activeThread.firstPost.stanceColorDisabled);
@@ -671,11 +616,10 @@ package com.civildebatewall {
 				leftOpinion.y = 1347 - leftOpinion.height;
 				
 				leftOpinion.setText(CDW.state.previousThread.firstPost.text, true);				
-				leftStance.setText(CDW.state.previousThread.firstPost.stanceFormatted, true);
-				CDW.state.previousThread.firstPost.stance == Post.STANCE_YES ? leftStance.setLetterSpacing(yesLetterSpacing) : leftStance.setLetterSpacing(noLetterSpacing);				
+								
 				leftNametag.setText(CDW.state.previousThread.firstPost.user.usernameFormatted + ' Says :', true);				
 				
-				leftStance.setBackgroundColor(CDW.state.previousThread.firstPost.stanceColorLight, true);
+				
 				leftOpinion.setBackgroundColor(CDW.state.previousThread.firstPost.stanceColorLight, true);
 				leftNametag.setBackgroundColor(CDW.state.previousThread.firstPost.stanceColorDark, true);				
 			}
@@ -685,11 +629,10 @@ package com.civildebatewall {
 				rightOpinion.y = 1347 - rightOpinion.height;
 				
 				rightOpinion.setText(CDW.state.nextThread.firstPost.text, true);				
-				rightStance.setText(CDW.state.nextThread.firstPost.stanceFormatted, true);
-				CDW.state.nextThread.firstPost.stance == Post.STANCE_YES ? rightStance.setLetterSpacing(yesLetterSpacing) : rightStance.setLetterSpacing(noLetterSpacing);				
+								
 				rightNametag.setText(CDW.state.nextThread.firstPost.user.usernameFormatted + ' Says :', true);				
 				
-				rightStance.setBackgroundColor(CDW.state.nextThread.firstPost.stanceColorLight, true);
+				
 				rightOpinion.setBackgroundColor(CDW.state.nextThread.firstPost.stanceColorLight, true);
 				rightNametag.setBackgroundColor(CDW.state.nextThread.firstPost.stanceColorDark, true);	
 			}
@@ -699,7 +642,7 @@ package com.civildebatewall {
 			var instant:Boolean = true;
 			if (CDW.state.activeView == CDW.state.lastView) instant = false;
 			
-			stance.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorLight, true);
+			
 			
 			quoteLeft.setColor(CDW.state.activeThread.firstPost.stanceColorLight, instant);
 			quoteRight.setColor(CDW.state.activeThread.firstPost.stanceColorLight, instant);				
@@ -783,13 +726,10 @@ package com.civildebatewall {
 			
 			// blocks
 			portrait.tweenIn();
-			header.tweenIn();
-			divider.tweenIn();
+
 			questionHeader.tweenIn();
 			dragLayer.tweenIn();
-			stance.tweenIn();
-			leftStance.tweenIn();
-			rightStance.tweenIn();
+
 			nametag.tweenIn();
 			leftNametag.tweenIn();
 			rightNametag.tweenIn();
@@ -862,9 +802,7 @@ package com.civildebatewall {
 				CDW.view.opinion.x += stageWidth;
 				CDW.view.rightOpinion.x += stageWidth;
 				
-				CDW.view.leftStance.x += stageWidth;
-				CDW.view.rightStance.x += stageWidth;
-				CDW.view.stance.x += stageWidth;
+
 				
 				CDW.view.leftNametag.x += stageWidth;
 				CDW.view.rightNametag.x += stageWidth;
@@ -881,9 +819,7 @@ package com.civildebatewall {
 				CDW.view.opinion.x -= stageWidth;
 				CDW.view.rightOpinion.x -= stageWidth;
 				
-				CDW.view.leftStance.x -= stageWidth;
-				CDW.view.rightStance.x -= stageWidth;
-				CDW.view.stance.x -= stageWidth;
+
 				
 				CDW.view.leftNametag.x -= stageWidth;
 				CDW.view.rightNametag.x -= stageWidth;
@@ -924,13 +860,13 @@ package com.civildebatewall {
 			
 			// mutations
 			portrait.setImage(CDW.state.activeThread.firstPost.user.photo);
-			stance.setText(CDW.state.activeThread.firstPost.stanceFormatted, true);
+			
 			opinion.setText(CDW.state.activeThread.firstPost.text);			
 			//question.setTextColor(CDW.state.questionTextColor);			
 			byline.y = 410 + opinion.height + 38;
 			byline.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorMedium, true);
 			opinion.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorLight, true);			
-			stance.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorLight, true);			
+						
 			
 			secondaryDebateButton.setBackgroundColor(CDW.state.activeThread.firstPost.stanceColorDark, true);
 			secondaryDebateButton.setDownColor(CDW.state.activeThread.firstPost.stanceColorMedium);
@@ -962,9 +898,9 @@ package com.civildebatewall {
 			portrait.tweenIn();
 			
 			letsDebateUnderlay.tweenIn();
-			header.tweenIn();
+			
 			questionHeader.tweenIn();
-			stance.tweenIn();
+			
 			byline.tweenIn(-1, {x: 916 - byline.width - 39}); // dynamic based on opinion size
 			opinion.tweenIn(1, {y: 410});
 			//debateButton.tweenIn(1, {x: 916, y: 410 + opinion.height + 15, scaleX: 0.75, scaleY: 0.75});
@@ -1099,8 +1035,7 @@ package com.civildebatewall {
 //			question.setTextColor(CDW.state.questionTextColor);			
 //			
 //			portrait.tweenIn(0.5, {delay: 0.5, onComplete: onViewTransitionComplete});
-//			header.tweenIn();
-//			divider.tweenIn();
+
 //			question.tweenIn();			
 //			debateStrip.tweenIn();			
 //			
@@ -1164,8 +1099,7 @@ package com.civildebatewall {
 			
 			// blocks
 			portrait.tweenIn();
-			header.tweenIn();
-			divider.tweenIn();
+		
 			questionHeader.tweenIn();
 			bigButton.tweenIn();
 			pickStanceInstructions.tweenIn();
@@ -1229,8 +1163,7 @@ package com.civildebatewall {
 			
 			// blocks
 			portrait.tweenIn();
-			header.tweenIn();
-			divider.tweenIn();
+			
 			questionHeader.tweenIn();
 			bigButton.tweenIn();
 			yesButton.tweenIn();
@@ -1381,8 +1314,7 @@ package com.civildebatewall {
 			
 			// mutations
 			countdownButton.progressRing.alpha = 0; // starts transparent			
-			stance.setText(CDW.state.userStanceText, true);
-			stance.setBackgroundColor(CDW.state.userStanceColorLight, true);
+
 			countdownButton.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			countdownButton.setDownColor(CDW.state.userStanceColorMedium);	
 			countdownButton.setRingColor(CDW.state.userStanceColorLight);
@@ -1400,7 +1332,7 @@ package com.civildebatewall {
 			
 			// blocks
 			portraitCamera.tweenIn();
-			header.tweenIn();
+			
 			cameraOverlay.tweenIn();
 			photoBoothButton.tweenIn();
 			countdownButton.tweenIn();			
@@ -1419,7 +1351,7 @@ package com.civildebatewall {
 		
 		private function onCameraClick(e:Event):void {
 			if (!countdownButton.isCountingDown()) {
-				header.tweenOut();
+				
 				photoBoothButton.tweenOut();
 				
 				var scaleFactor:Number = 103 / 124;
@@ -1545,10 +1477,7 @@ package com.civildebatewall {
 			
 			CDW.inactivityTimer.arm();
 			
-			// mutations
-			stance.setText(CDW.state.userStanceText);
-			stance.setBackgroundColor(CDW.state.userStanceColorLight);
-			(CDW.state.userStanceText == 'YES!') ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);			
+			// mutations			
 			nameEntryInstructions.setBackgroundColor(CDW.state.userStanceColorLight, true);
 			saveButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
 			saveButton.setDownColor(CDW.state.userStanceColorMedium);			
@@ -1569,10 +1498,10 @@ package com.civildebatewall {
 			
 			// blocks, no delay since it needs to happen during the flash!
 			portrait.tweenIn(0);			
-			header.tweenIn(0);
-			divider.tweenIn(0);
+			
+			
 			questionHeader.tweenIn(0);
-			stance.tweenIn(-1, {delay: 1});
+			
 			nameEntryInstructions.tweenIn(-1, {delay: 1});
 			
 			nameEntryField.tweenIn(-1, {delay: 1});
@@ -1677,9 +1606,7 @@ package com.civildebatewall {
 			quoteLeft.setColor(CDW.state.userStanceColorLight, true);
 			quoteRight.setColor(CDW.state.userStanceColorLight, true);				
 			
-			stance.setText(CDW.state.userStanceText);
-			stance.setBackgroundColor(CDW.state.userStanceColorLight);
-			(CDW.state.userStanceText == 'YES!') ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);
+
 			
 			// behaviors
 			retakePhotoButton.setOnClick(photoBoothView);
@@ -1691,10 +1618,9 @@ package com.civildebatewall {
 			quoteLeft.tweenIn();
 			quoteRight.tweenIn();			
 			portrait.tweenIn();			
-			header.tweenIn();
-			divider.tweenIn();
+
 			questionHeader.tweenIn();
-			stance.tweenIn();
+			
 			bigButton.tweenIn();
 			nametag.tweenIn();
 			opinion.tweenIn();
@@ -1736,7 +1662,7 @@ package com.civildebatewall {
 			
 			quoteLeft.tweenOut();
 			quoteRight.tweenOut();			
-			stance.tweenOut();
+			
 			bigButton.tweenOut();
 			nametag.tweenOut();
 			opinion.tweenOut();
@@ -1819,9 +1745,7 @@ package com.civildebatewall {
 			
 			editOpinion.setBackgroundColor(CDW.state.userStanceColorLight);
 			
-			stance.setText(CDW.state.userStanceText);
-			stance.setBackgroundColor(CDW.state.userStanceColorLight);
-			(CDW.state.userStanceText == 'YES!') ? stance.setLetterSpacing(yesLetterSpacing) : stance.setLetterSpacing(noLetterSpacing);			
+			
 			
 			// behaviors
 			saveButton.setOnClick(onSaveOpinionEdit);
@@ -1834,10 +1758,9 @@ package com.civildebatewall {
 			quoteLeft.tweenIn();
 			quoteRight.tweenIn(); // stays under keyboard		
 			portrait.tweenIn();	
-			header.tweenIn();
-			divider.tweenIn();
+
 			//question.tweenIn();
-			stance.tweenIn();
+			
 			nametag.tweenIn();
 			
 			//opinion.tweenIn(); // TODO fade this out?
@@ -1910,8 +1833,7 @@ package com.civildebatewall {
 			
 			// blocks
 			portrait.tweenIn();	
-			header.tweenIn();
-			divider.tweenIn();
+		
 			questionHeader.tweenIn();
 			statsOverlay.tweenIn();
 			

@@ -17,9 +17,11 @@ package com.kitschpatrol.futil.blocks {
 		private var _backgroundColor:uint;
 		private var _showBackground:Boolean;
 		private var _backgroundImage:BitmapData;
+		private var _backgroundAlpha:Number;
 		
 		// Border
 		private var _borderColor:uint;
+		private var _borderAlpha:Number;
 		private var _borderThickness:Number;
 		private var _showBorder:Boolean;
 		
@@ -31,9 +33,11 @@ package com.kitschpatrol.futil.blocks {
 			_width = 0;
 			_height = 0;
 			_radius = 0;	
-			_backgroundColor = 0x0000ff;
+			_backgroundColor = 0x000000;
+			_backgroundAlpha = 1.0;
 			_showBackground = true;
 			_borderColor = 0x00ff00;
+			_borderAlpha = 1.0;
 			_borderThickness = 5;
 			_showBorder = false;
 			
@@ -49,7 +53,7 @@ package com.kitschpatrol.futil.blocks {
 				if (_backgroundImage != null)
 					graphics.beginBitmapFill(_backgroundImage, null, true, true);
 				else
-					graphics.beginFill(_backgroundColor);
+					graphics.beginFill(_backgroundColor, _backgroundAlpha);
 				
 				
 				if (_radius > 0)
@@ -63,7 +67,7 @@ package com.kitschpatrol.futil.blocks {
 			
 			// Border
 			if (_showBorder) {
-				graphics.lineStyle(_borderThickness, _borderColor, 1, false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER);		
+				graphics.lineStyle(_borderThickness, _borderColor, _borderAlpha, false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER);		
 				
 				if (_radius > 0) {
 					var borderRadiusCoefficient:Number = (_width - _borderThickness * 2) / _width;
@@ -106,6 +110,12 @@ package com.kitschpatrol.futil.blocks {
 			update();
 		}
 		
+		public function get backgroundAlpha():Number { return _backgroundAlpha; }
+		public function set backgroundAlpha(a:Number):void {
+			_backgroundAlpha = a;
+			update();
+		}		
+		
 		
 		public function get backgroundImage():BitmapData { return _backgroundImage; }
 		public function set backgroundImage(image:BitmapData):void {
@@ -134,6 +144,12 @@ package com.kitschpatrol.futil.blocks {
 			_borderColor = color;
 			update();
 		}
+		
+		public function get borderAlpha():Number { return _borderAlpha; }
+		public function set borderAlpha(a:Number):void {
+			_borderAlpha = a;
+			update();
+		}				
 		
 		public function get showBackground():Boolean { return _showBackground; }
 		public function set showBackground(show:Boolean):void {

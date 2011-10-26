@@ -1,4 +1,6 @@
 package com.kitschpatrol.futil.blocks {
+	import com.kitschpatrol.futil.DefaultAssets;
+	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.constants.CharacterSet;
 	
 	import flash.display.BitmapData;
@@ -9,8 +11,6 @@ package com.kitschpatrol.futil.blocks {
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.utils.getTimer;
-	import com.kitschpatrol.futil.DefaultAssets;
-	import com.kitschpatrol.futil.Math2;
 	
 	public class BlockText extends BlockBase {
 
@@ -21,6 +21,7 @@ package com.kitschpatrol.futil.blocks {
 		private var _sizeFactorGlyphs:String;
 		
 		private var _text:String;
+		private var _textBold:Boolean;
 		private var _textColor:uint;
 		private var _textSizePixels:Number;
 		private var _textFont:String;
@@ -79,6 +80,7 @@ package com.kitschpatrol.futil.blocks {
 			_textAlignmentMode = TextFormatAlign.LEFT;
 			_textColor = 0x000000;
 			_text = "AA";
+			_textBold = false;
 			_textFont = DefaultAssets.DEFAULT_FONT
 			_sizeFactorGlyphs = CharacterSet.SET_OF_ASCENT_LETTERS;
 			_boundingMode = OPTICAL_BOUNDING;
@@ -111,6 +113,7 @@ package com.kitschpatrol.futil.blocks {
 			textFormat.font =  _textFont;
 			textFormat.align = _textAlignmentMode;
 			textFormat.size = s;
+			textFormat.bold = _textBold;
 			
 			if (forMeasurement) {
 				textFormat.leading = 0;
@@ -128,6 +131,7 @@ package com.kitschpatrol.futil.blocks {
 			tempTextField.selectable = _selectable;
 			tempTextField.multiline = true;
 			tempTextField.antiAliasType = AntiAliasType.ADVANCED;
+			
 			
 			//tempTextField.mouseEnabled = false;			
 			//tempTextField.gridFitType = GridFitType.PIXEL;			
@@ -168,7 +172,7 @@ package com.kitschpatrol.futil.blocks {
 					trace("changed bounds");
 					var start:int = getTimer();
 					
-					if (_minWidth == _maxWidth) {
+					if ((_minWidth == _maxWidth) && (_growthMode != MAXIMIZE_HEIGHT)) {
 						// TODO what about MAXIMIZE_HEIGHT mode?
 						textField.width = _minWidth - _padding.horizontal;
 					}	
@@ -181,7 +185,7 @@ package com.kitschpatrol.futil.blocks {
 						var originalScale:Number = textField.scaleX;
 						textField.scaleX = 1;
 						textField.scaleY = 1;
-						textField.text = textField.text;					
+						textField.text = textField.text;
 						
 						
 						if (_growthMode == MAXIMIZE_HEIGHT) {
@@ -192,6 +196,8 @@ package com.kitschpatrol.futil.blocks {
 							textField.text = textField.text;
 							
 							var desiredLines:int = int((_leading + (_minHeight - _padding.vertical)) / (_leading + _textSizePixels));
+							trace("Desired lines for " + textField.text + ": " + desiredLines);
+							//desiredLines = 3;
 							
 							// roughly divide the text width to get started
 							if (desiredLines > textField.numLines) {
@@ -214,7 +220,7 @@ package com.kitschpatrol.futil.blocks {
 							}
 							
 							// clamp it off
-							textField.width = Math2.clamp(getMaxLineWidth() + 5, _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal);
+							//textField.width = Math2.clamp(getMaxLineWidth() + 5, _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal);
 							textField.text = textField.text;							
 						}
 						else if (_growthMode == MAXIMIZE_WIDTH) {
@@ -618,6 +624,17 @@ package com.kitschpatrol.futil.blocks {
 			changedBounds = true;
 			super.maxHeight = height;
 		}
+
+		public function get textBold():Boolean {
+			return _textBold;
+		}
+
+		public function set textBold(value:Boolean):void {
+			changedFormat = true;
+			_textBold = value;
+			update();
+		}
+
 		
 	}
 }
