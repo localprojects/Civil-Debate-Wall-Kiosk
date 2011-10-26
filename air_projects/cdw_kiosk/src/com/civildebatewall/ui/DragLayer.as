@@ -60,9 +60,6 @@ package com.civildebatewall.ui {
 			TweenMax.killTweensOf(CDW.view.nametag);
 			TweenMax.killTweensOf(CDW.view.leftNametag);
 			TweenMax.killTweensOf(CDW.view.rightNametag);			
-			TweenMax.killTweensOf(CDW.view.stance);
-			TweenMax.killTweensOf(CDW.view.leftStance);
-			TweenMax.killTweensOf(CDW.view.rightStance);			
 			TweenMax.killTweensOf(CDW.view.opinion);
 			TweenMax.killTweensOf(CDW.view.leftOpinion);
 			TweenMax.killTweensOf(CDW.view.rightOpinion);			
@@ -125,15 +122,13 @@ package com.civildebatewall.ui {
 				
 				// drag blocks
 				CDW.view.nametag.x = CDW.view.nametag.defaultTweenInVars.x - difference;
-				CDW.view.stance.x = CDW.view.stance.defaultTweenInVars.x - difference;
+
 				
 				CDW.view.opinion.x = CDW.view.opinion.defaultTweenInVars.x - difference;
 				CDW.view.leftOpinion.x = CDW.view.leftOpinion.defaultTweenInVars.x - difference;
 				CDW.view.rightOpinion.x = CDW.view.rightOpinion.defaultTweenInVars.x - difference;
 				
-				CDW.view.leftStance.x = CDW.view.leftStance.defaultTweenInVars.x - difference;
-				CDW.view.stance.x = CDW.view.stance.defaultTweenInVars.x - difference;
-				CDW.view.rightStance.x = CDW.view.rightStance.defaultTweenInVars.x - difference;
+
 				
 				CDW.view.leftNametag.x = CDW.view.leftNametag.defaultTweenInVars.x - difference;
 				CDW.view.nametag.x = CDW.view.nametag.defaultTweenInVars.x - difference;

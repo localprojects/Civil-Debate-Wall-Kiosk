@@ -1,5 +1,6 @@
 package com.kitschpatrol.futil.blocks {
 	
+	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.constants.Alignment;
 	
 	import flash.display.DisplayObject;
@@ -7,7 +8,6 @@ package com.kitschpatrol.futil.blocks {
 	import flash.display.Sprite;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import com.kitschpatrol.futil.Math2;
 	
 	// Nested display object approach to registration management.
 	
@@ -353,6 +353,13 @@ package com.kitschpatrol.futil.blocks {
 			update();
 		}
 		
+		public function get backgroundAlpha():Number { return background.backgroundAlpha; }
+		public function set backgroundAlpha(a:Number):void {
+			background.backgroundAlpha = a;
+			update();
+		}		
+		
+		
 		public function get showBackground():Boolean { return background.showBackground; }
 		public function set showBackground(show:Boolean):void {
 			background.showBackground = show;
@@ -364,6 +371,12 @@ package com.kitschpatrol.futil.blocks {
 			background.borderColor = color;
 			update();
 		}				
+		
+		public function get borderAlpha():Number { return background.borderAlpha; }
+		public function set borderAlpha(a:Number):void {
+			background.borderAlpha = a;
+			update();
+		}
 		
 		public function get borderThickness():Number { return background.borderThickness; }
 		public function set borderThickness(thickness:Number):void {
