@@ -1,55 +1,39 @@
 <?xml version="1.0"?> 
-<project name="Civil Debate Wall Kiosk Build and Deployment" basedir="." default="build">
-
-	<!-- Load properties -->
-	<property file="${basedir}/build.properties" description="Subjective properties." />	
+<project name="CDW Kiosk" basedir="." default="main">
 	
-	<!-- Load the third party ant tasks dynamically -->
-	<taskdef resource="flexTasks.tasks" classpath="${SDK_HOME}/ant/lib/flexTasks.jar" />
-	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpath="${basedir}/libs-build/xmltask.jar" />
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${basedir}/libs-build/ant-contrib-1.0b3.jar" />
+	<property file="build.properties" />		
 	
-	<!-- Required for OSX 10.6 / Snow Leopard Performance -->
-	<condition property="local.d32" value="-d32" >
-		<and>
-			<equals arg1="${sun.arch.data.model}" arg2="64" />
-			<equals arg1="${os.arch}" arg2="x86_64" />
-			<os family="mac" />
-		</and>
-	</condition>
+	<taskdef name="S3Upload" classname="dak.ant.taskdefs.S3Upload" onerror="fail" />
 	
-	<target name="chkOS" description="if switch to set OS specific settings">
-		<condition property="isWindows">
-			<os family="windows" />
-		</condition>
-		<condition property="isMac">
-			<os family="mac" />
-		</condition>		
-		<antcall target="setUnixEnv" />
-		<antcall target="setWindowsEnv" />
+	<target name="main" depends="build, upload">
+		<!-- Just wraps up the whole process. -->
 	</target>
 	
-<target name="setUnixEnv" if="isMac">
-	<echo>This is an Mac machine.</echo>
-</target>
+	<target name="refresh" description="">
+		<!-- TODO pull from git -->
+	</target>
+	
+    <target name="build" description="Uses Flash Builder to perform a release build and wrap it in an AIR App installer."> 
+    	<!-- See: http://help.adobe.com/en_US/flashbuilder/using/WSe4e4b720da9dedb524b8220812e5611f28f-7fcc.html -->
+        <fb.exportReleaseBuild 
+        	project="cdw_kiosk"
+        	basefilename="CDW Kiosk"
+        	certificate="${basedir}\certificate\lpcert.p12"
+        	destdir="bin-release"
+        	packagetype="native"
+        	password="${CERTIFICATE_PASSWORD}"
+    		verbose="true" />
+    </target>
+	
+    <target name="upload" description="Uploads AIR App installer to S3." > 
+		<S3Upload
+			verbose="true"
+			accessId="${S3_ACCESS_ID}"
+			secretKey="${S3_SECRET_KEY}"
+			bucket="${S3_BUCKET}"
+			publicRead="false" >
+			<fileset dir="${basedir}\bin-release" includes="*" />
+        </S3Upload>
+    </target>
 
-<target name="setWindowsEnv" if="isWindows">
-	  <echo>This is a Windows machine.</echo>
-	</target>	
-
-	
-	<!--//
-	
-	Compile FUTIL and copy it to libs
-	Upload project folder to S3 (rsync?)
-	Launch VM
-	Download from S3 to VM
-	Compile
-	
-	//-->
-	
-	
-    <target name="build" depends="chkOS"> 
-    	<echo message="In build" />
-    </target> 
 </project>

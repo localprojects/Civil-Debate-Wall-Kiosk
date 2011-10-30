@@ -4,6 +4,8 @@ package com.kitschpatrol.futil.tweenPlugins {
 	
 	public class FutilBlockPlugin extends TweenPlugin {
 		
+		
+		// TODO update this
 		TweenPlugin.activate([BackgroundColorPlugin, TextColorPlugin, AlignmentPointPlugin, TextContentPlugin]);		
 		
 		public function FutilBlockPlugin()	{

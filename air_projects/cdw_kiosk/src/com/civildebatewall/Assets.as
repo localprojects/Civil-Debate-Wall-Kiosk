@@ -27,6 +27,30 @@ package com.civildebatewall
 		
 		
 		// Bitmaps
+		[Embed(source = '/assets/graphics/statsButtonCenter.png')] private static const statsButtonCenterClass:Class;
+		public static function getStatsButtonCenter():Bitmap { return new statsButtonCenterClass() as Bitmap; };
+		public static const statsButtonCenter:Bitmap = getStatsButtonCenter();
+		
+		[Embed(source = '/assets/graphics/sortedByText.png')] private static const sortedByTextClass:Class;
+		public static function getSortedByText():Bitmap { return new sortedByTextClass() as Bitmap; };
+		public static const sortedByText:Bitmap = getSortedByText();
+		
+		[Embed(source = '/assets/graphics/leftCarat.png')] private static const leftCaratClass:Class;
+		public static function getLeftCarat():Bitmap { return new leftCaratClass() as Bitmap; };
+		public static const leftCarat:Bitmap = getLeftCarat();
+		
+		[Embed(source = '/assets/graphics/rightCarat.png')] private static const rightCaratClass:Class;
+		public static function getRightCarat():Bitmap { return new rightCaratClass() as Bitmap; };
+		public static const rightCarat:Bitmap = getRightCarat();
+		
+		[Embed(source = '/assets/graphics/leftCaratBig.png')] private static const leftCaratBigClass:Class;
+		public static function getLeftCaratBig():Bitmap { return new leftCaratBigClass() as Bitmap; };
+		public static const leftCaratBig:Bitmap = getLeftCaratBig();
+				
+		[Embed(source = '/assets/graphics/rightCaratBig.png')] private static const rightCaratBigClass:Class;
+		public static function getRightCaratBig():Bitmap { return new rightCaratBigClass() as Bitmap; };
+		public static const rightCaratBig:Bitmap = getRightCaratBig();
+		
 		[Embed(source = '/assets/graphics/orangeRightCarat.png')] private static const orangeRightCaratClass:Class;
 		public static function getOrangeRightCarat():Bitmap { return new orangeRightCaratClass() as Bitmap; };
 		public static const orangeRightCarat:Bitmap = getOrangeRightCarat();

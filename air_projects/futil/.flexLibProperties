@@ -34,6 +34,8 @@
     <classEntry path="com.kitschpatrol.futil.JPEGEncoder"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.NamedYPlugin"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.NamedXPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.blocks.BlockBitmap"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.BlockBitmapPlugin"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
