@@ -8,3 +8,5 @@ bin-debug/
 *.air
 *.dmg
 *.exe
+
+air_projects/cdw_kiosk/build.properties
