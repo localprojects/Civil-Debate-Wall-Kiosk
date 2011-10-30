@@ -5,13 +5,11 @@
 	
 	<taskdef name="S3Upload" classname="dak.ant.taskdefs.S3Upload" onerror="fail" />
 	
-	<target name="main" depends="build, upload">
+	<target name="main" depends="refresh, build, upload">
 		<!-- Just wraps up the whole process. -->
 	</target>
 	
-	<target name="refresh" description="">
-		<!-- TODO pull from git -->
-	</target>
+	<target name="refresh" description="">		  <exec executable="cmd">		    <arg line="/c git reset --hard HEAD"/>		  			    <arg line="/c git pull" />		  </exec>	</target>
 	
     <target name="build" description="Uses Flash Builder to perform a release build and wrap it in an AIR App installer."> 
     	<!-- See: http://help.adobe.com/en_US/flashbuilder/using/WSe4e4b720da9dedb524b8220812e5611f28f-7fcc.html -->
