@@ -19,7 +19,7 @@ package com.kitschpatrol.futil.blocks {
 		
 		// size should ALWAYS be in pixels
 		private var _sizeFactorGlyphs:String;
-		
+
 		private var _text:String;
 		private var _textBold:Boolean;
 		private var _textColor:uint;
@@ -632,6 +632,7 @@ package com.kitschpatrol.futil.blocks {
 		public function set textBold(value:Boolean):void {
 			changedFormat = true;
 			_textBold = value;
+			textFormat.bold = _textBold;
 			update();
 		}
 

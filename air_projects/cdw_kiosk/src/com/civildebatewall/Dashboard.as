@@ -63,7 +63,11 @@ package com.civildebatewall {
 			viewChooser.addEventListener(Event.SELECT, onViewSelect);
 			viewChooser.width = this.width - 10;
 			
-			new PushButton(this, 5, viewChooser.y + viewChooser.height + 5, "HIt Data", function():void { CDW.data.question = new Question({'id':'32424', 'text':'asdfasdf'}); });
+			new PushButton(this, 5, viewChooser.y + viewChooser.height + 5, "Test", function():void {
+				//CDW.data.question = new Question({'id':'32424', 'text':'asdfasdf'});
+				
+			
+			});
 			
 		}
 		

@@ -15,7 +15,6 @@ package com.civildebatewall.staging.elements {
 	import mx.binding.utils.ChangeWatcher;
 	import mx.events.PropertyChangeEvent;
 	
-	
 	//ChangeWatcher.watch(this, "firstName", propertyChangeHandler);	
 	
 	public class QuestionHeader extends BlockBaseTweenable	{
@@ -40,9 +39,9 @@ package com.civildebatewall.staging.elements {
 				leading: 30,
 			  textColor: 0x000000,
 			  backgroundColor: 0xffffff,
+				backgroundAlpha: 0,
 			  growthMode: BlockText.MAXIMIZE_HEIGHT,
 				registrationPoint: Alignment.CENTER,
-				showRegistrationPoint: true,
 				minWidth: 100,
 				maxWidth: 982,
 				height: 211
@@ -67,7 +66,6 @@ package com.civildebatewall.staging.elements {
 			bottomLine.x = 49;
 			bottomLine.y = 277;
 			addChild(bottomLine);			
-			
 			
 			ChangeWatcher.watch(CDW.data, "question", onQuestionChange);
 		}

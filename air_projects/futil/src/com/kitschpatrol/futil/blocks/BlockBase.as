@@ -6,8 +6,11 @@ package com.kitschpatrol.futil.blocks {
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.Timer;
 	
 	// Nested display object approach to registration management.
 	
@@ -417,6 +420,103 @@ package com.kitschpatrol.futil.blocks {
 			_maxHeight = value;
 			update();
 		}
+		
+		
+		
+		// Interaction
+		protected var onClick:Function;
+		protected var onDown:Function;	
+		protected var timeout:Number; // time between presses
+		protected var timer:Timer;
+		public var locked:Boolean;
+		
+		public function setTimeout(time:Number):void {
+			timeout = time;
+			timer.delay = timeout;
+			timer.reset();
+			timer.stop();
+		}
+		
+		// Button stuff
+		private function onTimeout(e:TimerEvent):void {
+			trace('button back!');
+			unlock();
+		}
+		
+		public function unlock():void {
+			locked = false;
+			timer.stop();
+			//TweenMax.to(background, 1, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
+			//TweenMax.to(outline, 1, {ease: Quart.easeOut, alpha: 1});			
+		}		
+		
+		
+		protected function onMouseDown(e:MouseEvent):void {
+			if (!locked) {
+				if (onDown != null) onDown(e);
+				this.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				//TweenMax.to(background, 0, {colorTransform: {tint: _backgroundDownColor, tintAmount: 1}});
+			}
+		}
+		
+		
+		
+		protected function onMouseUp(e:MouseEvent):void {
+			if (timeout > 0) {
+				locked = true;
+				timer.reset();
+				timer.start();
+				//TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _disabledColor, tintAmount: 1}});
+				//TweenMax.to(outline, 0.3, {ease: Quart.easeOut, alpha: 0});				
+			}
+			else {
+				//TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
+			}
+			
+			this.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			
+			if (onClick != null) onClick(e);
+		}
+		
+		
+		protected function defaultOnClick(e:MouseEvent):void {
+			trace("default button click, nothing to do");
+		}
+		
+
+		
+		public function setOnClick(f:Function):void {
+			if (f == null) {
+				disable();
+			}
+			else {
+				trace("Setting on click to : " + f);
+				onClick = f;
+				enable();
+			}
+		}
+		
+		public function setOnDown(f:Function):void {
+			if (f != null) onDown = f;
+		}		
+		
+		
+		
+		public function enable():void {
+			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			
+			//this.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
+		}
+		
+		
+		public function disable():void {
+			trace('disabled');
+			this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			
+			//this.removeEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
+		}
+		
+		
 
 		// Overrides to proxy out container.
 		override public function addChild(child:DisplayObject):DisplayObject { return content.addChild(child);	}

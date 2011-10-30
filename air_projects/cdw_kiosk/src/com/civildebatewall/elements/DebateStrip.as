@@ -5,12 +5,14 @@ package com.civildebatewall.elements {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
+	import flash.display.Bitmap;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
-	
+
 	
 	public class DebateStrip extends BlockBase {
 		
@@ -18,25 +20,48 @@ package com.civildebatewall.elements {
 		private var activeThumbnail:ThumbnailButton;
 		private var targetThumbnail:ThumbnailButton;		
 		
+		private var leftButton:Sprite;
+		private var rightButton:Sprite;		
+		
 		public function DebateStrip()	{
-			super();scrollField
+			super();
 			
 			// overdraw for a more friendly hit-zone
-			scrollField = new InertialScrollField(1080, 206, InertialScrollField.SCROLL_X);
+			scrollField = new InertialScrollField(980, 140, InertialScrollField.SCROLL_X);
+			scrollField.x = 50;
 			
 			
 			scrollField.setBackgroundColor(0xff0000, 0.0);
 			scrollField.addEventListener(InertialScrollField.EVENT_NOT_CLICK, onNotClick);
 			
-			
 			// background strip
 			scrollField.graphics.beginFill(0xffffff, 1.0);			
-			scrollField.graphics.drawRect(0, 34, 1080, 141);
+			scrollField.graphics.drawRect(0, 0, 980, 140);
 			scrollField.graphics.endFill();
-			
 			
 			// min and max get updated in update			
 			addChild(scrollField);
+			
+			// buttons
+			leftButton = new Sprite();
+			leftButton.graphics.beginFill(0xffffff);
+			leftButton.graphics.drawRect(0,0, 50, 140);
+			leftButton.graphics.endFill();
+			var leftCarat:Bitmap = Assets.getLeftCarat();
+			leftButton.addChild(leftCarat);
+			GeomUtil.centerWithin(leftCarat, leftButton);
+			addChild(leftButton);
+			
+			rightButton = new Sprite();
+			rightButton.graphics.beginFill(0xffffff);
+			rightButton.graphics.drawRect(0,0, 50, 140);
+			rightButton.graphics.endFill();
+			var rightCarat:Bitmap = Assets.getRightCarat();
+			rightButton.addChild(rightCarat);
+			GeomUtil.centerWithin(rightCarat, rightButton);
+			rightButton.x = 50 + 980;
+			addChild(rightButton);			
+			
 		}
 		
 		public function update():void {
@@ -44,14 +69,12 @@ package com.civildebatewall.elements {
 			
 			// Clean up the kids, could do a diff instead...
 			GraphicsUtil.removeChildren(scrollField.scrollSheet);
-
 			
 			for (var i:uint = 0; i < CDW.data.threads.length; i++) {
 				var threadThumbnail:ThumbnailButton = new ThumbnailButton(CDW.data.threads[i]);
-				
-				
+
 				threadThumbnail.x = (threadThumbnail.width - 6) * i; // compensate for dots
-				threadThumbnail.y = 34;
+				threadThumbnail.y = 0;
 				
 				threadThumbnail.addEventListener(MouseEvent.MOUSE_DOWN, onThumbnailMouseDown);
 				threadThumbnail.addEventListener(MouseEvent.MOUSE_UP, onThumbnailMouseUp);				
@@ -68,7 +91,7 @@ package com.civildebatewall.elements {
 			}
 			
 			// update the scroll field limits to acommodate the growing strip...
-			scrollField.xMin = -scrollField.scrollSheet.width + 1080;
+			scrollField.xMin = -scrollField.scrollSheet.width + scrollField.width;
 			scrollField.xMax = 0; 	
 		}
 		
@@ -85,7 +108,7 @@ package com.civildebatewall.elements {
 					if (tempThumb.thread.id == id) {
 						
 						// deactivate the old on
-						if (activeThumbnail != null) {						
+						if (activeThumbnail != null) {			
 							activeThumbnail.selected = false;
 							activeThumbnail.setBackgroundColor(0xffffff);
 							trace("deselecting: " + activeThumbnail);
@@ -94,8 +117,8 @@ package com.civildebatewall.elements {
 						// select the new one
 						activeThumbnail = tempThumb;
 						activeThumbnail.setBackgroundColor(activeThumbnail.downBackgroundColor);
-						scrollField.scrollSheet.setChildIndex(activeThumbnail, scrollField.scrollSheet.numChildren - 1); // make sure the colored dots are on top 
-						activeThumbnail.selected = true;						
+						scrollField.scrollSheet.setChildIndex(activeThumbnail, scrollField.scrollSheet.numChildren - 1); // make sure the colored dots are on top
+						activeThumbnail.selected = true;		
 					
 						break;
 					}

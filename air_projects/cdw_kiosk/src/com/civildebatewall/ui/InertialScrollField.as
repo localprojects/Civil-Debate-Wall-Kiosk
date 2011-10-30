@@ -208,6 +208,7 @@ package com.civildebatewall.ui {
 			}
 		}
 		
+		
 		private function onMouseUp(event:MouseEvent):void {
 			// Hand it over to the throw tween
 			scrollSheet.stopDrag();

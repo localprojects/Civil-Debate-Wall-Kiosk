@@ -1,13 +1,12 @@
 package com.civildebatewall.staging.futilProxies {
-	
-	import com.civildebatewall.CDW;
+
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Quart;
-	import com.kitschpatrol.futil.blocks.BlockText;
+	import com.kitschpatrol.futil.blocks.BlockBase;
+	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
-	public class BlockTextTweenable extends BlockText {
-		
+	public class BlockBitmapTweenable extends BlockBitmap	{
 		
 		private var defaultTweenVars:Object;
 		public var defaultTweenInVars:Object; // public for the drag transition... TODO better way to expose tween-in X?
@@ -15,11 +14,10 @@ package com.civildebatewall.staging.futilProxies {
 		private var defaultDuration:Number;
 		private var defaultInDuration:Number;
 		private var defaultOutDuration:Number;
-		public var active:Boolean; // inactive blocks are marked for tweening out on the screen
+		public var active:Boolean; // inactive blocks are marked for tweening out on the screen				
 		
-		public function BlockTextTweenable(params:Object=null) {
+		public function BlockBitmapTweenable(params:Object=null) {
 			super(params);
-			
 			// set some default parameters, can be overriden
 			defaultTweenVars = {cacheAsBitmap: true};
 			defaultTweenInVars = ObjectUtil.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenIn, onComplete: afterTweenIn});
@@ -30,8 +28,8 @@ package com.civildebatewall.staging.futilProxies {
 			active = false;			
 			
 			visible = false;			
-
 		}
+		
 		
 		// DUPLICATED IN OTHER PROXY CLASSES
 		// TODO add duration control?
@@ -43,7 +41,7 @@ package com.civildebatewall.staging.futilProxies {
 		public function setDefaultTweenOut(duration:Number, params:Object):void {
 			defaultOutDuration = duration;
 			defaultTweenOutVars = ObjectUtil.mergeObjects(defaultTweenOutVars, params);
-		}
+		}				
 		
 		// A little tweening abstraction... sets overridable default parameters
 		// manages visibility / invisibility
@@ -87,7 +85,7 @@ package com.civildebatewall.staging.futilProxies {
 			if (duration == -1) duration = defaultInDuration;
 			if (params == null) params = defaultTweenInVars;
 			else params = ObjectUtil.mergeObjects(defaultTweenInVars, params);
-
+			
 			TweenMax.to(this, duration, params);
 		}		
 		
@@ -98,6 +96,8 @@ package com.civildebatewall.staging.futilProxies {
 			
 			TweenMax.to(this, duration, params);
 			active = true; // TODO WHY WAS THIS FALSE?
-		}			
+		}						
+		
+		
 	}
 }
