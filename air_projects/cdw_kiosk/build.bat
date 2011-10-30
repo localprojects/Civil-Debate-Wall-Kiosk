@@ -1,5 +1,11 @@
 echo Running CDW Build script...
 
+echo Refreshing from GIT…
+git reset --hard HEAD
+git pull
+
+echo Building and uploading install file..
+
 echo Refreshing from GIT...
 git reset --hard HEAD
 git pull
