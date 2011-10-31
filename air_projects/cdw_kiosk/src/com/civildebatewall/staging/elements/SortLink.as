@@ -11,7 +11,6 @@ package com.civildebatewall.staging.elements {
 
 		private var underline:Shape;
 		
-		
 		public function SortLink(params:Object=null) {
 			
 			super(
@@ -20,7 +19,8 @@ package com.civildebatewall.staging.elements {
 					{textFont: Assets.FONT_REGULAR,
 					backgroundColor: Assets.COLOR_GRAY_5,
 					textColor: Assets.COLOR_GRAY_25,
-					textSizePixels: 14})
+					textSizePixels: 14,
+					buttonMode: true})
 			);
 			
 			underline = new Shape();

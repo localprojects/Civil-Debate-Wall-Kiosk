@@ -7,9 +7,9 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.data.Word;
 	import com.civildebatewall.kiosk.Kiosk;
 	import com.civildebatewall.kiosk.blocks.BlockBase;
-	import com.civildebatewall.ui.ButtonBase;
-	import com.civildebatewall.ui.InertialScrollField;
-	import com.civildebatewall.ui.WordButton;
+	import com.civildebatewall.kiosk.ui.ButtonBase;
+	import com.civildebatewall.kiosk.ui.InertialScrollField;
+	import com.civildebatewall.kiosk.ui.WordButton;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.*;

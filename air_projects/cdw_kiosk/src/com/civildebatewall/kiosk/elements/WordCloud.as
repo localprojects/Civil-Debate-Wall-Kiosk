@@ -2,7 +2,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
 	import com.civildebatewall.kiosk.blocks.BlockBase;
 	import com.civildebatewall.data.Word;
-	import com.civildebatewall.ui.WordButton;
+	import com.civildebatewall.kiosk.ui.WordButton;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;

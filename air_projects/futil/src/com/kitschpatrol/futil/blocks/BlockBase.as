@@ -10,6 +10,7 @@ package com.kitschpatrol.futil.blocks {
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.ui.Mouse;
 	import flash.utils.Timer;
 	
 	// Nested display object approach to registration management.
@@ -23,6 +24,7 @@ package com.kitschpatrol.futil.blocks {
 
 	
 	public class BlockBase extends Sprite {
+		
 		
 		// Hidden children keep things in alignment while presenting
 		// a pure display object container elsewhere.
@@ -52,12 +54,11 @@ package com.kitschpatrol.futil.blocks {
 		internal var _minHeight:Number;
 		internal var _maxWidth:Number;
 		internal var _maxHeight:Number;
-		
+
 		private var _contentCrop:Padding;
 		
 		
 		internal var lockUpdates:Boolean; // prevents update from firing... useful when queueing a bunch of changes // TODO getter and setter?		
-			
 	
 		public function BlockBase(params:Object = null)	{
 			//super();
@@ -86,8 +87,13 @@ package com.kitschpatrol.futil.blocks {
 			_contentCrop = new Padding();
 			_paddingMode = PADDING_INSIDE;
 			
-			// Other initializations
-						
+			// Button stuff
+			buttonTimer = new Timer(0);
+			onButtonDown = new Vector.<Function>(0);
+			onButtonUp = new Vector.<Function>(0);
+			onStageUp = new Vector.<Function>(0);
+			onButtonLock = new Vector.<Function>(0);
+			onButtonUnlock = new Vector.<Function>(0);						
 			
 			// TODO devise and flip the update booleans (e.g. invalidate everything)
 
@@ -424,98 +430,108 @@ package com.kitschpatrol.futil.blocks {
 		
 		
 		// Interaction
-		protected var onClick:Function;
-		protected var onDown:Function;	
-		protected var timeout:Number; // time between presses
-		protected var timer:Timer;
-		public var locked:Boolean;
 		
-		public function setTimeout(time:Number):void {
-			timeout = time;
-			timer.delay = timeout;
-			timer.reset();
-			timer.stop();
+		// Enable button mode by setting buttonMode = true
+		// Then, push functions onto the callback vectors
+		
+		// toggle?
+		
+		public var onButtonDown:Vector.<Function>;
+		public var onButtonUp:Vector.<Function>;
+		public var onStageUp:Vector.<Function>;
+		public var onButtonLock:Vector.<Function>;
+		public var onButtonUnlock:Vector.<Function>;
+		
+		protected var buttonTimer:Timer;
+		public var locked:Boolean;
+		private var tempEvent:MouseEvent;
+		
+		// Register events
+		override public function get buttonMode():Boolean {
+			return super.buttonMode;
 		}
 		
-		// Button stuff
+		override public function set buttonMode(value:Boolean):void {
+			super.buttonMode = value;
+			
+			if (buttonMode) {
+				// enable listeners
+				this.addEventListener(MouseEvent.MOUSE_DOWN, onButtonDownInternal);
+			}
+			else {
+				// disable listeners
+				this.removeEventListener(MouseEvent.MOUSE_DOWN, onButtonDownInternal);			
+			}
+		}
+		
+		public function get buttonTimeout():Number {
+			return buttonTimer.delay;
+		}
+		
+		public function set buttonTimeout(time:Number):void {
+			buttonTimer.delay = time;
+			buttonTimer.reset();
+			buttonTimer.stop();			
+		}
+
+		
+		private function onButtonDownInternal(e:MouseEvent):void {
+			tempEvent = e;
+			
+			if (!locked) {
+				this.addEventListener(MouseEvent.MOUSE_UP, onButtonUpInternal);
+				stage.addEventListener(MouseEvent.MOUSE_UP, onStageUpInternal);
+				executeAll(onButtonDown);
+			}
+		}
+		
+		private function onButtonUpInternal(e:MouseEvent):void {
+			tempEvent = e;
+			
+			if (!locked) {
+				// lock it if necessary
+				if (buttonTimeout > 0) {
+					locked = true;
+					buttonTimer.reset();
+					buttonTimer.start();
+					executeAll(onButtonLock);
+				}				
+				
+				executeAll(onButtonUp);
+			}
+		}
+		
+		private function onStageUpInternal(e:MouseEvent):void {
+			tempEvent = e;
+			
+			if (!locked) {
+				executeAll(onStageUp);
+			}			
+		}
+		
 		private function onTimeout(e:TimerEvent):void {
 			trace('button back!');
 			unlock();
 		}
 		
 		public function unlock():void {
+			trace("Button unlocked");
 			locked = false;
-			timer.stop();
-			//TweenMax.to(background, 1, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
-			//TweenMax.to(outline, 1, {ease: Quart.easeOut, alpha: 1});			
-		}		
-		
-		
-		protected function onMouseDown(e:MouseEvent):void {
-			if (!locked) {
-				if (onDown != null) onDown(e);
-				this.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-				//TweenMax.to(background, 0, {colorTransform: {tint: _backgroundDownColor, tintAmount: 1}});
-			}
+			buttonTimer.stop();
+			executeAll(onButtonUnlock);
 		}
 		
 		
-		
-		protected function onMouseUp(e:MouseEvent):void {
-			if (timeout > 0) {
-				locked = true;
-				timer.reset();
-				timer.start();
-				//TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _disabledColor, tintAmount: 1}});
-				//TweenMax.to(outline, 0.3, {ease: Quart.easeOut, alpha: 0});				
-			}
-			else {
-				//TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
-			}
-			
-			this.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			
-			if (onClick != null) onClick(e);
+		// Calls each function in a vector
+		private function executeAll(functions:Vector.<Function>):void {
+			for (var i:int = 0; i < functions.length; i++) {
+				functions[i](tempEvent);
+			}			
 		}
+		//-------------
 		
-		
-		protected function defaultOnClick(e:MouseEvent):void {
-			trace("default button click, nothing to do");
-		}
 		
 
-		
-		public function setOnClick(f:Function):void {
-			if (f == null) {
-				disable();
-			}
-			else {
-				trace("Setting on click to : " + f);
-				onClick = f;
-				enable();
-			}
-		}
-		
-		public function setOnDown(f:Function):void {
-			if (f != null) onDown = f;
-		}		
-		
-		
-		
-		public function enable():void {
-			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			
-			//this.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
-		}
-		
-		
-		public function disable():void {
-			trace('disabled');
-			this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			
-			//this.removeEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
-		}
-		
 		
 
 		// Overrides to proxy out container.

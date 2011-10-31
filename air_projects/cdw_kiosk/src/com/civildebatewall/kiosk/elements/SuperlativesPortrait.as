@@ -7,7 +7,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.kiosk.blocks.BlockBase;
 	import com.civildebatewall.kiosk.blocks.BlockBitmapPlus;
 	import com.civildebatewall.kiosk.blocks.BlockParagraph;
-	import com.civildebatewall.ui.BalloonButton;
+	import com.civildebatewall.kiosk.ui.BalloonButton;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	
@@ -65,13 +65,12 @@ package com.civildebatewall.kiosk.elements {
 			debateButton.setOnClick(onDebateClick);
 			addChild(debateButton);			
 			
-			nametag = new NameTag('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);	
-			nametag.setPadding(33, 38, 24, 38);
+			nametag = new NameTag();	
 			nametag.setDefaultTweenIn(1, {x: 30, y: 492});
 			nametag.setDefaultTweenOut(1, {x: -300, y: 492});
 			nametag.scaleX = 0.5;
 			nametag.scaleY = 0.5;	
-			addChild(nametag);			
+			addChild(nametag);
 			
 			opinion = new BlockParagraph(915, 0x000000, '', 42);	
 			opinion.setDefaultTweenIn(1, {x: 30, y: 552});
@@ -130,8 +129,8 @@ package com.civildebatewall.kiosk.elements {
 			quoteRight.setColor(_post.stanceColorLight, true);
 			debateButton.setDownColor(_post.stanceColorMedium);
 			debateButton.setBackgroundColor(_post.stanceColorDark, true);
-			nametag.setBackgroundColor(_post.stanceColorMedium, true);
-			nametag.setText(_post.user.usernameFormatted + ' Says : ', true);
+			nametag.backgroundColor = _post.stanceColorMedium;
+			nametag.text = _post.user.usernameFormatted + ' Says:';
 			opinion.setBackgroundColor(_post.stanceColorLight, true);
 			opinion.setText(_post.text);
 			//rightQuote.y = opinion.y + opinion.height

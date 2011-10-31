@@ -3,8 +3,8 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.kiosk.blocks.BlockBase;
 	import com.civildebatewall.kiosk.blocks.BlockLabelBar;
-	import com.civildebatewall.ui.BlockButton;
-	import com.civildebatewall.ui.IconButton;
+	import com.civildebatewall.kiosk.ui.BlockButton;
+	import com.civildebatewall.kiosk.ui.IconButton;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.utilitites.StringUtil;

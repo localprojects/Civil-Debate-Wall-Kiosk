@@ -1,4 +1,4 @@
-package com.civildebatewall.ui {
+package com.civildebatewall.kiosk.ui {
 	import com.bit101.components.Text;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;

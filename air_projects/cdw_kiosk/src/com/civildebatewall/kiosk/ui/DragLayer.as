@@ -1,4 +1,4 @@
-package com.civildebatewall.ui {
+package com.civildebatewall.kiosk.ui {
 	
 	import com.civildebatewall.*;
 	import com.civildebatewall.kiosk.blocks.BlockBase;

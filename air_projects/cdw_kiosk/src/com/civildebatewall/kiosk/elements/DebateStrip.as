@@ -2,7 +2,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.kiosk.blocks.BlockBase;
-	import com.civildebatewall.ui.*;
+	import com.civildebatewall.kiosk.ui.*;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
