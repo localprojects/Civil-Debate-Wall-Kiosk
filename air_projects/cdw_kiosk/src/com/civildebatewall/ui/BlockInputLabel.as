@@ -7,8 +7,8 @@ package com.civildebatewall.ui {
 	import flash.text.*;
 	
 	import com.civildebatewall.*;
-	import com.civildebatewall.blocks.*;
-	import com.civildebatewall.elements.*;
+	import com.civildebatewall.kiosk.blocks.*;
+	import com.civildebatewall.kiosk.elements.*;
 	
 	
 	

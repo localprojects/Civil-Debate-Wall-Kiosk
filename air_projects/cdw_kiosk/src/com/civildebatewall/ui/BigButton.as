@@ -1,6 +1,6 @@
 package com.civildebatewall.ui {
 	import com.civildebatewall.*;
-	import com.civildebatewall.blocks.BlockLabel;
+	import com.civildebatewall.kiosk.blocks.BlockLabel;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;

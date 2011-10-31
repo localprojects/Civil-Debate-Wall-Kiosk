@@ -19,7 +19,7 @@
 	},
 	
 	"mac": {
-		"halfSize": false,
+		"halfSize": true,
 		"startFullScreen": false,
 		"webcamOnly": true,
 		"imagePath": "/Users/Mika/Desktop/CDWImages/",		

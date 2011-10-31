@@ -8,8 +8,8 @@ package com.civildebatewall.ui {
 	import flash.utils.Timer;
 	
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.CDW;
-	import com.civildebatewall.blocks.BlockBase;
+	import com.civildebatewall.kiosk.Kiosk;
+	import com.civildebatewall.kiosk.blocks.BlockBase;
 	
 	public class ButtonBase extends BlockBase {
 		
@@ -71,7 +71,7 @@ package com.civildebatewall.ui {
 		protected function onMouseDown(e:MouseEvent):void {
 			if (!locked) {
 				if (onDown != null) onDown(e);
-				CDW.self.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				Kiosk.self.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				TweenMax.to(background, 0, {colorTransform: {tint: _backgroundDownColor, tintAmount: 1}});
 			}
 		}
@@ -91,7 +91,7 @@ package com.civildebatewall.ui {
 				TweenMax.to(background, 0.3, {ease: Quart.easeOut, colorTransform: {tint: _backgroundColor, tintAmount: 1}});
 			}
 			
-			CDW.self.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
+			Kiosk.self.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
 			
 			onClick(e);
 		}		

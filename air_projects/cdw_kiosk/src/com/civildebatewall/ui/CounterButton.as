@@ -6,7 +6,7 @@ package com.civildebatewall.ui {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.Utilities;
-	import com.civildebatewall.blocks.BlockLabel;
+	import com.civildebatewall.kiosk.blocks.BlockLabel;
 
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;	

@@ -1,30 +1,24 @@
 package com.civildebatewall.data {
-	import com.adobe.protocols.dict.Response;
+	import com.adobe.crypto.SHA1;
 	import com.adobe.serialization.json.*;
-	import com.adobe.utils.StringUtil;
 	import com.civildebatewall.*;
-	import com.civildebatewall.CDW;
-	import com.civildebatewall.Utilities;
 	import com.greensock.*;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.*;
 	import com.greensock.loading.display.*;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.events.*;
-	import flash.filesystem.File;
-	import flash.geom.Rectangle;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.net.*;
-	
-	import sekati.layout.Arrange;
-	import sekati.utils.ColorUtil;
 	
 	public class Data extends EventDispatcher {
 		
 		
-		[Bindable] public var question:Question;
+		public static const DATA_UPDATE_EVENT:String = "dataUpdateEvent";
+		public static const DATA_PRE_UPDATE_EVENT:String = "dataPreUpdateEvent";
+		
+		public var question:Question;
 		public var users:Array;
 		public var threads:Array;
 		public var posts:Array;
@@ -48,10 +42,14 @@ package com.civildebatewall.data {
 			
 		public function Data() {
 			super();
+			
+			// Hash the secret key (just once)
+			CivilDebateWall.settings.secretKeyHash = SHA1.hash(CivilDebateWall.settings.secretKey);
+			
+			clear();
 		}
 		
-		public function load():void {
-			// load the question
+		private function clear():void {
 			question = null;
 			users = [];
 			threads = [];
@@ -63,18 +61,22 @@ package com.civildebatewall.data {
 			frequentWords = [];
 			likeTotals = {};
 			stanceTotals = {};
-			
-			latestTextMessages = [];
+			latestTextMessages = [];			
+		}
+		
+		public function load():void {
+			// load the question
+			clear();
 			
 
 			trace('Loading question');
-			Utilities.getRequestJSON(CDW.settings.serverPath + '/api/sms/kiosk' + CDW.settings.kioskNumber, onPhoneNumberReceived); // TODO no need, grab it when we check the recents on SMS prompt page?
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/sms/kiosk' + CivilDebateWall.settings.kioskNumber, onPhoneNumberReceived); // TODO no need, grab it when we check the recents on SMS prompt page?
 		}
 		
 		private function onPhoneNumberReceived(r:Object):void {
 			trace('Got phone number, loading users');
 			smsNumber = r['number'];
-			Utilities.getRequestJSON(CDW.settings.serverPath + '/api/questions/current', onQuestionReceived);			
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/questions/current', onQuestionReceived);			
 		}
 		
 		private function onQuestionReceived(r:Object):void {
@@ -84,7 +86,7 @@ package com.civildebatewall.data {
 			question = new Question(r);
 		
 			// Get users
-			Utilities.getRequestJSON(CDW.settings.serverPath + '/api/users', onUsersReceived);			
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/users', onUsersReceived);			
 		}
 		
 		
@@ -109,7 +111,7 @@ package com.civildebatewall.data {
 		private function completeHandler(event:LoaderEvent):void {
 			//trace(event.target + " is complete!");
 			trace("loading threads");
-			Utilities.getRequestJSON(CDW.settings.serverPath + '/api/questions/' + question.id + '/threads', onThreadsReceived);
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/questions/' + question.id + '/threads', onThreadsReceived);
 		}
 		
 		public var postQueue:LoaderMax = new LoaderMax({name:"postQueue", onProgress:progressHandler, onComplete:onPostsLoaded, onError:errorHandler});		
@@ -190,13 +192,9 @@ package com.civildebatewall.data {
 			for each (var word:Word in frequentWords) {
 				// search all posts
 				for each (post in posts) {
-					
-					
 					var regex:RegExp = new RegExp(/\b/.source + word +  /\b/.source, 'g');					
 					
 					var wordsInPost:Array = post.text.toLowerCase().match(wordSearch);
-					
-					
 					
 					for each (var wordInPost:String in wordsInPost) {
 						
@@ -224,14 +222,14 @@ package com.civildebatewall.data {
 			threads.sortOn('created', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?
 			//posts.sortOn('created', Array.DESCENDING); // newest first			
 				
-			// ready to start
-			this.dispatchEvent(new Event(Event.COMPLETE));
+			// Updated!
+			this.dispatchEvent(new Event(Data.DATA_PRE_UPDATE_EVENT));
+			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
 		}		
-		
 
 		
 		
-//
+		
 //		
 //		// STUBS
 //		public function getQuestionText():String {
@@ -311,23 +309,23 @@ package com.civildebatewall.data {
 		public function uploadResponse(threadID:String, responseTo:String, userID:String, opinion:String, stance:String, origin:String, callback:Function):void {
 			var yesno:uint = (stance == Post.STANCE_YES) ? 1 : 0;
 			var params:Object = {'yesno': yesno, 'text': opinion, 'responseto': responseTo, 'author': userID, 'origin': origin};
-			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/threads/' + threadID + '/posts', params, callback);
+			Utilities.postRequestJSON(CivilDebateWall.settings.serverPath + '/api/threads/' + threadID + '/posts', params, callback);
 		}
 					
 		public function uploadThread(questionId:String, userID:String, opinion:String, stance:String, origin:String, callback:Function):void {
 			var yesno:uint = (stance == Post.STANCE_YES) ? 1 : 0;
 			var params:Object = {'yesno': yesno, 'text': opinion, 'author': userID, 'origin': origin}; 
-			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/questions/' + questionId + '/threads', params, callback);			
+			Utilities.postRequestJSON(CivilDebateWall.settings.serverPath + '/api/questions/' + questionId + '/threads', params, callback);			
 		}		
 		
 		public function createUser(username:String, phoneNumber:String, callback:Function):void {
 			trace("Creating user with phone: " + phoneNumber);
 			trace("Creating user with username: " + username);			
-			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users', {'phonenumber': phoneNumber, 'username': username}, callback);			
+			Utilities.postRequestJSON(CivilDebateWall.settings.serverPath + '/api/users', {'phonenumber': phoneNumber, 'username': username}, callback);			
 		}	
 		
 		public function checkForUser(phoneNumber:String, callback:Function):void {
-			Utilities.postRequestJSON(CDW.settings.serverPath + '/api/users/search', {'phone': phoneNumber}, callback); // TODO no need, grab it when we check the recents on SMS prompt page?			
+			Utilities.postRequestJSON(CivilDebateWall.settings.serverPath + '/api/users/search', {'phone': phoneNumber}, callback); // TODO no need, grab it when we check the recents on SMS prompt page?			
 		}
 
 		// NEW STUFF
@@ -344,7 +342,7 @@ package com.civildebatewall.data {
 		private var textCallback:Function;
 		public function fetchLatestTextMessages(callback:Function = null):void {
 			textCallback = callback;
-			Utilities.getRequestJSON(CDW.settings.serverPath + '/api/sms/kiosk/' + CDW.settings.kioskNumber, onLatestTextMessages); // TODO no need, grab it when we check the recents on SMS prompt page?			
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/sms/kiosk/' + CivilDebateWall.settings.kioskNumber, onLatestTextMessages); // TODO no need, grab it when we check the recents on SMS prompt page?			
 		}
 		
 		public function onLatestTextMessages(r:Object):void {
@@ -363,38 +361,7 @@ package com.civildebatewall.data {
 		}
 
 		
-		public function getNextThread():Thread {
-			var grabNext:Boolean;
-			
-			// walk the object
-			for each (var thread:Thread in threads) {
-				if (grabNext) {
-					return thread;
-				}
-				
-				if (thread.id == CDW.state.activeThread.id) {
-					grabNext = true;
-				}
-			}
-			
-			return null;
-		}		
 
-		public function getPreviousThread():Thread {
-			var lastThread:Thread = null;
-			
-			// walk the object
-			for each (var thread:Thread in threads) {
-				if (thread.id == CDW.state.activeThread.id) {
-					return lastThread;
-				}
-				else {
-					lastThread = thread;
-				}
-			}
-			
-			return null;
-		}
 		
 		public function getThreadByID(id:String):Thread {
 			for each (var thread:Thread in threads) {

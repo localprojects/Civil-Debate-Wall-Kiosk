@@ -5,9 +5,9 @@ package com.civildebatewall.ui {
 	import flash.display.*;
 	import flash.events.MouseEvent;
 	
-	import com.civildebatewall.CDW;
+	import com.civildebatewall.kiosk.Kiosk;
 	
-	
+	import com.civildebatewall.CivilDebateWall;
 	
 	public class BalloonButton extends BlockButton {
 
@@ -27,7 +27,7 @@ package com.civildebatewall.ui {
 			tailOutline = new Shape;
 			addChild(tailOutline);
 			
-			if (CDW.settings.halfSize) {
+			if (CivilDebateWall.settings.halfSize) {
 				scaleMode = LineScaleMode.NORMAL; 
 			}
 			else {

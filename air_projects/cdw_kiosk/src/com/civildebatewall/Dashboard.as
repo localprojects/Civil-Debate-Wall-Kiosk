@@ -4,6 +4,7 @@ package com.civildebatewall {
 	
 	import flash.display.*;
 	import flash.events.Event;
+	import com.civildebatewall.kiosk.Kiosk;
 	
 	
 	public class Dashboard extends Window	{
@@ -77,37 +78,37 @@ package com.civildebatewall {
 		}
 		
 		private function onOverlaySlider(e:Event):void {
-			CDW.testOverlay.alpha = overlaySlider.value;
+			Kiosk.testOverlay.alpha = overlaySlider.value;
 		}
 		
 		private function onFocalLengthSlider(e:Event):void {
-			CDW.view.portraitCamera.setFocalLength(focalLengthSlider.value);
+			CivilDebateWall.kiosk.view.portraitCamera.setFocalLength(focalLengthSlider.value);
 		}
 		
 		private function onBarTestSlider(e:Event):void {
-			CDW.view.statsOverlay.voteStatBar.setLabels(Math.round(barTestSlider.value * 10), Math.round(barTestSlider.value * 100));
-			CDW.view.statsOverlay.voteStatBar.barPercent = barTestSlider.value;
+			CivilDebateWall.kiosk.view.statsOverlay.voteStatBar.setLabels(Math.round(barTestSlider.value * 10), Math.round(barTestSlider.value * 100));
+			CivilDebateWall.kiosk.view.statsOverlay.voteStatBar.barPercent = barTestSlider.value;
 			
 		}		
 		
 		private function onOverlayToggle(e:Event):void {
-			CDW.testOverlay.visible = testOverlayCheckbox.selected;
+			Kiosk.testOverlay.visible = testOverlayCheckbox.selected;
 		}
 		
 		private function onViewSelect(e:Event):void {
 			var selection:String = e.target.selectedItem;
 
-			if (selection == 'Home') CDW.view.homeView();
-			if (selection == 'Debate Overlay') CDW.view.debateOverlayView();
-			if (selection == 'Pick Stance') CDW.view.pickStanceView();
-			if (selection == 'SMS Prompt') CDW.view.smsPromptView();
-			if (selection == 'Photo Booth') CDW.view.photoBoothView();
-			if (selection == 'Name Entry') CDW.view.nameEntryView();
-			if (selection == 'Verify Opinion') CDW.view.verifyOpinionView();
-			if (selection == 'Edit Opinion') CDW.view.editOpinionView();
-			if (selection == 'Stats Overlay') CDW.view.statsView();
-			if (selection == 'Inactivity Overlay') CDW.view.inactivityOverlayView();
-			if (selection == 'Submit Overlay') CDW.view.submitOverlayView();			
+			if (selection == 'Home') CivilDebateWall.kiosk.view.homeView();
+			if (selection == 'Debate Overlay') CivilDebateWall.kiosk.view.debateOverlayView();
+			if (selection == 'Pick Stance') CivilDebateWall.kiosk.view.pickStanceView();
+			if (selection == 'SMS Prompt') CivilDebateWall.kiosk.view.smsPromptView();
+			if (selection == 'Photo Booth') CivilDebateWall.kiosk.view.photoBoothView();
+			if (selection == 'Name Entry') CivilDebateWall.kiosk.view.nameEntryView();
+			if (selection == 'Verify Opinion') CivilDebateWall.kiosk.view.verifyOpinionView();
+			if (selection == 'Edit Opinion') CivilDebateWall.kiosk.view.editOpinionView();
+			if (selection == 'Stats Overlay') CivilDebateWall.kiosk.view.statsView();
+			if (selection == 'Inactivity Overlay') CivilDebateWall.kiosk.view.inactivityOverlayView();
+			if (selection == 'Submit Overlay') CivilDebateWall.kiosk.view.submitOverlayView();			
 		}
 		
 		

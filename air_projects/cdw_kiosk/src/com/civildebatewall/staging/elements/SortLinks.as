@@ -1,6 +1,6 @@
 package com.civildebatewall.staging.elements {
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.CDW;
+	import com.civildebatewall.kiosk.Kiosk;
 	import com.civildebatewall.staging.futilProxies.BlockBaseTweenable;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockText;

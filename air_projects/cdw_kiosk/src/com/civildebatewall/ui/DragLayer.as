@@ -1,7 +1,7 @@
 package com.civildebatewall.ui {
 	
 	import com.civildebatewall.*;
-	import com.civildebatewall.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.BlockBase;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
@@ -51,19 +51,19 @@ package com.civildebatewall.ui {
 			vxSamples = new Array(); // clear the history
 			
 			// refactor startX based on tween progress, for portrait and other things
-			startX = this.mouseX - (CDW.view.nametag.x - CDW.view.nametag.defaultTweenInVars.x);
+			startX = this.mouseX - (CivilDebateWall.kiosk.view.nametag.x - CivilDebateWall.kiosk.view.nametag.defaultTweenInVars.x);
 			currentX = startX;
 			leftEdge = 0;			
 			
 			// Stop tweens
 			// TweenMax.killAll();
-			TweenMax.killTweensOf(CDW.view.nametag);
-			TweenMax.killTweensOf(CDW.view.leftNametag);
-			TweenMax.killTweensOf(CDW.view.rightNametag);			
-			TweenMax.killTweensOf(CDW.view.opinion);
-			TweenMax.killTweensOf(CDW.view.leftOpinion);
-			TweenMax.killTweensOf(CDW.view.rightOpinion);			
-			TweenMax.killChildTweensOf(CDW.view.portrait);
+			TweenMax.killTweensOf(CivilDebateWall.kiosk.view.nametag);
+			TweenMax.killTweensOf(CivilDebateWall.kiosk.view.leftNametag);
+			TweenMax.killTweensOf(CivilDebateWall.kiosk.view.rightNametag);			
+			TweenMax.killTweensOf(CivilDebateWall.kiosk.view.opinion);
+			TweenMax.killTweensOf(CivilDebateWall.kiosk.view.leftOpinion);
+			TweenMax.killTweensOf(CivilDebateWall.kiosk.view.rightOpinion);			
+			TweenMax.killChildTweensOf(CivilDebateWall.kiosk.view.portrait);
 			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			//}
@@ -99,11 +99,11 @@ package com.civildebatewall.ui {
 			if (mouseDown) {
 				
 				// edge limits
-				if ((leftEdge < 0) && (CDW.state.nextThread == null)) {
+				if ((leftEdge < 0) && (CivilDebateWall.state.nextThread == null)) {
 					leftEdge = 0;
 					difference = 0;
 				}
-				else if ((leftEdge > 0) && (CDW.state.previousThread == null)) {
+				else if ((leftEdge > 0) && (CivilDebateWall.state.previousThread == null)) {
 					leftEdge = 0;
 					difference = 0;
 				}
@@ -111,26 +111,26 @@ package com.civildebatewall.ui {
 				trace("leftEdge: " + leftEdge + " difference: " + difference);
 				
 				
-				difference = Math2.clamp(difference, -stageWidth, stageWidth);
-				leftEdge = Math2.clamp(leftEdge, -stageWidth, stageWidth);				
+				difference = Math2.clamp(difference, -stage.stageWidth, stage.stageWidth);
+				leftEdge = Math2.clamp(leftEdge, -stage.stageWidth, stage.stageWidth);				
 				
 				
 				
-				var amount:Number = Math2.map(Math.abs(leftEdge), 0, stageWidth, 0, 1);
+				var amount:Number = Math2.map(Math.abs(leftEdge), 0, stage.stageWidth, 0, 1);
 				
 				// drag blocks
-				CDW.view.nametag.x = CDW.view.nametag.defaultTweenInVars.x - difference;
+				CivilDebateWall.kiosk.view.nametag.x = CivilDebateWall.kiosk.view.nametag.defaultTweenInVars.x - difference;
 
 				
-				CDW.view.opinion.x = CDW.view.opinion.defaultTweenInVars.x - difference;
-				CDW.view.leftOpinion.x = CDW.view.leftOpinion.defaultTweenInVars.x - difference;
-				CDW.view.rightOpinion.x = CDW.view.rightOpinion.defaultTweenInVars.x - difference;
+				CivilDebateWall.kiosk.view.opinion.x = CivilDebateWall.kiosk.view.opinion.defaultTweenInVars.x - difference;
+				CivilDebateWall.kiosk.view.leftOpinion.x = CivilDebateWall.kiosk.view.leftOpinion.defaultTweenInVars.x - difference;
+				CivilDebateWall.kiosk.view.rightOpinion.x = CivilDebateWall.kiosk.view.rightOpinion.defaultTweenInVars.x - difference;
 				
 
 				
-				CDW.view.leftNametag.x = CDW.view.leftNametag.defaultTweenInVars.x - difference;
-				CDW.view.nametag.x = CDW.view.nametag.defaultTweenInVars.x - difference;
-				CDW.view.rightNametag.x = CDW.view.rightNametag.defaultTweenInVars.x - difference;					
+				CivilDebateWall.kiosk.view.leftNametag.x = CivilDebateWall.kiosk.view.leftNametag.defaultTweenInVars.x - difference;
+				CivilDebateWall.kiosk.view.nametag.x = CivilDebateWall.kiosk.view.nametag.defaultTweenInVars.x - difference;
+				CivilDebateWall.kiosk.view.rightNametag.x = CivilDebateWall.kiosk.view.rightNametag.defaultTweenInVars.x - difference;					
 				
 				
 				// TODO tween debate overlay
@@ -141,16 +141,16 @@ package com.civildebatewall.ui {
 
 				if (leftEdge < 0) {
 					// going to next
-					CDW.view.portrait.setIntermediateImage(CDW.state.nextThread.firstPost.user.photo, Math2.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
+					CivilDebateWall.kiosk.view.portrait.setIntermediateImage(CivilDebateWall.state.nextThread.firstPost.user.photo, Math2.mapClamp(Math.abs(leftEdge), 0, stage.stageWidth, 0, 1));
 					
 					// No tween if no change!
-					if (CDW.state.nextThread.firstPost.stance != CDW.state.activeThread.firstPost.stance) {
+					if (CivilDebateWall.state.nextThread.firstPost.stance != CivilDebateWall.state.activeThread.firstPost.stance) {
 
 
-						CDW.view.flagButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);
+						CivilDebateWall.kiosk.view.flagButton.setBackgroundColor(Color.interpolateColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, CivilDebateWall.state.nextThread.firstPost.stanceColorDark, amount), true);
 						
-						CDW.view.likeButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);					
-						CDW.view.viewDebateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.nextThread.firstPost.stanceColorDark, amount), true);
+						CivilDebateWall.kiosk.view.likeButton.setBackgroundColor(Color.interpolateColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, CivilDebateWall.state.nextThread.firstPost.stanceColorDark, amount), true);					
+						CivilDebateWall.kiosk.view.viewDebateButton.setBackgroundColor(Color.interpolateColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, CivilDebateWall.state.nextThread.firstPost.stanceColorDark, amount), true);
 						
 //						CDW.view.leftQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.nextThread.firstPost.stanceColorLight, amount), true);
 //						CDW.view.rightQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.nextThread.firstPost.stanceColorLight, amount), true);
@@ -164,14 +164,14 @@ package com.civildebatewall.ui {
 				}
 				else if (leftEdge > 0) {
 					// going to previous
-					CDW.view.portrait.setIntermediateImage(CDW.state.previousThread.firstPost.user.photo, Math2.mapClamp(Math.abs(leftEdge), 0, stageWidth, 0, 1));
+					CivilDebateWall.kiosk.view.portrait.setIntermediateImage(CivilDebateWall.state.previousThread.firstPost.user.photo, Math2.mapClamp(Math.abs(leftEdge), 0, stage.stageWidth, 0, 1));
 					
-					if (CDW.state.previousThread.firstPost.stance != CDW.state.previousThread.firstPost.stance) { 						
+					if (CivilDebateWall.state.previousThread.firstPost.stance != CivilDebateWall.state.previousThread.firstPost.stance) { 						
 
-						CDW.view.flagButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
+						CivilDebateWall.kiosk.view.flagButton.setBackgroundColor(Color.interpolateColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, CivilDebateWall.state.previousThread.firstPost.stanceColorDark, amount), true);
 						
-						CDW.view.likeButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);					
-						CDW.view.viewDebateButton.setBackgroundColor(Color.interpolateColor(CDW.state.activeThread.firstPost.stanceColorDark, CDW.state.previousThread.firstPost.stanceColorDark, amount), true);
+						CivilDebateWall.kiosk.view.likeButton.setBackgroundColor(Color.interpolateColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, CivilDebateWall.state.previousThread.firstPost.stanceColorDark, amount), true);					
+						CivilDebateWall.kiosk.view.viewDebateButton.setBackgroundColor(Color.interpolateColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, CivilDebateWall.state.previousThread.firstPost.stanceColorDark, amount), true);
 						
 //						CDW.view.leftQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.previousThread.firstPost.stanceColorLight, amount), true);
 //						CDW.view.rightQuote.setColor(Utilities.interpolateColorThroughWhite(CDW.state.activeThread.firstPost.stanceColorLight, CDW.state.previousThread.firstPost.stanceColorLight, amount), true);
@@ -198,15 +198,15 @@ package com.civildebatewall.ui {
 				trace('Mouse up. Velocity average: ' + vxAverage);
 
 				// see if we need to transition
-				if ((CDW.state.nextThread != null) &&(vxAverage < -vxThreshold) || (leftEdge < (stageWidth / -2))) {
-					CDW.view.nextDebate();
+				if ((CivilDebateWall.state.nextThread != null) &&(vxAverage < -vxThreshold) || (leftEdge < (stage.stageWidth / -2))) {
+					CivilDebateWall.kiosk.view.nextDebate();
 				}
-				if ((CDW.state.previousThread != null) && (vxAverage > vxThreshold) || (leftEdge > (stageWidth / 2))) {
-					CDW.view.previousDebate();			
+				if ((CivilDebateWall.state.previousThread != null) && (vxAverage > vxThreshold) || (leftEdge > (stage.stageWidth / 2))) {
+					CivilDebateWall.kiosk.view.previousDebate();			
 				}
 				else {
 					// spring back to current
-					CDW.view.homeView();					
+					CivilDebateWall.kiosk.view.homeView();					
 				}
 			}
 		}		

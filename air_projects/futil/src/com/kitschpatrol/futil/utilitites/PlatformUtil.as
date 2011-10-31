@@ -3,13 +3,15 @@ package com.kitschpatrol.futil.utilitites {
 	
 	public class PlatformUtil	{
 	
-			public static function isMac():Boolean {
+			public static function get isMac():Boolean {
 				return StringUtil.contains(Capabilities.os, "Mac");				
 			}
 			
-			public static function isWindows():Boolean {
+			public static function get isWindows():Boolean {
 				return StringUtil.contains(Capabilities.os, "Windows");				
-			}			
+			}
+			
+			
 		
 	}
 }

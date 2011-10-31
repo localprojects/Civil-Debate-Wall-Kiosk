@@ -42,7 +42,9 @@ The Windows 7 machines that run the kiosk should be set up as follows:
 - Ensure that the machine is connected to the NAS, and that the NAS is mapped to drive letter "E:". It should be configured to auto-connect at startup.
 - Install the CDW Deployment Tools to C:\
 - Run CDWupdate.bat to install the latest version of the CDW Kiosk application.
+- Install LogMeIn
 - TODO a few more steps...
+
 
 - - - - - - - - - - - - - - - -
 

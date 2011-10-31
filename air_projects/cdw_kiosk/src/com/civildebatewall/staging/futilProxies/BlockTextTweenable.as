@@ -1,6 +1,6 @@
 package com.civildebatewall.staging.futilProxies {
 	
-	import com.civildebatewall.CDW;
+	import com.civildebatewall.kiosk.Kiosk;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.blocks.BlockText;
