@@ -30,6 +30,20 @@ If something goes wrong, the best course of action is generally to right click a
 
 A content management system is accessible through [URL TBD].
 
+### Kiosk Machine Setup
+The Windows 7 machines that run the kiosk should be set up as follows:
+
+- Install the [Adobe Air Runtime](http://get.adobe.com/air/) version 3.0.
+- Install the [Adobe Air Settings Manager](http://airdownload.adobe.com/air/applications/SettingsManager/SettingsManager.air)
+- Run the settings manager and disable automatic updates.
+- Disabled all power saving functionality.
+- Disable screen savers.
+- Disable AERO.
+- Ensure that the machine is connected to the NAS, and that the NAS is mapped to drive letter "E:". It should be configured to auto-connect at startup.
+- Install the CDW Deployment Tools to C:\
+- Run CDWupdate.bat to install the latest version of the CDW Kiosk application.
+- TODO a few more steps...
+
 - - - - - - - - - - - - - - - -
 
 ## For Developers
@@ -54,6 +68,8 @@ There are a number of supporting projects in the `air_projects` directory:
 - `wall_saver_scratch` allows isolated, single-window testing and development of the wall saver animation sequence. This project now dormant since wall saver functionality has been merged into the main `cdw_kiosk` project. 
 
 `slr_control` contains a Windows-only Visual Studio project for the SLR communication app. The `cdw_kiosk` project has local copies of the relevant binaries, it does not reference this project directly.
+
+`deploy_tools` includes tools and scripts to automate the AIR application update process on the kiosk computers.
 
 ### Dependencies
 
@@ -127,6 +143,8 @@ After the build machine is configured, moving from development on the Mac to a r
 
 1. For each CDW kiosk deployment machine, download the `CDW Kiosk.exe` file from S3 and run it to install the latest version of the software. (This step pending automation!)
 
+##### Updating Kiosk Machines:
+After a new binary is uploaded to S3, the kiosk machines need to download and install the latest. 
 
 
 #### Screen Synchronization
