@@ -1,7 +1,7 @@
 package com.kitschpatrol.futil.blocks {
 	import com.kitschpatrol.futil.DefaultAssets;
 	import com.kitschpatrol.futil.Math2;
-	import com.kitschpatrol.futil.constants.CharacterSet;
+	import com.kitschpatrol.futil.constants.Char;
 	
 	import flash.display.BitmapData;
 	import flash.geom.Rectangle;
@@ -82,7 +82,7 @@ package com.kitschpatrol.futil.blocks {
 			_text = "AA";
 			_textBold = false;
 			_textFont = DefaultAssets.DEFAULT_FONT
-			_sizeFactorGlyphs = CharacterSet.SET_OF_ASCENT_LETTERS;
+			_sizeFactorGlyphs = Char.SET_OF_ASCENT_LETTERS;
 			_boundingMode = OPTICAL_BOUNDING;
 			_textSizePixels = 20;
 			_selectable = false;	

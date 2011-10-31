@@ -11,18 +11,19 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.kiosk.camera.*;
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
+	import com.civildebatewall.kiosk.ui.*;
 	import com.civildebatewall.staging.elements.NavArrow;
 	import com.civildebatewall.staging.elements.QuestionHeader;
 	import com.civildebatewall.staging.elements.SortLinks;
 	import com.civildebatewall.staging.elements.StatsButton;
 	import com.civildebatewall.staging.futilProxies.BlockBitmapTweenable;
-	import com.civildebatewall.ui.*;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.constants.Alignment;
+	import com.kitschpatrol.futil.constants.Char;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.FunctionUtil;
@@ -179,19 +180,16 @@ package com.civildebatewall.kiosk {
 
 
 			// triple nametags
-			nametag = new NameTag('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);	
-			nametag.setPadding(33, 38, 24, 38);
+			nametag = new NameTag();	
 			nametag.setDefaultTweenIn(1, {x: 238, y: 410});
 			nametag.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 410});
 			addChild(nametag);
 			
-			leftNametag = new NameTag('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
-			leftNametag.setPadding(33, 38, 24, 38);
+			leftNametag = new NameTag();	
 			leftNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x - stageWidth, y: nametag.defaultTweenInVars.y});
 			addChild(leftNametag);
 			
-			rightNametag = new NameTag('Name', 50, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
-			rightNametag.setPadding(33, 38, 24, 38);
+			rightNametag = new NameTag();	
 			rightNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x + stageWidth, y: nametag.defaultTweenInVars.y});
 			addChild(rightNametag);
 
@@ -203,9 +201,9 @@ package com.civildebatewall.kiosk {
 			
 			
 			// triple opinions
-			opinion = new BlockParagraph(915, 0x000000, '', 42);	
-			opinion.setDefaultTweenIn(1, {x: 101});
-			opinion.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});
+			opinion = new BlockParagraph(880, 0x000000, '', 42);	
+			opinion.setDefaultTweenIn(1, {x: 100});
+			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT});
 			addChild(opinion);
 			
 			rightOpinion = new BlockParagraph(915, 0x000000, '', 42);
@@ -506,9 +504,7 @@ package com.civildebatewall.kiosk {
 			flagNoButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1098});					
 			addChild(flagNoButton);			
 			
-			
-			
-						
+
 			// Submit overlay
 			submitOverlay = new BlockBitmapTweenable({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
 			submitOverlay.setDefaultTweenIn(1, {alpha: 0.85});
@@ -578,9 +574,11 @@ package com.civildebatewall.kiosk {
 			// content mutations
 			portrait.setImage(CivilDebateWall.state.activeThread.firstPost.user.photo); // TODO need to copy?
 			//question.setText(CDW.data.question.text, true);
-			nametag.setText(CivilDebateWall.state.activeThread.firstPost.user.usernameFormatted + ' Says :', true);
+			nametag.text = CivilDebateWall.state.activeThread.firstPost.user.usernameFormatted + ' Says : ' + CivilDebateWall.state.activeThread.firstPost.stance.toUpperCase() + "!";
 			
-			opinion.setText(CivilDebateWall.state.activeThread.firstPost.text);
+			
+			
+			opinion.setText(Char.LEFT_QUOTE + CivilDebateWall.state.activeThread.firstPost.text + Char.RIGHT_QUOTE);
 			bigButton.setText('ADD YOUR OPINION', true);
 			likeButton.setCount(CivilDebateWall.state.activeThread.firstPost.likes);			
 			
@@ -610,7 +608,7 @@ package com.civildebatewall.kiosk {
 			// state mutations
 			debateOverlay.scrollField.scrollTo(0, 0);			
 			CivilDebateWall.state.clearUser(); // Reset user info
-			// debateStrip.setActiveThumbnail(CivilDebateWall.state.activeThread.id); // TODO just pass object?
+			
 			
 			// aesthetic mutations
 			//question.setTextColor(CDW.state.questionTextColor);
@@ -629,11 +627,11 @@ package com.civildebatewall.kiosk {
 				
 				leftOpinion.setText(CivilDebateWall.state.previousThread.firstPost.text, true);				
 								
-				leftNametag.setText(CivilDebateWall.state.previousThread.firstPost.user.usernameFormatted + ' Says :', true);				
+				//leftNametag.setText(CivilDebateWall.state.previousThread.firstPost.user.usernameFormatted + ' Says :', true);				
 				
 				
 				leftOpinion.setBackgroundColor(CivilDebateWall.state.previousThread.firstPost.stanceColorLight, true);
-				leftNametag.setBackgroundColor(CivilDebateWall.state.previousThread.firstPost.stanceColorDark, true);				
+				//leftNametag.setBackgroundColor(CivilDebateWall.state.previousThread.firstPost.stanceColorDark, true);				
 			}
 			
 			if (CivilDebateWall.state.nextThread != null) {
@@ -642,11 +640,11 @@ package com.civildebatewall.kiosk {
 				
 				rightOpinion.setText(CivilDebateWall.state.nextThread.firstPost.text, true);				
 								
-				rightNametag.setText(CivilDebateWall.state.nextThread.firstPost.user.usernameFormatted + ' Says :', true);				
+				//rightNametag.setText(CivilDebateWall.state.nextThread.firstPost.user.usernameFormatted + ' Says :', true);				
 				
 				
 				rightOpinion.setBackgroundColor(CivilDebateWall.state.nextThread.firstPost.stanceColorLight, true);
-				rightNametag.setBackgroundColor(CivilDebateWall.state.nextThread.firstPost.stanceColorDark, true);	
+				//rightNametag.setBackgroundColor(CivilDebateWall.state.nextThread.firstPost.stanceColorDark, true);	
 			}
 			
 			
@@ -657,7 +655,7 @@ package com.civildebatewall.kiosk {
 			
 			
 				
-			nametag.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, true);
+			nametag.backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDark;
 			opinion.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorLight, true);
 
 			
@@ -1577,12 +1575,12 @@ package com.civildebatewall.kiosk {
 			//question.setTextColor(CDW.state.questionTextColor);			
 			bigButton.setText('SUBMIT THIS DEBATE', true);
 			bigButton.enable();
-			nametag.setText(CivilDebateWall.state.userName + ' Says:', true);
+			//nametag.setText(CivilDebateWall.state.userName + ' Says:', true);
 			opinion.setText(CivilDebateWall.state.userOpinion);
 
 			opinion.y = stageHeight - 574 - opinion.height; 
 			
-			nametag.setBackgroundColor(CivilDebateWall.state.userStanceColorMedium, true); // make instant?
+		//	nametag.setBackgroundColor(CivilDebateWall.state.userStanceColorMedium, true); // make instant?
 			opinion.setBackgroundColor(CivilDebateWall.state.userStanceColorLight, true);
 			
 			

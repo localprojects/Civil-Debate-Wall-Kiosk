@@ -9,7 +9,7 @@
     <classEntry path="com.kitschpatrol.futil.blocks.BlockShape"/>
     <classEntry path="com.kitschpatrol.futil.constants.Alignment"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.AlignmentPointPlugin"/>
-    <classEntry path="com.kitschpatrol.futil.constants.CharacterSet"/>
+    <classEntry path="com.kitschpatrol.futil.constants.Char"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.BackgroundColorPlugin"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.FutilBlockPlugin"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.BaseColorPlugin"/>

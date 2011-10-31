@@ -1,4 +1,4 @@
-package com.civildebatewall.ui {
+package com.civildebatewall.kiosk.ui {
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.MouseEvent;

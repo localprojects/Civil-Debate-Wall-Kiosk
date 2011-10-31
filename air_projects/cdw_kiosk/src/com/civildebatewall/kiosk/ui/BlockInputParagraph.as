@@ -1,4 +1,4 @@
-package com.civildebatewall.ui {
+package com.civildebatewall.kiosk.ui {
 	import flash.events.Event;
 	import flash.text.*;
 	

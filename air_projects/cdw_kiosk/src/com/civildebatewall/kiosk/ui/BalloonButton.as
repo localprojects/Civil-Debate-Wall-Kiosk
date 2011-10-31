@@ -1,4 +1,4 @@
-package com.civildebatewall.ui {
+package com.civildebatewall.kiosk.ui {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	

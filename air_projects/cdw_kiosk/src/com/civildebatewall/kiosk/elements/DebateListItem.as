@@ -6,7 +6,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.kiosk.blocks.BlockLabelBar;
 	import com.civildebatewall.kiosk.blocks.BlockParagraph;
 	import com.civildebatewall.data.Post;
-	import com.civildebatewall.ui.ButtonBase;
+	import com.civildebatewall.kiosk.ui.ButtonBase;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;

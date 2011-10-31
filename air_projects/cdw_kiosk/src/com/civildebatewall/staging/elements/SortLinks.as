@@ -124,31 +124,30 @@ package com.civildebatewall.staging.elements {
 			
 			
 			// Events, TODO drop these into block
-			recentText.setOnDown(onMouseDownLink);
-			yesText.setOnDown(onMouseDownLink);
-			noText.setOnDown(onMouseDownLink);
-			mostDebatedText.setOnDown(onMouseDownLink);
+			recentText.onButtonDown.push(down);
+			yesText.onButtonDown.push(down);
+			noText.onButtonDown.push(down);
+			mostDebatedText.onButtonDown.push(down);
 		
-			recentText.setOnClick(onMouseUpLink);
-			yesText.setOnClick(onMouseUpLink);
-			noText.setOnClick(onMouseUpLink);
-			mostDebatedText.setOnClick(onMouseUpLink);			
+			recentText.onButtonUp.push(up);
+			yesText.onButtonUp.push(up);
+			noText.onButtonUp.push(up);
+			mostDebatedText.onButtonUp.push(up);			
 		}
 		
 		private var clickedLink:SortLink;
 		
-		
-		private function onMouseDownLink(e:MouseEvent):void {
+		private function down(e:MouseEvent):void {
 			clickedLink = e.currentTarget as SortLink;
 			clickedLink.drawMouseDown();
 		}
 		
-		private function onMouseUpLink(e:MouseEvent):void {
+		private function up(e:MouseEvent):void {
 			if (selectedLink != clickedLink) {
 				selectedLink.drawMouseUp();
 				clickedLink.drawMouseDown();
 				selectedLink = clickedLink;
-				}
+			}
 		}
 		
 	}
