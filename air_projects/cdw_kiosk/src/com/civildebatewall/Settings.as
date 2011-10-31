@@ -19,11 +19,11 @@ package com.civildebatewall {
 			settings = rawSettings.common; // Always use the common settings
 			
 			// Use the "Mac" or "Windows" settings depending on detected platform
-			if (PlatformUtil.isWindows()) {
+			if (PlatformUtil.isWindows) {
 				trace("Loading Windows Settings");
 				settings = ObjectUtil.mergeObjects(settings , rawSettings.windows);
 			}
-			else if (PlatformUtil.isMac()) {
+			else if (PlatformUtil.isMac) {
 				trace("Loading Mac Settings");
 				settings  = ObjectUtil.mergeObjects(settings , rawSettings.mac);				
 			}

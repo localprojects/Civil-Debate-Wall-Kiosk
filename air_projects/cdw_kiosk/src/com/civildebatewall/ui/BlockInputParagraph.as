@@ -2,7 +2,7 @@ package com.civildebatewall.ui {
 	import flash.events.Event;
 	import flash.text.*;
 	
-	import com.civildebatewall.blocks.BlockParagraph;
+	import com.civildebatewall.kiosk.blocks.BlockParagraph;
 	
 	
 	public class BlockInputParagraph extends BlockParagraph {

@@ -16,6 +16,7 @@ package com.civildebatewall {
 	import flash.geom.*;
 	import flash.net.*;
 	import flash.utils.*;
+	import com.civildebatewall.kiosk.Kiosk;
 
 	public class Utilities {
 		
@@ -105,7 +106,7 @@ package com.civildebatewall {
 			request.data = variables;  
 			
 			// Security header
-			request.requestHeaders.push(new URLRequestHeader("X-Auth-Token", CDW.settings.secretKeyHash));
+			request.requestHeaders.push(new URLRequestHeader("X-Auth-Token", CivilDebateWall.settings.secretKeyHash));
 			
 			trace('sending variables: ' + variables.toString());
 			

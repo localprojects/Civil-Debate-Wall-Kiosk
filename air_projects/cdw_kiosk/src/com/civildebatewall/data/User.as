@@ -1,8 +1,9 @@
 package com.civildebatewall.data {
 	
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.CDW;
+	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.MetaBitmap;
+	import com.civildebatewall.kiosk.Kiosk;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.ImageLoader;
 	import com.greensock.loading.LoaderMax;
@@ -29,12 +30,12 @@ package com.civildebatewall.data {
 			trace (_id);
 				
 			// load portrait image, first see if it exists
-			var imageFile:File = new File(CDW.settings.imagePath + _id + '.jpg');
+			var imageFile:File = new File(CivilDebateWall.settings.imagePath + _id + '.jpg');
 			
 			if (imageFile.exists) {
 				// load the portrait
 				trace('Loading image from file for ' + _username);
-				CDW.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes:2400, onComplete: onImageLoaded}) );
+				CivilDebateWall.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes:2400, onComplete: onImageLoaded}) );
 			}
 			else {
 				// use placeholder

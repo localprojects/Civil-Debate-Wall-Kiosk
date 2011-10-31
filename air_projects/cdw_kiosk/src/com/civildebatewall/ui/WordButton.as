@@ -1,6 +1,6 @@
 package com.civildebatewall.ui {
 	import com.civildebatewall.*;
-	import com.civildebatewall.blocks.BlockLabel;
+	import com.civildebatewall.kiosk.blocks.BlockLabel;
 	import com.civildebatewall.data.Word;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;

@@ -1,9 +1,10 @@
 package com.civildebatewall.data {
 	
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.CDW;
+	import com.civildebatewall.kiosk.Kiosk;
 	import com.civildebatewall.Utilities;
 	import com.kitschpatrol.futil.utilitites.DateUtil;
+	import com.civildebatewall.CivilDebateWall;
 		
 	
 	public class Post extends Object {
@@ -47,7 +48,7 @@ package com.civildebatewall.data {
 			_likes = jsonObject['likes'];
 			_text = jsonObject['text'];
 			_origin = ORIGIN_KIOSK; // todo support other origins
-			_user = CDW.data.getUserByID(jsonObject['author']['id']);
+			_user = CivilDebateWall.data.getUserByID(jsonObject['author']['id']);
 			_created = DateUtil.parseJsonDate(jsonObject['created']);
 			_thread = parentThread;
 			
@@ -95,7 +96,7 @@ package com.civildebatewall.data {
 		
 		
 		public function incrementLikes():void {
-			Utilities.postRequest(CDW.settings.serverPath + '/api/posts/' + _id + '/like', {}, onLikeUpdated);						
+			Utilities.postRequest(CivilDebateWall.settings.serverPath + '/api/posts/' + _id + '/like', {}, onLikeUpdated);						
 		}
 		
 		private function onLikeUpdated(r:Object):void {
@@ -104,7 +105,7 @@ package com.civildebatewall.data {
 		}
 		
 		public function incrementFlags():void {
-			Utilities.postRequest(CDW.settings.serverPath + '/api/posts/' + _id + '/flag', {}, onFlagUpdated);						
+			Utilities.postRequest(CivilDebateWall.settings.serverPath + '/api/posts/' + _id + '/flag', {}, onFlagUpdated);						
 		}		
 		
 		private function onFlagUpdated(r:Object):void {
@@ -129,7 +130,7 @@ package com.civildebatewall.data {
 		public function get created():Date { return _created; }
 		public function get responseTo():Post {
 			if (responseToID != null) {	
-				return CDW.data.getPostByID(responseToID);
+				return CivilDebateWall.data.getPostByID(responseToID);
 			}
 			return null;
 		}

@@ -1,8 +1,10 @@
 package com.civildebatewall.staging.elements {
 	
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.CDW;
+	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
+	import com.civildebatewall.data.Data;
+	import com.civildebatewall.kiosk.Kiosk;
 	import com.civildebatewall.staging.futilProxies.BlockBaseTweenable;
 	import com.civildebatewall.staging.futilProxies.BlockTextTweenable;
 	import com.kitschpatrol.futil.blocks.BlockText;
@@ -11,9 +13,6 @@ package com.civildebatewall.staging.elements {
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.text.engine.TextBlock;
-	
-	import mx.binding.utils.ChangeWatcher;
-	import mx.events.PropertyChangeEvent;
 	
 	//ChangeWatcher.watch(this, "firstName", propertyChangeHandler);	
 	
@@ -67,18 +66,12 @@ package com.civildebatewall.staging.elements {
 			bottomLine.y = 277;
 			addChild(bottomLine);			
 			
-			ChangeWatcher.watch(CDW.data, "question", onQuestionChange);
+			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataChange);
 		}
-		
-		
-		public function set text(t:String):void {
-			questionText.text = t;
+
+		protected function onDataChange(e:Event):void {
+			questionText.text = CivilDebateWall.data.question.text;
 		}
-		
-		protected function onQuestionChange(e:PropertyChangeEvent):void {
-			trace("question changed!");
-			questionText.text = e.property as String;
-		}		
 		
 	}
 }

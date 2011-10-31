@@ -1,6 +1,6 @@
 package com.civildebatewall.data {
 	
-	import com.civildebatewall.CDW;
+	import com.civildebatewall.kiosk.Kiosk;
 	
 	public class Word extends Object {
 	

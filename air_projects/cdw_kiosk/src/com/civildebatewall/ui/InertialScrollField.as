@@ -15,8 +15,8 @@ package com.civildebatewall.ui {
 	import flash.utils.getTimer;
 	
 	import com.civildebatewall.*;
-	import com.civildebatewall.CDW;
-	import com.civildebatewall.blocks.BlockBase;
+	import com.civildebatewall.kiosk.Kiosk;
+	import com.civildebatewall.kiosk.blocks.BlockBase;
 	
 	public class InertialScrollField extends Sprite {
 		
@@ -157,8 +157,8 @@ package com.civildebatewall.ui {
 			// TODO direction restrictions?
 			mouseTravelX = 0;
 			mouseTravelY = 0;			
-			lastMouseX = CDW.self.stage.mouseX;
-			lastMouseY = CDW.self.stage.mouseY;
+			lastMouseX = Kiosk.self.stage.mouseX;
+			lastMouseY = Kiosk.self.stage.mouseY;
 			x1 = x2 = scrollSheet.x;
 			y1 = y2 = scrollSheet.y;
 			t1 = t2 = getTimer();
@@ -169,7 +169,7 @@ package com.civildebatewall.ui {
 			}
 			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			CDW.self.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			Kiosk.self.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
 		
 		
@@ -177,10 +177,10 @@ package com.civildebatewall.ui {
 			if (_scrollAllowed) {
 				// Odometer for the mouse
 				// Not just distance! cumulative to handle double-back situation
-				mouseTravelX += Math.abs(CDW.self.stage.mouseX - lastMouseX);
-				mouseTravelY += Math.abs(CDW.self.stage.mouseY - lastMouseY);			
-				lastMouseX = CDW.self.stage.mouseX;
-				lastMouseY = CDW.self.stage.mouseY;
+				mouseTravelX += Math.abs(Kiosk.self.stage.mouseX - lastMouseX);
+				mouseTravelY += Math.abs(Kiosk.self.stage.mouseY - lastMouseY);			
+				lastMouseX = Kiosk.self.stage.mouseX;
+				lastMouseY = Kiosk.self.stage.mouseY;
 				
 				y2 = y1;
 				x2 = x1;
@@ -213,7 +213,7 @@ package com.civildebatewall.ui {
 			// Hand it over to the throw tween
 			scrollSheet.stopDrag();
 			
-			CDW.self.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			Kiosk.self.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
 			var time:Number = (getTimer() - t2) / 1000;

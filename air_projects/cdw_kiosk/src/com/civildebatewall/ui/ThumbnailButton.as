@@ -1,8 +1,8 @@
 package com.civildebatewall.ui {
 	import com.civildebatewall.*;
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.blocks.BlockBase;
-	import com.civildebatewall.blocks.BlockLabel;
+	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.BlockLabel;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.Thread;
 	import com.greensock.*;

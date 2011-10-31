@@ -1,12 +1,21 @@
 package com.civildebatewall {
+	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.TextMessage;
 	import com.civildebatewall.data.Thread;
+	import com.civildebatewall.kiosk.Kiosk;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	
-	public class State extends Object {
+	
+	
+	public class State extends EventDispatcher {
+		
+		
+		public static const ACTIVE_DEBATE_CHANGE:String = "activeDebateChange";
 		
 		public var activeView:Function;
 		public var lastView:Function;
@@ -18,8 +27,8 @@ package com.civildebatewall {
 		public var previousThread:Thread = null;		
 		public var threadOverlayOpen:Boolean = false;
 		
-		// for reloading
-		public var activeThreadID:String = '';
+		// for persistence accross reloads
+		public var activeThreadID:String = '';		
 		public var activePostID:String = '';		
 		
 		// scratch user... TODO wrap this up in the object?
@@ -49,6 +58,18 @@ package com.civildebatewall {
 		
 		public var questionTextColor:uint = 0xff0000;
 
+		
+		public function State()	{
+			CivilDebateWall.data.addEventListener(Data.DATA_PRE_UPDATE_EVENT, onDataPreUpdate);
+		}
+		
+		private function onDataPreUpdate(e:Event):void {
+			// Initialize some stuff. only runs once at startup.
+			CivilDebateWall.state.setActiveDebate(CivilDebateWall.data.threads[0]);			
+			CivilDebateWall.data.removeEventListener(Data.DATA_UPDATE_EVENT, onDataPreUpdate);
+						
+		}				
+		
  
 		public function clearUser():void {
 			userID = '';
@@ -90,48 +111,81 @@ package com.civildebatewall {
 			lastThread = activeThread;
 			activeThread = thread;
 			
+			
+			
+			
 			// logs backwards... ugh
-			
-			
-			CDW.dashboard.log('---------------------------------');			
-			
-			
+			CivilDebateWall.dashboard.log('---------------------------------');			
 			
 			for (var i:uint = activeThread.posts.length - 1; i > 0; i--) {
 				trace(i);
-				CDW.dashboard.log(activeThread.posts[i].id);
+				CivilDebateWall.dashboard.log(activeThread.posts[i].id);
 			}
-			CDW.dashboard.log(activeThread.posts[0].id);
+			CivilDebateWall.dashboard.log(activeThread.posts[0].id);
 			
-			CDW.dashboard.log('Posts:');			
-			CDW.dashboard.log("Active thread:\n\t" + activeThread.id);			
+			CivilDebateWall.dashboard.log('Posts:');			
+			CivilDebateWall.dashboard.log("Active thread:\n\t" + activeThread.id);			
 			
-			CDW.dashboard.log('---------------------------------');			
+			CivilDebateWall.dashboard.log('---------------------------------');			
 			
 			// funky overrides for big-jump transitions
 			if (overridePrevious != null) {
 				previousThread = overridePrevious; 
 			}
 			else {
-				previousThread = CDW.data.getPreviousThread();
+				previousThread = getPreviousThread();
 			}					
 			
 			if (overrideNext != null) {
 				nextThread =overrideNext; 
 			}
 			else {
-				nextThread = CDW.data.getNextThread();
+				nextThread = getNextThread();
 			}
 
 			trace("Prev: " + previousThread);
 			trace("Active: " + activeThread);
 			trace("Next: " + nextThread);
+			
+			this.dispatchEvent(new Event(ACTIVE_DEBATE_CHANGE));
+			
 		}
 		
+		public function getNextThread():Thread {
+			var grabNext:Boolean;
+			
+			// walk the object
+			for each (var thread:Thread in CivilDebateWall.data.threads) {
+				if (grabNext) {
+					return thread;
+				}
+				
+				if (thread.id == activeThread.id) {
+					grabNext = true;
+				}
+			}
+			
+			return null;
+		}		
+		
+		public function getPreviousThread():Thread {
+			var lastThread:Thread = null;
+			
+			// walk the object
+			for each (var thread:Thread in CivilDebateWall.data.threads) {
+				if (thread.id == activeThread.id) {
+					return lastThread;
+				}
+				else {
+					lastThread = thread;
+				}
+			}
+			
+			return null;
+		}		
 		
 		
-		public function State()	{
 		
-		}
+
 	}
 }

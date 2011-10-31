@@ -1,7 +1,8 @@
 package com.civildebatewall.data {
 	import com.adobe.protocols.dict.Database;
 	import com.adobe.serialization.json.JSON;
-	import com.civildebatewall.CDW;
+	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.kiosk.Kiosk;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.DataLoader;
 	import com.greensock.loading.LoaderMax;
@@ -23,7 +24,7 @@ package com.civildebatewall.data {
 			_posts = [];
 			
 			// queue up post loading
-			CDW.data.postQueue.append(new DataLoader(CDW.settings.serverPath + '/api/threads/' + _id, {name: _id, estimatedBytes:2400, onComplete: onPostsLoaded}) );
+			CivilDebateWall.data.postQueue.append(new DataLoader(CivilDebateWall.settings.serverPath + '/api/threads/' + _id, {name: _id, estimatedBytes:2400, onComplete: onPostsLoaded}) );
 		}
 		
 		private function onPostsLoaded(e:LoaderEvent):void {
@@ -35,7 +36,7 @@ package com.civildebatewall.data {
 				var tempPost:Post = new Post(jsonPost, this);
 				_posts.push(tempPost); // one copy in the thread
 				//trace("Created: " + tempPost.text); 				
-				CDW.data.posts.push(tempPost); // and one copy globally
+				CivilDebateWall.data.posts.push(tempPost); // and one copy globally
 			}
 			
 
