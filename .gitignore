@@ -9,4 +9,6 @@ bin-debug/
 *.dmg
 *.exe
 
+!deploy_tools/*.exe
+
 air_projects/cdw_kiosk/build.properties
