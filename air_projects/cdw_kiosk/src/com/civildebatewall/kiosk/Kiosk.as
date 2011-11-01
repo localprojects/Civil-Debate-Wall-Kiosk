@@ -2,6 +2,7 @@ package com.civildebatewall.kiosk {
 
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.InactivityEvent;
+	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.kiosk.blocks.*;
 	import com.civildebatewall.kiosk.camera.*;
@@ -49,8 +50,8 @@ package com.civildebatewall.kiosk {
 		private function onDataUpdate(e:Event):void {
 			// Initialize some stuff. only runs once at startup.			
 			
-						
-			view.homeView();		
+			// Start at home // TODO no content conditional?
+			CivilDebateWall.state.setView(view.homeView);
 		}
 		
 

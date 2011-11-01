@@ -2,8 +2,7 @@ package com.kitschpatrol.futil.utilitites {
 	
 	public class StringUtil	{
 		
-		
-		
+				
 		// very crude implementation, but works in our case
 		public static function plural(word:String, count:Number):String {
 			if (count != 1) {

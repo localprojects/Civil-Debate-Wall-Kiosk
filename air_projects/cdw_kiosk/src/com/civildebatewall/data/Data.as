@@ -18,6 +18,13 @@ package com.civildebatewall.data {
 		public static const DATA_UPDATE_EVENT:String = "dataUpdateEvent";
 		public static const DATA_PRE_UPDATE_EVENT:String = "dataPreUpdateEvent";
 		
+		
+		public static const LIKE_UPDATE_LOCAL:String = "likeUpdateLocal";
+		public static const LIKE_UPDATE_SERVER:String = "likeUpdateServer";		
+		public static const FLAG_UPDATE_LOCAL:String = "flagUpdateLocal";
+		public static const FLAG_UPDATE_SERVER:String = "flagUpdateServer";		
+		
+		
 		public var question:Question;
 		public var users:Array;
 		public var threads:Array;
@@ -327,12 +334,36 @@ package com.civildebatewall.data {
 		public function checkForUser(phoneNumber:String, callback:Function):void {
 			Utilities.postRequestJSON(CivilDebateWall.settings.serverPath + '/api/users/search', {'phone': phoneNumber}, callback); // TODO no need, grab it when we check the recents on SMS prompt page?			
 		}
+		
+		public function like(post:Post):void {
+			post.likes++;
+			Utilities.postRequest(CivilDebateWall.settings.serverPath + '/api/posts/' + post.id + '/like', {}, onLikeUpdated);
+			this.dispatchEvent(new Event(LIKE_UPDATE_LOCAL));
+		}
+		
+		public function flag(post:Post):void {
+			Utilities.postRequest(CivilDebateWall.settings.serverPath + '/api/posts/' + post.id + '/flag', {}, onFlagUpdated);
+			this.dispatchEvent(new Event(FLAG_UPDATE_LOCAL));
+		}
+		
+		private function onLikeUpdated(r:Object):void {
+			trace("likes updated server side for post " + r);
+			this.dispatchEvent(new Event(LIKE_UPDATE_SERVER));
+		}
+		
+		private function onFlagUpdated(r:Object):void {
+			trace("flags updated server side for post " + r);
+			this.dispatchEvent(new Event(FLAG_UPDATE_SERVER));
+		}		
+		
+		
 
 		// NEW STUFF
 		
 		// User stuff
 		
 
+		
 		
 		
 

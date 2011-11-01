@@ -3,6 +3,7 @@ package com.civildebatewall {
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.TextMessage;
 	import com.civildebatewall.data.Thread;
+	import com.civildebatewall.kiosk.HomeView;
 	import com.civildebatewall.kiosk.Kiosk;
 	
 	import flash.display.Bitmap;
@@ -14,7 +15,7 @@ package com.civildebatewall {
 	
 	public class State extends EventDispatcher {
 		
-		
+		public static const VIEW_CHANGE:String = "viewChange";
 		public static const ACTIVE_DEBATE_CHANGE:String = "activeDebateChange";
 		
 		public var activeView:Function;
@@ -60,12 +61,14 @@ package com.civildebatewall {
 
 		
 		public function State()	{
+			//activeView = CivilDebateWall.kiosk.view.homeView; // Start at home
 			CivilDebateWall.data.addEventListener(Data.DATA_PRE_UPDATE_EVENT, onDataPreUpdate);
 		}
 		
 		private function onDataPreUpdate(e:Event):void {
 			// Initialize some stuff. only runs once at startup.
-			CivilDebateWall.state.setActiveDebate(CivilDebateWall.data.threads[0]);			
+			CivilDebateWall.state.activeView = CivilDebateWall.kiosk.view.homeView;
+			CivilDebateWall.state.setActiveThread(CivilDebateWall.data.threads[0]);
 			CivilDebateWall.data.removeEventListener(Data.DATA_UPDATE_EVENT, onDataPreUpdate);
 						
 		}				
@@ -106,14 +109,18 @@ package com.civildebatewall {
 			}
 		}
 		
+		public function setView(view:Function):void {
+			lastView = activeView;
+			activeView = view;
+			dispatchEvent(new Event(VIEW_CHANGE));
+		}
 		
-		public function setActiveDebate(thread:Thread, overridePrevious:Thread = null, overrideNext:Thread = null):void {
+		
+		public function setActiveThread(thread:Thread, overridePrevious:Thread = null, overrideNext:Thread = null):void {
 			lastThread = activeThread;
 			activeThread = thread;
-			
-			
-			
-			
+
+
 			// logs backwards... ugh
 			CivilDebateWall.dashboard.log('---------------------------------');			
 			

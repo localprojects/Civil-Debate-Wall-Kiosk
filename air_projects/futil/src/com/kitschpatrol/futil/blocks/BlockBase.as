@@ -89,6 +89,8 @@ package com.kitschpatrol.futil.blocks {
 			
 			// Button stuff
 			buttonTimer = new Timer(0);
+			buttonTimer.addEventListener(TimerEvent.TIMER, onTimeout);
+			
 			onButtonDown = new Vector.<Function>(0);
 			onButtonUp = new Vector.<Function>(0);
 			onStageUp = new Vector.<Function>(0);
@@ -471,7 +473,7 @@ package com.kitschpatrol.futil.blocks {
 		public function set buttonTimeout(time:Number):void {
 			buttonTimer.delay = time;
 			buttonTimer.reset();
-			buttonTimer.stop();			
+			buttonTimer.stop();
 		}
 
 		
@@ -487,25 +489,34 @@ package com.kitschpatrol.futil.blocks {
 		
 		private function onButtonUpInternal(e:MouseEvent):void {
 			tempEvent = e;
-			
+
 			if (!locked) {
-				// lock it if necessary
-				if (buttonTimeout > 0) {
-					locked = true;
-					buttonTimer.reset();
-					buttonTimer.start();
-					executeAll(onButtonLock);
-				}				
-				
+				// Stage always fires, and this fires first, so we handle lock in there.
+				this.removeEventListener(MouseEvent.MOUSE_UP, onButtonUpInternal);				
 				executeAll(onButtonUp);
 			}
+
 		}
 		
 		private function onStageUpInternal(e:MouseEvent):void {
 			tempEvent = e;
 			
 			if (!locked) {
+				
+	
+				
+								
+				stage.removeEventListener(MouseEvent.MOUSE_UP, onStageUpInternal);
+				
 				executeAll(onStageUp);
+				
+				if (buttonTimeout > 0) {
+					locked = true;
+					buttonTimer.reset();
+					buttonTimer.start();
+					executeAll(onButtonLock);
+				}							
+				
 			}			
 		}
 		

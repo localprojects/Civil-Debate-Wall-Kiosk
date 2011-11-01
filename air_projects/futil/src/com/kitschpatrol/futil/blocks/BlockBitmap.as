@@ -3,10 +3,13 @@ package com.kitschpatrol.futil.blocks {
 	
 	public class BlockBitmap extends BlockBase {
 		
-		private var b:Bitmap;
+		protected var b:Bitmap;
 		
 		public function BlockBitmap(params:Object) {
 			super(params);
+			
+			if (b == null) b = new Bitmap();
+			
 			addChild(b);
 		}
 		

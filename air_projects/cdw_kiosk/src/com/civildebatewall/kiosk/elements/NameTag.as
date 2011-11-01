@@ -3,6 +3,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.staging.futilProxies.BlockTextTweenable;
 	import com.kitschpatrol.futil.blocks.Padding;
+	import com.kitschpatrol.futil.constants.Alignment;
 	
 	import flash.display.Bitmap;
 	import flash.text.*;

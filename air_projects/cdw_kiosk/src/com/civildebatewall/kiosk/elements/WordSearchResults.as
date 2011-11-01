@@ -107,7 +107,7 @@ package com.civildebatewall.kiosk.elements {
 			targetSearchResult = e.target as SearchResult;
 
 			CivilDebateWall.state.highlightWord =  targetSearchResult._highlight;
-			CivilDebateWall.state.setActiveDebate(targetSearchResult.post.thread);
+			CivilDebateWall.state.setActiveThread(targetSearchResult.post.thread);
 			CivilDebateWall.state.activePost = targetSearchResult.post;
 			
 			if (targetSearchResult.post.isThreadStarter) {

@@ -4,6 +4,7 @@ package com.civildebatewall.kiosk {
 	import com.adobe.serialization.json.*;
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.State;
 	import com.civildebatewall.TestAssets;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.*;
@@ -16,14 +17,14 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.staging.elements.QuestionHeader;
 	import com.civildebatewall.staging.elements.SortLinks;
 	import com.civildebatewall.staging.elements.StatsButton;
+	import com.civildebatewall.staging.futilProxies.BlockBaseTweenable;
 	import com.civildebatewall.staging.futilProxies.BlockBitmapTweenable;
+	import com.civildebatewall.staging.futilProxies.BlockTextTweenable;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
 	import com.kitschpatrol.futil.Math2;
-	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.constants.Alignment;
-	import com.kitschpatrol.futil.constants.Char;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.FunctionUtil;
@@ -40,9 +41,33 @@ package com.civildebatewall.kiosk {
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.Timer;
+	
+	import mx.collections.ArrayList;
 
 	public class View extends Sprite {
+		
+		
+		// convenience
+		public var stageWidth:Number;
+		public var stageHeight:Number;	
+		
+		// NEW STUFF
 				
+		// Home View
+		public var portrait:Portrait;
+		public var questionHeader:QuestionHeader;		
+		public var opinion:OpinionText;	
+		private var likeButton:LikeButton;
+		private var viewCommentsButton:ViewCommentsButton;
+		private var flagButton:FlagButton;
+		private var leftArrow:NavArrow;
+		private var rightArrow:NavArrow;
+		private var bigButton:BigButton; // TODO migrate to Futil?		
+		
+		
+		
+		// OLD STUFF
+		
 		// immutable
 		private var smsDisclaimer:BlockParagraph;
 		public var portraitCamera:PortraitCamera; // public for dashboard
@@ -80,7 +105,7 @@ package com.civildebatewall.kiosk {
 		private var editTextInstructions:BlockLabel;
 		private var cameraOverlay:CameraOverlay;
 		private var statsButton:StatsButton;
-		public var flagButton:IconButton;		
+				
 		private var secondaryDebateButton:BalloonButton;		
 		private var yesButton:BlockButton;
 		private var noButton:BlockButton;
@@ -93,17 +118,10 @@ package com.civildebatewall.kiosk {
 		private var submitOverlayContinueButton:BlockButton;				
 		private var submitOverlayMessage:BlockParagraph;
 		
-		private var leftArrow:NavArrow;
-		private var rightArrow:NavArrow;
+		private var nameEntryField:BlockInputLabel;
 		
+
 		
-		// mutable, dynamic content (e.g. text changes based on database)
-		private var nameEntryField:BlockInputLabel; // changes dimensions
-		//private var question:QuestionText; // changes dimensions
-		public var portrait:Portrait;
-		private var bigButton:BigButton;
-		public var likeButton:CounterButton;
-		public var viewDebateButton:BlockButton;
 		private var editOpinion:BlockInputParagraph; // changes dimensions 
 		private var byline:BlockLabel; // changes dimensions
 		
@@ -112,23 +130,7 @@ package com.civildebatewall.kiosk {
 		public var debateStrip:DebateStrip;
 		public var debateOverlay:DebateOverlay;		
 
-		// multiples of these for the drag transitions		
-		public var nametag:NameTag;
-		public var leftNametag:NameTag;
-		public var rightNametag:NameTag;		
-		public var opinion:BlockParagraph;
-		public var leftOpinion:BlockParagraph;		
-		public var rightOpinion:BlockParagraph;
-		
-		// mouse protection during tweens
-		public var protection:Sprite;
-		
-		// convenience
-		public var stageWidth:Number;
-		public var stageHeight:Number;	
-		
-		// NEW STUFF
-		public var questionHeader:QuestionHeader;
+
 
 		
 		public function View() {
@@ -139,7 +141,7 @@ package com.civildebatewall.kiosk {
 		private function init():void {
 			// for convenience
 			stageWidth = 1080;
-			stageHeight = 1920;	
+			stageHeight = 1920;
 			
 			// Work around for lack of mouse-down events
 			// http://forums.adobe.com/message/2794098?tstart=0
@@ -164,57 +166,25 @@ package com.civildebatewall.kiosk {
 			
 			letsDebateUnderlay = new BlockBitmapTweenable({bitmap: new Bitmap(new BitmapData(1022, 577, false, 0xffffff))});
 			letsDebateUnderlay.mouseEnabled = false; // let keystrokes through to the keyboard
-			letsDebateUnderlay.x = 30;
-			letsDebateUnderlay.y = 249;
+			letsDebateUnderlay.x = 28;
+			letsDebateUnderlay.y = 264;
 			
 			letsDebateUnderlay.setDefaultTweenIn(1, {alpha: 0.9, ease: Quart.easeOut});
 			letsDebateUnderlay.setDefaultTweenOut(1, {alpha: 0, ease: Quart.easeOut});
 			addChild(letsDebateUnderlay);				
 			
 
-			
-		questionHeader = new QuestionHeader();
-		questionHeader.setDefaultTweenIn(1, { alpha: 1});
-		questionHeader.setDefaultTweenOut(1, { alpha: 0});
+			questionHeader = new QuestionHeader();
+			questionHeader.setDefaultTweenIn(1, { alpha: 1});
+			questionHeader.setDefaultTweenOut(1, { alpha: 0});
 			addChild(questionHeader) 
-
-
-			// triple nametags
-			nametag = new NameTag();	
-			nametag.setDefaultTweenIn(1, {x: 238, y: 410});
-			nametag.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 410});
-			addChild(nametag);
-			
-			leftNametag = new NameTag();	
-			leftNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x - stageWidth, y: nametag.defaultTweenInVars.y});
-			addChild(leftNametag);
-			
-			rightNametag = new NameTag();	
-			rightNametag.setDefaultTweenIn(1, {x: nametag.defaultTweenInVars.x + stageWidth, y: nametag.defaultTweenInVars.y});
-			addChild(rightNametag);
-
-			byline = new BlockLabel('Byline', 22, 0xffffff, 0x000000, Assets.FONT_HEAVY, true);
-			byline.setPadding(18, 32, 16, 32);
-			byline.setDefaultTweenIn(1, {x: 586});
-			byline.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE	});			
-			addChild(byline);
-			
 			
 			// triple opinions
-			opinion = new BlockParagraph(880, 0x000000, '', 42);	
-			opinion.setDefaultTweenIn(1, {x: 100});
-			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT});
+			opinion = new OpinionText();	
+			opinion.setDefaultTweenIn(1, {x: 100, y: 1296});
+			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT,  y: 1296});
 			addChild(opinion);
 			
-			rightOpinion = new BlockParagraph(915, 0x000000, '', 42);
-			rightOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x + stageWidth});
-			rightOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x + stageWidth});
-			addChild(rightOpinion);
-			
-			leftOpinion = new BlockParagraph(915, 0x000000, '', 42);	
-			leftOpinion.setDefaultTweenIn(1, {x: opinion.defaultTweenInVars.x - stageWidth});
-			leftOpinion.setDefaultTweenOut(1, {x: opinion.defaultTweenInVars.x - stageWidth});
-			addChild(leftOpinion);		
 			
 			// TODO is there always a drag layer?
 			dragLayer = new DragLayer();
@@ -228,7 +198,7 @@ package com.civildebatewall.kiosk {
 			editOpinion.setDefaultTweenOut(0, {visible: false, x: 101});			
 			addChild(editOpinion);
 			
-			bigButton = new BigButton('ADD YOUR OPINION');
+			bigButton = new BigButton();
 			bigButton.setDefaultTweenIn(1, {x: 455, y: 1470, alpha: 1});
 			bigButton.setDefaultTweenOut(1, {x: 455, y: 1470, alpha: 0}); // TODO possibly subclass for cooler in and out tweens
 			addChild(bigButton);
@@ -240,30 +210,19 @@ package com.civildebatewall.kiosk {
 			statsButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 796});
 			addChild(statsButton);
 			
-			likeButton = new CounterButton(148, 63, 0x000000, 'Like', 20, 0xffffff, Assets.FONT_BOLD);
-			likeButton.setTimeout(15000);
-			likeButton.setDefaultTweenIn(1, {x: 238, y: 1376});
-			likeButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1376});			
-			addChild(likeButton);
+			viewCommentsButton = new ViewCommentsButton();
+			viewCommentsButton.setDefaultTweenIn(1, {x: 288, y: 1341});
+			viewCommentsButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
+			addChild(viewCommentsButton);
+
 			
-			viewDebateButton = new BlockButton(492, 63, 0x000000, '', 20, 0xffffff, Assets.FONT_BOLD);
-			viewDebateButton.shiftBaseline(2);
-			viewDebateButton.setDefaultTweenIn(1, {x: 404, y: 1376});
-			viewDebateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1376});			
-			addChild(viewDebateButton);
 			
-			flagButton = new IconButton(67, 63, 0x000000, '', 20, 0xffffff, null, Assets.flagIcon);
-			flagButton.setTimeout(15000);			
-			flagButton.setDefaultTweenIn(1, {x: 914, y: 1376});
-			flagButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1376});
-			addChild(flagButton);			
 			
+
 //			debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
 //			debateButton.setDefaultTweenIn(1, {x: 813, scaleX: 1, scaleY: 1});
 //			debateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, scaleX: 1, scaleY: 1});
 //			addChild(debateButton);
-			
-			
 			
 			secondaryDebateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
 			secondaryDebateButton.setStrokeColor(Assets.COLOR_GRAY_15);
@@ -441,6 +400,16 @@ package com.civildebatewall.kiosk {
 			sortLinks.setDefaultTweenOut(1, {y: Alignment.OFF_STAGE_BOTTOM});			
 			addChild(sortLinks);
 			
+			likeButton = new LikeButton();
+			likeButton.setDefaultTweenIn(1, {x: 100, y: 1341});
+			likeButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
+			addChild(likeButton);
+			
+			flagButton = new FlagButton();
+			flagButton.setDefaultTweenIn(1, {x: 916, y: 1341});
+			flagButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
+			addChild(flagButton);
+			
 			
 			// TODO HOOK THIS UP?
 			smsSubmittedProfanityWarning = new BlockLabel('Please choose words that will encourage a civil debate and re-submit your message!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
@@ -533,6 +502,19 @@ package com.civildebatewall.kiosk {
 			flashOverlay.setDefaultTweenOut(1, {alpha: 0, ease: Quart.easeOut});
 			flashOverlay.name = 'Flash Overlay';
 			addChild(flashOverlay);	
+			
+			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
+			CivilDebateWall.state.addEventListener(State.VIEW_CHANGE, onViewChange);
+		}
+		
+		private function onViewChange(e:Event):void {
+			// refresh the view...
+			CivilDebateWall.state.activeView();
+		}		
+		
+		private function onActiveDebateChange(e:Event):void {
+			// refresh the view... listen inside display objects, instead?
+			//CivilDebateWall.state.activeView();
 		}
 		
 		
@@ -548,7 +530,7 @@ package com.civildebatewall.kiosk {
 			CivilDebateWall.inactivityTimer.disarm();
 			portrait.setImage(Assets.portraitPlaceholder);
 			//question.setTextColor(CDW.state.questionTextColor);
-			bigButton.setText('ADD YOUR OPINION', true);
+			bigButton.setText('ADD YOUR OPINION');
 			CivilDebateWall.state.clearUser();
 
 			// behaviors
@@ -564,209 +546,32 @@ package com.civildebatewall.kiosk {
 		
 		// =========================================================================
 		
-
 		public function homeView(...args):void {
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = homeView;
 			markAllInactive();
+			
 			CivilDebateWall.inactivityTimer.disarm();
-			
-			// content mutations
-			portrait.setImage(CivilDebateWall.state.activeThread.firstPost.user.photo); // TODO need to copy?
-			//question.setText(CDW.data.question.text, true);
-			nametag.text = CivilDebateWall.state.activeThread.firstPost.user.usernameFormatted + ' Says : ' + CivilDebateWall.state.activeThread.firstPost.stance.toUpperCase() + "!";
-			
-			
-			
-			opinion.setText(Char.LEFT_QUOTE + CivilDebateWall.state.activeThread.firstPost.text + Char.RIGHT_QUOTE);
-			bigButton.setText('ADD YOUR OPINION', true);
-			likeButton.setCount(CivilDebateWall.state.activeThread.firstPost.likes);			
-			
-			
-			// hilite
-			trace("Hilite state: " + CivilDebateWall.state.highlightWord);
-			if (CivilDebateWall.state.highlightWord != null) {
-				trace("Hiliting!" + CivilDebateWall.state.highlightWord);
-				opinion.setHighlightColor(CivilDebateWall.state.activeThread.firstPost.stanceColorHighlight);
-				opinion.setHighlight(CivilDebateWall.state.highlightWord);
-			}
-			else {
-				// 
-				trace("unhilite");
-				opinion.clearHighlight();				
-			}
-			
-			leftOpinion.clearHighlight();
-			rightOpinion.clearHighlight();
-			
-			// hilite these too, if we need to
-			debateOverlay.update();			
-			
-			CivilDebateWall.state.highlightWord = null;
-			
-			
-			// state mutations
-			debateOverlay.scrollField.scrollTo(0, 0);			
 			CivilDebateWall.state.clearUser(); // Reset user info
+			debateOverlay.scrollField.scrollTo(0, 0);			
 			
+			bigButton.setText('ADD YOUR OPINION'); // TODO move to listener?
 			
-			// aesthetic mutations
-			//question.setTextColor(CDW.state.questionTextColor);
-			
-			
-			// disabled colors
-			likeButton.setDisabledColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled);
-			flagButton.setDisabledColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled);
-			viewDebateButton.setDisabledColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled);
-						
-			
-			// Set up previous and next overlay
-			if (CivilDebateWall.state.previousThread != null) {
-				// set the previous debate				
-				leftOpinion.y = 1347 - leftOpinion.height;
-				
-				leftOpinion.setText(CivilDebateWall.state.previousThread.firstPost.text, true);				
-								
-				//leftNametag.setText(CivilDebateWall.state.previousThread.firstPost.user.usernameFormatted + ' Says :', true);				
-				
-				
-				leftOpinion.setBackgroundColor(CivilDebateWall.state.previousThread.firstPost.stanceColorLight, true);
-				//leftNametag.setBackgroundColor(CivilDebateWall.state.previousThread.firstPost.stanceColorDark, true);				
-			}
-			
-			if (CivilDebateWall.state.nextThread != null) {
-				// set the next debate
-				rightOpinion.y = 1347 - rightOpinion.height;
-				
-				rightOpinion.setText(CivilDebateWall.state.nextThread.firstPost.text, true);				
-								
-				//rightNametag.setText(CivilDebateWall.state.nextThread.firstPost.user.usernameFormatted + ' Says :', true);				
-				
-				
-				rightOpinion.setBackgroundColor(CivilDebateWall.state.nextThread.firstPost.stanceColorLight, true);
-				//rightNametag.setBackgroundColor(CivilDebateWall.state.nextThread.firstPost.stanceColorDark, true);	
-			}
-			
-			
-			// ease if we're transitioning
-			var instant:Boolean = true;
-			if (CivilDebateWall.state.activeView == CivilDebateWall.state.lastView) instant = false;
-			
-			
-			
-				
-			nametag.backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDark;
-			opinion.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorLight, true);
-
-			
-			
-			
-			// respect locked buttons
-			likeButton.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, instant);			
-			//	if (likeButton.locked) likeButton.setBackgroundColor(CDW.state.activeStanceColorDisabled, instant); 
-			likeButton.setDownColor(CivilDebateWall.state.activeThread.firstPost.stanceColorMedium);			
-			
-			flagButton.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark), instant;
-			if (flagButton.locked) flagButton.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled, instant);
-			flagButton.setDownColor(CivilDebateWall.state.activeThread.firstPost.stanceColorMedium);
-						
-			flagButton.unlock();
-			likeButton.unlock();
-
-			// view debate button
-			viewDebateButton.setDownColor(CivilDebateWall.state.activeThread.firstPost.stanceColorMedium);
-			
-			var responseCount:int = CivilDebateWall.state.activeThread.postCount - 1;			
-			
-			if (responseCount == 0) {
-				viewDebateButton.setFont(Assets.FONT_BOLD); // actually sets after call to set label
-				viewDebateButton.setLabel('No responses yet. Be the first!', false);
-				viewDebateButton.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled, true);				
-				viewDebateButton.showOutline(false);				
-			}
-			else {
-				// TODO embed this functionality in the button label itself?
-				// viewDebateButton.fitLabel(text, maxWidth, prefix, postfix);
-				
-				// Show as much comment as possible... truncate what we can't
-				viewDebateButton.setFont(Assets.FONT_BOLD);
-				var firstCommentText:String = CivilDebateWall.state.activeThread.posts[1].text;
-				var newLabel:String = '\u201C' + firstCommentText + '\u201D + ' + responseCount + ' ' + StringUtil.plural('response', responseCount);				
-				var commentLength:int = firstCommentText.length;
-				var commentPreview:String = firstCommentText;				
-				var previewWidth:Number = viewDebateButton.measureText(newLabel);
-				
-				while (previewWidth > 460) {
-					commentLength--;
-					commentPreview = StringUtil.truncate(firstCommentText, commentLength, '...');
-					newLabel = '\u201C' + commentPreview + '\u201D + ' + responseCount + ' ' + StringUtil.plural('response', responseCount);					
-					previewWidth = viewDebateButton.measureText(newLabel);
-				}
-				
-				viewDebateButton.setLabel(newLabel); // finally, tween it in
-				viewDebateButton.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, true);
-				viewDebateButton.showOutline(true);								
-			}			
-			
-			
-			// behaviors
-			if (responseCount == 0) {			
-				viewDebateButton.setOnClick(null);
-				CivilDebateWall.state.threadOverlayOpen = false;
-			}
-			else {
-				viewDebateButton.setOnClick(onDebateViewButton);
-				
-				if (CivilDebateWall.state.threadOverlayOpen) {
-					TweenMax.delayedCall(1.0, debateOverlayView);
-				}
-			}
-			
-			bigButton.setOnClick(onAddOpinionButton);			
+			// behavior
+			// bigButton.setOnClick(onAddOpinionButton);			
 			//statsButton.setOnClick(statsView);
-			
-			likeButton.setOnClick(incrementLikes);
-			flagButton.setOnClick(onFlagClick);
-			
-			
+
 			// blocks
 			portrait.tweenIn();
-
 			questionHeader.tweenIn();
-			dragLayer.tweenIn();
-
-			nametag.tweenIn();
-			leftNametag.tweenIn();
-			rightNametag.tweenIn();
-
-			
-			rightOpinion.tweenIn();
-			leftOpinion.tweenIn();
-			bigButton.tweenIn();
-			statsButton.tweenIn();
-			likeButton.tweenIn();
-			flagButton.tweenIn();
-			viewDebateButton.tweenIn();
-			debateStrip.tweenIn();
-			sortLinks.tweenIn();
 			leftArrow.tweenIn();
 			rightArrow.tweenIn();
-			
-
-			
-			if (CivilDebateWall.state.activeView == CivilDebateWall.state.lastView) {
-				opinion.y = 1347 - opinion.height;
-				opinion.tweenIn();				
-			}
-			else {
-				opinion.tweenIn(-1, {y: 1347 - opinion.height});				
-			}
-			
-			
-			
-			// Fire the debate overlay?
-						
-			
+			opinion.tweenIn();			
+			statsButton.tweenIn();
+			likeButton.tweenIn();
+			viewCommentsButton.tweenIn();			
+			flagButton.tweenIn();			
+			bigButton.tweenIn();
+			debateStrip.tweenIn();
+			sortLinks.tweenIn();
 			
 			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
 			// note that it's a one-time thing, when the block tweens back in, it will start from its canonical "tween out" location
@@ -775,34 +580,14 @@ package com.civildebatewall.kiosk {
 			
 			// clean up the old based on what's not active
 			tweenOutInactive();
-						
-			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design);
 		}
 		
-		private function onFlagClick(e:Event):void {
-			CivilDebateWall.state.activePost = CivilDebateWall.state.activeThread.firstPost;
-			flagOverlayView();
-		}
-		
-		private function onDebateViewButton(e:Event):void {
-			CivilDebateWall.state.threadOverlayOpen = true;
-			debateOverlayView();			
-		}
-		
-		
+		// TODO these...
 		public function nextDebate():void {
 			if (CivilDebateWall.state.nextThread != null) { 	
 				trace('Transition to next.');
-				CivilDebateWall.state.setActiveDebate(CivilDebateWall.state.nextThread);
-				CivilDebateWall.kiosk.view.leftOpinion.x += stageWidth;
+				CivilDebateWall.state.setActiveThread(CivilDebateWall.state.nextThread);
 				CivilDebateWall.kiosk.view.opinion.x += stageWidth;
-				CivilDebateWall.kiosk.view.rightOpinion.x += stageWidth;
-				
-
-				
-				CivilDebateWall.kiosk.view.leftNametag.x += stageWidth;
-				CivilDebateWall.kiosk.view.rightNametag.x += stageWidth;
-				CivilDebateWall.kiosk.view.nametag.x += stageWidth;
 			}
 			homeView();
 		}
@@ -810,114 +595,40 @@ package com.civildebatewall.kiosk {
 		public function previousDebate():void {
 			if (CivilDebateWall.state.previousThread != null) {
 				trace('Transition to previous.');
-				CivilDebateWall.state.setActiveDebate(CivilDebateWall.state.previousThread);
-				CivilDebateWall.kiosk.view.leftOpinion.x -= stageWidth;
+				CivilDebateWall.state.setActiveThread(CivilDebateWall.state.previousThread);
 				CivilDebateWall.kiosk.view.opinion.x -= stageWidth;
-				CivilDebateWall.kiosk.view.rightOpinion.x -= stageWidth;
-				
-
-				
-				CivilDebateWall.kiosk.view.leftNametag.x -= stageWidth;
-				CivilDebateWall.kiosk.view.rightNametag.x -= stageWidth;
-				CivilDebateWall.kiosk.view.nametag.x -= stageWidth;
 			}
 			homeView();			
-		}		
-		
-		private function onDebateButton(e:Event):void {
-			CivilDebateWall.state.userRespondingTo = CivilDebateWall.state.activeThread.firstPost;
-			CivilDebateWall.state.userIsResponding = true;
-			pickStanceView();
 		}
 		
-		private function onAddOpinionButton():void {
-			CivilDebateWall.state.userRespondingTo = null;			
-			CivilDebateWall.state.userIsResponding = false;
-			pickStanceView();
-		}		
-		
-		private function incrementLikes(e:Event):void {
-			// also uploads
-			CivilDebateWall.state.activeThread.firstPost.incrementLikes();
-			CivilDebateWall.state.activeThread.firstPost.likes = likeButton.getCount() + 1;
-			likeButton.setCount(CivilDebateWall.state.activeThread.firstPost.likes);			
-		}
+
 
 		// =========================================================================
 		
 		
-		public function debateOverlayView(...args):void {
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = debateOverlayView;			
-			markAllInactive();			
+		public function debateOverlayView(...args):void {			
+			markAllInactive();
 			CivilDebateWall.inactivityTimer.disarm();
 			
-							
+			// Alignment
+			letsDebateUnderlay.height = opinion.height + 233;
 			
-			// mutations
-			portrait.setImage(CivilDebateWall.state.activeThread.firstPost.user.photo);
+			//debateOverlay.setMaxHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));
 			
-			opinion.setText(CivilDebateWall.state.activeThread.firstPost.text);			
-			//question.setTextColor(CDW.state.questionTextColor);			
-			byline.y = 410 + opinion.height + 38;
-			byline.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorMedium, true);
-			opinion.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorLight, true);			
-						
-			
-			secondaryDebateButton.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, true);
-			secondaryDebateButton.setDownColor(CivilDebateWall.state.activeThread.firstPost.stanceColorMedium);
-			
-
-			
-			viewDebateButton.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, true);
-			viewDebateButton.setDownColor(CivilDebateWall.state.activeThread.firstPost.stanceColorMedium);			
-			
-			// use the full capitalize name for the byline
-			byline.setText('Said by ' + CivilDebateWall.state.activeThread.firstPost.user.usernameFormatted, true);
-			viewDebateButton.setFont(Assets.FONT_HEAVY);
-			viewDebateButton.setLabel('BACK TO HOME SCREEN', false);
-			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 + 5 - letsDebateUnderlay.y; // height depends on opinion
-
-			
-			
-			letsDebateUnderlay.height = 410 + opinion.height + 144 + 15 + 5 - letsDebateUnderlay.y; // height depends on opinion				
-			debateOverlay.setMaxHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));				
-			
-					
-			debateOverlay.update();
-			
-			// behaviors
-			viewDebateButton.setOnClick(onCloseDebateOverlay);
-			
-			// blocks
 			portrait.tweenIn();
-			
-			letsDebateUnderlay.tweenIn();
-			
 			questionHeader.tweenIn();
+			letsDebateUnderlay.tweenIn();
+			opinion.tweenIn(1, {y: 327 + opinion.height});			
+				
+			//debateOverlay.tweenIn(-1, {y: letsDebateUnderlay.y + letsDebateUnderlay.height + 30});
 			
-			byline.tweenIn(-1, {x: 916 - byline.width - 39}); // dynamic based on opinion size
-			opinion.tweenIn(1, {y: 410});
-			//debateButton.tweenIn(1, {x: 916, y: 410 + opinion.height + 15, scaleX: 0.75, scaleY: 0.75});
 			
+			// resize question header...
 			
-			secondaryDebateButton.setOnClick(onDebateButton);
-			
+							
+			//debateOverlay.update();			
 
-			
-			secondaryDebateButton.y = 410 + opinion.height + 15;
-			secondaryDebateButton.tweenIn();
-			
-			
-			
-			
-			viewDebateButton.tweenIn(1, {y: 1650});	
-			debateStrip.tweenIn();
-			debateOverlay.tweenIn(-1, {y: letsDebateUnderlay.y + letsDebateUnderlay.height + 30});			
-			
 			tweenOutInactive();	
-			
-			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design7);			
 		}
 		
 		private function onCloseDebateOverlay(e:Event):void {
@@ -987,7 +698,7 @@ package com.civildebatewall.kiosk {
 			flagTimerBar.tweenOut(-1, {alpha: 0, y: flagTimerBar.y}); // just fade out 
 			
 			// modify it on the server
-			CivilDebateWall.state.activePost.incrementFlags();
+			
 			
 			flagYesButton.disable();
 			flagYesButton.showOutline(false);
@@ -1576,12 +1287,12 @@ package com.civildebatewall.kiosk {
 			bigButton.setText('SUBMIT THIS DEBATE', true);
 			bigButton.enable();
 			//nametag.setText(CivilDebateWall.state.userName + ' Says:', true);
-			opinion.setText(CivilDebateWall.state.userOpinion);
+			
 
 			opinion.y = stageHeight - 574 - opinion.height; 
 			
 		//	nametag.setBackgroundColor(CivilDebateWall.state.userStanceColorMedium, true); // make instant?
-			opinion.setBackgroundColor(CivilDebateWall.state.userStanceColorLight, true);
+			
 			
 			
 			var buttonRowY:Number = opinion.y - 30 - retakePhotoButton.height;			
@@ -1612,7 +1323,7 @@ package com.civildebatewall.kiosk {
 			questionHeader.tweenIn();
 			
 			bigButton.tweenIn();
-			nametag.tweenIn();
+			
 			opinion.tweenIn();
 			retakePhotoButton.tweenIn();
 			editTextButton.tweenIn();
@@ -1653,7 +1364,7 @@ package com.civildebatewall.kiosk {
 
 			
 			bigButton.tweenOut();
-			nametag.tweenOut();
+			
 			opinion.tweenOut();
 			retakePhotoButton.tweenOut();
 			editTextButton.tweenOut();
@@ -1746,7 +1457,7 @@ package com.civildebatewall.kiosk {
 
 			//question.tweenIn();
 			
-			nametag.tweenIn();
+
 			
 			//opinion.tweenIn(); // TODO fade this out?
 			editOpinion.y = stageHeight - 574 - opinion.height; 			
@@ -1865,20 +1576,17 @@ package com.civildebatewall.kiosk {
 		
 		// =========================================================================
 		
-		
 		// View utilities
-
-
-		
 		private function setTestOverlay(b:Bitmap):void {
 			Kiosk.testOverlay.bitmapData = b.bitmapData.clone();						
 		}	
 		
 
 		private function markAllInactive():void {
-			
 			// other housekeeping, TODO break this into its own function?
 			if(smsCheckTimer != null) smsCheckTimer.stop();					
+			
+			
 			
 			
 			// marks all FIRST LEVEL blocks as inactive
@@ -1888,22 +1596,66 @@ package com.civildebatewall.kiosk {
 				if (this.getChildAt(i) is BlockBase) {				
 					(this.getChildAt(i) as BlockBase).active = false;
 				}
+				
+				
+				// Run on the proxies, too... this is ugly				
+				if (this.getChildAt(i) is BlockBaseTweenable) {				
+					(this.getChildAt(i) as BlockBaseTweenable).active = false;
+				}
+				
+				if (this.getChildAt(i) is BlockBitmapTweenable) {				
+					(this.getChildAt(i) as BlockBitmapTweenable).active = false;
+				}			
+				
+				if (this.getChildAt(i) is BlockTextTweenable) {				
+					(this.getChildAt(i) as BlockTextTweenable).active = false;
+				}
+				
+				
 			}
 		}
 		
 		
 		private function tweenOutInactive(instant:Boolean = false):void {	
 			for (var i:int = 0; i < this.numChildren; i++) {
-				
 				if ((this.getChildAt(i) is BlockBase) && !(this.getChildAt(i) as BlockBase).active) {
-					
 					if (instant)
 						(this.getChildAt(i) as BlockBase).tweenOut(0);
 					else
 						(this.getChildAt(i) as BlockBase).tweenOut();
-					
 				}
 			}
+			
+			
+			// Run on the proxies, too... this is ugly
+			for (i = 0; i < this.numChildren; i++) {
+				if ((this.getChildAt(i) is BlockBaseTweenable) && !(this.getChildAt(i) as BlockBaseTweenable).active) {
+					if (instant)
+						(this.getChildAt(i) as BlockBaseTweenable).tweenOut(0);
+					else
+						(this.getChildAt(i) as BlockBaseTweenable).tweenOut();
+				}
+			}		
+			
+			for (i = 0; i < this.numChildren; i++) {
+				if ((this.getChildAt(i) is BlockBitmapTweenable) && !(this.getChildAt(i) as BlockBitmapTweenable).active) {
+					if (instant)
+						(this.getChildAt(i) as BlockBitmapTweenable).tweenOut(0);
+					else
+						(this.getChildAt(i) as BlockBitmapTweenable).tweenOut();
+				}
+			}			
+			
+			for (i = 0; i < this.numChildren; i++) {
+				if ((this.getChildAt(i) is BlockTextTweenable) && !(this.getChildAt(i) as BlockTextTweenable).active) {
+					if (instant)
+						(this.getChildAt(i) as BlockTextTweenable).tweenOut(0);
+					else
+						(this.getChildAt(i) as BlockTextTweenable).tweenOut();
+				}
+			}						
+			
+			
 		}
 		
 	}
