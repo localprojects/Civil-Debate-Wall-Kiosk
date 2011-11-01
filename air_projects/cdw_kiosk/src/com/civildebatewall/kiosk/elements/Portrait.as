@@ -1,14 +1,14 @@
 package com.civildebatewall.kiosk.elements {
+	import com.civildebatewall.*;
+	import com.civildebatewall.kiosk.blocks.BlockBase;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
 	import flash.display.*;
+	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
-	
-	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
 	
 	
 	
@@ -21,6 +21,12 @@ package com.civildebatewall.kiosk.elements {
 		public function Portrait() {
 			super();
 			init();
+			
+			
+		}
+		
+		private function onActiveDebateChange(e:Event):void {
+			setImage(CivilDebateWall.state.activeThread.firstPost.user.photo);
 		}
 		
 		private function init():void {
@@ -32,7 +38,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			targetImage.alpha = 0;
 			
-			
+			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
 		}
 		
 		public function setImage(i:Bitmap, instant:Boolean = false):void {

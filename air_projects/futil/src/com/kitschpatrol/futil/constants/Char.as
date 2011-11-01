@@ -23,6 +23,7 @@ package com.kitschpatrol.futil.constants {
 		public static const APOSTROPHE:String = RIGHT_SINGLE_QUOTE;
 		public static const LEFT_QUOTE:String = "\u201C";
 		public static const RIGHT_QUOTE:String = "\u201D";
+		public static const ELLIPSES:String = "\u2026";
 		
 	}
 }

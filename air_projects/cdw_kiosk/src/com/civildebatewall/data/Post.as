@@ -1,13 +1,19 @@
 package com.civildebatewall.data {
 	
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.Utilities;
-	import com.kitschpatrol.futil.utilitites.DateUtil;
 	import com.civildebatewall.CivilDebateWall;
-		
+	import com.civildebatewall.Utilities;
+	import com.civildebatewall.kiosk.Kiosk;
+	import com.kitschpatrol.futil.utilitites.DateUtil;
 	
-	public class Post extends Object {
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	
+	
+	
+	public class Post {
+		
+		
 		
 		public static const ORIGIN_KIOSK:String = 'kiosk';
 		public static const ORIGIN_WEB:String = 'web';
@@ -94,24 +100,6 @@ package com.civildebatewall.data {
 		public function set likes(n:uint):void { _likes = n; }
 
 		
-		
-		public function incrementLikes():void {
-			Utilities.postRequest(CivilDebateWall.settings.serverPath + '/api/posts/' + _id + '/like', {}, onLikeUpdated);						
-		}
-		
-		private function onLikeUpdated(r:Object):void {
-			trace("likes updated server side for post " + _id);
-			// TODo bring it back down
-		}
-		
-		public function incrementFlags():void {
-			Utilities.postRequest(CivilDebateWall.settings.serverPath + '/api/posts/' + _id + '/flag', {}, onFlagUpdated);						
-		}		
-		
-		private function onFlagUpdated(r:Object):void {
-			trace("flags updated server side for post " + _id);
-			// TODo bring it back down
-		}
 		
 		
 		public function get flags():uint { return _flags; }

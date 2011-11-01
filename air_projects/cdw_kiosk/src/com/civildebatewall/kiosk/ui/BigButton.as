@@ -3,6 +3,8 @@ package com.civildebatewall.kiosk.ui {
 	import com.civildebatewall.kiosk.blocks.BlockLabel;
 	import com.greensock.*;
 	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.blocks.BlockText;
+	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
 	import flash.display.Bitmap;
@@ -14,10 +16,12 @@ package com.civildebatewall.kiosk.ui {
 	import flash.geom.*;
 	import flash.text.*;
 	
+	import flashx.textLayout.formats.TextAlign;
+	
 	public class BigButton extends ButtonBase	{
 		
-		private var labelText:BlockLabel;
-		private var label:String;
+		public var label:BlockText;
+		
 		private var buttonWidth:Number;
 		private var buttonHeight:Number;
 		private var button:Sprite;		
@@ -34,9 +38,8 @@ package com.civildebatewall.kiosk.ui {
 		public var bottomEdgeOffset:Number;		
 		
 		
-		public function BigButton(buttonLabel:String) {
+		public function BigButton() {
 			super();
-			label = buttonLabel;			
 			init();
 		}
 		
@@ -76,10 +79,20 @@ package com.civildebatewall.kiosk.ui {
 			topPanel.x = 35;
 			
 			// create the button text format
-			labelText = new BlockLabel(label, 36, 0x4c4d4f, 0x000000, Assets.FONT_HEAVY, false);
-			labelText.visible = true;
-			labelText.setPadding(0, 0, 0, 0);
-			GeomUtil.centerWithin(labelText, topPanel);
+			label = new BlockText({
+				textFont: Assets.FONT_BOLD, 
+				textBold: true,
+				textSizePixels: 24,
+				textAlignmentMode: TextAlign.CENTER,
+				textColor: Assets.COLOR_GRAY_85,
+				backgroundAlpha: 0,
+				width: 484,
+				height: 98,
+				alignmentPoint: Alignment.CENTER				
+			});
+			
+
+		
 
 			// add children
 			button.addChild(bottomButtonEdge);
@@ -87,7 +100,7 @@ package com.civildebatewall.kiosk.ui {
 			button.addChild(topPanel);
 			addChild(buttonMask);
 			addChild(button);
-			topPanel.addChild(labelText);
+			topPanel.addChild(label);
 			
 			button.mask = buttonMask;
 			
@@ -97,12 +110,7 @@ package com.civildebatewall.kiosk.ui {
 		
 		// pass through to the label
 		override public function setText(s:String, instant:Boolean = false):void {
-			// find target width
-			var newWidth:Number = labelText.checkWidth(s);
-			labelText.x = (topPanel.width / 2) - (newWidth / 2);
-			labelText.y = (topPanel.height / 2) - (labelText.height / 2);			
-
-			labelText.setText(s, instant);
+			label.text = s;
 		}
 		
 

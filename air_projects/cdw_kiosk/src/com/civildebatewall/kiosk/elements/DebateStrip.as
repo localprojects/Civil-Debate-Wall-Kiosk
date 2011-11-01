@@ -160,7 +160,7 @@ package com.civildebatewall.kiosk.elements {
 			if (scrollField.isClick) {
 				// go to opinion
 				if (activeThumbnail != targetThumbnail) {
-					CivilDebateWall.state.setActiveDebate(targetThumbnail.thread);
+					CivilDebateWall.state.setActiveThread(targetThumbnail.thread);
 				}
 			}
 			
