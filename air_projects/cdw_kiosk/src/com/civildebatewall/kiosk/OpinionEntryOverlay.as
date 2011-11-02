@@ -4,7 +4,10 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.data.Data;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
+	import com.kitschpatrol.futil.utilitites.ColorUtil;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
+	import flash.display.Shape;
 	import flash.events.Event;
 
 	public class OpinionEntryOverlay extends BlockInertialScroll {
@@ -36,21 +39,42 @@ package com.civildebatewall.kiosk {
 				alignmentPoint: Alignment.CENTER,
 				backgroundRadiusTopLeft: 12,
 				backgroundRadiusTopRight: 12,
-				width: 1023
+				width: 1022,
+				height: 188
 			});
 
 			addChild(question);
-		
+			
+			var formUnderlay:Shape = GraphicsUtil.shapeFromSize(1022, 929, ColorUtil.gray(211));
+			formUnderlay.y = question.bottom;
+			addChild(formUnderlay);
+			
+			var nameLabel:BlockText = new BlockText({
+				text: "WHAT IS YOUR NAME?",
+				textFont: Assets.FONT_BOLD,
+				textBold: true,
+				textColor: ColorUtil.gray(79),
+				textSizePixels: 16,
+				letterSpacing: -1,
+				x: 72, 
+				y: 322
+			});
+			
+			addChild(nameLabel);
+			
+			
+			
+			
+			
+			
+			
+
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 		}
 		
 		private function onDataUpdate(e:Event):void {
 			question.text = CivilDebateWall.data.question.text;
 		}
-		
-		
-		
-		
-		
+				
 	}
 }

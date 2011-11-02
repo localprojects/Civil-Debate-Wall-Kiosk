@@ -13,7 +13,9 @@ package {
 	import flash.display.Sprite;
 	import flash.text.Font;
 	
+	import flashx.textLayout.formats.BackgroundColor;
 	import flashx.textLayout.formats.TextAlign;
+	
 	import uk.co.soulwire.gui.SimpleGUI;
 	
 	
@@ -35,12 +37,11 @@ package {
 			
 			// Test Object
 			testBlock = new BlockText({textFont: Assets.FONT_LIGHT,
-				x: 300, y: 300, showRegistrationPoint: true, maxWidth: 10000,
-				maxSizeBehavior: BlockBase.MAX_SIZE_CLIPS,
-				showBorder: true,
-				borderColor: 0xff0000,
-				borderThickness: 5,
-				text: "mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret"});
+				x: 400, y: 600, showRegistrationPoint: true, maxWidth: 10000,
+				//maxSizeBehavior: BlockBase.MAX_SIZE_CLIPS,
+				input: true,
+				backgroundColor: 0xff0000,
+				text: "Let's make this editable"});
 			
 			
 //			testBlock = new TextBlock({text: "Do you feel our public education provides our children with a thorough education these days?",
@@ -104,6 +105,8 @@ package {
 			gui.addSlider(targetObject + ".registrationX", 0, 1, {label: "Registration X"});
 			gui.addSlider(targetObject + ".registrationY", 0, 1, {label: "Registration Y"});
 			gui.addToggle(targetObject + ".showRegistrationPoint", {label: "Show Registration Point"});
+			gui.addToggle(targetObject + ".selectable", {label: "Selectable"});
+			gui.addToggle(targetObject + ".input", {label: "Input"});			
 			gui.addColour(targetObject + ".backgroundColor", {label: "Background Color"});
 			
 			gui.addColumn("TEXT");
