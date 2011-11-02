@@ -17,7 +17,6 @@ package com.kitschpatrol.futil.blocks {
 		private var _radiusBottomRight:Number;
 		private var _radiusBottomLeft:Number;
 				
-		
 		// Background
 		private var _backgroundColor:uint;
 		private var _showBackground:Boolean;

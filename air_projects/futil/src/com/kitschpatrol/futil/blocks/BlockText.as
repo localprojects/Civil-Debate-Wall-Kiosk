@@ -4,7 +4,10 @@ package com.kitschpatrol.futil.blocks {
 	import com.kitschpatrol.futil.constants.Char;
 	
 	import flash.display.BitmapData;
+	import flash.display.FocusDirection;
 	import flash.events.Event;
+	import flash.events.FocusEvent;
+	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.geom.Rectangle;
 	import flash.text.AntiAliasType;
@@ -30,6 +33,7 @@ package com.kitschpatrol.futil.blocks {
 		private var _textFont:String;
 		private var _letterSpacing:Number;
 		private var _leading:Number;
+		private var _maxChars:int;
 		private var _textAlpha:Number;
 		private var _input:Boolean;
 		
@@ -70,6 +74,10 @@ package com.kitschpatrol.futil.blocks {
 		// size caching, automatic singleton?
 		public static var sizeMaps:Object = {};
 		
+		public var onFocus:Vector.<Function>;
+		public var onBlur:Vector.<Function>;
+		public var onInput:Vector.<Function>;
+		
 		// Constructor
 		public function BlockText(params:Object=null)	{
 			//super(null); // get the default block base, we'll pass params laters
@@ -100,6 +108,7 @@ package com.kitschpatrol.futil.blocks {
 			_leading = 0;			
 			_growthMode = MAXIMIZE_WIDTH;
 			_input = false;
+			_maxChars = -1;
 			
 			textField = generateTextField(_text, _textSizePixels);
 
@@ -107,7 +116,12 @@ package com.kitschpatrol.futil.blocks {
 				
 			textSizePixels = _textSizePixels;
 			
-			addChild(textField);			
+			addChild(textField);
+			
+			onFocus = new Vector.<Function>(0);
+			onBlur = new Vector.<Function>(0);
+			onInput = new Vector.<Function>(0);
+			
 			setParams(params); // TODO doesn't update if null? // Get params?
 		}
 		
@@ -154,6 +168,7 @@ package com.kitschpatrol.futil.blocks {
 				tempTextField.wordWrap = false;
 				tempTextField.selectable = false;
 				tempTextField.type = TextFieldType.DYNAMIC;
+				tempTextField.maxChars = -1;
 			}
 			else {
 				tempTextField.autoSize = TextFieldAutoSize.NONE;
@@ -161,7 +176,14 @@ package com.kitschpatrol.futil.blocks {
 				tempTextField.wordWrap = true;
 				tempTextField.selectable = _selectable;
 				tempTextField.type = _input ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
-				if (_input)	tempTextField.addEventListener(Event.CHANGE, onTextInput);
+				if (_input)	{
+					tempTextField.addEventListener(Event.CHANGE, onInputInternal);
+					tempTextField.addEventListener(FocusEvent.FOCUS_IN, onFocusInternal);
+					tempTextField.addEventListener(FocusEvent.FOCUS_OUT, onBlurInternal);
+					this.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, onMouseFocusChangeInternal);
+					this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseFocusInternal);
+				}
+				tempTextField.maxChars = _maxChars;
 			}
 			
 			tempTextField.text = t;
@@ -169,6 +191,8 @@ package com.kitschpatrol.futil.blocks {
 			return tempTextField;
 		}
 		
+		
+
 		
 		// width overrides are used for animation
 		override public function update(contentWidth:Number = -1, contentHeight:Number = -1):void {
@@ -182,11 +206,12 @@ package com.kitschpatrol.futil.blocks {
 					//var depthIndex:int = getChildIndex(textField);
 					
 					if (content.contains(textField)) {
-						// Clean up listener
-						if (textField.hasEventListener(Event.CHANGE)) {
-							textField.removeEventListener(Event.CHANGE, onTextInput);
-						}
-						removeChild(textField);						
+						// Clean up listeners
+						if (textField.hasEventListener(Event.CHANGE)) textField.removeEventListener(Event.CHANGE, onInputInternal);
+						if (textField.hasEventListener(FocusEvent.FOCUS_IN)) textField.removeEventListener(Event.CHANGE, onFocusInternal);
+						if (textField.hasEventListener(FocusEvent.FOCUS_OUT)) textField.removeEventListener(Event.CHANGE, onBlurInternal);
+						if (this.hasEventListener(MouseEvent.MOUSE_DOWN)) this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseFocusInternal);
+						removeChild(textField);
 					}
 					textField = generateTextField();
 					
@@ -623,17 +648,52 @@ package com.kitschpatrol.futil.blocks {
 			textField.selectable = _selectable; // operates directly
 		}
 		
-		private function onTextInput(e:Event):void {
-			trace("input!");
-			_text = textField.text; // keep internal text representation in sync with input
-			trace("Internal text: " + _text);
-			
-			changedBounds = true;
-			update();
-		}		
+		public function get maxChars():int { return _maxChars; }
+		public function set maxChars(value:int):void {
+			_maxChars = value;
+			textField.maxChars = _maxChars;
+		}
+		
+		// read only, convenience
+		public function get charsLeft():int { return textField.maxChars - textField.text.length; }
 		
 		
 
+		
+		// Events		
+		private function onInputInternal(e:Event):void {
+			_text = textField.text; // keep internal text representation in sync with input
+			changedBounds = true;
+			update();
+			executeAll(onInput);
+		}
+		
+		private function onFocusInternal(e:FocusEvent):void {
+			tempEvent = e;
+			executeAll(onFocus);
+			trace("on focus callback");
+		}
+		
+		private function onBlurInternal(e:FocusEvent):void {
+			tempEvent = e;
+			executeAll(onBlur);
+			trace("Field blurred");
+		}
+		
+		// Let the whole block grant focus to an interactive text field 
+		private function onMouseFocusInternal(e:MouseEvent):void {
+			stage.focus = textField;
+			executeAll(onFocus);
+		}
+		
+		
+		// If we're clicking inside our block, don't defocus!
+		private function onMouseFocusChangeInternal(e:FocusEvent):void {
+			if(this.contains(e.relatedObject)) {
+				e.preventDefault();	
+			}
+		}
+		
 
 		// tween plugin overrides
 		public function get textFont():String { return _textFont;	}		

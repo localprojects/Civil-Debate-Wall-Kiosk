@@ -237,6 +237,8 @@ package com.civildebatewall
 
 		
 		// Colors
+		public static const COLOR_RED_SELECTION:uint = ColorUtil.rgb(255, 26, 23);
+		
 		public static const COLOR_YES_EXTRA_LIGHT:uint = ColorUtil.rgb(185, 229, 250); //Utilities.color(109, 207, 246);
 		public static const COLOR_YES_LIGHT:uint = ColorUtil.rgb(0, 185, 255);
 		public static const COLOR_YES_MEDIUM:uint = ColorUtil.rgb(0, 155, 255);
