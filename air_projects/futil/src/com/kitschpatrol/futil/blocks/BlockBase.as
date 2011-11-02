@@ -435,8 +435,7 @@ package com.kitschpatrol.futil.blocks {
 		public function set backgroundAlpha(a:Number):void {
 			background.backgroundAlpha = a;
 			update();
-		}		
-		
+		}
 		
 		public function get showBackground():Boolean { return background.showBackground; }
 		public function set showBackground(show:Boolean):void {
@@ -468,11 +467,18 @@ package com.kitschpatrol.futil.blocks {
 			update();
 		}				
 		
-		public function get paddingMOde():String { return _paddingMode; }
+		public function get paddingMode():String { return _paddingMode; }
 		public function set paddingMode(mode:String):void {
 			_paddingMode = mode;
 			update();
 		}
+		
+		
+		// Convenience
+		public function get left():Number { return x; }
+		public function get top():Number { return y; }
+		public function get right():Number { return x + width; }
+		public function get bottom():Number { return y + height; }		
 		
 		
 		// This class acts as a transparent proxy to the content pane.

@@ -4,10 +4,13 @@ package com.kitschpatrol.futil.blocks {
 	import com.kitschpatrol.futil.constants.Char;
 	
 	import flash.display.BitmapData;
+	import flash.events.Event;
+	import flash.events.TextEvent;
 	import flash.geom.Rectangle;
 	import flash.text.AntiAliasType;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.utils.getTimer;
@@ -28,6 +31,9 @@ package com.kitschpatrol.futil.blocks {
 		private var _letterSpacing:Number;
 		private var _leading:Number;
 		private var _textAlpha:Number;
+		private var _input:Boolean;
+		
+		
 		
 		// TODO Implement this
 		private var _boundingMode:String;
@@ -59,6 +65,7 @@ package com.kitschpatrol.futil.blocks {
 		// update flags
 		private var changedBounds:Boolean;
 		private var changedFormat:Boolean;	
+		private var changedTextField:Boolean;
 		
 		// size caching, automatic singleton?
 		public static var sizeMaps:Object = {};
@@ -71,6 +78,7 @@ package com.kitschpatrol.futil.blocks {
 			textFormat = new TextFormat();			
 			changedBounds = true;
 			changedFormat = true;
+			changedTextField = false;
 			textSizeOffset = new TextSize();
 			
 			// Initialization
@@ -91,6 +99,7 @@ package com.kitschpatrol.futil.blocks {
 			_letterSpacing = 0;
 			_leading = 0;			
 			_growthMode = MAXIMIZE_WIDTH;
+			_input = false;
 			
 			textField = generateTextField(_text, _textSizePixels);
 
@@ -117,9 +126,10 @@ package com.kitschpatrol.futil.blocks {
 			textFormat.size = s;
 			textFormat.bold = _textBold;
 			
+			
 			if (forMeasurement) {
 				textFormat.leading = 0;
-				textFormat.letterSpacing = 0;				
+				textFormat.letterSpacing = 0;
 			}
 			else {
 				textFormat.leading = fieldLeading; // adjusted for white space
@@ -128,31 +138,34 @@ package com.kitschpatrol.futil.blocks {
 			
 			// field is overwritte
 			var tempTextField:TextField = new TextField();
+			
 			tempTextField.defaultTextFormat = textFormat;
 			tempTextField.embedFonts = true;			
-			tempTextField.selectable = _selectable;
 			tempTextField.multiline = true;
 			tempTextField.antiAliasType = AntiAliasType.ADVANCED;
-			
-			
+
 			//tempTextField.mouseEnabled = false;			
 			//tempTextField.gridFitType = GridFitType.PIXEL;			
 			tempTextField.condenseWhite = true;
-			
 
 			if (forMeasurement) {
 				tempTextField.autoSize = TextFieldAutoSize.LEFT;
 				tempTextField.textColor = 0x000000;
-				tempTextField.wordWrap = false;				
+				tempTextField.wordWrap = false;
+				tempTextField.selectable = false;
+				tempTextField.type = TextFieldType.DYNAMIC;
 			}
 			else {
 				tempTextField.autoSize = TextFieldAutoSize.NONE;
 				tempTextField.textColor = _textColor;
 				tempTextField.wordWrap = true;
+				tempTextField.selectable = _selectable;
+				tempTextField.type = _input ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
+				if (_input)	tempTextField.addEventListener(Event.CHANGE, onTextInput);
 			}
 			
 			tempTextField.text = t;
-
+			
 			return tempTextField;
 		}
 		
@@ -160,6 +173,29 @@ package com.kitschpatrol.futil.blocks {
 		// width overrides are used for animation
 		override public function update(contentWidth:Number = -1, contentHeight:Number = -1):void {
 			if (!lockUpdates) {
+				
+				if (changedTextField) {
+					trace("generating new text field");
+					lockUpdates = true; // make sure we don't recurse infinitely
+					
+					// Have to remove and -re-add to the display list
+					//var depthIndex:int = getChildIndex(textField);
+					
+					if (content.contains(textField)) {
+						// Clean up listener
+						if (textField.hasEventListener(Event.CHANGE)) {
+							textField.removeEventListener(Event.CHANGE, onTextInput);
+						}
+						removeChild(textField);						
+					}
+					textField = generateTextField();
+					
+					addChild(textField);
+					
+					changedTextField = false;
+					lockUpdates = false;
+					changedBounds = true; // have to recalculate bounds
+				}
 				
 				// TODO empty text is NOT width zero!!!!
 				if (changedFormat) {
@@ -171,7 +207,7 @@ package com.kitschpatrol.futil.blocks {
 				
 				
 				if (changedBounds) {
-					trace("changed bounds");
+					//trace("changed bounds");
 					var start:int = getTimer();
 					
 					if ((_minWidth == _maxWidth) && (_growthMode != MAXIMIZE_HEIGHT)) {
@@ -198,7 +234,7 @@ package com.kitschpatrol.futil.blocks {
 							textField.text = textField.text;
 							
 							var desiredLines:int = int((_leading + (_minHeight - _padding.vertical)) / (_leading + _textSizePixels));
-							trace("Desired lines for " + textField.text + ": " + desiredLines);
+							// trace("Desired lines for " + textField.text + ": " + desiredLines);
 							//desiredLines = 3;
 							
 							// roughly divide the text width to get started
@@ -258,7 +294,7 @@ package com.kitschpatrol.futil.blocks {
 					changedBounds = false;
 					
 					var elapsed:int = getTimer() - start;
-					trace("Changing bounds took " + elapsed + " ms");
+					// trace("Changing bounds took " + elapsed + " ms");
 					
 				}
 				
@@ -566,6 +602,37 @@ package com.kitschpatrol.futil.blocks {
 			changedBounds = true;
 			update();
 		}		
+		
+		
+		
+		
+		
+		// text input
+		
+		public function get input():Boolean { return _input; }
+		public function set input(value:Boolean):void {
+			_input = value;
+			if (_input) selectable = true; // has to be selectable if it's interactive				
+			changedTextField = true;
+			update();
+		}
+		
+		public function get selectable():Boolean { return _selectable; }
+		public function set selectable(value:Boolean):void {
+			_selectable = value;
+			textField.selectable = _selectable; // operates directly
+		}
+		
+		private function onTextInput(e:Event):void {
+			trace("input!");
+			_text = textField.text; // keep internal text representation in sync with input
+			trace("Internal text: " + _text);
+			
+			changedBounds = true;
+			update();
+		}		
+		
+		
 
 
 		// tween plugin overrides
