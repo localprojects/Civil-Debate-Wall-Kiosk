@@ -4,10 +4,10 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.civildebatewall.kiosk.blocks.BlockBitmapPlus;
 	import com.civildebatewall.kiosk.blocks.BlockParagraph;
-	import com.civildebatewall.kiosk.ui.BalloonButton;
+	import com.civildebatewall.kiosk.ui.BalloonButtonOld;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	
@@ -15,13 +15,13 @@ package com.civildebatewall.kiosk.elements {
 	import flash.display.Shape;
 	import flash.events.Event;
 	
-	public class SuperlativesPortrait extends BlockBase {
+	public class SuperlativesPortrait extends OldBlockBase {
 		
 		private var portrait:Portrait;
 		private var quoteLeft:BlockBitmapPlus;
 		private var quoteRight:BlockBitmapPlus;		
 		private var theMask:Shape;
-		private var debateButton:BalloonButton;
+		private var debateButton:BalloonButtonOld;
 		private var nametag:NameTag;
 		private var opinion:BlockParagraph;
 		
@@ -57,7 +57,7 @@ package com.civildebatewall.kiosk.elements {
 			quoteRight.scaleY = 0.5;			
 			addChild(quoteRight);
 			
-			debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
+			debateButton = new BalloonButtonOld(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
 			debateButton.setDefaultTweenIn(1, {x: 361, y: 368});
 			debateButton.setDefaultTweenOut(1, {x: width + 10, y: 368});
 			debateButton.scaleX = 0.75;

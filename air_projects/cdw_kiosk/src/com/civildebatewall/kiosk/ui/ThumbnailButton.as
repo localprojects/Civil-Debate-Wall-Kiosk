@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk.ui {
 	import com.civildebatewall.*;
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.civildebatewall.kiosk.blocks.BlockLabel;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.Thread;
@@ -13,7 +13,7 @@ package com.civildebatewall.kiosk.ui {
 	import flash.display.*;
 	import flash.text.*;
 	
-	public class ThumbnailButton extends BlockBase {
+	public class ThumbnailButton extends OldBlockBase {
 	
 		private var _thread:Thread;
 		private var _backgroundColor:uint;

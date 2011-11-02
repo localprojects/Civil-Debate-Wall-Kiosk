@@ -1,9 +1,9 @@
 package com.civildebatewall.staging.elements {
 	import com.bit101.charts.PieChart;
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.staging.futilProxies.BlockBaseTweenable;
 	import com.greensock.layout.ScaleMode;
 	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
@@ -12,7 +12,7 @@ package com.civildebatewall.staging.elements {
 	import flash.display.JointStyle;
 	import flash.display.Shape;
 	
-	public class StatsButton extends BlockBaseTweenable {
+	public class StatsButton extends BlockBase {
 		
 		private var yesRing:Shape;
 		private var noRing:Shape;

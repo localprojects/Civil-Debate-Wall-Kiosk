@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.civildebatewall.kiosk.ui.*;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.Math2;
@@ -14,7 +14,7 @@ package com.civildebatewall.kiosk.elements {
 	import flash.events.MouseEvent;
 	
 	
-	public class DebateStrip extends BlockBase {
+	public class DebateStrip extends OldBlockBase {
 		
 		private var scrollField:InertialScrollField;
 		private var activeThumbnail:ThumbnailButton;
@@ -29,7 +29,6 @@ package com.civildebatewall.kiosk.elements {
 			// overdraw for a more friendly hit-zone
 			scrollField = new InertialScrollField(980, 140, InertialScrollField.SCROLL_X);
 			scrollField.x = 50;
-			scrollField.setBackgroundColor(0xff0000, 0.0);
 			scrollField.addEventListener(InertialScrollField.EVENT_NOT_CLICK, onNotClick);
 			
 			// background strip

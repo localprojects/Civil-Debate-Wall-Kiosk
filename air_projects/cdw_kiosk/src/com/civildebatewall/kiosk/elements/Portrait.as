@@ -1,6 +1,6 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
@@ -12,7 +12,7 @@ package com.civildebatewall.kiosk.elements {
 	
 	
 	
-	public class Portrait extends BlockBase {
+	public class Portrait extends OldBlockBase {
 		
 		private var image:Bitmap;
 		private var targetImage:Bitmap;

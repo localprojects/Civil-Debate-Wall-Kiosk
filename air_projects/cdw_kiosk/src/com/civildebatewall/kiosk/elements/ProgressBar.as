@@ -5,9 +5,9 @@ package com.civildebatewall.kiosk.elements {
 	import flash.display.Shape;
 	
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	
-	public class ProgressBar extends BlockBase {
+	public class ProgressBar extends OldBlockBase {
 		
 		private var _barWidth:Number;
 		private var _barHeight:Number;		

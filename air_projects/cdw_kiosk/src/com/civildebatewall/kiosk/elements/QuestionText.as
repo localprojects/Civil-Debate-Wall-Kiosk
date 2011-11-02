@@ -6,9 +6,9 @@ package com.civildebatewall.kiosk.elements {
 	import flash.text.*;
 	
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	
-	public class QuestionText extends BlockBase {
+	public class QuestionText extends OldBlockBase {
 		
 		private var questionText:TextField;
 		private var questionTextColor:uint;

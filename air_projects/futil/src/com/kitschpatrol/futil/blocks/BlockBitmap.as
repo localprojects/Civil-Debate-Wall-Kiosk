@@ -21,5 +21,8 @@ package com.kitschpatrol.futil.blocks {
 			return b;
 		}
 		
+		override public function get width():Number { return contentWidth; };
+		override public function get height():Number { return contentHeight; };
+		
 	}
 }

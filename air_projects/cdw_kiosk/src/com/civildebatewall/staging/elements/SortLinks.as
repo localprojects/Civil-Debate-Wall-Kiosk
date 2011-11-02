@@ -1,8 +1,9 @@
 package com.civildebatewall.staging.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.staging.futilProxies.BlockBaseTweenable;
+	
 	import com.greensock.TweenMax;
+	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	
 	import flash.display.Bitmap;
@@ -11,7 +12,7 @@ package com.civildebatewall.staging.elements {
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	
-	public class SortLinks extends BlockBaseTweenable	{
+	public class SortLinks extends BlockBase	{
 		
 		private var sortedText:Bitmap;
 		private var recentText:SortLink;

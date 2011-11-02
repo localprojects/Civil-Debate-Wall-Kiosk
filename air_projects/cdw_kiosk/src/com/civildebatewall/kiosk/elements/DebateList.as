@@ -1,12 +1,12 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.kiosk.Kiosk;
 	import com.civildebatewall.Utilities;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.events.Event;
 	
-	public class DebateList extends BlockBase {
+	public class DebateList extends OldBlockBase {
 		
 		private const numItems:int = 5;
 		private const yPadding:Number = 15;

@@ -11,7 +11,7 @@ package com.civildebatewall.kiosk.blocks {
 	import com.civildebatewall.Assets;
 	
 	// multi-line block text
-	public class BlockLabel extends BlockBase {
+	public class BlockLabel extends OldBlockBase {
 		
 		protected var _text:String;
 		protected var _textSize:Number;

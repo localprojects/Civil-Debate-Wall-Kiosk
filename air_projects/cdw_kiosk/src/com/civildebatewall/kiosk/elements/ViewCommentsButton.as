@@ -2,7 +2,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-	import com.civildebatewall.staging.futilProxies.BlockTextTweenable;
+	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.constants.Char;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
@@ -12,7 +12,7 @@ package com.civildebatewall.kiosk.elements {
 	
 	import flashx.textLayout.formats.TextAlign;
 	
-	public class ViewCommentsButton extends BlockTextTweenable	{
+	public class ViewCommentsButton extends BlockText	{
 		public function ViewCommentsButton(params:Object=null) {
 			super({
 				textFont: Assets.FONT_REGULAR,
@@ -44,7 +44,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			
 			
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.debateOverlayView);
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.threadView);
 		}
 		
 	

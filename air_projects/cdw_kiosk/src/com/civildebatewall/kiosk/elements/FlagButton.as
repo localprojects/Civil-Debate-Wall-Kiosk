@@ -2,9 +2,9 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-	import com.civildebatewall.staging.futilProxies.BlockBaseTweenable;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Back;
+	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.constants.Alignment;
 	
 	import flash.display.Bitmap;
@@ -12,7 +12,7 @@ package com.civildebatewall.kiosk.elements {
 	import flash.events.MouseEvent;
 	
 	
-	public class FlagButton extends BlockBaseTweenable {
+	public class FlagButton extends BlockBase {
 		
 		private var icon:Bitmap;
 		

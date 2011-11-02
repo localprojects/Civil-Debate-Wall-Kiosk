@@ -99,7 +99,7 @@ package com.civildebatewall {
 			var selection:String = e.target.selectedItem;
 
 			if (selection == 'Home') CivilDebateWall.kiosk.view.homeView();
-			if (selection == 'Debate Overlay') CivilDebateWall.kiosk.view.debateOverlayView();
+			if (selection == 'Debate Overlay') CivilDebateWall.kiosk.view.threadView();
 			if (selection == 'Pick Stance') CivilDebateWall.kiosk.view.pickStanceView();
 			if (selection == 'SMS Prompt') CivilDebateWall.kiosk.view.smsPromptView();
 			if (selection == 'Photo Booth') CivilDebateWall.kiosk.view.photoBoothView();

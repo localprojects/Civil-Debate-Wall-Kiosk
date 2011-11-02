@@ -3,7 +3,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.adobe.images.*;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.civildebatewall.kiosk.camera.*;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.Math2;
@@ -13,7 +13,7 @@ package com.civildebatewall.kiosk.elements {
 	import flash.geom.*;
 	import flash.media.*;
 	
-	public class PortraitCamera extends BlockBase {
+	public class PortraitCamera extends OldBlockBase {
 		
 		public var cameraBitmap:Bitmap;
 		private var onFaceShutter:Function;

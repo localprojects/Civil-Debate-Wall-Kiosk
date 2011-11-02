@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.civildebatewall.kiosk.blocks.BlockLabelBar;
 	import com.civildebatewall.kiosk.ui.BlockButton;
 	import com.civildebatewall.kiosk.ui.IconButton;
@@ -13,7 +13,7 @@ package com.civildebatewall.kiosk.elements {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	public class StatsOverlay extends BlockBase {
+	public class StatsOverlay extends OldBlockBase {
 		
 		// vote bar
 		private var voteTitleBar:BlockLabelBar;
@@ -101,7 +101,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			wordSearchResults = new WordSearchResults();
 			wordSearchResults.setDefaultTweenIn(1, {alpha: 1, x:0, y: 702});
-			wordSearchResults.setDefaultTweenOut(1, {alpha: 1, x:0, y: BlockBase.OFF_BOTTOM_EDGE});
+			wordSearchResults.setDefaultTweenOut(1, {alpha: 1, x:0, y: OldBlockBase.OFF_BOTTOM_EDGE});
 			wordSearchResults.scrollField.scrollSheet.addEventListener(SearchResult.EVENT_GOTO_DEBATE, onGoToDebate, true);
 			wordSearchResults.scrollField.scrollSheet.addEventListener(Comment.EVENT_FLAG, onFlag, true);			
 			wordSearchResults.scrollField.scrollSheet.addEventListener(Comment.EVENT_BUTTON_DOWN, onDown, true);
@@ -154,12 +154,12 @@ package com.civildebatewall.kiosk.elements {
 			
 			mostDebatedList = new DebateList();
 			mostDebatedList.setDefaultTweenIn(1, {x: 519, y: 705});
-			mostDebatedList.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 705});			
+			mostDebatedList.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 705});			
 			addChild(mostDebatedList);
 			
 			mostLikedList = new DebateList();
 			mostLikedList.setDefaultTweenIn(1, {x: 519, y: 705});
-			mostLikedList.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 705});			
+			mostLikedList.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 705});			
 			addChild(mostLikedList);			
 			
 			homeButton = new BlockButton(1022, 63, 0x000000, 'BACK TO DEBATE', 34, 0xffffff, Assets.FONT_HEAVY);
@@ -422,8 +422,8 @@ package com.civildebatewall.kiosk.elements {
 			for (var i:int = 0; i < this.numChildren; i++) {
 				//if ((this.getChildAt(i) is BlockBase) && (this.getChildAt(i).visible)) {
 				// attempt to fix blank screen issue....
-				if (this.getChildAt(i) is BlockBase) {				
-					(this.getChildAt(i) as BlockBase).active = false;
+				if (this.getChildAt(i) is OldBlockBase) {				
+					(this.getChildAt(i) as OldBlockBase).active = false;
 				}
 			}
 		}
@@ -432,12 +432,12 @@ package com.civildebatewall.kiosk.elements {
 		private function tweenOutInactive(instant:Boolean = false):void {	
 			for (var i:int = 0; i < this.numChildren; i++) {
 				
-				if ((this.getChildAt(i) is BlockBase) && !(this.getChildAt(i) as BlockBase).active) {
+				if ((this.getChildAt(i) is OldBlockBase) && !(this.getChildAt(i) as OldBlockBase).active) {
 					
 					if (instant)
-						(this.getChildAt(i) as BlockBase).tweenOut(0);
+						(this.getChildAt(i) as OldBlockBase).tweenOut(0);
 					else
-						(this.getChildAt(i) as BlockBase).tweenOut();
+						(this.getChildAt(i) as OldBlockBase).tweenOut();
 					
 				}
 			}

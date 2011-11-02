@@ -1,4 +1,7 @@
 package com.civildebatewall.kiosk.ui {
+	import com.civildebatewall.*;
+	import com.civildebatewall.kiosk.Kiosk;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.greensock.*;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
@@ -13,10 +16,6 @@ package com.civildebatewall.kiosk.ui {
 	import flash.text.*;
 	import flash.ui.Mouse;
 	import flash.utils.getTimer;
-	
-	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
 	
 	public class InertialScrollField extends Sprite {
 		
@@ -36,11 +35,8 @@ package com.civildebatewall.kiosk.ui {
 		public var xMax:Number = Number.MAX_VALUE;
 		public var yMin:Number = Number.MIN_VALUE;		
 		public var yMax:Number = Number.MAX_VALUE;
-		
-		private var _backgroundColor:uint;
-		private var _backgroundAlpha:Number;	
+			
 		private var _scrollAllowed:Boolean;
-		
 		
 		private var scrollMask:Shape;
 		private var dragBounds:Rectangle;
@@ -69,13 +65,14 @@ package com.civildebatewall.kiosk.ui {
 		private var YOverlap:Number;		
 		private var xOverlap:Number;
 		
+
+		
+		
+		
 		public var isClick:Boolean; // clicking through the pane, else it's a scroll
 		
 		public function InertialScrollField(containerWidth:Number, containerHeight:Number, scrollAxis:String = SCROLL_Y) {
 			super();
-			
-			_backgroundColor = 0xffffff;
-			_backgroundAlpha = 1.0;			
 			
 			scrollSheet = new Sprite();
 			addChild(scrollSheet);
@@ -106,7 +103,7 @@ package com.civildebatewall.kiosk.ui {
 			_containerHeight = containerHeight;
 			
 			this.graphics.clear();
-			this.graphics.beginFill(_backgroundColor, _backgroundAlpha);
+			this.graphics.beginFill(0xff0000, 1);
 			this.graphics.drawRect(0, 0, _containerWidth, _containerHeight);
 			this.graphics.endFill();
 			
@@ -279,12 +276,6 @@ package com.civildebatewall.kiosk.ui {
 		public function set scrollAllowed(b:Boolean):void {
 			_scrollAllowed = b;
 		}			
-		
-		public function setBackgroundColor(c:uint, a:Number = 1.0):void {
-			_backgroundColor = c;
-			_backgroundAlpha = a;
-			setContainerSize(_containerWidth, _containerHeight);			
-		}
 		
 		public function scrollTo(x:Number, y:Number):void {
 			TweenMax.to(scrollSheet, 1, {x: x, y: y, ease: Quart.easeInOut, roundProps:['x']});

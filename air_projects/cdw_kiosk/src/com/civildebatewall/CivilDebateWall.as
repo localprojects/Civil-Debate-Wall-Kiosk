@@ -11,6 +11,7 @@ package com.civildebatewall {
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
 	import com.kitschpatrol.futil.tweenPlugins.BackgroundColorPlugin;
+	import com.kitschpatrol.futil.tweenPlugins.FutilBlockPlugin;
 	import com.kitschpatrol.futil.tweenPlugins.NamedXPlugin;
 	import com.kitschpatrol.futil.tweenPlugins.NamedYPlugin;
 	import com.kitschpatrol.futil.tweenPlugins.TextColorPlugin;
@@ -43,10 +44,9 @@ package com.civildebatewall {
 			TweenPlugin.activate([ThrowPropsPlugin]);			
 			TweenPlugin.activate([CacheAsBitmapPlugin]);	
 			TweenPlugin.activate([TransformAroundCenterPlugin]);
-			TweenPlugin.activate([NamedXPlugin]);
-			TweenPlugin.activate([NamedYPlugin]);
-			TweenPlugin.activate([BackgroundColorPlugin]);
-			TweenPlugin.activate([TextColorPlugin]);
+
+			// Futil plugins
+			TweenPlugin.activate([FutilBlockPlugin]);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}

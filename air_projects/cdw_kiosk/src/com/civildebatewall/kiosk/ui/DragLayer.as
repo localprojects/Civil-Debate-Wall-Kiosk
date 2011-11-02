@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk.ui {
 	
 	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
@@ -11,7 +11,7 @@ package com.civildebatewall.kiosk.ui {
 	import flash.events.*;
 
 	
-	public class DragLayer extends BlockBase {
+	public class DragLayer extends OldBlockBase {
 		private var mouseDown:Boolean;		
 		private var startX:int;
 		private var lastX:int;

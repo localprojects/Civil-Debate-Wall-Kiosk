@@ -1,6 +1,6 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.civildebatewall.data.Word;
 	import com.civildebatewall.kiosk.ui.WordButton;
 	import com.greensock.TweenMax;
@@ -10,7 +10,7 @@ package com.civildebatewall.kiosk.elements {
 	
 	import flash.events.*;
 	
-	public class WordCloud extends BlockBase {
+	public class WordCloud extends OldBlockBase {
 		
 		// Events
 		public static const EVENT_WORD_SELECTED:String = "eventWordSelected";

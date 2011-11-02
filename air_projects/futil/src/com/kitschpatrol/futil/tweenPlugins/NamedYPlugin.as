@@ -26,16 +26,21 @@ package com.kitschpatrol.futil.tweenPlugins {
 			if (!(target is DisplayObject) || !(value is String)) return false;
 			
 			var targetY:Number;
+			var targetHeight:Number = target.height;
+			
+			// fix for block dimension weirdness?
+			//if (target is BlockBase) targetHeight = target.contentHeight;
+			
 	
 			switch (value) {
 				case Alignment.OFF_STAGE_TOP:
-					targetY = -target.height - padding;
+					targetY = -targetHeight - padding;
 					break;				
 				case Alignment.OFF_STAGE_BOTTOM:
 					targetY = target.stage.stageHeight + padding;
 					break;
 				case Alignment.CENTER_STAGE:
-					targetY = (target.stage.stageHeight - target.height) / 2;
+					targetY = (target.stage.stageHeight - targetHeight) / 2;
 					break;				
 				default:
 					// Must have been a string for a different reason

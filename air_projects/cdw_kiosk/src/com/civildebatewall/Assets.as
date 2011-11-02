@@ -31,6 +31,14 @@ package com.civildebatewall
 		public static function getStatsButtonCenter():Bitmap { return new statsButtonCenterClass() as Bitmap; };
 		public static const statsButtonCenter:Bitmap = getStatsButtonCenter();
 		
+		[Embed(source = '/assets/graphics/balloonButtonBackground.png')] private static const balloonButtonBackgroundClass:Class;
+		public static function getBalloonButtonBackground():Bitmap { return new balloonButtonBackgroundClass() as Bitmap; };
+		public static const balloonButtonBackground:Bitmap = getBalloonButtonBackground();
+		
+		[Embed(source = '/assets/graphics/balloonButtonText.png')] private static const balloonButtonTextClass:Class;
+		public static function getBalloonButtonText():Bitmap { return new balloonButtonTextClass() as Bitmap; };
+		public static const balloonButtonText:Bitmap = getBalloonButtonText();		
+		
 		[Embed(source = '/assets/graphics/sortedByText.png')] private static const sortedByTextClass:Class;
 		public static function getSortedByText():Bitmap { return new sortedByTextClass() as Bitmap; };
 		public static const sortedByText:Bitmap = getSortedByText();

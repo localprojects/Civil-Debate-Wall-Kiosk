@@ -1,7 +1,8 @@
 package com.civildebatewall.kiosk.elements {
 
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.staging.futilProxies.BlockTextTweenable;
+	
+	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.blocks.Padding;
 	import com.kitschpatrol.futil.constants.Alignment;
 	
@@ -9,7 +10,7 @@ package com.civildebatewall.kiosk.elements {
 	import flash.text.*;
 
 	
-	public class NameTag extends BlockTextTweenable {
+	public class NameTag extends BlockText {
 		
 		public function NameTag() {
 			super({

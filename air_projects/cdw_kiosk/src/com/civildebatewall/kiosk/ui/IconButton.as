@@ -4,7 +4,7 @@ package com.civildebatewall.kiosk.ui {
 	import flash.text.*;
 	
 	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	
 	
 	

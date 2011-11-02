@@ -1,7 +1,11 @@
 package com.kitschpatrol.futil.blocks {
 	
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.constants.Alignment;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
+	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
@@ -9,8 +13,6 @@ package com.kitschpatrol.futil.blocks {
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.ui.Mouse;
 	import flash.utils.Timer;
 	
 	// Nested display object approach to registration management.
@@ -28,8 +30,8 @@ package com.kitschpatrol.futil.blocks {
 		
 		// Hidden children keep things in alignment while presenting
 		// a pure display object container elsewhere.
-		internal var content:Sprite;
-		internal var background:BlockShape; // note special block shape class for background and border
+		protected var content:Sprite;
+		protected var background:BlockShape; // note special block shape class for background and border
 		private var registrationMarker:Shape;
 
 		internal var _padding:Padding; // Padding, note convenience getters and setters for all, top/bottom, and left/right
@@ -58,7 +60,14 @@ package com.kitschpatrol.futil.blocks {
 		private var _contentCrop:Padding;
 		
 		
-		internal var lockUpdates:Boolean; // prevents update from firing... useful when queueing a bunch of changes // TODO getter and setter?		
+		// TODO?
+		//private var _constrainScroll:Boolean; // whether or not we can scroll content beyond the boundaries of the container
+		
+		
+		
+		
+		
+		protected var lockUpdates:Boolean; // prevents update from firing... useful when queueing a bunch of changes // TODO getter and setter?		
 	
 		public function BlockBase(params:Object = null)	{
 			//super();
@@ -124,10 +133,7 @@ package com.kitschpatrol.futil.blocks {
 				
 				lockUpdates = false;
 			}
-			
-			
-			// update regardless
-			update();
+			update(); // update regardless
 		}
 		
 		
@@ -143,8 +149,6 @@ package com.kitschpatrol.futil.blocks {
 					// only if needed
 					background.width = Math2.clamp(contentWidth - _contentCrop.horizontal, _minWidth, _maxWidth + _padding.horizontal) + _padding.horizontal; // stretch max for padding
 					background.height = Math2.clamp(contentHeight - _contentCrop.vertical, _minHeight, _maxHeight + _padding.vertical) + _padding.vertical;
-				
-					
 					
 					// Compensate for padding, which always accumulates on the outsize of the content
 					content.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
@@ -160,7 +164,7 @@ package com.kitschpatrol.futil.blocks {
 					background.width = Math2.clamp(contentWidth - _contentCrop.horizontal + _padding.horizontal, _minWidth, _maxWidth); // do not stretch max for padding
 					background.height = Math2.clamp(contentHeight - _contentCrop.vertical + _padding.vertical, _minHeight, _maxHeight);
 					
-					// Compensate for padding, which always accumulates on the outsize of the content
+					// Compensate for padding, which always accumulates on the inside of the block
 					content.x =  -(_registrationPoint.x * background.width) + _padding.left;
 					content.y = -(_registrationPoint.y * background.height) + _padding.top;
 					
@@ -178,9 +182,17 @@ package com.kitschpatrol.futil.blocks {
 				content.x -= _contentCrop.left;
 				content.y -= _contentCrop.top;
 				
+				// Update the mask if needed
+				if (_maxSizeBehavior == BlockBase.MAX_SIZE_CLIPS) {
+					clippingMask.x = background.x + _padding.left;
+					clippingMask.y = background.y + _padding.top;
+					clippingMask.width = background.width - _padding.horizontal;
+					clippingMask.height = background.height - _padding.vertical;
+				}
+				
 				// Hilite the content area for debug
-//				content.graphics.clear();
-//				content.graphics.beginFill(0xfff000);
+// content.graphics.clear();
+// content.graphics.beginFill(0xfff000);
 //				content.graphics.drawRect(0, 0, content.width, content.height);
 //				content.graphics.endFill();
 				
@@ -221,37 +233,64 @@ package com.kitschpatrol.futil.blocks {
 			update();
 		}
 		
-		public function get registrationPointX():Number { return _registrationPoint.x; }
-		public function set registrationPointX(value:Number):void {
+		public function get registrationX():Number { return _registrationPoint.x; }
+		public function set registrationX(value:Number):void {
 			registrationPoint = new Point(value, _registrationPoint.y); 			
 		}
 		
-		public function get registrationPointY():Number { return _registrationPoint.y; }
-		public function set registrationPointY(value:Number):void {
+		public function get registrationY():Number { return _registrationPoint.y; }
+		public function set registrationY(value:Number):void {
 			registrationPoint = new Point(_registrationPoint.x, value); 
 		}		
 				
 		
 
-		// Content alignment
+		// Content alignment within the container
 		public function get alignmentPoint():Point { return _alignmentPoint; }
 		public function set alignmentPoint(point:Point):void {
-			trace("Set point to: " + point);
 			_alignmentPoint = point.clone();
 			update();
 		}
 		
-		public function get alignmentPointX():Number { return _alignmentPoint.x; }
-		public function set alignmentPointX(value:Number):void {
+		public function get alignmentX():Number { return _alignmentPoint.x; }
+		public function set alignmentX(value:Number):void {
 			_alignmentPoint.x = value;
 			alignmentPoint = _alignmentPoint; 
 		}
 		
-		public function get alignmentPointY():Number { return _alignmentPoint.y; }
-		public function set alignmentPointY(value:Number):void {
+		public function get alignmentY():Number { return _alignmentPoint.y; }
+		public function set alignmentY(value:Number):void {
 			_alignmentPoint.y = value;
 			alignmentPoint = _alignmentPoint; 
+		}
+		
+		// scrolling is a different way of thinking about the alignment point
+		public function get scrollX():Number {
+			return (contentWidth - (background.width - _padding.horizontal)) * _alignmentPoint.x;
+		}
+		
+		public function set scrollX(pixels:Number):void { 			
+			alignmentX = pixels / (contentWidth - (background.width - _padding.horizontal));			
+		}
+		
+		public function get maxScrollX():Number {
+			return (contentWidth - (background.width - _padding.horizontal));
 		}		
+		
+		public function get scrollY():Number {
+			return (contentHeight - (background.height - _padding.vertical)) * _alignmentPoint.y;
+		}
+		
+		public function set scrollY(pixels:Number):void { 			
+			alignmentY = pixels / (contentHeight - (background.height - _padding.vertical));			
+		}		
+		
+		public function get maxScrollY():Number {
+			return (contentHeight - (background.height - _padding.vertical));
+		}
+		
+
+		
 		
 		
 
@@ -285,10 +324,28 @@ package com.kitschpatrol.futil.blocks {
 		}		
 		
 		
+		protected var clippingMask:Shape;
+		
 		// TODO, implement, then tween plugin for this?
 		public function get maxSizeBehavior():String { return _maxSizeBehavior; }
 		public function set maxSizeBehavior(behavior:String):void {
+			
+			
 			_maxSizeBehavior = behavior;
+			
+			if (_maxSizeBehavior == MAX_SIZE_CLIPS) {
+				// add the mask
+				clippingMask = GraphicsUtil.shapeFromSize(10, 10);
+				super.addChild(clippingMask);
+				content.mask = clippingMask;
+				
+			}
+			else {
+				removeChild(clippingMask);
+			}
+			
+			
+			
 			update();
 		}	
 		
@@ -501,11 +558,8 @@ package com.kitschpatrol.futil.blocks {
 		private function onStageUpInternal(e:MouseEvent):void {
 			tempEvent = e;
 			
-			if (!locked) {
-				
-	
-				
-								
+			// note mouse enabled check! useful for blocking clickthrough in inertial scroll fields
+			if (!locked && mouseEnabled) {
 				stage.removeEventListener(MouseEvent.MOUSE_UP, onStageUpInternal);
 				
 				executeAll(onStageUp);
@@ -539,12 +593,8 @@ package com.kitschpatrol.futil.blocks {
 				functions[i](tempEvent);
 			}			
 		}
-		//-------------
 		
 		
-
-		
-
 		// Overrides to proxy out container.
 		override public function addChild(child:DisplayObject):DisplayObject { return content.addChild(child);	}
 		override public function addChildAt(child:DisplayObject, index:int):DisplayObject { return content.addChildAt(child, index); }
@@ -556,5 +606,87 @@ package com.kitschpatrol.futil.blocks {
 		override public function setChildIndex(child:DisplayObject, index:int):void { content.setChildIndex(child, index); }
 		override public function swapChildren(child1:DisplayObject, child2:DisplayObject):void { content.swapChildren(child1, child2); }
 		override public function swapChildrenAt(index1:int, index2:int):void { content.swapChildrenAt(index1, index2); }
+
+		//-------------
+		
+		
+		
+		
+		
+		// Animation stuff for CDW... this breaks Futil's the tween engine agnostic approach  
+		// Multiple inheritance sure would be nice...
+		// Defining stuff here is ugly, but keeps it out of the constructors
+		private var defaultTweenVars:Object = {cacheAsBitmap: true};
+		private var defaultTweenInVars:Object = ObjectUtil.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenIn, onComplete: afterTweenIn});
+		private var defaultTweenOutVars:Object = ObjectUtil.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenOut, onComplete: afterTweenOut});
+		private var defaultDuration:Number = 1;
+		private var defaultInDuration:Number = defaultDuration;
+		private var defaultOutDuration:Number = defaultDuration;
+		public var active:Boolean = false;
+		
+		public function setDefaultTweenIn(duration:Number, params:Object):void {
+			defaultInDuration = duration;
+			defaultTweenInVars = ObjectUtil.mergeObjects(defaultTweenInVars, params);
+		}
+		
+		public function setDefaultTweenOut(duration:Number, params:Object):void {
+			defaultOutDuration = duration;
+			defaultTweenOutVars = ObjectUtil.mergeObjects(defaultTweenOutVars, params);
+		}				
+		
+		// A little tweening abstraction... sets overridable default parameters
+		// manages visibility / invisibility
+		protected function beforeTweenIn():void {
+			this.visible = true;
+			this.mouseEnabled = true;
+			this.mouseChildren = true;			
+		}
+		
+		protected function afterTweenIn():void {
+			// override me
+		}		
+		
+		protected function beforeTweenOut():void {
+			// override me
+			this.mouseEnabled = false;
+			this.mouseChildren = false;			
+		}
+		
+		protected function afterTweenOut():void {
+			this.visible = false;
+			
+			// restore position so overriden out tweens restart from their canonical location
+			defaultTweenOutVars.onComplete = null;
+			
+			TweenMax.to(this, 0, defaultTweenOutVars); // note that we have to preprocess again othwerise it will try to tween to the name shortcuts
+			defaultTweenOutVars.onComplete = afterTweenOut;
+		}		
+		
+		public function tween(duration:Number, params:Object):void {
+			TweenMax.to(this, duration, ObjectUtil.mergeObjects(defaultTweenVars, params));
+			active = true;
+		}
+		
+		// Tweens to default location, or takes modifiers if called without arguments
+		public function tweenIn(duration:Number = -1, params:Object = null):void {
+			// THIS TRIES TO FIX THE MISSING BLOCK PROBLEM!!! // IT WORKS!s
+			TweenMax.killTweensOf(this); // stop tweening out if we're tweening out, keeps afterTweenOut from firing...
+			active = true;
+			
+			if (duration == -1) duration = defaultInDuration;
+			if (params == null) params = defaultTweenInVars;
+			else params = ObjectUtil.mergeObjects(defaultTweenInVars, params);
+			
+			TweenMax.to(this, duration, params);
+		}		
+		
+		public function tweenOut(duration:Number = -1, params:Object = null):void {
+			if (duration == -1)	duration = defaultOutDuration;
+			if (params == null)	params = defaultTweenOutVars;
+			else params = ObjectUtil.mergeObjects(defaultTweenOutVars, params);
+			
+			TweenMax.to(this, duration, params);
+			active = true; // TODO WHY WAS THIS FALSE?
+		}			
 	}
 }
