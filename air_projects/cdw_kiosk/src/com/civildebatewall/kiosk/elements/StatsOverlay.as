@@ -103,9 +103,9 @@ package com.civildebatewall.kiosk.elements {
 			wordSearchResults.setDefaultTweenIn(1, {alpha: 1, x:0, y: 702});
 			wordSearchResults.setDefaultTweenOut(1, {alpha: 1, x:0, y: OldBlockBase.OFF_BOTTOM_EDGE});
 			wordSearchResults.scrollField.scrollSheet.addEventListener(SearchResult.EVENT_GOTO_DEBATE, onGoToDebate, true);
-			wordSearchResults.scrollField.scrollSheet.addEventListener(Comment.EVENT_FLAG, onFlag, true);			
-			wordSearchResults.scrollField.scrollSheet.addEventListener(Comment.EVENT_BUTTON_DOWN, onDown, true);
-			wordSearchResults.scrollField.scrollSheet.addEventListener(Comment.EVENT_DEBATE, onDown, true);			
+//			wordSearchResults.scrollField.scrollSheet.addEventListener(Comment.EVENT_FLAG, onFlag, true);			
+//			wordSearchResults.scrollField.scrollSheet.addEventListener(Comment.EVENT_BUTTON_DOWN, onDown, true);
+//			wordSearchResults.scrollField.scrollSheet.addEventListener(Comment.EVENT_DEBATE, onDown, true);			
 			addChild(wordSearchResults);
 
 			closeWordCloudButton = new IconButton(63, 63, 0x000000, '', 0, 0x000000, null, Assets.getCloseButton());

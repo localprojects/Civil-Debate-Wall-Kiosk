@@ -104,7 +104,8 @@ package com.kitschpatrol.futil.blocks {
 			onButtonUp = new Vector.<Function>(0);
 			onStageUp = new Vector.<Function>(0);
 			onButtonLock = new Vector.<Function>(0);
-			onButtonUnlock = new Vector.<Function>(0);						
+			onButtonUnlock = new Vector.<Function>(0);
+			onButtonCancel = new Vector.<Function>(0);
 			
 			// TODO devise and flip the update booleans (e.g. invalidate everything)
 
@@ -414,6 +415,15 @@ package com.kitschpatrol.futil.blocks {
 		// Background Proxy
 		public function get backgroundRadius():Number { return background.radius; }
 		public function set backgroundRadius(radius:Number):void { background.radius = radius; }
+		public function get backgroundRadiusTopLeft():Number { return background.radiusTopLeft; }
+		public function set backgroundRadiusTopLeft(radius:Number):void { background.radiusTopLeft = radius; }
+		public function get backgroundRadiusTopRight():Number { return background.radiusTopRight; }
+		public function set backgroundRadiusTopRight(radius:Number):void { background.radiusTopRight = radius; }
+		public function get backgroundRadiusBottomLeft():Number { return background.radiusBottomLeft; }
+		public function set backgroundRadiusBottomLeft(radius:Number):void { background.radiusBottomLeft = radius; }
+		public function get backgroundRadiusBottomRight():Number { return background.radiusBottomRight; }
+		public function set backgroundRadiusBottomRight(radius:Number):void { background.radiusBottomRight = radius; }		
+		
 		
 		public function get backgroundColor():uint { return background.backgroundColor; }
 		public function set backgroundColor(color:uint):void {
@@ -500,6 +510,7 @@ package com.kitschpatrol.futil.blocks {
 		public var onStageUp:Vector.<Function>;
 		public var onButtonLock:Vector.<Function>;
 		public var onButtonUnlock:Vector.<Function>;
+		public var onButtonCancel:Vector.<Function>; // useful for inertial scroll fields
 		
 		protected var buttonTimer:Timer;
 		public var locked:Boolean;
@@ -531,6 +542,18 @@ package com.kitschpatrol.futil.blocks {
 			buttonTimer.delay = time;
 			buttonTimer.reset();
 			buttonTimer.stop();
+		}
+		
+		override public function get mouseEnabled():Boolean {
+			return super.mouseEnabled;
+		}
+		
+		override public function set mouseEnabled(enabled:Boolean):void {
+			super.mouseEnabled = enabled;
+			
+			if (!super.mouseEnabled) {
+				executeAll(onButtonCancel);
+			}
 		}
 
 		
@@ -595,14 +618,39 @@ package com.kitschpatrol.futil.blocks {
 		}
 		
 		
+		
+		
+		
 		// Overrides to proxy out container.
-		override public function addChild(child:DisplayObject):DisplayObject { return content.addChild(child);	}
-		override public function addChildAt(child:DisplayObject, index:int):DisplayObject { return content.addChildAt(child, index); }
+		// make sure everything updates after the content changes
+		override public function addChild(child:DisplayObject):DisplayObject {
+			var added:DisplayObject = content.addChild(child);
+			update();
+			return added;
+		}
+		
+		override public function addChildAt(child:DisplayObject, index:int):DisplayObject {
+			var added:DisplayObject = content.addChildAt(child, index);
+			update();
+			return added;
+		}
+		
 		override public function getChildAt(index:int):DisplayObject { return content.getChildAt(index);	} 
 		override public function getChildByName(name:String):DisplayObject { return content.getChildByName(name);	}
 		override public function getChildIndex(child:DisplayObject):int { return content.getChildIndex(child); }
-		override public function removeChild(child:DisplayObject):DisplayObject { return content.removeChild(child); }
-		override public function removeChildAt(index:int):DisplayObject { return content.removeChildAt(index); }
+		
+		override public function removeChild(child:DisplayObject):DisplayObject {
+			var removed:DisplayObject = content.removeChild(child);
+			update();
+			return removed;
+		}
+		
+		override public function removeChildAt(index:int):DisplayObject {
+			var removed:DisplayObject = content.removeChildAt(index);
+			update();
+			return removed;
+		}
+		
 		override public function setChildIndex(child:DisplayObject, index:int):void { content.setChildIndex(child, index); }
 		override public function swapChildren(child1:DisplayObject, child2:DisplayObject):void { content.swapChildren(child1, child2); }
 		override public function swapChildrenAt(index1:int, index2:int):void { content.swapChildrenAt(index1, index2); }
@@ -671,6 +719,7 @@ package com.kitschpatrol.futil.blocks {
 		public function tweenIn(duration:Number = -1, params:Object = null):void {
 			// THIS TRIES TO FIX THE MISSING BLOCK PROBLEM!!! // IT WORKS!s
 			TweenMax.killTweensOf(this); // stop tweening out if we're tweening out, keeps afterTweenOut from firing...
+			
 			active = true;
 			
 			if (duration == -1) duration = defaultInDuration;

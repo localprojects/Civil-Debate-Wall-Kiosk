@@ -98,9 +98,7 @@ package com.civildebatewall.kiosk {
 			
 			if (isClick && (mouseTravel > wiggleThreshold)) {
 				trace("Not a click.")
-				
 				disableChildren(content);
-				
 				isClick = false;
 			}
 			
@@ -144,16 +142,18 @@ package com.civildebatewall.kiosk {
 			props.ease = Quart.easeOut;
 				
 			// Stopped Here
-			ThrowPropsPlugin.to(this, props, maxDuration, minDuration, overshootTolerance);
+			if (!isClick) {
+				ThrowPropsPlugin.to(this, props, maxDuration, minDuration, overshootTolerance);
 				
-			// Restore child mouse functionality
-			enableChildren(content);
-//			trace("Throw velocity was: " + xVelocity + " / " + yVelocity);
-//			trace("Mouse travel was: " + mouseTravel);						
+				// Restore child mouse functionality
+				enableChildren(content);
+				// trace("Throw velocity was: " + xVelocity + " / " + yVelocity);
+				// trace("Mouse travel was: " + mouseTravel);
+			}
 		}
 		
 		
-		
+		// Move to utility?
 		// How to block mouse events from children?
 		// This works for the children't event listeners, but what if they've put a listener on the stage!
 		// You'd have to check mouseenabled manually inside your method.
@@ -188,7 +188,5 @@ package com.civildebatewall.kiosk {
 			}
 		}
 
-		
-		
 	}
 }

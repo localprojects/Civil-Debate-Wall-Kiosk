@@ -17,7 +17,6 @@ package com.civildebatewall.staging.elements {
 		
 		// Listen to state changes
 		private var questionText:BlockText;
-		
 
 		public var showLines:Boolean;
 		

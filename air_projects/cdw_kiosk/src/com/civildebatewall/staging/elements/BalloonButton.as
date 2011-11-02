@@ -2,6 +2,7 @@ package com.civildebatewall.staging.elements
 {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.BitmapPlus;
+	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Post;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -30,11 +31,13 @@ package com.civildebatewall.staging.elements
 			
 			onButtonDown.push(onDown);
 			onStageUp.push(onUp);
+			onButtonCancel.push(onCancel);			
 		}
 		
 		public function get targetPost():Post {
 			return _targetPost;
 		}
+		
 		public function set targetPost(post:Post):void {
 			_targetPost = post;
 			TweenMax.to(underlay, 0, {colorMatrixFilter:{colorize: _targetPost.stanceColorMedium, amount: 1}});
@@ -45,7 +48,16 @@ package com.civildebatewall.staging.elements
 		}
 		
 		public function onUp(e:MouseEvent):void {
-			TweenMax.to(underlay, 0.5, {colorMatrixFilter:{colorize: _targetPost.stanceColorMedium, amount: 1}});			
+			TweenMax.to(underlay, 0.5, {colorMatrixFilter:{colorize: _targetPost.stanceColorMedium, amount: 1}});
+			
+			CivilDebateWall.state.userRespondingTo = _targetPost;
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.debateTypePickerView);
+		}
+		
+		public function onCancel(e:MouseEvent):void {
+			if (_targetPost != null) {
+				TweenMax.to(underlay, 0.5, {colorMatrixFilter:{colorize: _targetPost.stanceColorMedium, amount: 1}});
+			}
 		}
 
 		

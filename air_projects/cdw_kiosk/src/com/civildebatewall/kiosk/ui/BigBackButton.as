@@ -9,9 +9,9 @@ package com.civildebatewall.kiosk.ui {
 	
 	import flashx.textLayout.formats.TextAlign;
 	
-	public class BackButton extends BlockText	{
+	public class BigBackButton extends BlockText	{
 		
-		public function BackButton() {
+		public function BigBackButton() {
 			super({
 				buttonMode: true,
 				text: "BACK TO HOME SCREEN",

@@ -3,6 +3,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
+	import com.civildebatewall.data.Post;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Back;
 	import com.greensock.easing.Elastic;
@@ -19,6 +20,8 @@ package com.civildebatewall.kiosk.elements {
 	import flashx.textLayout.formats.TextAlign;
 	
 	public class LikeButton extends BlockBase {
+		
+		private var _targetPost:Post;		
 		
 		private var counter:BlockText;
 		private var icon:Bitmap;		
@@ -84,9 +87,7 @@ package com.civildebatewall.kiosk.elements {
 			label.mouseEnabled = false;
 			addChild(label);
 			
-			
-			
-			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
+
 			CivilDebateWall.data.addEventListener(Data.LIKE_UPDATE_LOCAL, onLike);
 			CivilDebateWall.data.addEventListener(Data.LIKE_UPDATE_SERVER, onLike);
 			
@@ -97,34 +98,37 @@ package com.civildebatewall.kiosk.elements {
 			onButtonUnlock.push(onUnlock);
 		}
 		
-		
 		private function onLike(e:Event):void {
 			trace("got event");
-			trace(CivilDebateWall.state.activeThread.firstPost.likes);
-			counter.text = CivilDebateWall.state.activeThread.firstPost.likes.toString();
-			label.text = StringUtil.plural("Like", CivilDebateWall.state.activeThread.firstPost.likes);
+			counter.text = _targetPost.likes.toString();
+			label.text = StringUtil.plural("Like", _targetPost.likes);
 		}
 		
-		private function onActiveDebateChange(e:Event):void {
-			unlock(); // Fires onUnlock() below.
-			counter.text = CivilDebateWall.state.activeThread.firstPost.likes.toString();
-			label.text = StringUtil.plural("Like", CivilDebateWall.state.activeThread.firstPost.likes);
+		public function get targetPost():Post {
+			return _targetPost;
 		}
+		
+		public function set targetPost(post:Post):void {
+			_targetPost = post;
+			counter.text =_targetPost.likes.toString();
+			label.text = StringUtil.plural("Like", _targetPost.likes);
+			unlock(); // Fires onUnlock() below.			
+		}		
 		
 		private function onDown(e:MouseEvent):void {
-			backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDark;
+			backgroundColor = _targetPost.stanceColorDark;
 		}
 		
 		private function onLock(e:MouseEvent):void {
-			backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled;
+			backgroundColor = _targetPost.stanceColorDisabled;
 		}
 		
 		private function onUnlock(e:MouseEvent):void {
-			backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorMedium;
+			backgroundColor = _targetPost.stanceColorMedium;
 		}
 		
 		private function onUp(e:MouseEvent):void {
-			CivilDebateWall.data.like(CivilDebateWall.state.activeThread.firstPost);
+			CivilDebateWall.data.like(_targetPost);
 			
 			// Thump
 			TweenMax.to(icon, 0.25, {transformAroundCenter:{scaleX: 1.5, scaleY: 1.5}, alpha: 0.75, ease: Back.easeOut, yoyo: true, repeat: 1});

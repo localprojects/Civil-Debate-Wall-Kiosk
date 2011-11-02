@@ -27,6 +27,34 @@ package com.civildebatewall
 		
 		
 		// Bitmaps
+		[Embed(source = '/assets/graphics/orText.png')] private static const orTextClass:Class;
+		public static function getOrText():Bitmap { return new orTextClass() as Bitmap; };
+		public static const orText:Bitmap = getOrText();
+		
+		[Embed(source = '/assets/graphics/yesButtonLabelText.png')] private static const yesButtonLabelTextClass:Class;
+		public static function getYesButtonLabelText():Bitmap { return new yesButtonLabelTextClass() as Bitmap; };
+		public static const yesButtonLabelText:Bitmap = getYesButtonLabelText();
+		
+		[Embed(source = '/assets/graphics/noButtonLabelText.png')] private static const noButtonLabelTextClass:Class;
+		public static function getNoButtonLabelText():Bitmap { return new noButtonLabelTextClass() as Bitmap; };
+		public static const noButtonLabelText:Bitmap = getNoButtonLabelText();
+		
+		
+		
+		[Embed(source = '/assets/graphics/portraitBannerYes.png')] private static const portraitBannerYesClass:Class;
+		public static function getPortraitBannerYes():Bitmap { return new portraitBannerYesClass() as Bitmap; };
+		public static const portraitBannerYes:Bitmap = getPortraitBannerYes();
+		
+		[Embed(source = '/assets/graphics/portraitBannerNo.png')] private static const portraitBannerNoClass:Class;
+		public static function getPortraitBannerNo():Bitmap { return new portraitBannerNoClass() as Bitmap; };
+		public static const portraitBannerNo:Bitmap = getPortraitBannerNo();
+		
+		[Embed(source = '/assets/graphics/flagIconSmall.png')] private static const flagIconSmallClass:Class;
+		public static function getFlagIconSmall():Bitmap { return new flagIconSmallClass() as Bitmap; };
+		public static const flagIconSmall:Bitmap = getFlagIconSmall();
+		
+		
+		
 		[Embed(source = '/assets/graphics/statsButtonCenter.png')] private static const statsButtonCenterClass:Class;
 		public static function getStatsButtonCenter():Bitmap { return new statsButtonCenterClass() as Bitmap; };
 		public static const statsButtonCenter:Bitmap = getStatsButtonCenter();

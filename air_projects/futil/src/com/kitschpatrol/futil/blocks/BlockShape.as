@@ -12,7 +12,11 @@ package com.kitschpatrol.futil.blocks {
 		// Shape
 		private var _width:Number;
 		private var _height:Number;
-		private var _radius:Number;		
+		private var _radiusTopLeft:Number;
+		private var _radiusTopRight:Number;
+		private var _radiusBottomRight:Number;
+		private var _radiusBottomLeft:Number;
+				
 		
 		// Background
 		private var _backgroundColor:uint;
@@ -33,7 +37,10 @@ package com.kitschpatrol.futil.blocks {
 			// Sensible defaults
 			_width = 0;
 			_height = 0;
-			_radius = 0;	
+			_radiusTopLeft = 0;
+			_radiusTopRight = 0;
+			_radiusBottomRight = 0;
+			_radiusBottomLeft = 0;
 			_backgroundColor = 0x000000;
 			_backgroundAlpha = 1.0;
 			_showBackground = true;
@@ -51,17 +58,19 @@ package com.kitschpatrol.futil.blocks {
 			// Background
 			if (_showBackground) {
 				
-				if (_backgroundImage != null)
+				if (_backgroundImage != null) {
 					graphics.beginBitmapFill(_backgroundImage, null, true, true);
-				else
+				}
+				else {
 					graphics.beginFill(_backgroundColor, _backgroundAlpha);
+				}
 				
-				
-				if (_radius > 0)
-					graphics.drawRoundRect(0, 0, _width, _height, _radius * 2, _radius * 2);
-				else
+				if ((_radiusTopLeft > 0) || (_radiusTopRight > 0) || (_radiusBottomRight > 0) || (_radiusBottomLeft > 0)) {
+					graphics.drawRoundRectComplex(0, 0, _width, _height, _radiusTopLeft, _radiusTopRight, _radiusBottomLeft, _radiusBottomRight);
+				}
+				else {
 					graphics.drawRect(0, 0, _width, _height);
-				
+				}
 				
 				graphics.endFill();
 			}
@@ -70,13 +79,21 @@ package com.kitschpatrol.futil.blocks {
 			if (_showBorder) {
 				graphics.lineStyle(_borderThickness, _borderColor, _borderAlpha, false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.MITER);		
 				
-				if (_radius > 0) {
+				if ((_radiusTopLeft > 0) || (_radiusTopRight > 0) || (_radiusBottomRight > 0) || (_radiusBottomLeft > 0)) {
 					var borderRadiusCoefficient:Number = (_width - _borderThickness * 2) / _width;
-					var borderRadius:Number = _radius * 2 * borderRadiusCoefficient * borderRadiusCoefficient;
+					
+					var borderRadiusTopLeft:Number = _radiusTopLeft * 1 * borderRadiusCoefficient * borderRadiusCoefficient;
+					var borderRadiusTopRight:Number = _radiusTopRight * 1 * borderRadiusCoefficient * borderRadiusCoefficient;
+					var borderRadiusBottomRight:Number = _radiusBottomRight * 1 * borderRadiusCoefficient * borderRadiusCoefficient;
+					var borderRadiusBottomLeft:Number = _radiusBottomLeft * 1 * borderRadiusCoefficient * borderRadiusCoefficient;
 					
 					// TODO really get this right... background shows through sometimes
-					borderRadius = Math.max(0, Math.floor((_radius * 2) - _borderThickness));
-					graphics.drawRoundRect(_borderThickness / 2, _borderThickness / 2, _width - _borderThickness, _height - _borderThickness, borderRadius, borderRadius);				
+					borderRadiusTopLeft = Math.max(0, Math.floor((_radiusTopLeft * 1) - _borderThickness));
+					borderRadiusTopRight = Math.max(0, Math.floor((_radiusTopRight * 1) - _borderThickness));
+					borderRadiusBottomRight = Math.max(0, Math.floor((_radiusBottomRight * 1) - _borderThickness));
+					borderRadiusBottomLeft = Math.max(0, Math.floor((_radiusBottomLeft * 1) - _borderThickness));
+					
+					graphics.drawRoundRectComplex(_borderThickness / 2, _borderThickness / 2, _width - _borderThickness, _height - _borderThickness, borderRadiusTopLeft, borderRadiusTopRight, borderRadiusBottomLeft, borderRadiusBottomRight);
 				}
 				else {
 					graphics.drawRect(_borderThickness / 2, _borderThickness / 2, _width - _borderThickness, _height - _borderThickness);				
@@ -99,9 +116,36 @@ package com.kitschpatrol.futil.blocks {
 		}
 		
 		// Background Manipulation
-		public function get radius():Number { return _radius; }
+		public function get radius():Number { return _radiusTopLeft; }
 		public function set radius(radius:Number):void {
-			_radius = radius;
+			_radiusTopLeft = radius;
+			_radiusTopRight = radius;
+			_radiusBottomRight = radius;
+			_radiusBottomLeft = radius;
+			update();
+		}
+		
+		public function get radiusTopLeft():Number { return _radiusTopLeft; }
+		public function set radiusTopLeft(radius:Number):void {
+			_radiusTopLeft = radius;
+			update();
+		}
+		
+		public function get radiusTopRight():Number { return _radiusTopRight; }
+		public function set radiusTopRight(radius:Number):void {
+			_radiusTopRight= radius;
+			update();
+		}	
+		
+		public function get radiusBottomRight():Number { return _radiusBottomRight; }
+		public function set radiusBottomRight(radius:Number):void {
+			_radiusBottomRight= radius;
+			update();
+		}			
+		
+		public function get radiusBottomLeft():Number { return _radiusBottomLeft; }
+		public function set radiusBottomLeft(radius:Number):void {
+			_radiusBottomLeft = radius;
 			update();
 		}
 		
