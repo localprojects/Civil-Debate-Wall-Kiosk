@@ -4,9 +4,9 @@ package com.civildebatewall.kiosk.elements {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	
-	public class CameraOverlay extends BlockBase {
+	public class CameraOverlay extends OldBlockBase {
 		
 		private var opacity:Number;
 		private var backgroundColor:uint;

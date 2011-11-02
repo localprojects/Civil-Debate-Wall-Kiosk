@@ -6,7 +6,7 @@ package com.civildebatewall.kiosk.blocks {
 	import flash.display.PixelSnapping;
 	
 	// Like block bitmap, but with control over color and such
-	public class BlockBitmapPlus extends BlockBase {
+	public class BlockBitmapPlus extends OldBlockBase {
 		
 		private var b:BitmapPlus;
 		

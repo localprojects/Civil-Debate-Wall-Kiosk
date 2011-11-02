@@ -3,7 +3,7 @@ package com.civildebatewall.kiosk.elements
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-	import com.civildebatewall.staging.futilProxies.BlockBaseTweenable;
+	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.constants.Char;
@@ -11,12 +11,13 @@ package com.civildebatewall.kiosk.elements
 	import flash.events.Event;
 	
 	
-	public class OpinionText extends BlockBaseTweenable	{
+	public class OpinionText extends BlockBase	{
 
 		private var opinion:BlockText;
 		private var nameTag:BlockText;
 		
 		public function OpinionText()	{
+			super();
 			
 			nameTag = new BlockText({
 				textFont: Assets.FONT_BOLD,
@@ -53,8 +54,7 @@ package com.civildebatewall.kiosk.elements
 			
 			addChild(opinion);
 			
-			
-			
+
 			showRegistrationPoint = true;		
 			
 			

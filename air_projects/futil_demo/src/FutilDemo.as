@@ -4,6 +4,7 @@ package {
 	import com.greensock.easing.*;
 	import com.greensock.plugins.TweenPlugin;
 	import com.kitschpatrol.futil.*;
+	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.tweenPlugins.*;
@@ -13,8 +14,8 @@ package {
 	import flash.text.Font;
 	
 	import flashx.textLayout.formats.TextAlign;
-	
 	import uk.co.soulwire.gui.SimpleGUI;
+	
 	
 	
 	[SWF(width="1024", height="768", frameRate="60")]	
@@ -33,7 +34,12 @@ package {
 			//Font.registerFont(Assets.FontLight);
 			
 			// Test Object
-			testBlock = new BlockText({textFont: Assets.FONT_LIGHT, x: 300, y: 300, showRegistrationPoint: true, maxWidth: 10000, text: "mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret"});
+			testBlock = new BlockText({textFont: Assets.FONT_LIGHT,
+				x: 300, y: 300, showRegistrationPoint: true, maxWidth: 10000,
+				maxSizeBehavior: BlockBase.MAX_SIZE_CLIPS,
+				
+				
+				text: "mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret"});
 			
 			
 //			testBlock = new TextBlock({text: "Do you feel our public education provides our children with a thorough education these days?",
@@ -75,8 +81,10 @@ package {
 			gui.addSlider(targetObject + ".paddingRight", 0, 200, {label: "Padding Right"});
 			gui.addSlider(targetObject + ".paddingBottom", 0, 200, {label: "Padding Bottom"});
 			gui.addSlider(targetObject + ".paddingLeft", 0, 200, {label: "Padding Left"});			
-			gui.addSlider(targetObject + ".alignmentPointX", 0, 1, {label: "Alignment X"});
-			gui.addSlider(targetObject + ".alignmentPointY", 0, 1, {label: "Alignment Y"});
+			gui.addSlider(targetObject + ".alignmentX", 0, 1, {label: "Alignment X"});
+			gui.addSlider(targetObject + ".alignmentY", 0, 1, {label: "Alignment Y"});
+			gui.addSlider(targetObject + ".scrollX", 0, 500, {label: "Scroll X"});
+			gui.addSlider(targetObject + ".scrollY", 0, 500, {label: "Scroll Y"});			
 			gui.addComboBox(targetObject + ".alignmentPoint", [
 				{label:"Left", data: Alignment.LEFT},
 				{label:"Center", data: Alignment.CENTER},
@@ -88,8 +96,8 @@ package {
 				{label:"Bottom", data: Alignment.BOTTOM},
 				{label:"Bottom Right", data: Alignment.BOTTOM_RIGHT},
 			], {label: "Alignment"});
-			gui.addSlider(targetObject + ".registrationPointX", 0, 1, {label: "Registration X"});
-			gui.addSlider(targetObject + ".registrationPointY", 0, 1, {label: "Registration Y"});
+			gui.addSlider(targetObject + ".registrationX", 0, 1, {label: "Registration X"});
+			gui.addSlider(targetObject + ".registrationY", 0, 1, {label: "Registration Y"});
 			gui.addToggle(targetObject + ".showRegistrationPoint", {label: "Show Registration Point"});
 			gui.addColour(targetObject + ".backgroundColor", {label: "Background Color"});
 			

@@ -1,13 +1,13 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.kitschpatrol.futil.Math2;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	
 	
-	public class VoteStatBar extends BlockBase {
+	public class VoteStatBar extends OldBlockBase {
 		
 		private var barWidth:Number;
 		private var barHeight:Number;		

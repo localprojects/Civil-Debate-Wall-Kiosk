@@ -9,7 +9,7 @@ package com.civildebatewall.kiosk.elements {
 	import flash.display.*;
 	import flash.events.Event;
 
-	public class Comment extends BlockBase {
+	public class Comment extends OldBlockBase {
 		
 		
 		public static const EVENT_FLAG:String = 'eventFlag';
@@ -127,10 +127,10 @@ package com.civildebatewall.kiosk.elements {
 			addChild(opinion);
 			
 			// Add the debate me button
-			var debateButton:BalloonButton = new BalloonButton(110, 101, 0x000000, 'LET\u0027S\nDEBATE !', 15);
+			var debateButton:BalloonButtonOld = new BalloonButtonOld(110, 101, 0x000000, 'LET\u0027S\nDEBATE !', 15);
 			
 			
-			debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
+			debateButton = new BalloonButtonOld(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
 			debateButton.scaleX = 0.75;  
 			debateButton.scaleY = 0.75;				
 			debateButton.setBackgroundColor(_post.stanceColorDark, true);
@@ -159,7 +159,11 @@ package com.civildebatewall.kiosk.elements {
 		
 		protected function onDebate(e:Event):void {
 			// forward to parent
+			if (mouseEnabled) {
+			
+			trace("Debate pressed!");
 			this.dispatchEvent(new Event(EVENT_DEBATE, true, true));
+			}
 		}
 		
 		protected function onFlag(e:Event):void {

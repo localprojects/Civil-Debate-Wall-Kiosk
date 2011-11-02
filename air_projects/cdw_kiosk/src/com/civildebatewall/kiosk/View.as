@@ -13,23 +13,24 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
 	import com.civildebatewall.kiosk.ui.*;
+	import com.civildebatewall.staging.elements.BalloonButton;
 	import com.civildebatewall.staging.elements.NavArrow;
 	import com.civildebatewall.staging.elements.QuestionHeader;
 	import com.civildebatewall.staging.elements.SortLinks;
 	import com.civildebatewall.staging.elements.StatsButton;
-	import com.civildebatewall.staging.futilProxies.BlockBaseTweenable;
-	import com.civildebatewall.staging.futilProxies.BlockBitmapTweenable;
-	import com.civildebatewall.staging.futilProxies.BlockTextTweenable;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
 	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.blocks.BlockBase;
+	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.FunctionUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
+	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.*;
@@ -42,7 +43,11 @@ package com.civildebatewall.kiosk {
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.Timer;
 	
+	import flashx.textLayout.formats.BackgroundColor;
+	
 	import mx.collections.ArrayList;
+	
+	import sekati.layout.Align;
 
 	public class View extends Sprite {
 		
@@ -55,7 +60,7 @@ package com.civildebatewall.kiosk {
 				
 		// Home View
 		public var portrait:Portrait;
-		public var questionHeader:QuestionHeader;		
+		public var questionHeaderHome:QuestionHeader;		
 		public var opinion:OpinionText;	
 		private var likeButton:LikeButton;
 		private var viewCommentsButton:ViewCommentsButton;
@@ -64,6 +69,12 @@ package com.civildebatewall.kiosk {
 		private var rightArrow:NavArrow;
 		private var bigButton:BigButton; // TODO migrate to Futil?		
 		
+		private var opinionUnderlay:BlockBase;
+		private var debateThisButton:BalloonButton;
+		
+		private var questionHeader:QuestionHeader;
+		
+		private var backButton:BackButton;
 		
 		
 		// OLD STUFF
@@ -71,22 +82,22 @@ package com.civildebatewall.kiosk {
 		// immutable
 		private var smsDisclaimer:BlockParagraph;
 		public var portraitCamera:PortraitCamera; // public for dashboard
-		private var inactivityOverlay:BlockBitmapTweenable;
+		private var inactivityOverlay:BlockBitmap;
 		private var inactivityTimerBar:ProgressBar;
 		private var inactivityInstructions:BlockLabelBar;
 		private var continueButton:BlockButton;
-		private var flashOverlay:BlockBitmapTweenable;
-		private var blackOverlay:BlockBitmapTweenable;
+		private var flashOverlay:BlockBitmap;
+		private var blackOverlay:BlockBitmap;
 		public var skipTextButton:BlockButton; // debug only
 		private var smsInstructions:BlockParagraph;
 		private var dragLayer:DragLayer;
-		private var flagOverlay:BlockBitmapTweenable;
+		private var flagOverlay:BlockBitmap;
 		private var flagTimerBar:ProgressBar;
 		private var flagInstructions:BlockLabelBar;
 		private var flagYesButton:BlockButton;
 		private var flagNoButton:BlockButton;
-		private var submitOverlay:BlockBitmapTweenable;		
-		private var letsDebateUnderlay:BlockBitmapTweenable;
+		private var submitOverlay:BlockBitmap;		
+		private var letsDebateUnderlay:BlockBitmap;
 		private var pickStanceInstructions:BlockLabelBar;
 		private var characterLimitWarning:BlockLabel;
 		private var usernameTakenWarning:BlockLabel;		
@@ -106,7 +117,7 @@ package com.civildebatewall.kiosk {
 		private var cameraOverlay:CameraOverlay;
 		private var statsButton:StatsButton;
 				
-		private var secondaryDebateButton:BalloonButton;		
+		private var secondaryDebateButton:BalloonButtonOld;		
 		private var yesButton:BlockButton;
 		private var noButton:BlockButton;
 		private var exitButton:BlockButton;				
@@ -128,7 +139,7 @@ package com.civildebatewall.kiosk {
 		// containers, have lots of nested content
 		public var statsOverlay:StatsOverlay;
 		public var debateStrip:DebateStrip;
-		public var debateOverlay:DebateOverlay;		
+		public var threadOverlayBrowser:ThreadBrowser;		
 
 
 
@@ -164,7 +175,7 @@ package com.civildebatewall.kiosk {
 			cameraOverlay.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(cameraOverlay);
 			
-			letsDebateUnderlay = new BlockBitmapTweenable({bitmap: new Bitmap(new BitmapData(1022, 577, false, 0xffffff))});
+			letsDebateUnderlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(1022, 577, false, 0xffffff))});
 			letsDebateUnderlay.mouseEnabled = false; // let keystrokes through to the keyboard
 			letsDebateUnderlay.x = 28;
 			letsDebateUnderlay.y = 264;
@@ -174,17 +185,43 @@ package com.civildebatewall.kiosk {
 			addChild(letsDebateUnderlay);				
 			
 
-			questionHeader = new QuestionHeader();
-			questionHeader.setDefaultTweenIn(1, { alpha: 1});
-			questionHeader.setDefaultTweenOut(1, { alpha: 0});
-			addChild(questionHeader) 
+			
+			
+			
+			
+			
+			questionHeaderHome = new QuestionHeader({width: 1080, height: 313, textSizePixels: 39, leading: 29});
+			questionHeaderHome.setDefaultTweenIn(1, { alpha: 1});
+			questionHeaderHome.setDefaultTweenOut(1, { alpha: 0});
+			addChild(questionHeaderHome)
+			
+			questionHeader = new QuestionHeader({width: 1024, height: 250, textSizePixels: 28,	leading: 22});
+			questionHeader.setDefaultTweenIn(1, {x: 28, alpha: 1});
+			questionHeader.setDefaultTweenOut(1, {x: 28, alpha: 0});
+			addChild(questionHeader)			
+			
+			
+			
+			
 			
 			// triple opinions
+			
+			opinionUnderlay = new BlockBase({backgroundColor: 0xffffff, backgroundAlpha: 0.85, width: 1024}); // height determined by opinion
+			opinionUnderlay.setDefaultTweenIn(1, {x: 28, y: 264, alpha: 1});
+			opinionUnderlay.setDefaultTweenOut(1, {x: 28, y: 264, alpha: 0});
+			addChild(opinionUnderlay);
+			
 			opinion = new OpinionText();	
 			opinion.setDefaultTweenIn(1, {x: 100, y: 1296});
 			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT,  y: 1296});
 			addChild(opinion);
 			
+			debateThisButton = new BalloonButton();
+			debateThisButton.setDefaultTweenIn(1, {x: 919});
+			debateThisButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT});
+			addChild(debateThisButton);
+			
+
 			
 			// TODO is there always a drag layer?
 			dragLayer = new DragLayer();
@@ -224,18 +261,18 @@ package com.civildebatewall.kiosk {
 //			debateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, scaleX: 1, scaleY: 1});
 //			addChild(debateButton);
 			
-			secondaryDebateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
+			secondaryDebateButton = new BalloonButtonOld(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
 			secondaryDebateButton.setStrokeColor(Assets.COLOR_GRAY_15);
 			secondaryDebateButton.scaleX = 0.75;  
 			secondaryDebateButton.scaleY = 0.75; 				
 			secondaryDebateButton.setDefaultTweenIn(1, {x: 909});
-			secondaryDebateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE});
+			secondaryDebateButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE});
 			addChild(secondaryDebateButton);	
 			
-			debateOverlay = new DebateOverlay();
-			debateOverlay.setDefaultTweenIn(1, {x: 30, y: 813});
-			debateOverlay.setDefaultTweenOut(1, {x: 30, y: BlockBase.OFF_BOTTOM_EDGE});			
-			addChild(debateOverlay);			
+			threadOverlayBrowser = new ThreadBrowser();
+			threadOverlayBrowser.setDefaultTweenIn(1, {x: 28}); // y depends on opinion height
+			threadOverlayBrowser.setDefaultTweenOut(1, {x: 28, y: OldBlockBase.OFF_BOTTOM_EDGE});			
+			addChild(threadOverlayBrowser);			
 			
 			debateStrip = new DebateStrip();
 			debateStrip.setDefaultTweenIn(1, {x: 0, y: 1671});
@@ -243,32 +280,28 @@ package com.civildebatewall.kiosk {
 			addChild(debateStrip);
 			
 			
-			leftArrow = new NavArrow({bitmap: Assets.leftCaratBig});
+			leftArrow = new NavArrow({bitmap: Assets.getLeftCaratBig()});
 			leftArrow.setDefaultTweenIn(1, {x: 39, y: 1002});
 			leftArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1002});
-			leftArrow.downColor = Assets.COLOR_NO_DARK;
-			leftArrow.upColor = Assets.COLOR_NO_LIGHT;
 			addChild(leftArrow);
 			
-			rightArrow = new NavArrow({bitmap: Assets.rightCaratBig});
+			rightArrow = new NavArrow({bitmap: Assets.getRightCaratBig()});
 			rightArrow.setDefaultTweenIn(1, {x: 1019, y: 1002});
 			rightArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 1002});
-			rightArrow.downColor = Assets.COLOR_NO_DARK;
-			rightArrow.upColor = Assets.COLOR_NO_LIGHT;			
-			addChild(rightArrow);			
+			addChild(rightArrow);
 			
 			
 			pickStanceInstructions = new BlockLabelBar('Your Answer / Please Select One :', 19, 0xffffff, 367, 63, Assets.COLOR_GRAY_85, Assets.FONT_REGULAR);
 			pickStanceInstructions.setDefaultTweenIn(1, {x: 670, y: 1243});
-			pickStanceInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
+			pickStanceInstructions.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 1243});					
 			addChild(pickStanceInstructions);
 			
 
 			
 			// Temp debug button so we don't have to SMS every time
 			skipTextButton = new BlockButton(200, 100, Assets.COLOR_GRAY_85, 'SIMULATE SMS', 20);
-			skipTextButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 500});
-			skipTextButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 500});
+			skipTextButton.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 500});
+			skipTextButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 500});
 			skipTextButton.alpha = 1; // start hidden
 			skipTextButton.setOnClick(simulateSMS);				
 			//skipTextButton.setOnClick(null); // start off
@@ -282,116 +315,116 @@ package com.civildebatewall.kiosk {
 			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_REGULAR);
 			smsInstructions.textField.setTextFormat(new TextFormat(Assets.FONT_HEAVY), smsInstrucitonPrefix.length, smsInstrucitonPrefix.length + smsPhoneNumber.length);			
 			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
-			smsInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1096});
+			smsInstructions.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1096});
 			addChild(smsInstructions);
 			
 			var smsDisclaimerText:String = 'You will receive an SMS notifying you of any future opponents \nwho would like to enter into a debate with you based on your opinion. \nYou can opt out at any time by replying STOP.';
 			smsDisclaimer = new BlockParagraph(915, Assets.COLOR_GRAY_75, smsDisclaimerText, 24);
 			smsDisclaimer.textField.setTextFormat(new TextFormat(null, null, 0xc7c8ca), smsDisclaimerText.length -45, smsDisclaimerText.length);
 			smsDisclaimer.setDefaultTweenIn(1, {x: 101, y: 1625});
-			smsDisclaimer.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1625});
+			smsDisclaimer.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1625});
 			addChild(smsDisclaimer);
 			
 			// y value is dynamic
 			exitButton = new BlockButton(125, 63, 0x000000, 'EXIT', 26, 0xffffff, Assets.FONT_HEAVY);
 			exitButton.setDefaultTweenIn(1, {x: 103});
-			exitButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});			
+			exitButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE});			
 			addChild(exitButton);
 			
 
 			characterLimit = new BlockLabelBar('Use No More than ' + CivilDebateWall.settings.characterLimit + ' characters', 19, 0xffffff, 367, 63, 0x000000, Assets.FONT_BOLD);			
 			characterLimit.setDefaultTweenIn(1, {x: 670, y: 1243});
-			characterLimit.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
+			characterLimit.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 1243});					
 			addChild(characterLimit);			
 			
 			photoBoothNag = new BlockLabel('Please look into the Camera!', 33, 0xffffff, 0x000000, Assets.FONT_BOLD);
-			photoBoothNag.setDefaultTweenIn(1.5, {alpha: 1, x: BlockBase.CENTER, y: 176}); // elastic easing was over-the-top
-			photoBoothNag.setDefaultTweenOut(1, {alpha: 0, x: BlockBase.CENTER, y: 176});
+			photoBoothNag.setDefaultTweenIn(1.5, {alpha: 1, x: OldBlockBase.CENTER, y: 176}); // elastic easing was over-the-top
+			photoBoothNag.setDefaultTweenOut(1, {alpha: 0, x: OldBlockBase.CENTER, y: 176});
 			addChild(photoBoothNag);			
 			
 			photoBoothButton = new BlockButton(398, 63, 0x000000, 'TOUCH TO COUNTDOWN', 26, 0xffffff, Assets.FONT_HEAVY);
-			photoBoothButton.setDefaultTweenIn(1, {alpha: 1, x: BlockBase.CENTER, y: 1628});
-			photoBoothButton.setDefaultTweenOut(1, {alpha: 0, x: BlockBase.CENTER, y: 1628});
+			photoBoothButton.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1628});
+			photoBoothButton.setDefaultTweenOut(1, {alpha: 0, x: OldBlockBase.CENTER, y: 1628});
 			addChild(photoBoothButton);
 			
 			countdownButton = new CountdownButton(6);
-			countdownButton.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1438, scaleX: 1, scaleY: 1});
-			countdownButton.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: stageHeight});
+			countdownButton.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1438, scaleX: 1, scaleY: 1});
+			countdownButton.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: stageHeight});
 			addChild(countdownButton);
 			
 			nameEntryInstructions = new BlockLabel('ENTER YOUR NAME', 26, 0xffffff, 0x000000, Assets.FONT_HEAVY)
 			nameEntryInstructions.setPadding(20, 31, 20, 31);
 			nameEntryInstructions.setDefaultTweenIn(1, {x: 101, y: 1000});
-			nameEntryInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1003});
+			nameEntryInstructions.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1003});
 			addChild(nameEntryInstructions);
 			
 			nameEntryField = new BlockInputLabel('', 33, 0xffffff, 0x000000, Assets.FONT_REGULAR, true);
 			nameEntryField.setPadding(24, 30, 20, 30);
 			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1096});
-			nameEntryField.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1096});
+			nameEntryField.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1096});
 			addChild(nameEntryField);			
 			
 			// X and Y are dynamic
 			saveButton = new BlockButton(335, 63, 0x000000, 'SAVE AND CONTINUE', 26, 0xffffff, Assets.FONT_HEAVY);			
 			saveButton.setDefaultTweenIn(1, {});
-			saveButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});
+			saveButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE});
 			addChild(saveButton);
 			
 			// Y is dynamic
 			retakePhotoButton = new BlockButton(270, 63, 0x000000, 'RETAKE PHOTO', 26, 0xffffff, Assets.FONT_HEAVY);
 			retakePhotoButton.setDefaultTweenIn(1, {x: 243});
-			retakePhotoButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});
+			retakePhotoButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE});
 			addChild(retakePhotoButton);
 			
 			// y is dynamic
 			editTextButton = new BlockButton(200, 63, 0x000000, 'EDIT TEXT', 26, 0xffffff, Assets.FONT_HEAVY);
 			editTextButton.setDefaultTweenIn(1, {x: 528});
-			editTextButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE});
+			editTextButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE});
 			addChild(editTextButton);
 			
 			// y is dynamic
 			// disabled per latest indesign file
 			editTextInstructions = new BlockLabel('EDITING TEXT...', 26, 0xffffff, 0x000000, Assets.FONT_HEAVY);
 			editTextInstructions.setDefaultTweenIn(1, {x: 525});
-			editTextInstructions.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE});
+			editTextInstructions.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE});
 			addChild(editTextInstructions);			
 			
 			keyboard = new Keyboard();
 			keyboard.setDefaultTweenIn(1, {x: 0, y: stageHeight - keyboard.height});
-			keyboard.setDefaultTweenOut(1, {x: 0, y: BlockBase.OFF_BOTTOM_EDGE});
+			keyboard.setDefaultTweenOut(1, {x: 0, y: OldBlockBase.OFF_BOTTOM_EDGE});
 			addChild(keyboard);
 			
 			
 			characterLimitWarning = new BlockLabel('You reached the character limit!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			characterLimitWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (characterLimitWarning.height / 2) - 10});	
-			characterLimitWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (characterLimitWarning.height / 2) - 10});
+			characterLimitWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1562 - (characterLimitWarning.height / 2) - 10});	
+			characterLimitWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1562 - (characterLimitWarning.height / 2) - 10});
 			addChild(characterLimitWarning);
 			
 			cameraTimeoutWarning = new BlockLabel('The camera could not focus, please try again!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			cameraTimeoutWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: BlockBase.CENTER});	
-			cameraTimeoutWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: BlockBase.CENTER});
+			cameraTimeoutWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: OldBlockBase.CENTER});	
+			cameraTimeoutWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: OldBlockBase.CENTER});
 			addChild(cameraTimeoutWarning);
 			
 			noNameWarning = new BlockLabel('Please enter a username!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			noNameWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
-			noNameWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (noNameWarning.height / 2) - 10});
+			noNameWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
+			noNameWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1562 - (noNameWarning.height / 2) - 10});
 			addChild(noNameWarning);
 			
 			usernameTakenWarning = new BlockLabel('That username is already taken!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			usernameTakenWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
-			usernameTakenWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (noNameWarning.height / 2) - 10});
+			usernameTakenWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
+			usernameTakenWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1562 - (noNameWarning.height / 2) - 10});
 			addChild(usernameTakenWarning);			
 			
 			noOpinionWarning = new BlockLabel('Please enter your opinion!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			noOpinionWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1562 - (noOpinionWarning.height / 2) - 10});	
-			noOpinionWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1562 - (noOpinionWarning.height / 2) - 10});
+			noOpinionWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1562 - (noOpinionWarning.height / 2) - 10});	
+			noOpinionWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1562 - (noOpinionWarning.height / 2) - 10});
 			addChild(noOpinionWarning);				
 			
 			
 			var profanityNagIncoming:String = 'Please choose words that will encourage a civil debate and re-send your message!';
 			smsReceivedProfanityWarning = new BlockParagraph(800, Assets.COLOR_GRAY_50, profanityNagIncoming, 26, 0xffffff, Assets.FONT_BOLD); 
-			smsReceivedProfanityWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 576});	
-			smsReceivedProfanityWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 576});
+			smsReceivedProfanityWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 576});	
+			smsReceivedProfanityWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 576});
 			addChild(smsReceivedProfanityWarning);
 			
 			
@@ -413,95 +446,100 @@ package com.civildebatewall.kiosk {
 			
 			// TODO HOOK THIS UP?
 			smsSubmittedProfanityWarning = new BlockLabel('Please choose words that will encourage a civil debate and re-submit your message!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			smsSubmittedProfanityWarning.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 576});	
-			smsSubmittedProfanityWarning.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 576});
+			smsSubmittedProfanityWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 576});	
+			smsSubmittedProfanityWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 576});
 			addChild(smsSubmittedProfanityWarning);			 
 			
 			
 			// TODO update from database
 			statsOverlay = new StatsOverlay();
 			statsOverlay.setDefaultTweenIn(1, {x: 29, y: 264});
-			statsOverlay.setDefaultTweenOut(1, {x: 29, y: BlockBase.OFF_BOTTOM_EDGE});
+			statsOverlay.setDefaultTweenOut(1, {x: 29, y: OldBlockBase.OFF_BOTTOM_EDGE});
 			addChild(statsOverlay);
 			
-			inactivityOverlay = new BlockBitmapTweenable({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
+			inactivityOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
 			inactivityOverlay.setDefaultTweenIn(1, {alpha: 0.85});
 			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});
 			addChild(inactivityOverlay);
 			
 			inactivityTimerBar = new ProgressBar(735, 2, 20);		
-			inactivityTimerBar.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1002});
-			inactivityTimerBar.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});			
+			inactivityTimerBar.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1002});
+			inactivityTimerBar.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
 			addChild(inactivityTimerBar);
 			
 			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
-			inactivityInstructions.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1018});
-			inactivityInstructions.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});			
+			inactivityInstructions.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1018});
+			inactivityInstructions.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
 			addChild(inactivityInstructions);
 			
 			continueButton = new BlockButton(735, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
 			continueButton.setDownColor(Assets.COLOR_GRAY_75);
-			continueButton.setDefaultTweenIn(1, {alpha: 1, x: BlockBase.CENTER, y: 1098});
-			continueButton.setDefaultTweenOut(1, {alpha: 1, x: BlockBase.OFF_LEFT_EDGE, y: 1098});					
+			continueButton.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1098});
+			continueButton.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.OFF_LEFT_EDGE, y: 1098});					
 			addChild(continueButton);
 			
 			// Flag overlay
-			flagOverlay = new BlockBitmapTweenable({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
+			flagOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
 			flagOverlay.setDefaultTweenIn(1, {alpha: 0.85});
 			flagOverlay.setDefaultTweenOut(1, {alpha: 0});
 			addChild(flagOverlay);
 			
 			flagTimerBar = new ProgressBar(735, 2, 20);		
-			flagTimerBar.setDefaultTweenIn(1, {alpha: 1, x: BlockBase.CENTER, y: 1002});
-			flagTimerBar.setDefaultTweenOut(1, {alpha: 1, x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});			
+			flagTimerBar.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1002});
+			flagTimerBar.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
 			addChild(flagTimerBar);
 			
 			flagInstructions = new BlockLabelBar('FLAG AS INAPPROPRIATE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
-			flagInstructions.setDefaultTweenIn(1, {x: BlockBase.CENTER, y: 1018});
-			flagInstructions.setDefaultTweenOut(1, {x: BlockBase.CENTER, y: BlockBase.OFF_TOP_EDGE});			
+			flagInstructions.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1018});
+			flagInstructions.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
 			addChild(flagInstructions);
 			
 			flagYesButton = new BlockButton(360, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
 			flagYesButton.setDownColor(Assets.COLOR_GRAY_75);
 			flagYesButton.setDefaultTweenIn(1, {x: 173, y: 1098});
-			flagYesButton.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 1098});					
+			flagYesButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1098});					
 			addChild(flagYesButton);
 			
 			flagNoButton = new BlockButton(360, 120, Assets.COLOR_GRAY_50, 'NO!', 92);
 			flagNoButton.setDownColor(Assets.COLOR_GRAY_75);
 			flagNoButton.setDefaultTweenIn(1, {x: 548, y: 1098});
-			flagNoButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, y: 1098});					
+			flagNoButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 1098});					
 			addChild(flagNoButton);			
 			
 
+			backButton = new BackButton();
+			backButton.setDefaultTweenIn(1, {x: 28, y: 1826});
+			backButton.setDefaultTweenOut(1, {x: 28, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(backButton);			
+			
 			// Submit overlay
-			submitOverlay = new BlockBitmapTweenable({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
+			submitOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
 			submitOverlay.setDefaultTweenIn(1, {alpha: 0.85});
 			submitOverlay.setDefaultTweenOut(1, {alpha: 0});
 			addChild(submitOverlay);
 			
 			submitOverlayMessage = new BlockParagraph(900, 0x000000, 'Thank you for your participation.\nKeep up with the latest at greatcivildebatewall.com', 31, 0xffffff, Assets.FONT_BOLD);
 			submitOverlayMessage.setDefaultTweenIn(1, {x: 101, y: 993});
-			submitOverlayMessage.setDefaultTweenOut(1, {x: BlockBase.OFF_LEFT_EDGE, y: 993});					
+			submitOverlayMessage.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 993});					
 			addChild(submitOverlayMessage);			
 			
 			submitOverlayContinueButton = new BlockButton(202, 65, 0x000000, 'CONTINUE', 25, 0xffffff, Assets.FONT_HEAVY);
 			submitOverlayContinueButton.setDefaultTweenIn(1, {alpha: 1, x: 779, y: 1243});
-			submitOverlayContinueButton.setDefaultTweenOut(1, {alpha: 1, x: BlockBase.OFF_RIGHT_EDGE, y: 1243});					
+			submitOverlayContinueButton.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.OFF_RIGHT_EDGE, y: 1243});					
 			addChild(submitOverlayContinueButton);						
 
 			// Camera Overlays
-			blackOverlay = new BlockBitmapTweenable({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
+			blackOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
 			blackOverlay.setDefaultTweenIn(0.1, {alpha: 1, immediateRender: true}); // duration of 0 doesn't work?
 			blackOverlay.setDefaultTweenOut(0, {alpha: 0});
-			addChild(blackOverlay);				
+			addChild(blackOverlay);
 			
 			// Flash overlay
-			flashOverlay = new BlockBitmapTweenable({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0xffffff))});
+			flashOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0xffffff))});
 			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut, immediateRender: true});
 			flashOverlay.setDefaultTweenOut(1, {alpha: 0, ease: Quart.easeOut});
 			flashOverlay.name = 'Flash Overlay';
-			addChild(flashOverlay);	
+			addChild(flashOverlay);
 			
 			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
 			CivilDebateWall.state.addEventListener(State.VIEW_CHANGE, onViewChange);
@@ -538,7 +576,7 @@ package com.civildebatewall.kiosk {
 			
 			// blocks
 			portrait.tweenIn();
-			questionHeader.tweenIn();			
+			questionHeaderHome.tweenIn();			
 			bigButton.tweenIn();	
 
 			tweenOutInactive();
@@ -551,7 +589,7 @@ package com.civildebatewall.kiosk {
 			
 			CivilDebateWall.inactivityTimer.disarm();
 			CivilDebateWall.state.clearUser(); // Reset user info
-			debateOverlay.scrollField.scrollTo(0, 0);			
+						
 			
 			bigButton.setText('ADD YOUR OPINION'); // TODO move to listener?
 			
@@ -561,7 +599,7 @@ package com.civildebatewall.kiosk {
 
 			// blocks
 			portrait.tweenIn();
-			questionHeader.tweenIn();
+			questionHeaderHome.tweenIn();
 			leftArrow.tweenIn();
 			rightArrow.tweenIn();
 			opinion.tweenIn();			
@@ -606,20 +644,30 @@ package com.civildebatewall.kiosk {
 		// =========================================================================
 		
 		
-		public function debateOverlayView(...args):void {			
+		public function threadView(...args):void {			
 			markAllInactive();
 			CivilDebateWall.inactivityTimer.disarm();
 			
+			// Do this on event callback instead?
+			debateThisButton.targetPost = CivilDebateWall.state.activeThread.firstPost;
+			
 			// Alignment
-			letsDebateUnderlay.height = opinion.height + 233;
+			opinionUnderlay.height = opinion.contentHeight + 233;
+			debateThisButton.y = 327 + opinion.contentHeight;
+			threadOverlayBrowser.y = opinionUnderlay.y + opinionUnderlay.height + 14;
+			threadOverlayBrowser.maxHeight = 1812 - threadOverlayBrowser.y;
+
 			
+
 			//debateOverlay.setMaxHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));
-			
 			portrait.tweenIn();
 			questionHeader.tweenIn();
-			letsDebateUnderlay.tweenIn();
-			opinion.tweenIn(1, {y: 327 + opinion.height});			
-				
+			opinionUnderlay.tweenIn();			
+			opinion.tweenIn(1, {y: 327 + opinion.contentHeight});
+			threadOverlayBrowser.tweenIn();
+			debateThisButton.tweenIn();
+			backButton.tweenIn();
+			
 			//debateOverlay.tweenIn(-1, {y: letsDebateUnderlay.y + letsDebateUnderlay.height + 30});
 			
 			
@@ -806,7 +854,7 @@ package com.civildebatewall.kiosk {
 			// blocks
 			portrait.tweenIn();
 		
-			questionHeader.tweenIn();
+			questionHeaderHome.tweenIn();
 			bigButton.tweenIn();
 			pickStanceInstructions.tweenIn();
 			yesButton.tweenIn(-1, {delay: 0.5}); // side slide & delay per jonathan
@@ -870,7 +918,7 @@ package com.civildebatewall.kiosk {
 			// blocks
 			portrait.tweenIn();
 			
-			questionHeader.tweenIn();
+			questionHeaderHome.tweenIn();
 			bigButton.tweenIn();
 			yesButton.tweenIn();
 			noButton.tweenIn();
@@ -882,7 +930,7 @@ package com.civildebatewall.kiosk {
 			
 			
 			// push the character limit down
-			pickStanceInstructions.tweenOut(-1, {x: BlockBase.OFF_LEFT_EDGE, y: pickStanceInstructions.y});
+			pickStanceInstructions.tweenOut(-1, {x: OldBlockBase.OFF_LEFT_EDGE, y: pickStanceInstructions.y});
 			
 	
 			tweenOutInactive();
@@ -927,7 +975,7 @@ package com.civildebatewall.kiosk {
 				if (CivilDebateWall.data.latestTextMessages[0].profane) {
 					// scold for five seconds
 					smsReceivedProfanityWarning.tweenIn();
-					TweenMax.delayedCall(5, function():void { smsReceivedProfanityWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE})});					
+					TweenMax.delayedCall(5, function():void { smsReceivedProfanityWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE})});					
 					
 					// reset time baseline
 					CivilDebateWall.state.lastTextMessageTime = CivilDebateWall.data.latestTextMessages[0].created; 
@@ -1046,7 +1094,7 @@ package com.civildebatewall.kiosk {
 			if (CivilDebateWall.state.lastView == photoBoothView) {
 				// we timed out! show the message for five seconds
 				cameraTimeoutWarning.tweenIn();
-				TweenMax.delayedCall(5, function():void { cameraTimeoutWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE})});
+				TweenMax.delayedCall(5, function():void { cameraTimeoutWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE})});
 			}
 			
 			tweenOutInactive();
@@ -1206,7 +1254,7 @@ package com.civildebatewall.kiosk {
 			portrait.tweenIn(0);			
 			
 			
-			questionHeader.tweenIn(0);
+			questionHeaderHome.tweenIn(0);
 			
 			nameEntryInstructions.tweenIn(-1, {delay: 1});
 			
@@ -1226,12 +1274,12 @@ package com.civildebatewall.kiosk {
 		}
 		
 		private function onLimitUnreached(e:Event):void {
-			characterLimitWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE});			
+			characterLimitWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE});			
 		}		
 		
 		
 		private function onNameNotEmpty(e:Event):void {
-			noNameWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE});
+			noNameWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE});
 			nameEntryField.setOnNotEmpty(null);
 		}
 		
@@ -1264,7 +1312,7 @@ package com.civildebatewall.kiosk {
 			else {
 				// there was an error, the name probably already existed!
 				usernameTakenWarning.tweenIn();
-				TweenMax.delayedCall(5, function():void { usernameTakenWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE}); });
+				TweenMax.delayedCall(5, function():void { usernameTakenWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE}); });
 				nameEntryView(); // make sure we stay here!
 				
 			}
@@ -1320,7 +1368,7 @@ package com.civildebatewall.kiosk {
 			
 			portrait.tweenIn();			
 
-			questionHeader.tweenIn();
+			questionHeaderHome.tweenIn();
 			
 			bigButton.tweenIn();
 			
@@ -1502,7 +1550,7 @@ package com.civildebatewall.kiosk {
 		}
 		
 		private function onOpinionNotEmpty(e:Event):void {
-			noOpinionWarning.tweenOut(-1, {x: BlockBase.OFF_RIGHT_EDGE});
+			noOpinionWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE});
 			nameEntryField.setOnNotEmpty(null);
 		}
 				
@@ -1530,7 +1578,7 @@ package com.civildebatewall.kiosk {
 			// blocks
 			portrait.tweenIn();	
 		
-			questionHeader.tweenIn();
+			questionHeaderHome.tweenIn();
 			statsOverlay.tweenIn();
 			
 			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design25);
@@ -1585,77 +1633,45 @@ package com.civildebatewall.kiosk {
 		private function markAllInactive():void {
 			// other housekeeping, TODO break this into its own function?
 			if(smsCheckTimer != null) smsCheckTimer.stop();					
-			
-			
-			
-			
+
 			// marks all FIRST LEVEL blocks as inactive
 			for (var i:int = 0; i < this.numChildren; i++) {
 				//if ((this.getChildAt(i) is BlockBase) && (this.getChildAt(i).visible)) {
 				// attempt to fix blank screen issue....
+				if (this.getChildAt(i) is OldBlockBase) {				
+					(this.getChildAt(i) as OldBlockBase).active = false;
+				}
+								
+				// Run on the new block base too, this is ugly...				
 				if (this.getChildAt(i) is BlockBase) {				
 					(this.getChildAt(i) as BlockBase).active = false;
 				}
-				
-				
-				// Run on the proxies, too... this is ugly				
-				if (this.getChildAt(i) is BlockBaseTweenable) {				
-					(this.getChildAt(i) as BlockBaseTweenable).active = false;
-				}
-				
-				if (this.getChildAt(i) is BlockBitmapTweenable) {				
-					(this.getChildAt(i) as BlockBitmapTweenable).active = false;
-				}			
-				
-				if (this.getChildAt(i) is BlockTextTweenable) {				
-					(this.getChildAt(i) as BlockTextTweenable).active = false;
-				}
-				
-				
 			}
 		}
 		
 		
 		private function tweenOutInactive(instant:Boolean = false):void {	
 			for (var i:int = 0; i < this.numChildren; i++) {
+				if ((this.getChildAt(i) is OldBlockBase) && !(this.getChildAt(i) as OldBlockBase).active) {
+					if (instant)
+						(this.getChildAt(i) as OldBlockBase).tweenOut(0);
+					else
+						(this.getChildAt(i) as OldBlockBase).tweenOut();
+				}
+			}
+			
+			
+			// Run on the new block base too, this is ugly...
+			for (i = 0; i < this.numChildren; i++) {
 				if ((this.getChildAt(i) is BlockBase) && !(this.getChildAt(i) as BlockBase).active) {
 					if (instant)
 						(this.getChildAt(i) as BlockBase).tweenOut(0);
 					else
 						(this.getChildAt(i) as BlockBase).tweenOut();
 				}
-			}
-			
-			
-			// Run on the proxies, too... this is ugly
-			for (i = 0; i < this.numChildren; i++) {
-				if ((this.getChildAt(i) is BlockBaseTweenable) && !(this.getChildAt(i) as BlockBaseTweenable).active) {
-					if (instant)
-						(this.getChildAt(i) as BlockBaseTweenable).tweenOut(0);
-					else
-						(this.getChildAt(i) as BlockBaseTweenable).tweenOut();
-				}
 			}		
 			
-			for (i = 0; i < this.numChildren; i++) {
-				if ((this.getChildAt(i) is BlockBitmapTweenable) && !(this.getChildAt(i) as BlockBitmapTweenable).active) {
-					if (instant)
-						(this.getChildAt(i) as BlockBitmapTweenable).tweenOut(0);
-					else
-						(this.getChildAt(i) as BlockBitmapTweenable).tweenOut();
-				}
-			}			
-			
-			for (i = 0; i < this.numChildren; i++) {
-				if ((this.getChildAt(i) is BlockTextTweenable) && !(this.getChildAt(i) as BlockTextTweenable).active) {
-					if (instant)
-						(this.getChildAt(i) as BlockTextTweenable).tweenOut(0);
-					else
-						(this.getChildAt(i) as BlockTextTweenable).tweenOut();
-				}
-			}						
-			
-			
+
 		}
 		
 	}

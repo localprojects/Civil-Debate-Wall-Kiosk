@@ -15,7 +15,7 @@ package com.civildebatewall.kiosk.blocks {
 	import sekati.layout.Arrange;
 	
 	// multi-line block text
-	public class BlockParagraph extends BlockBase {
+	public class BlockParagraph extends OldBlockBase {
 		
 		protected var _textWidth:Number;
 		protected var _text:String;

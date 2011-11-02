@@ -3,10 +3,10 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.staging.futilProxies.BlockBaseTweenable;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Back;
 	import com.greensock.easing.Elastic;
+	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
@@ -18,7 +18,7 @@ package com.civildebatewall.kiosk.elements {
 	
 	import flashx.textLayout.formats.TextAlign;
 	
-	public class LikeButton extends BlockBaseTweenable {
+	public class LikeButton extends BlockBase {
 		
 		private var counter:BlockText;
 		private var icon:Bitmap;		

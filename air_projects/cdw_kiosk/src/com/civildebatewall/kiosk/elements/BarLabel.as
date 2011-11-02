@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.Utilities;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.civildebatewall.kiosk.blocks.BlockLabel;
 	import com.civildebatewall.kiosk.blocks.BlockLabelBar;
 	import com.greensock.TweenMax;
@@ -12,7 +12,7 @@ package com.civildebatewall.kiosk.elements {
 	
 	
 	
-	public class BarLabel extends BlockBase {
+	public class BarLabel extends OldBlockBase {
 		
 		protected var mainLabel:BlockLabelBar;
 		protected var _mainLabelText:String;

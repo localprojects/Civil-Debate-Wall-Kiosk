@@ -4,7 +4,7 @@ package com.civildebatewall.kiosk.keyboard {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.kiosk.Kiosk;
 	import com.civildebatewall.Utilities;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.kitschpatrol.futil.Math2;
 	
 	import flash.display.InteractiveObject;
@@ -17,7 +17,7 @@ package com.civildebatewall.kiosk.keyboard {
 	
 	
 	
-	public class Keyboard extends BlockBase {
+	public class Keyboard extends OldBlockBase {
 		
 		private var keys:Array;
 		private var shift:Boolean;

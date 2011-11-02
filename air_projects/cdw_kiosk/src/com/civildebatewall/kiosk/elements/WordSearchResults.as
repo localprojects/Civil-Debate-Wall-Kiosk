@@ -6,7 +6,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.Word;
 	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.civildebatewall.kiosk.ui.ButtonBase;
 	import com.civildebatewall.kiosk.ui.InertialScrollField;
 	import com.civildebatewall.kiosk.ui.WordButton;
@@ -15,7 +15,7 @@ package com.civildebatewall.kiosk.elements {
 	import flash.display.*;
 	import flash.events.*;
 	
-	public class WordSearchResults extends BlockBase {
+	public class WordSearchResults extends OldBlockBase {
 		
 		public var scrollField:InertialScrollField;		
 		public var resultCount:uint;		
@@ -116,7 +116,7 @@ package com.civildebatewall.kiosk.elements {
 			}
 			else {
 				// it's a response
-				CivilDebateWall.kiosk.view.debateOverlayView();
+				CivilDebateWall.kiosk.view.threadView();
 			}
 		}
 		

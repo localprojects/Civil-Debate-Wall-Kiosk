@@ -9,7 +9,7 @@ package com.civildebatewall.kiosk.ui {
 	
 	import com.civildebatewall.CivilDebateWall;
 	
-	public class BalloonButton extends BlockButton {
+	public class BalloonButtonOld extends BlockButton {
 
 		private var tail:Shape;
 		private var tailOutline:Shape;
@@ -20,7 +20,7 @@ package com.civildebatewall.kiosk.ui {
 		
 		
 		// block button with a tail
-		public function BalloonButton(buttonWidth:Number, buttonHeight:Number, backgroundColor:uint, labelText:String, labelSize:Number, labelColor:uint = 0xffffff, labelFont:String = null)	{
+		public function BalloonButtonOld(buttonWidth:Number, buttonHeight:Number, backgroundColor:uint, labelText:String, labelSize:Number, labelColor:uint = 0xffffff, labelFont:String = null)	{
 			radius = 30;
 			
 			tail = new Shape();

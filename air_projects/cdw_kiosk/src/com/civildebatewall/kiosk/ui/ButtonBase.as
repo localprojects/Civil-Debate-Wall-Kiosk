@@ -9,9 +9,9 @@ package com.civildebatewall.kiosk.ui {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.blocks.BlockBase;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	
-	public class ButtonBase extends BlockBase {
+	public class ButtonBase extends OldBlockBase {
 		
 		public static const ACTIVE:String = 'active';
 		public static const INACTIVE:String = 'active';

@@ -4,9 +4,10 @@ package com.kitschpatrol.futil.blocks {
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
 	import flash.display.Shape;
+	import flash.display.Sprite;
 	
 	// for background
-	public class BlockShape extends Shape {
+	public class BlockShape extends Sprite {
 		
 		// Shape
 		private var _width:Number;

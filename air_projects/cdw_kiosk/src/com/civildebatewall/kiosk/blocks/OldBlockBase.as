@@ -9,7 +9,7 @@ package com.civildebatewall.kiosk.blocks {
 	import flash.display.Sprite;
 	
 	
-	public class BlockBase extends Sprite {
+	public class OldBlockBase extends Sprite {
 		
 		private var defaultTweenVars:Object;
 		public var defaultTweenInVars:Object; // public for the drag transition... TODO better way to expose tween-in X?
@@ -20,7 +20,7 @@ package com.civildebatewall.kiosk.blocks {
 		public var active:Boolean; // inactive blocks are marked for tweening out on the screen
 		
 		
-		public function BlockBase() {
+		public function OldBlockBase() {
 			super();
 			
 			// set some default parameters, can be overriden

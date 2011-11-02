@@ -27,6 +27,7 @@ package com.kitschpatrol.futil.blocks {
 		private var _textFont:String;
 		private var _letterSpacing:Number;
 		private var _leading:Number;
+		private var _textAlpha:Number;
 		
 		// TODO Implement this
 		private var _boundingMode:String;
@@ -79,6 +80,7 @@ package com.kitschpatrol.futil.blocks {
 			// Sensible defaults.
 			_textAlignmentMode = TextFormatAlign.LEFT;
 			_textColor = 0x000000;
+			_textAlpha = 1.0;
 			_text = "AA";
 			_textBold = false;
 			_textFont = DefaultAssets.DEFAULT_FONT
@@ -87,7 +89,7 @@ package com.kitschpatrol.futil.blocks {
 			_textSizePixels = 20;
 			_selectable = false;	
 			_letterSpacing = 0;
-			_leading = 0;
+			_leading = 0;			
 			_growthMode = MAXIMIZE_WIDTH;
 			
 			textField = generateTextField(_text, _textSizePixels);
@@ -336,8 +338,9 @@ package com.kitschpatrol.futil.blocks {
 			
 			var startTime:int = getTimer();
 			
-			// check cache, note weird string index
-			var cacheKey:String = _textFont + _sizeFactorGlyphs;
+			// check cache, note weird string index to make sure each change in compensation dimensions
+			// yields a fresh swath of cache
+			var cacheKey:String = _textFont + _textBold + _sizeFactorGlyphs;
 			
 			if (BlockText.sizeMaps.hasOwnProperty(cacheKey)) {
 				trace("In the cache, load that: " + cacheKey);
@@ -346,10 +349,6 @@ package com.kitschpatrol.futil.blocks {
 			}
 			else {
 				trace("Not cached! Generating: " + cacheKey);
-				
-				
-				
-				
 				// rebuilds size set maping pixel sizes to flash TextField sizes
 				// height is maximum character height (in pixels) for a given internal size
 				BlockText.sizeMaps[cacheKey] = {};
@@ -466,6 +465,13 @@ package com.kitschpatrol.futil.blocks {
 			textField.textColor = _textColor;
 			// no need to update
 		}
+		
+		public function get textAlpha():Number	{	return _textAlpha;	}
+		public function set textAlpha(value:Number):void  {
+			_textAlpha = value;
+			textField.alpha = _textAlpha;
+			// no need to update
+		}		
 		
 		public function get growthMode():String { return _growthMode; }
 		public function set growthMode(mode:String):void {
