@@ -118,9 +118,9 @@ package com.civildebatewall.kiosk.elements {
 		private function onDebateClick(e:Event):void {
 			// Respond to debate
 			trace("Debate with post: " + _post);
-			CivilDebateWall.state.userIsResponding = true;
+			CivilDebateWall.state.userIsDebating = true;
 			CivilDebateWall.state.userRespondingTo = _post;				
-			CivilDebateWall.kiosk.view.pickStanceView();			
+		//	CivilDebateWall.kiosk.view.pickStanceView();			
 		}
 		
 		private function finishSettingPost(instant:Boolean = false):void {

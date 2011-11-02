@@ -2,6 +2,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
+	import com.civildebatewall.data.Post;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Back;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -14,51 +15,64 @@ package com.civildebatewall.kiosk.elements {
 	
 	public class FlagButton extends BlockBase {
 		
-		private var icon:Bitmap;
+		private var _targetPost:Post;		
+		
+		public var icon:Bitmap;
 		
 		public function FlagButton() {
 			super({
 				buttonMode: true,
-				width: 64,
-				height: 64,
-				backgroundRadius: 8,
-				alignmentPoint: Alignment.CENTER
+				width: 30,
+				height: 30,
+				backgroundRadius: 4,
+				alignmentPoint: Alignment.CENTER,
+				icon: Assets.getFlagIconSmall()
 			});
 			
-			icon = Assets.getFlagIcon();
 			addChild(icon);
-			
-			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
 			
 			buttonTimeout = 5000;
 			onButtonDown.push(onDown);
 			onStageUp.push(onUp);
 			onButtonLock.push(onLock);
 			onButtonUnlock.push(onUnlock);
+			onButtonCancel.push(onCancel);
 		}
 		
-		private function onActiveDebateChange(e:Event):void {
+		public function get targetPost():Post {
+			return _targetPost;
+		}
+		public function set targetPost(post:Post):void {
+			_targetPost = post;
 			unlock(); // Fires onUnlock() below.			
 		}
 		
 		private function onDown(e:MouseEvent):void {
-			backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDark;
+			backgroundColor = _targetPost.stanceColorDark;
 		}
 		
 		private function onLock(e:MouseEvent):void {
-			backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled;
+			backgroundColor = _targetPost.stanceColorDisabled;
 		}
 		
 		private function onUnlock(e:MouseEvent):void {
-			backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorMedium;			
+			backgroundColor = _targetPost.stanceColorMedium;			
 		}
 		
 		private function onUp(e:MouseEvent):void {
-			CivilDebateWall.data.flag(CivilDebateWall.state.activeThread.firstPost);
+			if (mouseEnabled) {
+				CivilDebateWall.data.flag(_targetPost);
 			
-			// Thump animation
-			TweenMax.to(icon, 0.25, {transformAroundCenter:{scaleX: 1.5, scaleY: 1.5}, alpha: 0.75, ease: Back.easeOut, yoyo: true, repeat: 1});
-		}			
+				// Thump animation
+				TweenMax.to(icon, 0.25, {transformAroundCenter:{scaleX: 1.5, scaleY: 1.5}, alpha: 0.75, ease: Back.easeOut, yoyo: true, repeat: 1});
+			}
+		}
+		
+		private function onCancel(e:MouseEvent):void {
+			if (_targetPost != null) {
+				backgroundColor = _targetPost.stanceColorMedium;
+			}
+		}		
 		
 		
 	}

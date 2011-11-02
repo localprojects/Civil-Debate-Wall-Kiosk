@@ -14,8 +14,10 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.kiosk.keyboard.*;
 	import com.civildebatewall.kiosk.ui.*;
 	import com.civildebatewall.staging.elements.BalloonButton;
+	import com.civildebatewall.staging.elements.DebateButton;
 	import com.civildebatewall.staging.elements.NavArrow;
 	import com.civildebatewall.staging.elements.QuestionHeader;
+	import com.civildebatewall.staging.elements.RespondButton;
 	import com.civildebatewall.staging.elements.SortLinks;
 	import com.civildebatewall.staging.elements.StatsButton;
 	import com.greensock.*;
@@ -62,9 +64,9 @@ package com.civildebatewall.kiosk {
 		public var portrait:Portrait;
 		public var questionHeaderHome:QuestionHeader;		
 		public var opinion:OpinionText;	
-		private var likeButton:LikeButton;
+		private var likeButton:HomeLikeButton;
 		private var viewCommentsButton:ViewCommentsButton;
-		private var flagButton:FlagButton;
+		private var flagButton:HomeFlagButton;
 		private var leftArrow:NavArrow;
 		private var rightArrow:NavArrow;
 		private var bigButton:BigButton; // TODO migrate to Futil?		
@@ -74,7 +76,19 @@ package com.civildebatewall.kiosk {
 		
 		private var questionHeader:QuestionHeader;
 		
+		private var bigBackButton:BigBackButton;
+		
+		
+		private var questionHeaderDecision:QuestionHeader;
 		private var backButton:BackButton;
+		private var respondButton:RespondButton;
+		private var debateButton:DebateButton;
+		private var orText:BlockBitmap;
+		
+		private var yesButton:YesButton;
+		private var noButton:NoButton;
+		
+		private var opinionEntryOverlay:OpinionEntryOverlay;
 		
 		
 		// OLD STUFF
@@ -118,8 +132,7 @@ package com.civildebatewall.kiosk {
 		private var statsButton:StatsButton;
 				
 		private var secondaryDebateButton:BalloonButtonOld;		
-		private var yesButton:BlockButton;
-		private var noButton:BlockButton;
+
 		private var exitButton:BlockButton;				
 		private var characterLimit:BlockLabelBar;
 		private var photoBoothNag:BlockLabel;
@@ -193,16 +206,49 @@ package com.civildebatewall.kiosk {
 			questionHeaderHome = new QuestionHeader({width: 1080, height: 313, textSizePixels: 39, leading: 29});
 			questionHeaderHome.setDefaultTweenIn(1, { alpha: 1});
 			questionHeaderHome.setDefaultTweenOut(1, { alpha: 0});
-			addChild(questionHeaderHome)
+			addChild(questionHeaderHome);
 			
 			questionHeader = new QuestionHeader({width: 1024, height: 250, textSizePixels: 28,	leading: 22});
 			questionHeader.setDefaultTweenIn(1, {x: 28, alpha: 1});
 			questionHeader.setDefaultTweenOut(1, {x: 28, alpha: 0});
-			addChild(questionHeader)			
+			addChild(questionHeader);
+			
+			questionHeaderDecision = new QuestionHeader({width: 880, height: 157, textSizePixels: 26, leading: 18});		
+			questionHeaderDecision.setDefaultTweenIn(1, {x: 100, y: 1060});
+			questionHeaderDecision.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1060});
+			addChild(questionHeaderDecision);			
+			
+			backButton = new BackButton();
+			backButton.setDefaultTweenIn(1, {x: 100, y: 982});
+			backButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 982});
+			addChild(backButton);
 			
 			
+			respondButton = new RespondButton();
+			respondButton.setDefaultTweenIn(1, {x: 100, y: 1231});
+			respondButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1231});
+			addChild(respondButton);			
+			
+			debateButton = new DebateButton();
+			debateButton.setDefaultTweenIn(1, {x: 583, y: 1231});
+			debateButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 1231});
+			addChild(debateButton);				
+			
+			orText = new BlockBitmap({bitmap: Assets.getOrText()});			
+			orText.setDefaultTweenIn(1, {x: 524, y: 1294, alpha: 1});
+			orText.setDefaultTweenOut(1, {x: 524, y: 1294, alpha: 0});
+			addChild(orText);			
 			
 			
+			yesButton = new YesButton();
+			yesButton.setDefaultTweenIn(1, {x: 446, y: 1231});
+			yesButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1231});
+			addChild(yesButton);
+			
+			noButton = new NoButton();
+			noButton.setDefaultTweenIn(1, {x: 720, y: 1231});
+			noButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 1231});
+			addChild(noButton);			
 			
 			// triple opinions
 			
@@ -213,7 +259,7 @@ package com.civildebatewall.kiosk {
 			
 			opinion = new OpinionText();	
 			opinion.setDefaultTweenIn(1, {x: 100, y: 1296});
-			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT,  y: 1296});
+			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1296});
 			addChild(opinion);
 			
 			debateThisButton = new BalloonButton();
@@ -222,6 +268,16 @@ package com.civildebatewall.kiosk {
 			addChild(debateThisButton);
 			
 
+			
+			opinionEntryOverlay = new OpinionEntryOverlay();
+			opinionEntryOverlay.setDefaultTweenIn(1, {x: 0, y: 0});
+			opinionEntryOverlay.setDefaultTweenOut(1, {x: 0, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(opinionEntryOverlay);
+			
+			
+			
+			
+			
 			
 			// TODO is there always a drag layer?
 			dragLayer = new DragLayer();
@@ -271,7 +327,7 @@ package com.civildebatewall.kiosk {
 			
 			threadOverlayBrowser = new ThreadBrowser();
 			threadOverlayBrowser.setDefaultTweenIn(1, {x: 28}); // y depends on opinion height
-			threadOverlayBrowser.setDefaultTweenOut(1, {x: 28, y: OldBlockBase.OFF_BOTTOM_EDGE});			
+			threadOverlayBrowser.setDefaultTweenOut(1, {x: 28, y: Alignment.OFF_STAGE_BOTTOM});			
 			addChild(threadOverlayBrowser);			
 			
 			debateStrip = new DebateStrip();
@@ -433,12 +489,12 @@ package com.civildebatewall.kiosk {
 			sortLinks.setDefaultTweenOut(1, {y: Alignment.OFF_STAGE_BOTTOM});			
 			addChild(sortLinks);
 			
-			likeButton = new LikeButton();
+			likeButton = new HomeLikeButton();
 			likeButton.setDefaultTweenIn(1, {x: 100, y: 1341});
 			likeButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
 			addChild(likeButton);
 			
-			flagButton = new FlagButton();
+			flagButton = new HomeFlagButton();
 			flagButton.setDefaultTweenIn(1, {x: 916, y: 1341});
 			flagButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
 			addChild(flagButton);
@@ -507,10 +563,10 @@ package com.civildebatewall.kiosk {
 			addChild(flagNoButton);			
 			
 
-			backButton = new BackButton();
-			backButton.setDefaultTweenIn(1, {x: 28, y: 1826});
-			backButton.setDefaultTweenOut(1, {x: 28, y: Alignment.OFF_STAGE_BOTTOM});
-			addChild(backButton);			
+			bigBackButton = new BigBackButton();
+			bigBackButton.setDefaultTweenIn(1, {x: 28, y: 1826});
+			bigBackButton.setDefaultTweenOut(1, {x: 28, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(bigBackButton);			
 			
 			// Submit overlay
 			submitOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
@@ -572,7 +628,12 @@ package com.civildebatewall.kiosk {
 			CivilDebateWall.state.clearUser();
 
 			// behaviors
-			bigButton.setOnClick(pickStanceView);				
+			
+			bigButton.setOnClick(function():void {
+				CivilDebateWall.state.setView(debateTypePickerView);			
+			});				
+			
+			
 			
 			// blocks
 			portrait.tweenIn();
@@ -584,6 +645,8 @@ package com.civildebatewall.kiosk {
 		
 		// =========================================================================
 		
+
+		
 		public function homeView(...args):void {
 			markAllInactive();
 			
@@ -591,11 +654,12 @@ package com.civildebatewall.kiosk {
 			CivilDebateWall.state.clearUser(); // Reset user info
 						
 			
-			bigButton.setText('ADD YOUR OPINION'); // TODO move to listener?
+			bigButton.setText('JOIN THE DEBATE'); // TODO move to listener?
+			bigButton.setOnClick(function():void {
+				CivilDebateWall.state.userRespondingTo = CivilDebateWall.state.activeThread.firstPost;
+				CivilDebateWall.state.setView(debateTypePickerView);			
+			});							
 			
-			// behavior
-			// bigButton.setOnClick(onAddOpinionButton);			
-			//statsButton.setOnClick(statsView);
 
 			// blocks
 			portrait.tweenIn();
@@ -654,19 +718,17 @@ package com.civildebatewall.kiosk {
 			// Alignment
 			opinionUnderlay.height = opinion.contentHeight + 233;
 			debateThisButton.y = 327 + opinion.contentHeight;
-			threadOverlayBrowser.y = opinionUnderlay.y + opinionUnderlay.height + 14;
-			threadOverlayBrowser.maxHeight = 1812 - threadOverlayBrowser.y;
+			threadOverlayBrowser.maxHeight = 1812 - (opinionUnderlay.y + opinionUnderlay.height + 14);
 
 			
-
 			//debateOverlay.setMaxHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));
 			portrait.tweenIn();
 			questionHeader.tweenIn();
 			opinionUnderlay.tweenIn();			
 			opinion.tweenIn(1, {y: 327 + opinion.contentHeight});
-			threadOverlayBrowser.tweenIn();
+			threadOverlayBrowser.tweenIn(1, {y: opinionUnderlay.y + opinionUnderlay.height + 14});
 			debateThisButton.tweenIn();
-			backButton.tweenIn();
+			bigBackButton.tweenIn();
 			
 			//debateOverlay.tweenIn(-1, {y: letsDebateUnderlay.y + letsDebateUnderlay.height + 30});
 			
@@ -696,6 +758,74 @@ package com.civildebatewall.kiosk {
 		
 		
 		// =========================================================================
+		
+		public function debateTypePickerView(...args):void {
+			markAllInactive(); 
+			CivilDebateWall.inactivityTimer.arm();
+			
+			CivilDebateWall.state.backDestination = homeView;  
+			
+			portrait.tweenIn(1, {alpha: 0.25});
+			backButton.tweenIn();
+			questionHeaderDecision.tweenIn();
+			respondButton.tweenIn();
+			orText.tweenIn();
+			debateButton.tweenIn();
+			
+			// custom tween outs
+			threadOverlayBrowser.tweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: threadOverlayBrowser.y});
+			opinion.tweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: opinion.y});
+			bigBackButton.tweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: bigBackButton.y});
+			
+			tweenOutInactive();			
+		}
+
+		// =========================================================================
+		
+		public function debateStancePickerView(...args):void {
+			markAllInactive();
+			CivilDebateWall.inactivityTimer.arm();
+			
+			CivilDebateWall.state.backDestination = CivilDebateWall.state.lastView;
+			
+			portrait.tweenIn(1, {alpha: 0.25});
+			backButton.tweenIn();
+			questionHeaderDecision.tweenIn();
+			yesButton.tweenIn();
+			noButton.tweenIn();
+			
+			
+			
+			tweenOutInactive();			
+		}
+		
+		
+		public function opinionEntryView(...args):void {
+			markAllInactive();			
+			CivilDebateWall.inactivityTimer.arm();
+			CivilDebateWall.state.backDestination = CivilDebateWall.state.lastView;
+			
+			opinionEntryOverlay.tweenIn();
+			
+			tweenOutInactive();			
+		}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			// ==============================================================================================================
+			// Old views ====================================================================================================
+			// ==============================================================================================================
+		
+		
+		
+		
 		
 		
 		public function flagOverlayView(...args):void {
@@ -815,61 +945,7 @@ package com.civildebatewall.kiosk {
 		}
 		
 		
-		// =========================================================================		
-		
-		
-		public function pickStanceView(...args):void {
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = pickStanceView;			
-			markAllInactive();		
-			
-			CivilDebateWall.inactivityTimer.arm();
-			
-			// mutations
-			opinion.y = 1347 - opinion.height; // return opinion to starting location (for entry via "debate me" button)
-			
-			portrait.setImage(Assets.portraitPlaceholder);
-			//question.setTextColor(CDW.state.questionTextColor);
-			
-			noButton.setBackgroundColor(Assets.COLOR_NO_LIGHT);
-			noButton.setDownColor(Assets.COLOR_NO_MEDIUM);
-			
-			yesButton.setBackgroundColor(Assets.COLOR_YES_LIGHT);
-			yesButton.setDownColor(Assets.COLOR_YES_LIGHT);
-			
-			noButton.showOutline(true);
-			yesButton.showOutline(true);			
-			
-			if (CivilDebateWall.state.userIsResponding) {
-				trace("User is responding!");
-				// got here from the 'let's debate' button and not the 'add opinion button'
-				bigButton.setText('DEBATE ME', true);
-				bigButton.disable();
-			}
-			
-			// behaviors
-			yesButton.setOnClick(onYesButton);
-			noButton.setOnClick(onNoButton);
-			
-			// blocks
-			portrait.tweenIn();
-		
-			questionHeaderHome.tweenIn();
-			bigButton.tweenIn();
-			pickStanceInstructions.tweenIn();
-			yesButton.tweenIn(-1, {delay: 0.5}); // side slide & delay per jonathan
-			noButton.tweenIn(-1, {delay: 0.5}); // side slide & delay per jonathan
-			
-			
-			tweenOutInactive();	// TODO disable behaviors as well? or let them ride? implications for mid-tween events
-			
-			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design8);			
-		}
-		
-		
-		// =========================================================================		
 
-		
 		private var smsCheckTimer:Timer;
 		
 		public function smsPromptView(...args):void {
@@ -887,17 +963,9 @@ package com.civildebatewall.kiosk {
 			exitButton.setBackgroundColor(CivilDebateWall.state.userStanceColorDark, true);
 			exitButton.setDownColor(CivilDebateWall.state.userStanceColorMedium);			
 			
-			noButton.showOutline(false);
-			yesButton.showOutline(false);			
+
 			
-			if (CivilDebateWall.state.userStance == 'yes') {
-				noButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);
-			}
-			else {	
-				yesButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);
-			}
-			
-			if (CivilDebateWall.state.userIsResponding) {
+			if (CivilDebateWall.state.userIsDebating) {
 				bigButton.setText('DEBATE ME', true);				
 			}
 			else {
@@ -908,8 +976,7 @@ package com.civildebatewall.kiosk {
 			exitButton.setOnClick(homeView); // TODO do we need the back button?
 			portrait.setImage(Assets.portraitPlaceholder);
 			//question.setTextColor(CDW.state.questionTextColor);			
-			yesButton.setOnClick(null);
-			noButton.setOnClick(null);
+
 			//
 			
 			// start polling to see if the user has sent their opinion yet
@@ -1431,7 +1498,7 @@ package com.civildebatewall.kiosk {
 			var imageName:String = FileUtil.saveJpeg(CivilDebateWall.state.userImage, CivilDebateWall.settings.imagePath, CivilDebateWall.state.userID + '.jpg');
 			var payload:Object;
 			
-			if (CivilDebateWall.state.userIsResponding) {
+			if (CivilDebateWall.state.userIsDebating) {
 				// create and upload new comment
 				trace("Uploading response post");
 				
@@ -1464,7 +1531,7 @@ package com.civildebatewall.kiosk {
 				CivilDebateWall.state.activePost = null;			
 			}			
 			
-			CivilDebateWall.data.load();			
+			CivilDebateWall.data.load();
 		}
 		
 		
@@ -1498,7 +1565,6 @@ package com.civildebatewall.kiosk {
 			editOpinion.setOnLimitReached(onLimitReached);
 			editOpinion.setOnLimitUnreached(onLimitUnreached);
 			editOpinion.setOnNumLinesChange(onNumLinesChange);			
-			
 			
 			//blocks		
 			portrait.tweenIn();	

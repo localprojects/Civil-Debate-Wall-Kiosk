@@ -100,7 +100,7 @@ package com.civildebatewall {
 
 			if (selection == 'Home') CivilDebateWall.kiosk.view.homeView();
 			if (selection == 'Debate Overlay') CivilDebateWall.kiosk.view.threadView();
-			if (selection == 'Pick Stance') CivilDebateWall.kiosk.view.pickStanceView();
+	//		if (selection == 'Pick Stance') CivilDebateWall.kiosk.view.pickStanceView();
 			if (selection == 'SMS Prompt') CivilDebateWall.kiosk.view.smsPromptView();
 			if (selection == 'Photo Booth') CivilDebateWall.kiosk.view.photoBoothView();
 			if (selection == 'Name Entry') CivilDebateWall.kiosk.view.nameEntryView();

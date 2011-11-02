@@ -85,7 +85,7 @@ package com.civildebatewall {
 			}
 			
 			// fill the background
-			graphics.beginFill(0xffffff);
+			graphics.beginFill(0x000000);
 			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 			graphics.endFill();
 			

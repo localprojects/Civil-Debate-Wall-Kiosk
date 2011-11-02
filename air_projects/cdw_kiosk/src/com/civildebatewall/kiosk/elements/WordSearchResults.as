@@ -29,9 +29,9 @@ package com.civildebatewall.kiosk.elements {
 			scrollField = new InertialScrollField(1022, 843);
 			addChild(scrollField);
 			
-			scrollField.scrollSheet.addEventListener(Comment.EVENT_DEBATE, onDebate, true);
-			scrollField.scrollSheet.addEventListener(Comment.EVENT_FLAG, onFlag, true);			
-			scrollField.scrollSheet.addEventListener(Comment.EVENT_BUTTON_DOWN, onDown, true);
+//			scrollField.scrollSheet.addEventListener(Comment.EVENT_DEBATE, onDebate, true);
+//			scrollField.scrollSheet.addEventListener(Comment.EVENT_FLAG, onFlag, true);			
+//			scrollField.scrollSheet.addEventListener(Comment.EVENT_BUTTON_DOWN, onDown, true);
 			scrollField.scrollSheet.addEventListener(SearchResult.EVENT_GOTO_DEBATE, onGoToDebate, true);
 		}
 		
@@ -47,16 +47,16 @@ package com.civildebatewall.kiosk.elements {
 
 			for (var i:uint = 0; i < word.posts.length; i++) {
 				var post:Post = word.posts[i];
-						
-				// create object and add it to the scroll field
-				var resultRow:SearchResult = new SearchResult(post, i + 1, word.word);
+//						
+//				// create object and add it to the scroll field
+//				var resultRow:SearchResult = new SearchResult();
+//				
+//				resultRow.x = 0;
+//				resultRow.y = yOffset;
+//				resultRow.visible = true;
 				
-				resultRow.x = 0;
-				resultRow.y = yOffset;
-				resultRow.visible = true;
-				
-				yOffset += resultRow.height + paddingBottom;
-				scrollField.scrollSheet.addChild(resultRow);	
+		//		yOffset += resultRow.height + paddingBottom;
+		//		scrollField.scrollSheet.addChild(resultRow);	
 			}
 			
 			// set scroll bounds
@@ -78,9 +78,9 @@ package com.civildebatewall.kiosk.elements {
 			
 			if (scrollField.isClick) {
 				trace("Debate with post: " + targetSearchResult.post);
-				CivilDebateWall.state.userIsResponding = true;
+				CivilDebateWall.state.userIsDebating = true;
 				CivilDebateWall.state.userRespondingTo = targetSearchResult.post;				
-				CivilDebateWall.kiosk.view.pickStanceView();
+		//		CivilDebateWall.kiosk.view.pickStanceView();
 			}
 			else {
 				trace('Not a real click.');

@@ -20,6 +20,7 @@ package com.civildebatewall {
 		
 		public var activeView:Function;
 		public var lastView:Function;
+		public var backDestination:Function;
 		
 		public var lastThread:Thread = null;		
 		public var activeThread:Thread = null;
@@ -55,7 +56,7 @@ package com.civildebatewall {
 		public var userStanceColorDisabled:uint;		
 		
 		public var activeComment:String = null;
-		public var userIsResponding:Boolean = false; // true if we're entering a debate through the "let's debate" button
+		public var userIsDebating:Boolean = false; // true if we're entering a debate through the "let's debate" button
 		
 		public var questionTextColor:uint = 0xff0000;
 
@@ -80,7 +81,7 @@ package com.civildebatewall {
 			userImage = new Bitmap(new BitmapData(1920, 1080));
 			userPhoneNumber = '';
 			userOpinion = '';
-			userIsResponding = false;
+			userIsDebating = false;
 			userImageFull = null;
 			userRespondingTo = null;
 			textMessage = null;

@@ -37,8 +37,9 @@ package {
 			testBlock = new BlockText({textFont: Assets.FONT_LIGHT,
 				x: 300, y: 300, showRegistrationPoint: true, maxWidth: 10000,
 				maxSizeBehavior: BlockBase.MAX_SIZE_CLIPS,
-				
-				
+				showBorder: true,
+				borderColor: 0xff0000,
+				borderThickness: 5,
 				text: "mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret mea Graece quidam oporteat iuvaret"});
 			
 			
@@ -80,7 +81,11 @@ package {
 			gui.addSlider(targetObject + ".paddingTop", 0, 200, {label: "Padding Top"});
 			gui.addSlider(targetObject + ".paddingRight", 0, 200, {label: "Padding Right"});
 			gui.addSlider(targetObject + ".paddingBottom", 0, 200, {label: "Padding Bottom"});
-			gui.addSlider(targetObject + ".paddingLeft", 0, 200, {label: "Padding Left"});			
+			gui.addSlider(targetObject + ".paddingLeft", 0, 200, {label: "Padding Left"});	
+			gui.addSlider(targetObject + ".backgroundRadiusTopLeft", 0, 50, {label: "rtl"});
+			gui.addSlider(targetObject + ".backgroundRadiusTopRight", 0, 50, {label: "rtr"});
+			gui.addSlider(targetObject + ".backgroundRadiusBottomRight", 0, 50, {label: "rbr"});
+			gui.addSlider(targetObject + ".backgroundRadiusBottomLeft", 0, 50, {label: "rbl"});
 			gui.addSlider(targetObject + ".alignmentX", 0, 1, {label: "Alignment X"});
 			gui.addSlider(targetObject + ".alignmentY", 0, 1, {label: "Alignment Y"});
 			gui.addSlider(targetObject + ".scrollX", 0, 500, {label: "Scroll X"});

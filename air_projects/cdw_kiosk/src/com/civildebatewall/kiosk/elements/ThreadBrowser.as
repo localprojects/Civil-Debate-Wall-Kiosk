@@ -24,13 +24,6 @@ package com.civildebatewall.kiosk.elements {
 			});
 			
 			
-			// fill up the content
-			
-			
-			//addChild(GraphicsUtil.shapeFromSize(100, 2000));
-			
-			
-
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 		}
 		
@@ -45,9 +38,8 @@ package com.civildebatewall.kiosk.elements {
 		}		
 			
 		private function refreshContent():void {
-			var yOffset:int = 30;
-			var paddingBottom:int = 35;
-						
+			var yOffset:int = 0;
+		
 			// clean up, note it's awkward to call content instead of "this"... compromises of Futil
 			GraphicsUtil.removeChildren(content);			
 
@@ -56,75 +48,36 @@ package com.civildebatewall.kiosk.elements {
 
 			// skip the last one since it's the original post
 			for (var i:uint = 0; i < CivilDebateWall.state.activeThread.posts.length - 1; i++) {
-				// create rows
-				var commentRow:Comment = new Comment(CivilDebateWall.state.activeThread.posts[i], i);
 				
-				//commentRow.number = i + 1;
-				commentRow.x = 30;
+				// create rows
+				var commentRow:Comment = new Comment(CivilDebateWall.state.activeThread.posts[i], i + 1);
+				commentRow.x = 0;
 				commentRow.y = yOffset;
 				commentRow.visible = true;
-				
-				yOffset += commentRow.height + paddingBottom;
 				addChild(commentRow);
+				
+				
+				yOffset += commentRow.height;
+				
 				
 				// add the lines between the comments				
 				if (i < CivilDebateWall.state.activeThread.postCount - 2) {
 					var line:Shape = new Shape();
 					line.graphics.lineStyle(1, Assets.COLOR_GRAY_25, 1.0, true);
 					line.graphics.moveTo(0, 0);
-					line.graphics.lineTo(commentRow.width, 0);
-					line.x = commentRow.x;
+					line.graphics.lineTo(commentRow.width - 60, 0);
+					line.x = 30;
 					line.y = yOffset;
-					yOffset += paddingBottom;
-					
 					addChild(line);
 				}
+				
+				yOffset += 1; // compensate for the line
 			}
 			
 
 			// do we need to scroll?
 			//scrollField.scrollAllowed = (scrollField.scrollSheet.height > _maxHeight - 30);			
 		}
-		
-
-
-		
-		
-		private function onNotClick(e:Event):void {
-
-		}		
-		
-//		
-//		private function onDebate(e:Event):void {
-//			targetButton = e.currentTarget as ButtonBase;
-//			targetComment = e.target as Comment;			
-//			
-//			if (scrollField.isClick) {
-//				trace("Debate with post: " + targetComment.post);
-//				CivilDebateWall.state.userIsResponding = true;
-//				CivilDebateWall.state.userRespondingTo = targetComment.post;				
-//				CivilDebateWall.kiosk.view.pickStanceView();
-//			}
-//			else {
-//				trace('Not a real click.');
-//			}
-//		}
-//		
-//		
-//		private function onFlag(e:Event):void {
-//			targetButton = e.currentTarget as ButtonBase;
-//			targetComment = e.target as Comment;			
-//			
-//			if (scrollField.isClick) {
-//				trace("Flag post: " + targetComment.post);
-//				// pull in the flag overlay
-//				CivilDebateWall.state.activePost = targetComment.post;
-//				CivilDebateWall.kiosk.view.flagOverlayView();
-//			}
-//			else {
-//				trace('Not a real click.');
-//			}
-//		}		
 		
 	}
 }

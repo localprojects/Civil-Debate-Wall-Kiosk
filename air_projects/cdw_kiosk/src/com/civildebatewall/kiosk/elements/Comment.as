@@ -1,69 +1,79 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.blocks.*;
 	import com.civildebatewall.data.Post;
+	import com.civildebatewall.kiosk.blocks.*;
 	import com.civildebatewall.kiosk.ui.*;
+	import com.civildebatewall.staging.elements.BalloonButton;
+	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
 	
 	import flash.display.*;
 	import flash.events.Event;
 
-	public class Comment extends OldBlockBase {
-		
-		
-		public static const EVENT_FLAG:String = 'eventFlag';
-		public static const EVENT_DEBATE:String = 'eventDebate';
-		public static const EVENT_BUTTON_DOWN:String = 'eventButtonDown';
-		
+	public class Comment extends BlockBase {
 		
 		protected var _post:Post;
-		protected var _postNumber:uint;
+		protected var _postNumber:int;
+		protected var postNumberString:String;
 		public var _highlight:String;
 		
-		public var activeButton:ButtonBase;
 		protected var portraitWidth:int;
 		protected var portraitHeight:int;
 		protected var portrait:Sprite;
 		protected var stanceLabel:BlockLabel;
 		
-		public function Comment(post:Post, postNumber:uint, highlight:String = null) {
-			super();
-			portraitWidth = 137;
-			portraitHeight = 188;			
+		public function Comment(post:Post, postNumber:int = -1) {
+			super({		
+				width: 1024,
+				minHeight: 257,
+				backgroundAlpha: 0,
+				paddingLeft: 30,
+				paddingRight: 30,
+				paddingTop: 34,
+				paddingBottom: 34
+				
+			});
+			
+			portraitWidth = 138;
+			portraitHeight = 189;			
 			
 			_post = post;
-			_postNumber = postNumber;
-			_highlight = highlight;
+			this.postNumber = postNumber;
 			
-			init();
+			draw();
 		}
 		
-		protected function init():void {
+		private function draw():void {
+			GraphicsUtil.removeChildren(content);
+
 			// draw the portrait
 			portrait = new Sprite();
 			portrait.graphics.beginBitmapFill(BitmapUtil.scaleToFill(_post.user.photo.bitmapData, portraitWidth, portraitHeight), null, false, true);
-			portrait.graphics.drawRoundRect(0, 0, portraitWidth, portraitHeight, 15, 15);
+			portrait.graphics.drawRoundRect(0, 0, portraitWidth, portraitHeight, 5, 5);
 			portrait.graphics.endFill();
 			
-			// draw the stance banner
-			stanceLabel = new BlockLabel('', 28, 0xffffff, 0x000000, Assets.FONT_BOLD, false);
-			stanceLabel.setPadding(0, 0, 0, 0);
-			stanceLabel.visible = true;
-			stanceLabel.setText(_post.stanceFormatted, true);
-			
-			portrait.graphics.beginFill(_post.stanceColorLight);				
-			portrait.graphics.drawRect(0, 131, portraitWidth, 38);
+			portrait.graphics.beginFill(_post.stanceColorMedium);
+			portrait.graphics.drawRect(0, 132, portraitWidth, 39);
 			portrait.graphics.endFill();
 			
-			stanceLabel.y = 130;
-			stanceLabel.x = (portraitWidth / 2) - (stanceLabel.width / 2);				
-			
-			portrait.addChild(stanceLabel)
+			var bannerText:Bitmap;
+			if (_post.stance == Post.STANCE_YES) {
+				bannerText = Assets.getPortraitBannerYes();
+				bannerText.x = 39;
+				bannerText.y = 141;			
+			}
+			else {
+				bannerText = Assets.getPortraitBannerNo();
+				bannerText.x = 44;
+				bannerText.y = 140;				
+			}
+			portrait.addChild(bannerText);
 			addChild(portrait);
 			
 			// add the byline
-			var authorText:String = _postNumber + '. ' + _post.user.usernameFormatted.toUpperCase() + '\u0027S REBUTTAL STATEMENT';
+			var authorText:String = postNumberString + _post.user.usernameFormatted.toUpperCase() + '\u0027S RESPONSE';
 			var authorLabel:BlockLabel = new BlockLabel(authorText, 17, _post.stanceColorLight, 0x000000, Assets.FONT_HEAVY, false);
 			authorLabel.setPadding(0, 0, 0, 0);
 			authorLabel.visible = true;
@@ -76,7 +86,6 @@ package com.civildebatewall.kiosk.elements {
 			// add the timestamp
 			var timeString:String = NumberUtil.zeroPad(_post.created.hours, 2) + NumberUtil.zeroPad(_post.created.minutes, 2);
 			var dateString:String = NumberUtil.zeroPad(_post.created.month, 2) + NumberUtil.zeroPad(_post.created.date, 2) + (_post.created.fullYear - 2000);
-			
 			var timestamp:String = 'Posted at ' + timeString + ' hours on ' + dateString;
 			
 			var timeLabel:BlockLabel = new BlockLabel(timestamp, 12, _post.stanceColorMedium, 0x000000, Assets.FONT_BOLD_ITALIC, false);
@@ -88,28 +97,20 @@ package com.civildebatewall.kiosk.elements {
 			
 			addChild(timeLabel);
 			
-			// add the flag button
-			var flagButton:IconButton = new IconButton(33, 32, _post.stanceColorDark, '', 0, 0x000000, null, Assets.getSmallFlagIcon());
-			flagButton.setDownColor(_post.stanceColorMedium);
-			flagButton.setOutlineWeight(2);
-			flagButton.setStrokeColor(Assets.COLOR_GRAY_15);
-			flagButton.visible = true;
-			flagButton.x = 791;
-			flagButton.y = 8;
-			
+			// flag button
+			var flagButton:FlagButton = new FlagButton();
+			flagButton.targetPost = _post;
+			flagButton.x = 802;
+			flagButton.y = 0;
 			addChild(flagButton);
-			flagButton.setOnDown(onDown);			
-			flagButton.setOnClick(onFlag);
 			
 			// add the hairline
 			var hairline:Shape = new Shape();
 			hairline.graphics.lineStyle(1, _post.stanceColorLight, 0.6, true); // some alpha to make it appear thinner
 			hairline.graphics.moveTo(0, 0);
 			hairline.graphics.lineTo(652, 0);
-			
 			hairline.x = 167;
 			hairline.y = 42;
-			
 			addChild(hairline);
 			
 			// Add the opinoin
@@ -119,61 +120,38 @@ package com.civildebatewall.kiosk.elements {
 			opinion.x = 167;
 			opinion.y = 60;
 			
-			if (_highlight != null) {
-				opinion.setHighlightColor(_post.stanceColorHighlight);
-				opinion.setHighlight(_highlight);
-			}
-			
 			addChild(opinion);
 			
 			// Add the debate me button
-			var debateButton:BalloonButtonOld = new BalloonButtonOld(110, 101, 0x000000, 'LET\u0027S\nDEBATE !', 15);
-			
-			
-			debateButton = new BalloonButtonOld(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
-			debateButton.scaleX = 0.75;  
-			debateButton.scaleY = 0.75;				
-			debateButton.setBackgroundColor(_post.stanceColorDark, true);
-			debateButton.setDownColor(_post.stanceColorMedium);				
-			debateButton.setStrokeColor(Assets.COLOR_GRAY_15);				
-			debateButton.visible = true;
-			
-			debateButton.x = 849;
-			debateButton.y = 61;
-			
-			debateButton.setOnDown(onDown);
-			debateButton.setOnClick(onDebate);
-			
-			addChild(debateButton);				
-			
-			// TODO debate button functionality
-		}
-		
-		public function unClick():void {
-			activeButton.setBackgroundColor(_post.stanceColorDark);
+			var debateButton:BalloonButton = new BalloonButton();
+			debateButton.targetPost = _post;
+			debateButton.x = 860;
+			debateButton.y = 60;
+			addChild(debateButton);					
 		}
 		
 		public function get post():Post {
 			return _post;
 		}
 		
-		protected function onDebate(e:Event):void {
-			// forward to parent
-			if (mouseEnabled) {
-			
-			trace("Debate pressed!");
-			this.dispatchEvent(new Event(EVENT_DEBATE, true, true));
+		public function set post(p:Post):void {
+			_post = p;
+			draw();
+		}
+		
+		public function get postNumber():int { 
+			return _postNumber;
+		}
+		
+		public function set postNumber(number:int):void {
+			_postNumber = number;
+			if (_postNumber == -1) {
+				postNumberString = "";
 			}
-		}
-		
-		protected function onFlag(e:Event):void {
-			// forward to parent
-			this.dispatchEvent(new Event(EVENT_FLAG, true, true));
-		}
-		
-		protected function onDown(e:Event):void {
-			activeButton = e.currentTarget as ButtonBase;
-			this.dispatchEvent(new Event(EVENT_BUTTON_DOWN, true, true));			
-		}
+			else {
+				postNumberString = _postNumber.toString() + ". ";
+			}
+		}		
+
 	}
 }
