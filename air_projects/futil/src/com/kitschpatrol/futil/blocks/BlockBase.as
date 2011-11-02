@@ -10,6 +10,7 @@ package com.kitschpatrol.futil.blocks {
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
@@ -520,7 +521,7 @@ package com.kitschpatrol.futil.blocks {
 		
 		protected var buttonTimer:Timer;
 		public var locked:Boolean;
-		private var tempEvent:MouseEvent;
+		protected var tempEvent:Event;
 		
 		// Register events
 		override public function get buttonMode():Boolean {
@@ -617,7 +618,7 @@ package com.kitschpatrol.futil.blocks {
 		
 		
 		// Calls each function in a vector
-		private function executeAll(functions:Vector.<Function>):void {
+		protected function executeAll(functions:Vector.<Function>):void {
 			for (var i:int = 0; i < functions.length; i++) {
 				functions[i](tempEvent);
 			}			
