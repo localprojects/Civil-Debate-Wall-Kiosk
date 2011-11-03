@@ -747,12 +747,12 @@ package com.civildebatewall.kiosk {
 		}
 		
 		private function onYesButton(e:MouseEvent):void {
-			CivilDebateWall.state.setStance('yes');
+			CivilDebateWall.state.setUserStance('yes');
 			smsPromptView();
 		}
 		
 		private function onNoButton(e:MouseEvent):void {
-			CivilDebateWall.state.setStance('no');
+			CivilDebateWall.state.setUserStance('no');
 			smsPromptView();			
 		}
 		

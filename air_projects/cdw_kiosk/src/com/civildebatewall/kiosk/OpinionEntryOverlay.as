@@ -1,6 +1,7 @@
 package com.civildebatewall.kiosk {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.StanceToggle;
 	import com.civildebatewall.data.Data;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockText;
@@ -9,6 +10,7 @@ package com.civildebatewall.kiosk {
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
+	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.FocusEvent;
@@ -20,7 +22,9 @@ package com.civildebatewall.kiosk {
 		private var question:BlockText;
 		private var nameCharacterCount:BlockText;		
 		private var nameField:BlockText;
+		private var opinionCharacterCount:BlockText;
 		private var opinionField:BlockText;
+		
 		
 		public function OpinionEntryOverlay()	{
 			super({
@@ -71,24 +75,6 @@ package com.civildebatewall.kiosk {
 			
 			addChild(nameLabel);
 			
-			nameCharacterCount = new BlockText({
-				text: nameLabel.maxChars + " Chars",
-				textFont: Assets.FONT_BOLD,				
-				backgroundAlpha: 0,
-				textColor: ColorUtil.gray(79),
-				textSizePixels: 16,
-				letterSpacing: -1,
-				textAlignmentMode: TextAlign.RIGHT,
-				registrationPoint: Alignment.TOP_RIGHT,
-				showRegistrationPoint: true
-			});
-			nameCharacterCount.x = 560;
-			nameCharacterCount.y = 322;
-			
-			addChild(nameCharacterCount);
-			
-			
-			
 			nameField = new BlockText({
 				text: "",
 				textFont: Assets.FONT_BOLD,				
@@ -109,9 +95,41 @@ package com.civildebatewall.kiosk {
 				alignmentY: 0.5,
 				input: true
 			});
-			
 			addChild(nameField);
+			
+			nameCharacterCount = new BlockText({
+				text: nameField.maxChars + " Chars",
+				textFont: Assets.FONT_BOLD,				
+				backgroundAlpha: 0,
+				textColor: ColorUtil.gray(79),
+				textSizePixels: 16,
+				letterSpacing: -1,
+				textAlignmentMode: TextAlign.RIGHT,
+				registrationPoint: Alignment.TOP_RIGHT,
+				showRegistrationPoint: true
+			});
+			nameCharacterCount.x = 560;
+			nameCharacterCount.y = 322;
+			addChild(nameCharacterCount);			
 
+			// Opinion
+			var opinionLabel:BlockText = new BlockText({
+				text: "WHAT IS YOUR OPINION? ",
+				textFont: Assets.FONT_BOLD,
+				textBold: true,
+				backgroundAlpha: 0,
+				textColor: ColorUtil.gray(79),
+				textSizePixels: 16,
+				letterSpacing: -1,
+				width: 370,
+				x: 72,
+				y: 526
+			});
+			
+			addChild(opinionLabel);
+			
+			
+			
 			opinionField = new BlockText({
 				text: "",
 				textFont: Assets.FONT_BOLD,				
@@ -131,13 +149,65 @@ package com.civildebatewall.kiosk {
 				paddingRight: 42,
 				paddingTop: 42,
 				input: true			
-			});
-			
+			});			
 			addChild(opinionField);
 			
+			opinionCharacterCount = new BlockText({
+				text: opinionField.maxChars + " Chars",
+				textFont: Assets.FONT_BOLD,		
+				backgroundAlpha: 0,
+				textColor: ColorUtil.gray(79),
+				textSizePixels: 16,
+				letterSpacing: -1,
+				textAlignmentMode: TextAlign.RIGHT,
+				registrationPoint: Alignment.TOP_RIGHT,
+				showRegistrationPoint: true
+			});
+			opinionCharacterCount.x = 952;
+			opinionCharacterCount.y = 526;
+			addChild(opinionCharacterCount);			
+			
+			
+			var saysText:Bitmap = Assets.getSaysText();
+			saysText.x = 590;
+			saysText.y = 418;
+			addChild(saysText);
+			
+			
+			// Stance button instructions
+			// Opinion
+			var stanceInstructions:BlockText = new BlockText({
+				text: "TAP TO CHANGE",
+				textFont: Assets.FONT_BOLD,
+				backgroundAlpha: 0,
+				textColor: ColorUtil.gray(79),
+				textSizePixels: 16,
+				letterSpacing: -1,
+				width: 260,
+				textAlignmentMode: TextAlign.CENTER,
+				alignmentX: 0.5,
+				showRegistrationPoint: true				
+			});
+			stanceInstructions.x = 732;
+			stanceInstructions.y = 322;
+			addChild(stanceInstructions);	
+		
+			
+			var stanceToggle:StanceToggle = new StanceToggle();
+			stanceToggle.x = 732;
+			stanceToggle.y = 361;
+			addChild(stanceToggle);
+			
+			
+			
+			
+			
+			
+			// Events
 			nameField.onInput.push(onNameFieldInput);
 			nameField.onFocus.push(onFieldFocus);
 			nameField.onBlur.push(onFieldBlur);
+			opinionField.onInput.push(onOpinionFieldInput);			
 			opinionField.onFocus.push(onFieldFocus);
 			opinionField.onBlur.push(onFieldBlur);			
 			
@@ -146,10 +216,13 @@ package com.civildebatewall.kiosk {
 		
 		private function onNameFieldInput(e:Event):void {
 			// update the character countdown
-			trace("Name field input!");
-			trace("Max: " + nameField.maxChars);
 			nameCharacterCount.text = nameField.charsLeft + StringUtil.plural(" Char", nameField.charsLeft);
 		}
+		
+		private function onOpinionFieldInput(e:Event):void {
+			// update the character countdown
+			opinionCharacterCount.text = opinionField.charsLeft + StringUtil.plural(" Char", opinionField.charsLeft);
+		}		
 		
 		private function onFieldFocus(e:FocusEvent):void {
 			TweenMax.to(e.target.parent.parent, 0, {borderAlpha: 1});

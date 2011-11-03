@@ -17,6 +17,7 @@ package com.civildebatewall {
 		
 		public static const VIEW_CHANGE:String = "viewChange";
 		public static const ACTIVE_DEBATE_CHANGE:String = "activeDebateChange";
+		public static const USER_STANCE_CHANGE:String = "userStanceChange";
 		
 		public var activeView:Function;
 		public var lastView:Function;
@@ -89,7 +90,7 @@ package com.civildebatewall {
 			//highlightWord = null;
 		}
 		
-		public function setStance(s:String):void {
+		public function setUserStance(s:String):void {
 			userStance = s;
 			
 			userStanceText = userStance.toUpperCase() + '!';	
@@ -108,6 +109,8 @@ package com.civildebatewall {
 				userStanceColorOverlay = Assets.COLOR_NO_OVERLAY;
 				userStanceColorDisabled = Assets.COLOR_NO_DISABLED;				
 			}
+			
+			this.dispatchEvent(new Event(USER_STANCE_CHANGE));
 		}
 		
 		public function setView(view:Function):void {

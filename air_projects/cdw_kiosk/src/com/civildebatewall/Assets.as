@@ -53,7 +53,9 @@ package com.civildebatewall
 		public static function getFlagIconSmall():Bitmap { return new flagIconSmallClass() as Bitmap; };
 		public static const flagIconSmall:Bitmap = getFlagIconSmall();
 		
-		
+		[Embed(source = '/assets/graphics/saysText.png')] private static const saysTextClass:Class;
+		public static function getSaysText():Bitmap { return new saysTextClass() as Bitmap; };
+		public static const saysText:Bitmap = getSaysText();		
 		
 		[Embed(source = '/assets/graphics/statsButtonCenter.png')] private static const statsButtonCenterClass:Class;
 		public static function getStatsButtonCenter():Bitmap { return new statsButtonCenterClass() as Bitmap; };
