@@ -1,4 +1,5 @@
 package com.kitschpatrol.futil.blocks {
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.CapsStyle;
 	import flash.display.JointStyle;
@@ -20,8 +21,8 @@ package com.kitschpatrol.futil.blocks {
 		// Background
 		private var _backgroundColor:uint;
 		private var _showBackground:Boolean;
-		private var _backgroundImage:BitmapData;
 		private var _backgroundAlpha:Number;
+		private var _backgroundImage:Bitmap;
 		
 		// Border
 		private var _borderColor:uint;
@@ -47,6 +48,7 @@ package com.kitschpatrol.futil.blocks {
 			_borderAlpha = 1.0;
 			_borderThickness = 5;
 			_showBorder = false;
+			_backgroundImage = null;
 			
 			update();
 		}
@@ -58,7 +60,7 @@ package com.kitschpatrol.futil.blocks {
 			if (_showBackground) {
 				
 				if (_backgroundImage != null) {
-					graphics.beginBitmapFill(_backgroundImage, null, true, true);
+					graphics.beginBitmapFill(_backgroundImage.bitmapData, null, true, true);
 				}
 				else {
 					graphics.beginFill(_backgroundColor, _backgroundAlpha);
@@ -161,8 +163,8 @@ package com.kitschpatrol.futil.blocks {
 		}		
 		
 		
-		public function get backgroundImage():BitmapData { return _backgroundImage; }
-		public function set backgroundImage(image:BitmapData):void {
+		public function get backgroundImage():Bitmap { return _backgroundImage; }
+		public function set backgroundImage(image:Bitmap):void {
 			_backgroundImage = image;
 			update();
 		}

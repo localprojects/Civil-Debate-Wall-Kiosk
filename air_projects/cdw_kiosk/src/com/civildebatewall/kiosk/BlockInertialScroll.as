@@ -126,7 +126,7 @@ package com.civildebatewall.kiosk {
 				// X Stuff
 				props.throwProps.scrollX = {};
 				props.throwProps.scrollX.velocity = xVelocity;
-				props.throwProps.scrollX.min = 0;
+				props.throwProps.scrollX.min = minScrollX;
 				props.throwProps.scrollX.max = maxScrollX;
 				props.throwProps.scrollX.resistance = resistance; // coasting time (less is "heavier"!	
 			}
@@ -134,7 +134,7 @@ package com.civildebatewall.kiosk {
 				// Y Stuff
 				props.throwProps.scrollY = {};					
 				props.throwProps.scrollY.velocity = yVelocity;
-				props.throwProps.scrollY.min = 0;
+				props.throwProps.scrollY.min = minScrollY;
 				props.throwProps.scrollY.max = maxScrollY;
 				props.throwProps.scrollY.resistance = resistance;					
 			}

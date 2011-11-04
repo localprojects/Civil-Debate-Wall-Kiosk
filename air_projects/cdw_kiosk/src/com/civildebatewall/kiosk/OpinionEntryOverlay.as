@@ -11,6 +11,8 @@ package com.civildebatewall.kiosk {
 	import com.kitschpatrol.futil.blocks.BlockShape;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
+	import com.kitschpatrol.futil.constants.Char;
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
@@ -29,12 +31,20 @@ package com.civildebatewall.kiosk {
 		private var question:BlockText;
 		private var nameCharacterCount:BlockText;		
 		private var nameField:BlockText;
+		private var formContainer:BlockBase;
+		private var opinionLabel:BlockText;
 		private var opinionCharacterCount:BlockText;
 		private var opinionField:BlockText;
+		private var stanceToggle:StanceToggle;
 		private var backButton:BackButton;
 		private var submitButton:SubmitButton;
+		private var keyboardContainer:BlockBase;
 		private var keyboard:Keyboard;
 		private var errorMessage:BlockText;
+		private var respondingToContainer:BlockBase;
+		private var respondingToPortrait:BlockShape;
+		private var respondingToName:BlockText;
+		private var respondingToOpinion:BlockText;
 		
 		
 		public function OpinionEntryOverlay()	{
@@ -42,8 +52,18 @@ package com.civildebatewall.kiosk {
 				width: 1080,
 				height: 1920,
 				backgroundAlpha: 0,
-				paddingLeft: 29
+				paddingLeft: 29,
+				scrollAxis: SCROLL_Y,
+				paddingTop: 500, // extra padding lets us scroll, TODO calc dynamically?
+				paddingBottom: 2000
+//				scrollLimitMode: SCROLL_LIMIT_MANUAL,
+//				minScrollY: -500,
+//				maxScrollY: 2000
 			});
+			
+			
+			
+			
 			
 			question = new BlockText({
 				paddingTop: 65,
@@ -70,9 +90,60 @@ package com.civildebatewall.kiosk {
 			
 			
 			
+			respondingToContainer = new BlockBase({
+				minHeight: 311,
+				width: 1022,
+				backgroundColor: ColorUtil.gray(211),
+				paddingTop: 46,
+				paddingLeft: 30,
+				visible: true
+			});
+			
+			addChild(respondingToContainer);
+			
+			respondingToPortrait = new BlockShape();
+			respondingToPortrait.backgroundImage = null,
+			respondingToPortrait.width = 192;
+			respondingToPortrait.height = 267;
+			respondingToPortrait.radius = 4;
+			respondingToContainer.addChild(respondingToPortrait);
+			
+			respondingToName = new BlockText({
+				textFont: Assets.FONT_BOLD,
+				textBold: true,
+				textColor: 0xffffff,
+				textSizePixels: 18,
+				paddingLeft: 22,
+				paddingRight: 22,				
+				alignmentPoint: Alignment.LEFT,
+				maxWidth: 742,
+				height: 54,
+				visible: true
+			});
+			respondingToName.x = 221;
+			respondingToContainer.addChild(respondingToName);
+			
+			respondingToOpinion = new BlockText({
+				textFont: Assets.FONT_BOLD,
+				textBold: true,
+				textColor: 0xffffff,
+				textSizePixels: 23,
+				leading: 15,
+				paddingLeft: 22,
+				paddingRight: 22,
+				paddingTop: 20,
+				paddingBottom: 27,
+				maxWidth: 742,
+				visible: true
+			});
+			respondingToOpinion.x = 221;
+			respondingToOpinion.y = 83;
+			respondingToContainer.addChild(respondingToOpinion);
 			
 			
-			var formContainer:BlockBase = new BlockBase({
+			
+			
+			formContainer = new BlockBase({
 				backgroundColor: ColorUtil.gray(211),
 				width: 1022,
 				maxSizeBehavior: BlockBase.MAX_SIZE_CLIPS,
@@ -165,15 +236,14 @@ package com.civildebatewall.kiosk {
 			formContainer.addChild(nameCharacterCount);			
 
 			// Opinion
-			var opinionLabel:BlockText = new BlockText({
-				text: "WHAT IS YOUR OPINION? ",
+			opinionLabel = new BlockText({
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
 				backgroundAlpha: 0,
 				textColor: ColorUtil.gray(79),
 				textSizePixels: 16,
 				letterSpacing: -1,
-				width: 370,
+				width: 750,
 				visible: true
 			});
 			opinionLabel.x = 72;
@@ -246,7 +316,7 @@ package com.civildebatewall.kiosk {
 			formContainer.addChild(stanceInstructions);	
 		
 			
-			var stanceToggle:StanceToggle = new StanceToggle();
+			stanceToggle = new StanceToggle();
 			stanceToggle.x = 732;
 			stanceToggle.y = 173;
 			stanceToggle.visible = true;
@@ -296,7 +366,7 @@ package com.civildebatewall.kiosk {
 			
 
 			
-			var keyboardContainer:BlockBase = new BlockBase({
+			keyboardContainer = new BlockBase({
 				backgroundColor: 0xffffff,
 				backgroundRadiusBottomLeft: 12,
 				backgroundRadiusBottomRight: 12,
@@ -432,6 +502,39 @@ package com.civildebatewall.kiosk {
 			super.beforeTweenIn();
 			CivilDebateWall.state.backDestination = CivilDebateWall.state.lastView;
 			stage.focus = nameField.textField;
+			
+			// Prepopulate fields
+			nameField.text = CivilDebateWall.state.userName;
+			opinionField.text = CivilDebateWall.state.userOpinion;
+			// stance toggle taken care of automatically
+			// the others really should be too
+			
+			// Make sure the text fields counts are fresh
+			nameField.executeAll(nameField.onInput);
+			opinionField.executeAll(opinionField.onInput);
+			
+			// Show the respondent?
+			if (CivilDebateWall.state.userIsDebating) {
+				respondingToPortrait.backgroundImage = BitmapUtil.scaleToFill(CivilDebateWall.state.userRespondingTo.user.photo, respondingToPortrait.width, respondingToPortrait.height);
+				respondingToName.text = (CivilDebateWall.state.userRespondingTo.user.username + " SAYS: " + CivilDebateWall.state.userRespondingTo.stance + "!").toUpperCase();
+				respondingToName.backgroundColor = CivilDebateWall.state.userRespondingTo.stanceColorDark;
+				respondingToOpinion.text = Char.LEFT_QUOTE + " " + CivilDebateWall.state.userRespondingTo.text + " " + Char.RIGHT_QUOTE;
+				respondingToOpinion.backgroundColor = CivilDebateWall.state.userRespondingTo.stanceColorMedium;
+				opinionLabel.text = "WHAT IS YOUR RESPONSE TO " + CivilDebateWall.state.userRespondingTo.user.username.toUpperCase() + "? ";
+				
+				respondingToContainer.visible = true;
+				respondingToContainer.y = question.bottom;
+				formContainer.y = respondingToContainer.bottom;
+				keyboardContainer.y = formContainer.bottom + 14;				
+			}
+			else {
+				opinionLabel.text = "WHAT IS YOUR OPINION? ";			
+				respondingToContainer.visible = false;
+				
+				formContainer.y = question.bottom;
+				keyboardContainer.y = formContainer.bottom + 14;				
+			}
+
 		}
 				
 	}
