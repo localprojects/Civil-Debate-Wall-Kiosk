@@ -11,13 +11,10 @@ package com.civildebatewall {
 		
 		private var logBox:TextArea;
 		private var viewChooser:ComboBox;
-		private var testOverlayCheckbox:CheckBox;
 		private var overlaySlider:Slider;
 		private var focalLengthSlider:Slider;
 		private var barTestSlider:Slider;		
 		
-		
-		private var testImages:Array;
 		
 		public function Dashboard(parent:DisplayObjectContainer=null, xpos:Number=0, ypos:Number=0, title:String="Dashboard")	{
 			super(parent, xpos, ypos, title);
@@ -28,8 +25,6 @@ package com.civildebatewall {
 			logBox = new TextArea(this, 5, 5, "Dashboard ready");
 			logBox.width = this.width - 10;
 			logBox.height = 90;
-			
-			testOverlayCheckbox = new CheckBox(this, 5, 103, 'Show test overlay', onOverlayToggle);
 			
 			overlaySlider = new Slider("horizontal", this, 120, 103, onOverlaySlider);
 			overlaySlider.minimum = 0;
@@ -91,9 +86,6 @@ package com.civildebatewall {
 			
 		}		
 		
-		private function onOverlayToggle(e:Event):void {
-			Kiosk.testOverlay.visible = testOverlayCheckbox.selected;
-		}
 		
 		private function onViewSelect(e:Event):void {
 			var selection:String = e.target.selectedItem;

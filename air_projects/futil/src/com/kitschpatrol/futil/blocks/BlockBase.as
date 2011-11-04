@@ -96,6 +96,8 @@ package com.kitschpatrol.futil.blocks {
 			_maxSizeBehavior = MAX_SIZE_OVERFLOWS;
 			_contentCrop = new Padding();
 			_paddingMode = PADDING_INSIDE;
+			active = false;			// for tween animation
+			visible = false;				// for tween animation
 			
 			// Button stuff
 			buttonTimer = new Timer(0);
@@ -110,9 +112,11 @@ package com.kitschpatrol.futil.blocks {
 			
 			// TODO devise and flip the update booleans (e.g. invalidate everything)
 
+
+		
+			
 			// overwrites defaults and calls update
 			setParams(params);
-			
 		}
 		
 		// set a bunch of fields at once
@@ -664,10 +668,6 @@ package com.kitschpatrol.futil.blocks {
 
 		//-------------
 		
-		
-		
-		
-		
 		// Animation stuff for CDW... this breaks Futil's the tween engine agnostic approach  
 		// Multiple inheritance sure would be nice...
 		// Defining stuff here is ugly, but keeps it out of the constructors
@@ -676,8 +676,8 @@ package com.kitschpatrol.futil.blocks {
 		private var defaultTweenOutVars:Object = ObjectUtil.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenOut, onComplete: afterTweenOut});
 		private var defaultDuration:Number = 1;
 		private var defaultInDuration:Number = defaultDuration;
-		private var defaultOutDuration:Number = defaultDuration;
-		public var active:Boolean = false;
+		private var defaultOutDuration:Number = 0.75;
+		public var active:Boolean;
 		
 		public function setDefaultTweenIn(duration:Number, params:Object):void {
 			defaultInDuration = duration;

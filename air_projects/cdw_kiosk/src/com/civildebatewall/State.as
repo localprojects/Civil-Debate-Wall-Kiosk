@@ -177,7 +177,7 @@ package com.civildebatewall {
 			}
 			
 			return null;
-		}		
+		}
 		
 		public function getPreviousThread():Thread {
 			var lastThread:Thread = null;

@@ -18,7 +18,8 @@ package com.civildebatewall.kiosk.keyboard {
 		private var keyWidth:Number;
 		private var keyHeight:Number;
 		public var letter:String;
-		private var padding:Number;
+		private var paddingTopBottom:Number;
+		private var paddingRightLeft:Number;
 		private var keyCap:Shape;
 		private var textField:TextField;
 		public var active:Boolean; // for toggles, like shift
@@ -57,7 +58,9 @@ package com.civildebatewall.kiosk.keyboard {
 			repeatIntervalTimer = new Timer(repeatInterval);
 			repeatIntervalTimer.addEventListener(TimerEvent.TIMER, onRepeatIntervalTimer);			
 			
-			padding = 8;
+			
+			paddingTopBottom = 12;
+			paddingRightLeft = 7;
 			
 			if (letter == 'SPACE') letter = ' ';
 						
@@ -70,8 +73,8 @@ package com.civildebatewall.kiosk.keyboard {
 			
 			// text label
 			var textFormat:TextFormat = new TextFormat();			
-			textFormat.bold = false;
-			textFormat.font =  Assets.FONT_REGULAR;
+			textFormat.bold = true;
+			textFormat.font =  Assets.FONT_BOLD;
 			textFormat.align = TextFormatAlign.CENTER;
 			textFormat.size = 20;
 			
@@ -101,12 +104,12 @@ package com.civildebatewall.kiosk.keyboard {
 			this.graphics.endFill();
 			
 			this.graphics.lineStyle(2, color);
-			this.graphics.drawRoundRect(padding, padding, keyWidth - padding * 2, keyHeight - padding * 2, 15, 15);
+			this.graphics.drawRoundRect(paddingRightLeft, paddingTopBottom, keyWidth - paddingRightLeft * 2, keyHeight - paddingTopBottom * 2, 15, 15);
 			
 			keyCap.graphics.clear();
 			keyCap.graphics.beginFill(color);
 			keyCap.graphics.lineStyle(2, color);
-			keyCap.graphics.drawRoundRect(padding, padding, keyWidth - padding * 2, keyHeight - padding * 2, 15, 15);			
+			keyCap.graphics.drawRoundRect(paddingRightLeft, paddingTopBottom, keyWidth - paddingRightLeft * 2, keyHeight - paddingTopBottom * 2, 15, 15);			
 			keyCap.graphics.endFill();
 		}
 		

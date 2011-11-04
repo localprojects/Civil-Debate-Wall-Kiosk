@@ -33,7 +33,6 @@ package com.civildebatewall.kiosk.elements {
 				paddingRight: 30,
 				paddingTop: 34,
 				paddingBottom: 34
-				
 			});
 			
 			portraitWidth = 138;
@@ -102,6 +101,7 @@ package com.civildebatewall.kiosk.elements {
 			flagButton.targetPost = _post;
 			flagButton.x = 802;
 			flagButton.y = 0;
+			flagButton.visible = true;
 			addChild(flagButton);
 			
 			// add the hairline
@@ -127,6 +127,7 @@ package com.civildebatewall.kiosk.elements {
 			debateButton.targetPost = _post;
 			debateButton.x = 860;
 			debateButton.y = 60;
+			debateButton.visible = true;
 			addChild(debateButton);					
 		}
 		

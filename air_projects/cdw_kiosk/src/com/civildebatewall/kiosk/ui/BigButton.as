@@ -88,7 +88,8 @@ package com.civildebatewall.kiosk.ui {
 				backgroundAlpha: 0,
 				width: 484,
 				height: 98,
-				alignmentPoint: Alignment.CENTER				
+				alignmentPoint: Alignment.CENTER,
+				visible: true
 			});
 			
 

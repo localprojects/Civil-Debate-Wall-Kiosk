@@ -2,8 +2,8 @@ package com.civildebatewall.kiosk.keyboard {
 	
 	import com.adobe.utils.StringUtil;
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.kiosk.Kiosk;
 	import com.civildebatewall.Utilities;
+	import com.civildebatewall.kiosk.Kiosk;
 	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.kitschpatrol.futil.Math2;
 	
@@ -21,8 +21,6 @@ package com.civildebatewall.kiosk.keyboard {
 		
 		private var keys:Array;
 		private var shift:Boolean;
-		private var marginTopBottom:Number = 40;
-		private var marginLeftRight:Number = 140;
 		public var target:InteractiveObject;
 		
 		public function Keyboard() {
@@ -33,7 +31,7 @@ package com.civildebatewall.kiosk.keyboard {
 		private function init():void {
 			// background
 			this.graphics.beginFill(0xffffff);
-			this.graphics.drawRect(0, 0, 1080, 358);
+			this.graphics.drawRect(0, 0, 962 + (7 * 2), 435); // add padding
 			this.graphics.endFill();
 			
 			
@@ -55,10 +53,10 @@ package com.civildebatewall.kiosk.keyboard {
 			keys = [];
 			
 			// find key width, it's the width of the keyboard divided by the longest row of keys
-			var keyWidth:Number = (width - (marginLeftRight * 2)) / maxLength(layout);
+			var keyWidth:Number = width / maxLength(layout);
 			
 			// key height is the height of the keyboard divided by the number of rows 
-			var keyHeight:Number = (height  - (marginTopBottom * 2)) / layout.length;			
+			var keyHeight:Number = height / layout.length;			
 			
 			// make the keys
 			for (var row:int = 0; row < layout.length; row++) {
@@ -72,23 +70,23 @@ package com.civildebatewall.kiosk.keyboard {
 					var key:Key = new Key(letter, keyWidth * widthFactor, keyHeight);
 					
 					key.x = xPos;
-					key.y = marginTopBottom + row * keyHeight;
+					key.y = row * keyHeight;
 					
 					// accuumulate width
 					xPos += key.width;
 					
 					// events inside the key
 					key.addEventListener(MouseEvent.MOUSE_DOWN, key.onMouseDown);
-					//key.addEventListener(TouchEvent.TOUCH_BEGIN, key.onMouseDown);
 					key.addEventListener(MouseEvent.MOUSE_UP, key.onMouseUp);
 					key.addEventListener(MouseEvent.MOUSE_OVER, key.onMouseOver);
 					key.addEventListener(MouseEvent.MOUSE_OUT, key.onMouseOut);
-					
+					//key.addEventListener(TouchEvent.TOUCH_BEGIN, key.onMouseDown);					
+
 					// events global to the keyboard
-					key.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-					//key.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);					
+					key.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);					
 					key.addEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
-										
+					//key.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);					
+					
 					
 					keys[key.letter] = key;
 					
@@ -97,11 +95,9 @@ package com.civildebatewall.kiosk.keyboard {
 			}
 
 			// customize certain keys
-			keys['DELETE'].repeats = true;
-		
-			
+			keys['DELETE'].repeats = true;			
 		}
-		
+
 
 		public function showSpacebar(b:Boolean):void {
 			keys[' '].visible = b;
@@ -125,7 +121,7 @@ package com.civildebatewall.kiosk.keyboard {
 		
 		private function onMouseDown(e:MouseEvent):void {
 			// make sure the text ends up where we want it
-			stage.focus = target;
+			//stage.focus = target;
 		}
 		
 		
@@ -208,7 +204,8 @@ package com.civildebatewall.kiosk.keyboard {
 				}
 
 				
-				// unstick the shift button if we're shifted if we're shifted
+				// unstick the shift button if we're shifted
+
 				if (shift) {
 					keys['SHIFT'].removeEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
 					keys['SHIFT'].dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP, false));
@@ -216,6 +213,14 @@ package com.civildebatewall.kiosk.keyboard {
 					lowerCase();
 				}
 			}
+			
+			// Fire the update
+			if (this.stage.focus is TextField) {
+				var tf2:TextField = this.stage.focus as TextField;
+				tf2.dispatchEvent(new Event(Event.CHANGE, true));
+			}
+			
+			
 		}
 		
 		// returns the number of 'cells' a row of keys takes up
