@@ -1257,7 +1257,7 @@ package com.civildebatewall.kiosk {
 			}
 			else {
 				trace('no face found, saving as is');
-				CivilDebateWall.state.userImage.bitmapData = BitmapUtil.scaleToFill(CivilDebateWall.state.userImage.bitmapData, stageWidth, stageHeight);
+				CivilDebateWall.state.userImage.bitmapData = BitmapUtil.scaleDataToFill(CivilDebateWall.state.userImage.bitmapData, stageWidth, stageHeight);
 			}
 			
 			// NOW flash

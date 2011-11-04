@@ -4,12 +4,13 @@ package com.kitschpatrol.futil.utilitites {
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.PixelSnapping;
 	import flash.geom.Matrix;
 
 	public class BitmapUtil {
 				
 		// scales down a bitmap data object so it fits with the width and height specified
-		public static function scaleToFit(b:BitmapData, maxWidth:int, maxHeight:int):BitmapData {
+		public static function scaleDataToFit(b:BitmapData, maxWidth:int, maxHeight:int):BitmapData {
 			var widthRatio:Number = maxWidth / b.width;
 			var heightRatio:Number = maxHeight / b.height;
 			var scaleRatio:Number = Math.min(widthRatio, heightRatio);
@@ -22,8 +23,12 @@ package com.kitschpatrol.futil.utilitites {
 			return o;
 		}
 		
+		public static function scaleToFit(b:Bitmap, maxWidth:int, maxHeight:int):Bitmap {
+			return new Bitmap(scaleDataToFit(b.bitmapData, maxWidth, maxHeight), PixelSnapping.AUTO, true);
+		}
+		
 		// scales down a bitmap data object so it fills the width and height specified, even if it has to crop		
-		public static function scaleToFill(b:BitmapData, newWidth:int, newHeight:int):BitmapData {
+		public static function scaleDataToFill(b:BitmapData, newWidth:int, newHeight:int):BitmapData {
 			// scale
 			var widthRatio:Number = newWidth / b.width;
 			var heightRatio:Number = newHeight / b.height;
@@ -40,6 +45,10 @@ package com.kitschpatrol.futil.utilitites {
 			o.draw(b, matrix);
 			return o;
 		}
+		
+		public static function scaleToFill(b:Bitmap, maxWidth:int, maxHeight:int):Bitmap {
+			return new Bitmap(scaleDataToFill(b.bitmapData, maxWidth, maxHeight), PixelSnapping.AUTO, true);
+		}		
 		
 
 		// finds position inside a bitmap using a normal		

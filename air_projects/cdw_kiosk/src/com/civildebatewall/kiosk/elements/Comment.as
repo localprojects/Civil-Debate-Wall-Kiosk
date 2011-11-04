@@ -49,7 +49,7 @@ package com.civildebatewall.kiosk.elements {
 
 			// draw the portrait
 			portrait = new Sprite();
-			portrait.graphics.beginBitmapFill(BitmapUtil.scaleToFill(_post.user.photo.bitmapData, portraitWidth, portraitHeight), null, false, true);
+			portrait.graphics.beginBitmapFill(BitmapUtil.scaleDataToFill(_post.user.photo.bitmapData, portraitWidth, portraitHeight), null, false, true);
 			portrait.graphics.drawRoundRect(0, 0, portraitWidth, portraitHeight, 5, 5);
 			portrait.graphics.endFill();
 			

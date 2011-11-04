@@ -40,7 +40,7 @@ package com.civildebatewall.kiosk.ui {
 			roundedPortrait = new Sprite();
 			
 
-			var scaledPhotoData:BitmapData = BitmapUtil.scaleToFill(thread.firstPost.user.photo.bitmapData, 71, 96)
+			var scaledPhotoData:BitmapData = BitmapUtil.scaleDataToFill(thread.firstPost.user.photo.bitmapData, 71, 96)
 			
 			roundedPortrait.graphics.beginBitmapFill(scaledPhotoData, null, false, true);
 			roundedPortrait.graphics.drawRoundRect(0, 0, 71, 96, 15, 15);

@@ -45,6 +45,13 @@ package com.kitschpatrol.futil.blocks {
 		public static const PADDING_INSIDE:String = "paddingIndside";
 		public static const PADDING_OUTSIDE:String = "paddingOutside";
 		
+		private var _scrollLimitMode:String;
+		public static const SCROLL_LIMIT_AUTO:String = "scrollLimitAuto"; // scroll bounds are automatically set to show all content, but nothing more
+		public static const SCROLL_LIMIT_MANUAL:String = "scrollLimitManual"; // user defines scroll limit
+		internal var _minScrollX:Number;
+		internal var _minScrollY:Number;
+		internal var _maxScrollX:Number;
+		internal var _maxScrollY:Number;
 		
 		// Size (padding is additive)
 		internal var _maxSizeBehavior:String; // TODO scope to private?, implement!
@@ -96,6 +103,11 @@ package com.kitschpatrol.futil.blocks {
 			_maxSizeBehavior = MAX_SIZE_OVERFLOWS;
 			_contentCrop = new Padding();
 			_paddingMode = PADDING_INSIDE;
+			_scrollLimitMode = SCROLL_LIMIT_AUTO;
+			_minScrollX = 0;
+			_minScrollY = 0;
+			_maxScrollX = 0; // will get redefined when switching to manual
+			_maxScrollY = 0; // will get redefined when switching to manual
 			active = false;			// for tween animation
 			visible = false;				// for tween animation
 			
@@ -271,6 +283,23 @@ package com.kitschpatrol.futil.blocks {
 		}
 		
 		// scrolling is a different way of thinking about the alignment point
+		
+		public function set scrollLimitMode(mode:String):void {
+			
+			if (mode == SCROLL_LIMIT_MANUAL) {
+				_minScrollX = 0;
+				_minScrollY = 0;
+				_maxScrollX = maxScrollX;
+				_maxScrollY = maxScrollY;
+			}
+			
+			_scrollLimitMode = mode;
+		}
+		
+		public function get scrollLimitMode():String {
+			return _scrollLimitMode;
+		}
+		
 		public function get scrollX():Number {
 			return (contentWidth - (background.width - _padding.horizontal)) * _alignmentPoint.x;
 		}
@@ -279,9 +308,36 @@ package com.kitschpatrol.futil.blocks {
 			alignmentX = pixels / (contentWidth - (background.width - _padding.horizontal));			
 		}
 		
+		public function get minScrollX():Number {
+			if (scrollLimitMode == SCROLL_LIMIT_AUTO) {			
+				return 0;
+			}
+			else if (scrollLimitMode == SCROLL_LIMIT_MANUAL) {
+				return _minScrollX; 
+			}
+			return 0;
+		}
+		
+		public function set minScrollX(limit:Number):void {
+				_minScrollX = limit; 
+		}
+
+
 		public function get maxScrollX():Number {
-			return (contentWidth - (background.width - _padding.horizontal));
+			if (scrollLimitMode == SCROLL_LIMIT_AUTO) {			
+				return (contentWidth - (background.width - _padding.horizontal));
+			}
+			else if (scrollLimitMode == SCROLL_LIMIT_MANUAL) {
+				return _maxScrollX; 
+			}
+			return 0;
+		}
+		
+		public function set maxScrollX(limit:Number):void {
+			_maxScrollX = limit;
 		}		
+		
+		
 		
 		public function get scrollY():Number {
 			return (contentHeight - (background.height - _padding.vertical)) * _alignmentPoint.y;
@@ -291,9 +347,34 @@ package com.kitschpatrol.futil.blocks {
 			alignmentY = pixels / (contentHeight - (background.height - _padding.vertical));			
 		}		
 		
-		public function get maxScrollY():Number {
-			return (contentHeight - (background.height - _padding.vertical));
+		public function get minScrollY():Number {
+			if (scrollLimitMode == SCROLL_LIMIT_AUTO) {			
+				return 0;
+			}
+			else if (scrollLimitMode == SCROLL_LIMIT_MANUAL) {
+				return _minScrollY; 
+			}
+			return 0;
 		}
+		
+		public function set minScrollY(limit:Number):void {
+			_minScrollY = limit; 
+		}
+		
+		
+		public function get maxScrollY():Number {
+			if (scrollLimitMode == SCROLL_LIMIT_AUTO) {			
+				return (contentWidth - (background.width - _padding.horizontal));
+			}
+			else if (scrollLimitMode == SCROLL_LIMIT_MANUAL) {
+				return _maxScrollY; 
+			}
+			return 0;
+		}
+		
+		public function set maxScrollY(limit:Number):void {
+			_maxScrollY = limit;
+		}		
 		
 
 		
@@ -327,7 +408,7 @@ package com.kitschpatrol.futil.blocks {
 			_maxHeight = width;
 			if (_maxHeight < _minHeight) _minHeight = _maxHeight;
 			update();
-		}		
+		}
 		
 		
 		protected var clippingMask:Shape;
@@ -622,7 +703,7 @@ package com.kitschpatrol.futil.blocks {
 		
 		
 		// Calls each function in a vector
-		protected function executeAll(functions:Vector.<Function>):void {
+		public function executeAll(functions:Vector.<Function>):void {
 			for (var i:int = 0; i < functions.length; i++) {
 				functions[i](tempEvent);
 			}			
@@ -646,6 +727,7 @@ package com.kitschpatrol.futil.blocks {
 			return added;
 		}
 		
+		override public function get numChildren():int { return content.numChildren; }
 		override public function getChildAt(index:int):DisplayObject { return content.getChildAt(index);	} 
 		override public function getChildByName(name:String):DisplayObject { return content.getChildByName(name);	}
 		override public function getChildIndex(child:DisplayObject):int { return content.getChildIndex(child); }

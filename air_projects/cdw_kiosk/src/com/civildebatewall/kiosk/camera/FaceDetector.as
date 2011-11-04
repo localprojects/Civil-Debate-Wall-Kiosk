@@ -103,7 +103,7 @@ package com.civildebatewall.kiosk.camera {
 		
 		public function searchBitmap(photo:BitmapData):void {
 			// resize
-			photo = BitmapUtil.scaleToFit(photo, maxSourceWidth, maxSourceHeight);
+			photo = BitmapUtil.scaleDataToFit(photo, maxSourceWidth, maxSourceHeight);
 			sourceCenter = new Point(photo.width / 2, photo.height / 2);
 			detector.detect(photo);
 		}

@@ -99,7 +99,7 @@ package com.civildebatewall.kiosk.elements {
 		public function setPost(post:Post, instant:Boolean = false):void {
 			_post = post;
 			
-			portrait.setImage(new Bitmap(BitmapUtil.scaleToFill(_post.user.photo.bitmapData, 503, 844), "auto", true), instant);
+			portrait.setImage(new Bitmap(BitmapUtil.scaleDataToFill(_post.user.photo.bitmapData, 503, 844), "auto", true), instant);
 			
 
 			if (instant) {
