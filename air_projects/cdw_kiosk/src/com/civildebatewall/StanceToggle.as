@@ -26,7 +26,7 @@ package com.civildebatewall {
 				width: 260, 
 				height: 143,
 				backgroundRadius: 20,
-				maxSizeBehavior: MAX_SIZE_CLIPS	
+				maxSizeBehavior: MAX_SIZE_CLIPS
 			});
 			
 			yesText = Assets.getYesButtonLabelText();

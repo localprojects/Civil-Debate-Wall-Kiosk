@@ -5,7 +5,6 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-	import com.civildebatewall.TestAssets;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.*;
 	import com.civildebatewall.kiosk.blocks.*;
@@ -460,7 +459,7 @@ package com.civildebatewall.kiosk {
 			cameraTimeoutWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: OldBlockBase.CENTER});	
 			cameraTimeoutWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: OldBlockBase.CENTER});
 			addChild(cameraTimeoutWarning);
-			
+				
 			noNameWarning = new BlockLabel('Please enter a username!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
 			noNameWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
 			noNameWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1562 - (noNameWarning.height / 2) - 10});
@@ -854,8 +853,6 @@ package com.civildebatewall.kiosk {
 			flagInstructions.tweenIn();
 			flagYesButton.tweenIn();
 			flagNoButton.tweenIn();			
-			
-			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
 		}
 		
 		private function removeFlagOverlayView(...args):void {
@@ -1000,9 +997,7 @@ package com.civildebatewall.kiosk {
 			pickStanceInstructions.tweenOut(-1, {x: OldBlockBase.OFF_LEFT_EDGE, y: pickStanceInstructions.y});
 			
 	
-			tweenOutInactive();
-			
-			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design10);			
+			tweenOutInactive();			
 		}
 		
 		private function onLatestMessagesFetched():void {
@@ -1165,8 +1160,6 @@ package com.civildebatewall.kiosk {
 			}
 			
 			tweenOutInactive();
-			
-			setTestOverlay(TestAssets.CDW_082511_Kiosk_Design11);
 		}
 		
 		
@@ -1331,9 +1324,7 @@ package com.civildebatewall.kiosk {
 			saveButton.tweenIn(-1, {delay: 1, x: 308});
 			keyboard.tweenIn(-1, {delay: 1});
 			
-			tweenOutInactive(true);
-			
-			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design16);			
+			tweenOutInactive(true);			
 		}
 		
 		private function onLimitReached(e:Event):void {
@@ -1446,7 +1437,6 @@ package com.civildebatewall.kiosk {
 			
 
 			tweenOutInactive();
-			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design17);			
 		}
 	
 		
@@ -1484,8 +1474,6 @@ package com.civildebatewall.kiosk {
 			retakePhotoButton.tweenOut();
 			editTextButton.tweenOut();
 			exitButton.tweenOut();	
-			
-			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
 		}
 		
 		
@@ -1586,10 +1574,8 @@ package com.civildebatewall.kiosk {
 			
 			opinion.tweenOut(0);
 			
-			tweenOutInactive();
-			
-			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design21);			
-		}
+			tweenOutInactive();			
+		}	
 		
 		private function onNumLinesChange(e:Event):void {
 			// flow upwards
@@ -1646,9 +1632,7 @@ package com.civildebatewall.kiosk {
 		
 			questionHeaderHome.tweenIn();
 			statsOverlay.tweenIn();
-			
-			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design25);
-			
+
 			tweenOutInactive();			
 		}
 		
@@ -1671,8 +1655,6 @@ package com.civildebatewall.kiosk {
 			inactivityTimerBar.tweenIn();			
 			inactivityInstructions.tweenIn();
 			continueButton.tweenIn();
-			
-			this.setTestOverlay(TestAssets.CDW_082511_Kiosk_Design22);
 		}
 		
 		

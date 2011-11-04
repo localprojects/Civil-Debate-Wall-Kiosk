@@ -3,6 +3,26 @@ package com.kitschpatrol.futil.utilitites {
 	public class StringUtil	{
 		
 				
+		
+		
+		
+		// Note "*" to denote expansion. needs to be converted into regex
+		// Should really be ordered by frequency...
+		public static const badWords:Vector.<RegExp> = new <RegExp>[/\bahole/gi, /\banus/gi, /\bash0le/gi, /\bash0les/gi, /\basholes/gi, /\bass/gi, /\bAss Monkey/gi, /\bAssface/gi, /\bassh0le/gi, /\bassh0lez/gi, /\basshole/gi, /\bassholes/gi, /\bassholz/gi, /\basswipe/gi, /\bazzhole/gi, /\bbassterds/gi, /\bbastard/gi, /\bbastards/gi, /\bbastardz/gi, /\bbasterds/gi, /\bbasterdz/gi, /\bBiatch/gi, /\bbitch/gi, /\bbitches/gi, /\bBlow Job/gi, /\bboffing/gi, /\bbutthole/gi, /\bbuttwipe/gi, /\bc0ck/gi, /\bc0cks/gi, /\bc0k/gi, /\bCarpet Muncher/gi, /\bcawk/gi, /\bcawks/gi, /\bClit/gi, /\bcnts/gi, /\bcntz/gi, /\bcock/gi, /\bcockhead/gi, /\bcock-head/gi, /\bcocks/gi, /\bCockSucker/gi, /\bcock-sucker/gi, /\bcrap/gi, /\bcum/gi, /\bcunt/gi, /\bcunts/gi, /\bcuntz/gi, /\bdick/gi, /\bdild0/gi, /\bdild0s/gi, /\bdildo/gi, /\bdildos/gi, /\bdilld0/gi, /\bdilld0s/gi, /\bdominatricks/gi, /\bdominatrics/gi, /\bdominatrix/gi, /\b\w*douche\w*/gi, /\bdyke/gi, /\benema/gi, /\bf u c k/gi, /\bf u c k e r/gi, /\bfag/gi, /\bfag1t/gi, /\bfaget/gi, /\bfagg1t/gi, /\bfaggit/gi, /\bfaggot/gi, /\bfagit/gi, /\bfags/gi, /\bfagz/gi, /\bfaig/gi, /\bfaigs/gi, /\bfart/gi, /\bflipping the bird/gi, /\bfuck/gi, /\bfucker/gi, /\bfuckin/gi, /\bfucking/gi, /\bfucks/gi, /\bFudge Packer/gi, /\bfuk/gi, /\bFukah/gi, /\bFuken/gi, /\bfuker/gi, /\bFukin/gi, /\bFukk/gi, /\bFukkah/gi, /\bFukken/gi, /\bFukker/gi, /\bFukkin/gi, /\bg00k/gi, /\bgay/gi, /\bgayboy/gi, /\bgaygirl/gi, /\bgays/gi, /\bgayz/gi, /\bGod-damned/gi, /\bh00r/gi, /\bh0ar/gi, /\bh0re/gi, /\bhells/gi, /\bhoar/gi, /\bhoor/gi, /\bhoore/gi, /\bjackoff/gi, /\bjap/gi, /\bjaps/gi, /\bjerk-off/gi, /\bjisim/gi, /\bjiss/gi, /\bjizm/gi, /\bjizz/gi, /\bknob/gi, /\bknobs/gi, /\bknobz/gi, /\bkunt/gi, /\bkunts/gi, /\bkuntz/gi, /\bLesbian/gi, /\bLezzian/gi, /\bLipshits/gi, /\bLipshitz/gi, /\bmasochist/gi, /\bmasokist/gi, /\bmassterbait/gi, /\bmasstrbait/gi, /\bmasstrbate/gi, /\bmasterbaiter/gi, /\bmasterbate/gi, /\bmasterbates/gi, /\bMotha Fucker/gi, /\bMotha Fuker/gi, /\bMotha Fukkah/gi, /\bMotha Fukker/gi, /\bMother Fucker/gi, /\bMother Fukah/gi, /\bMother Fuker/gi, /\bMother Fukkah/gi, /\bMother Fukker/gi, /\bmother-fucker/gi, /\bMutha Fucker/gi, /\bMutha Fukah/gi, /\bMutha Fuker/gi, /\bMutha Fukkah/gi, /\bMutha Fukker/gi, /\bn1gr/gi, /\bnastt/gi, /\bnigger/gi, /\bnigur/gi, /\bniiger/gi, /\bniigr/gi, /\borafis/gi, /\borgasim/gi, /\borgasm/gi, /\borgasum/gi, /\boriface/gi, /\borifice/gi, /\borifiss/gi, /\bpacki/gi, /\bpackie/gi, /\bpacky/gi, /\bpaki/gi, /\bpakie/gi, /\bpaky/gi, /\bpecker/gi, /\bpeeenus/gi, /\bpeeenusss/gi, /\bpeenus/gi, /\bpeinus/gi, /\bpen1s/gi, /\bpenas/gi, /\bpenis/gi, /\bpenis-breath/gi, /\bpenus/gi, /\bpenuus/gi, /\bPhuc/gi, /\bPhuck/gi, /\bPhuk/gi, /\bPhuker/gi, /\bPhukker/gi, /\bpolac/gi, /\bpolack/gi, /\bpolak/gi, /\bPoonani/gi, /\bpr1c/gi, /\bpr1ck/gi, /\bpr1k/gi, /\bpusse/gi, /\bpussee/gi, /\bpussy/gi, /\bpuuke/gi, /\bpuuker/gi, /\bqueer/gi, /\bqueers/gi, /\bqueerz/gi, /\bqweers/gi, /\bqweerz/gi, /\bqweir/gi, /\brecktum/gi, /\brectum/gi, /\bretard/gi, /\bsadist/gi, /\bscank/gi, /\bschlong/gi, /\bscrewing/gi, /\bsemen/gi, /\bsex/gi, /\bsexy/gi, /\bSh!t/gi, /\bsh1t/gi, /\bsh1ter/gi, /\bsh1ts/gi, /\bsh1tter/gi, /\bsh1tz/gi, /\bshit/gi, /\bshits/gi, /\bshitter/gi, /\bShitty/gi, /\bShity/gi, /\bshitz/gi, /\bShyt/gi, /\bShyte/gi, /\bShytty/gi, /\bShyty/gi, /\bskanck/gi, /\bskank/gi, /\bskankee/gi, /\bskankey/gi, /\bskanks/gi, /\bSkanky/gi, /\bslut/gi, /\bsluts/gi, /\bSlutty/gi, /\bslutz/gi, /\bson-of-a-bitch/gi, /\btit/gi, /\bturd/gi, /\bva1jina/gi, /\bvag1na/gi, /\bvagiina/gi, /\bvagina/gi, /\bvaj1na/gi, /\bvajina/gi, /\bvullva/gi, /\bvulva/gi, /\bw0p/gi, /\bwh00r/gi, /\bwh0re/gi, /\bwhore/gi, /\bxrated/gi, /\bxxx/gi, /\bb!+ch/gi, /\bbitch/gi, /\bblowjob/gi, /\bclit/gi, /\barschloch/gi, /\bfuck/gi, /\bshit/gi, /\bass/gi, /\basshole/gi, /\bb!tch/gi, /\bb17ch/gi, /\bb1tch/gi, /\bbastard/gi, /\bbi+ch/gi, /\bboiolas/gi, /\bbuceta/gi, /\bc0ck/gi, /\bcawk/gi, /\bchink/gi, /\bcipa/gi, /\bclits/gi, /\bcock/gi, /\bcum/gi, /\bcunt/gi, /\bdildo/gi, /\bdirsa/gi, /\bejakulate/gi, /\bfatass/gi, /\bfcuk/gi, /\bfuk/gi, /\bfux0r/gi, /\bhoer/gi, /\bhore/gi, /\bjism/gi, /\bkawk/gi, /\bl3itch/gi, /\bl3i+ch/gi, /\blesbian/gi, /\bmasturbate/gi, /\bmasterbat\w*/gi, /\bmasterbat3/gi, /\bmotherfucker/gi, /\bs.o.b./gi, /\bmofo/gi, /\bnazi/gi, /\bnigga/gi, /\bnigger/gi, /\bnutsack/gi, /\bphuck/gi, /\bpimpis/gi, /\bpusse/gi, /\bpussy/gi, /\bscrotum/gi, /\bsh!t/gi, /\bshemale/gi, /\bshi+/gi, /\bsh!+/gi, /\bslut/gi, /\bsmut/gi, /\bteets/gi, /\btits/gi, /\bboobs/gi, /\bb00bs/gi, /\bteez/gi, /\btestical/gi, /\btesticle/gi, /\btitt/gi, /\bw00se/gi, /\bjackoff/gi, /\bwank/gi, /\bwhoar/gi, /\bwhore/gi, /\b\w*damn/gi, /\b\w*dyke/gi, /\b\w*fuck\w*/gi, /\b\w*shit\w*/gi, /\b@$$/gi, /\bamcik/gi, /\bamcikdskota/gi, /\barse\w*/gi, /\bassrammer/gi, /\bayir/gi, /\bbi7ch/gi, /\bbitch\w*/gi, /\bbollock\w*/gi, /\bbreasts/gi, /\bbutt-pirate/gi, /\bcabron/gi, /\bcazzo/gi, /\bchraa/gi, /\bchuj/gi, /\bCock\w*/gi, /\bcunt\w*/gi, /\bd4mn/gi, /\bdaygo/gi, /\bdego/gi, /\bdick\w*/gi, /\bdike\w*/gi, /\bdupa/gi, /\bdziwka/gi, /\bejackulate/gi, /\bEkrem\w*/gi, /\bEkto/gi, /\benculer/gi, /\bfaen/gi, /\bfag\w*/gi, /\bfanculo/gi, /\bfanny/gi, /\bfeces/gi, /\bfeg/gi, /\bFelcher/gi, /\bficken/gi, /\bfitt\w*/gi, /\bFlikker/gi, /\bforeskin/gi, /\bFotze/gi, /\bFu(\w*/gi, /\bfuk\w*/gi, /\bfutkretzn/gi, /\bgay/gi, /\bgook/gi, /\bguiena/gi, /\bh0r/gi, /\bh4x0r/gi, /\bhell/gi, /\bhelvete/gi, /\bhoer\w*/gi, /\bhonkey/gi, /\bHuevon/gi, /\bhui/gi, /\binjun/gi, /\bjizz/gi, /\bkanker\w*/gi, /\bkike/gi, /\bklootzak/gi, /\bkraut/gi, /\bknulle/gi, /\bkuk/gi, /\bkuksuger/gi, /\bKurac/gi, /\bkurwa/gi, /\bkusi\w*/gi, /\bkyrpa\w*/gi, /\blesbo/gi, /\bmamhoon/gi, /\bmasturbat\w*/gi, /\bmerd\w*/gi, /\bmibun/gi, /\bmonkleigh/gi, /\bmouliewop/gi, /\bmuie/gi, /\bmulkku/gi, /\bmuschi/gi, /\bnazis/gi, /\bnepesaurio/gi, /\b\w*nigger\w*/gi, /\b\w*nozzle\w*/gi, /\borospu/gi, /\bpaska\w*/gi, /\bperse/gi, /\bpicka/gi, /\bpierdol\w*/gi, /\bpillu\w*/gi, /\bpimmel/gi, /\bpiss\w*/gi, /\bpizda/gi, /\bpoontsee/gi, /\bpoop/gi, /\bporn/gi, /\bp0rn/gi, /\bpr0n/gi, /\bpreteen/gi, /\bpula/gi, /\bpule/gi, /\bputa/gi, /\bputo/gi, /\bqahbeh/gi, /\bqueef\w*/gi, /\brautenberg/gi, /\bschaffer/gi, /\bscheiss\w*/gi, /\bschlampe/gi, /\bschmuck/gi, /\bscrew/gi, /\bsh!t\w*/gi, /\bsharmuta/gi, /\bsharmute/gi, /\bshipal/gi, /\bshiz/gi, /\bskribz/gi, /\bskurwysyn/gi, /\bsphencter/gi, /\bspic/gi, /\bspierdalaj/gi, /\bsplooge/gi, /\bsuka/gi, /\bb00b\w*/gi, /\btesticle\w*/gi, /\btitt\w*/gi, /\btwat/gi, /\bvittu/gi, /\bwank\w*/gi, /\bwetback\w*/gi, /\bwichser/gi, /\bwop\w*/gi, /\byed/gi, /\bzabourah/gi];
+		
+		public static function isProfane(text:String):Boolean {
+			var testString:String = stripLinebreaks(text);
+			
+			for (var i:int = 0; i < badWords.length; i++) {
+				if (testString.search(badWords[i]) > -1) {
+					return true;
+				}
+			}			
+			return false;
+		}
+		
+		
+		
 		// very crude implementation, but works in our case
 		public static function plural(word:String, count:Number):String {
 			if (count != 1) {
@@ -275,6 +295,11 @@ package com.kitschpatrol.futil.utilitites {
 		public static function quote(p_string:String):String {
 			var regx:RegExp = /[\\"\r\n]/g;
 			return '"'+ p_string.replace(regx, _quote) +'"'; //"
+		}
+		
+		public static function stripLinebreaks(text:String):String {
+			var regx:RegExp = /[\\"\r\n]/g;
+			return text.replace(regx, "");			
 		}
 		
 		

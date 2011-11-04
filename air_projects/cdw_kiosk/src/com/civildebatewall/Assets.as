@@ -39,7 +39,9 @@ package com.civildebatewall
 		public static function getNoButtonLabelText():Bitmap { return new noButtonLabelTextClass() as Bitmap; };
 		public static const noButtonLabelText:Bitmap = getNoButtonLabelText();
 		
-		
+		[Embed(source = '/assets/graphics/dragHandle.png')] private static const dragHandleClass:Class;
+		public static function getDragHandle():Bitmap { return new dragHandleClass() as Bitmap; };
+		public static const dragHandle:Bitmap = getDragHandle();		
 		
 		[Embed(source = '/assets/graphics/portraitBannerYes.png')] private static const portraitBannerYesClass:Class;
 		public static function getPortraitBannerYes():Bitmap { return new portraitBannerYesClass() as Bitmap; };

@@ -36,7 +36,6 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		private function onUp(e:MouseEvent):void {
-		
 			CivilDebateWall.state.setView(CivilDebateWall.state.backDestination);
 			TweenMax.to(this, 0.5, {backgroundColor: 0xffffff, textColor: ColorUtil.gray(77)});
 		}				

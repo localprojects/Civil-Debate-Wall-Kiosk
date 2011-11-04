@@ -30,7 +30,8 @@ package com.civildebatewall.kiosk.elements
 				paddingLeft: 35,
 				paddingRight: 35,
 				height: 78,
-				registrationPoint: Alignment.BOTTOM_LEFT				
+				registrationPoint: Alignment.BOTTOM_LEFT,
+				visible: true
 			});
 		
 			opinion = new BlockText({
@@ -44,8 +45,11 @@ package com.civildebatewall.kiosk.elements
 				paddingRight: 35,
 				paddingBottom: 25,
 				maxHeight: 1000,
-				registrationPoint: Alignment.BOTTOM_LEFT 
+				registrationPoint: Alignment.BOTTOM_LEFT,
+				visible: true
 			});
+			
+			
 			
 			
 			addChild(nameTag);

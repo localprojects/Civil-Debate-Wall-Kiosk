@@ -18,6 +18,8 @@ package com.kitschpatrol.futil.blocks {
 	import flash.text.TextFormatAlign;
 	import flash.utils.getTimer;
 	
+	import mx.controls.Text;
+	
 	public class BlockText extends BlockBase {
 
 		// TODO write tween plugin
@@ -108,7 +110,7 @@ package com.kitschpatrol.futil.blocks {
 			_leading = 0;			
 			_growthMode = MAXIMIZE_WIDTH;
 			_input = false;
-			_maxChars = -1;
+			_maxChars = 0; // unlimited
 			
 			textField = generateTextField(_text, _textSizePixels);
 
@@ -662,22 +664,20 @@ package com.kitschpatrol.futil.blocks {
 		
 		// Events		
 		private function onInputInternal(e:Event):void {
-			_text = textField.text; // keep internal text representation in sync with input
-			changedBounds = true;
-			update();
+			text = textField.text; // keep internal text representation in sync with input
+			//changedBounds = true;
+			//update();
 			executeAll(onInput);
 		}
 		
 		private function onFocusInternal(e:FocusEvent):void {
 			tempEvent = e;
 			executeAll(onFocus);
-			trace("on focus callback");
 		}
 		
 		private function onBlurInternal(e:FocusEvent):void {
 			tempEvent = e;
 			executeAll(onBlur);
-			trace("Field blurred");
 		}
 		
 		// Let the whole block grant focus to an interactive text field 
@@ -689,9 +689,14 @@ package com.kitschpatrol.futil.blocks {
 		
 		// If we're clicking inside our block, don't defocus!
 		private function onMouseFocusChangeInternal(e:FocusEvent):void {
+			
+			// For CDW! Disallow deselection.
+			e.preventDefault();			
+			
 			if(this.contains(e.relatedObject)) {
 				e.preventDefault();	
 			}
+			
 		}
 		
 

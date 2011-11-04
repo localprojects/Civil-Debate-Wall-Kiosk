@@ -48,7 +48,8 @@ package com.civildebatewall.kiosk.elements {
 				backgroundAlpha: 0,
 				width: 50,
 				height: 20,
-				registrationPoint: Alignment.TOP_RIGHT
+				registrationPoint: Alignment.TOP_RIGHT,
+				visible: true
 			});
 			
 			counter.x = 50;
@@ -79,7 +80,8 @@ package com.civildebatewall.kiosk.elements {
 				textColor: 0xffffff,
 				backgroundAlpha: 0,
 				width: 73,
-				height: 20
+				height: 20,
+				visible: true
 			});
 			
 			label.x = 100;

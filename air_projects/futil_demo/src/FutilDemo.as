@@ -9,8 +9,10 @@ package {
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.tweenPlugins.*;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
+	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.text.Font;
 	
 	import flashx.textLayout.formats.BackgroundColor;
@@ -57,6 +59,9 @@ package {
 //				paddingRight: 990														 
 //			});			
 			
+			
+			testBlock.onInput.push(onInput);
+			
 			addChild(testBlock);			
 			
 			// Tween Targets
@@ -67,6 +72,16 @@ package {
 			// GUI
 			// http://blog.soulwire.co.uk/code/actionscript-3/simple-flash-prototype-gui-tool
 			generateGui("testBlock");
+		}
+		
+		private function onInput(e:Event):void {
+			// test profanity check!
+			if (StringUtil.isProfane(testBlock.text)) {
+				testBlock.backgroundColor = 0xff0000;
+			}
+			else {
+				testBlock.backgroundColor = 0x00ff00;
+			}
 		}
 		
 		
