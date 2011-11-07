@@ -2,12 +2,16 @@ package com.civildebatewall.kiosk.ui {
 	import com.civildebatewall.*;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
+	import com.kitschpatrol.futil.blocks.BlockText;
+	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.text.*;
 	import flash.utils.*;
+	
+	import flashx.textLayout.formats.TextAlign;
 	
 	public class CountdownButton extends ButtonBase {
 		
@@ -16,16 +20,11 @@ package com.civildebatewall.kiosk.ui {
 		private var progress:Number; // normalized
 		private var countdownTimer:Timer;
 		private var startTime:int;
-		
-		// text
-		private var countTextWrapper:Sprite;
-		private var countText:TextField;
-		
+				
 		// graphics
 		public var progressRing:Shape;
 		private var progressColor:uint;
 		private var ringColor:uint;
-		private var icon:Bitmap;
 		private var arrow:Bitmap;
 		
 		// events
@@ -33,7 +32,10 @@ package com.civildebatewall.kiosk.ui {
 		private var onAlmostFinish:Function;
 		
 		private var innerCircleRadius:Number;
-		private var outerRingRadius:Number;		
+		private var outerRingRadius:Number;
+		
+		// text
+		private var countLabel:BlockText;
 		
 		// constructor
 		public function CountdownButton(timerDuration:Number) {
@@ -48,8 +50,8 @@ package com.civildebatewall.kiosk.ui {
 
 		private function init():void {
 			//dimensions
-			innerCircleRadius = 62;
-			outerRingRadius = 74;
+			innerCircleRadius = 47;
+			outerRingRadius = 56;
 			
 			// set up timer
 			countdownTimer = new Timer(1000, duration);
@@ -68,63 +70,42 @@ package com.civildebatewall.kiosk.ui {
 			ringColor = 0xffffff;
 			drawRing();
 			
-			// set up the wrapper, allows rotation around center
-			countTextWrapper = new Sprite();
-			countTextWrapper.x = width / 2;
-			countTextWrapper.y = height / 2;
-			
-			// set up the text
-			var textFormat:TextFormat = new TextFormat();
-			textFormat.bold = false;
-			textFormat.font =  Assets.FONT_REGULAR;
-			textFormat.align = TextFormatAlign.CENTER;
-			textFormat.size = 76;
-			
-			countText = new TextField();
-			countText.defaultTextFormat = textFormat;
-			countText.embedFonts = true;
-			countText.selectable = false;
-			countText.multiline = false;
-			countText.cacheAsBitmap = false;
-			countText.mouseEnabled = false;			
-			countText.gridFitType = GridFitType.NONE;
-			countText.antiAliasType = AntiAliasType.NORMAL;
-			countText.textColor = 0xffffff;
-			countText.width = width / 2;
-			countText.wordWrap = false;
-			countText.text = duration.toString();
-			countText.x = (-width / 4) - 3;
-			countText.y = -50;
-			countText.visible = false;
-			
-			countTextWrapper.addChild(countText);
-			
-			// set up the icon
-			icon = Assets.getCameraIcon();
-			icon.x = -icon.width / 2 - 4;
-			icon.y = (-icon.height / 2) - 4;			
-			
-			countTextWrapper.addChild(icon);
-				
-			addChild(countTextWrapper);
-			
-			arrow = Assets.getCameraArrow();
+			countLabel = new BlockText({
+				text: '5',
+				textFont: Assets.FONT_BOLD,
+				textSizePixels: 41,
+				textColor: 0xffffff,
+				alignmentPoint: Alignment.CENTER,
+				textAlignmentMode: TextAlign.CENTER,
+				registrationPoint: Alignment.CENTER,
+				visible: true,
+				width: outerRingRadius * 2,
+				height: outerRingRadius * 2,
+				backgroundAlpha: 0
+			});
+			countLabel.x = outerRingRadius;
+			countLabel.y = outerRingRadius;
+			addChild(countLabel);
+						
+
+			arrow = Assets.getCameraArrowSmall();
 			addChild(arrow);
 			resetArrow();
+			
+			CivilDebateWall.state.addEventListener(State.USER_STANCE_CHANGE, onUserStanceChange);
 		}
 		
 		private function resetArrow():void {
 			TweenMax.killTweensOf(arrow);			
 			arrow.alpha = 0;
 			GeomUtil.centerWithin(arrow, this);
-			arrow.y += 14;	
-			arrow.x += 12;
+			arrow.y += 5;
 		}
 		
 		override protected function beforeTweenIn():void {
 			super.beforeTweenIn();
-			// reset the arrow
-			resetArrow();	
+			resetArrow();
+			countLabel.text = duration.toString();			
 		}
 				
 		// run the timer
@@ -133,43 +114,40 @@ package com.civildebatewall.kiosk.ui {
 			countdownTimer.start();
 			
 			startTime = getTimer();
-			countText.text = duration.toString();
+			countLabel.text = duration.toString();
 			
 			// reset the arrow
 			resetArrow();
 
 			
-			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countTextWrapper, 180, true), scaleX: 0, scaleY: 0, onComplete: onSecondTweenComplete});			
+			TweenMax.to(countLabel, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countLabel, 180, true), scaleX: 0, scaleY: 0, onComplete: onSecondTweenComplete});			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}		
 		
 		// every second
 		private function onTimerSecond(e:TimerEvent):void {
 			// shrink and fade the counter text, then call the rest of the animation in onSecondTweenComplete
-			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countTextWrapper, 180, true), scaleX: 0, scaleY: 0, onComplete: onSecondTweenComplete});
+			TweenMax.to(countLabel, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countLabel, 180, true), scaleX: 0, scaleY: 0, onComplete: onSecondTweenComplete});
 		}
 		
 		
 		private function onSecondTweenComplete():void {
 			// update the count, then bring back the text
-			icon.visible = false;
-			countText.visible = true;
-			countText.text = (duration - (countdownTimer.currentCount + 2)).toString();
+			countLabel.visible = true;
+			countLabel.text = (duration - (countdownTimer.currentCount + 2)).toString();
 			
 			if (countdownTimer.currentCount < 4) {
 				//onAlmostFinish();
 				// spin up a new number
-				TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 1, scaleY: 1});	
+				TweenMax.to(countLabel, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countLabel, 0, true), scaleX: 1, scaleY: 1});	
 			}
 			else if (countdownTimer.currentCount == 4) {
 				// stop spinning numbers, show the icon
 				trace("Showing icon");
-				TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 0, scaleY: 0});
+				TweenMax.to(countLabel, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countLabel, 0, true), scaleX: 0, scaleY: 0});
 				TweenMax.to(arrow, 0.2, {alpha: 1});
 				TweenMax.to(arrow, 0.25, {y: "-20", yoyo: true, repeat: -1});				
 			}
-			
-						
 		}
 		
 		
@@ -177,7 +155,7 @@ package com.civildebatewall.kiosk.ui {
 			// timer's complete, forward the event
 			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
-			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation: 360, scaleX: 0, scaleY: 0, onComplete: onFinalTweenComplete});
+			TweenMax.to(countLabel, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation: 360, scaleX: 0, scaleY: 0, onComplete: onFinalTweenComplete});
 			this.dispatchEvent(e);
 			
 			// call the function
@@ -186,9 +164,9 @@ package com.civildebatewall.kiosk.ui {
 		
 		
 		private function onFinalTweenComplete():void {
-			icon.visible = true;
-			countText.visible = false;
-			TweenMax.to(countTextWrapper, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countTextWrapper, 0, true), scaleX: 1, scaleY: 1});
+			
+			countLabel.visible = false;
+			TweenMax.to(countLabel, 0.2, {ease: Quart.easeInOut, alpha: 1, rotation:getRotationChange(countLabel, 0, true), scaleX: 1, scaleY: 1});
 			
 			progress = 0;
 			drawRing();			
@@ -269,7 +247,15 @@ package com.civildebatewall.kiosk.ui {
 		// extra events		
 		public function setOnAlmostFinish(f:Function):void {
 			onAlmostFinish = f;			
-		}		
+		}
+		
+		private function onUserStanceChange(e:Event):void {
+			setBackgroundColor(CivilDebateWall.state.userStanceColorLight, true);
+			setDownColor(CivilDebateWall.state.userStanceColorMedium);	
+			setRingColor(CivilDebateWall.state.userStanceColorLight);
+			setProgressColor(0xffffff);			
+		}
+		
 
 	}
 }

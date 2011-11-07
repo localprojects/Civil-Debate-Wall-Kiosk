@@ -31,7 +31,6 @@ package com.civildebatewall.kiosk {
 	import com.kitschpatrol.futil.utilitites.FunctionUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
-	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.*;
@@ -43,12 +42,6 @@ package com.civildebatewall.kiosk {
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.Timer;
-	
-	import flashx.textLayout.formats.BackgroundColor;
-	
-	import mx.collections.ArrayList;
-	
-	import sekati.layout.Align;
 
 	public class View extends Sprite {
 		
@@ -89,6 +82,12 @@ package com.civildebatewall.kiosk {
 		
 		private var opinionEntryOverlay:OpinionEntryOverlay;
 		
+		private var userOpinion:UserOpinionText;
+		private var everythingOkText:BlockBitmap;
+		private var cancelButton:CancelButton;
+		private var retakePhotoButton:RetakePhotoButton;
+		private var editNameOrOpinionButton:EditNameOrOpinionButton;
+		
 		
 		// OLD STUFF
 		
@@ -124,7 +123,6 @@ package com.civildebatewall.kiosk {
 		// mutable (e.g. color changes)
 		private var nameEntryInstructions:BlockLabel;		
 		private var saveButton:BlockButton;		
-		private var retakePhotoButton:BlockButton;
 		private var editTextButton:BlockButton;
 		private var editTextInstructions:BlockLabel;
 		private var cameraOverlay:CameraOverlay;
@@ -261,6 +259,32 @@ package com.civildebatewall.kiosk {
 			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1296});
 			addChild(opinion);
 			
+			userOpinion = new UserOpinionText();
+			userOpinion.setDefaultTweenIn(1, {x: 100, y: 1296});
+			userOpinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1296});
+			addChild(userOpinion);
+			
+			everythingOkText = new BlockBitmap({bitmap: Assets.getEverythingOkText()});
+			everythingOkText.setDefaultTweenIn(1, {x: 100, y: 1341});
+			everythingOkText.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
+			addChild(everythingOkText);
+			
+			cancelButton = new CancelButton();
+			cancelButton.setDefaultTweenIn(1, {x: 100, y: 1497});
+			cancelButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1497});
+			addChild(cancelButton);
+			
+			retakePhotoButton = new RetakePhotoButton();
+			retakePhotoButton.setDefaultTweenIn(1, {x: 294, y: 1497});
+			retakePhotoButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1497});
+			addChild(retakePhotoButton);
+			
+			editNameOrOpinionButton = new EditNameOrOpinionButton();
+			editNameOrOpinionButton.setDefaultTweenIn(1, {x: 591, y: 1497});
+			editNameOrOpinionButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1497});
+			addChild(editNameOrOpinionButton);			
+			
+			
 			debateThisButton = new BalloonButton();
 			debateThisButton.setDefaultTweenIn(1, {x: 919});
 			debateThisButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT});
@@ -291,8 +315,8 @@ package com.civildebatewall.kiosk {
 			addChild(editOpinion);
 			
 			bigButton = new BigButton();
-			bigButton.setDefaultTweenIn(1, {x: 455, y: 1470, alpha: 1});
-			bigButton.setDefaultTweenOut(1, {x: 455, y: 1470, alpha: 0}); // TODO possibly subclass for cooler in and out tweens
+			bigButton.setDefaultTweenIn(1, {x: 455, alpha: 1});
+			bigButton.setDefaultTweenOut(1, {x: 455, alpha: 0}); // TODO possibly subclass for cooler in and out tweens
 			addChild(bigButton);
 			
 			
@@ -403,8 +427,8 @@ package com.civildebatewall.kiosk {
 			addChild(photoBoothButton);
 			
 			countdownButton = new CountdownButton(6);
-			countdownButton.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1438, scaleX: 1, scaleY: 1});
-			countdownButton.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: stageHeight});
+			countdownButton.setDefaultTweenIn(1, {x: Alignment.CENTER_STAGE, y: 30});
+			countdownButton.setDefaultTweenOut(1, {x: Alignment.CENTER_STAGE, y: Alignment.OFF_STAGE_TOP});
 			addChild(countdownButton);
 			
 			nameEntryInstructions = new BlockLabel('ENTER YOUR NAME', 26, 0xffffff, 0x000000, Assets.FONT_HEAVY)
@@ -425,11 +449,7 @@ package com.civildebatewall.kiosk {
 			saveButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE});
 			addChild(saveButton);
 			
-			// Y is dynamic
-			retakePhotoButton = new BlockButton(270, 63, 0x000000, 'RETAKE PHOTO', 26, 0xffffff, Assets.FONT_HEAVY);
-			retakePhotoButton.setDefaultTweenIn(1, {x: 243});
-			retakePhotoButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE});
-			addChild(retakePhotoButton);
+
 			
 			// y is dynamic
 			editTextButton = new BlockButton(200, 63, 0x000000, 'EDIT TEXT', 26, 0xffffff, Assets.FONT_HEAVY);
@@ -623,6 +643,7 @@ package com.civildebatewall.kiosk {
 			CivilDebateWall.inactivityTimer.disarm();
 			portrait.setImage(Assets.portraitPlaceholder);
 			//question.setTextColor(CDW.state.questionTextColor);
+			bigButton.y = 1470;
 			bigButton.setText('ADD YOUR OPINION');
 			CivilDebateWall.state.clearUser();
 
@@ -652,7 +673,7 @@ package com.civildebatewall.kiosk {
 			CivilDebateWall.inactivityTimer.disarm();
 			CivilDebateWall.state.clearUser(); // Reset user info
 						
-			
+			bigButton.y = 1470;
 			bigButton.setText('JOIN THE DEBATE'); // TODO move to listener?
 			bigButton.setOnClick(function():void {
 				CivilDebateWall.state.userRespondingTo = CivilDebateWall.state.activeThread.firstPost;
@@ -673,6 +694,7 @@ package com.civildebatewall.kiosk {
 			bigButton.tweenIn();
 			debateStrip.tweenIn();
 			sortLinks.tweenIn();
+			
 			
 			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
 			// note that it's a one-time thing, when the block tweens back in, it will start from its canonical "tween out" location
@@ -808,14 +830,150 @@ package com.civildebatewall.kiosk {
 			
 			tweenOutInactive();			
 		}
+		
+		
+		
+		
+		private var faceDetector:FaceDetector = new FaceDetector();
+		
+		public function photoBoothView(...args):void {			
+			markAllInactive();
+			CivilDebateWall.inactivityTimer.arm();			
 			
 			
+			// behaviors
+			countdownButton.setOnFinish(onCountdownFinish);
+			
+			// blocks
+			portraitCamera.tweenIn();
+			cameraOverlay.tweenIn();
+			countdownButton.tweenIn();
+			
+			// Start counting down automatically
+			countdownButton.start();			
 			
 			
+			// Todo update this
+//			if (CivilDebateWall.state.lastView == photoBoothView) {
+//				// we timed out! show the message for five seconds
+//				cameraTimeoutWarning.tweenIn();
+//				TweenMax.delayedCall(5, function():void { cameraTimeoutWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE})});
+//			}
+//			
+			tweenOutInactive();
+		}
+		
+		
+		private function onCountdownFinish(e:Event):void {			
+			// go to black
+			blackOverlay.tweenIn(-1, {onComplete: onScreenBlack});
+		}
+		
+		private function onScreenBlack():void {
+			trace('screen black');
+			
+			// Do this in portrait camera instead?
+			if (CivilDebateWall.settings.webcamOnly) {
+				// using webcam
+				portraitCamera.takePhoto();
+				CivilDebateWall.state.userImage = portraitCamera.cameraBitmap; // store here temporarily	
+				detectFace(CivilDebateWall.state.userImage);
+			}
+			else {
+				// using SLR
+				portraitCamera.slr.setOnTimeout(onSLRTimeout);
+				portraitCamera.slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
+				portraitCamera.slr.takePhoto();
+			}
+		}
+		
+		private function onSLRTimeout(e:Event):void {
+			// go back to photo page
+			CivilDebateWall.dashboard.log("SLR timeout callback");
+			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
+			photoBoothView();
+		}
+		
+		
+		private function onPhotoCapture(e:CameraFeedEvent):void {
+			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
+			
+			// process SLR image
+			CivilDebateWall.state.userImage = portraitCamera.slr.image;
+			detectFace(CivilDebateWall.state.userImage);
+		}
+		
+		
+		private function detectFace(b:Bitmap):void {
+			trace('face detection started');
+			// find the face closest to the center
+			faceDetector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onDetectionComplete);			
+			faceDetector.searchBitmap(b.bitmapData);
+		}
+		
+		
+		private function onDetectionComplete(e:ObjectDetectorEvent):void {
+			faceDetector.removeEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onDetectionComplete);
+			trace('face detection complete');
+			trace(faceDetector.faceRect);
+			
+			// save a copy of the original image, we'll write it to disk later
+			CivilDebateWall.state.userImageFull = new Bitmap(CivilDebateWall.state.userImage.bitmapData.clone());
+			
+			if (faceDetector.faceRect != null) {
+				trace('face found, cropping to it');
+				
+				// Scale the face detector rectangle
+				var scaleFactor:Number = CivilDebateWall.state.userImage.height / faceDetector.maxSourceHeight; 
+				var scaledFaceRect:Rectangle = GeomUtil.scaleRect(faceDetector.faceRect, scaleFactor);
+				
+				trace("Scaled face rect: " + scaledFaceRect);
+				
+				CivilDebateWall.state.userImage = Utilities.cropToFace(CivilDebateWall.state.userImage, scaledFaceRect, new Rectangle(294, 352, 494, 576));				
+			}
+			else {
+				trace('no face found, saving as is');
+				CivilDebateWall.state.userImage.bitmapData = BitmapUtil.scaleDataToFill(CivilDebateWall.state.userImage.bitmapData, stageWidth, stageHeight);
+			}
+			
+			// NOW flash
+			flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
+		}
+		
+		
+		private function onFlashOn():void {
+			blackOverlay.tweenOut();
+			CivilDebateWall.state.setView(opinionReviewView);
+			flashOverlay.tweenOut();
+		}
+		
+		
+		// =========================================================================		
+		
+
+		public function opinionReviewView(...args):void {
+			markAllInactive();
+			CivilDebateWall.inactivityTimer.arm();
+			CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.view.opinionEntryView;			
+			
+			portrait.setImage(CivilDebateWall.state.userImage, true);
+			bigButton.setText("SUBMIT MY OPINION", true);
+			bigButton.enable();
+			bigButton.y = 1607;			
 			
 			
+			//portrait.tween
+			portrait.tweenIn();
+			questionHeaderHome.tweenIn();
+			userOpinion.tweenIn();
+			everythingOkText.tweenIn();
+			cancelButton.tweenIn();
+			retakePhotoButton.tweenIn();
+			editNameOrOpinionButton.tweenIn();
+			bigButton.tweenIn();
 			
-			
+			tweenOutInactive();			
+		}
 			
 			
 			// ==============================================================================================================
@@ -1105,7 +1263,7 @@ package com.civildebatewall.kiosk {
 			portrait.setImage(CivilDebateWall.state.userImage);
 			//question.setTextColor(CDW.state.questionTextColor);
 			//go straight to verification;
-			verifyOpinionView();
+			//verifyOpinionView();
 		}
 		
 		public function simulateSMS(e:Event):void {
@@ -1119,167 +1277,7 @@ package com.civildebatewall.kiosk {
 		
 		// =========================================================================		
 		
-		private var faceDetector:FaceDetector = new FaceDetector();
-		
-		public function photoBoothView(...args):void {
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = photoBoothView;			
-			markAllInactive();
-			
-			CivilDebateWall.inactivityTimer.arm();
-			
-			// mutations
-			countdownButton.progressRing.alpha = 0; // starts transparent			
 
-			countdownButton.setBackgroundColor(CivilDebateWall.state.userStanceColorLight, true);
-			countdownButton.setDownColor(CivilDebateWall.state.userStanceColorMedium);	
-			countdownButton.setRingColor(CivilDebateWall.state.userStanceColorLight);
-			countdownButton.setProgressColor(0xffffff);				
-			photoBoothButton.setBackgroundColor(CivilDebateWall.state.userStanceColorDark, true);
-			photoBoothButton.setDownColor(CivilDebateWall.state.userStanceColorMedium);			
-			photoBoothNag.setBackgroundColor(CivilDebateWall.state.userStanceColorMedium, true);
-			cameraOverlay.setColor(CivilDebateWall.state.userStanceColorLight, CivilDebateWall.state.userStanceColorOverlay);
-			
-			// behaviors
-			countdownButton.setOnClick(onCameraClick);
-			countdownButton.setOnAlmostFinish(onCountdownAlmostFinish);			
-			countdownButton.setOnFinish(onCountdownFinish);
-			photoBoothButton.setOnClick(onCameraClick);
-			
-			// blocks
-			portraitCamera.tweenIn();
-			
-			cameraOverlay.tweenIn();
-			photoBoothButton.tweenIn();
-			countdownButton.tweenIn();			
-			
-			if (CivilDebateWall.state.lastView == photoBoothView) {
-				// we timed out! show the message for five seconds
-				cameraTimeoutWarning.tweenIn();
-				TweenMax.delayedCall(5, function():void { cameraTimeoutWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE})});
-			}
-			
-			tweenOutInactive();
-		}
-		
-		
-		private function onCameraClick(e:Event):void {
-			if (!countdownButton.isCountingDown()) {
-				
-				photoBoothButton.tweenOut();
-				
-				var scaleFactor:Number = 103 / 124;
-				
-				countdownButton.setBackgroundColor(CivilDebateWall.state.userStanceColorMedium);
-				countdownButton.tween(1, {x: countdownButton.x + 15, y: 30, scaleX: scaleFactor, scaleY: scaleFactor, ease: Quart.easeInOut, onComplete: onCountdownPositioned}); // move it up
-				TweenMax.to(countdownButton.progressRing, 1, {alpha: 1, ease: Quart.easeInOut});
-				photoBoothNag.tweenIn(-1, {delay: 1});
-			}
-		}
-		
-		
-		private function onCountdownPositioned():void {
-			countdownButton.start()	
-		}
-		
-		
-		private function onCountdownAlmostFinish():void {
-			// nothing at the moment, could show cheese...
-		}
-		
-		
-		private function onCountdownFinish(e:Event):void {			
-			// go to black
-			blackOverlay.tweenIn(-1, {onComplete: onScreenBlack});
-		}
-		
-		private function onScreenBlack():void {
-			trace('screen black');
-			
-			// Do this in portrait camera instead?
-			if (CivilDebateWall.settings.webcamOnly) {
-				// using webcam
-				portraitCamera.takePhoto();
-				CivilDebateWall.state.userImage = portraitCamera.cameraBitmap; // store here temporarily	
-				detectFace(CivilDebateWall.state.userImage);
-			}
-			else {
-				// using SLR
-				portraitCamera.slr.setOnTimeout(onSLRTimeout);
-				portraitCamera.slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
-				portraitCamera.slr.takePhoto();
-			}
-		}
-		
-		private function onSLRTimeout(e:Event):void {
-			// go back to photo page
-			CivilDebateWall.dashboard.log("SLR timeout callback");
-			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
-			photoBoothView();
-		}
-		
-		
-		private function onPhotoCapture(e:CameraFeedEvent):void {
-			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
-			
-			// process SLR image
-			CivilDebateWall.state.userImage = portraitCamera.slr.image;
-			detectFace(CivilDebateWall.state.userImage);
-		}
-		
-		
-		private function detectFace(b:Bitmap):void {
-			trace('face detection started');
-			// find the face closest to the center
-			faceDetector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onDetectionComplete);			
-			faceDetector.searchBitmap(b.bitmapData);
-		}
-		
-		
-		private function onDetectionComplete(e:ObjectDetectorEvent):void {
-			faceDetector.removeEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onDetectionComplete);
-			trace('face detection complete');
-			trace(faceDetector.faceRect);
-			
-			// save a copy of the original image, we'll write it to disk later
-			CivilDebateWall.state.userImageFull = new Bitmap(CivilDebateWall.state.userImage.bitmapData.clone());
-			
-			if (faceDetector.faceRect != null) {
-				trace('face found, cropping to it');
-				
-				// Scale the face detector rectangle
-				var scaleFactor:Number = CivilDebateWall.state.userImage.height / faceDetector.maxSourceHeight; 
-				var scaledFaceRect:Rectangle = GeomUtil.scaleRect(faceDetector.faceRect, scaleFactor);
-				
-				trace("Scaled face rect: " + scaledFaceRect);
-				
-				CivilDebateWall.state.userImage = Utilities.cropToFace(CivilDebateWall.state.userImage, scaledFaceRect, new Rectangle(294, 352, 494, 576));				
-			}
-			else {
-				trace('no face found, saving as is');
-				CivilDebateWall.state.userImage.bitmapData = BitmapUtil.scaleDataToFill(CivilDebateWall.state.userImage.bitmapData, stageWidth, stageHeight);
-			}
-			
-			// NOW flash
-			flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
-		}
-		
-		
-		private function onFlashOn():void {
-			blackOverlay.tweenOut();
-			
-			// skip name entry if we already have it
-			if(CivilDebateWall.state.userName == '') {			
-				nameEntryView();
-			}
-			else {
-				verifyOpinionView();
-			}
-			flashOverlay.tweenOut();
-		}
-		
-		
-		// =========================================================================
 		
 		
 		public function nameEntryView(...args):void {
@@ -1365,7 +1363,7 @@ package com.civildebatewall.kiosk {
 				// It worked!
 				var tempUser:User = new User(r);
 				CivilDebateWall.state.userID = tempUser.id;
-				verifyOpinionView();
+				//verifyOpinionView();
 			}
 			else {
 				// there was an error, the name probably already existed!
@@ -1380,64 +1378,7 @@ package com.civildebatewall.kiosk {
 		// =========================================================================
 		
 		
-		public function verifyOpinionView(...args):void {
-			markAllInactive();
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = verifyOpinionView;			
-			
-			CivilDebateWall.inactivityTimer.arm();
-			
-			// mutations
-			portrait.setImage(CivilDebateWall.state.userImage, true);
-			//question.setTextColor(CDW.state.questionTextColor);			
-			bigButton.setText('SUBMIT THIS DEBATE', true);
-			bigButton.enable();
-			//nametag.setText(CivilDebateWall.state.userName + ' Says:', true);
-			
 
-			opinion.y = stageHeight - 574 - opinion.height; 
-			
-		//	nametag.setBackgroundColor(CivilDebateWall.state.userStanceColorMedium, true); // make instant?
-			
-			
-			
-			var buttonRowY:Number = opinion.y - 30 - retakePhotoButton.height;			
-			
-			retakePhotoButton.y = buttonRowY;
-			retakePhotoButton.setBackgroundColor(CivilDebateWall.state.userStanceColorDark, true);
-			retakePhotoButton.setDownColor(CivilDebateWall.state.userStanceColorMedium);
-			
-			editTextButton.y = buttonRowY;
-			editTextButton.setBackgroundColor(CivilDebateWall.state.userStanceColorDark, true);
-			editTextButton.setDownColor(CivilDebateWall.state.userStanceColorMedium);			
-			
-			exitButton.y = buttonRowY;
-			exitButton.setBackgroundColor(CivilDebateWall.state.userStanceColorDark, true);
-			exitButton.setDownColor(CivilDebateWall.state.userStanceColorMedium);
-			
-				
-			// behaviors
-			retakePhotoButton.setOnClick(photoBoothView);
-			editTextButton.setOnClick(editOpinionView);
-			exitButton.setOnClick(homeView);
-			bigButton.setOnClick(submitOverlayView);
-			
-			// blocks
-			
-			portrait.tweenIn();			
-
-			questionHeaderHome.tweenIn();
-			
-			bigButton.tweenIn();
-			
-			opinion.tweenIn();
-			retakePhotoButton.tweenIn();
-			editTextButton.tweenIn();
-			exitButton.tweenIn();						
-			
-
-			tweenOutInactive();
-		}
 	
 		
 		// =========================================================================
@@ -1597,7 +1538,7 @@ package com.civildebatewall.kiosk {
 				// valid
 				// move the opinion back
 				opinion.tweenIn(0);
-				verifyOpinionView();				
+				//verifyOpinionView();				
 			}
 		}
 		

@@ -96,7 +96,6 @@ package com.civildebatewall {
 			if (selection == 'SMS Prompt') CivilDebateWall.kiosk.view.smsPromptView();
 			if (selection == 'Photo Booth') CivilDebateWall.kiosk.view.photoBoothView();
 			if (selection == 'Name Entry') CivilDebateWall.kiosk.view.nameEntryView();
-			if (selection == 'Verify Opinion') CivilDebateWall.kiosk.view.verifyOpinionView();
 			if (selection == 'Edit Opinion') CivilDebateWall.kiosk.view.editOpinionView();
 			if (selection == 'Stats Overlay') CivilDebateWall.kiosk.view.statsView();
 			if (selection == 'Inactivity Overlay') CivilDebateWall.kiosk.view.inactivityOverlayView();
