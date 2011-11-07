@@ -119,6 +119,9 @@ package com.civildebatewall.kiosk {
 			xVelocity = (scrollX - scrollStartX) / dragDuration;
 			yVelocity = (scrollY - scrollStartY) / dragDuration;
 			
+			// zero velocity if we're out of bounds
+			if ((scrollY > maxScrollY) || (scrollY < minScrollY)) yVelocity = 0;
+			
 			// Tween the flick
 			var props:Object = {throwProps: {}};
 				

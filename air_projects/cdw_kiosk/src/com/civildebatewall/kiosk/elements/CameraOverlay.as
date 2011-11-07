@@ -1,17 +1,23 @@
 package com.civildebatewall.kiosk.elements {
 	
-	import flash.geom.Rectangle;
-	
 	import com.civildebatewall.Assets;
+	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.State;
+	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.Kiosk;
 	import com.civildebatewall.kiosk.blocks.OldBlockBase;
+	import com.kitschpatrol.futil.utilitites.ColorUtil;
+	
+	import flash.display.Bitmap;
+	import flash.events.Event;
+	import flash.geom.Rectangle;
 	
 	public class CameraOverlay extends OldBlockBase {
 		
 		private var opacity:Number;
 		private var backgroundColor:uint;
-		private var borderColor:uint;		
 		private var window:Rectangle;
+		private var label:Bitmap;
 
 		public function CameraOverlay()	{
 			super();
@@ -19,10 +25,18 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		private function init():void {
-			window = new Rectangle(116, 289, 849, 1522);
-			opacity = 0.25;
+			window = new Rectangle(116, 265, 848, 1546);
+			opacity = 0.85;
 			draw();
+			
+			label = Assets.getPhotoPrompt();
+			label.x = 272;
+			label.y = 186;
+			addChild(label);
+			
 			this.cacheAsBitmap = true;
+			
+			CivilDebateWall.state.addEventListener(State.USER_STANCE_CHANGE, onUserStanceChange);
 		}
 		
 		private function draw():void {
@@ -44,16 +58,19 @@ package com.civildebatewall.kiosk.elements {
 			this.graphics.drawRect(0, window.y, 1080 - (window.x + window.width), window.height); // left
 			this.graphics.endFill();
 			
-			this.graphics.lineStyle(15, borderColor, 1.0, true);
-			this.graphics.drawRect(window.x, window.y, window.width, window.height);
-			this.graphics.endFill();
 		}
 		
-		public function setColor(borderC:uint, backgroundC:uint):void {
-			borderColor = borderC;
-			backgroundColor = backgroundC;			
-			draw();
+		private function onUserStanceChange(e:Event):void {
+			if (CivilDebateWall.state.userStance == Post.STANCE_YES) {
+				backgroundColor = ColorUtil.rgb(62, 124, 148);	
+			}
+			else {
+				backgroundColor = ColorUtil.rgb(141, 50, 3);
+			}
+			
+			draw();			
 		}
+		
 
 	}
 }

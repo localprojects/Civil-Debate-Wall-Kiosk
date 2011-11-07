@@ -53,17 +53,11 @@ package com.civildebatewall.kiosk {
 				height: 1920,
 				backgroundAlpha: 0,
 				paddingLeft: 29,
+				paddingTop: 30,
 				scrollAxis: SCROLL_Y,
-				paddingTop: 500, // extra padding lets us scroll, TODO calc dynamically?
-				paddingBottom: 2000
-//				scrollLimitMode: SCROLL_LIMIT_MANUAL,
-//				minScrollY: -500,
-//				maxScrollY: 2000
+				scrollLimitMode: SCROLL_LIMIT_MANUAL
 			});
-			
-			
-			
-			
+
 			
 			question = new BlockText({
 				paddingTop: 65,
@@ -490,6 +484,9 @@ package com.civildebatewall.kiosk {
 			}
 			else {
 				trace("Looks OK! Will submit.");
+				CivilDebateWall.state.userOpinion = opinionField.text;
+				CivilDebateWall.state.userName = nameField.text;
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.photoBoothView);
 			}
 			
 	
@@ -525,14 +522,23 @@ package com.civildebatewall.kiosk {
 				respondingToContainer.visible = true;
 				respondingToContainer.y = question.bottom;
 				formContainer.y = respondingToContainer.bottom;
-				keyboardContainer.y = formContainer.bottom + 14;				
+				keyboardContainer.y = formContainer.bottom + 14;
+				
+				// allow overscroll
+				minScrollY = 0;
+				maxScrollY = question.height + respondingToContainer.height + (paddingTop * 2);
+				
 			}
 			else {
 				opinionLabel.text = "WHAT IS YOUR OPINION? ";			
 				respondingToContainer.visible = false;
 				
 				formContainer.y = question.bottom;
-				keyboardContainer.y = formContainer.bottom + 14;				
+				keyboardContainer.y = formContainer.bottom + 14;
+				
+				// allow overscroll
+				minScrollY = 0;
+				maxScrollY = question.height + (paddingTop * 2);				
 			}
 
 		}

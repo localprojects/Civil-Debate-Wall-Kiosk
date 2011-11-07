@@ -27,6 +27,28 @@ package com.civildebatewall
 		
 		
 		// Bitmaps
+		[Embed(source = '/assets/graphics/photoOverlayNo.png')] private static const photoOverlayNoClass:Class;
+		public static function getPhotoOverlayNo():Bitmap { return new photoOverlayNoClass() as Bitmap; };
+		public static const photoOverlayNo:Bitmap = getPhotoOverlayNo();
+		
+		[Embed(source = '/assets/graphics/photoOverlayYes.png')] private static const photoOverlayYesClass:Class;
+		public static function getPhotoOverlayYes():Bitmap { return new photoOverlayYesClass() as Bitmap; };
+		public static const photoOverlayYes:Bitmap = getPhotoOverlayYes();
+		
+		[Embed(source = '/assets/graphics/photoPrompt.png')] private static const photoPromptClass:Class;
+		public static function getPhotoPrompt():Bitmap { return new photoPromptClass() as Bitmap; };
+		public static const photoPrompt:Bitmap = getPhotoPrompt();
+		
+		[Embed(source = '/assets/graphics/cameraArrowSmall.png')] private static const cameraArrowSmallClass:Class;
+		public static function getCameraArrowSmall():Bitmap { return new cameraArrowSmallClass() as Bitmap; };
+		public static const cameraArrowSmall:Bitmap = getCameraArrowSmall();
+		
+		[Embed(source = '/assets/graphics/everythingOkText.png')] private static const everythingOkTextClass:Class;
+		public static function getEverythingOkText():Bitmap { return new everythingOkTextClass() as Bitmap; };
+		public static const everythingOkText:Bitmap = getEverythingOkText();
+		
+
+		
 		[Embed(source = '/assets/graphics/orText.png')] private static const orTextClass:Class;
 		public static function getOrText():Bitmap { return new orTextClass() as Bitmap; };
 		public static const orText:Bitmap = getOrText();

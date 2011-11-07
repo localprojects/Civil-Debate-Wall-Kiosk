@@ -92,7 +92,7 @@ package com.civildebatewall.kiosk.keyboard {
 			textField.autoSize = TextFieldAutoSize.CENTER;
 			textField.text = letter;
 			textField.height = height;
-			textField.y = (height / 2) - 13;
+			textField.y = (height / 2) - 10;
 			addChild(textField);
 		}
 		
