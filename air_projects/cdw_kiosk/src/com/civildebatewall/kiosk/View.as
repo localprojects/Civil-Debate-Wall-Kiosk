@@ -15,7 +15,6 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.kiosk.ui.*;
 	import com.civildebatewall.staging.elements.BalloonButton;
 	import com.civildebatewall.staging.elements.DebateButton;
-	import com.civildebatewall.staging.elements.LinkButton;
 	import com.civildebatewall.staging.elements.NavArrow;
 	import com.civildebatewall.staging.elements.QuestionHeader;
 	import com.civildebatewall.staging.elements.RespondButton;
@@ -24,205 +23,216 @@ package com.civildebatewall.kiosk {
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
-	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
-	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.FunctionUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
-	import com.kitschpatrol.futil.utilitites.NumberUtil;
-	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.*;
 	import flash.events.*;
-	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.net.*;
-	import flash.text.TextFormat;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
-	import flash.utils.Timer;
-	
-	import flashx.textLayout.formats.TextAlign;
 
 	public class View extends Sprite {
-		
-		
 		// convenience
-		public var stageWidth:Number;
-		public var stageHeight:Number;	
+		public const stageWidth:Number = 1080;
+		public const stageHeight:Number = 1920;	
 		
-		// NEW STUFF
-				
-		// Home View
-		public var portrait:Portrait;
-		public var questionHeaderHome:QuestionHeader;		
-		public var opinion:OpinionText;	
+		// home view		
+		private var portrait:Portrait;
+		private var questionHeaderHome:QuestionHeader;		
+		private var opinion:OpinionText;	
 		private var likeButton:HomeLikeButton;
 		private var viewCommentsButton:ViewCommentsButton;
 		private var flagButton:HomeFlagButton;
 		private var leftArrow:NavArrow;
 		private var rightArrow:NavArrow;
-		private var bigButton:BigButton; // TODO migrate to Futil?		
-		
+		private var bigButton:BigButton; // TODO migrate to Futil?
+		private var statsButton:StatsButton;
+		private var debateStrip:DebateStrip;		
+		private var sortLinks:SortLinks;
+		private var dragLayer:DragLayer;		
+
+		// comment thread view
+		private var questionHeader:QuestionHeader;
 		private var opinionUnderlay:BlockBase;
 		private var debateThisButton:BalloonButton;
-		
-		private var questionHeader:QuestionHeader;
-		
 		private var bigBackButton:BigBackButton;
+		private var threadOverlayBrowser:ThreadBrowser;
 		
+		// stats view
+		public var statsOverlay:StatsOverlay;		
 		
+		// pick debate type view
 		private var questionHeaderDecision:QuestionHeader;
 		private var backButton:BackButton;
 		private var respondButton:RespondButton;
 		private var debateButton:DebateButton;
 		private var orText:BlockBitmap;
 		
+		// pick stance view
 		private var yesButton:YesButton;
 		private var noButton:NoButton;
 		
+		// opinion entry view
 		private var opinionEntryOverlay:OpinionEntryOverlay;
 		
+		// photo booth view (move to its own container?)
+		public var portraitCamera:PortraitCamera; // public for dashboard		
+		private var countdownButton:CountdownButton;
+		private var cameraTimeoutWarning:BlockLabel;
+		private var cameraOverlay:CameraOverlay;		
+		private var flashOverlay:BlockBitmap;
+		private var blackOverlay:BlockBitmap;		
+		
+		// opinion review view
 		private var userOpinion:UserOpinionText;
 		private var everythingOkText:BlockBitmap;
 		private var cancelButton:CancelButton;
 		private var retakePhotoButton:RetakePhotoButton;
 		private var editNameOrOpinionButton:EditNameOrOpinionButton;
 		
+		// terms and conditions overlay
 		private var termsAndConditionsButton:TermsAndConditionsButton;
 		private var termsAndConditionsUnderlay:BlockBase;
 		private var termsAndConditionsText:BlockBitmap;
 		private var closeTermsButton:CloseTermsButton;
-			
+		
+		// sms prompt view
 		public var smsOverlay:SMSOverlay; // public for dashboard testing
-		
 
-		
-		
-		// OLD STUFF
-		
-		// immutable
-		
-		public var portraitCamera:PortraitCamera; // public for dashboard
+		// inactivity overlay (Updates TODO!)
 		private var inactivityOverlay:BlockBitmap;
 		private var inactivityTimerBar:ProgressBar;
 		private var inactivityInstructions:BlockLabelBar;
 		private var continueButton:BlockButton;
-		private var flashOverlay:BlockBitmap;
-		private var blackOverlay:BlockBitmap;
-		public var skipTextButton:BlockButton; // debug only
 		
-		private var dragLayer:DragLayer;
+		// flag overlay (Updates TODO!)
 		private var flagOverlay:BlockBitmap;
 		private var flagTimerBar:ProgressBar;
 		private var flagInstructions:BlockLabelBar;
 		private var flagYesButton:BlockButton;
 		private var flagNoButton:BlockButton;
-		private var submitOverlay:BlockBitmap;		
-		private var letsDebateUnderlay:BlockBitmap;
-		private var pickStanceInstructions:BlockLabelBar;
-		private var characterLimitWarning:BlockLabel;
-		private var usernameTakenWarning:BlockLabel;		
-		private var cameraTimeoutWarning:BlockLabel;
-		private var noNameWarning:BlockLabel;
-		private var noOpinionWarning:BlockLabel;		
-		private var sortLinks:SortLinks;
-		
-		// mutable (e.g. color changes)
-		private var nameEntryInstructions:BlockLabel;		
-		private var saveButton:BlockButton;		
-		private var editTextButton:BlockButton;
-		private var editTextInstructions:BlockLabel;
-		private var cameraOverlay:CameraOverlay;
-		private var statsButton:StatsButton;
-				
-		private var secondaryDebateButton:BalloonButtonOld;		
 
-		private var exitButton:BlockButton;				
-		private var characterLimit:BlockLabelBar;
-		private var photoBoothNag:BlockLabel;
-		private var photoBoothButton:BlockButton;
-		private var countdownButton:CountdownButton;		
-		private var keyboard:Keyboard;
-		private var submitOverlayContinueButton:BlockButton;				
-		private var submitOverlayMessage:BlockParagraph;
-		
-		private var nameEntryField:BlockInputLabel;
-		
+		// ================================================================================================================================================
 
-		
-		private var editOpinion:BlockInputParagraph; // changes dimensions 
-		private var byline:BlockLabel; // changes dimensions
-		
-		// containers, have lots of nested content
-		public var statsOverlay:StatsOverlay;
-		public var debateStrip:DebateStrip;
-		public var threadOverlayBrowser:ThreadBrowser;		
-
-
-		
-
-		
+		// Constructor
 		public function View() {
 			super();
 			init();
 		}
 		
 		private function init():void {
-			// for convenience
-			stageWidth = 1080;
-			stageHeight = 1920;
-			
-			// Work around for lack of mouse-down events
-			// http://forums.adobe.com/message/2794098?tstart=0
-			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
-			
 			// dump everything with just a single instance on the stage,
 			// they'll get tweened in and out as necessary
+			
+			// home view
 			portrait = new Portrait();
 			portrait.setDefaultTweenIn(1, {alpha: 1});
 			portrait.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(portrait);
 			
-			portraitCamera = new PortraitCamera();
-			portraitCamera.setDefaultTweenIn(1, {alpha: 1});
-			portraitCamera.setDefaultTweenOut(1, {alpha: 0});
-			addChild(portraitCamera);
-
-			cameraOverlay = new CameraOverlay();
-			cameraOverlay.setDefaultTweenIn(1, {alpha: 1});
-			cameraOverlay.setDefaultTweenOut(1, {alpha: 0});			
-			addChild(cameraOverlay);
-			
-			letsDebateUnderlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(1022, 577, false, 0xffffff))});
-			letsDebateUnderlay.mouseEnabled = false; // let keystrokes through to the keyboard
-			letsDebateUnderlay.x = 28;
-			letsDebateUnderlay.y = 264;
-			
-			letsDebateUnderlay.setDefaultTweenIn(1, {alpha: 0.9, ease: Quart.easeOut});
-			letsDebateUnderlay.setDefaultTweenOut(1, {alpha: 0, ease: Quart.easeOut});
-			addChild(letsDebateUnderlay);				
-			
-
-			
-			
-			
-			
-			
 			questionHeaderHome = new QuestionHeader({width: 1080, height: 313, textSizePixels: 39, leading: 29});
 			questionHeaderHome.setDefaultTweenIn(1, { alpha: 1});
 			questionHeaderHome.setDefaultTweenOut(1, { alpha: 0});
-			addChild(questionHeaderHome);
+			addChild(questionHeaderHome);			
 			
+			opinion = new OpinionText();	
+			opinion.setDefaultTweenIn(1, {x: 100, y: 1296});
+			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1296});
+			addChild(opinion);
+			
+			likeButton = new HomeLikeButton();
+			likeButton.setDefaultTweenIn(1, {x: 100, y: 1341});
+			likeButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
+			addChild(likeButton);
+			
+			viewCommentsButton = new ViewCommentsButton();
+			viewCommentsButton.setDefaultTweenIn(1, {x: 288, y: 1341});
+			viewCommentsButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
+			addChild(viewCommentsButton);			
+			
+			flagButton = new HomeFlagButton();
+			flagButton.setDefaultTweenIn(1, {x: 916, y: 1341});
+			flagButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
+			addChild(flagButton);
+
+			leftArrow = new NavArrow({bitmap: Assets.getLeftCaratBig()});
+			leftArrow.setDefaultTweenIn(1, {x: 39, y: 1002});
+			leftArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1002});
+			addChild(leftArrow);
+			
+			rightArrow = new NavArrow({bitmap: Assets.getRightCaratBig()});
+			rightArrow.setDefaultTweenIn(1, {x: 1019, y: 1002});
+			rightArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 1002});
+			addChild(rightArrow);
+			
+			bigButton = new BigButton();
+			bigButton.setDefaultTweenIn(1, {x: 455, alpha: 1});
+			bigButton.setDefaultTweenOut(1, {x: 455, alpha: 0}); // TODO possibly subclass for cooler in and out tweens
+			addChild(bigButton);
+			
+			statsButton = new StatsButton();
+			statsButton.setDefaultTweenIn(1, {x: 838, y: 796});
+			statsButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 796});
+			addChild(statsButton);			
+			
+			debateStrip = new DebateStrip();
+			debateStrip.setDefaultTweenIn(1, {x: 0, y: 1671});
+			debateStrip.setDefaultTweenOut(1, {x: 0, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(debateStrip);			
+			
+			sortLinks = new SortLinks();
+			sortLinks.setDefaultTweenIn(1, {y: 1811});	
+			sortLinks.setDefaultTweenOut(1, {y: Alignment.OFF_STAGE_BOTTOM});			
+			addChild(sortLinks);			
+			
+			dragLayer = new DragLayer(); // TODO is there always a drag layer?
+			dragLayer.setDefaultTweenIn(0, {});
+			dragLayer.setDefaultTweenOut(0, {});
+			addChild(dragLayer);			
+						
+			
+			// comment thread view
 			questionHeader = new QuestionHeader({width: 1024, height: 250, textSizePixels: 28,	leading: 22});
 			questionHeader.setDefaultTweenIn(1, {x: 28, alpha: 1});
 			questionHeader.setDefaultTweenOut(1, {x: 28, alpha: 0});
 			addChild(questionHeader);
 			
+			opinionUnderlay = new BlockBase({backgroundColor: 0xffffff, backgroundAlpha: 0.85, width: 1024}); // height determined by opinion
+			opinionUnderlay.setDefaultTweenIn(1, {x: 28, y: 264, alpha: 1});
+			opinionUnderlay.setDefaultTweenOut(1, {x: 28, y: 264, alpha: 0});
+			addChild(opinionUnderlay);			
+			
+			debateThisButton = new BalloonButton();
+			debateThisButton.setDefaultTweenIn(1, {x: 919});
+			debateThisButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT});
+			addChild(debateThisButton);
+			
+			bigBackButton = new BigBackButton();
+			bigBackButton.setDefaultTweenIn(1, {x: 28, y: 1826});
+			bigBackButton.setDefaultTweenOut(1, {x: 28, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(bigBackButton);
+			
+			threadOverlayBrowser = new ThreadBrowser();
+			threadOverlayBrowser.setDefaultTweenIn(1, {x: 28}); // y depends on opinion height
+			threadOverlayBrowser.setDefaultTweenOut(1, {x: 28, y: Alignment.OFF_STAGE_BOTTOM});			
+			addChild(threadOverlayBrowser);
+			
+
+			// stats view
+			statsOverlay = new StatsOverlay();
+			statsOverlay.setDefaultTweenIn(1, {x: 29, y: 264});
+			statsOverlay.setDefaultTweenOut(1, {x: 29, y: OldBlockBase.OFF_BOTTOM_EDGE});
+			addChild(statsOverlay);		
+			
+			
+			// pick debate type view
 			questionHeaderDecision = new QuestionHeader({width: 880, height: 157, textSizePixels: 26, leading: 18});		
 			questionHeaderDecision.setDefaultTweenIn(1, {x: 100, y: 1060});
 			questionHeaderDecision.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1060});
@@ -232,7 +242,6 @@ package com.civildebatewall.kiosk {
 			backButton.setDefaultTweenIn(1, {x: 100, y: 982});
 			backButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 982});
 			addChild(backButton);
-			
 			
 			respondButton = new RespondButton();
 			respondButton.setDefaultTweenIn(1, {x: 100, y: 1231});
@@ -250,6 +259,7 @@ package com.civildebatewall.kiosk {
 			addChild(orText);			
 			
 			
+			// pick stance view
 			yesButton = new YesButton();
 			yesButton.setDefaultTweenIn(1, {x: 446, y: 1231});
 			yesButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1231});
@@ -260,18 +270,47 @@ package com.civildebatewall.kiosk {
 			noButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 1231});
 			addChild(noButton);			
 			
-			// triple opinions
 			
-			opinionUnderlay = new BlockBase({backgroundColor: 0xffffff, backgroundAlpha: 0.85, width: 1024}); // height determined by opinion
-			opinionUnderlay.setDefaultTweenIn(1, {x: 28, y: 264, alpha: 1});
-			opinionUnderlay.setDefaultTweenOut(1, {x: 28, y: 264, alpha: 0});
-			addChild(opinionUnderlay);
+			// opinion entry view
+			opinionEntryOverlay = new OpinionEntryOverlay();
+			opinionEntryOverlay.setDefaultTweenIn(1, {x: 0, y: 0});
+			opinionEntryOverlay.setDefaultTweenOut(1, {x: 0, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(opinionEntryOverlay);
 			
-			opinion = new OpinionText();	
-			opinion.setDefaultTweenIn(1, {x: 100, y: 1296});
-			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1296});
-			addChild(opinion);
 			
+			// photo booth view (move to its own container?)
+			portraitCamera = new PortraitCamera();
+			portraitCamera.setDefaultTweenIn(1, {alpha: 1});
+			portraitCamera.setDefaultTweenOut(1, {alpha: 0});
+			addChild(portraitCamera);
+			
+			cameraOverlay = new CameraOverlay();
+			cameraOverlay.setDefaultTweenIn(1, {alpha: 1});
+			cameraOverlay.setDefaultTweenOut(1, {alpha: 0});			
+			addChild(cameraOverlay);
+			
+			countdownButton = new CountdownButton(6);
+			countdownButton.setDefaultTweenIn(1, {x: Alignment.CENTER_STAGE, y: 30});
+			countdownButton.setDefaultTweenOut(1, {x: Alignment.CENTER_STAGE, y: Alignment.OFF_STAGE_TOP});
+			addChild(countdownButton);			
+			
+			cameraTimeoutWarning = new BlockLabel('The camera could not focus, please try again!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
+			cameraTimeoutWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: OldBlockBase.CENTER});	
+			cameraTimeoutWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: OldBlockBase.CENTER});
+			addChild(cameraTimeoutWarning);			
+			
+			blackOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
+			blackOverlay.setDefaultTweenIn(0.1, {alpha: 1, immediateRender: true}); // duration of 0 doesn't work?
+			blackOverlay.setDefaultTweenOut(0, {alpha: 0});
+			addChild(blackOverlay);
+			
+			flashOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0xffffff))});
+			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut, immediateRender: true});
+			flashOverlay.setDefaultTweenOut(1, {alpha: 0, ease: Quart.easeOut});
+			addChild(flashOverlay);
+			
+			
+			// opinion review view
 			userOpinion = new UserOpinionText();
 			userOpinion.setDefaultTweenIn(1, {x: 100, y: 1296});
 			userOpinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1296});
@@ -295,315 +334,10 @@ package com.civildebatewall.kiosk {
 			editNameOrOpinionButton = new EditNameOrOpinionButton();
 			editNameOrOpinionButton.setDefaultTweenIn(1, {x: 591, y: 1497});
 			editNameOrOpinionButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1497});
-			addChild(editNameOrOpinionButton);			
+			addChild(editNameOrOpinionButton);						
 			
 			
-			debateThisButton = new BalloonButton();
-			debateThisButton.setDefaultTweenIn(1, {x: 919});
-			debateThisButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT});
-			addChild(debateThisButton);
-			
-
-			
-			opinionEntryOverlay = new OpinionEntryOverlay();
-			opinionEntryOverlay.setDefaultTweenIn(1, {x: 0, y: 0});
-			opinionEntryOverlay.setDefaultTweenOut(1, {x: 0, y: Alignment.OFF_STAGE_BOTTOM});
-			addChild(opinionEntryOverlay);
-			
-			
-			
-			
-			
-			
-
-			
-			
-			
-			
-			// TODO is there always a drag layer?
-			dragLayer = new DragLayer();
-			dragLayer.setDefaultTweenIn(0, {});
-			dragLayer.setDefaultTweenOut(0, {});
-			addChild(dragLayer);			
-			
-			// dynamic y
-			editOpinion = new BlockInputParagraph(915, 0x000000, '', 42);
-			editOpinion.setDefaultTweenIn(0, {visible: true, x: 101});
-			editOpinion.setDefaultTweenOut(0, {visible: false, x: 101});			
-			addChild(editOpinion);
-			
-			bigButton = new BigButton();
-			bigButton.setDefaultTweenIn(1, {x: 455, alpha: 1});
-			bigButton.setDefaultTweenOut(1, {x: 455, alpha: 0}); // TODO possibly subclass for cooler in and out tweens
-			addChild(bigButton);
-			
-			
-			
-			statsButton = new StatsButton();
-			statsButton.setDefaultTweenIn(1, {x: 838, y: 796});
-			statsButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 796});
-			addChild(statsButton);
-			
-			viewCommentsButton = new ViewCommentsButton();
-			viewCommentsButton.setDefaultTweenIn(1, {x: 288, y: 1341});
-			viewCommentsButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
-			addChild(viewCommentsButton);
-
-			
-			
-			
-
-//			debateButton = new BalloonButton(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
-//			debateButton.setDefaultTweenIn(1, {x: 813, scaleX: 1, scaleY: 1});
-//			debateButton.setDefaultTweenOut(1, {x: BlockBase.OFF_RIGHT_EDGE, scaleX: 1, scaleY: 1});
-//			addChild(debateButton);
-			
-			secondaryDebateButton = new BalloonButtonOld(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
-			secondaryDebateButton.setStrokeColor(Assets.COLOR_GRAY_15);
-			secondaryDebateButton.scaleX = 0.75;  
-			secondaryDebateButton.scaleY = 0.75; 				
-			secondaryDebateButton.setDefaultTweenIn(1, {x: 909});
-			secondaryDebateButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE});
-			addChild(secondaryDebateButton);	
-			
-			threadOverlayBrowser = new ThreadBrowser();
-			threadOverlayBrowser.setDefaultTweenIn(1, {x: 28}); // y depends on opinion height
-			threadOverlayBrowser.setDefaultTweenOut(1, {x: 28, y: Alignment.OFF_STAGE_BOTTOM});			
-			addChild(threadOverlayBrowser);			
-			
-			debateStrip = new DebateStrip();
-			debateStrip.setDefaultTweenIn(1, {x: 0, y: 1671});
-			debateStrip.setDefaultTweenOut(1, {x: 0, y: Alignment.OFF_STAGE_BOTTOM});
-			addChild(debateStrip);
-			
-			
-			leftArrow = new NavArrow({bitmap: Assets.getLeftCaratBig()});
-			leftArrow.setDefaultTweenIn(1, {x: 39, y: 1002});
-			leftArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1002});
-			addChild(leftArrow);
-			
-			rightArrow = new NavArrow({bitmap: Assets.getRightCaratBig()});
-			rightArrow.setDefaultTweenIn(1, {x: 1019, y: 1002});
-			rightArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 1002});
-			addChild(rightArrow);
-			
-			
-			pickStanceInstructions = new BlockLabelBar('Your Answer / Please Select One :', 19, 0xffffff, 367, 63, Assets.COLOR_GRAY_85, Assets.FONT_REGULAR);
-			pickStanceInstructions.setDefaultTweenIn(1, {x: 670, y: 1243});
-			pickStanceInstructions.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 1243});					
-			addChild(pickStanceInstructions);
-			
-
-			
-
-
-
-			
-
-			
-			// y value is dynamic
-			exitButton = new BlockButton(125, 63, 0x000000, 'EXIT', 26, 0xffffff, Assets.FONT_HEAVY);
-			exitButton.setDefaultTweenIn(1, {x: 103});
-			exitButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE});			
-			addChild(exitButton);
-			
-
-			characterLimit = new BlockLabelBar('Use No More than ' + CivilDebateWall.settings.characterLimit + ' characters', 19, 0xffffff, 367, 63, 0x000000, Assets.FONT_BOLD);			
-			characterLimit.setDefaultTweenIn(1, {x: 670, y: 1243});
-			characterLimit.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 1243});					
-			addChild(characterLimit);			
-			
-			photoBoothNag = new BlockLabel('Please look into the Camera!', 33, 0xffffff, 0x000000, Assets.FONT_BOLD);
-			photoBoothNag.setDefaultTweenIn(1.5, {alpha: 1, x: OldBlockBase.CENTER, y: 176}); // elastic easing was over-the-top
-			photoBoothNag.setDefaultTweenOut(1, {alpha: 0, x: OldBlockBase.CENTER, y: 176});
-			addChild(photoBoothNag);			
-			
-			photoBoothButton = new BlockButton(398, 63, 0x000000, 'TOUCH TO COUNTDOWN', 26, 0xffffff, Assets.FONT_HEAVY);
-			photoBoothButton.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1628});
-			photoBoothButton.setDefaultTweenOut(1, {alpha: 0, x: OldBlockBase.CENTER, y: 1628});
-			addChild(photoBoothButton);
-			
-			countdownButton = new CountdownButton(6);
-			countdownButton.setDefaultTweenIn(1, {x: Alignment.CENTER_STAGE, y: 30});
-			countdownButton.setDefaultTweenOut(1, {x: Alignment.CENTER_STAGE, y: Alignment.OFF_STAGE_TOP});
-			addChild(countdownButton);
-			
-			nameEntryInstructions = new BlockLabel('ENTER YOUR NAME', 26, 0xffffff, 0x000000, Assets.FONT_HEAVY)
-			nameEntryInstructions.setPadding(20, 31, 20, 31);
-			nameEntryInstructions.setDefaultTweenIn(1, {x: 101, y: 1000});
-			nameEntryInstructions.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1003});
-			addChild(nameEntryInstructions);
-			
-			nameEntryField = new BlockInputLabel('', 33, 0xffffff, 0x000000, Assets.FONT_REGULAR, true);
-			nameEntryField.setPadding(24, 30, 20, 30);
-			nameEntryField.setDefaultTweenIn(1, {x: 101, y: 1096});
-			nameEntryField.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1096});
-			addChild(nameEntryField);			
-			
-			// X and Y are dynamic
-			saveButton = new BlockButton(335, 63, 0x000000, 'SAVE AND CONTINUE', 26, 0xffffff, Assets.FONT_HEAVY);			
-			saveButton.setDefaultTweenIn(1, {});
-			saveButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE});
-			addChild(saveButton);
-			
-
-			
-			// y is dynamic
-			editTextButton = new BlockButton(200, 63, 0x000000, 'EDIT TEXT', 26, 0xffffff, Assets.FONT_HEAVY);
-			editTextButton.setDefaultTweenIn(1, {x: 528});
-			editTextButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE});
-			addChild(editTextButton);
-			
-			// y is dynamic
-			// disabled per latest indesign file
-			editTextInstructions = new BlockLabel('EDITING TEXT...', 26, 0xffffff, 0x000000, Assets.FONT_HEAVY);
-			editTextInstructions.setDefaultTweenIn(1, {x: 525});
-			editTextInstructions.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE});
-			addChild(editTextInstructions);			
-			
-			keyboard = new Keyboard();
-			keyboard.setDefaultTweenIn(1, {x: 0, y: stageHeight - keyboard.height});
-			keyboard.setDefaultTweenOut(1, {x: 0, y: OldBlockBase.OFF_BOTTOM_EDGE});
-			addChild(keyboard);
-			
-			
-			characterLimitWarning = new BlockLabel('You reached the character limit!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			characterLimitWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1562 - (characterLimitWarning.height / 2) - 10});	
-			characterLimitWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1562 - (characterLimitWarning.height / 2) - 10});
-			addChild(characterLimitWarning);
-			
-			cameraTimeoutWarning = new BlockLabel('The camera could not focus, please try again!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			cameraTimeoutWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: OldBlockBase.CENTER});	
-			cameraTimeoutWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: OldBlockBase.CENTER});
-			addChild(cameraTimeoutWarning);
-				
-			noNameWarning = new BlockLabel('Please enter a username!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			noNameWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
-			noNameWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1562 - (noNameWarning.height / 2) - 10});
-			addChild(noNameWarning);
-			
-			usernameTakenWarning = new BlockLabel('That username is already taken!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			usernameTakenWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1562 - (noNameWarning.height / 2) - 10});	
-			usernameTakenWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1562 - (noNameWarning.height / 2) - 10});
-			addChild(usernameTakenWarning);			
-			
-			noOpinionWarning = new BlockLabel('Please enter your opinion!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			noOpinionWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1562 - (noOpinionWarning.height / 2) - 10});	
-			noOpinionWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1562 - (noOpinionWarning.height / 2) - 10});
-			addChild(noOpinionWarning);				
-			
-
-			
-			
-			sortLinks = new SortLinks();
-			sortLinks.setDefaultTweenIn(1, {y: 1811});	
-			sortLinks.setDefaultTweenOut(1, {y: Alignment.OFF_STAGE_BOTTOM});			
-			addChild(sortLinks);
-			
-			likeButton = new HomeLikeButton();
-			likeButton.setDefaultTweenIn(1, {x: 100, y: 1341});
-			likeButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
-			addChild(likeButton);
-			
-			flagButton = new HomeFlagButton();
-			flagButton.setDefaultTweenIn(1, {x: 916, y: 1341});
-			flagButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
-			addChild(flagButton);
-			
-
-			
-			// TODO update from database
-			statsOverlay = new StatsOverlay();
-			statsOverlay.setDefaultTweenIn(1, {x: 29, y: 264});
-			statsOverlay.setDefaultTweenOut(1, {x: 29, y: OldBlockBase.OFF_BOTTOM_EDGE});
-			addChild(statsOverlay);
-			
-			inactivityOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
-			inactivityOverlay.setDefaultTweenIn(1, {alpha: 0.85});
-			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});
-			addChild(inactivityOverlay);
-			
-			inactivityTimerBar = new ProgressBar(735, 2, 20);		
-			inactivityTimerBar.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1002});
-			inactivityTimerBar.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
-			addChild(inactivityTimerBar);
-			
-			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
-			inactivityInstructions.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1018});
-			inactivityInstructions.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
-			addChild(inactivityInstructions);
-			
-			continueButton = new BlockButton(735, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
-			continueButton.setDownColor(Assets.COLOR_GRAY_75);
-			continueButton.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1098});
-			continueButton.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.OFF_LEFT_EDGE, y: 1098});					
-			addChild(continueButton);
-			
-			// Flag overlay
-			flagOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
-			flagOverlay.setDefaultTweenIn(1, {alpha: 0.85});
-			flagOverlay.setDefaultTweenOut(1, {alpha: 0});
-			addChild(flagOverlay);
-			
-			flagTimerBar = new ProgressBar(735, 2, 20);		
-			flagTimerBar.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1002});
-			flagTimerBar.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
-			addChild(flagTimerBar);
-			
-			flagInstructions = new BlockLabelBar('FLAG AS INAPPROPRIATE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
-			flagInstructions.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1018});
-			flagInstructions.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
-			addChild(flagInstructions);
-			
-			flagYesButton = new BlockButton(360, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
-			flagYesButton.setDownColor(Assets.COLOR_GRAY_75);
-			flagYesButton.setDefaultTweenIn(1, {x: 173, y: 1098});
-			flagYesButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1098});					
-			addChild(flagYesButton);
-			
-			flagNoButton = new BlockButton(360, 120, Assets.COLOR_GRAY_50, 'NO!', 92);
-			flagNoButton.setDownColor(Assets.COLOR_GRAY_75);
-			flagNoButton.setDefaultTweenIn(1, {x: 548, y: 1098});
-			flagNoButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 1098});					
-			addChild(flagNoButton);			
-			
-
-			bigBackButton = new BigBackButton();
-			bigBackButton.setDefaultTweenIn(1, {x: 28, y: 1826});
-			bigBackButton.setDefaultTweenOut(1, {x: 28, y: Alignment.OFF_STAGE_BOTTOM});
-			addChild(bigBackButton);			
-			
-			// Submit overlay
-			submitOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
-			submitOverlay.setDefaultTweenIn(1, {alpha: 0.85});
-			submitOverlay.setDefaultTweenOut(1, {alpha: 0});
-			addChild(submitOverlay);
-			
-			submitOverlayMessage = new BlockParagraph(900, 0x000000, 'Thank you for your participation.\nKeep up with the latest at greatcivildebatewall.com', 31, 0xffffff, Assets.FONT_BOLD);
-			submitOverlayMessage.setDefaultTweenIn(1, {x: 101, y: 993});
-			submitOverlayMessage.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 993});					
-			addChild(submitOverlayMessage);			
-			
-			submitOverlayContinueButton = new BlockButton(202, 65, 0x000000, 'CONTINUE', 25, 0xffffff, Assets.FONT_HEAVY);
-			submitOverlayContinueButton.setDefaultTweenIn(1, {alpha: 1, x: 779, y: 1243});
-			submitOverlayContinueButton.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.OFF_RIGHT_EDGE, y: 1243});					
-			addChild(submitOverlayContinueButton);						
-
-			// Camera Overlays
-			blackOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
-			blackOverlay.setDefaultTweenIn(0.1, {alpha: 1, immediateRender: true}); // duration of 0 doesn't work?
-			blackOverlay.setDefaultTweenOut(0, {alpha: 0});
-			addChild(blackOverlay);
-			
-			// Flash overlay
-			flashOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0xffffff))});
-			flashOverlay.setDefaultTweenIn(0.1, {alpha: 1, ease: Quart.easeOut, immediateRender: true});
-			flashOverlay.setDefaultTweenOut(1, {alpha: 0, ease: Quart.easeOut});
-			flashOverlay.name = 'Flash Overlay';
-			addChild(flashOverlay);
-			
-			
-			
+			// terms and conditions overlay
 			termsAndConditionsButton = new TermsAndConditionsButton();
 			termsAndConditionsButton.setDefaultTweenIn(1, {x: 791, y: 1864});
 			termsAndConditionsButton.setDefaultTweenOut(1, {x: 791, y: Alignment.OFF_STAGE_BOTTOM});
@@ -631,14 +365,67 @@ package com.civildebatewall.kiosk {
 			closeTermsButton.setDefaultTweenIn(1, {x: 845, y: 1849});
 			closeTermsButton.setDefaultTweenOut(1, {x: 845, y: Alignment.OFF_STAGE_BOTTOM});
 			addChild(closeTermsButton);
+
 			
+			// sms prompt view
 			smsOverlay = new SMSOverlay();
 			smsOverlay.setDefaultTweenIn(0, {});
 			smsOverlay.setDefaultTweenOut(1, {});
 			addChild(smsOverlay);
+			
+			
+			// inactivity overlay (Updates TODO!)
+			inactivityOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
+			inactivityOverlay.setDefaultTweenIn(1, {alpha: 0.85});
+			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});
+			addChild(inactivityOverlay);
+			
+			inactivityTimerBar = new ProgressBar(735, 2, 20);		
+			inactivityTimerBar.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1002});
+			inactivityTimerBar.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
+			addChild(inactivityTimerBar);
+			
+			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
+			inactivityInstructions.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1018});
+			inactivityInstructions.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
+			addChild(inactivityInstructions);
+			
+			continueButton = new BlockButton(735, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
+			continueButton.setDownColor(Assets.COLOR_GRAY_75);
+			continueButton.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1098});
+			continueButton.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.OFF_LEFT_EDGE, y: 1098});					
+			addChild(continueButton);
+			
+			
+			// flag overlay (Updates TODO!)
+			flagOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
+			flagOverlay.setDefaultTweenIn(1, {alpha: 0.85});
+			flagOverlay.setDefaultTweenOut(1, {alpha: 0});
+			addChild(flagOverlay);
+			
+			flagTimerBar = new ProgressBar(735, 2, 20);		
+			flagTimerBar.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1002});
+			flagTimerBar.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
+			addChild(flagTimerBar);
+			
+			flagInstructions = new BlockLabelBar('FLAG AS INAPPROPRIATE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
+			flagInstructions.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1018});
+			flagInstructions.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
+			addChild(flagInstructions);
+			
+			flagYesButton = new BlockButton(360, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
+			flagYesButton.setDownColor(Assets.COLOR_GRAY_75);
+			flagYesButton.setDefaultTweenIn(1, {x: 173, y: 1098});
+			flagYesButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1098});					
+			addChild(flagYesButton);
+			
+			flagNoButton = new BlockButton(360, 120, Assets.COLOR_GRAY_50, 'NO!', 92);
+			flagNoButton.setDownColor(Assets.COLOR_GRAY_75);
+			flagNoButton.setDefaultTweenIn(1, {x: 548, y: 1098});
+			flagNoButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 1098});					
+			addChild(flagNoButton);			
 
-			
-			
+			// Watch state for changes
 			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
 			CivilDebateWall.state.addEventListener(State.VIEW_CHANGE, onViewChange);
 		}
@@ -653,29 +440,25 @@ package com.civildebatewall.kiosk {
 			//CivilDebateWall.state.activeView();
 		}
 		
-		
-		// =========================================================================
-		
-		
-		// land here if there aren't yet opinions for the current question
-		// TODO some kind of "be the first" message
+		// ================================================================================================================================================
+
 		public function noOpinionView(...args):void {
+			// land here if there aren't yet opinions for the current question
+			// TODO some kind of "be the first" message
+			
 			markAllInactive();
 			
 			// mutations
 			CivilDebateWall.inactivityTimer.disarm();
 			portrait.setImage(Assets.portraitPlaceholder);
-			//question.setTextColor(CDW.state.questionTextColor);
 			bigButton.y = 1470;
 			bigButton.setText('ADD YOUR OPINION');
 			CivilDebateWall.state.clearUser();
 
 			// behaviors
-			
 			bigButton.setOnClick(function():void {
 				CivilDebateWall.state.setView(debateTypePickerView);			
-			});				
-			
+			});
 			
 			
 			// blocks
@@ -686,9 +469,7 @@ package com.civildebatewall.kiosk {
 			tweenOutInactive();
 		}
 		
-		// =========================================================================
-		
-
+		// ================================================================================================================================================
 		
 		public function homeView(...args):void {
 			markAllInactive();
@@ -703,7 +484,6 @@ package com.civildebatewall.kiosk {
 				CivilDebateWall.state.setView(debateTypePickerView);			
 			});							
 			
-
 			// blocks
 			portrait.tweenIn();
 			questionHeaderHome.tweenIn();
@@ -747,10 +527,7 @@ package com.civildebatewall.kiosk {
 			homeView();			
 		}
 		
-
-
-		// =========================================================================
-		
+		// ================================================================================================================================================
 		
 		public function threadView(...args):void {			
 			markAllInactive();
@@ -764,8 +541,6 @@ package com.civildebatewall.kiosk {
 			debateThisButton.y = 327 + opinion.contentHeight;
 			threadOverlayBrowser.maxHeight = 1812 - (opinionUnderlay.y + opinionUnderlay.height + 14);
 
-			
-			//debateOverlay.setMaxHeight(stageHeight - (letsDebateUnderlay.y + letsDebateUnderlay.height + 30 + 300));
 			portrait.tweenIn();
 			questionHeader.tweenIn();
 			opinionUnderlay.tweenIn();			
@@ -773,26 +548,15 @@ package com.civildebatewall.kiosk {
 			threadOverlayBrowser.tweenIn(1, {y: opinionUnderlay.y + opinionUnderlay.height + 14});
 			debateThisButton.tweenIn();
 			bigBackButton.tweenIn();
-			
-			//debateOverlay.tweenIn(-1, {y: letsDebateUnderlay.y + letsDebateUnderlay.height + 30});
-			
-			
-			// resize question header...
-			
-							
-			//debateOverlay.update();			
-
+								
 			tweenOutInactive();	
 		}
 		
-
-		
-		// =========================================================================
+		// ================================================================================================================================================
 		
 		public function debateTypePickerView(...args):void {
 			markAllInactive(); 
 			CivilDebateWall.inactivityTimer.arm();
-			
 			CivilDebateWall.state.backDestination = homeView;  
 			
 			portrait.tweenIn(1, {alpha: 0.25});
@@ -802,20 +566,19 @@ package com.civildebatewall.kiosk {
 			orText.tweenIn();
 			debateButton.tweenIn();
 			
-			// custom tween outs
-			threadOverlayBrowser.tweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: threadOverlayBrowser.y});
-			opinion.tweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: opinion.y});
-			bigBackButton.tweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: bigBackButton.y});
+			// custom tween outs TODO these don't handle fast clicking very well
+			// threadOverlayBrowser.tweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: threadOverlayBrowser.y});
+			// opinion.tweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: opinion.y});
+			// bigBackButton.tweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: bigBackButton.y});
 			
 			tweenOutInactive();			
 		}
 
-		// =========================================================================
+		// ================================================================================================================================================
 		
 		public function debateStancePickerView(...args):void {
 			markAllInactive();
-			CivilDebateWall.inactivityTimer.arm();
-			
+			CivilDebateWall.inactivityTimer.arm();			
 			CivilDebateWall.state.backDestination = CivilDebateWall.state.lastView;
 			
 			portrait.tweenIn(1, {alpha: 0.25});
@@ -823,12 +586,11 @@ package com.civildebatewall.kiosk {
 			questionHeaderDecision.tweenIn();
 			yesButton.tweenIn();
 			noButton.tweenIn();
-			
-			
-			
+
 			tweenOutInactive();			
 		}
 		
+		// ================================================================================================================================================		
 		
 		public function opinionEntryView(...args):void {
 			markAllInactive();			
@@ -840,15 +602,13 @@ package com.civildebatewall.kiosk {
 			tweenOutInactive();			
 		}
 		
-		
-		
+		// ================================================================================================================================================		
 		
 		private var faceDetector:FaceDetector = new FaceDetector();
 		
 		public function photoBoothView(...args):void {			
 			markAllInactive();
 			CivilDebateWall.inactivityTimer.arm();			
-			
 			
 			// behaviors
 			countdownButton.setOnFinish(onCountdownFinish);
@@ -861,7 +621,6 @@ package com.civildebatewall.kiosk {
 			// Start counting down automatically
 			countdownButton.start();			
 			
-			
 			// Todo update this
 //			if (CivilDebateWall.state.lastView == photoBoothView) {
 //				// we timed out! show the message for five seconds
@@ -871,7 +630,6 @@ package com.civildebatewall.kiosk {
 //			
 			tweenOutInactive();
 		}
-		
 		
 		private function onCountdownFinish(e:Event):void {			
 			// go to black
@@ -903,7 +661,6 @@ package com.civildebatewall.kiosk {
 			photoBoothView();
 		}
 		
-		
 		private function onPhotoCapture(e:CameraFeedEvent):void {
 			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 			
@@ -912,14 +669,12 @@ package com.civildebatewall.kiosk {
 			detectFace(CivilDebateWall.state.userImage);
 		}
 		
-		
 		private function detectFace(b:Bitmap):void {
 			trace('face detection started');
 			// find the face closest to the center
 			faceDetector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onDetectionComplete);			
 			faceDetector.searchBitmap(b.bitmapData);
 		}
-		
 		
 		private function onDetectionComplete(e:ObjectDetectorEvent):void {
 			faceDetector.removeEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onDetectionComplete);
@@ -949,22 +704,18 @@ package com.civildebatewall.kiosk {
 			flashOverlay.tweenIn(-1, {onComplete: onFlashOn}); // use default tween in duration
 		}
 		
-		
 		private function onFlashOn():void {
 			blackOverlay.tweenOut();
 			CivilDebateWall.state.setView(opinionReviewView);
 			flashOverlay.tweenOut();
 		}
 		
+		// ================================================================================================================================================		
 		
-		// =========================================================================		
-		
-
 		public function opinionReviewView(...args):void {
 			markAllInactive();
 			CivilDebateWall.inactivityTimer.arm();
 			CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.view.opinionEntryView;			
-			
 			
 			bigButton.setOnClick(function():void {
 				CivilDebateWall.state.setView(smsPromptView);			
@@ -975,8 +726,6 @@ package com.civildebatewall.kiosk {
 			bigButton.enable();
 			bigButton.y = 1607;			
 			
-			
-			//portrait.tween
 			portrait.tweenIn();
 			questionHeaderHome.tweenIn();
 			userOpinion.tweenIn();
@@ -990,9 +739,7 @@ package com.civildebatewall.kiosk {
 			tweenOutInactive();			
 		}
 		
-		
-		
-		
+		// ================================================================================================================================================		
 		
 		public function termsAndConditionsView(...args):void {
 			termsAndConditionsUnderlay.tweenIn();
@@ -1000,7 +747,7 @@ package com.civildebatewall.kiosk {
 			closeTermsButton.tweenIn();
 		}
 		
-		
+		// ================================================================================================================================================		
 		
 		public function smsPromptView(...args):void {
 			markAllInactive();
@@ -1011,20 +758,15 @@ package com.civildebatewall.kiosk {
 			tweenOutInactive();
 		}
 		
+		// ================================================================================================================================================		
 		
 		
-		
-			
-			
 			// ==============================================================================================================
 			// Old views ====================================================================================================
 			// ==============================================================================================================
 		
 		
-		
-		
-		
-		
+
 		public function flagOverlayView(...args):void {
 			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
 			CivilDebateWall.state.activeView = flagOverlayView;
@@ -1089,96 +831,12 @@ package com.civildebatewall.kiosk {
 		
 
 		
-		private function onUserImageLoaded(b:Bitmap):void {
-			CivilDebateWall.state.userImage = b;
-			portrait.setImage(CivilDebateWall.state.userImage);
-			//question.setTextColor(CDW.state.questionTextColor);
-			//go straight to verification;
-			//verifyOpinionView();
-		}
-		
-
-		
-		
-				
-
-
-		
-		private function onSaveName(e:Event):void {
-			// trim white space
-			nameEntryField.getTextField().text = StringUtil.trim(nameEntryField.getTextField().text);
-			
-			if (nameEntryField.getTextField().length == 0) {
-				noNameWarning.tweenIn();
-			}
-			else {
-				// Validates
-				// Save name to RAM
-				CivilDebateWall.state.userName = nameEntryField.getTextField().text;
-				
-				// Try to create the user, check for existing username
-				CivilDebateWall.data.createUser(CivilDebateWall.state.userName, CivilDebateWall.state.userPhoneNumber, onUserCreated);
-				
-			}
-		}
-		
-		private function onUserCreated(r:Object):void {
-			if (r['error'] == null) {
-				// It worked!
-				var tempUser:User = new User(r);
-				CivilDebateWall.state.userID = tempUser.id;
-				//verifyOpinionView();
-			}
-			else {
-				// there was an error, the name probably already existed!
-				usernameTakenWarning.tweenIn();
-				TweenMax.delayedCall(5, function():void { usernameTakenWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE}); });
-				
-			}
-		}
-		
-		
-		// =========================================================================
-		
-		
 
 	
 		
 		// =========================================================================
 		
-		
-		public function submitOverlayView(...args):void {
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = submitOverlayView;
-			
-			// mutations			
-			// TODO HOW TO HANDLE OVERLAYS ON OVERLAYS? IS IT ALREADY SUBMITTED AT THIS POINT/
-			CivilDebateWall.inactivityTimer.arm();
-			
-			// mutations
-			submitOverlayMessage.setBackgroundColor(CivilDebateWall.state.userStanceColorLight, true);
-			//submitOverlayContinueButton.setBackgroundColor(CDW.state.userStanceColorDark, true);
-			//submitOverlayContinueButton.setDownColor(CDW.state.userStanceColorMedium);			
-			
-			// behaviors
-			//submitOverlayContinueButton.setOnClick(onSubmitContinue);
-			
-			// blocks
-			submitOverlay.tweenIn();
-			
-			submitOverlayMessage.tweenIn(-1, {onComplete: submitDebate}); // submit it automatically after animation
-			//submitOverlayContinueButton.tweenIn();
-			
-			
-			bigButton.tweenOut();
-			
-			opinion.tweenOut();
-			retakePhotoButton.tweenOut();
-			editTextButton.tweenOut();
-			exitButton.tweenOut();	
-		}
-		
-		
+
 		
 		private function submitDebate():void {
 			// Syncs state up to the cloud

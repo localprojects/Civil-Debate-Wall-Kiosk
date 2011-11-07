@@ -506,6 +506,24 @@ package com.civildebatewall.kiosk {
 			
 		}
 		
+		
+		// Try to create the user, check for existing username
+//		CivilDebateWall.data.createUser(CivilDebateWall.state.userName, CivilDebateWall.state.userPhoneNumber, onUserCreated);
+//		
+//		private function onUserCreated(r:Object):void {
+//			if (r['error'] == null) {
+//				// It worked!
+//				var tempUser:User = new User(r);
+//				CivilDebateWall.state.userID = tempUser.id;
+//				//verifyOpinionView();
+//			}
+//			else {
+//				// there was an error, the name probably already existed!
+//				trace("TODO handle name error");
+//			}
+//		}		
+		
+		
 		override protected function beforeTweenIn():void {
 			super.beforeTweenIn();
 			CivilDebateWall.state.backDestination = CivilDebateWall.state.lastView;

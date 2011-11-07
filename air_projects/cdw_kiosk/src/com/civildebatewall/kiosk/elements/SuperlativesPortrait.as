@@ -18,8 +18,6 @@ package com.civildebatewall.kiosk.elements {
 	public class SuperlativesPortrait extends OldBlockBase {
 		
 		private var portrait:Portrait;
-		private var quoteLeft:BlockBitmapPlus;
-		private var quoteRight:BlockBitmapPlus;		
 		private var theMask:Shape;
 		private var debateButton:BalloonButtonOld;
 		private var nametag:NameTag;
@@ -41,21 +39,6 @@ package com.civildebatewall.kiosk.elements {
 			portrait.visible = true;
 			addChild(portrait);
 			
-			quoteLeft = new BlockBitmapPlus(Assets.getQuoteLeft());
-			quoteLeft.setDefaultTweenIn(1, {x: 30, y: 368});
-			quoteLeft.setDefaultTweenOut(1, {x: -quoteLeft.width - 10, y: 368});
-			
-			quoteLeft.scaleX = 0.5;
-			quoteLeft.scaleY = 0.5;			
-			addChild(quoteLeft);
-			
-			quoteRight = new BlockBitmapPlus(Assets.getQuoteRight());
-			quoteRight.setDefaultTweenIn(1, {x: 383, y: 727});
-			quoteRight.setDefaultTweenOut(1, {x: width + 10, y: 727});
-			
-			quoteRight.scaleX = 0.5;
-			quoteRight.scaleY = 0.5;			
-			addChild(quoteRight);
 			
 			debateButton = new BalloonButtonOld(152, 135, 0x000000, 'LET\u2019S\nDEBATE !', 22, 0xffffff, Assets.FONT_HEAVY);
 			debateButton.setDefaultTweenIn(1, {x: 361, y: 368});
@@ -81,8 +64,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			
 			// starting positions
-			quoteLeft.tweenOut();
-			quoteRight.tweenOut();		
+
 			debateButton.tweenOut();
 			nametag.tweenOut();
 			opinion.tweenOut();
@@ -107,8 +89,6 @@ package com.civildebatewall.kiosk.elements {
 			}
 			else {
 				// tween everything out, then finish
-				quoteLeft.tweenOut();
-				quoteRight.tweenOut(-1, {onComplete: finishSettingPost});
 				debateButton.tweenOut();
 				nametag.tweenOut();
 				opinion.tweenOut();
@@ -125,8 +105,6 @@ package com.civildebatewall.kiosk.elements {
 		
 		private function finishSettingPost(instant:Boolean = false):void {
 			// mutations go here
-			quoteLeft.setColor(_post.stanceColorLight, true);
-			quoteRight.setColor(_post.stanceColorLight, true);
 			debateButton.setDownColor(_post.stanceColorMedium);
 			debateButton.setBackgroundColor(_post.stanceColorDark, true);
 			nametag.backgroundColor = _post.stanceColorMedium;
@@ -135,8 +113,7 @@ package com.civildebatewall.kiosk.elements {
 			opinion.setText(_post.text);
 			//rightQuote.y = opinion.y + opinion.height
 			
-			quoteLeft.tweenIn();
-			quoteRight.tweenIn();								
+								
 			debateButton.tweenIn();
 			nametag.tweenIn();
 			opinion.tweenIn();
