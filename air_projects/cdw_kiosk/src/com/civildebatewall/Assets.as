@@ -1,5 +1,4 @@
-package com.civildebatewall
-{
+package com.civildebatewall {
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	
 	import flash.display.*;
@@ -7,25 +6,7 @@ package com.civildebatewall
 	public final class Assets	{
 		
 		// Embed code is generated dynamically by embedgen.py
-		
-		
-		// Temp
-		[Embed(source = '/assets/graphics/4e4d360f0f2e421e7b000002-full.jpg')] private static const a4e4d360f0f2e421e7b000002fullClass:Class;
-		public static function getSample():Bitmap { return new a4e4d360f0f2e421e7b000002fullClass() as Bitmap; };
-		
-		[Embed(source = '/assets/graphics/wordFrequencyBlockPlaceholder.png')] private static const wordFrequencyBlockPlaceholderClass:Class;
-		public static function getWordFrequencyBlockPlaceholder():Bitmap { return new wordFrequencyBlockPlaceholderClass() as Bitmap; };
-		public static const wordFrequencyBlockPlaceholder:Bitmap = getWordFrequencyBlockPlaceholder();
-		
-		[Embed(source = '/assets/graphics/mostDebatedPlaceholder.png')] private static const mostDebatedPlaceholderClass:Class;
-		public static function getMostDebatedPlaceholder():Bitmap { return new mostDebatedPlaceholderClass() as Bitmap; };
-		public static const mostDebatedPlaceholder:Bitmap = getMostDebatedPlaceholder();
-		
-		[Embed(source = '/assets/graphics/mostDebatedPortraitPlaceholder.png')] private static const mostDebatedPortraitPlaceholderClass:Class;
-		public static function getMostDebatedPortraitPlaceholder():Bitmap { return new mostDebatedPortraitPlaceholderClass() as Bitmap; };
-		public static const mostDebatedPortraitPlaceholder:Bitmap = getMostDebatedPortraitPlaceholder();		
-		
-		
+
 		// Bitmaps
 		[Embed(source = '/assets/graphics/smsSubscribeHeader.png')] private static const smsSubscribeHeaderClass:Class;
 		public static function getSmsSubscribeHeader():Bitmap { return new smsSubscribeHeaderClass() as Bitmap; };
@@ -43,19 +24,9 @@ package com.civildebatewall
 		public static function getSmsSuccessNote():Bitmap { return new smsSuccessNoteClass() as Bitmap; };
 		public static const smsSuccessNote:Bitmap = getSmsSuccessNote();
 		
-		
-		
 		[Embed(source = '/assets/graphics/termsAndConditions.png')] private static const termsAndConditionsClass:Class;
 		public static function getTermsAndConditions():Bitmap { return new termsAndConditionsClass() as Bitmap; };
 		public static const termsAndConditions:Bitmap = getTermsAndConditions();		
-		
-		[Embed(source = '/assets/graphics/photoOverlayNo.png')] private static const photoOverlayNoClass:Class;
-		public static function getPhotoOverlayNo():Bitmap { return new photoOverlayNoClass() as Bitmap; };
-		public static const photoOverlayNo:Bitmap = getPhotoOverlayNo();
-		
-		[Embed(source = '/assets/graphics/photoOverlayYes.png')] private static const photoOverlayYesClass:Class;
-		public static function getPhotoOverlayYes():Bitmap { return new photoOverlayYesClass() as Bitmap; };
-		public static const photoOverlayYes:Bitmap = getPhotoOverlayYes();
 		
 		[Embed(source = '/assets/graphics/photoPrompt.png')] private static const photoPromptClass:Class;
 		public static function getPhotoPrompt():Bitmap { return new photoPromptClass() as Bitmap; };
@@ -68,9 +39,7 @@ package com.civildebatewall
 		[Embed(source = '/assets/graphics/everythingOkText.png')] private static const everythingOkTextClass:Class;
 		public static function getEverythingOkText():Bitmap { return new everythingOkTextClass() as Bitmap; };
 		public static const everythingOkText:Bitmap = getEverythingOkText();
-		
 
-		
 		[Embed(source = '/assets/graphics/orText.png')] private static const orTextClass:Class;
 		public static function getOrText():Bitmap { return new orTextClass() as Bitmap; };
 		public static const orText:Bitmap = getOrText();
@@ -135,33 +104,13 @@ package com.civildebatewall
 		public static function getRightCaratBig():Bitmap { return new rightCaratBigClass() as Bitmap; };
 		public static const rightCaratBig:Bitmap = getRightCaratBig();
 		
-		[Embed(source = '/assets/graphics/orangeRightCarat.png')] private static const orangeRightCaratClass:Class;
-		public static function getOrangeRightCarat():Bitmap { return new orangeRightCaratClass() as Bitmap; };
-		public static const orangeRightCarat:Bitmap = getOrangeRightCarat();
-
-		[Embed(source = '/assets/graphics/blueRightCarat.png')] private static const blueRightCaratClass:Class;
-		public static function getBlueRightCarat():Bitmap { return new blueRightCaratClass() as Bitmap; };
-		public static const blueRightCarat:Bitmap = getBlueRightCarat();		
-		
-		[Embed(source = '/assets/graphics/dashedBar.png')] private static const dashedBarClass:Class;
-		public static function getDashedBar():Bitmap { return new dashedBarClass() as Bitmap; };
-		public static const dashedBar:Bitmap = getDashedBar();		
-		
 		[Embed(source = '/assets/graphics/closeButton.png')] private static const closeButtonClass:Class;
 		public static function getCloseButton():Bitmap { return new closeButtonClass() as Bitmap; };
-		public static const closeButton:Bitmap = getCloseButton();		
-		
-		[Embed(source = '/assets/graphics/roundColon.png')] private static const roundColonClass:Class;
-		public static function getRoundColon():Bitmap { return new roundColonClass() as Bitmap; };
-		public static const roundColon:Bitmap = getRoundColon();		
+		public static const closeButton:Bitmap = getCloseButton();				
 		
 		[Embed(source = '/assets/graphics/wordCloudGradient.png')] private static const wordCloudGradientClass:Class;
 		public static function getWordCloudGradient():Bitmap { return new wordCloudGradientClass() as Bitmap; };
-		public static const wordCloudGradient:Bitmap = getWordCloudGradient();		
-		
-		[Embed(source = '/assets/graphics/cameraArrow.png')] private static const cameraArrowClass:Class;
-		public static function getCameraArrow():Bitmap { return new cameraArrowClass() as Bitmap; };
-		public static const cameraArrow:Bitmap = getCameraArrow();		
+		public static const wordCloudGradient:Bitmap = getWordCloudGradient();				
 		
 		[Embed(source = '/assets/graphics/leftArrow.png')] private static const leftArrowClass:Class;
 		public static function getLeftArrow():Bitmap { return new leftArrowClass() as Bitmap; };
@@ -183,26 +132,10 @@ package com.civildebatewall
 		public static function getButtonBackground():Bitmap { return new buttonBackgroundClass() as Bitmap; };
 		public static const buttonBackground:Bitmap = getButtonBackground();
 		
-		[Embed(source = '/assets/graphics/cameraIcon.png')] private static const cameraIconClass:Class;
-		public static function getCameraIcon():Bitmap { return new cameraIconClass() as Bitmap; };
-		public static const cameraIcon:Bitmap = getCameraIcon();
-		
-		[Embed(source = '/assets/graphics/commentsPlaceholder.png')] private static const commentsPlaceholderClass:Class;
-		public static function getCommentsPlaceholder():Bitmap { return new commentsPlaceholderClass() as Bitmap; };
-		public static const commentsPlaceholder:Bitmap = getCommentsPlaceholder();
-		
-		[Embed(source = '/assets/graphics/divider.png')] private static const dividerClass:Class;
-		public static function getDivider():Bitmap { return new dividerClass() as Bitmap; };
-		public static const divider:Bitmap = getDivider();
-		
 		[Embed(source = '/assets/graphics/flagIcon.png')] private static const flagIconClass:Class;
 		public static function getFlagIcon():Bitmap { return new flagIconClass() as Bitmap; };
 		public static const flagIcon:Bitmap = getFlagIcon();
-		
-		[Embed(source = '/assets/graphics/headerBackground.png')] private static const headerBackgroundClass:Class;
-		public static function getHeaderBackground():Bitmap { return new headerBackgroundClass() as Bitmap; };
-		public static const headerBackground:Bitmap = getHeaderBackground();
-		
+
 		[Embed(source = '/assets/graphics/leftButtonTile.png')] private static const leftButtonTileClass:Class;
 		public static function getLeftButtonTile():Bitmap { return new leftButtonTileClass() as Bitmap; };
 		public static const leftButtonTile:Bitmap = getLeftButtonTile();
@@ -218,19 +151,8 @@ package com.civildebatewall
 		[Embed(source = '/assets/graphics/portraitPlaceholder.png')] private static const portraitPlaceholderClass:Class;
 		public static function getPortraitPlaceholder():Bitmap { return new portraitPlaceholderClass() as Bitmap; };
 		public static const portraitPlaceholder:Bitmap = getPortraitPlaceholder();
-		
-		[Embed(source = '/assets/graphics/smallFlagIcon.png')] private static const smallFlagIconClass:Class;
-		public static function getSmallFlagIcon():Bitmap { return new smallFlagIconClass() as Bitmap; };
-		public static const smallFlagIcon:Bitmap = getSmallFlagIcon();		
-		
-		[Embed(source = '/assets/graphics/statsIcon.png')] private static const statsIconClass:Class;
-		public static function getStatsIcon():Bitmap { return new statsIconClass() as Bitmap; };
-		public static const statsIcon:Bitmap = getStatsIcon();
-		
-		[Embed(source = '/assets/graphics/statsPlaceholder.png')] private static const statsPlaceholderClass:Class;
-		public static function getStatsPlaceholder():Bitmap { return new statsPlaceholderClass() as Bitmap; };
-		public static const statsPlaceholder:Bitmap = getStatsPlaceholder();
-				
+
+		// TODO get rid of this?
 		[Embed(source = '/assets/graphics/bubblePerimeter.png')] private static const bubblePerimeterClass:Class;
 		public static function getBubblePerimeter():Bitmap { return new bubblePerimeterClass() as Bitmap; };
 		public static const bubblePerimeter:Bitmap = getBubblePerimeter();
@@ -246,14 +168,6 @@ package com.civildebatewall
 		[Embed(source = '/assets/graphics/circlePerimeter.png')] private static const circlePerimeterClass:Class;
 		public static function getCirclePerimeter():Bitmap { return new circlePerimeterClass() as Bitmap; };
 		public static const circlePerimeter:Bitmap = getCirclePerimeter();
-		
-		[Embed(source = '/assets/graphics/quoteRight.png')] private static const quoteRightClass:Class;
-		public static function getQuoteRight():Bitmap { return new quoteRightClass() as Bitmap; };
-		public static const quoteRight:Bitmap = getQuoteRight();
-		
-		[Embed(source = '/assets/graphics/quoteLeft.png')] private static const quoteLeftClass:Class;
-		public static function getQuoteLeft():Bitmap { return new quoteLeftClass() as Bitmap; };
-		public static const quoteLeft:Bitmap = getQuoteLeft();
 
 		
 		// Generators

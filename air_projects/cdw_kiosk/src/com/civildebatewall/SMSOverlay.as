@@ -20,7 +20,7 @@ package com.civildebatewall
 	
 	public class SMSOverlay extends BlockBase	{
 		
-		private var skipCountdownDuration:Number = 10; // TODO move to settings?
+		private var skipCountdownDuration:Number = 5; // TODO move to settings?
 		private var skipCountdownCounter:Number = skipCountdownDuration;
 		private var skipTimer:Timer;
 		private var smsCheckTimer:Timer;		

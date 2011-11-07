@@ -21,6 +21,8 @@ package com.civildebatewall {
 	import flash.events.*;
 	import flash.net.*;
 	import flash.ui.Mouse;
+	import flash.ui.Multitouch;
+	import flash.ui.MultitouchInputMode;
 	
 	// Main entry point for the app.
 	// Manages display of Interactive Kiosk and Wallsaver modes.
@@ -47,6 +49,10 @@ package com.civildebatewall {
 
 			// Futil plugins
 			TweenPlugin.activate([FutilBlockPlugin]);
+			
+			// Work around for lack of mouse-down events
+			// http://forums.adobe.com/message/2794098?tstart=0
+			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;			
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}

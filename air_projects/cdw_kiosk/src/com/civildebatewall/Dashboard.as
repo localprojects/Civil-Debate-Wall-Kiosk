@@ -94,8 +94,7 @@ package com.civildebatewall {
 			if (selection == 'Debate Overlay') CivilDebateWall.kiosk.view.threadView();
 			if (selection == 'Photo Booth') CivilDebateWall.kiosk.view.photoBoothView();
 			if (selection == 'Stats Overlay') CivilDebateWall.kiosk.view.statsView();
-			if (selection == 'Inactivity Overlay') CivilDebateWall.kiosk.view.inactivityOverlayView();
-			if (selection == 'Submit Overlay') CivilDebateWall.kiosk.view.submitOverlayView();			
+			if (selection == 'Inactivity Overlay') CivilDebateWall.kiosk.view.inactivityOverlayView();			
 		}
 		
 		
