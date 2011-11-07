@@ -4,6 +4,7 @@ package com.civildebatewall.kiosk {
 	import com.adobe.serialization.json.*;
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.SMSOverlay;
 	import com.civildebatewall.State;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.*;
@@ -14,6 +15,7 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.kiosk.ui.*;
 	import com.civildebatewall.staging.elements.BalloonButton;
 	import com.civildebatewall.staging.elements.DebateButton;
+	import com.civildebatewall.staging.elements.LinkButton;
 	import com.civildebatewall.staging.elements.NavArrow;
 	import com.civildebatewall.staging.elements.QuestionHeader;
 	import com.civildebatewall.staging.elements.RespondButton;
@@ -25,6 +27,7 @@ package com.civildebatewall.kiosk {
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
+	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
@@ -42,6 +45,8 @@ package com.civildebatewall.kiosk {
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import flash.utils.Timer;
+	
+	import flashx.textLayout.formats.TextAlign;
 
 	public class View extends Sprite {
 		
@@ -88,11 +93,20 @@ package com.civildebatewall.kiosk {
 		private var retakePhotoButton:RetakePhotoButton;
 		private var editNameOrOpinionButton:EditNameOrOpinionButton;
 		
+		private var termsAndConditionsButton:TermsAndConditionsButton;
+		private var termsAndConditionsUnderlay:BlockBase;
+		private var termsAndConditionsText:BlockBitmap;
+		private var closeTermsButton:CloseTermsButton;
+			
+		public var smsOverlay:SMSOverlay; // public for dashboard testing
+		
+
+		
 		
 		// OLD STUFF
 		
 		// immutable
-		private var smsDisclaimer:BlockParagraph;
+		
 		public var portraitCamera:PortraitCamera; // public for dashboard
 		private var inactivityOverlay:BlockBitmap;
 		private var inactivityTimerBar:ProgressBar;
@@ -101,7 +115,7 @@ package com.civildebatewall.kiosk {
 		private var flashOverlay:BlockBitmap;
 		private var blackOverlay:BlockBitmap;
 		public var skipTextButton:BlockButton; // debug only
-		private var smsInstructions:BlockParagraph;
+		
 		private var dragLayer:DragLayer;
 		private var flagOverlay:BlockBitmap;
 		private var flagTimerBar:ProgressBar;
@@ -115,9 +129,7 @@ package com.civildebatewall.kiosk {
 		private var usernameTakenWarning:BlockLabel;		
 		private var cameraTimeoutWarning:BlockLabel;
 		private var noNameWarning:BlockLabel;
-		private var noOpinionWarning:BlockLabel;
-		private var smsReceivedProfanityWarning:BlockParagraph;
-		private var smsSubmittedProfanityWarning:BlockLabel;		
+		private var noOpinionWarning:BlockLabel;		
 		private var sortLinks:SortLinks;
 		
 		// mutable (e.g. color changes)
@@ -152,6 +164,7 @@ package com.civildebatewall.kiosk {
 		public var threadOverlayBrowser:ThreadBrowser;		
 
 
+		
 
 		
 		public function View() {
@@ -302,6 +315,11 @@ package com.civildebatewall.kiosk {
 			
 			
 			
+
+			
+			
+			
+			
 			// TODO is there always a drag layer?
 			dragLayer = new DragLayer();
 			dragLayer.setDefaultTweenIn(0, {});
@@ -377,32 +395,11 @@ package com.civildebatewall.kiosk {
 			
 
 			
-			// Temp debug button so we don't have to SMS every time
-			skipTextButton = new BlockButton(200, 100, Assets.COLOR_GRAY_85, 'SIMULATE SMS', 20);
-			skipTextButton.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 500});
-			skipTextButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 500});
-			skipTextButton.alpha = 1; // start hidden
-			skipTextButton.setOnClick(simulateSMS);				
-			//skipTextButton.setOnClick(null); // start off
-			addChild(skipTextButton);
 
-			// broken apart for easy measurability
-			var smsInstrucitonPrefix:String = 'What would you say to convince others of your opinion?\nText ';
-			var smsInstrucitonPostfix:String = ' with your statement.';			
-			var smsPhoneNumber:String = NumberUtil.formatPhoneNumber(CivilDebateWall.data.smsNumber);
-			var smsInstructionText:String = smsInstrucitonPrefix + smsPhoneNumber + smsInstrucitonPostfix;
-			smsInstructions = new BlockParagraph(915, 0x000000, smsInstructionText, 30, 0xffffff, Assets.FONT_REGULAR);
-			smsInstructions.textField.setTextFormat(new TextFormat(Assets.FONT_HEAVY), smsInstrucitonPrefix.length, smsInstrucitonPrefix.length + smsPhoneNumber.length);			
-			smsInstructions.setDefaultTweenIn(1, {x: 101, y: 1096});
-			smsInstructions.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1096});
-			addChild(smsInstructions);
+
+
 			
-			var smsDisclaimerText:String = 'You will receive an SMS notifying you of any future opponents \nwho would like to enter into a debate with you based on your opinion. \nYou can opt out at any time by replying STOP.';
-			smsDisclaimer = new BlockParagraph(915, Assets.COLOR_GRAY_75, smsDisclaimerText, 24);
-			smsDisclaimer.textField.setTextFormat(new TextFormat(null, null, 0xc7c8ca), smsDisclaimerText.length -45, smsDisclaimerText.length);
-			smsDisclaimer.setDefaultTweenIn(1, {x: 101, y: 1625});
-			smsDisclaimer.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1625});
-			addChild(smsDisclaimer);
+
 			
 			// y value is dynamic
 			exitButton = new BlockButton(125, 63, 0x000000, 'EXIT', 26, 0xffffff, Assets.FONT_HEAVY);
@@ -495,12 +492,7 @@ package com.civildebatewall.kiosk {
 			noOpinionWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1562 - (noOpinionWarning.height / 2) - 10});
 			addChild(noOpinionWarning);				
 			
-			
-			var profanityNagIncoming:String = 'Please choose words that will encourage a civil debate and re-send your message!';
-			smsReceivedProfanityWarning = new BlockParagraph(800, Assets.COLOR_GRAY_50, profanityNagIncoming, 26, 0xffffff, Assets.FONT_BOLD); 
-			smsReceivedProfanityWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 576});	
-			smsReceivedProfanityWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 576});
-			addChild(smsReceivedProfanityWarning);
+
 			
 			
 			sortLinks = new SortLinks();
@@ -518,13 +510,7 @@ package com.civildebatewall.kiosk {
 			flagButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
 			addChild(flagButton);
 			
-			
-			// TODO HOOK THIS UP?
-			smsSubmittedProfanityWarning = new BlockLabel('Please choose words that will encourage a civil debate and re-submit your message!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			smsSubmittedProfanityWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 576});	
-			smsSubmittedProfanityWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 576});
-			addChild(smsSubmittedProfanityWarning);			 
-			
+
 			
 			// TODO update from database
 			statsOverlay = new StatsOverlay();
@@ -616,6 +602,43 @@ package com.civildebatewall.kiosk {
 			flashOverlay.name = 'Flash Overlay';
 			addChild(flashOverlay);
 			
+			
+			
+			termsAndConditionsButton = new TermsAndConditionsButton();
+			termsAndConditionsButton.setDefaultTweenIn(1, {x: 791, y: 1864});
+			termsAndConditionsButton.setDefaultTweenOut(1, {x: 791, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(termsAndConditionsButton);
+			
+			termsAndConditionsUnderlay = new BlockBase({
+				width: 1080,
+				height: 1920,
+				backgroundColor: 0x000000,
+				backgroundAlpha: 0.85
+			});
+			
+			termsAndConditionsUnderlay.setDefaultTweenIn(1, {alpha: 1});
+			termsAndConditionsUnderlay.setDefaultTweenOut(1, {alpha: 0});			
+			addChild(termsAndConditionsUnderlay);
+			
+			termsAndConditionsText = new BlockBitmap({
+				bitmap: Assets.getTermsAndConditions()
+			});
+			termsAndConditionsText.setDefaultTweenIn(1, {x: 100, y: 982});
+			termsAndConditionsText.setDefaultTweenOut(1, {x: 100, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(termsAndConditionsText);
+			
+			closeTermsButton = new CloseTermsButton();
+			closeTermsButton.setDefaultTweenIn(1, {x: 845, y: 1849});
+			closeTermsButton.setDefaultTweenOut(1, {x: 845, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(closeTermsButton);
+			
+			smsOverlay = new SMSOverlay();
+			smsOverlay.setDefaultTweenIn(0, {});
+			smsOverlay.setDefaultTweenOut(1, {});
+			addChild(smsOverlay);
+
+			
+			
 			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
 			CivilDebateWall.state.addEventListener(State.VIEW_CHANGE, onViewChange);
 		}
@@ -673,7 +696,7 @@ package com.civildebatewall.kiosk {
 			CivilDebateWall.inactivityTimer.disarm();
 			CivilDebateWall.state.clearUser(); // Reset user info
 						
-			bigButton.y = 1470;
+			bigButton.y = 1470;			
 			bigButton.setText('JOIN THE DEBATE'); // TODO move to listener?
 			bigButton.setOnClick(function():void {
 				CivilDebateWall.state.userRespondingTo = CivilDebateWall.state.activeThread.firstPost;
@@ -762,21 +785,7 @@ package com.civildebatewall.kiosk {
 			tweenOutInactive();	
 		}
 		
-		private function onCloseDebateOverlay(e:Event):void {
-			CivilDebateWall.state.threadOverlayOpen = false;
-			homeView();
-		}
-		
-		private function onYesButton(e:MouseEvent):void {
-			CivilDebateWall.state.setUserStance('yes');
-			smsPromptView();
-		}
-		
-		private function onNoButton(e:MouseEvent):void {
-			CivilDebateWall.state.setUserStance('no');
-			smsPromptView();			
-		}
-		
+
 		
 		// =========================================================================
 		
@@ -956,6 +965,11 @@ package com.civildebatewall.kiosk {
 			CivilDebateWall.inactivityTimer.arm();
 			CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.view.opinionEntryView;			
 			
+			
+			bigButton.setOnClick(function():void {
+				CivilDebateWall.state.setView(smsPromptView);			
+			});							
+			
 			portrait.setImage(CivilDebateWall.state.userImage, true);
 			bigButton.setText("SUBMIT MY OPINION", true);
 			bigButton.enable();
@@ -971,9 +985,35 @@ package com.civildebatewall.kiosk {
 			retakePhotoButton.tweenIn();
 			editNameOrOpinionButton.tweenIn();
 			bigButton.tweenIn();
+			termsAndConditionsButton.tweenIn();
 			
 			tweenOutInactive();			
 		}
+		
+		
+		
+		
+		
+		public function termsAndConditionsView(...args):void {
+			termsAndConditionsUnderlay.tweenIn();
+			termsAndConditionsText.tweenIn();
+			closeTermsButton.tweenIn();
+		}
+		
+		
+		
+		public function smsPromptView(...args):void {
+			markAllInactive();
+			CivilDebateWall.inactivityTimer.arm();	
+			
+			smsOverlay.tweenIn();
+			
+			tweenOutInactive();
+		}
+		
+		
+		
+		
 			
 			
 			// ==============================================================================================================
@@ -1046,215 +1086,6 @@ package com.civildebatewall.kiosk {
 				
 		
 		
-		// =========================================================================
-		
-		
-		// For inter-debate transitions initiated by the debate picker...
-		// tweens everything out except the portrait, then tweens stuff back in
-		// TODO get rid of this?
-		public function transitionView(...args):void {
-		//	markAllInactive();
-			
-			
-			// are we going from debate to debate?
-			if (CivilDebateWall.state.activeView == CivilDebateWall.state.lastView) {
-				// are we going in the next direction?
-				
-				
-				// 
-				
-				// are we going in the previous direction
-//				nextDebate();
-				
-				
-			}
-			
-			
-//			portrait.setImage(CDW.database.getActivePortrait());
-//			question.setTextColor(CDW.state.questionTextColor);			
-//			
-//			portrait.tweenIn(0.5, {delay: 0.5, onComplete: onViewTransitionComplete});
-
-//			question.tweenIn();			
-//			debateStrip.tweenIn();			
-//			
-//			leftQuote.tweenOut(0.25);
-//			rightQuote.tweenOut(0.25);
-//			opinion.tweenOut(0.25);
-//			stance.tweenOut(0.25);
-//			nametag.tweenOut(0.25);
-//			bigButton.tweenOut(0.25);
-//			statsButton.tweenOut(0.25);
-//			likeButton.tweenOut(0.25);
-//			debateButton.tweenOut(0.25);
-//			flagButton.tweenOut(0.25);
-//			viewDebateButton.tweenOut(0.25);			
-			
-			
-			//tweenOutInactive();	
-		}
-		
-		private function onViewTransitionComplete():void {
-			// tween stuff back in
-			homeView();
-		}
-		
-		
-
-		private var smsCheckTimer:Timer;
-		
-		public function smsPromptView(...args):void {
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = smsPromptView;
-			markAllInactive();
-			
-			CivilDebateWall.inactivityTimer.arm();
-			
-			// mutations
-			smsInstructions.setBackgroundColor(CivilDebateWall.state.userStanceColorLight, true);
-			characterLimit.setBackgroundColor(CivilDebateWall.state.userStanceColorLight, true);
-			
-			exitButton.y = 1000;
-			exitButton.setBackgroundColor(CivilDebateWall.state.userStanceColorDark, true);
-			exitButton.setDownColor(CivilDebateWall.state.userStanceColorMedium);			
-			
-
-			
-			if (CivilDebateWall.state.userIsDebating) {
-				bigButton.setText('DEBATE ME', true);				
-			}
-			else {
-				bigButton.setText('ADD YOUR OPINION', true);				
-			}
-			
-			// behaviors
-			exitButton.setOnClick(homeView); // TODO do we need the back button?
-			portrait.setImage(Assets.portraitPlaceholder);
-			//question.setTextColor(CDW.state.questionTextColor);			
-
-			//
-			
-			// start polling to see if the user has sent their opinion yet
-			CivilDebateWall.data.fetchLatestTextMessages(onLatestMessagesFetched);
-			
-			// blocks
-			portrait.tweenIn();
-			
-			questionHeaderHome.tweenIn();
-			bigButton.tweenIn();
-			yesButton.tweenIn();
-			noButton.tweenIn();
-			exitButton.tweenIn();
-			smsInstructions.tweenIn();
-			characterLimit.tweenIn();
-			smsDisclaimer.tweenIn();
-			skipTextButton.tweenIn(); // TEMP for debug, TODO put on setting switch
-			
-			
-			// push the character limit down
-			pickStanceInstructions.tweenOut(-1, {x: OldBlockBase.OFF_LEFT_EDGE, y: pickStanceInstructions.y});
-			
-	
-			tweenOutInactive();			
-		}
-		
-		private function onLatestMessagesFetched():void {
-			trace("latest baseline messages fetched...");
-			
-			if(CivilDebateWall.data.latestTextMessages.length > 0) {
-				CivilDebateWall.state.lastTextMessageTime = CivilDebateWall.data.latestTextMessages[0].created;	
-			}
-			else {
-				// edge case, no messages, anything will be newer
-				trace("No messages yet.");
-				CivilDebateWall.state.lastTextMessageTime = new Date(1900, 1, 1, 12, 0, 0, 0); // the distant past...
-			}
-
-			// start checking for new messages every second
-			smsCheckTimer = new Timer(1000);
-			smsCheckTimer.addEventListener(TimerEvent.TIMER, onSmsCheckTimer);
-			smsCheckTimer.start();			
-		}
-
-		
-		private function onSmsCheckTimer(e:TimerEvent):void {
-			trace('fetcheding latest sms');
-			CivilDebateWall.data.fetchLatestTextMessages(onSMSCheckResponse);
-			smsCheckTimer.stop();
-		}
-		
-		
-		private function onSMSCheckResponse():void {
-			trace('latest sms fetched');
-			
-			// Grab a newer message
-			if ((CivilDebateWall.data.latestTextMessages.length > 0) && (CivilDebateWall.data.latestTextMessages[0].created > CivilDebateWall.state.lastTextMessageTime)) {
-				trace("got SMS");		
-				
-				// check for profanity, TODO move this to check SMS
-				if (CivilDebateWall.data.latestTextMessages[0].profane) {
-					// scold for five seconds
-					smsReceivedProfanityWarning.tweenIn();
-					TweenMax.delayedCall(5, function():void { smsReceivedProfanityWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE})});					
-					
-					// reset time baseline
-					CivilDebateWall.state.lastTextMessageTime = CivilDebateWall.data.latestTextMessages[0].created; 
-					
-					// keep checking
-					trace("Bad words! keep trying");
-					smsCheckTimer.reset();
-					smsCheckTimer.start();						
-				}
-				else {
-					trace("it's clean");
-					handleSMS(CivilDebateWall.data.latestTextMessages[0]);
-				}
-			}
-			else {
-				trace("no new SMS, keep trying");
-				smsCheckTimer.reset();
-				smsCheckTimer.start();						
-			}
-		}
-		
-		
-		private function handleSMS(sms:TextMessage):void {
-			// check for user
-			CivilDebateWall.state.textMessage = sms; // save for later
-			trace("Checking for " + sms.phoneNumber);
-			
-			CivilDebateWall.state.userOpinion = CivilDebateWall.state.textMessage.text; // TODO truncate this?			
-			CivilDebateWall.state.userPhoneNumber = CivilDebateWall.state.textMessage.phoneNumber;
-			
-			var tempUser:User = CivilDebateWall.data.getUserByPhoneNumber(sms.phoneNumber); // TODO check server instead
-			
-			if (tempUser != null) {
-				trace("user exists");
-				// user exists...
-				// they must have a username
-				// but do they have a photo?
-				CivilDebateWall.state.userName = tempUser.username;
-				CivilDebateWall.state.userPhoneNumber = tempUser.phoneNumber;
-				CivilDebateWall.state.userID = tempUser.id;
-				
-				var imageFile:File = new File(CivilDebateWall.settings.imagePath + CivilDebateWall.state.userID + '.jpg');
-				
-				if (imageFile.exists) {
-					// have a photo, load it
-					// TODO jsut pull it from user object...
-					FileUtil.loadImageAsync(imageFile.url, onUserImageLoaded);					
-				}
-				else {
-					// no photo, go take one
-					photoBoothView();
-				}
-			}
-			else {
-				trace("no user");
-				// no user, go to photo booth
-				photoBoothView();
-			}
-		}
 		
 
 		
@@ -1266,78 +1097,12 @@ package com.civildebatewall.kiosk {
 			//verifyOpinionView();
 		}
 		
-		public function simulateSMS(e:Event):void {
-			if(smsCheckTimer != null) smsCheckTimer.stop();
-			//var testTextMessage:TextMessage = new TextMessage({'message': Utilities.dummyText(100), 'phoneNumber': '415' + Utilities.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});
-			var testTextMessage:TextMessage = new TextMessage({'message': '', 'phoneNumber': '555' + Math2.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});			
-			handleSMS(testTextMessage);
-		}
 
 		
 		
-		// =========================================================================		
-		
+				
 
-		
-		
-		public function nameEntryView(...args):void {
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = nameEntryView;			
-			markAllInactive();
-			flashOverlay.active = true; // needs to tween out itself
-			usernameTakenWarning.active = true;
-			
-			CivilDebateWall.inactivityTimer.arm();
-			
-			// mutations			
-			nameEntryInstructions.setBackgroundColor(CivilDebateWall.state.userStanceColorLight, true);
-			saveButton.setBackgroundColor(CivilDebateWall.state.userStanceColorDark, true);
-			saveButton.setDownColor(CivilDebateWall.state.userStanceColorMedium);			
-			keyboard.setColor(CivilDebateWall.state.userStanceColorLight, true);
-			keyboard.showSpacebar(false);
-			nameEntryField.setBackgroundColor(CivilDebateWall.state.userStanceColorLight, true);
-			portrait.setImage(CivilDebateWall.state.userImage, true);
-			//question.setTextColor(CDW.state.questionTextColor);			
-			nameEntryField.setText('', true); // clear the name entry field			
-			keyboard.target = nameEntryField.getTextField();
-			
-			nameEntryField.setOnLimitReached(onLimitReached);
-			nameEntryField.setOnLimitUnreached(onLimitUnreached);			
-			
-			
-			// behaviors
-			saveButton.setOnClick(onSaveName);
-			
-			// blocks, no delay since it needs to happen during the flash!
-			portrait.tweenIn(0);			
-			
-			
-			questionHeaderHome.tweenIn(0);
-			
-			nameEntryInstructions.tweenIn(-1, {delay: 1});
-			
-			nameEntryField.tweenIn(-1, {delay: 1});
-			
-			saveButton.y = 1197;
-			saveButton.tweenIn(-1, {delay: 1, x: 308});
-			keyboard.tweenIn(-1, {delay: 1});
-			
-			tweenOutInactive(true);			
-		}
-		
-		private function onLimitReached(e:Event):void {
-			characterLimitWarning.tweenIn();			
-		}
-		
-		private function onLimitUnreached(e:Event):void {
-			characterLimitWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE});			
-		}		
-		
-		
-		private function onNameNotEmpty(e:Event):void {
-			noNameWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE});
-			nameEntryField.setOnNotEmpty(null);
-		}
+
 		
 		private function onSaveName(e:Event):void {
 			// trim white space
@@ -1345,7 +1110,6 @@ package com.civildebatewall.kiosk {
 			
 			if (nameEntryField.getTextField().length == 0) {
 				noNameWarning.tweenIn();
-				nameEntryField.setOnNotEmpty(onNameNotEmpty);
 			}
 			else {
 				// Validates
@@ -1369,7 +1133,6 @@ package com.civildebatewall.kiosk {
 				// there was an error, the name probably already existed!
 				usernameTakenWarning.tweenIn();
 				TweenMax.delayedCall(5, function():void { usernameTakenWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE}); });
-				nameEntryView(); // make sure we stay here!
 				
 			}
 		}
@@ -1406,8 +1169,6 @@ package com.civildebatewall.kiosk {
 			submitOverlayMessage.tweenIn(-1, {onComplete: submitDebate}); // submit it automatically after animation
 			//submitOverlayContinueButton.tweenIn();
 			
-			
-
 			
 			bigButton.tweenOut();
 			
@@ -1466,92 +1227,6 @@ package com.civildebatewall.kiosk {
 		
 		// =========================================================================		
 		
-		
-		public function editOpinionView(...args):void {
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = editOpinionView;			
-			markAllInactive();
-			
-			CivilDebateWall.inactivityTimer.arm();
-			
-			// mutations
-			editOpinion.setText(CivilDebateWall.state.userOpinion);
-
-			keyboard.target = editOpinion.getTextField();
-			keyboard.showSpacebar(true);
-			
-			editTextInstructions.setBackgroundColor(CivilDebateWall.state.userStanceColorDark, true);
-			
-			saveButton.setBackgroundColor(CivilDebateWall.state.userStanceColorDark, true);
-			saveButton.setDownColor(CivilDebateWall.state.userStanceColorMedium);			
-			
-			editOpinion.setBackgroundColor(CivilDebateWall.state.userStanceColorLight);
-			
-			
-			
-			// behaviors
-			saveButton.setOnClick(onSaveOpinionEdit);
-			editOpinion.setOnLimitReached(onLimitReached);
-			editOpinion.setOnLimitUnreached(onLimitUnreached);
-			editOpinion.setOnNumLinesChange(onNumLinesChange);			
-			
-			//blocks		
-			portrait.tweenIn();	
-
-			//question.tweenIn();
-			
-
-			
-			//opinion.tweenIn(); // TODO fade this out?
-			editOpinion.y = stageHeight - 574 - opinion.height; 			
-			editOpinion.tweenIn(); // instant
-			
-			saveButton.y = 1376;
-			saveButton.tweenIn(-1, {x: 589});
-			
-			editTextInstructions.y = editOpinion.y - editTextInstructions.height - 30; 
-			//editTextInstructions.tweenIn(); // disabled per latest design
-			keyboard.tweenIn();
-			
-			opinion.tweenOut(0);
-			
-			tweenOutInactive();			
-		}	
-		
-		private function onNumLinesChange(e:Event):void {
-			// flow upwards
-			TweenMax.to(editOpinion, 0.5, {y: stageHeight - 574 - editOpinion.height, ease: Quart.easeInOut});
-			TweenMax.to(editTextInstructions, 0.5, {y: (stageHeight - 574 - editOpinion.height) - editTextInstructions.height - 30, ease: Quart.easeInOut});
-		}
-			
-		
-		private function onSaveOpinionEdit(e:Event):void {
-			// Validate
-			editOpinion.getTextField().text = StringUtil.trim(editOpinion.getTextField().text);
-			CivilDebateWall.state.userOpinion = editOpinion.getTextField().text
-			
-			if (editOpinion.getTextField().length == 0) {
-				noOpinionWarning.tweenIn();
-				editOpinion.setOnNotEmpty(onOpinionNotEmpty);
-			}
-			else {
-				// valid
-				// move the opinion back
-				opinion.tweenIn(0);
-				//verifyOpinionView();				
-			}
-		}
-		
-		private function onOpinionNotEmpty(e:Event):void {
-			noOpinionWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE});
-			nameEntryField.setOnNotEmpty(null);
-		}
-				
-		
-		
-		// =========================================================================
-		
-
 		
 		public function statsView(...args):void {
 			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
@@ -1614,15 +1289,8 @@ package com.civildebatewall.kiosk {
 		// =========================================================================
 		
 		// View utilities
-		private function setTestOverlay(b:Bitmap):void {
-			Kiosk.testOverlay.bitmapData = b.bitmapData.clone();						
-		}	
-		
 
 		private function markAllInactive():void {
-			// other housekeeping, TODO break this into its own function?
-			if(smsCheckTimer != null) smsCheckTimer.stop();					
-
 			// marks all FIRST LEVEL blocks as inactive
 			for (var i:int = 0; i < this.numChildren; i++) {
 				//if ((this.getChildAt(i) is BlockBase) && (this.getChildAt(i).visible)) {
@@ -1638,7 +1306,6 @@ package com.civildebatewall.kiosk {
 			}
 		}
 		
-		
 		private function tweenOutInactive(instant:Boolean = false):void {	
 			for (var i:int = 0; i < this.numChildren; i++) {
 				if ((this.getChildAt(i) is OldBlockBase) && !(this.getChildAt(i) as OldBlockBase).active) {
@@ -1648,8 +1315,7 @@ package com.civildebatewall.kiosk {
 						(this.getChildAt(i) as OldBlockBase).tweenOut();
 				}
 			}
-			
-			
+				
 			// Run on the new block base too, this is ugly...
 			for (i = 0; i < this.numChildren; i++) {
 				if ((this.getChildAt(i) is BlockBase) && !(this.getChildAt(i) as BlockBase).active) {
@@ -1659,8 +1325,6 @@ package com.civildebatewall.kiosk {
 						(this.getChildAt(i) as BlockBase).tweenOut();
 				}
 			}		
-			
-
 		}
 		
 	}

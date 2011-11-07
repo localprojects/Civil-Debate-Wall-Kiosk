@@ -27,6 +27,28 @@ package com.civildebatewall
 		
 		
 		// Bitmaps
+		[Embed(source = '/assets/graphics/smsSubscribeHeader.png')] private static const smsSubscribeHeaderClass:Class;
+		public static function getSmsSubscribeHeader():Bitmap { return new smsSubscribeHeaderClass() as Bitmap; };
+		public static const smsSubscribeHeader:Bitmap = getSmsSubscribeHeader();
+		
+		[Embed(source = '/assets/graphics/smsPhoneLabel.png')] private static const smsPhoneLabelClass:Class;
+		public static function getSmsPhoneLabel():Bitmap { return new smsPhoneLabelClass() as Bitmap; };
+		public static const smsPhoneLabel:Bitmap = getSmsPhoneLabel();
+		
+		[Embed(source = '/assets/graphics/smsSuccessText.png')] private static const smsSuccessTextClass:Class;
+		public static function getSmsSuccessText():Bitmap { return new smsSuccessTextClass() as Bitmap; };
+		public static const smsSuccessText:Bitmap = getSmsSuccessText();
+		
+		[Embed(source = '/assets/graphics/smsSuccessNote.png')] private static const smsSuccessNoteClass:Class;
+		public static function getSmsSuccessNote():Bitmap { return new smsSuccessNoteClass() as Bitmap; };
+		public static const smsSuccessNote:Bitmap = getSmsSuccessNote();
+		
+		
+		
+		[Embed(source = '/assets/graphics/termsAndConditions.png')] private static const termsAndConditionsClass:Class;
+		public static function getTermsAndConditions():Bitmap { return new termsAndConditionsClass() as Bitmap; };
+		public static const termsAndConditions:Bitmap = getTermsAndConditions();		
+		
 		[Embed(source = '/assets/graphics/photoOverlayNo.png')] private static const photoOverlayNoClass:Class;
 		public static function getPhotoOverlayNo():Bitmap { return new photoOverlayNoClass() as Bitmap; };
 		public static const photoOverlayNo:Bitmap = getPhotoOverlayNo();

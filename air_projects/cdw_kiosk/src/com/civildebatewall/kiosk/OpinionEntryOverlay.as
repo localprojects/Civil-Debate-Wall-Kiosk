@@ -45,7 +45,7 @@ package com.civildebatewall.kiosk {
 		private var respondingToPortrait:BlockShape;
 		private var respondingToName:BlockText;
 		private var respondingToOpinion:BlockText;
-		
+		private var errors:Boolean;		
 		
 		public function OpinionEntryOverlay()	{
 			super({
@@ -170,6 +170,7 @@ package com.civildebatewall.kiosk {
 			errorMessage.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 46});
 			formContainer.addChild(errorMessage);
 
+			errors = false;
 			
 			
 			
@@ -404,6 +405,8 @@ package com.civildebatewall.kiosk {
 			
 			if (StringUtil.isProfane(nameField.text) || StringUtil.isProfane(opinionField.text)) {
 				
+				errors = true;
+				
 				if (!errorMessage.visible) {
 					errorMessage.x = 1022; // come in from right					
 				}
@@ -413,6 +416,8 @@ package com.civildebatewall.kiosk {
 			}
 			else {
 				errorMessage.tweenOut();
+				
+				errors = false;
 			}
 			
 		}
@@ -456,7 +461,7 @@ package com.civildebatewall.kiosk {
 			opinionField.text = StringUtil.trim(opinionField.text);
 			
 			// clear messages
-			
+						
 
 			if (!errorMessage.visible) {
 				errorMessage.x = 1022; // come in from right
@@ -466,32 +471,38 @@ package com.civildebatewall.kiosk {
 			if ((nameField.text.length == 0) && (opinionField.text.length == 0)) {
 				errorMessage.text = "PLEASE FILL IN BOTH FIELDS BEFORE CONTINUING."
 				errorMessage.tweenIn();
+				errors = true;
 			}
 			else if (nameField.text.length == 0) {
 				errorMessage.text = "PLEASE FILL IN YOUR NAME."
-				errorMessage.tweenIn();				
+				errorMessage.tweenIn();
+				errors = true;
 			}
 			else if (opinionField.text.length == 0) {
 				errorMessage.text = "PLEASE ADD YOUR OPINION."
-				errorMessage.tweenIn();								
+				errorMessage.tweenIn();
+				errors = true;				
 			}
 			
 			// TODO username taken?			
 			
 			
-			if (errorMessage.visible) {
+			if (errors) {
 				trace("Errors! Won't submit");
 			}
 			else {
 				trace("Looks OK! Will submit.");
 				CivilDebateWall.state.userOpinion = opinionField.text;
 				CivilDebateWall.state.userName = nameField.text;
-				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.photoBoothView);
+				
+				if (CivilDebateWall.state.userImage == null) { 
+					CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.photoBoothView);
+				}
+				else {
+					CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.opinionReviewView);					
+				}
 			}
-			
-	
 
-			
 			
 		}
 		

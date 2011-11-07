@@ -35,10 +35,6 @@ package com.civildebatewall {
 			myContextMenu.customItems.push(toggleDashboardItem);
 			toggleDashboardItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onToggleDashboard);
 			
-			var toggleSMSButtonItem:ContextMenuItem = new ContextMenuItem("Toggle SMS Button");
-			myContextMenu.customItems.push(toggleSMSButtonItem);
-			toggleSMSButtonItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onToggleSMSButton);						
-			
 			var quitItem:ContextMenuItem = new ContextMenuItem("Quit");
 			myContextMenu.customItems.push(quitItem);
 			quitItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onQuitSelect);
@@ -66,16 +62,6 @@ package com.civildebatewall {
 			CivilDebateWall.self.toggleFullScreen();
 		}
 		
-		private static function onToggleSMSButton(e:ContextMenuEvent):void {
-			if(CivilDebateWall.kiosk.view.skipTextButton.alpha == 1) {
-				CivilDebateWall.kiosk.view.skipTextButton.alpha = 0;
-				CivilDebateWall.kiosk.view.skipTextButton.setOnClick(null);								
-			}
-			else {
-				CivilDebateWall.kiosk.view.skipTextButton.alpha = 1;
-				CivilDebateWall.kiosk.view.skipTextButton.setOnClick(CivilDebateWall.kiosk.view.simulateSMS);				
-			}
-		}
 		
 		private static function onToggleDashboard(e:ContextMenuEvent):void {
 			CivilDebateWall.dashboard.visible = !CivilDebateWall.dashboard.visible;

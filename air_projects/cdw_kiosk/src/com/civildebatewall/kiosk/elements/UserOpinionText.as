@@ -57,6 +57,7 @@ package com.civildebatewall.kiosk.elements
 		}
 		
 		override protected function beforeTweenIn():void {
+			super.beforeTweenIn();
 			
 			trace("Setting name: " + CivilDebateWall.state.userName);
 			trace("Setting opinion: " + CivilDebateWall.state.userOpinion);
