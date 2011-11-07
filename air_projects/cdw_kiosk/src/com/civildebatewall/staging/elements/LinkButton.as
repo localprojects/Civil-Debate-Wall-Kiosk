@@ -7,11 +7,11 @@ package com.civildebatewall.staging.elements {
 	
 	import flash.display.Shape;
 	
-	public class SortLink extends BlockText {
+	public class LinkButton extends BlockText {
 
 		private var underline:Shape;
 		
-		public function SortLink(params:Object=null) {
+		public function LinkButton(params:Object=null) {
 			
 			super(
 				ObjectUtil.mergeObjects(
@@ -20,7 +20,8 @@ package com.civildebatewall.staging.elements {
 					backgroundColor: Assets.COLOR_GRAY_5,
 					textColor: Assets.COLOR_GRAY_25,
 					textSizePixels: 14,
-					buttonMode: true})
+					buttonMode: true,
+					visible: true})
 			);
 			
 			underline = new Shape();

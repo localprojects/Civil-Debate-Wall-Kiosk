@@ -77,7 +77,7 @@ package com.civildebatewall {
 			if (CivilDebateWall.state.userStance == Post.STANCE_YES) {
 				
 				TweenMax.to(yesText, duration, {alpha: 1, transformAroundCenter: {scaleX: 1, scaleY: 1, rotation:getRotationChange(yesText, 0, true) }});
-				TweenMax.to(noText, duration, {alpha: 0, transformAroundCenter: {scaleX: 0, scaleY: 0, rotation:getRotationChange(yesText, 180, true) }});
+				TweenMax.to(noText, duration, {alpha: 0, transformAroundCenter: {scaleX: 0, scaleY: 0, rotation:getRotationChange(noText, 180, true) }});
 								
 				//TweenMax.to(noText, duration, {alpha: 0, y: height});				
 				
@@ -88,7 +88,7 @@ package com.civildebatewall {
 //				TweenMax.to(noText, duration, {alpha: 1, y: noTarget});				
 //				TweenMax.to(yesText, duration, {alpha: 0, y: height});
 				//noText.rotation = -180;
-				TweenMax.to(noText, duration, {alpha: 1, transformAroundCenter: {scaleX: 1, scaleY: 1, rotation:getRotationChange(yesText, 0, true) }});
+				TweenMax.to(noText, duration, {alpha: 1, transformAroundCenter: {scaleX: 1, scaleY: 1, rotation:getRotationChange(noText, 0, true) }});
 				TweenMax.to(yesText, duration, {alpha: 0, transformAroundCenter: {scaleX: 0, scaleY: 0, rotation:getRotationChange(yesText, 180, true) }});				
 			}
 			

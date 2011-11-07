@@ -15,16 +15,16 @@ package com.civildebatewall.staging.elements {
 	public class SortLinks extends BlockBase	{
 		
 		private var sortedText:Bitmap;
-		private var recentText:SortLink;
+		private var recentText:LinkButton;
 		private var dividerA:BlockText;		
-		private var yesText:SortLink;
+		private var yesText:LinkButton;
 		private var dividerB:BlockText;
-		private var noText:SortLink;		
+		private var noText:LinkButton;		
 		private var dividerC:BlockText;
-		private var mostDebatedText:SortLink;
+		private var mostDebatedText:LinkButton;
 		
 		
-		private var selectedLink:SortLink;		
+		private var selectedLink:LinkButton;		
 		
 		public function SortLinks(params:Object=null) {
 			super({
@@ -35,7 +35,7 @@ package com.civildebatewall.staging.elements {
 			
 			sortedText = Assets.getSortedByText();
 			
-			recentText = new SortLink({
+			recentText = new LinkButton({
 				text: "Recent"				
 			});
 			
@@ -47,7 +47,7 @@ package com.civildebatewall.staging.elements {
 				text: "/"				
 			});
 			
-			yesText = new SortLink({
+			yesText = new LinkButton({
 				text: "Yes"
 			});
 			
@@ -59,7 +59,7 @@ package com.civildebatewall.staging.elements {
 				text: "/"				
 			});			
 			
-			noText = new SortLink({
+			noText = new LinkButton({
 				text: "No"				
 			});
 			
@@ -71,7 +71,7 @@ package com.civildebatewall.staging.elements {
 				text: "/"				
 			});			
 			
-			mostDebatedText = new SortLink({
+			mostDebatedText = new LinkButton({
 				text: "Most Debated"				
 			});
 			
@@ -136,10 +136,10 @@ package com.civildebatewall.staging.elements {
 			mostDebatedText.onButtonUp.push(up);			
 		}
 		
-		private var clickedLink:SortLink;
+		private var clickedLink:LinkButton;
 		
 		private function down(e:MouseEvent):void {
-			clickedLink = e.currentTarget as SortLink;
+			clickedLink = e.currentTarget as LinkButton;
 			clickedLink.drawMouseDown();
 		}
 		

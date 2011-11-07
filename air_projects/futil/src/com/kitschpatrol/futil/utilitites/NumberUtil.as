@@ -4,6 +4,7 @@ package com.kitschpatrol.futil.utilitites {
 	public class NumberUtil {
 		
 		
+		
 		public static function zeroPad(number:*, width:int):String {
 			var ret:String = ""+ number.toString();
 			while( ret.length < width )
@@ -16,7 +17,8 @@ package com.kitschpatrol.futil.utilitites {
 			s = s.replace('+1', '');
 			
 			// put it into US format...
-			return '(' + s.substr(0, 3) + ') ' + s.substr(3, 3) + '-' + s.substr(6);			
+		//return '(' + s.substr(0, 3) + ') ' + s.substr(3, 3) + '-' + s.substr(6);
+			return s.substr(0, 3) + '-' + s.substr(3, 3) + '-' + s.substr(6);			
 		}		
 		
 		

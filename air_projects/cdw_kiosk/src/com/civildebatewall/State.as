@@ -40,7 +40,7 @@ package com.civildebatewall {
 		public var userOpinion:String = '';
 		public var userPhoneNumber:String = '#########';
 		public var userID:String = '';
-		public var userImage:Bitmap = new Bitmap(new BitmapData(1080, 1920));
+		public var userImage:Bitmap = null;
 		public var userImageFull:Bitmap = null;		
 		public var lastTextMessageTime:Date;
 		public var textMessage:TextMessage; // the message we're working with
@@ -79,7 +79,7 @@ package com.civildebatewall {
 		public function clearUser():void {
 			userID = '';
 			userName = '';
-			userImage = new Bitmap(new BitmapData(1920, 1080));
+			userImage = null;
 			userPhoneNumber = '';
 			userOpinion = '';
 			userIsDebating = false;

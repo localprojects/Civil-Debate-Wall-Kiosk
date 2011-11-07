@@ -1,10 +1,10 @@
 package com.civildebatewall {
 	import com.bit101.components.*;
 	import com.civildebatewall.data.Question;
+	import com.civildebatewall.kiosk.Kiosk;
 	
 	import flash.display.*;
 	import flash.events.Event;
-	import com.civildebatewall.kiosk.Kiosk;
 	
 	
 	public class Dashboard extends Window	{
@@ -59,11 +59,11 @@ package com.civildebatewall {
 			viewChooser.addEventListener(Event.SELECT, onViewSelect);
 			viewChooser.width = this.width - 10;
 			
-			new PushButton(this, 5, viewChooser.y + viewChooser.height + 5, "Test", function():void {
-				//CDW.data.question = new Question({'id':'32424', 'text':'asdfasdf'});
-				
-			
+			new PushButton(this, 5, viewChooser.y + viewChooser.height + 5, "Simulate SMS", function():void {
+				CivilDebateWall.kiosk.view.smsOverlay.simulateSMS();
 			});
+			
+			
 			
 		}
 		
@@ -92,11 +92,7 @@ package com.civildebatewall {
 
 			if (selection == 'Home') CivilDebateWall.kiosk.view.homeView();
 			if (selection == 'Debate Overlay') CivilDebateWall.kiosk.view.threadView();
-	//		if (selection == 'Pick Stance') CivilDebateWall.kiosk.view.pickStanceView();
-			if (selection == 'SMS Prompt') CivilDebateWall.kiosk.view.smsPromptView();
 			if (selection == 'Photo Booth') CivilDebateWall.kiosk.view.photoBoothView();
-			if (selection == 'Name Entry') CivilDebateWall.kiosk.view.nameEntryView();
-			if (selection == 'Edit Opinion') CivilDebateWall.kiosk.view.editOpinionView();
 			if (selection == 'Stats Overlay') CivilDebateWall.kiosk.view.statsView();
 			if (selection == 'Inactivity Overlay') CivilDebateWall.kiosk.view.inactivityOverlayView();
 			if (selection == 'Submit Overlay') CivilDebateWall.kiosk.view.submitOverlayView();			
