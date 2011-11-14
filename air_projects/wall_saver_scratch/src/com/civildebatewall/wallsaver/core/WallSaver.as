@@ -8,13 +8,19 @@ package com.civildebatewall.wallsaver.core {
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
+	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.display.StageDisplayState;
+	import flash.display.StageScaleMode;
+	import flash.events.Event;
 	
 	public class WallSaver extends Sprite {
 		
 		public var timeline:TimelineMax;		
 		private var canvas:Sprite;
 		
+		private var topBar:Shape;
+		private var bottomBar:Shape;
 		
 		public function WallSaver()	{
 			super();
@@ -23,10 +29,35 @@ package com.civildebatewall.wallsaver.core {
 			canvas = new Sprite();
 			canvas.alpha = 0;
 			canvas.visible = false;
-			addChild(canvas);			
+			addChild(canvas);
 			
 			timeline = new TimelineMax({useFrames: true});
 		}
+		
+		public function toggleFullScreen():void {
+			if (stage.displayState == StageDisplayState.NORMAL) {
+				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+				stage.scaleMode = StageScaleMode.SHOW_ALL;
+				
+				// block off extras
+
+				topBar = GraphicsUtil.shapeFromSize(stage.stageWidth, 1080- Main.totalHeight / 2);
+				bottomBar = GraphicsUtil.shapeFromSize(stage.stageWidth,1080 - Main.totalHeight / 2);
+				
+				addChild(topBar);
+				trace(topBar.height)
+				canvas.y = topBar.height;
+				bottomBar.y = canvas.x + canvas.height;
+				addChild(bottomBar);
+				
+				
+			}
+			else {
+				stage.displayState = StageDisplayState.NORMAL;
+				stage.scaleMode = StageScaleMode.EXACT_FIT;				
+			}					
+		}
+		
 		
 		
 		// TODO put this into a big conditional?
