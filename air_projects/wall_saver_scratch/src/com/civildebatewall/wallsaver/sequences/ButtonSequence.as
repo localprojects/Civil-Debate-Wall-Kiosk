@@ -5,7 +5,7 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.greensock.TweenMax;
 	import com.greensock.data.TweenMaxVars;
 	import com.greensock.easing.*;
-	import com.kitschpatrol.futil.TextBlock;
+	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
@@ -17,7 +17,7 @@ package com.civildebatewall.wallsaver.sequences {
 	public class ButtonSequence extends Sprite implements ISequence {
 		
 		private var overlays:Vector.<Shape>;
-		private var buttons:Vector.<TextBlock>;
+		private var buttons:Vector.<BlockText>;
 		
 		
 		public function ButtonSequence() {
@@ -25,7 +25,7 @@ package com.civildebatewall.wallsaver.sequences {
 		
 			// Draw the white overlays
 			overlays = new Vector.<Shape>(Main.screens.length);
-			buttons = new Vector.<TextBlock>(Main.screens.length);
+			buttons = new Vector.<BlockText>(Main.screens.length);
 			
 			for (var i:int = 0; i < Main.screens.length; i++) {
 				overlays[i] = GraphicsUtil.shapeFromRect(Main.screens[i], 0xffffff);
@@ -37,7 +37,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// Add them to the Sprite
 			for each (var shape:Shape in overlays) addChild(shape);
-			for each (var button:TextBlock in buttons) addChild(button);
+			for each (var button:BlockText in buttons) addChild(button);
 		}
 		
 		
@@ -51,7 +51,6 @@ package com.civildebatewall.wallsaver.sequences {
 			}
 			
 
-			
 			timelineIn.appendMultiple(overlayTweens, 0, TweenAlign.START, 20);
 			
 			// Buttons

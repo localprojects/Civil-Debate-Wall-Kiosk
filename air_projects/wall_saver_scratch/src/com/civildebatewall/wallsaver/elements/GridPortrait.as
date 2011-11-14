@@ -1,7 +1,7 @@
 package com.civildebatewall.wallsaver.elements {
 	import com.civildebatewall.resources.Assets;
 	import com.greensock.TweenMax;
-	import com.kitschpatrol.futil.BlockShape;
+	import com.kitschpatrol.futil.blocks.BlockShape;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
 	
@@ -17,7 +17,7 @@ package com.civildebatewall.wallsaver.elements {
 		
 		public function GridPortrait(stance:String, portrait:Bitmap)	{
 			
-			this.portrait = new Bitmap(BitmapUtil.scaleToFill(portrait.bitmapData, 233, 311));
+			this.portrait = BitmapUtil.scaleToFill(portrait, 233, 311);
 
 			_step = 0;			
 			

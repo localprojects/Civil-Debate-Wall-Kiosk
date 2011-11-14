@@ -51,11 +51,11 @@ package com.civildebatewall.resources {
 
 
 		// Sample Kiosks		
-		[Embed(source = '/assets/graphics/sampleKiosk1.png')] private static const sampleKiosk1Class:Class;
+		[Embed(source = '/assets/graphics/sampleKiosk1.jpg')] private static const sampleKiosk1Class:Class;
 		public static function getSampleKiosk1():Bitmap { return new sampleKiosk1Class() as Bitmap; };
 		public static const sampleKiosk1:Bitmap = getSampleKiosk1();
 		
-		[Embed(source = '/assets/graphics/sampleKiosk2.png')] private static const sampleKiosk2Class:Class;
+		[Embed(source = '/assets/graphics/sampleKiosk2.jpg')] private static const sampleKiosk2Class:Class;
 		public static function getSampleKiosk2():Bitmap { return new sampleKiosk2Class() as Bitmap; };
 		public static const sampleKiosk2:Bitmap = getSampleKiosk2();		
 		

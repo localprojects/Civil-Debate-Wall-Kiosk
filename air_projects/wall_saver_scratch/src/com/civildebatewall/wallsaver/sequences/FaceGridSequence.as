@@ -64,7 +64,7 @@ package com.civildebatewall.wallsaver.sequences {
 						stance = "no";
 					}
 					
-					var tempPortrait:GridPortrait = new GridPortrait(stance, ArrayUtil.getRandomElement(portraitData));
+					var tempPortrait:GridPortrait = new GridPortrait(stance, ArrayUtil.randomElement(portraitData));
 					tempPortrait.x = (gridSpacing * (screenCol + 1)) + (screenCol * portraitWidth) + screen.x;
 					tempPortrait.y = (gridSpacing * row) + (row * portraitHeight) + wallsaverPaddingTop;
 					
