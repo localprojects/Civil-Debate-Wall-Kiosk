@@ -15,7 +15,7 @@
 // Uses Alchemy Jpeg Decoder so we can do this synchronously
 // Via Thibault Imbert http://www.bytearray.org/?p=1089
 
-package com.kitschpatrol.futil
+package com.kitschpatrol.futil.jpeg
 {
 	import cmodule.jpegdecoder.CLibInit;
 	

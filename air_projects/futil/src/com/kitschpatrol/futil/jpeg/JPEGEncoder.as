@@ -1,4 +1,4 @@
-package com.kitschpatrol.futil {
+package com.kitschpatrol.futil.jpeg {
 	
 	
 	// UNUSED

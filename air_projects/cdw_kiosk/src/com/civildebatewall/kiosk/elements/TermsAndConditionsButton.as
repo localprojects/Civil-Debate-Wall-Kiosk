@@ -15,7 +15,7 @@ package com.civildebatewall.kiosk.elements {
 				text: "Terms and Conditions",
 				textFont: Assets.FONT_REGULAR,
 				backgroundAlpha: 0,
-				textSizePixels: 14,
+				textSize: 14,
 				buttonMode: true,
 				textColor: 0xffffff,
 				visible: false

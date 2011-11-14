@@ -51,8 +51,8 @@ package com.civildebatewall.kiosk {
 			// Initialize some stuff. only runs once at startup.			
 			
 			// Start at home // TODO no content conditional?
-			//CivilDebateWall.state.setView(view.homeView);
-			CivilDebateWall.state.setView(view.smsPromptView);
+			CivilDebateWall.state.setView(view.homeView);
+			//CivilDebateWall.state.setView(view.smsPromptView);
 		}
 		
 

@@ -18,7 +18,7 @@ package com.civildebatewall.staging.elements {
 				text: "RESPOND TO THE QUESTION",
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
-				textSizePixels: 18,
+				textSize: 18,
 				letterSpacing: -1,
 				textColor: ColorUtil.gray(77),
 				backgroundColor: 0xffffff,

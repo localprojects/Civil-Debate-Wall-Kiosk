@@ -73,7 +73,7 @@ package com.civildebatewall.kiosk.ui {
 			countLabel = new BlockText({
 				text: '5',
 				textFont: Assets.FONT_BOLD,
-				textSizePixels: 41,
+				textSize: 41,
 				textColor: 0xffffff,
 				alignmentPoint: Alignment.CENTER,
 				textAlignmentMode: TextAlign.CENTER,

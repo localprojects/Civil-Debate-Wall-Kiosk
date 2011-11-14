@@ -137,7 +137,7 @@ package com.civildebatewall.kiosk {
 			portrait.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(portrait);
 			
-			questionHeaderHome = new QuestionHeader({width: 1080, height: 313, textSizePixels: 39, leading: 29});
+			questionHeaderHome = new QuestionHeader({width: 1080, height: 313, textSize: 39, leading: 29});
 			questionHeaderHome.setDefaultTweenIn(1, { alpha: 1});
 			questionHeaderHome.setDefaultTweenOut(1, { alpha: 0});
 			addChild(questionHeaderHome);			
@@ -199,7 +199,7 @@ package com.civildebatewall.kiosk {
 						
 			
 			// comment thread view
-			questionHeader = new QuestionHeader({width: 1024, height: 250, textSizePixels: 28,	leading: 22});
+			questionHeader = new QuestionHeader({width: 1024, height: 250, textSize: 28,	leading: 22});
 			questionHeader.setDefaultTweenIn(1, {x: 28, alpha: 1});
 			questionHeader.setDefaultTweenOut(1, {x: 28, alpha: 0});
 			addChild(questionHeader);
@@ -233,7 +233,7 @@ package com.civildebatewall.kiosk {
 			
 			
 			// pick debate type view
-			questionHeaderDecision = new QuestionHeader({width: 880, height: 157, textSizePixels: 26, leading: 18});		
+			questionHeaderDecision = new QuestionHeader({width: 880, height: 157, textSize: 26, leading: 18});		
 			questionHeaderDecision.setDefaultTweenIn(1, {x: 100, y: 1060});
 			questionHeaderDecision.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1060});
 			addChild(questionHeaderDecision);			

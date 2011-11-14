@@ -82,7 +82,7 @@ package com.civildebatewall.kiosk.ui {
 			label = new BlockText({
 				textFont: Assets.FONT_BOLD, 
 				textBold: true,
-				textSizePixels: 24,
+				textSize: 24,
 				textAlignmentMode: TextAlign.CENTER,
 				textColor: Assets.COLOR_GRAY_85,
 				backgroundAlpha: 0,

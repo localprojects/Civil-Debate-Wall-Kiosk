@@ -87,7 +87,7 @@ package com.civildebatewall
 				width: 1080,				
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
-				textSizePixels: 14,
+				textSize: 14,
 				textColor: 0xffffff,
 				backgroundAlpha: 0,
 				textAlignmentMode: TextAlign.CENTER,

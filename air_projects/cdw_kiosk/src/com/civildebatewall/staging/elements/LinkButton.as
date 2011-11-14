@@ -19,7 +19,7 @@ package com.civildebatewall.staging.elements {
 					{textFont: Assets.FONT_REGULAR,
 					backgroundColor: Assets.COLOR_GRAY_5,
 					textColor: Assets.COLOR_GRAY_25,
-					textSizePixels: 14,
+					textSize: 14,
 					buttonMode: true,
 					visible: true})
 			);

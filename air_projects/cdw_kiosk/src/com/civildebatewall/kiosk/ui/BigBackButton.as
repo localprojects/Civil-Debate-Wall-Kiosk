@@ -17,7 +17,7 @@ package com.civildebatewall.kiosk.ui {
 				text: "BACK TO HOME SCREEN",
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
-				textSizePixels: 25,
+				textSize: 25,
 				textColor: 0xffffff,
 				textAlignmentMode: TextAlign.CENTER,
 				width: 1024,

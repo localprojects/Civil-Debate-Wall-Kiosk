@@ -10,7 +10,6 @@ package com.civildebatewall.kiosk.elements
 	
 	import flash.events.Event;
 	
-	
 	public class UserOpinionText extends BlockBase	{
 		
 		private var opinion:BlockText;
@@ -22,7 +21,7 @@ package com.civildebatewall.kiosk.elements
 			nameTag = new BlockText({
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
-				textSizePixels: 30,
+				textSize: 30,
 				textColor: 0xffffff,
 				minWidth: 100,
 				maxWidth: 880,
@@ -36,7 +35,7 @@ package com.civildebatewall.kiosk.elements
 			
 			opinion = new BlockText({
 				textFont: Assets.FONT_REGULAR,
-				textSizePixels: 30,
+				textSize: 30,
 				textColor: 0xffffff,
 				minWidth: 100,
 				maxWidth: 880,

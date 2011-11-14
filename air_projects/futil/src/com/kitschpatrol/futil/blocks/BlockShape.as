@@ -4,7 +4,6 @@ package com.kitschpatrol.futil.blocks {
 	import flash.display.CapsStyle;
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
-	import flash.display.Shape;
 	import flash.display.Sprite;
 	
 	// for background
