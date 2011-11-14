@@ -21,7 +21,7 @@ package {
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	
-	[SWF(width="5720", height="1920", frameRate="60")]	
+	[SWF(width="5720", height="1920", frameRate="60", backgroundColor="0x000000")]
 	public class Main extends Sprite {
 		
 		// These will come in from FlashSpan
@@ -59,7 +59,7 @@ package {
 			
 			// Resize the window for development
 			stage.scaleMode = StageScaleMode.EXACT_FIT;
-			stage.align = StageAlign.TOP_LEFT;
+			stage.align = StageAlign.LEFT;
 			stage.nativeWindow.width = totalWidth / stageScaleFactor;
 			
 
@@ -117,28 +117,6 @@ package {
 				addChild(GraphicsUtil.shapeFromRect(bezel));
 			}
 			
-			
-//			// Height Constrained
-//			var textField:TextField = new TextField();
-//			textField.text = "sdfsD Fasd fasd fas dfasd fas dfasdfdfasdf sdfsD Fasd fasd fas dfasd fas dfasdfdfasdf";
-//			textField.wordWrap = true;
-//			textField.multiline = true;
-//			textField.height = 5;
-//			textField.autoSize = TextFieldAutoSize.LEFT;
-//			addChild(textField);
-////			
-//			// Width Constrained
-//			var textField:TextField = new TextField();
-//			textField.text = "sdfsD Fasd fasd fas dfasd fas dfasdfdfasdf";
-//			textField.wordWrap = true;
-//			textField.multiline = true;
-//			textField.width = 5000;
-//			//textField.width = 50;
-//			textField.autoSize = TextFieldAutoSize.LEFT;
-//			addChild(textField);			
-//			
-//			textField.scaleX = 10;
-//			textField.scaleY = 10;
 		}
 		
 
