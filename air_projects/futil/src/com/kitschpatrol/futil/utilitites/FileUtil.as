@@ -2,8 +2,8 @@ package com.kitschpatrol.futil.utilitites
 {
 	import cmodule.aircall.CLibInit;
 	
-	import com.kitschpatrol.futil.JPEGDecoder;
-	import com.kitschpatrol.futil.JPEGEncoder;
+	import com.kitschpatrol.futil.jpeg.JPEGDecoder;
+	import com.kitschpatrol.futil.jpeg.JPEGEncoder;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;

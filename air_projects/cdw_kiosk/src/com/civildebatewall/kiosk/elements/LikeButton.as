@@ -42,7 +42,7 @@ package com.civildebatewall.kiosk.elements {
 				text: '0',
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
-				textSizePixels: 18,
+				textSize: 18,
 				textAlignmentMode: TextAlign.RIGHT,
 				textColor: 0xffffff,
 				backgroundAlpha: 0,
@@ -76,7 +76,7 @@ package com.civildebatewall.kiosk.elements {
 			label = new BlockText({
 				text: 'Like',
 				textFont: Assets.FONT_REGULAR,
-				textSizePixels: 18,
+				textSize: 18,
 				textColor: 0xffffff,
 				backgroundAlpha: 0,
 				width: 73,

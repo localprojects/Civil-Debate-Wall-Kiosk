@@ -16,7 +16,7 @@ package com.civildebatewall.kiosk.elements {
 				buttonMode: true,
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
-				textSizePixels: 18,
+				textSize: 18,
 				textColor: ColorUtil.gray(77),
 				backgroundColor: 0xffffff,
 				textAlignmentMode: TextAlign.CENTER,

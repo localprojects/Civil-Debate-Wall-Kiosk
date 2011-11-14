@@ -39,11 +39,6 @@ package com.kitschpatrol.futil.blocks {
 		private var _alignmentPoint:Point; // the alignment of the content relative to the background (less padding)
 		private var _registrationPoint:Point; // the origin of the block, normalized relative to the top left of the background
 		private var _showRegistrationPoint:Boolean;
-			
-		// Padding mode
-		private var  _paddingMode:String;
-		public static const PADDING_INSIDE:String = "paddingIndside";
-		public static const PADDING_OUTSIDE:String = "paddingOutside";
 		
 		private var _scrollLimitMode:String;
 		public static const SCROLL_LIMIT_AUTO:String = "scrollLimitAuto"; // scroll bounds are automatically set to show all content, but nothing more
@@ -67,6 +62,8 @@ package com.kitschpatrol.futil.blocks {
 
 		private var _contentCrop:Padding;
 		
+		
+		private var _blockChildCounter:int = 0; // if we need to check the bounds for content cropping...
 		
 		// TODO?
 		//private var _constrainScroll:Boolean; // whether or not we can scroll content beyond the boundaries of the container
@@ -102,7 +99,6 @@ package com.kitschpatrol.futil.blocks {
 			_maxHeight = Number.MAX_VALUE;
 			_maxSizeBehavior = MAX_SIZE_OVERFLOWS;
 			_contentCrop = new Padding();
-			_paddingMode = PADDING_INSIDE;
 			_scrollLimitMode = SCROLL_LIMIT_AUTO;
 			_minScrollX = 0;
 			_minScrollY = 0;
@@ -140,7 +136,7 @@ package com.kitschpatrol.futil.blocks {
 				for (var key:String in params) {
 					if (this.hasOwnProperty(key)) {
 						// set local
-						trace("Setting " + key + " to " + params[key]);
+						//trace("Setting " + key + " to " + params[key]);
 						this[key] = params[key];
 					}
 					else {
@@ -162,35 +158,40 @@ package com.kitschpatrol.futil.blocks {
 				if (contentWidth == -1) contentWidth = content.width;
 				if (contentHeight == -1) contentHeight = content.height;
 				
-				
-				if (_paddingMode == PADDING_OUTSIDE) {
-					// only if needed
-					background.width = Math2.clamp(contentWidth - _contentCrop.horizontal, _minWidth, _maxWidth + _padding.horizontal) + _padding.horizontal; // stretch max for padding
-					background.height = Math2.clamp(contentHeight - _contentCrop.vertical, _minHeight, _maxHeight + _padding.vertical) + _padding.vertical;
+
+				// compensate for children with content crops... pretty unruly
+				// problem with wrong background bounds for blocks with embedded block text blocks.
+				if (_blockChildCounter > 0) {
+					// find limits
+					var minX:Number = Number.MAX_VALUE;
+					var minY:Number = Number.MAX_VALUE;
+					var maxX:Number = Number.MIN_VALUE;
+					var maxY:Number = Number.MIN_VALUE;
 					
-					// Compensate for padding, which always accumulates on the outsize of the content
-					content.x = -(_registrationPoint.x * (background.width - _padding.horizontal));
-					content.y = -(_registrationPoint.y * (background.height - _padding.vertical));
+					for (var i:int = 0; i < this.numChildren; i++) {
+						var child:DisplayObject = this.getChildAt(i);
+						// takes advantage of x, y, width and height override lies
+						minX = Math.min(minX, child.x);
+						minY = Math.min(minY, child.y);
+						maxX = Math.max(maxX, child.x + child.width);
+						maxY = Math.max(maxY, child.y + child.height);
+					}
 					
-					background.x = content.x - _padding.left;
-					background.y = content.y - _padding.top;					
-				}				
-				else {
-					// padding internal!
-					
-					// only if needed
-					background.width = Math2.clamp(contentWidth - _contentCrop.horizontal + _padding.horizontal, _minWidth, _maxWidth); // do not stretch max for padding
-					background.height = Math2.clamp(contentHeight - _contentCrop.vertical + _padding.vertical, _minHeight, _maxHeight);
-					
-					// Compensate for padding, which always accumulates on the inside of the block
-					content.x =  -(_registrationPoint.x * background.width) + _padding.left;
-					content.y = -(_registrationPoint.y * background.height) + _padding.top;
-					
-					background.x = -(_registrationPoint.x * background.width);
-					background.y = -(_registrationPoint.y * background.height);				
+					// make the parent fit the child's image of themselves (with content cropping)
+					contentWidth = maxX - minX;
+					contentHeight = maxY - minY;						
 				}
+					
+				background.width = Math2.clamp(contentWidth - _contentCrop.horizontal + _padding.horizontal, _minWidth, _maxWidth); // do not stretch max for padding
+				background.height = Math2.clamp(contentHeight - _contentCrop.vertical + _padding.vertical, _minHeight, _maxHeight);
 				
-  			
+				// Compensate for padding, which always accumulates on the inside of the block
+				content.x =  -(_registrationPoint.x * background.width) + _padding.left;
+				content.y = -(_registrationPoint.y * background.height) + _padding.top;
+				
+				background.x = -(_registrationPoint.x * background.width);
+				background.y = -(_registrationPoint.y * background.height);				
+				
 				
 				// Align content
 				content.x += _alignmentPoint.x * ((background.width - _padding.horizontal) - (contentWidth - _contentCrop.horizontal));
@@ -209,22 +210,19 @@ package com.kitschpatrol.futil.blocks {
 				}
 				
 				// Hilite the content area for debug
-// content.graphics.clear();
-// content.graphics.beginFill(0xfff000);
-//				content.graphics.drawRect(0, 0, content.width, content.height);
-//				content.graphics.endFill();
+				// content.graphics.clear();
+				// content.graphics.beginFill(0xfff000);
+				// content.graphics.drawRect(0, 0, content.width, content.height);
+				// content.graphics.endFill();
+				
+				// if dimensions change, should update parent, too
+				if (this.parent is BlockBase) (this.parent as BlockBase).update();
 				
 			}
 		}
 		
 		
-		
-
-		
-		
-		
 		// Getters and Setters
-		
 		public function get showRegistrationPoint():Boolean { return _showRegistrationPoint; }
 		public function set showRegistrationPoint(show:Boolean):void {
 			_showRegistrationPoint = show;
@@ -233,7 +231,6 @@ package com.kitschpatrol.futil.blocks {
 			else
 				super.removeChild(registrationMarker);
 		}
-		
 		
 		// registration point
 		public function get registrationPoint():Point { return _registrationPoint };
@@ -260,8 +257,6 @@ package com.kitschpatrol.futil.blocks {
 		public function set registrationY(value:Number):void {
 			registrationPoint = new Point(_registrationPoint.x, value); 
 		}		
-				
-		
 
 		// Content alignment within the container
 		public function get alignmentPoint():Point { return _alignmentPoint; }
@@ -283,9 +278,7 @@ package com.kitschpatrol.futil.blocks {
 		}
 		
 		// scrolling is a different way of thinking about the alignment point
-		
 		public function set scrollLimitMode(mode:String):void {
-			
 			if (mode == SCROLL_LIMIT_MANUAL) {
 				_minScrollX = 0;
 				_minScrollY = 0;
@@ -377,9 +370,6 @@ package com.kitschpatrol.futil.blocks {
 		}		
 		
 
-		
-		
-		
 
 		// Size
 		public function get minWidth():Number { return _minWidth; }
@@ -431,14 +421,13 @@ package com.kitschpatrol.futil.blocks {
 				removeChild(clippingMask);
 			}
 			
-			
-			
 			update();
 		}	
 		
 		
 		// Mostly for dealing with sloppy text fields, this can make the content sprite
 		// Appear smaller than it actually is to the background generator
+		// Would it be better to just manually define a bounds rect?
 		public function get contentCropTop():Number { return _contentCrop.top; }
 		public function set contentCropTop(amount:Number):void {
 			_contentCrop.top = amount;
@@ -553,13 +542,7 @@ package com.kitschpatrol.futil.blocks {
 			update();
 		}				
 		
-		public function get paddingMode():String { return _paddingMode; }
-		public function set paddingMode(mode:String):void {
-			_paddingMode = mode;
-			update();
-		}
-		
-		
+
 		// Convenience
 		public function get left():Number { return x; }
 		public function get top():Number { return y; }
@@ -690,12 +673,12 @@ package com.kitschpatrol.futil.blocks {
 		}
 		
 		private function onTimeout(e:TimerEvent):void {
-			trace('button back!');
+			//trace('button back!');
 			unlock();
 		}
 		
 		public function unlock():void {
-			trace("Button unlocked");
+			//trace("Button unlocked");
 			locked = false;
 			buttonTimer.stop();
 			executeAll(onButtonUnlock);
@@ -716,12 +699,14 @@ package com.kitschpatrol.futil.blocks {
 		// Overrides to proxy out container.
 		// make sure everything updates after the content changes
 		override public function addChild(child:DisplayObject):DisplayObject {
+			if (child is BlockBase) _blockChildCounter++; // keep track of child blocks so we can recalculate bounds based on their contentcrop values 
 			var added:DisplayObject = content.addChild(child);
 			update();
 			return added;
 		}
 		
 		override public function addChildAt(child:DisplayObject, index:int):DisplayObject {
+			if (child is BlockBase) _blockChildCounter++;			
 			var added:DisplayObject = content.addChildAt(child, index);
 			update();
 			return added;
@@ -733,12 +718,14 @@ package com.kitschpatrol.futil.blocks {
 		override public function getChildIndex(child:DisplayObject):int { return content.getChildIndex(child); }
 		
 		override public function removeChild(child:DisplayObject):DisplayObject {
+			if (child is BlockBase) _blockChildCounter--;			
 			var removed:DisplayObject = content.removeChild(child);
 			update();
 			return removed;
 		}
 		
 		override public function removeChildAt(index:int):DisplayObject {
+			if (index is BlockBase) _blockChildCounter--;			
 			var removed:DisplayObject = content.removeChildAt(index);
 			update();
 			return removed;

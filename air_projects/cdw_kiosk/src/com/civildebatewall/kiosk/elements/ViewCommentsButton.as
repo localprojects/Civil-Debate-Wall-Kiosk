@@ -16,7 +16,7 @@ package com.civildebatewall.kiosk.elements {
 		public function ViewCommentsButton(params:Object=null) {
 			super({
 				textFont: Assets.FONT_REGULAR,
-				textSizePixels: 18,
+				textSize: 18,
 				backgroundRadius: 8,
 				textAlignmentMode: TextAlign.CENTER,
 				textColor: 0xffffff,

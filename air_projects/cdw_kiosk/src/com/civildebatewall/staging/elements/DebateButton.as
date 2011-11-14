@@ -17,7 +17,7 @@ package com.civildebatewall.staging.elements {
 				buttonMode: true,
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
-				textSizePixels: 18,
+				textSize: 18,
 				leading: 11,
 				letterSpacing: -1,
 				textColor: ColorUtil.gray(77),

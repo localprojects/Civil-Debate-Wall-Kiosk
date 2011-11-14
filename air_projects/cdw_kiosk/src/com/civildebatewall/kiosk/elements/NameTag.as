@@ -17,7 +17,7 @@ package com.civildebatewall.kiosk.elements {
 				text: 'Name',
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
-				textSizePixels: 30,
+				textSize: 30,
 				textColor: 0xffffff,
 				backgroundColor: 0x000000,
 				minWidth: 100,

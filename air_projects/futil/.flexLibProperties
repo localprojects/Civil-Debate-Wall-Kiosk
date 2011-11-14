@@ -31,7 +31,7 @@
     <classEntry path="com.kitschpatrol.futil.utilitites.FunctionUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.PlatformUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.FileUtil"/>
-    <classEntry path="com.kitschpatrol.futil.JPEGEncoder"/>
+    <classEntry path="com.kitschpatrol.futil.jpeg.JPEGEncoder"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.NamedYPlugin"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.NamedXPlugin"/>
     <classEntry path="com.kitschpatrol.futil.blocks.BlockBitmap"/>

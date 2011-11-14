@@ -34,7 +34,7 @@ package com.civildebatewall.kiosk.blocks
 				textFont: Assets.FONT_BOLD,
 				backgroundAlpha: 0,	
 				textColor: ColorUtil.gray(77),
-				textSizePixels: 87,
+				textSize: 87,
 				visible: true
 			});
 			number.x = 30;
