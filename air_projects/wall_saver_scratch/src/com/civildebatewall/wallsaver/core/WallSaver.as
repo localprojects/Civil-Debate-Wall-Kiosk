@@ -5,9 +5,10 @@ package com.civildebatewall.wallsaver.core {
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
-	import com.kitschpatrol.futil.Utilities;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
+	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
-	import flash.display.Sprite;	
+	import flash.display.Sprite;
 	
 	public class WallSaver extends Sprite {
 		
@@ -33,7 +34,7 @@ package com.civildebatewall.wallsaver.core {
 			if (timeline.active) timeline.stop();
 			
 			// Clean up
-			Utilities.removeChildren(canvas);
+			GraphicsUtil.removeChildren(canvas);
 			
 			// Clear the timeline
 			timeline.clear();

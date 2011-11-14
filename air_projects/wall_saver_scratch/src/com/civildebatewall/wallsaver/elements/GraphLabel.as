@@ -1,8 +1,8 @@
 package com.civildebatewall.wallsaver.elements {
 	import com.civildebatewall.resources.Assets;
-	import com.kitschpatrol.futil.TextBlock;
+	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
-	import com.kitschpatrol.futil.constants.CharacterSet;
+	import com.kitschpatrol.futil.constants.Char;
 	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
@@ -12,9 +12,8 @@ package com.civildebatewall.wallsaver.elements {
 	
 	public class GraphLabel extends Sprite {
 		
-		
 		private var stanceText:Bitmap;
-		private var countText:TextBlock;
+		private var countText:BlockText;
 		private var _count:int;
 		
 		public function GraphLabel(stance:String) {
@@ -32,16 +31,19 @@ package com.civildebatewall.wallsaver.elements {
 			addChild(stanceText);
 			
 			// vote counter
-			countText = new TextBlock({text: "0",
-																 textColor: 0xffffff,
-																 textFont: Assets.FONT_BOLD,
-																 sizeFactorGlyphs: CharacterSet.SET_OF_NUMBERS,															 
-																 textSizePixels: 225,
-																 alignmentPoint: Alignment.CENTER,																 
-																 showBackground: false,
-																 textAlignmentMode: TextAlign.CENTER,
-																 width: stanceText.width,
-																 y: stanceText.height + 90});
+			countText = new BlockText({
+				text: "0",
+				textColor: 0xffffff,
+				textFont: Assets.FONT_BOLD,
+				sizeFactorGlyphs: Char.SET_OF_NUMBERS,															 
+				textSize: 225,
+				alignmentPoint: Alignment.CENTER,																 
+				showBackground: false,
+				textAlignmentMode: TextAlign.CENTER,
+				width: stanceText.width,
+				y: stanceText.height + 90,
+				visible: true
+			});
 			
 			addChild(countText);			 
 		}
