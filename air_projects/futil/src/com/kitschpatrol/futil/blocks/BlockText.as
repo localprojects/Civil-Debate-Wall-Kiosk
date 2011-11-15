@@ -9,12 +9,15 @@ package com.kitschpatrol.futil.blocks {
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	import flash.text.AntiAliasType;
+	import flash.text.GridFitType;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.utils.getTimer;
+	
+	import flashx.textLayout.formats.Float;
 	
 	public class BlockText extends BlockBase {
 
@@ -43,8 +46,17 @@ package com.kitschpatrol.futil.blocks {
 		
 		// Growth prioririty (buggy?)
 		private var _growthMode:String;
-		public static const MAXIMIZE_WIDTH:String = "maximizeWidth"; // given plent of maxWidth and maxHeight, grow the width of the box
-		public static const MAXIMIZE_HEIGHT:String = "maximizeHeight"; // given ty of maxWidth and maxHeght, grow the height of the box
+		public static const MAXIMIZE_WIDTH:String = "maximizeWidth"; // given plent of maxWidth and maxHeight, grow the width of the text box (fewer rows of text)
+		public static const MAXIMIZE_HEIGHT:String = "maximizeHeight"; // given ty of maxWidth and maxHeght, grow the height of the text box (more rows of text)
+		
+
+		// Max size behavior, specific to text. TODO Implement these!
+		public static const MAX_SIZE_TRUNCATES:String = "maxSizeTruncates"; // ellipses or whatever? this is a text only option!
+		public static const MAX_SIZE_RESIZES:String = "maxSizeResizes"; // reduces the textsize until it fits
+
+
+		// Weird internal flash limits
+		private static const MAX_TEXT_FIELD_WIDTH:Number = 107324000;
 		
 		// Interaction
 		private var _selectable:Boolean;		
@@ -88,6 +100,8 @@ package com.kitschpatrol.futil.blocks {
 			// Initialization
 			maxTextPixelSize = 0;
 			fieldLeading = 0;
+			
+			_maxWidth = MAX_TEXT_FIELD_WIDTH;
 			
 			// Sensible defaults.
 			_textAlignmentMode = TextFormatAlign.LEFT;
@@ -155,7 +169,8 @@ package com.kitschpatrol.futil.blocks {
 			tempTextField.antiAliasType = AntiAliasType.ADVANCED;
 
 			//tempTextField.mouseEnabled = false;			
-			//tempTextField.gridFitType = GridFitType.PIXEL;			
+			//tempTextField.gridFitType = GridFitType.PIXEL;
+			tempTextField.gridFitType = GridFitType.SUBPIXEL; // word wrap fix? http://stackoverflow.com/questions/5793032/as3-textfield-antialiastype-breaks-wordwrap			
 			tempTextField.condenseWhite = true;
 
 			if (forMeasurement) {
@@ -243,6 +258,42 @@ package com.kitschpatrol.futil.blocks {
 						textField.text = textField.text;
 						
 						
+						/*
+						
+						// text flow...
+						
+						
+						if (maximize width...) {
+						
+							// first grow fat
+							// while content < maxWidth, grow horizontally							
+							
+							// then grow tall
+							// while content < maxheight, growVertically							
+						
+						// while content < maxheight, growVertically
+						}
+						else if (maximize height...) {
+							
+							// first grow tall
+							// while content < maxheight, growVertically							
+							
+							
+							// then grow fat						
+							// while content < maxWidth, grow horizontally								
+						}
+						
+						// then overflow if there
+						
+						textField.
+						
+						
+						// then resize, if needed
+						*/
+						
+						
+						
+						
 						if (_growthMode == MAXIMIZE_HEIGHT) {
 							// normal preparations
 							textField.width = _maxWidth - _padding.horizontal;
@@ -299,7 +350,7 @@ package com.kitschpatrol.futil.blocks {
 //									textField.text = textField.text;
 //								}								
 //								
-
+								// todo overflow out the bottom
 							}
 							
 							
@@ -308,9 +359,25 @@ package com.kitschpatrol.futil.blocks {
 							textField.text = textField.text;							
 						}
 						else if (_growthMode == MAXIMIZE_WIDTH) {
+							
+							var maxLines:int = int((_maxHeight - _padding.vertical) / (_leading + _textSizePixels)); // take the floor
+							maxLines = Math.max(maxLines, 1); // at least 1
+							trace("Max lines: " + maxLines);
+							
 							textField.width = _maxWidth - _padding.horizontal;
 							textField.text = textField.text;
-							textField.width = Math2.clamp(getMaxLineWidth() + 6, _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal); // TODO FIGURE OUT THE +6 BUSINESS...
+							textField.width = Math2.clamp(getMaxLineWidth(), _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal);
+							textField.text = textField.text;						
+							
+							
+							trace("num lines: " + textField.numLines);
+							// todo overflow off the right							
+							while (textField.numLines > maxLines) {
+								textField.width++;
+								textField.text = textField.text;								
+							}
+							
+							
 						}	
 						
 						// rescale
@@ -345,6 +412,24 @@ package com.kitschpatrol.futil.blocks {
 					var elapsed:int = getTimer() - start;
 					// trace("Changing bounds took " + elapsed + " ms");
 				}
+				
+				
+				// Update the mask if needed
+				// TODO finish this!
+				if (_maxSizeBehavior == BlockText.MAX_SIZE_RESIZES) {
+					trace("content width: " + contentWidth);
+					trace("background width: " + background.width);					
+					
+					if(contentWidth > background.width) {
+						
+						// we're oversize!
+						trace("fat");
+					}
+					else if (contentHeight > background.height) {
+						trace("tall");						
+					}
+				}				
+				
 				
 				super.update(contentWidth, contentHeight); // TODO pass bounds vector instead?
 			}			

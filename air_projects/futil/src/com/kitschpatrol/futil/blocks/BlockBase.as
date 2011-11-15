@@ -51,9 +51,8 @@ package com.kitschpatrol.futil.blocks {
 		// Size (padding is additive)
 		internal var _maxSizeBehavior:String; // TODO scope to private?, implement!
 		public static const MAX_SIZE_CLIPS:String = "maxSizeClips"; // masks off
-		public static const MAX_SIZE_TRUNCATES:String = "maxSizeTruncates"; // ellipses or whatever
 		public static const MAX_SIZE_OVERFLOWS:String = "maxSizeOverflows"; // nothing happen, text just sticks out
-		public static const MAX_SIZE_BREAKS_LINE:String = "maxSizeBreaksLine"; // nothing happen, text just sticks out			
+					
 		
 		internal var _minWidth:Number;
 		internal var _minHeight:Number;
@@ -406,8 +405,6 @@ package com.kitschpatrol.futil.blocks {
 		// TODO, implement, then tween plugin for this?
 		public function get maxSizeBehavior():String { return _maxSizeBehavior; }
 		public function set maxSizeBehavior(behavior:String):void {
-			
-			
 			_maxSizeBehavior = behavior;
 			
 			if (_maxSizeBehavior == MAX_SIZE_CLIPS) {
@@ -415,10 +412,9 @@ package com.kitschpatrol.futil.blocks {
 				clippingMask = GraphicsUtil.shapeFromSize(10, 10);
 				super.addChild(clippingMask);
 				content.mask = clippingMask;
-				
 			}
 			else {
-				removeChild(clippingMask);
+				if (clippingMask != null && super.contains(clippingMask)) super.removeChild(clippingMask);
 			}
 			
 			update();

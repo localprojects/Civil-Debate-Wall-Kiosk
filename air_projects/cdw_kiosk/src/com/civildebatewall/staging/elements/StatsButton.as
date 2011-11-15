@@ -11,20 +11,20 @@ package com.civildebatewall.staging.elements {
 	import flash.display.CapsStyle;
 	import flash.display.JointStyle;
 	import flash.display.Shape;
+	import flash.events.Event;
 	
 	public class StatsButton extends BlockBase {
 		
 		private var yesRing:Shape;
 		private var noRing:Shape;
 		private var label:Bitmap;
+		private var degrees:Number; // how much ring to draw
 		
 		public function StatsButton(params:Object=null) {
 			super(params);
 		
 			noRing = new Shape();
-			noRing.graphics.beginFill(Assets.COLOR_NO_LIGHT);
-			noRing.graphics.drawCircle(0, 0, 71);
-			noRing.graphics.endFill();
+
 			noRing.x = 71;
 			noRing.y = 71;
 			addChild(noRing);
@@ -41,13 +41,37 @@ package com.civildebatewall.staging.elements {
 			addChild(label);
 			
 			setStats(0.5);
+			
+			onButtonDown.push(onDown);
+			
+			// todo get stats from data changes
+		}
+		
+		private function onDown(e:Event):void {
+			drawDown();
 		}
 		
 		
 		private function setStats(normalizedYes:Number):void {
-			var degrees:Number = Math2.map(normalizedYes, 0, 1, 0, 360);
+			degrees = Math2.map(normalizedYes, 0, 1, 0, 360);
+			draw();
+		}
+		
+		private function draw():void {
+			noRing.graphics.clear();
+			noRing.graphics.beginFill(Assets.COLOR_NO_LIGHT);
+			noRing.graphics.drawCircle(0, 0, 71);
+			noRing.graphics.endFill();			
 			drawSegment(yesRing, -90, degrees - 90, 71, 0, 0, 2, Assets.COLOR_YES_LIGHT);			
 		}
+		
+		private function drawDown():void {
+			noRing.graphics.clear();
+			noRing.graphics.beginFill(Assets.COLOR_NO_DARK);
+			noRing.graphics.drawCircle(0, 0, 71);
+			noRing.graphics.endFill();			
+			drawSegment(yesRing, -90, degrees - 90, 71, 0, 0, 2, Assets.COLOR_YES_DARK);			
+		}		
 		
 		
 		private function drawSegment(holder:Shape, startAngle:Number, endAngle:Number, segmentRadius:Number, xpos:Number, ypos:Number,  step:Number, fillColor:Number):void {
