@@ -8,12 +8,14 @@ package {
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.tweenPlugins.*;
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.text.Font;
+	import flash.text.TextField;
 	
 	import flashx.textLayout.formats.BackgroundColor;
 	import flashx.textLayout.formats.TextAlign;
@@ -22,7 +24,7 @@ package {
 	
 	
 	
-	[SWF(width="1024", height="768", frameRate="60")]	
+	[SWF(width="1524", height="768", frameRate="60")]	
 	public class FutilDemo extends Sprite {
 
 		private var gui:SimpleGUI;
@@ -33,6 +35,8 @@ package {
 		
 		public function FutilDemo() {
 			TweenPlugin.activate([FutilBlockPlugin, NamedYPlugin]);			
+			
+			
 			
 			
 			//Font.registerFont(Assets.FontLight);
@@ -49,17 +53,20 @@ package {
 			testBlock = new BlockText({
 				text: "Do you feel our public education provides our children with a thorough education?",
 //				backgroundColor: 0x322f31,
-//				textSize: 274,
+				textSize: 20,
 //				leading: 196,
 				textColor: 0xffffff,
-				minWidth: 500,
+				minWidth: 0,
+				maxWidth: 2025,
 				alignmentPoint: Alignment.CENTER,
-				height: 500,
-				growthMode: BlockText.MAXIMIZE_HEIGHT,
-				paddingLeft: 50,
-				paddingRight: 50,
+				height: 20,
+				growthMode: BlockText.MAXIMIZE_WIDTH,
+				maxSizeBehavior: BlockText.MAX_SIZE_RESIZES,
 				visible: true
-			});			
+			});		
+			
+			testBlock.x = 200;
+			testBlock.y = 250;
 			
 			
 			//testBlock.onInput.push(onInput);
@@ -94,7 +101,7 @@ package {
 			gui.addSlider(targetObject + ".y", -stage.stageHeight * 2, stage.stageHeight * 2, {label: "Y"});			
 			gui.addSlider(targetObject + ".minWidth", 0, stage.stageWidth, {label: "Min Width"});
 			gui.addSlider(targetObject + ".minHeight", 0, stage.stageHeight, {label: "Min Height"});
-			gui.addSlider(targetObject + ".maxWidth", 0, stage.stageWidth, {label: "Max Width"});
+			gui.addSlider(targetObject + ".maxWidth", 0, 4000, {label: "Max Width"});
 			gui.addSlider(targetObject + ".maxHeight", 0, stage.stageHeight, {label: "Max Height"});
 			gui.addSlider(targetObject + ".paddingTop", 0, 200, {label: "Padding Top"});
 			gui.addSlider(targetObject + ".paddingRight", 0, 200, {label: "Padding Right"});
