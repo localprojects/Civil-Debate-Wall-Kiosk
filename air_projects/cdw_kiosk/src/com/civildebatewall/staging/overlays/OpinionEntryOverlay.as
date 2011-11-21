@@ -1,4 +1,4 @@
-package com.civildebatewall.kiosk {
+package com.civildebatewall.staging.overlays {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.StanceToggle;
@@ -25,6 +25,7 @@ package com.civildebatewall.kiosk {
 	import flash.ui.Mouse;
 	
 	import flashx.textLayout.formats.TextAlign;
+	import com.civildebatewall.kiosk.BlockInertialScroll;
 
 	public class OpinionEntryOverlay extends BlockInertialScroll {
 		
@@ -57,7 +58,6 @@ package com.civildebatewall.kiosk {
 				scrollAxis: SCROLL_Y,
 				scrollLimitMode: SCROLL_LIMIT_MANUAL
 			});
-
 			
 			question = new BlockText({
 				paddingTop: 65,
@@ -147,9 +147,7 @@ package com.civildebatewall.kiosk {
 			
 			formContainer.y = question.bottom;
 			addChild(formContainer);
-			
-			
-			
+
 			
 			var errorStyle:Object = {
 				textFont: Assets.FONT_BOLD,

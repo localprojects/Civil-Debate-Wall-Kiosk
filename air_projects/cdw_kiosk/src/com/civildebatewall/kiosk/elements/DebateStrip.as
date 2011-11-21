@@ -3,6 +3,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.civildebatewall.kiosk.ui.*;
+	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
@@ -12,6 +13,9 @@ package com.civildebatewall.kiosk.elements {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.text.engine.Kerning;
+	
+	import flashx.textLayout.elements.BreakElement;
 	
 	
 	public class DebateStrip extends OldBlockBase {
@@ -21,7 +25,8 @@ package com.civildebatewall.kiosk.elements {
 		private var targetThumbnail:ThumbnailButton;		
 		
 		private var leftButton:Sprite;
-		private var rightButton:Sprite;		
+		private var rightButton:Sprite;
+		
 		
 		public function DebateStrip()	{
 			super();
@@ -61,6 +66,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
+			CivilDebateWall.state.addEventListener(State.SORT_CHANGE, onSortChange);			
 		}
 
 
@@ -73,6 +79,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			// Clean up the kids, could do a diff instead...
 			GraphicsUtil.removeChildren(scrollField.scrollSheet);
+			
 			
 			for (var i:uint = 0; i < CivilDebateWall.data.threads.length; i++) {
 				var threadThumbnail:ThumbnailButton = new ThumbnailButton(CivilDebateWall.data.threads[i]);
@@ -91,6 +98,7 @@ package com.civildebatewall.kiosk.elements {
 				threadThumbnail.update();
 				
 				scrollField.scrollSheet.addChild(threadThumbnail);
+				
 			}
 			
 			// update the scroll field limits to acommodate the growing strip...
@@ -130,6 +138,30 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 			scrollToActive();			
+		}
+		
+		
+		
+		private function onSortChange(e:Event):void {
+			
+			// animate the thumbnails into their new position
+			for (var i:int = 0; i < scrollField.scrollSheet.numChildren; i++) {
+				if (scrollField.scrollSheet.getChildAt(i) is ThumbnailButton) {
+					var tempThumb:ThumbnailButton = scrollField.scrollSheet.getChildAt(i) as ThumbnailButton;
+					
+					// figure out new x position
+					var newX:int;
+					for (var j:int = 0; j < CivilDebateWall.data.threads.length; j++) {
+						if (tempThumb.thread.id == CivilDebateWall.data.threads[j].id) {
+							newX = (tempThumb.width - 6) * j;
+							break;
+						}
+					}
+					
+					// tween it over
+					TweenMax.to(tempThumb, 1, {x: newX, ease: Quart.easeInOut});
+				}
+			}
 		}
 		
 		

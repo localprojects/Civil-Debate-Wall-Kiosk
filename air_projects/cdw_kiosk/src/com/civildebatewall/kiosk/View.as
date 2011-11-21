@@ -20,6 +20,9 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.staging.elements.RespondButton;
 	import com.civildebatewall.staging.elements.SortLinks;
 	import com.civildebatewall.staging.elements.StatsButton;
+	import com.civildebatewall.staging.overlays.FlagOverlay;
+	import com.civildebatewall.staging.overlays.InactivityOverlay;
+	import com.civildebatewall.staging.overlays.OpinionEntryOverlay;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -97,23 +100,21 @@ package com.civildebatewall.kiosk {
 		private var retakePhotoButton:RetakePhotoButton;
 		private var editNameOrOpinionButton:EditNameOrOpinionButton;
 		
-		// terms and conditions overlay
+		// terms and conditions overlay (put in overlay?)
 		private var termsAndConditionsButton:TermsAndConditionsButton;
 		private var termsAndConditionsUnderlay:BlockBase;
 		private var termsAndConditionsText:BlockBitmap;
 		private var closeTermsButton:CloseTermsButton;
 		
-		// sms prompt view
+		// sms prompt view // TODO?
 		public var smsOverlay:SMSOverlay; // public for dashboard testing
 
-		// inactivity overlay (Updates TODO!)
-		private var inactivityOverlay:BlockBitmap;
-		private var inactivityTimerBar:ProgressBar;
-		private var inactivityInstructions:BlockLabelBar;
-		private var continueButton:BlockButton;
-		
-		// flag overlay (Updates TODO!)
+		// flag overlay
 		private var flagOverlay:FlagOverlay;
+		
+		// inactivity overlay
+		private var inactivityOverlay:InactivityOverlay;		
+		
 		
 
 		// ================================================================================================================================================
@@ -157,13 +158,13 @@ package com.civildebatewall.kiosk {
 			addChild(flagButton);
 
 			leftArrow = new NavArrow({bitmap: Assets.getLeftCaratBig()});
-			leftArrow.setDefaultTweenIn(1, {x: 39, y: 1002});
-			leftArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1002});
+			leftArrow.setDefaultTweenIn(1, {x: 0, y: 907});
+			leftArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 907});
 			addChild(leftArrow);
 			
 			rightArrow = new NavArrow({bitmap: Assets.getRightCaratBig()});
-			rightArrow.setDefaultTweenIn(1, {x: 1019, y: 1002});
-			rightArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 1002});
+			rightArrow.setDefaultTweenIn(1, {x: 980, y: 907});
+			rightArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 907});
 			addChild(rightArrow);
 			
 			bigButton = new BigButton();
@@ -372,35 +373,18 @@ package com.civildebatewall.kiosk {
 			smsOverlay.setDefaultTweenOut(1, {});
 			addChild(smsOverlay);
 			
-			
-			// inactivity overlay (Updates TODO!)
-//			inactivityOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
-//			inactivityOverlay.setDefaultTweenIn(1, {alpha: 0.85});
-//			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});
-//			addChild(inactivityOverlay);
-//			
-//			inactivityTimerBar = new ProgressBar(735, 2, 20);		
-//			inactivityTimerBar.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1002});
-//			inactivityTimerBar.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
-//			addChild(inactivityTimerBar);
-//			
-//			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
-//			inactivityInstructions.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1018});
-//			inactivityInstructions.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
-//			addChild(inactivityInstructions);
-//			
-//			continueButton = new BlockButton(735, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
-//			continueButton.setDownColor(Assets.COLOR_GRAY_75);
-//			continueButton.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1098});
-//			continueButton.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.OFF_LEFT_EDGE, y: 1098});					
-//			addChild(continueButton);
-			
-			
+
 			// flag overlay
 			flagOverlay = new FlagOverlay();
 			flagOverlay.setDefaultTweenIn(0, {}); // internal
 			flagOverlay.setDefaultTweenOut(1, {});  // internal
 			addChild(flagOverlay);
+			
+			// Inactivity Overlay
+			inactivityOverlay = new InactivityOverlay();
+			inactivityOverlay.setDefaultTweenIn(0, {}); // internal
+			inactivityOverlay.setDefaultTweenOut(1, {});  // internal
+			addChild(inactivityOverlay);			
 
 			// Watch state for changes
 			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
@@ -474,6 +458,9 @@ package com.civildebatewall.kiosk {
 			bigButton.tweenIn();
 			debateStrip.tweenIn();
 			sortLinks.tweenIn();
+			
+			
+			//inactivityOverlayView();
 			
 			
 			// override any tween outs here (flagging them as active means they won't get tweened out automatically)
@@ -734,16 +721,9 @@ package com.civildebatewall.kiosk {
 			
 			tweenOutInactive();
 		}
-		
-		// ================================================================================================================================================		
-		
-		
-			// ==============================================================================================================
-			// Old views ====================================================================================================
-			// ==============================================================================================================
-		
-		
 
+		// ================================================================================================================================================
+		
 		public function flagOverlayView(...args):void {
 			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
 			CivilDebateWall.state.activeView = flagOverlayView;
@@ -756,13 +736,28 @@ package com.civildebatewall.kiosk {
 			flagOverlay.tweenOut();	
 		}
 		
+		
+		// ================================================================================================================================================		
+
+		
+		public function inactivityOverlayView(...args):void {
+			CivilDebateWall.inactivityTimer.disarm();			
+			inactivityOverlay.tweenIn();
+		}
+		
+		public function removeInactivityOverlayView(...args):void {
+			inactivityOverlay.tweenOut();
+			// TODO rearm timer?
+		}
+		
 
 		
 		
+		// ==============================================================================================================
+		// Old views ====================================================================================================
+		// ==============================================================================================================
 		
-
-		
-
+				
 	
 		
 		// =========================================================================
@@ -845,35 +840,9 @@ package com.civildebatewall.kiosk {
 		// =========================================================================		
 		
 		
-		public function inactivityOverlayView(...args):void {
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = inactivityOverlayView;			
-			// mutations			
-			CivilDebateWall.inactivityTimer.disarm();
-			
-			// behaviors
-			continueButton.setOnClick(onContinue);
-			//inactivityTimerBar.setOnComplete(homeView);
-			
-			// blocks
-			inactivityOverlay.tweenIn();
-			inactivityTimerBar.tweenIn();			
-			inactivityInstructions.tweenIn();
-			continueButton.tweenIn();
-		}
+
 		
-		
-		private function onContinue(e:Event):void {
-			CivilDebateWall.state.activeView = CivilDebateWall.state.lastView ;
-			CivilDebateWall.state.lastView = inactivityOverlayView; // revert since it's an overlay
-			
-			CivilDebateWall.inactivityTimer.arm();
-			inactivityOverlay.tweenOut();
-			inactivityTimerBar.tweenOut();
-			inactivityInstructions.tweenOut();
-			continueButton.tweenOut();			
-		}
-		
+
 		
 		// =========================================================================
 		
