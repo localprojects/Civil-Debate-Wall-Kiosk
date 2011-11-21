@@ -113,11 +113,8 @@ package com.civildebatewall.kiosk {
 		private var continueButton:BlockButton;
 		
 		// flag overlay (Updates TODO!)
-		private var flagOverlay:BlockBitmap;
-		private var flagTimerBar:ProgressBar;
-		private var flagInstructions:BlockLabelBar;
-		private var flagYesButton:BlockButton;
-		private var flagNoButton:BlockButton;
+		private var flagOverlay:FlagOverlay;
+		
 
 		// ================================================================================================================================================
 
@@ -142,10 +139,7 @@ package com.civildebatewall.kiosk {
 			questionHeaderHome.setDefaultTweenOut(1, { alpha: 0});
 			addChild(questionHeaderHome);			
 			
-			opinion = new OpinionText();	
-			opinion.setDefaultTweenIn(1, {x: 100, y: 1296});
-			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1296});
-			addChild(opinion);
+			// opinion added in "comment thread view" section for draw order
 			
 			likeButton = new HomeLikeButton();
 			likeButton.setDefaultTweenIn(1, {x: 100, y: 1341});
@@ -207,7 +201,12 @@ package com.civildebatewall.kiosk {
 			opinionUnderlay = new BlockBase({backgroundColor: 0xffffff, backgroundAlpha: 0.85, width: 1024}); // height determined by opinion
 			opinionUnderlay.setDefaultTweenIn(1, {x: 28, y: 264, alpha: 1});
 			opinionUnderlay.setDefaultTweenOut(1, {x: 28, y: 264, alpha: 0});
-			addChild(opinionUnderlay);			
+			addChild(opinionUnderlay);
+			
+			opinion = new OpinionText();	
+			opinion.setDefaultTweenIn(1, {x: 100, y: 1296});
+			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1296});
+			addChild(opinion);			
 			
 			debateThisButton = new BalloonButton();
 			debateThisButton.setDefaultTweenIn(1, {x: 919});
@@ -375,55 +374,33 @@ package com.civildebatewall.kiosk {
 			
 			
 			// inactivity overlay (Updates TODO!)
-			inactivityOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
-			inactivityOverlay.setDefaultTweenIn(1, {alpha: 0.85});
-			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});
-			addChild(inactivityOverlay);
+//			inactivityOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
+//			inactivityOverlay.setDefaultTweenIn(1, {alpha: 0.85});
+//			inactivityOverlay.setDefaultTweenOut(1, {alpha: 0});
+//			addChild(inactivityOverlay);
+//			
+//			inactivityTimerBar = new ProgressBar(735, 2, 20);		
+//			inactivityTimerBar.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1002});
+//			inactivityTimerBar.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
+//			addChild(inactivityTimerBar);
+//			
+//			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
+//			inactivityInstructions.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1018});
+//			inactivityInstructions.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
+//			addChild(inactivityInstructions);
+//			
+//			continueButton = new BlockButton(735, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
+//			continueButton.setDownColor(Assets.COLOR_GRAY_75);
+//			continueButton.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1098});
+//			continueButton.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.OFF_LEFT_EDGE, y: 1098});					
+//			addChild(continueButton);
 			
-			inactivityTimerBar = new ProgressBar(735, 2, 20);		
-			inactivityTimerBar.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1002});
-			inactivityTimerBar.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
-			addChild(inactivityTimerBar);
 			
-			inactivityInstructions = new BlockLabelBar('ARE YOU STILL THERE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
-			inactivityInstructions.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1018});
-			inactivityInstructions.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
-			addChild(inactivityInstructions);
-			
-			continueButton = new BlockButton(735, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
-			continueButton.setDownColor(Assets.COLOR_GRAY_75);
-			continueButton.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1098});
-			continueButton.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.OFF_LEFT_EDGE, y: 1098});					
-			addChild(continueButton);
-			
-			
-			// flag overlay (Updates TODO!)
-			flagOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
-			flagOverlay.setDefaultTweenIn(1, {alpha: 0.85});
-			flagOverlay.setDefaultTweenOut(1, {alpha: 0});
+			// flag overlay
+			flagOverlay = new FlagOverlay();
+			flagOverlay.setDefaultTweenIn(0, {}); // internal
+			flagOverlay.setDefaultTweenOut(1, {});  // internal
 			addChild(flagOverlay);
-			
-			flagTimerBar = new ProgressBar(735, 2, 20);		
-			flagTimerBar.setDefaultTweenIn(1, {alpha: 1, x: OldBlockBase.CENTER, y: 1002});
-			flagTimerBar.setDefaultTweenOut(1, {alpha: 1, x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
-			addChild(flagTimerBar);
-			
-			flagInstructions = new BlockLabelBar('FLAG AS INAPPROPRIATE ?', 23, 0xffffff, 735, 63, Assets.COLOR_GRAY_75, Assets.FONT_HEAVY);
-			flagInstructions.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: 1018});
-			flagInstructions.setDefaultTweenOut(1, {x: OldBlockBase.CENTER, y: OldBlockBase.OFF_TOP_EDGE});			
-			addChild(flagInstructions);
-			
-			flagYesButton = new BlockButton(360, 120, Assets.COLOR_GRAY_50, 'YES!', 92);
-			flagYesButton.setDownColor(Assets.COLOR_GRAY_75);
-			flagYesButton.setDefaultTweenIn(1, {x: 173, y: 1098});
-			flagYesButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: 1098});					
-			addChild(flagYesButton);
-			
-			flagNoButton = new BlockButton(360, 120, Assets.COLOR_GRAY_50, 'NO!', 92);
-			flagNoButton.setDownColor(Assets.COLOR_GRAY_75);
-			flagNoButton.setDefaultTweenIn(1, {x: 548, y: 1098});
-			flagNoButton.setDefaultTweenOut(1, {x: OldBlockBase.OFF_RIGHT_EDGE, y: 1098});					
-			addChild(flagNoButton);			
 
 			// Watch state for changes
 			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
@@ -770,62 +747,16 @@ package com.civildebatewall.kiosk {
 		public function flagOverlayView(...args):void {
 			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
 			CivilDebateWall.state.activeView = flagOverlayView;
-			
-			// mutations			
-			CivilDebateWall.inactivityTimer.disarm();
-			flagInstructions.setText("FLAG AS INAPPROPRIATE ?");			
-			flagYesButton.enable();
-			flagYesButton.showOutline(true, true);
-			flagYesButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);
-						
-			flagNoButton.disable();
-			flagNoButton.showOutline(true, true);
-			flagNoButton.setBackgroundColor(Assets.COLOR_GRAY_50, true);
-			
-			// behaviors
-			flagYesButton.setOnClick(incrementFlags);
-			flagNoButton.setOnClick(removeFlagOverlayView);			
-			flagTimerBar.setOnComplete(removeFlagOverlayView);
-			
-			// blocks
-			flagOverlay.tweenIn();
-			flagTimerBar.tweenIn();			
-			flagInstructions.tweenIn();
-			flagYesButton.tweenIn();
-			flagNoButton.tweenIn();			
+			flagOverlay.tweenIn();		
 		}
 		
-		private function removeFlagOverlayView(...args):void {
+		public function removeFlagOverlayView(...args):void {
 			CivilDebateWall.state.activeView = CivilDebateWall.state.lastView; // revert the view, since it was just an overlay
 			CivilDebateWall.state.lastView = flagOverlayView;
-						
-			flagOverlay.tweenOut();
-			flagTimerBar.tweenOut();			
-			flagInstructions.tweenOut();
-			flagYesButton.tweenOut();
-			flagNoButton.tweenOut();			
+			flagOverlay.tweenOut();	
 		}
 		
-		private function incrementFlags(e:Event):void {
-			// stop the bar
-			flagInstructions.setText('FLAGGED FOR REVIEW. WE WILL LOOK INTO IT.');
-			flagTimerBar.pause();
-			flagTimerBar.tweenOut(-1, {alpha: 0, y: flagTimerBar.y}); // just fade out 
-			
-			// modify it on the server
-			
-			
-			flagYesButton.disable();
-			flagYesButton.showOutline(false);
-			flagYesButton.setBackgroundColor(Assets.COLOR_GRAY_75);
-			
-			flagNoButton.disable();
-			flagNoButton.showOutline(false);
-			
-			// Wait and then go back
-			FunctionUtil.doAfterDelay(removeFlagOverlayView, 2000);
-		}
-				
+
 		
 		
 		
@@ -922,7 +853,7 @@ package com.civildebatewall.kiosk {
 			
 			// behaviors
 			continueButton.setOnClick(onContinue);
-			inactivityTimerBar.setOnComplete(homeView);
+			//inactivityTimerBar.setOnComplete(homeView);
 			
 			// blocks
 			inactivityOverlay.tweenIn();

@@ -16,7 +16,11 @@ package com.civildebatewall.kiosk.elements
 		private var nameTag:BlockText;
 		
 		public function UserOpinionText()	{
-			super();
+			super({
+				registrationPoint: Alignment.BOTTOM_LEFT,
+				width: 880,
+				maxHeight: 1000			
+			});
 			
 			nameTag = new BlockText({
 				textFont: Assets.FONT_BOLD,
@@ -29,7 +33,6 @@ package com.civildebatewall.kiosk.elements
 				paddingLeft: 35,
 				paddingRight: 35,
 				height: 78,
-				registrationPoint: Alignment.BOTTOM_LEFT,
 				visible: true
 			});
 			
@@ -44,7 +47,6 @@ package com.civildebatewall.kiosk.elements
 				paddingRight: 35,
 				paddingBottom: 25,
 				maxHeight: 1000,
-				registrationPoint: Alignment.BOTTOM_LEFT,
 				visible: true
 			});
 			
@@ -67,8 +69,8 @@ package com.civildebatewall.kiosk.elements
 			opinion.backgroundColor = CivilDebateWall.state.userStanceColorLight;
 			opinion.text = Char.LEFT_QUOTE + CivilDebateWall.state.userOpinion + Char.RIGHT_QUOTE;
 			
-			opinion.y = 0;
-			nameTag.y = opinion.y - opinion.height;			
+			opinion.y = opinion.height;
+			nameTag.y = opinion.top - nameTag.height;
 		}
 		
 		

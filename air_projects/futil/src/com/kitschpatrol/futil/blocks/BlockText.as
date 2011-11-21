@@ -15,6 +15,7 @@ package com.kitschpatrol.futil.blocks {
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
+	import flash.text.TextLineMetrics;
 	import flash.utils.getTimer;
 	
 	import flashx.textLayout.formats.Float;
@@ -329,6 +330,7 @@ package com.kitschpatrol.futil.blocks {
 //								}
 							}
 							
+							// WAS WORKING HERE...
 							trace("now we have " + textField.numLines);
 							
 							if (textField.numLines > desiredLines) {
@@ -366,6 +368,9 @@ package com.kitschpatrol.futil.blocks {
 							
 							textField.width = _maxWidth - _padding.horizontal;
 							textField.text = textField.text;
+							
+							trace("max line width:" + getMaxLineWidth());
+							
 							textField.width = Math2.clamp(getMaxLineWidth(), _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal);
 							textField.text = textField.text;						
 							
@@ -437,11 +442,12 @@ package com.kitschpatrol.futil.blocks {
 		
 		
 		private function getMaxLineWidth():Number {
-			var maxLineWidth:Number = 0;
+			var maxLineWidth:Number = 0;			
 			for (var i:int = 0; i < textField.numLines; i++) {
-				maxLineWidth = Math.max(maxLineWidth, textField.getLineMetrics(i).width);
+				// add 4 for the 2 pixel gutter on each side.
+				maxLineWidth = Math.max(maxLineWidth, Math.ceil(textField.getLineMetrics(i).width + 4));
 			}
-			return maxLineWidth;
+			return Math.ceil(maxLineWidth);
 		}
 
 		

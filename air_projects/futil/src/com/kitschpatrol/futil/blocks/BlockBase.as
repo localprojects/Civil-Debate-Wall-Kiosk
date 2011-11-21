@@ -808,6 +808,30 @@ package com.kitschpatrol.futil.blocks {
 			
 			TweenMax.to(this, duration, params);
 			active = true; // TODO WHY WAS THIS FALSE?
-		}			
+		}
+		
+		
+		// to do, call these automatically?
+//		public function markAllInactive():void {
+//			// marks all FIRST LEVEL blocks as inactive
+//			for (var i:int = 0; i < this.numChildren; i++) {				
+//				if (this.getChildAt(i) is BlockBase) {				
+//					(this.getChildAt(i) as BlockBase).active = false;
+//				}
+//			}
+//		}
+//		
+//		public function tweenOutInactive(instant:Boolean = false):void {	
+//			for (var i:int = 0; i < this.numChildren; i++) {
+//				if ((this.getChildAt(i) is BlockBase) && !(this.getChildAt(i) as BlockBase).active) {
+//					if (instant)
+//						(this.getChildAt(i) as BlockBase).tweenOut(0);
+//					else
+//						(this.getChildAt(i) as BlockBase).tweenOut();
+//				}
+//			}		
+//		}		
+		
+		
 	}
 }
