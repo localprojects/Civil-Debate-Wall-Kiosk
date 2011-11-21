@@ -226,7 +226,12 @@ package com.civildebatewall.data {
 			
 
 			// now sort by date
-			threads.sortOn('created', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?
+			
+			// TODO go back to sorting based on state?
+			CivilDebateWall.state.setSort(CivilDebateWall.state.sortMode);
+			
+			
+			//threads.sortOn('created', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?
 			//posts.sortOn('created', Array.DESCENDING); // newest first			
 				
 			// Updated!

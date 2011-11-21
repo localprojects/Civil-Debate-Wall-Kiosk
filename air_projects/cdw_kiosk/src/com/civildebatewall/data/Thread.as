@@ -70,6 +70,7 @@ package com.civildebatewall.data {
 		public function get id():String { return _id;	}
 		public function get posts():Array { return _posts;	}
 		public function get firstPost():Post { return _firstPost;	}
+		public function get firstStance():String { return _firstPost.stance }
 		public function get postCount():uint { return _postCount; }
 		public function get created():Date { return _created; }		
 	}

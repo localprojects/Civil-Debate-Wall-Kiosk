@@ -5,6 +5,7 @@ package com.civildebatewall.staging.elements {
 	import com.civildebatewall.data.Data;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
+	import com.kitschpatrol.futil.constants.Alignment;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -18,6 +19,12 @@ package com.civildebatewall.staging.elements {
 			
 			onButtonDown.push(down);
 			onButtonUp.push(up);
+			
+			width = 100;
+			height = 152;	
+			alignmentPoint = Alignment.CENTER;
+			backgroundAlpha = 0;
+			
 
 			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
 		}

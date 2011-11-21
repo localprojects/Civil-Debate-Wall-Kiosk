@@ -10,6 +10,7 @@ package com.civildebatewall.staging.elements {
 	public class LinkButton extends BlockText {
 
 		private var underline:Shape;
+		public var value:int;
 		
 		public function LinkButton(params:Object=null) {
 			

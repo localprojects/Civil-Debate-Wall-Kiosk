@@ -3,7 +3,6 @@ package com.civildebatewall {
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.TextMessage;
 	import com.civildebatewall.data.Thread;
-	import com.civildebatewall.kiosk.HomeView;
 	import com.civildebatewall.kiosk.Kiosk;
 	
 	import flash.display.Bitmap;
@@ -18,6 +17,13 @@ package com.civildebatewall {
 		public static const VIEW_CHANGE:String = "viewChange";
 		public static const ACTIVE_DEBATE_CHANGE:String = "activeDebateChange";
 		public static const USER_STANCE_CHANGE:String = "userStanceChange";
+		public static const SORT_CHANGE:String = "sortChange";
+		
+		public static const SORT_BY_RECENT:int = 0;
+		public static const SORT_BY_YES:int = 1;
+		public static const SORT_BY_NO:int = 2;
+		public static const SORT_BY_MOST_DEBATED:int = 3;		
+		public var sortMode:int = SORT_BY_RECENT;		
 		
 		public var activeView:Function;
 		public var lastView:Function;
@@ -74,6 +80,41 @@ package com.civildebatewall {
 			CivilDebateWall.data.removeEventListener(Data.DATA_UPDATE_EVENT, onDataPreUpdate);
 						
 		}				
+		
+		
+		public function setSort(sortMode:int):void {
+			this.sortMode = sortMode;
+			
+			// sort the debate list
+			
+			trace("sorting by " + sortMode);
+			
+			switch (sortMode) {
+				case SORT_BY_RECENT:
+					CivilDebateWall.data.threads.sortOn('created', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?					
+					break;
+				
+				case SORT_BY_YES:
+					CivilDebateWall.data.threads.sortOn('firstStance', Array.DESCENDING); // newest first // Is this working?					
+					break;
+				
+				case SORT_BY_NO:
+					CivilDebateWall.data.threads.sortOn('firstStance'); // newest first // Is this working?					
+					break;				
+				
+				case SORT_BY_MOST_DEBATED:
+					CivilDebateWall.data.threads.sortOn('postCount', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?					
+					break;				
+				
+				default:
+					trace("invalid sort type");
+			}
+			
+			
+			this.dispatchEvent(new Event(SORT_CHANGE));
+		}
+		
+		
 		
  
 		public function clearUser():void {

@@ -1,7 +1,8 @@
 package com.civildebatewall.staging.elements {
 	import com.civildebatewall.Assets;
+	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.State;
 	import com.civildebatewall.kiosk.Kiosk;
-	
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
@@ -36,7 +37,9 @@ package com.civildebatewall.staging.elements {
 			sortedText = Assets.getSortedByText();
 			
 			recentText = new LinkButton({
-				text: "Recent"				
+				text: "Recent",
+				value: State.SORT_BY_RECENT
+				
 			});
 			
 			dividerA = new BlockText({
@@ -48,7 +51,8 @@ package com.civildebatewall.staging.elements {
 			});
 			
 			yesText = new LinkButton({
-				text: "Yes"
+				text: "Yes",
+				value: State.SORT_BY_YES
 			});
 			
 			dividerB = new BlockText({
@@ -60,7 +64,8 @@ package com.civildebatewall.staging.elements {
 			});			
 			
 			noText = new LinkButton({
-				text: "No"				
+				text: "No",
+				value: State.SORT_BY_NO				
 			});
 			
 			dividerC = new BlockText({
@@ -72,7 +77,8 @@ package com.civildebatewall.staging.elements {
 			});			
 			
 			mostDebatedText = new LinkButton({
-				text: "Most Debated"				
+				text: "Most Debated",
+				value: State.SORT_BY_MOST_DEBATED				
 			});
 			
 
@@ -148,6 +154,12 @@ package com.civildebatewall.staging.elements {
 				selectedLink.drawMouseUp();
 				clickedLink.drawMouseDown();
 				selectedLink = clickedLink;
+				
+				
+				CivilDebateWall.state.setSort(selectedLink.value)
+				// change the order
+				
+				
 			}
 		}
 		
