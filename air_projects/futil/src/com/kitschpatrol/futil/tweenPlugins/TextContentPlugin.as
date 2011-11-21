@@ -42,6 +42,11 @@ package com.kitschpatrol.futil.tweenPlugins {
 			
 			// put old text  in a new field
 			oldText = target.generateTextField(this.target.text);
+			
+			// set the text field dimensions
+			oldText.width = target.textField.width;
+			oldText.height = target.textField.height;
+			
 
 			// get the starting dimensions
 			oldContentWidth = this.target.contentWidth;

@@ -5,7 +5,7 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.kiosk.elements.BackButton;
 	import com.civildebatewall.kiosk.keyboard.Keyboard;
-	import com.civildebatewall.staging.elements.SubmitButton;
+	import com.civildebatewall.staging.elements.BigGrayButton;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockShape;
@@ -37,7 +37,7 @@ package com.civildebatewall.kiosk {
 		private var opinionField:BlockText;
 		private var stanceToggle:StanceToggle;
 		private var backButton:BackButton;
-		private var submitButton:SubmitButton;
+		private var submitButton:BigGrayButton;
 		private var keyboardContainer:BlockBase;
 		private var keyboard:Keyboard;
 		private var errorMessage:BlockText;
@@ -353,7 +353,7 @@ package com.civildebatewall.kiosk {
 			dragInstructions.y = 872;
 			formContainer.addChild(dragInstructions);
 
-			var submitButton:SubmitButton = new SubmitButton();
+			var submitButton:BigGrayButton = new BigGrayButton();
 			submitButton.x = 560;
 			submitButton.y = 653;
 			submitButton.visible = true;

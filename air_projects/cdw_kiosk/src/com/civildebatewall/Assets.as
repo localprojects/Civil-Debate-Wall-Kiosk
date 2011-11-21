@@ -16,6 +16,10 @@ package com.civildebatewall {
 		public static function getSmsPhoneLabel():Bitmap { return new smsPhoneLabelClass() as Bitmap; };
 		public static const smsPhoneLabel:Bitmap = getSmsPhoneLabel();
 		
+		[Embed(source = '/assets/graphics/progressGradient.png')] private static const progressGradientClass:Class;
+		public static function getProgressGradient():Bitmap { return new progressGradientClass() as Bitmap; };
+		public static const progressGradient:Bitmap = getProgressGradient();
+		
 		[Embed(source = '/assets/graphics/smsSuccessText.png')] private static const smsSuccessTextClass:Class;
 		public static function getSmsSuccessText():Bitmap { return new smsSuccessTextClass() as Bitmap; };
 		public static const smsSuccessText:Bitmap = getSmsSuccessText();

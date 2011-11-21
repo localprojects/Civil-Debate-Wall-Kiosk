@@ -10,10 +10,10 @@ package com.civildebatewall.staging.elements {
 	
 	import flashx.textLayout.formats.TextAlign;
 	
-		public class SubmitButton extends BlockText	{
+		public class BigGrayButton extends BlockText	{
 			
 			
-			public function SubmitButton(params:Object=null) {
+			public function BigGrayButton(params:Object=null) {
 				super({
 					buttonMode: true,
 					textFont: Assets.FONT_BOLD,
@@ -40,6 +40,9 @@ package com.civildebatewall.staging.elements {
 			private function onUp(e:MouseEvent):void {
 				TweenMax.to(this, 0.5, {backgroundColor: 0xffffff, textColor: ColorUtil.gray(77)});
 				// Validation and processing handled in OpinionEntryOverlay
-			}			
+			}
+			
+			
+			
 	}
 }
