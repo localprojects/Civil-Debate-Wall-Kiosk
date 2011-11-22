@@ -1,16 +1,19 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.blocks.OldBlockBase;
+	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Word;
+	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.civildebatewall.kiosk.ui.WordButton;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
+	import flash.display.Shape;
 	import flash.events.*;
 	
-	public class WordCloud extends OldBlockBase {
+	public class WordCloud extends BlockBase {
 		
 		// Events
 		public static const EVENT_WORD_SELECTED:String = "eventWordSelected";
@@ -25,25 +28,24 @@ package com.civildebatewall.kiosk.elements {
 		
 		public function WordCloud()	{
 			super();
-			drawBackground();
+			width = 1022;
+			height = 299;
+			backgroundColor = Assets.COLOR_GRAY_5;
+			
+			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataChange);
 		}
 		
-		
-		private function drawBackground():void {
-			this.graphics.beginFill(Assets.COLOR_GRAY_5);
-			this.graphics.drawRect(0, 0, 1022, 299);
-			this.graphics.endFill();
+		private function onDataChange(e:Event):void {
+			setWords(CivilDebateWall.data.frequentWords);			
 		}
 		
+
 		
 		public function setWords(source:Array):void {
 			row1 = [];
 			row2 = [];
 			row3 = [];
 			row4 = [];					
-			
-			this.graphics.clear();
-			this.drawBackground();
 			
 			// remove existing
 			GraphicsUtil.removeChildren(this);
@@ -98,10 +100,7 @@ package com.civildebatewall.kiosk.elements {
 			for (var p:int = 0; p < numChildren; p++) {
 				wordButtons.push(getChildAt(p));
 			}
-			
-			
-			
-			
+
 			// NOW we have the final list of words, normalize
 			// recalculate color based on new max and min
 			// find limits
@@ -115,9 +114,7 @@ package com.civildebatewall.kiosk.elements {
 			trace("Mapping -5: " + Math2.map(-5, minDifference, maxDifference, 0, 1));
 			trace("Mapping 2: " + Math2.map(2, minDifference, maxDifference, 0, 1));			
 			
-			
-			
-			
+
 			for each (wordButton in wordButtons) {
 				// set the new difference and add listeners
 				wordButton.normalDifference = Math2.map(wordButton.difference, minDifference, maxDifference, 0, 1);
@@ -144,17 +141,21 @@ package com.civildebatewall.kiosk.elements {
 			if (row.length > 0) {
 				// leading box
 				if (row[0].x > 15) {
-					this.graphics.beginFill(Assets.COLOR_GRAY_20);
-					this.graphics.drawRect(0, row[0].y, row[0].x - 15, row[0].height);
-					this.graphics.endFill();
+					var grayBox:Shape = new Shape();
+					grayBox.graphics.beginFill(Assets.COLOR_GRAY_20);
+					grayBox.graphics.drawRect(0, row[0].y, row[0].x - 15, row[0].height);
+					grayBox.graphics.endFill();
+					addChild(grayBox);
 				}
 				
 				// trailing box
 				var lastIndex:int = row.length - 1;
 				if ((row[lastIndex].x + row[lastIndex].width) < (this.width - 15)) {
-					this.graphics.beginFill(Assets.COLOR_GRAY_20);
-					this.graphics.drawRect(row[lastIndex].x + row[lastIndex].width + 15, row[lastIndex].y, this.width - (row[lastIndex].x + row[lastIndex].width) - 15, row[lastIndex].height);
-					this.graphics.endFill();
+					var grayBoxTrailing:Shape = new Shape();					
+					grayBoxTrailing.graphics.beginFill(Assets.COLOR_GRAY_20);
+					grayBoxTrailing.graphics.drawRect(row[lastIndex].x + row[lastIndex].width + 15, row[lastIndex].y, this.width - (row[lastIndex].x + row[lastIndex].width) - 15, row[lastIndex].height);
+					grayBoxTrailing.graphics.endFill();
+					addChild(grayBoxTrailing);
 				}			
 			}
 		}
@@ -213,9 +214,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			for(var i:int = 0; i < row.length; i++) {
 				trace(i + " / " + row.length);
-				
-	
-				
+			
 					if (!this.contains(row[i])) addChild(row[i]);				
 					
 					row[i].x = xAccumulator;

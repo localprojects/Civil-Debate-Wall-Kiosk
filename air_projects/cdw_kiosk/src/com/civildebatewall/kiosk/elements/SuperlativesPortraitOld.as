@@ -15,7 +15,7 @@ package com.civildebatewall.kiosk.elements {
 	import flash.display.Shape;
 	import flash.events.Event;
 	
-	public class SuperlativesPortrait extends OldBlockBase {
+	public class SuperlativesPortraitOld extends OldBlockBase {
 		
 		private var portrait:Portrait;
 		private var theMask:Shape;
@@ -23,7 +23,7 @@ package com.civildebatewall.kiosk.elements {
 		private var nametag:NameTag;
 		private var opinion:BlockParagraph;
 		
-		public function SuperlativesPortrait() {
+		public function SuperlativesPortraitOld() {
 			super();
 			
 			theMask = new Shape();

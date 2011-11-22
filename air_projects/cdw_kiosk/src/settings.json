@@ -23,7 +23,7 @@
 		"startFullScreen": false,
 		"webcamOnly": true,
 		"imagePath": "/Users/Mika/Desktop/CDWImages/",		
-		"serverPath": "http://0.0.0.0:8080"	
+		"serverPath": "http://staging.civildebatewall.com"	
 	}
 	
 }

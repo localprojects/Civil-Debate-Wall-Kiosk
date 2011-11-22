@@ -1,44 +1,61 @@
 package com.civildebatewall.kiosk.ui {
 	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.blocks.BlockLabel;
 	import com.civildebatewall.data.Word;
+	import com.civildebatewall.kiosk.blocks.BlockLabel;
+	import com.kitschpatrol.futil.blocks.BlockText;
+	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import fl.motion.Color;
 	
+	import flashx.textLayout.formats.TextAlign;
 	
-	public class WordButton extends BlockLabel {
+	
+	public class WordButton extends BlockText {
 		public var difference:Number;		
 		public var normalDifference:Number;
 		private var _posts:Array;
-		private var interpolatedColor:uint;
 		public var word:Word; // keep the word reference
 		public var yesCases:Number;
 		public var noCases:Number;		
 		
-		public function WordButton(_word:Word, textSize:Number = 34, textColor:uint=0xffffff, backgroundColor:uint=0x000000, font:String=null, showBackground:Boolean=true)	{
+		public function WordButton(_word:Word)	{
+			super();
+			
+			
 			word = _word;
 			normalDifference = word.normalDifference;
 			_posts = word.posts;
-			font = Assets.FONT_REGULAR;
-			
 			yesCases = word.yesCases;			
 			noCases = word.noCases;			
 
-			super(StringUtil.capitalize(word.word), textSize, textColor, backgroundColor, font, showBackground);
+			// set up the word button
+			height = 57;
+			backgroundRadius = 4;
+			text = StringUtil.capitalize(word.word);
+			textFont = Assets.FONT_BOLD;
+			letterSpacing = -1;	
+			textColor = 0xffffff;
+			textSize = 25;
+			textAlignmentMode = TextAlign.CENTER;
+			paddingTop = 0;
+			paddingRight = 13;
+			paddingBottom = 0;
+			paddingLeft = 13;
+			leading = 25; // make sure we don't wrap
+			backgroundColor = 0x000000;
+			alignmentPoint = Alignment.CENTER;
 			
-			// set background color
-
-			this.setPadding(14, 15, 10, 15);
-			
+			visible = true;
 			updateColor();
 		}
 		
+		// todo normal difference setter?
 		public function updateColor():void {
-			interpolatedColor = BitmapUtil.getPixelAtNormal(Assets.wordCloudGradient, normalDifference, 0);
-			this.setBackgroundColor(interpolatedColor, true);			
+			backgroundColor =	BitmapUtil.getPixelAtNormal(Assets.wordCloudGradient, normalDifference, 0);			
 		}
+		
 		
 	}
 }

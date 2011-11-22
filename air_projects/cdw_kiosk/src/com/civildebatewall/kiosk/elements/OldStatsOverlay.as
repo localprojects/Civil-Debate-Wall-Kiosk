@@ -13,7 +13,9 @@ package com.civildebatewall.kiosk.elements {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	public class StatsOverlay extends OldBlockBase {
+	public class OldStatsOverlay extends OldBlockBase {
+		
+
 		
 		// vote bar
 		private var voteTitleBar:BlockLabelBar;
@@ -34,7 +36,7 @@ package com.civildebatewall.kiosk.elements {
 		private var superlativesTitleBar:BlockLabelBar;
 		private var nextSuperlativeButton:IconButton;
 		private var previousSuperlativeButton:IconButton;
-		private var superlativesPortrait:SuperlativesPortrait;
+		private var superlativesPortrait:SuperlativesPortraitOld;
 		
 		private var mostDebatedList:DebateList;
 		private var mostLikedList:DebateList;
@@ -43,9 +45,12 @@ package com.civildebatewall.kiosk.elements {
 		public var homeButton:BlockButton;		
 		
 		
-		public function StatsOverlay() {
+		public function OldStatsOverlay() {
 			super();
 			init();
+			
+			
+			
 		}
 		
 		
@@ -72,7 +77,6 @@ package com.civildebatewall.kiosk.elements {
 			voteStatBar.setDefaultTweenIn(1, {x: 0, y: 78});
 			voteStatBar.setDefaultTweenOut(1, {x: 0, y: 78});
 			addChild(voteStatBar);
-			
 			
 			// Word Frequency
 			wordTitleBar = new BlockLabelBar('Most Frequently Used Words', 26, 0xffffff, 1022, 63, 0x000000, Assets.FONT_BOLD);
@@ -147,7 +151,7 @@ package com.civildebatewall.kiosk.elements {
 			nextSuperlativeButton.setDefaultTweenOut(1, {alpha:0, x: 719, y: 626});
 			addChild(nextSuperlativeButton);		
 			
-			superlativesPortrait = new SuperlativesPortrait();
+			superlativesPortrait = new SuperlativesPortraitOld();
 			superlativesPortrait.setDefaultTweenIn(1, {x: 0, y: 705});
 			superlativesPortrait.setDefaultTweenOut(1, {x: -superlativesPortrait.width - 50, y: 705});			
 			addChild(superlativesPortrait);
@@ -198,7 +202,7 @@ package com.civildebatewall.kiosk.elements {
 			wordSearchResults.updateSearch(wordCloud.activeWord.word);
 		
 			
-			wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.getText() + '\u2019 used in '  + wordSearchResults.resultCount + StringUtil.plural(' Opinion', wordSearchResults.resultCount));
+			wordCloudResultsTitleBar.setText('\u2018' + wordCloud.activeWord.text + '\u2019 used in '  + wordSearchResults.resultCount + StringUtil.plural(' Opinion', wordSearchResults.resultCount));
 			
 			// update based on active word?			
 			homeButton.setBackgroundColor(CivilDebateWall.state.activeThread.firstPost.stanceColorDark, true);

@@ -81,8 +81,8 @@ package com.civildebatewall {
 		}
 		
 		private function onBarTestSlider(e:Event):void {
-			CivilDebateWall.kiosk.view.statsOverlay.voteStatBar.setLabels(Math.round(barTestSlider.value * 10), Math.round(barTestSlider.value * 100));
-			CivilDebateWall.kiosk.view.statsOverlay.voteStatBar.barPercent = barTestSlider.value;
+			CivilDebateWall.kiosk.view.oldStatsOverlay.voteStatBar.setLabels(Math.round(barTestSlider.value * 10), Math.round(barTestSlider.value * 100));
+			CivilDebateWall.kiosk.view.oldStatsOverlay.voteStatBar.barPercent = barTestSlider.value;
 			
 		}		
 		
