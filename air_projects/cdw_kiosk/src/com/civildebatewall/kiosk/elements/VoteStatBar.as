@@ -1,10 +1,12 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
+	import com.civildebatewall.data.Data;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	
 	
 	public class VoteStatBar extends BlockBase {
@@ -46,9 +48,16 @@ package com.civildebatewall.kiosk.elements {
 			overlay.y = 36;
 			addChild(overlay);
 			
-			barPercent = 50;
+			
 			
 			// TODO update from data
+			
+			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
+		}
+		
+		private function onDataUpdate(e:Event):void {
+			barPercent = CivilDebateWall.data.yesPercent * 100;
+			setLabels(CivilDebateWall.data.stanceTotals.yes, CivilDebateWall.data.stanceTotals.no);
 		}
 		
 		public function get barPercent():Number {

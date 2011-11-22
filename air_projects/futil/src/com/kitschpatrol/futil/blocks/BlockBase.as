@@ -673,6 +673,11 @@ package com.kitschpatrol.futil.blocks {
 			unlock();
 		}
 		
+		public function lock():void {
+			locked = true;
+			executeAll(onButtonLock);			
+		}
+		
 		public function unlock():void {
 			//trace("Button unlocked");
 			locked = false;

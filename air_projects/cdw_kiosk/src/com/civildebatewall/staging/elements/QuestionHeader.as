@@ -69,13 +69,11 @@ package com.civildebatewall.staging.elements {
 				super.update(contentWidth, contentHeight); // TODO pass bounds vector instead?
 				
 				if (showLines && (topLine != null) && (bottomLine != null)) {
-					topLine.y = 30;
-					bottomLine.y = height - 30;
+					topLine.y = height * .1;
+					bottomLine.y = height - (height * .1);
 					topLine.width = background.width * 0.9092592593;
 					bottomLine.width = background.width * 0.9092592593;
 				}
-				
-				
 			}
 		}
 

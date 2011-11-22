@@ -22,6 +22,7 @@ package com.civildebatewall {
 		public static const SUPERLATIVE_POST_CHANGE:String = "superlativePostChange";
 		public static const ON_STATS_VIEW_CHANGE:String = "onStatsViewChange";
 		public static const ON_ACTIVE_POST_CHANGE:String = "onActivePostChange";
+		public static const ON_HIGHLIGHT_WORD_CHANGE:String = "onHighlightWord";
 		
 		// constants
 		// sort types
@@ -56,8 +57,7 @@ package com.civildebatewall {
 		public var activeThreadID:String = '';		
 		public var activePostID:String = '';		
 		
-		
-		
+
 		// stats
 		public var superlativePost:Post = null; // from stats
 		
@@ -70,9 +70,7 @@ package com.civildebatewall {
 			activePost = post;
 			dispatchEvent(new Event(ON_ACTIVE_POST_CHANGE));
 		}
-		
-		
-		
+				
 		
 		// scratch user... TODO wrap this up in the object?
 		public var userStance:String = 'yes';
@@ -86,6 +84,11 @@ package com.civildebatewall {
 		public var textMessage:TextMessage; // the message we're working with
 		public var userStanceText:String = ''; // add exclamation point		
 		public var userRespondingTo:Post; // which post we're debating
+		
+		public function setHighlightWord(word:String):void {
+			highlightWord = word;
+			dispatchEvent(new Event(ON_HIGHLIGHT_WORD_CHANGE));
+		}
 		
 		public var highlightWord:String = null;
 		

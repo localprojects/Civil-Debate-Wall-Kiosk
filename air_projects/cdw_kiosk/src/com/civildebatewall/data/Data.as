@@ -7,6 +7,7 @@ package com.civildebatewall.data {
 	import com.greensock.loading.*;
 	import com.greensock.loading.display.*;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
+	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -35,7 +36,8 @@ package com.civildebatewall.data {
 		public var mostLikedPosts:Array;
 		public var frequentWords:Array;
 		public var likeTotals:Object;
-		public var stanceTotals:Object;		
+		public var stanceTotals:Object;
+		public var yesPercent:Number; // normalized yes / total
 		
 		// sms
 		public var latestTextMessages:Array;
@@ -221,6 +223,12 @@ package com.civildebatewall.data {
 			}			
 			
 			frequentWords.sortOn('total', Array.DESCENDING, Array.NUMERIC);
+			
+			
+			trace("Stance totals: ");
+			ObjectUtil.traceObject(stanceTotals);
+			
+			yesPercent = stanceTotals.yes / (stanceTotals.yes + stanceTotals.no); 
 			
 			// end stats
 			

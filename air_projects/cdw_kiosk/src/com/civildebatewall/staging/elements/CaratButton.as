@@ -13,7 +13,7 @@ package com.civildebatewall.staging.elements
 			buttonMode = true;
 			width = 64;
 			height = 64;
-			backgroundColor = 0xff0000;
+			backgroundAlpha = 0;
 			visible = true;
 			alignmentPoint = Alignment.CENTER;
 

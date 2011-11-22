@@ -32,7 +32,7 @@ package com.civildebatewall.kiosk.elements {
 		private var numberLabel:BlockText;		
 		private var author:BlockText;	
 		private var horizontalRule:BlockBase;
-		private var callout:BlockText;
+		public var callout:BlockText;
 		
 		public function DebateListItem(post:Post, itemIndex:int = 0) {
 			super();			
@@ -79,7 +79,7 @@ package com.civildebatewall.kiosk.elements {
 			author.height = 12;			
 			author.x = 86;
 			author.y = 26;
-			author.text = name + " : " + date + "," + time;
+			author.text = name + " : " + date + ", " + time;
 			author.visible = true;
 			author.backgroundAlpha = 0;
 			addChild(author);

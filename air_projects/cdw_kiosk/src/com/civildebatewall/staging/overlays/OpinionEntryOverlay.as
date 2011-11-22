@@ -221,7 +221,6 @@ package com.civildebatewall.staging.overlays {
 				letterSpacing: -1,
 				textAlignmentMode: TextAlign.RIGHT,
 				registrationPoint: Alignment.TOP_RIGHT,
-				showRegistrationPoint: true,
 				visible: true
 			});
 			nameCharacterCount.x = 560;
@@ -275,7 +274,6 @@ package com.civildebatewall.staging.overlays {
 				letterSpacing: -1,
 				textAlignmentMode: TextAlign.RIGHT,
 				registrationPoint: Alignment.TOP_RIGHT,
-				showRegistrationPoint: true,
 				visible: true
 			});
 			opinionCharacterCount.x = 952;
@@ -301,7 +299,6 @@ package com.civildebatewall.staging.overlays {
 				width: 260,
 				textAlignmentMode: TextAlign.CENTER,
 				alignmentX: 0.5,
-				showRegistrationPoint: true,
 				visible: true
 			});
 			stanceInstructions.x = 732;
@@ -344,7 +341,6 @@ package com.civildebatewall.staging.overlays {
 				width: 260,
 				textAlignmentMode: TextAlign.RIGHT,
 				registrationPoint: Alignment.TOP_RIGHT,
-				showRegistrationPoint: true,
 				visible: true
 			});
 			dragInstructions.x = 938;

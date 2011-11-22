@@ -17,6 +17,7 @@ package com.civildebatewall.kiosk.ui {
 	public class LowerMenuButton extends BlockText	{
 	
 		private var icon:Bitmap;
+		private var lowered:Boolean;
 		
 		public function LowerMenuButton() {
 			super({
@@ -43,6 +44,7 @@ package com.civildebatewall.kiosk.ui {
 			icon.y = 25;	
 			background.addChild(icon);
 			
+			lowered = false;
 			
 		}
 		
@@ -52,12 +54,24 @@ package com.civildebatewall.kiosk.ui {
 		}
 		
 		private function onDown(e:MouseEvent):void {
-			backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDark;
+			TweenMax.to(this, 0, {backgroundColor: CivilDebateWall.state.activeThread.firstPost.stanceColorLight});			
 		}
 		
 		private function onUp(e:MouseEvent):void {
 			TweenMax.to(this, 0.5, {backgroundColor: CivilDebateWall.state.activeThread.firstPost.stanceColorMedium});
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView); // TODO dynamically go back to stats as well?
+			//CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView); // TODO dynamically go back to stats as well?
+			
+			if (!lowered) {
+				lowered = true;
+				TweenMax.to(this, 0.5, {text: "Raise Menu"})
+				CivilDebateWall.kiosk.view.statsOverlay.lowerMenu();
+			}
+			else {
+				lowered = false;
+				TweenMax.to(this, 0.5, {text: "Lower Menu"})
+				CivilDebateWall.kiosk.view.statsOverlay.raiseMenu();					
+			}
+			
 		}			
 	}
 }

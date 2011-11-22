@@ -2,6 +2,8 @@ package com.civildebatewall.staging.elements {
 	import com.bit101.charts.PieChart;
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.data.Data;
+	import com.greensock.TweenMax;
 	import com.greensock.layout.ScaleMode;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -13,9 +15,12 @@ package com.civildebatewall.staging.elements {
 	import flash.display.JointStyle;
 	import flash.display.Shape;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	public class StatsButton extends BlockBase {
 		
+		
+		private var _percent:Number;
 		private var yesRing:Shape;
 		private var noRing:Shape;
 		private var label:Bitmap;
@@ -41,14 +46,37 @@ package com.civildebatewall.staging.elements {
 			label.y = 15;
 			addChild(label);
 			
-			setStats(0.5);
+			//setStats(0.5);
 			
+			_percent = 0;
 			buttonMode = true;
 			
 			onButtonDown.push(onDown);
 			onButtonUp.push(onUp);
 			
+			backgroundAlpha = 0;
+			
 			// todo get stats from data changes
+			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
+		}
+		
+		public function get percent():Number { return _percent; }
+		public function set percent(value:Number):void {
+			_percent = value;
+			setStats(_percent);
+		}
+		
+
+		private function onMove(e:MouseEvent):void {
+			if (this.stage != null) {
+				percent = Math2.map(this.stage.mouseX, 0, 1080, 0, 1);
+			}
+		}
+			
+		
+		private function onDataUpdate(e:Event):void {
+			// why can't tween?
+			percent = CivilDebateWall.data.yesPercent;
 		}
 		
 		private function onDown(e:Event):void {
@@ -57,7 +85,7 @@ package com.civildebatewall.staging.elements {
 		
 		private function onUp(e:Event):void {
 			trace("button up!");
-			
+			draw();
 			CivilDebateWall.kiosk.view.statsView();
 		}
 		
@@ -66,6 +94,8 @@ package com.civildebatewall.staging.elements {
 			degrees = Math2.map(normalizedYes, 0, 1, 0, 360);
 			draw();
 		}
+		
+		//public function set degrees(value:Number
 		
 		private function draw():void {
 			noRing.graphics.clear();

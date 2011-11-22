@@ -36,10 +36,7 @@ package com.civildebatewall {
 			focalLengthSlider.maximum = 3;
 			focalLengthSlider.value = 1;	
 			
-			barTestSlider = new Slider("horizontal", this, 120, 130, onBarTestSlider);
-			barTestSlider.minimum = 0;
-			barTestSlider.maximum = 100;
-			barTestSlider.value = 50;				
+		
 			
 			viewChooser = new ComboBox(this, 5, 140, 'View');
 			viewChooser.addItem('Home');
@@ -80,12 +77,7 @@ package com.civildebatewall {
 			CivilDebateWall.kiosk.view.portraitCamera.setFocalLength(focalLengthSlider.value);
 		}
 		
-		private function onBarTestSlider(e:Event):void {
-			CivilDebateWall.kiosk.view.oldStatsOverlay.voteStatBar.setLabels(Math.round(barTestSlider.value * 10), Math.round(barTestSlider.value * 100));
-			CivilDebateWall.kiosk.view.oldStatsOverlay.voteStatBar.barPercent = barTestSlider.value;
-			
-		}		
-		
+
 		
 		private function onViewSelect(e:Event):void {
 			var selection:String = e.target.selectedItem;

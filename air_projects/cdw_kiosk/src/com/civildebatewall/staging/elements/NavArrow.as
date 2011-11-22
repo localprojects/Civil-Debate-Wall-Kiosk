@@ -21,11 +21,10 @@ package com.civildebatewall.staging.elements {
 			onButtonUp.push(up);
 			
 			width = 100;
-			height = 152;	
+			height = 152;
 			alignmentPoint = Alignment.CENTER;
 			backgroundAlpha = 0;
-			
-
+		
 			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
 		}
 		
