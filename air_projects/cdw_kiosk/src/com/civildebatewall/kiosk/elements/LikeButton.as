@@ -118,7 +118,7 @@ package com.civildebatewall.kiosk.elements {
 		}		
 		
 		private function onDown(e:MouseEvent):void {
-			backgroundColor = _targetPost.stanceColorDark;
+			backgroundColor = _targetPost.stanceColorLight;
 		}
 		
 		private function onLock(e:MouseEvent):void {
@@ -126,11 +126,13 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		private function onUnlock(e:MouseEvent):void {
-			backgroundColor = _targetPost.stanceColorMedium;
+			backgroundColor = _targetPost.stanceColorDark;
 		}
 		
 		private function onUp(e:MouseEvent):void {
 			CivilDebateWall.data.like(_targetPost);
+			
+			backgroundColor = _targetPost.stanceColorDark;			
 			
 			// Thump
 			TweenMax.to(icon, 0.25, {transformAroundCenter:{scaleX: 1.5, scaleY: 1.5}, alpha: 0.75, ease: Back.easeOut, yoyo: true, repeat: 1});

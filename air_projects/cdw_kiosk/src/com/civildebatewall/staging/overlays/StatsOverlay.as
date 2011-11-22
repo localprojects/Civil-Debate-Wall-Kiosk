@@ -1,12 +1,17 @@
 package com.civildebatewall.staging.overlays {
 	import com.civildebatewall.Assets;
+	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.State;
 	import com.civildebatewall.kiosk.elements.DebateList;
 	import com.civildebatewall.kiosk.elements.VoteStatBar;
 	import com.civildebatewall.kiosk.elements.WordCloud;
 	import com.civildebatewall.staging.StatsTitleBarSelector;
 	import com.civildebatewall.staging.SuperlativesPortrait;
 	import com.civildebatewall.staging.elements.StatsTitleBar;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.blocks.BlockBase;
+	import com.kitschpatrol.futil.blocks.BlockShape;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
@@ -18,11 +23,12 @@ package com.civildebatewall.staging.overlays {
 		private var wordCloud:WordCloud;
 		private var searchResultsTitle:StatsTitleBar;
 		private var superlativesTitle:StatsTitleBarSelector;
-		
-		
-		
 		private var superlativesPortrait:SuperlativesPortrait;
-		private var debateList:DebateList;
+		private var debateList:DebateList;		
+		private var filler:BlockShape;
+		
+		
+
 		
 		
 		public function StatsOverlay(params:Object=null) {
@@ -77,24 +83,65 @@ package com.civildebatewall.staging.overlays {
 
 			//CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataChange);
 			superlativesPortrait = new SuperlativesPortrait();
-			superlativesPortrait.setDefaultTweenIn(1, {x: 29, y: 703});
-			superlativesPortrait.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 703});
+			superlativesPortrait.setDefaultTweenIn(1, {x: 29, y: 703, ease: Quart.easeInOut});
+			superlativesPortrait.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 703, ease: Quart.easeInOut});
 			addChild(superlativesPortrait);
 			
 			debateList = new DebateList();
-			debateList.setDefaultTweenIn(1, {x: 546, y: 703});
-			debateList.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 703});
+			debateList.setDefaultTweenIn(1, {x: 546, y: 703, ease: Quart.easeInOut});
+			debateList.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 703, ease: Quart.easeInOut});
 			addChild(debateList);
+
+
+			filler = new BlockShape();
+			filler.x = 29;
+			filler.y = 234;
+			filler.width = 1022;
+			filler.height = 0;
+			filler.backgroundColor = Assets.COLOR_GRAY_5;
+			addChild(filler);
 			
-			superlativesView();
-			
+			// todo create intro sequence?
+			superlativesPortrait.tweenIn();
+			debateList.tweenIn();			
 			// opinions results is just overlay
+			
+			// show search results if they change...
+			
+			
 		}
 		
-		private function superlativesView():void {
-			superlativesPortrait.tweenIn();
-			debateList.tweenIn();
+		private var menuLowerDistance:String = "924"; // string makes it relative
+		private var duration:Number = 0.6;
+		
+		
+		public function lowerMenu():void {
+			TweenMax.to(filler, duration, {height:  924, ease: Quart.easeInOut});
+			TweenMax.to(wordCloudTitle, duration, {y: menuLowerDistance, ease: Quart.easeInOut});			
+			TweenMax.to(wordCloud, duration, {y: menuLowerDistance, ease: Quart.easeInOut});
+			TweenMax.to(searchResultsTitle, duration, {y: menuLowerDistance, alpha: 0, ease: Quart.easeInOut});			
+			TweenMax.to(superlativesTitle, duration, {y: menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
+			TweenMax.to(superlativesPortrait, duration, {y: menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
+			TweenMax.to(debateList, duration, {y: menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
+			
+						
+			
 		}
+		
+		public function raiseMenu():void {
+			TweenMax.to(filler, duration, {height:  0, ease: Quart.easeInOut});			
+			TweenMax.to(wordCloudTitle, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});			
+			TweenMax.to(wordCloud, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});
+			TweenMax.to(searchResultsTitle, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});	
+			TweenMax.to(superlativesTitle, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});
+			TweenMax.to(superlativesPortrait, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});
+			TweenMax.to(debateList, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});	
+		}
+		
+		
+		
+		
+		
 		
 		
 		

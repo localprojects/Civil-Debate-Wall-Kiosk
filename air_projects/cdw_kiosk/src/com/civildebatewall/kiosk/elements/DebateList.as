@@ -7,6 +7,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
+	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -89,6 +90,21 @@ package com.civildebatewall.kiosk.elements {
 			
 			for (var i:int = 0; i < items.length; i++) {
 				var item:DebateListItem = new DebateListItem(items[i], i + 1);
+				
+				
+				// What to call out?
+				switch (CivilDebateWall.state.statsView) {
+					case State.VIEW_MOST_DEBATED:
+						item.callout.text = item.post.thread.postCount + " " + StringUtil.plural("Response", item.post.thread.postCount);
+						break;
+					case State.VIEW_MOST_LIKED:
+						item.callout.text = item.post.likes + " " + StringUtil.plural("Like", item.post.likes);
+						break;
+					default:
+						trace("invalid stats view");
+				}				
+				
+				
 				item.onButtonDown.push(onItemSelected);
 				item.visible = true;
 				item.y = yAccumulator;

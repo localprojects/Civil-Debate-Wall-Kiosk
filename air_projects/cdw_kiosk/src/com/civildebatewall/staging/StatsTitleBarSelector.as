@@ -60,13 +60,13 @@ package com.civildebatewall.staging
 				case State.VIEW_MOST_DEBATED:
 					
 					
-					TweenMax.to(this, 1, {text: "Most Debated Opinions"});
+					TweenMax.to(this, 0.5, {text: "Most Debated Opinions"});
 					leftButton.disable();
 					rightButton.enable();
 					
 					break;
 				case State.VIEW_MOST_LIKED:
-					TweenMax.to(this, 1, {text: "Most Liked Opinions"});
+					TweenMax.to(this, 0.5, {text: "Most Liked Opinions"});
 					rightButton.disable();
 					leftButton.enable();
 					

@@ -48,7 +48,7 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		private function onDown(e:MouseEvent):void {
-			backgroundColor = _targetPost.stanceColorDark;
+			backgroundColor = _targetPost.stanceColorLight;
 		}
 		
 		private function onLock(e:MouseEvent):void {
@@ -56,7 +56,7 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		private function onUnlock(e:MouseEvent):void {
-			backgroundColor = _targetPost.stanceColorMedium;			
+			backgroundColor = _targetPost.stanceColorDark;			
 		}
 		
 		private function onUp(e:MouseEvent):void {
@@ -64,7 +64,6 @@ package com.civildebatewall.kiosk.elements {
 				
 				// confimation overlay...
 				CivilDebateWall.kiosk.view.flagOverlayView();
-				
 				
 				
 				
@@ -77,7 +76,7 @@ package com.civildebatewall.kiosk.elements {
 		
 		private function onCancel(e:MouseEvent):void {
 			if (_targetPost != null) {
-				backgroundColor = _targetPost.stanceColorMedium;
+				backgroundColor = _targetPost.stanceColorDark;
 			}
 		}		
 		

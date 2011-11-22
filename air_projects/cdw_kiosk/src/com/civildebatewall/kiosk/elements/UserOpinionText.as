@@ -3,6 +3,7 @@ package com.civildebatewall.kiosk.elements
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
+	import com.civildebatewall.staging.BlockTextOpinion;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
@@ -10,7 +11,7 @@ package com.civildebatewall.kiosk.elements
 	
 	import flash.events.Event;
 	
-	public class UserOpinionText extends BlockBase	{
+	public class UserOpinionText extends BlockTextOpinion	{
 		
 		private var opinion:BlockText;
 		private var nameTag:BlockText;
@@ -19,7 +20,8 @@ package com.civildebatewall.kiosk.elements
 			super({
 				registrationPoint: Alignment.BOTTOM_LEFT,
 				width: 880,
-				maxHeight: 1000			
+				maxHeight: 1000,
+				backgroundAlpha: 0
 			});
 			
 			nameTag = new BlockText({

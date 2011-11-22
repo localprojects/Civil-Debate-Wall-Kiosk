@@ -71,7 +71,7 @@ package com.civildebatewall.kiosk {
 		private var threadOverlayBrowser:ThreadBrowser;
 		
 		// stats view
-		public var oldStatsOverlay:OldStatsOverlay;		
+		private var statsUnderlay:BlockBase;		
 		public var statsOverlay:StatsOverlay;
 		private var lowerMenuButton:LowerMenuButton;
 		
@@ -163,7 +163,7 @@ package com.civildebatewall.kiosk {
 
 			leftArrow = new NavArrow({bitmap: Assets.getLeftCaratBig()});
 			leftArrow.setDefaultTweenIn(1, {x: 0, y: 907});
-			leftArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 907});
+			leftArrow.setDefaultTweenOut(1, {x: -100, y: 907});
 			addChild(leftArrow);
 			
 			rightArrow = new NavArrow({bitmap: Assets.getRightCaratBig()});
@@ -201,7 +201,7 @@ package com.civildebatewall.kiosk {
 			questionHeader = new QuestionHeader({width: 1024, height: 250, textSize: 28,	leading: 22});
 			questionHeader.setDefaultTweenIn(1, {x: 28, alpha: 1});
 			questionHeader.setDefaultTweenOut(1, {x: 28, alpha: 0});
-			addChild(questionHeader);
+			// defer adding to stage so it's over the stats underlay
 			
 			opinionUnderlay = new BlockBase({backgroundColor: 0xffffff, backgroundAlpha: 0.85, width: 1024}); // height determined by opinion
 			opinionUnderlay.setDefaultTweenIn(1, {x: 28, y: 264, alpha: 1});
@@ -230,27 +230,26 @@ package com.civildebatewall.kiosk {
 			
 
 			// stats view
-			oldStatsOverlay = new OldStatsOverlay();
-			oldStatsOverlay.setDefaultTweenIn(1, {x: 29, y: 264});
-			oldStatsOverlay.setDefaultTweenOut(1, {x: 29, y: OldBlockBase.OFF_BOTTOM_EDGE});
-			addChild(oldStatsOverlay);
+			statsUnderlay = new BlockBase({width: 1080, height: 1920,	backgroundColor: 0xffffff});
+			statsUnderlay.setDefaultTweenIn(1, {alpha: 1});
+			statsUnderlay.setDefaultTweenOut(1, {alpha: 0});
+			addChild(statsUnderlay);		
 			
 			statsOverlay = new StatsOverlay();
 			statsOverlay.setDefaultTweenIn(1, {x: 0, y: 264});
 			statsOverlay.setDefaultTweenOut(1, {x: 0, y: Alignment.OFF_STAGE_BOTTOM});
-			addChild(statsOverlay);			
+			addChild(statsOverlay);	
+
+			addChild(bigBackButton);	// deferred for draw order over the stats		
+			addChild(questionHeader); // deferred for draw order over the stats			
 			
 			lowerMenuButton = new LowerMenuButton();
 			lowerMenuButton.setDefaultTweenIn(1, {x: 813, y: 1826});
 			lowerMenuButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 1826});	
 			addChild(lowerMenuButton);
 			
-			
-			addChild(bigBackButton);	// deferred for draw order over the stats		
-			
-			
 			// pick debate type view
-			questionHeaderDecision = new QuestionHeader({width: 880, height: 157, textSize: 26, leading: 18});		
+			questionHeaderDecision = new QuestionHeader({width: 880, height: 157, textSize: 26, leading: 18});
 			questionHeaderDecision.setDefaultTweenIn(1, {x: 100, y: 1060});
 			questionHeaderDecision.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1060});
 			addChild(questionHeaderDecision);			
@@ -270,7 +269,7 @@ package com.civildebatewall.kiosk {
 			debateButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 1231});
 			addChild(debateButton);				
 			
-			orText = new BlockBitmap({bitmap: Assets.getOrText()});			
+			orText = new BlockBitmap({bitmap: Assets.getOrText(), backgroundAlpha: 0});			
 			orText.setDefaultTweenIn(1, {x: 524, y: 1294, alpha: 1});
 			orText.setDefaultTweenOut(1, {x: 524, y: 1294, alpha: 0});
 			addChild(orText);			
@@ -563,8 +562,8 @@ package com.civildebatewall.kiosk {
 		
 		public function debateStancePickerView(...args):void {
 			markAllInactive();
-			CivilDebateWall.inactivityTimer.arm();			
-			CivilDebateWall.state.backDestination = CivilDebateWall.state.lastView;
+			CivilDebateWall.inactivityTimer.arm();
+			CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.view.debateTypePickerView;
 			
 			portrait.tweenIn(1, {alpha: 0.25});
 			backButton.tweenIn();
@@ -836,50 +835,20 @@ package com.civildebatewall.kiosk {
 		
 		public function statsView(...args):void {
 			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = oldStatsView;	
+			CivilDebateWall.state.activeView = statsView;	
 			markAllInactive();
 			
 			bigBackButton.width = 770;
 			bigBackButton.tweenIn();
 			
+			statsUnderlay.tweenIn();
+			questionHeader.tweenIn();			
 			lowerMenuButton.tweenIn();
 			statsOverlay.tweenIn();
 			tweenOutInactive();
 		}
 		
 		
-		
-		
-		public function oldStatsView(...args):void {
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = oldStatsView;	
-			markAllInactive();
-			
-			CivilDebateWall.inactivityTimer.disarm();
-			
-			// mutations
-			portrait.setImage(Assets.statsUnderlay);
-			//question.setTextColor(CDW.state.questionTextColor);			
-			
-			// behaviors
-			oldStatsOverlay.homeButton.setOnClick(homeView);
-			
-			// blocks
-			portrait.tweenIn();	
-		
-			questionHeaderHome.tweenIn();
-			oldStatsOverlay.tweenIn();
-
-			tweenOutInactive();			
-		}
-		
-		
-		// =========================================================================		
-		
-		
-
-		
-
 		
 		// =========================================================================
 		

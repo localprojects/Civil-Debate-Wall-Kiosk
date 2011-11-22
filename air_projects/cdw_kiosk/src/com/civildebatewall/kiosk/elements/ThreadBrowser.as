@@ -20,6 +20,7 @@ package com.civildebatewall.kiosk.elements {
 				width: 1024,
 				maxHeight: 100,
 				maxSizeBehavior: MAX_SIZE_CLIPS,
+				scrollLimitMode: SCROLL_LIMIT_MANUAL,
 				scrollAxis: SCROLL_Y
 			});
 			
@@ -30,11 +31,14 @@ package com.civildebatewall.kiosk.elements {
 		
 		private function onDataUpdate(e:Event):void {
 			refreshContent();
+			
 		}
 		
 		override protected function beforeTweenIn():void {
 			refreshContent();
 			super.beforeTweenIn();
+			
+	
 		}		
 			
 		private function refreshContent():void {
@@ -76,7 +80,10 @@ package com.civildebatewall.kiosk.elements {
 			
 
 			// do we need to scroll?
-			//scrollField.scrollAllowed = (scrollField.scrollSheet.height > _maxHeight - 30);			
+			//scrollField.scrollAllowed = (scrollField.scrollSheet.height > _maxHeight - 30);
+			minScrollY = 0;
+			maxScrollY = content.height - height;			
+			
 		}
 		
 	}

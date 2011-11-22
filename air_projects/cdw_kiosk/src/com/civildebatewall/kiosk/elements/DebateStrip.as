@@ -34,6 +34,9 @@ package com.civildebatewall.kiosk.elements {
 			scrollField.x = 50;
 			scrollField.addEventListener(InertialScrollField.EVENT_NOT_CLICK, onNotClick);
 			
+			
+			
+			
 			// background strip
 			scrollField.graphics.beginFill(0xffffff, 1.0);			
 			scrollField.graphics.drawRect(0, 0, 980, 140);
@@ -100,8 +103,15 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 			// update the scroll field limits to acommodate the growing strip...
-			scrollField.xMin = -scrollField.scrollSheet.width + scrollField.width;
-			scrollField.xMax = 0; 	
+			 
+			
+			// TODO scrollField.width is broken...
+//			trace("Sheet width: " + scrollField.scrollSheet.width);
+//			trace("Parent width: " + scrollField.width);	
+			
+			scrollField.xMin = -scrollField.scrollSheet.width + 980;
+			scrollField.xMax = 0;
+			trace("Scroll limits: " + scrollField.xMin + "Scroll limits: " + scrollField.xMax);
 		}
 		
 		

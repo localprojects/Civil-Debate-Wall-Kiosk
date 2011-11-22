@@ -2,6 +2,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
+	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.constants.Char;
@@ -29,31 +30,30 @@ package com.civildebatewall.kiosk.elements {
 			});
 			
 			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
+			// TODO on data change?
 			
 			onButtonDown.push(onDown);
 			onStageUp.push(onUp);
 		}
 		
 		private function onDown(e:MouseEvent):void {
-			// TODO
+			TweenMax.to(this, 0, {backgroundColor: CivilDebateWall.state.activeThread.firstPost.stanceColorLight});
 		}
 		
 		private function onUp(e:MouseEvent):void {
-
-			
-			
-			
-			
+			TweenMax.to(this, 0.3, {backgroundColor: CivilDebateWall.state.activeThread.firstPost.stanceColorDark});
 			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.threadView);
 		}
+		
 		
 	
 		
 
 		private function onActiveDebateChange(e:Event):void {
-			backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorMedium;
 			
-			if (CivilDebateWall.state.activeThread.postCount > 1) {
+			
+			if (CivilDebateWall.state.activeThread.postCount > 2) {
+				backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDark;				
 				// Iteratively truncate the text of the first post to fit in the button
 				var firstCommentText:String = CivilDebateWall.state.activeThread.posts[0].text;
 				var commentLength:int = firstCommentText.length;
@@ -64,14 +64,20 @@ package com.civildebatewall.kiosk.elements {
 					commentLength--;
 					text = wrapText(StringUtil.truncate(firstCommentText, commentLength, Char.ELLIPSES));
 				}
+				
+				unlock();
 			}
 			else {
+				
+				lock();
+				backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled;				
+				
 				text = "No responses yet. Be the first!";				
 			}
 		}		
 		
 		private function wrapText(s:String):String {
-		 return Char.LEFT_QUOTE + s + Char.RIGHT_QUOTE + " + " + CivilDebateWall.state.activeThread.postCount + " responses";
+		 return Char.LEFT_QUOTE + s + Char.RIGHT_QUOTE + " + " + (CivilDebateWall.state.activeThread.postCount - 1) + " responses";
 		}
 		
 	}
