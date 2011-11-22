@@ -1,6 +1,7 @@
 package com.civildebatewall.kiosk {
 	import ObjectDetection.ObjectDetectorEvent;
 	
+	import com.adobe.fileformats.vcard.Phone;
 	import com.adobe.serialization.json.*;
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
@@ -28,6 +29,7 @@ package com.civildebatewall.kiosk {
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
+	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.constants.Alignment;
@@ -38,6 +40,7 @@ package com.civildebatewall.kiosk {
 	
 	import flash.display.*;
 	import flash.events.*;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.*;
 	import flash.ui.Multitouch;
@@ -448,7 +451,45 @@ package com.civildebatewall.kiosk {
 		
 		// ================================================================================================================================================
 		
+		
+
+		
+		
+		
+		private function randomOffScreenLeftPoint():Point {
+			return new Point(Math2.randRange(-100, -200), Math2.randRange(-200, 2220));
+		}
+		
+		private function randomOffScreenRightPoint():Point {
+			// stopped here, working on sms animation, needs real values
+			return new Point(Math2.randRange(-100, -200), Math2.randRange(-200, 2220));
+		}
+		
+		
 		public function homeView(...args):void {
+			
+			
+
+			
+			var numPhones:int = 10;
+			var phones:Vector.<Phone> = new Vector.<Phone>(numPhones);
+			
+			for (int i = 0; i < numPhones; i++) {
+				var tempPhone:Phone = new Phone();
+				
+				
+				
+				
+				phones.push(				
+			}
+			
+			
+			
+			
+			
+		}
+		
+		public function homeViewReal(...args):void {
 			markAllInactive();
 			
 			CivilDebateWall.inactivityTimer.disarm();

@@ -1,12 +1,38 @@
 package com.civildebatewall {
+	
+	
+	
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	
-	import flash.display.*;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.Sprite;
+	
+	
 	
 	public final class Assets	{
 		
 		// Embed code is generated dynamically by embedgen.py
 
+		// Vector
+		[Embed(source = '/assets/graphics/noBubble.swf')] private static const noBubbleClass:Class;
+		public static function getNoBubble():Sprite { return new noBubbleClass() as Sprite; };
+		public static const noBubble:Sprite = getNoBubble();
+		
+		[Embed(source = '/assets/graphics/yesBubble.swf')] private static const yesBubbleClass:Class;
+		public static function getYesBubble():Sprite { return new yesBubbleClass() as Sprite; };
+		public static const yesBubble:Sprite = getYesBubble();
+		
+		[Embed(source = '/assets/graphics/yesPhone.swf')] private static const yesPhoneClass:Class;
+		public static function getYesPhone():Sprite { return new yesPhoneClass() as Sprite; };
+		public static const yesPhone:Sprite = getYesPhone();
+		
+		[Embed(source = '/assets/graphics/noPhone.swf')] private static const noPhoneClass:Class;
+		public static function getNoPhone():Sprite { return new noPhoneClass() as Sprite; };
+		public static const noPhone:Sprite = getNoPhone();
+
+		
+		
 		// Bitmaps
 		[Embed(source = '/assets/graphics/lowerMenuCarat.png')] private static const lowerMenuCaratClass:Class;
 		public static function getLowerMenuCarat():Bitmap { return new lowerMenuCaratClass() as Bitmap; };
