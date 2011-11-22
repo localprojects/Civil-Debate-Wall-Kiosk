@@ -36,6 +36,7 @@
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.NamedXPlugin"/>
     <classEntry path="com.kitschpatrol.futil.blocks.BlockBitmap"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.BlockBitmapPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.BitmapDataPlugin"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

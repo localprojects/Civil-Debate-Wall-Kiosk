@@ -237,6 +237,8 @@ package com.civildebatewall {
 		public static const COLOR_NO_DISABLED:uint = ColorUtil.rgb(140, 41, 4);		
 		public static const COLOR_NO_HIGHLIGHT:uint = COLOR_NO_DISABLED; // TBD		
 		
+		
+		
 		public static const COLOR_GRAY_2:uint = ColorUtil.rgb(248, 248, 248); // ?% K
 		public static const COLOR_GRAY_5:uint = ColorUtil.rgb(241, 242, 242); // 5% K
 		public static const COLOR_GRAY_15:uint = ColorUtil.rgb(220, 221, 222); // 15% K		

@@ -5,6 +5,7 @@ package {
 	import com.greensock.plugins.TweenPlugin;
 	import com.kitschpatrol.futil.*;
 	import com.kitschpatrol.futil.blocks.BlockBase;
+	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.tweenPlugins.*;
@@ -12,6 +13,7 @@ package {
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
+	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.text.Font;
@@ -33,12 +35,13 @@ package {
 		public var tweenDuration:Number;
 		public var targetTween:Boolean;
 		
+		
+		public var startBitmap:BlockBitmap;
+		
 		public function FutilDemo() {
-			TweenPlugin.activate([FutilBlockPlugin, NamedYPlugin]);			
+			TweenPlugin.activate([FutilBlockPlugin, NamedYPlugin, BlockBitmapPlugin]);			
 			
-			
-			
-			
+
 			//Font.registerFont(Assets.FontLight);
 			
 			// Test Object
@@ -81,6 +84,14 @@ package {
 			// GUI
 			// http://blog.soulwire.co.uk/code/actionscript-3/simple-flash-prototype-gui-tool
 			generateGui("testBlock");
+			
+			startBitmap = new BlockBitmap({bitmap: Assets.getEarth()});
+			startBitmap.visible = true;
+			startBitmap.x = this.stage.stageWidth - 250;
+			startBitmap.y = this.stage.stageHeight - 250;	
+			
+			addChild(startBitmap);
+			
 		}
 		
 //		private function onInput(e:Event):void {
@@ -160,10 +171,12 @@ package {
 			], {label: "Font"});			
 			
 			gui.addButton("Random text", {callback: onRandomText});			
+			gui.addButton("Tween image", {callback: onTweenImage});			
 			gui.addColumn("Tween");
 						
 			gui.addToggle("targetTween", {label: "Use TweenMax", callback: onTargetTweenChange});
 			if (targetTween) {
+				
 				gui.addStepper("tweenDuration", 0, 20, {label: "Duration"});
 				gui.addButton("Tween to Target", {callback: tweenToTarget});
 				gui.addComboBox(targetObject + ".ease", [
@@ -211,6 +224,11 @@ package {
 			
 			
 			//testBlock.text = "Bla bla";
+		}
+		
+		private function onTweenImage():void {
+			trace("tweening image");
+			TweenMax.to(startBitmap, 1, {bitmap: Assets.getMoon()});
 		}
 		
 		

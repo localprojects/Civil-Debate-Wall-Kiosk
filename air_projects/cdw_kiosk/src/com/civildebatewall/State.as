@@ -14,16 +14,31 @@ package com.civildebatewall {
 	
 	public class State extends EventDispatcher {
 		
+		// events
 		public static const VIEW_CHANGE:String = "viewChange";
 		public static const ACTIVE_DEBATE_CHANGE:String = "activeDebateChange";
 		public static const USER_STANCE_CHANGE:String = "userStanceChange";
 		public static const SORT_CHANGE:String = "sortChange";
+		public static const SUPERLATIVE_POST_CHANGE:String = "superlativePostChange";
+		public static const ON_STATS_VIEW_CHANGE:String = "onStatsViewChange";
 		
+		// constants
+		// sort types
 		public static const SORT_BY_RECENT:int = 0;
 		public static const SORT_BY_YES:int = 1;
 		public static const SORT_BY_NO:int = 2;
-		public static const SORT_BY_MOST_DEBATED:int = 3;		
-		public var sortMode:int = SORT_BY_RECENT;		
+		public static const SORT_BY_MOST_DEBATED:int = 3;
+		
+		// stat superlative types
+		public static const VIEW_MOST_DEBATED:int = 0;
+		public static const VIEW_MOST_LIKED:int = 1;		
+		public var statsView:int = VIEW_MOST_DEBATED;
+		public function setStatsView(type:int):void {
+			statsView = type;
+			dispatchEvent(new Event(ON_STATS_VIEW_CHANGE));
+		}
+		
+		public var sortMode:int = SORT_BY_RECENT;
 		
 		public var activeView:Function;
 		public var lastView:Function;
@@ -39,6 +54,20 @@ package com.civildebatewall {
 		// for persistence accross reloads
 		public var activeThreadID:String = '';		
 		public var activePostID:String = '';		
+		
+		
+		
+		// stats
+		public var superlativePost:Post = null; // from stats
+		
+		public function setSuperlativePost(post:Post):void {
+			superlativePost = post;
+			dispatchEvent(new Event(SUPERLATIVE_POST_CHANGE));
+		}
+		
+		
+		
+		
 		
 		// scratch user... TODO wrap this up in the object?
 		public var userStance:String = 'yes';
