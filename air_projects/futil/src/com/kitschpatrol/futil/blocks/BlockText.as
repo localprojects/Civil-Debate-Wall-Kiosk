@@ -303,7 +303,7 @@ package com.kitschpatrol.futil.blocks {
 							textField.text = textField.text;
 							
 							var desiredLines:int = int((_leading + (_minHeight - _padding.vertical)) / (_leading + _textSizePixels));
-							trace("Desired lines for " + textField.text + ": " + desiredLines);
+							//trace("Desired lines for " + textField.text + ": " + desiredLines);
 							//desiredLines = 3;
 							
 							// roughly divide the text width to get started
@@ -311,7 +311,7 @@ package com.kitschpatrol.futil.blocks {
 							if (desiredLines == 0) desiredLines = 1; 
 							
 							if (desiredLines > textField.numLines) {
-								trace("Not enough lines");
+								//trace("Not enough lines");
 								
 								// jump to roughly the right width
 								textField.width /= desiredLines / textField.numLines; // TODO better squaring alogithm instead of dividing
@@ -331,10 +331,10 @@ package com.kitschpatrol.futil.blocks {
 							}
 							
 							// WAS WORKING HERE...
-							trace("now we have " + textField.numLines);
+							//trace("now we have " + textField.numLines);
 							
 							if (textField.numLines > desiredLines) {
-								trace("Too many lines");								
+								//trace("Too many lines");								
 								// need to expand width
 								// jump to roughly the right width
 								textField.width /= desiredLines / textField.numLines; // TODO better squaring alogithm instead of dividing
@@ -364,18 +364,18 @@ package com.kitschpatrol.futil.blocks {
 							
 							var maxLines:int = int((_maxHeight - _padding.vertical) / (_leading + _textSizePixels)); // take the floor
 							maxLines = Math.max(maxLines, 1); // at least 1
-							trace("Max lines: " + maxLines);
+							//trace("Max lines: " + maxLines);
 							
 							textField.width = _maxWidth - _padding.horizontal;
 							textField.text = textField.text;
 							
-							trace("max line width:" + getMaxLineWidth());
+							//trace("max line width:" + getMaxLineWidth());
 							
 							textField.width = Math2.clamp(getMaxLineWidth(), _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal);
 							textField.text = textField.text;						
 							
 							
-							trace("num lines: " + textField.numLines);
+							//trace("num lines: " + textField.numLines);
 							// todo overflow off the right							
 							while (textField.numLines > maxLines) {
 								textField.width++;
@@ -422,16 +422,16 @@ package com.kitschpatrol.futil.blocks {
 				// Update the mask if needed
 				// TODO finish this!
 				if (_maxSizeBehavior == BlockText.MAX_SIZE_RESIZES) {
-					trace("content width: " + contentWidth);
-					trace("background width: " + background.width);					
+					//trace("content width: " + contentWidth);
 					
+					//trace("background width: " + background.width);					
 					if(contentWidth > background.width) {
 						
 						// we're oversize!
-						trace("fat");
+						//trace("fat");
 					}
 					else if (contentHeight > background.height) {
-						trace("tall");						
+						//trace("tall");						
 					}
 				}				
 				
@@ -602,7 +602,7 @@ package com.kitschpatrol.futil.blocks {
 			if (_textSizePixels < 0) _textSizePixels = 0; 
 				
 			if (_textSizePixels > maxTextPixelSize) {
-				trace("Drastic measures");
+				//trace("Drastic measures");
 				
 				
 				// Scale from the largest true text field sample we have

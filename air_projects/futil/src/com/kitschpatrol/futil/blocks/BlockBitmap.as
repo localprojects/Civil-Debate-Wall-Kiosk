@@ -5,6 +5,7 @@ package com.kitschpatrol.futil.blocks {
 		
 		protected var b:Bitmap;
 		
+		
 		public function BlockBitmap(params:Object) {
 			super(params);
 			

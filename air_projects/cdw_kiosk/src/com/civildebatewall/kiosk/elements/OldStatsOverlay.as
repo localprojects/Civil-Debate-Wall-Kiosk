@@ -279,7 +279,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			previousSuperlativeButton.setOnClick(null);
 			nextSuperlativeButton.setOnClick(mostLikedView);
-			mostDebatedList.setOnSelected(onMostDebatedSelected);
+			//mostDebatedList.setOnSelected(onMostDebatedSelected);
 			
 			voteTitleBar.tweenIn();
 			voteStatBar.tweenIn();
@@ -324,7 +324,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			previousSuperlativeButton.setOnClick(mostDebatedView);
 			nextSuperlativeButton.setOnClick(null);
-			mostLikedList.setOnSelected(onMostLikedSelected);
+			//mostLikedList.setOnSelected(onMostLikedSelected);
 			
 			voteTitleBar.tweenIn();
 			voteStatBar.tweenIn();

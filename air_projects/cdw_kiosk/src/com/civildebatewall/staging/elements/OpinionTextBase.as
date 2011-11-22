@@ -14,8 +14,8 @@ package com.civildebatewall.staging.elements
 	
 	public class OpinionTextBase extends BlockBase	{
 		
-		private var opinion:BlockText;
-		private var nameTag:BlockText;
+		protected var opinion:BlockText;
+		protected var nameTag:BlockText;
 		
 		public function OpinionTextBase()	{
 			super({

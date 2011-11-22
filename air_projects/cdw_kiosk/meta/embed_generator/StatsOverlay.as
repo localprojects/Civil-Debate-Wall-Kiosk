@@ -1,6 +1,5 @@
 package com.civildebatewall.staging.overlays {
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.kiosk.elements.DebateList;
 	import com.civildebatewall.kiosk.elements.VoteStatBar;
 	import com.civildebatewall.kiosk.elements.WordCloud;
 	import com.civildebatewall.staging.StatsTitleBarSelector;
@@ -19,11 +18,7 @@ package com.civildebatewall.staging.overlays {
 		private var searchResultsTitle:StatsTitleBar;
 		private var superlativesTitle:StatsTitleBarSelector;
 		
-		
-		
-		private var superlativesPortrait:SuperlativesPortrait;
-		private var debateList:DebateList;
-		
+		private var debatedSuperlativesPortrait:SuperlativesPortrait;
 		
 		public function StatsOverlay(params:Object=null) {
 			
@@ -76,47 +71,36 @@ package com.civildebatewall.staging.overlays {
 			addChild(superlativesTitle);
 
 			//CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataChange);
-			superlativesPortrait = new SuperlativesPortrait();
-			superlativesPortrait.setDefaultTweenIn(1, {x: 29, y: 703});
-			superlativesPortrait.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 703});
-			addChild(superlativesPortrait);
 			
-			debateList = new DebateList();
-			debateList.setDefaultTweenIn(1, {x: 546, y: 703});
-			debateList.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 703});
-			addChild(debateList);
 			
-			superlativesView();
+			debatedSuperlativesPortrait = new SuperlativesPortrait();
+			debatedSuperlativesPortrait.setDefaultTweenIn(1, {x: 29, y: 703});
+			debatedSuperlativesPortrait.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 703});
+			addChild(debatedSuperlativesPortrait);
 			
-			// opinions results is just overlay
-		}
-		
-		private function superlativesView():void {
-			superlativesPortrait.tweenIn();
-			debateList.tweenIn();
+			mostDebatedView();
 		}
 		
 		
+		private function mostDebatedView():void {
+			// portrait
+			
+			// list
+			debatedSuperlativesPortrait.tweenIn();
+
+		}
 		
-//		private function mostDebatedView():void {
-//			// portrait
-//			
-//			// list
-//			debatedSuperlativesPortrait.tweenIn();
-//
-//		}
-//		
-//		private function mostLikedView():void {
-//			
-//
-//		}
-//		
-//		private function searchResultsView():void {
-//			
-//			
-//			
-//		}
-//		
+		private function mostLikedView():void {
+			
+
+		}
+		
+		private function searchResultsView():void {
+			
+			
+			
+		}
+		
 		
 			
 		

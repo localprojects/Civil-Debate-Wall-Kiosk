@@ -9,9 +9,9 @@ package com.kitschpatrol.futil.tweenPlugins {
 		
 		public static const API:Number = 1.0;	
 		
+		
 		protected var target:BlockBitmap;
-		private var originalBitmap:Bitmap;
-		private var newBitmap:Bitmap;
+		private var oldBitmap:Bitmap;
 		
 		public function BlockBitmapPlugin()	{
 			super();
@@ -24,18 +24,27 @@ package com.kitschpatrol.futil.tweenPlugins {
 			
 			this.target = target as BlockBitmap;
 			
-			originalBitmap = target.bitmap;
-			newBitmap = value;
+			// what about size?
+			oldBitmap = target.bitmap;
+			target.bitmap = value;
 			
-			var originalBitmapIndex:int = this.target.getChildIndex(target.bitmap);
-			this.target.addChildAt(newBitmap, originalBitmapIndex);
+			var oldBitmapIndex:int = this.target.getChildIndex(oldBitmap);
+			this.target.addChildAt(target.bitmap, oldBitmapIndex);
+
+			onComplete = onTweenComplete;
 			
 			return true;
 		}
 		
 		override public function set changeFactor(n:Number):void {
-			originalBitmap.alpha = 1 - changeFactor;			
+			oldBitmap.alpha = 1 - n;
 		}
+		
+		private function onTweenComplete():void {
+			oldBitmap = null; // gc me
+		}
+		
+		
 		
 	}
 }

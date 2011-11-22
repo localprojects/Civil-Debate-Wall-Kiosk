@@ -3,6 +3,14 @@ package {
 	
 	public final class Assets	{
 		
+		// Test Images
+		[Embed(source = '/assets/graphics/earth.png')] private static const earthClass:Class;
+		public static function getEarth():Bitmap { return new earthClass() as Bitmap; };
+		public static const earth:Bitmap = getEarth();
+		
+		[Embed(source = '/assets/graphics/moon.png')] private static const moonClass:Class;
+		public static function getMoon():Bitmap { return new moonClass() as Bitmap; };
+		public static const moon:Bitmap = getMoon();
 		
 		// Fonts
 		[Embed(source='/assets/fonts/fonts.swf', symbol='RockwellLight')] public static const FontLight:Class;
