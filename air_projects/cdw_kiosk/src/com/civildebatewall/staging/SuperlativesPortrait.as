@@ -5,11 +5,16 @@ package com.civildebatewall.staging
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.elements.Portrait;
+	import com.civildebatewall.staging.elements.BalloonButton;
+	import com.civildebatewall.staging.elements.DebateButton;
+	import com.civildebatewall.staging.elements.GoToDebateButton;
 	import com.civildebatewall.staging.elements.OpinionTextSuperlative;
+	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	
+	import flash.display.Bitmap;
 	import flash.events.Event;
 	
 	public class SuperlativesPortrait extends BlockBase	{
@@ -17,7 +22,8 @@ package com.civildebatewall.staging
 		private var post:Post;
 		private var opinionText:OpinionTextSuperlative;
 		private var portrait:BlockBitmap;
-		
+		private var debateButton:BalloonButton;
+		private var goToDebateButton:GoToDebateButton;
 		
 		public function SuperlativesPortrait(params:Object=null) {
 			super(params);
@@ -26,6 +32,7 @@ package com.civildebatewall.staging
 			width = 504;
 			height = 845;			
 			
+			// TODO fix block bitmap tweening...
 			portrait = new BlockBitmap({bitmap: BitmapUtil.scaleToFill(Assets.getPortraitPlaceholder(), width, height)});
 			portrait.visible = true;
 			addChild(portrait );
@@ -37,7 +44,16 @@ package com.civildebatewall.staging
 			opinionText.y = 469;
 			addChild(opinionText);
 			
-
+			debateButton = new BalloonButton();
+			debateButton.x = 362;
+			debateButton.y = 345;
+			debateButton.visible = true;
+			addChild(debateButton);
+			
+			goToDebateButton = new GoToDebateButton();
+			goToDebateButton.x = 30;
+			goToDebateButton.visible = true;
+			addChild(goToDebateButton);
 			
 			// LISTEN TO STATE
 			CivilDebateWall.state.addEventListener(State.SUPERLATIVE_POST_CHANGE, onPostChange);
@@ -50,11 +66,19 @@ package com.civildebatewall.staging
 		
 		public function setPost(post:Post):void {
 			this.post = post;
-			opinionText.setPost(post);
-
-			// fade in portrait
 			
-			// update details
+			// update details			
+			opinionText.setPost(post);
+			debateButton.targetPost = post;
+			goToDebateButton.targetPost = post;
+			
+			// reposition button
+			goToDebateButton.y = opinionText.bottom + 14;
+			
+			// fade in portrait
+			TweenMax.to(portrait, 1, {bitmap: new Bitmap(BitmapUtil.scaleDataToFill(post.user.photo.bitmapData, width, height), "auto", true)});
+			
+			
 			
 		}
 	}

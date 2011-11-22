@@ -18,7 +18,7 @@ package com.civildebatewall.staging.elements
 			super();
 							
 			// listens
-			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
+			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
 		}
 		
 		
@@ -33,6 +33,13 @@ package com.civildebatewall.staging.elements
 			
 			update();
 		}
+		
+//		override public function setPost(post:Post):void {
+//			super.setPost(post);
+//			
+//			
+//			
+//		}
 		
 		
 	}

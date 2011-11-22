@@ -46,12 +46,12 @@ package com.civildebatewall.kiosk {
 	public class View extends Sprite {
 		// convenience
 		public const stageWidth:Number = 1080;
-		public const stageHeight:Number = 1920;	
+		public const stageHeight:Number = 1920;
 		
 		// home view		
 		private var portrait:Portrait;
 		private var questionHeaderHome:QuestionHeader;		
-		private var opinion:OpinionTextHome;	
+		private var opinionHome:OpinionTextHome;	
 		private var likeButton:HomeLikeButton;
 		private var viewCommentsButton:ViewCommentsButton;
 		private var flagButton:HomeFlagButton;
@@ -208,10 +208,10 @@ package com.civildebatewall.kiosk {
 			opinionUnderlay.setDefaultTweenOut(1, {x: 28, y: 264, alpha: 0});
 			addChild(opinionUnderlay);
 			
-			opinion = new OpinionTextHome();	
-			opinion.setDefaultTweenIn(1, {x: 100, y: 1296});
-			opinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1296});
-			addChild(opinion);			
+			opinionHome = new OpinionTextHome();	
+			opinionHome.setDefaultTweenIn(1, {x: 100, y: 945});
+			opinionHome.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 945});
+			addChild(opinionHome);			
 			
 			debateThisButton = new BalloonButton();
 			debateThisButton.setDefaultTweenIn(1, {x: 919});
@@ -404,7 +404,7 @@ package com.civildebatewall.kiosk {
 			addChild(inactivityOverlay);			
 
 			// Watch state for changes
-			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
+			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
 			CivilDebateWall.state.addEventListener(State.VIEW_CHANGE, onViewChange);
 		}
 		
@@ -462,12 +462,14 @@ package com.civildebatewall.kiosk {
 				CivilDebateWall.state.setView(debateTypePickerView);			
 			});							
 			
+			
+			
 			// blocks
 			portrait.tweenIn();
 			questionHeaderHome.tweenIn();
 			leftArrow.tweenIn();
 			rightArrow.tweenIn();
-			opinion.tweenIn();			
+			opinionHome.tweenIn();			
 			statsButton.tweenIn();
 			likeButton.tweenIn();
 			viewCommentsButton.tweenIn();			
@@ -494,7 +496,7 @@ package com.civildebatewall.kiosk {
 			if (CivilDebateWall.state.nextThread != null) { 	
 				trace('Transition to next.');
 				CivilDebateWall.state.setActiveThread(CivilDebateWall.state.nextThread);
-				CivilDebateWall.kiosk.view.opinion.x += stageWidth;
+				CivilDebateWall.kiosk.view.opinionHome.x += stageWidth;
 			}
 			homeView();
 		}
@@ -503,7 +505,7 @@ package com.civildebatewall.kiosk {
 			if (CivilDebateWall.state.previousThread != null) {
 				trace('Transition to previous.');
 				CivilDebateWall.state.setActiveThread(CivilDebateWall.state.previousThread);
-				CivilDebateWall.kiosk.view.opinion.x -= stageWidth;
+				CivilDebateWall.kiosk.view.opinionHome.x -= stageWidth;
 			}
 			homeView();			
 		}
@@ -518,8 +520,8 @@ package com.civildebatewall.kiosk {
 			debateThisButton.targetPost = CivilDebateWall.state.activeThread.firstPost;
 			
 			// Alignment
-			opinionUnderlay.height = opinion.contentHeight + 233;
-			debateThisButton.y = 327 + opinion.contentHeight;
+			opinionUnderlay.height = opinionHome.contentHeight + 233;
+			debateThisButton.y = 327 + opinionHome.contentHeight;
 			threadOverlayBrowser.maxHeight = 1812 - (opinionUnderlay.y + opinionUnderlay.height + 14);
 
 			bigBackButton.width = 1022;
@@ -527,7 +529,7 @@ package com.civildebatewall.kiosk {
 			portrait.tweenIn();
 			questionHeader.tweenIn();
 			opinionUnderlay.tweenIn();			
-			opinion.tweenIn(1, {y: 327 + opinion.contentHeight});
+			opinionHome.tweenIn(1, {y: 327});
 			threadOverlayBrowser.tweenIn(1, {y: opinionUnderlay.y + opinionUnderlay.height + 14});
 			debateThisButton.tweenIn();
 			bigBackButton.tweenIn();

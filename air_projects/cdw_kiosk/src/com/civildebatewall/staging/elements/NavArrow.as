@@ -26,7 +26,7 @@ package com.civildebatewall.staging.elements {
 			backgroundAlpha = 0;
 			
 
-			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
+			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
 		}
 		
 		override protected function beforeTweenIn():void {

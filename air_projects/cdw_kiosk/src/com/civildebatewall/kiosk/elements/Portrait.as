@@ -38,7 +38,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			targetImage.alpha = 0;
 			
-			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
+			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
 		}
 		
 		public function setImage(i:Bitmap, instant:Boolean = false):void {

@@ -32,7 +32,7 @@ package com.kitschpatrol.futil.blocks {
 		// Hidden children keep things in alignment while presenting
 		// a pure display object container elsewhere.
 		protected var content:Sprite;
-		protected var background:BlockShape; // note special block shape class for background and border
+		public var background:BlockShape; // note special block shape class for background and border
 		private var registrationMarker:Shape;
 
 		internal var _padding:Padding; // Padding, note convenience getters and setters for all, top/bottom, and left/right

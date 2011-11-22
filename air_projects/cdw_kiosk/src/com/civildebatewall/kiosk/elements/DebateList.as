@@ -56,17 +56,27 @@ package com.civildebatewall.kiosk.elements {
 					break;
 				case State.VIEW_MOST_LIKED:
 					
-					var mostLikedFirstPosts:Array = [];
+					var mostLikedPosts:Array = [];
 					for (var j:int = 0; j < CivilDebateWall.data.mostLikedPosts.length; j++) {
-						mostLikedFirstPosts.push(CivilDebateWall.data.mostLikedPosts[j].firstPost);
+						mostLikedPosts.push(CivilDebateWall.data.mostLikedPosts[j]);
 					}
 					
-					setItems(mostLikedFirstPosts);
+					setItems(mostLikedPosts);
 					
 					break;
 				default:
 					trace("invalid stats view");
-			}			
+			}
+			
+			// select the first item
+			
+			
+			
+			
+			
+			
+			
+			
 		}
 		
 		// takes a list of posts
@@ -75,15 +85,33 @@ package com.civildebatewall.kiosk.elements {
 			
 			var yAccumulator:Number = 0;
 			
+			var containsSuperlativePost:Boolean = false;
+			
 			for (var i:int = 0; i < items.length; i++) {
 				var item:DebateListItem = new DebateListItem(items[i], i + 1);
 				item.onButtonDown.push(onItemSelected);
 				item.visible = true;
 				item.y = yAccumulator;
 				addChild(item);
+				
+				if (CivilDebateWall.state.superlativePost != null) {
+					if (item.post.id == CivilDebateWall.state.superlativePost.id) {
+						containsSuperlativePost = true;
+						item.activate();
+					}
+				}
 					
 				yAccumulator += item.height + yPadding;
 			}
+			
+			// nothing is selected? make the first one
+			if (!containsSuperlativePost) {
+				CivilDebateWall.state.setSuperlativePost((getChildAt(0) as DebateListItem).post);
+				item.activate();
+			}
+			
+						
+			
 		}
 		
 		public function deactivateAll():void {

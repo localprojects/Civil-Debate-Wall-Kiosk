@@ -28,7 +28,7 @@ package com.civildebatewall.kiosk.elements {
 				alignmentPoint: Alignment.CENTER
 			});
 			
-			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
+			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
 			
 			onButtonDown.push(onDown);
 			onStageUp.push(onUp);

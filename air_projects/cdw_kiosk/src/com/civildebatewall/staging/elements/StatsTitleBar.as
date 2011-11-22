@@ -25,6 +25,9 @@ package com.civildebatewall.staging.elements {
 			textAlignmentMode = TextAlign.CENTER;
 			alignmentPoint = Alignment.CENTER;
 			
+			content.mouseChildren = false;
+			content.mouseEnabled = false;
+			
 			width = 1022;
 			height = 64;
 			backgroundColor = 0x000000;
