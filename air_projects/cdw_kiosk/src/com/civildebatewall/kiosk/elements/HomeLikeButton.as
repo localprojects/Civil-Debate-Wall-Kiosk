@@ -9,7 +9,7 @@ package com.civildebatewall.kiosk.elements {
 			super();
 			
 			// listens for updates to the active thread
-			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
+			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
 		}
 		
 		private function onActiveDebateChange(e:Event):void {

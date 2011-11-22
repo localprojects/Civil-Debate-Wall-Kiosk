@@ -40,15 +40,15 @@ package com.civildebatewall.staging.elements
 		
 		public function set targetPost(post:Post):void {
 			_targetPost = post;
-			TweenMax.to(underlay, 0, {colorMatrixFilter:{colorize: _targetPost.stanceColorMedium, amount: 1}});
-		}
-		
-		public function onDown(e:MouseEvent):void {
 			TweenMax.to(underlay, 0, {colorMatrixFilter:{colorize: _targetPost.stanceColorDark, amount: 1}});
 		}
 		
+		public function onDown(e:MouseEvent):void {
+			TweenMax.to(underlay, 0, {colorMatrixFilter:{colorize: _targetPost.stanceColorLight, amount: 1}});
+		}
+		
 		public function onUp(e:MouseEvent):void {
-			TweenMax.to(underlay, 0.5, {colorMatrixFilter:{colorize: _targetPost.stanceColorMedium, amount: 1}});
+			TweenMax.to(underlay, 0.5, {colorMatrixFilter:{colorize: _targetPost.stanceColorDark, amount: 1}});
 			
 			CivilDebateWall.state.userRespondingTo = _targetPost;
 			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.debateTypePickerView);
@@ -56,7 +56,7 @@ package com.civildebatewall.staging.elements
 		
 		public function onCancel(e:MouseEvent):void {
 			if (_targetPost != null) {
-				TweenMax.to(underlay, 0.5, {colorMatrixFilter:{colorize: _targetPost.stanceColorMedium, amount: 1}});
+				TweenMax.to(underlay, 0.5, {colorMatrixFilter:{colorize: _targetPost.stanceColorDark, amount: 1}});
 			}
 		}
 

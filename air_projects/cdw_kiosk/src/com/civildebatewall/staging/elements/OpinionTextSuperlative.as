@@ -25,8 +25,8 @@ package com.civildebatewall.staging.elements {
 			opinion.paddingBottom = 17;	
 			opinion.paddingLeft = 18;
 			opinion.paddingRight = 18;			
-			nameTag.leading = 10;
-			nameTag.textSize = 15;
+			opinion.leading = 10;
+			opinion.textSize = 15;
 		}		
 	}
 }

@@ -63,7 +63,7 @@ package com.civildebatewall.kiosk.elements {
 			addChild(rightButton);
 			
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
-			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
+			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
 			CivilDebateWall.state.addEventListener(State.SORT_CHANGE, onSortChange);			
 		}
 

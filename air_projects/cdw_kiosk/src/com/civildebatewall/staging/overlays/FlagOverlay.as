@@ -61,11 +61,12 @@ package com.civildebatewall.staging.overlays {
 			message.setDefaultTweenOut(1, {y: Alignment.OFF_STAGE_TOP});
 			addChild(message);
 
-			timerBar = new ProgressBar({width: 880, height: 10, duration: 10});
+			timerBar = new ProgressBar({width: 880, height: 1, duration: 10});
 			timerBar.x = 100;
 			timerBar.setDefaultTweenIn(1, {x: 100, y: 964});
 			timerBar.setDefaultTweenOut(1, {x: 100, y: Alignment.OFF_STAGE_TOP});
 			timerBar.onProgressComplete.push(closeOverlay);
+			
 			addChild(timerBar);
 			
 			// actions
@@ -89,7 +90,7 @@ package com.civildebatewall.staging.overlays {
 			
 			// fade out the bar
 			timerBar.pause();
-			TweenMax.to(timerBar, 1, {alpha: 0});
+			//TweenMax.to(timerBar, 1, {alpha: 0});
 			
 			// after delay, go back
 			TweenMax.delayedCall(3, closeOverlay);			

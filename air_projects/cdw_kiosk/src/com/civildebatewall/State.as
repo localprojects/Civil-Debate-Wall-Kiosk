@@ -16,11 +16,12 @@ package com.civildebatewall {
 		
 		// events
 		public static const VIEW_CHANGE:String = "viewChange";
-		public static const ACTIVE_DEBATE_CHANGE:String = "activeDebateChange";
+		public static const ACTIVE_THREAD_CHANGE:String = "activeThreadChange";
 		public static const USER_STANCE_CHANGE:String = "userStanceChange";
 		public static const SORT_CHANGE:String = "sortChange";
 		public static const SUPERLATIVE_POST_CHANGE:String = "superlativePostChange";
 		public static const ON_STATS_VIEW_CHANGE:String = "onStatsViewChange";
+		public static const ON_ACTIVE_POST_CHANGE:String = "onActivePostChange";
 		
 		// constants
 		// sort types
@@ -65,6 +66,10 @@ package com.civildebatewall {
 			dispatchEvent(new Event(SUPERLATIVE_POST_CHANGE));
 		}
 		
+		public function setActivePost(post:Post):void {
+			activePost = post;
+			dispatchEvent(new Event(ON_ACTIVE_POST_CHANGE));
+		}
 		
 		
 		
@@ -228,7 +233,7 @@ package com.civildebatewall {
 			trace("Active: " + activeThread);
 			trace("Next: " + nextThread);
 			
-			this.dispatchEvent(new Event(ACTIVE_DEBATE_CHANGE));
+			this.dispatchEvent(new Event(ACTIVE_THREAD_CHANGE));
 			
 		}
 		

@@ -13,6 +13,7 @@ package com.civildebatewall.staging.elements
 			buttonMode = true;
 			width = 64;
 			height = 64;
+			backgroundColor = 0xff0000;
 			visible = true;
 			alignmentPoint = Alignment.CENTER;
 
@@ -21,11 +22,21 @@ package com.civildebatewall.staging.elements
 		}
 		
 		private function onDown(e:MouseEvent):void {
-			TweenMax.to(bitmap, 0, {alpha: 0.5});			
+			TweenMax.to(this, 0, {alpha: 0.5});			
 		}
 		
 		private function onUp(e:MouseEvent):void {
-			TweenMax.to(bitmap, 0.5, {alpha: 1});
+			TweenMax.to(this, 0.5, {alpha: 1});
+		}
+		
+		public function disable():void {
+			TweenMax.to(this, 0, {alpha: 0.5});
+			locked = true;
+		}
+		
+		public function enable():void {
+			TweenMax.to(this, 0.5, {alpha: 1});
+			locked = false;			
 		}
 	}
 }

@@ -87,7 +87,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			callout = new BlockText();
 			callout.textFont = Assets.FONT_BOLD;
-			callout.textSize = 16;
+			callout.textSize = 34;
 			callout.width = 418;
 			callout.height = 34;			
 			callout.x = 86;

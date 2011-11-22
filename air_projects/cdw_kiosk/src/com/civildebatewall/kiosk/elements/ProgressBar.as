@@ -40,7 +40,7 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		override protected function beforeTweenIn():void {
-			_targetWidth = width;
+			_targetWidth = 880; // TODO not hard coded
 			width = 0;
 			super.beforeTweenIn();
 		}		
