@@ -1,18 +1,17 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.blocks.OldBlockBase;
 	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.blocks.BlockBase;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	
 	
-	public class VoteStatBar extends OldBlockBase {
+	public class VoteStatBar extends BlockBase {
 		
-		private var barWidth:Number;
-		private var barHeight:Number;		
+
 		private var bar:Shape;
-		private var barMask:Shape;		
+	
 		private var _barPercent:Number;
 
 		private var arrowWidth:Number = 24;
@@ -25,23 +24,13 @@ package com.civildebatewall.kiosk.elements {
 		public function VoteStatBar()	{
 			super();
 			
-			barWidth = 1022;
-			barHeight = 141;
-			
-			this.graphics.beginFill(Assets.COLOR_NO_LIGHT);
-			this.graphics.drawRect(0, 0, barWidth, barHeight);
-			this.graphics.endFill();
-			
+			maxSizeBehavior = MAX_SIZE_CLIPS;			
+			width = 1022;
+			height = 141;
+			backgroundColor = Assets.COLOR_NO_LIGHT;
+						
 			bar = new Shape();
 			addChild(bar);
-			
-			barMask = new Shape();
-			barMask.graphics.beginFill(0x000000);
-			barMask.graphics.drawRect(0, 0, barWidth, barHeight);
-			barMask.graphics.endFill();
-			addChild(barMask);
-			
-			this.mask = barMask;
 			
 			overlay = new Sprite();
 			
@@ -58,6 +47,8 @@ package com.civildebatewall.kiosk.elements {
 			addChild(overlay);
 			
 			barPercent = 50;
+			
+			// TODO update from data
 		}
 		
 		public function get barPercent():Number {
@@ -67,8 +58,10 @@ package com.civildebatewall.kiosk.elements {
 		public function set barPercent(n:Number):void {
 			_barPercent = n; // limit to 0 - 100
 			
-			var w:Number = Math2.mapClamp(_barPercent, 0, 100, -arrowWidth, barWidth);  // limit to 0 - 100
+			var w:Number = Math2.mapClamp(_barPercent, 0, 100, -arrowWidth, width);  // limit to 0 - 100
 			midPoint = w + (arrowWidth / 2);
+			
+			
 			
 			// redraw the bar
 			bar.graphics.clear();
@@ -76,9 +69,9 @@ package com.civildebatewall.kiosk.elements {
 			bar.graphics.beginFill(Assets.COLOR_YES_LIGHT);
 			bar.graphics.moveTo(-arrowWidth, 0);
 			bar.graphics.lineTo(w, 0);
-			bar.graphics.lineTo(w + arrowWidth, barHeight / 2);
-			bar.graphics.lineTo(w, barHeight );
-			bar.graphics.lineTo(-arrowWidth, barHeight );
+			bar.graphics.lineTo(w + arrowWidth, height / 2);
+			bar.graphics.lineTo(w, height);
+			bar.graphics.lineTo(-arrowWidth, height );
 			bar.graphics.lineTo(-arrowWidth, 0);
 			bar.graphics.endFill();
 			
@@ -86,13 +79,11 @@ package com.civildebatewall.kiosk.elements {
 			
 			
 			if(overlay.x < 20) overlay.x = 20;
-			if(overlay.x + overlay.width > barWidth - 20) overlay.x = barWidth - 20 - overlay.width;
+			if(overlay.x + overlay.width > width - 20) overlay.x = height - 20 - overlay.width;
 			
 			// figure out the ratio?
 			yesLabel.setSize(_barPercent);
 			noLabel.setSize(Math.abs(100 - _barPercent));			
-			
-			
 		}
 		
 		public function setLabels(yesValue:uint, noValue:uint):void {

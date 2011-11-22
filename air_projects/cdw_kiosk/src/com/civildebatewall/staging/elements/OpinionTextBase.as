@@ -1,9 +1,9 @@
-package com.civildebatewall.kiosk.elements
+package com.civildebatewall.staging.elements
 {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-
+	import com.civildebatewall.data.Post;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
@@ -12,18 +12,18 @@ package com.civildebatewall.kiosk.elements
 	import flash.events.Event;
 	
 	
-	public class OpinionText extends BlockBase	{
-
+	public class OpinionTextBase extends BlockBase	{
+		
 		private var opinion:BlockText;
 		private var nameTag:BlockText;
 		
-		public function OpinionText()	{
+		public function OpinionTextBase()	{
 			super({
-				registrationPoint: Alignment.BOTTOM_LEFT,
+				//registrationPoint: Alignment.BOTTOM_LEFT,
 				width: 880,
 				maxHeight: 1000			
 			});
-							
+			
 			
 			nameTag = new BlockText({
 				minWidth: 100,
@@ -36,9 +36,10 @@ package com.civildebatewall.kiosk.elements
 				textBold: true,
 				textSize: 30,
 				textColor: 0xffffff,
+				leading: 20,
 				visible: true
 			});
-		
+			
 			opinion = new BlockText({
 				minWidth: 100,
 				maxWidth: 880,
@@ -50,33 +51,25 @@ package com.civildebatewall.kiosk.elements
 				textFont: Assets.FONT_REGULAR,
 				textSize: 30,
 				textColor: 0xffffff,
+				leading: 20,
 				visible: true
 			});
 			
 			addChild(opinion);
 			addChild(nameTag);
+		}
+		
+		public function setPost(post:Post):void {
+			nameTag.backgroundColor = post.stanceColorDark;
+			nameTag.text = (post.user.username + " SAYS : " + post.stance + "!").toUpperCase();
+			
+			opinion.backgroundColor = post.stanceColorLight;
+			opinion.text = Char.LEFT_QUOTE + post.text + Char.RIGHT_QUOTE;
+			
+			update();			
+		}
+		
 
-	
-			CivilDebateWall.state.addEventListener(State.ACTIVE_DEBATE_CHANGE, onActiveDebateChange);
-		}
-		
-		
-		private function onActiveDebateChange(e:Event):void {
-			trace("debate change!");
-			nameTag.backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDark;
-			nameTag.text = (CivilDebateWall.state.activeThread.firstPost.user.username + " SAYS : " + CivilDebateWall.state.activeThread.firstPost.stance + "!").toUpperCase();
-			
-			opinion.backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorLight;
-			opinion.text = Char.LEFT_QUOTE + CivilDebateWall.state.activeThread.firstPost.text + Char.RIGHT_QUOTE;
-			
-			// inside container, origin is still in top left, even when registratio point moves...
-			
-			opinion.y = opinion.height;
-			nameTag.y = opinion.top - nameTag.height;
-			
-			update();
-		}
-		
 		
 	}
 }

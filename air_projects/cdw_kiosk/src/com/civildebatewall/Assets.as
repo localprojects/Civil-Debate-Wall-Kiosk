@@ -8,6 +8,20 @@ package com.civildebatewall {
 		// Embed code is generated dynamically by embedgen.py
 
 		// Bitmaps
+		[Embed(source = '/assets/graphics/lowerMenuCarat.png')] private static const lowerMenuCaratClass:Class;
+		public static function getLowerMenuCarat():Bitmap { return new lowerMenuCaratClass() as Bitmap; };
+		public static const lowerMenuCarat:Bitmap = getLowerMenuCarat();
+		
+		[Embed(source = '/assets/graphics/leftCaratWhite.png')] private static const leftCaratWhiteClass:Class;
+		public static function getLeftCaratWhite():Bitmap { return new leftCaratWhiteClass() as Bitmap; };
+		public static const leftCaratWhite:Bitmap = getLeftCaratWhite();
+		
+		[Embed(source = '/assets/graphics/rightCaratWhite.png')] private static const rightCaratWhiteClass:Class;
+		public static function getRightCaratWhite():Bitmap { return new rightCaratWhiteClass() as Bitmap; };
+		public static const rightCaratWhite:Bitmap = getRightCaratWhite();
+		
+		
+		
 		[Embed(source = '/assets/graphics/smsSubscribeHeader.png')] private static const smsSubscribeHeaderClass:Class;
 		public static function getSmsSubscribeHeader():Bitmap { return new smsSubscribeHeaderClass() as Bitmap; };
 		public static const smsSubscribeHeader:Bitmap = getSmsSubscribeHeader();

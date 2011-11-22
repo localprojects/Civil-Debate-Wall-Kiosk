@@ -1,6 +1,7 @@
 package com.civildebatewall.staging.elements {
 	import com.bit101.charts.PieChart;
 	import com.civildebatewall.Assets;
+	import com.civildebatewall.CivilDebateWall;
 	import com.greensock.layout.ScaleMode;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -42,7 +43,10 @@ package com.civildebatewall.staging.elements {
 			
 			setStats(0.5);
 			
+			buttonMode = true;
+			
 			onButtonDown.push(onDown);
+			onButtonUp.push(onUp);
 			
 			// todo get stats from data changes
 		}
@@ -51,7 +55,13 @@ package com.civildebatewall.staging.elements {
 			drawDown();
 		}
 		
+		private function onUp(e:Event):void {
+			trace("button up!");
+			
+			CivilDebateWall.kiosk.view.statsView();
+		}
 		
+		// tween this
 		private function setStats(normalizedYes:Number):void {
 			degrees = Math2.map(normalizedYes, 0, 1, 0, 360);
 			draw();

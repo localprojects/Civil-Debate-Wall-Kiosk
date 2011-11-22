@@ -17,7 +17,6 @@ package com.civildebatewall.kiosk.elements {
 	
 	import flashx.textLayout.elements.BreakElement;
 	
-	
 	public class DebateStrip extends OldBlockBase {
 		
 		private var scrollField:InertialScrollField;
@@ -26,8 +25,7 @@ package com.civildebatewall.kiosk.elements {
 		
 		private var leftButton:Sprite;
 		private var rightButton:Sprite;
-		
-		
+
 		public function DebateStrip()	{
 			super();
 			

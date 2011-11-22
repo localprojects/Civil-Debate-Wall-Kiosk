@@ -135,6 +135,8 @@ package com.civildebatewall {
 	
 		
 		
+		
+		
 		private function onInactive(e:InactivityEvent):void {
 			trace("inactive!");
 			//view.inactivityOverlayView();

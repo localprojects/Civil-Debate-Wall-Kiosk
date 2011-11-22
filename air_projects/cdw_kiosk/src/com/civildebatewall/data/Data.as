@@ -77,7 +77,7 @@ package com.civildebatewall.data {
 			
 
 			trace('Loading question');
-			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/sms/kiosk' + CivilDebateWall.settings.kioskNumber, onPhoneNumberReceived); // TODO no need, grab it when we check the recents on SMS prompt page?
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/sms/kiosk/' + CivilDebateWall.settings.kioskNumber, onPhoneNumberReceived); // TODO no need, grab it when we check the recents on SMS prompt page?
 		}
 		
 		private function onPhoneNumberReceived(r:Object):void {
