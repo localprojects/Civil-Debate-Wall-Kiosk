@@ -36,6 +36,7 @@ The Windows 7 machines that run the kiosk should be set up as follows:
 - Install the [Adobe Air Runtime](http://get.adobe.com/air/) version 3.0.
 - Install the [Adobe Air Settings Manager](http://airdownload.adobe.com/air/applications/SettingsManager/SettingsManager.air)
 - Run the settings manager and disable automatic updates.
+- Install the [Microsoft Visual C++ 2010 Redistributable Package](http://www.microsoft.com/download/en/details.aspx?id=5555). (Required by the SLR control software. *TODO: Copy all the required DLLs into the native package?*)
 - Disabled all power saving functionality.
 - Disable screen savers.
 - Disable AERO.

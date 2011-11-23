@@ -37,6 +37,9 @@
     <classEntry path="com.kitschpatrol.futil.blocks.BlockBitmap"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.BlockBitmapPlugin"/>
     <classEntry path="com.kitschpatrol.futil.tweenPlugins.BitmapDataPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.Random"/>
+    <classEntry path="com.kitschpatrol.futil.drawing.Path"/>
+    <classEntry path="com.kitschpatrol.futil.drawing.DashedLine"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

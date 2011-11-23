@@ -1,5 +1,6 @@
 package com.kitschpatrol.futil.utilitites {
 	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.Random;
 	
 	public class ArrayUtil {
 
@@ -13,7 +14,7 @@ package com.kitschpatrol.futil.utilitites {
 		}
 		
 		public static function randomElement(a:Array):* {
-			return a[Math2.randRange(0, a.length - 1)];
+			return a[int(Random.range(0, a.length - 1))];
 		}
 		
 		public static function average(a:Array):Number {
@@ -80,7 +81,6 @@ package com.kitschpatrol.futil.utilitites {
 			
 			return aOut;
 		}		
-		
 		
 		
 		// looks through a numerical field of each object in an an array of objects, returns max value

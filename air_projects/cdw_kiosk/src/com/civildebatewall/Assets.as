@@ -23,10 +23,12 @@ package com.civildebatewall {
 		public static function getYesBubble():Sprite { return new yesBubbleClass() as Sprite; };
 		public static const yesBubble:Sprite = getYesBubble();
 		
+		// Default size 158 x 298		
 		[Embed(source = '/assets/graphics/yesPhone.swf')] private static const yesPhoneClass:Class;
 		public static function getYesPhone():Sprite { return new yesPhoneClass() as Sprite; };
 		public static const yesPhone:Sprite = getYesPhone();
 		
+		// Default size 158 x 298		
 		[Embed(source = '/assets/graphics/noPhone.swf')] private static const noPhoneClass:Class;
 		public static function getNoPhone():Sprite { return new noPhoneClass() as Sprite; };
 		public static const noPhone:Sprite = getNoPhone();

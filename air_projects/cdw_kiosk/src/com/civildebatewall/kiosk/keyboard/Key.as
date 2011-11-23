@@ -5,6 +5,7 @@ package com.civildebatewall.kiosk.keyboard {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.Random;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
@@ -99,7 +100,7 @@ package com.civildebatewall.kiosk.keyboard {
 		private function draw():void {
 			// draw backboard / hit area
 			this.graphics.clear();
-			this.graphics.beginFill(Math2.randRange(0, int.MAX_VALUE), 0);
+			this.graphics.beginFill(int(Random.range(0, int.MAX_VALUE)), 0);
 			this.graphics.drawRect(0, 0, keyWidth, keyHeight);
 			this.graphics.endFill();
 			
