@@ -5,6 +5,7 @@ package com.civildebatewall
 	import com.civildebatewall.kiosk.blocks.PhoneHeader;
 	import com.civildebatewall.kiosk.elements.WhiteButton;
 	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.Random;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.blocks.BlockText;
@@ -181,7 +182,7 @@ package com.civildebatewall
 		}
 		
 		public function simulateSMS():void {
-			var testTextMessage:TextMessage = new TextMessage({'message': '', 'phoneNumber': '555' + Math2.randRange(1000000, 9999999).toString(), 'created': '2011-09-07 17:31:44'});			
+			var testTextMessage:TextMessage = new TextMessage({'message': '', 'phoneNumber': '555' + int(Random.range(1000000, 9999999).toString()), 'created': '2011-09-07 17:31:44'});			
 			handleSMS(testTextMessage);
 		}
 		
