@@ -3,9 +3,9 @@ package com.kitschpatrol.futil.drawing {
 	import flash.display.CapsStyle;
 	import flash.display.Graphics;
 	import flash.display.LineScaleMode;
-	import flash.display.Shape;
+	import flash.display.Sprite;
 
-	public class DashedLine extends Shape	{
+	public class DashedLine extends Sprite	{ // could be shape...
 		// Builds on Senocular's Path class to make a tweenable, progressively drawing, color alternating dashed line
 		
 		// draw through this
@@ -23,8 +23,9 @@ package com.kitschpatrol.futil.drawing {
 		private var offStepSize:Number;
 		private var penStep:Number; // how far to move the		
 		private var activeColor:uint;
+		private var lineScaleMode:String;
 		
-		public function DashedLine(thickness:Number, onLength:Number, offLength:Number, colorA:uint, colorB:uint, caps:String = CapsStyle.NONE) {
+		public function DashedLine(thickness:Number, onLength:Number, offLength:Number, colorA:uint, colorB:uint, caps:String = CapsStyle.NONE, lineScaleMode:String = LineScaleMode.NORMAL) {
 			path = new Path();
 			_step = 0;
 			
@@ -34,10 +35,11 @@ package com.kitschpatrol.futil.drawing {
 			this.colorA = colorA;
 			this.colorB = colorB;
 			this.caps = caps;
+			this.lineScaleMode = lineScaleMode;
 		}
 		
 		
-		private function draw():void {
+		protected function draw():void {
 			// from normal distance to pixels...			
 			onStepSize = onLength / path.length; 
 			offStepSize = offLength / path.length;						
@@ -50,7 +52,7 @@ package com.kitschpatrol.futil.drawing {
 				
 				// cycle colors
 				activeColor = (alternator++ % 2 == 0) ? colorA : colorB; 
-				graphics.lineStyle(thickness, activeColor, 1.0, false, LineScaleMode.NORMAL, caps);				
+				graphics.lineStyle(thickness, activeColor, 1.0, false, lineScaleMode, caps);				
 				
 				// draw into self
 				path.draw(graphics, penStep, penStep + onStepSize);

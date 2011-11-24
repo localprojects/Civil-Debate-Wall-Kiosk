@@ -71,7 +71,7 @@ package com.kitschpatrol.futil.blocks {
 		
 		
 		
-		protected var lockUpdates:Boolean; // prevents update from firing... useful when queueing a bunch of changes // TODO getter and setter?		
+		public var lockUpdates:Boolean; // prevents update from firing... useful when queueing a bunch of changes // TODO getter and setter?		
 	
 		public function BlockBase(params:Object = null)	{
 			//super();
@@ -116,6 +116,8 @@ package com.kitschpatrol.futil.blocks {
 			onButtonLock = new Vector.<Function>(0);
 			onButtonUnlock = new Vector.<Function>(0);
 			onButtonCancel = new Vector.<Function>(0);
+			onButtonOver = new Vector.<Function>(0);
+			onButtonOut = new Vector.<Function>(0);
 			
 			// TODO devise and flip the update booleans (e.g. invalidate everything)
 
@@ -582,6 +584,9 @@ package com.kitschpatrol.futil.blocks {
 		public var onButtonLock:Vector.<Function>;
 		public var onButtonUnlock:Vector.<Function>;
 		public var onButtonCancel:Vector.<Function>; // useful for inertial scroll fields
+		public var onButtonOver:Vector.<Function>;
+		public var onButtonOut:Vector.<Function>;		
+		
 		
 		protected var buttonTimer:Timer;
 		public var locked:Boolean;
@@ -598,10 +603,17 @@ package com.kitschpatrol.futil.blocks {
 			if (buttonMode) {
 				// enable listeners
 				this.addEventListener(MouseEvent.MOUSE_DOWN, onButtonDownInternal);
+				this.addEventListener(MouseEvent.MOUSE_UP, onButtonUpInternal);
+				this.addEventListener(MouseEvent.MOUSE_OVER, onButtonOverInternal);
+				this.addEventListener(MouseEvent.MOUSE_OUT, onButtonOutInternal);	
+								
 			}
 			else {
 				// disable listeners
-				this.removeEventListener(MouseEvent.MOUSE_DOWN, onButtonDownInternal);			
+				this.removeEventListener(MouseEvent.MOUSE_DOWN, onButtonDownInternal);
+				this.removeEventListener(MouseEvent.MOUSE_UP, onButtonUpInternal);	
+				this.removeEventListener(MouseEvent.MOUSE_OVER, onButtonOverInternal);
+				this.removeEventListener(MouseEvent.MOUSE_OUT, onButtonOutInternal);	
 			}
 		}
 		
@@ -632,7 +644,6 @@ package com.kitschpatrol.futil.blocks {
 			tempEvent = e;
 			
 			if (!locked) {
-				this.addEventListener(MouseEvent.MOUSE_UP, onButtonUpInternal);
 				stage.addEventListener(MouseEvent.MOUSE_UP, onStageUpInternal);
 				executeAll(onButtonDown);
 			}
@@ -642,12 +653,27 @@ package com.kitschpatrol.futil.blocks {
 			tempEvent = e;
 
 			if (!locked) {
-				// Stage always fires, and this fires first, so we handle lock in there.
-				this.removeEventListener(MouseEvent.MOUSE_UP, onButtonUpInternal);				
+				// Stage always fires, and this fires first, so we handle lock in there.				
 				executeAll(onButtonUp);
 			}
 
 		}
+		
+		private function onButtonOverInternal(e:MouseEvent):void {
+			tempEvent = e;
+			
+			if (!locked) {
+				
+				executeAll(onButtonOver);
+			}
+		}
+		
+		
+		private function onButtonOutInternal(e:MouseEvent):void {
+						
+			executeAll(onButtonOut);
+		}
+		
 		
 		private function onStageUpInternal(e:MouseEvent):void {
 			tempEvent = e;
@@ -693,6 +719,15 @@ package com.kitschpatrol.futil.blocks {
 			}			
 		}
 		
+		
+		// handy for tweening
+		public function get scale():Number {
+			return scaleX;
+		}
+		public function set scale(value:Number):void {
+			scaleX = value;
+			scaleY = value;
+		}
 		
 		
 		

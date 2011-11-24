@@ -2,6 +2,8 @@ package com.kitschpatrol.futil.constants {
 	
 	import flash.geom.Point;
 	
+	
+	
 	public class Alignment {
 				
 		// Have to use function to get a new copy of the object each time
@@ -23,7 +25,10 @@ package com.kitschpatrol.futil.constants {
 		public static const OFF_STAGE_LEFT:String = "offStageLeft";
 		public static const CENTER_STAGE:String = "centerStage";
 		
-		
-		
+		// ripped from flashx.textLayout.formats.TextAlign; for convenience
+		public static const TEXT_LEFT:String = "left";
+		public static const TEXT_CENTER:String = "center";
+		public static const TEXT_RIGHT:String = "right";
+		public static const TEXT_JUSTIFY:String = "justify";		
 	}
 }

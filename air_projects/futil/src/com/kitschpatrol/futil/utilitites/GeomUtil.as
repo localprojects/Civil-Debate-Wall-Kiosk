@@ -33,5 +33,7 @@ package com.kitschpatrol.futil.utilitites {
 			return scaleRect(childRect, scaleRatio);
 		}		
 		
+		
+		
 	}
 }

@@ -37,6 +37,22 @@ package com.kitschpatrol.futil.utilitites {
 			// TODO last step already equals destination
 			return int(Math2.map(normal, 0, 1, stepSize, 1) / stepSize) * stepSize;
 		}
+		
+		
+		public static function formatDynamicPhoneNumber(number:String):String {
+			// format the phone number intelligently as it builds. similar to the iPhone's dial pad.
+			var bareNumber:String = number.replace(/[^\d]/gs, ''); 
+			
+			if (bareNumber.length >= 8) {
+				return "(" + bareNumber.substr(0, 3) + ") " + bareNumber.substr(3, 3) + "-" + bareNumber.substr(6);				
+			}
+			else if (bareNumber.length >= 4) {
+				return bareNumber.substr(0, 3) + "-" + bareNumber.substr(3);
+			}
+			else {
+				return bareNumber;
+			}
+		}		
 	
 		// The start of a unit test for the above
 		/*

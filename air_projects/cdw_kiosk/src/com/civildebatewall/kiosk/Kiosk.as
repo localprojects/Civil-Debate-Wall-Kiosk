@@ -36,14 +36,6 @@ package com.civildebatewall.kiosk {
 			view = new View();
 			addChild(view);
 			
-			// set up test overlay
-			testOverlay = new Bitmap(new BitmapData(1080, 1920));
-			testOverlay.visible = false;
-			testOverlay.alpha = 0.5;
-			
-			// Add test overlay
-			addChild(testOverlay);			
-			
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 		}
 		
@@ -51,13 +43,9 @@ package com.civildebatewall.kiosk {
 			// Initialize some stuff. only runs once at startup.			
 			
 			// Start at home // TODO no content conditional?
-			CivilDebateWall.state.setView(view.homeView);
-			//CivilDebateWall.state.setView(view.smsPromptView);
+			//CivilDebateWall.state.setView(view.homeView);
+			CivilDebateWall.state.setView(view.smsPromptView);
 		}
-		
-
-
-
 		
 		private function onInactive(e:InactivityEvent):void {
 			trace("inactive!");
