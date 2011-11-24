@@ -4,8 +4,6 @@ package com.civildebatewall.kiosk {
 	import com.adobe.serialization.json.*;
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.kitschpatrol.futil.drawing.DashedLine;
-	import com.civildebatewall.SMSOverlay;
 	import com.civildebatewall.State;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.*;
@@ -14,7 +12,6 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
 	import com.civildebatewall.kiosk.ui.*;
-	import com.civildebatewall.smsfun.Phone;
 	import com.civildebatewall.staging.elements.BalloonButton;
 	import com.civildebatewall.staging.elements.DebateButton;
 	import com.civildebatewall.staging.elements.NavArrow;
@@ -27,6 +24,10 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.staging.overlays.InactivityOverlay;
 	import com.civildebatewall.staging.overlays.OpinionEntryOverlay;
 	import com.civildebatewall.staging.overlays.StatsOverlay;
+	import com.civildebatewall.staging.overlays.smsfun.Connection;
+	import com.civildebatewall.staging.overlays.smsfun.OldSMSOverlay;
+	import com.civildebatewall.staging.overlays.smsfun.Phone;
+	import com.civildebatewall.staging.overlays.smsfun.SMSOverlay;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -34,16 +35,25 @@ package com.civildebatewall.kiosk {
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.constants.Alignment;
+	import com.kitschpatrol.futil.drawing.DashedLine;
+	import com.kitschpatrol.futil.drawing.Path;
+	import com.kitschpatrol.futil.easing.Ease;
+	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
-	import com.kitschpatrol.futil.drawing.Path;
+	import com.kitschpatrol.futil.utilitites.PointUtil;
 	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.*;
+	
+	import flashx.textLayout.elements.BreakElement;
+	import flashx.textLayout.formats.TextAlign;
+	
+	import sekati.layout.Arrange;
 
 	public class View extends Sprite {
 		// convenience
@@ -113,7 +123,8 @@ package com.civildebatewall.kiosk {
 		private var closeTermsButton:CloseTermsButton;
 		
 		// sms prompt view // TODO?
-		public var smsOverlay:SMSOverlay; // public for dashboard testing
+		public var oldSmsOverlay:OldSMSOverlay; // public for dashboard testing
+		public var smsOverlay:SMSOverlay;
 
 		// flag overlay
 		private var flagOverlay:FlagOverlay;
@@ -386,9 +397,14 @@ package com.civildebatewall.kiosk {
 
 			
 			// sms prompt view
+			oldSmsOverlay = new OldSMSOverlay();
+			oldSmsOverlay.setDefaultTweenIn(0, {});
+			oldSmsOverlay.setDefaultTweenOut(1, {});
+			addChild(oldSmsOverlay);
+			
 			smsOverlay = new SMSOverlay();
 			smsOverlay.setDefaultTweenIn(0, {});
-			smsOverlay.setDefaultTweenOut(1, {});
+			smsOverlay.setDefaultTweenOut(1, {});			
 			addChild(smsOverlay);
 			
 
@@ -451,88 +467,10 @@ package com.civildebatewall.kiosk {
 		// ================================================================================================================================================
 		
 		
-
-		
-		
 		
 
-		
-
-		
 		
 		public function homeView(...args):void {
-			
-			
-			
-			
-			
-
-			
-			var numPhones:int = 30;
-			var phones:Vector.<Phone> = new Vector.<Phone>(numPhones);
-			
-			var i:int;
-			
-			for (i = 0; i < numPhones; i++) {
-				var tempPhone:Phone = new Phone();
-				tempPhone.position = Random.randomOffScreenPoint(200, 500, 1080, 1920);
-				
-				var scale:Number = Random.range(.5, 1);
-				
-			//	trace("Scale: " + scale);
-//				tempPhone.scaleX = scale;
-//				tempPhone.scaleY = scale;
-				
-				//addChild(tempPhone);
-				
-				phones[i] = tempPhone;
-				
-			}
-			
-			
-			// tween everything in
-			
-			for (i = 0; i < numPhones; i++) {
-				var destination:Point = Random.randomOnScreenPoint(1080, 1920);
-				TweenMax.to(phones[i], Random.range(1, 5), {x: destination.x, y: destination.y});
-				
-				
-				
-				
-			}
-			
-			
-			
-			var connection:DashedLine = new DashedLine();
-			connection.path.moveTo(0, 100);
-			connection.path.lineTo(100, 100);
-			connection.path.curveTo(150, 100, 150, 150);			
-			connection.path.lineTo(150, 200);
-			
-			addChild(connection);
-			
-			connection.step = 0;
-			
-			connection.scaleX = 3;
-			connection.scaleY = 3;
-			
-			
-			TweenMax.to(connection, 5, {step: 1});
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-		}
-		
-		public function homeViewReal(...args):void {
 			markAllInactive();
 			
 			CivilDebateWall.inactivityTimer.disarm();
@@ -819,11 +757,10 @@ package com.civildebatewall.kiosk {
 		
 		public function smsPromptView(...args):void {
 			markAllInactive();
-			CivilDebateWall.inactivityTimer.arm();	
-			
+			portrait.tweenIn();			
 			smsOverlay.tweenIn();
-			
-			tweenOutInactive();
+			tweenOutInactive();			
+			// CivilDebateWall.inactivityTimer.arm();	
 		}
 
 		// ================================================================================================================================================

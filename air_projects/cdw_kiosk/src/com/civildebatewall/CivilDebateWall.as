@@ -46,6 +46,7 @@ package com.civildebatewall {
 			TweenPlugin.activate([ThrowPropsPlugin]);			
 			TweenPlugin.activate([CacheAsBitmapPlugin]);	
 			TweenPlugin.activate([TransformAroundCenterPlugin]);
+			TweenPlugin.activate([TransformAroundPointPlugin]);	
 
 			// Futil plugins
 			TweenPlugin.activate([FutilBlockPlugin]);

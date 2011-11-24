@@ -28,6 +28,15 @@ package com.kitschpatrol.futil.utilitites {
 		}		
 		
 		
+		public static function twoDimensionalArray(cols:int, rows:int):Array {
+			var a:Array = new Array(cols);
+			for(var i:int = 0; i < a.length; i++) {
+				a[i] = new Array(rows);
+			}
+			return a;
+		}
+		
+		
 		public static function contains(needle:Object, haystack:Array):Boolean {
 			return (haystack.indexOf(needle) > -1);
 		}		

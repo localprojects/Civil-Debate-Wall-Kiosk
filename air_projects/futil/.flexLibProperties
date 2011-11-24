@@ -40,6 +40,7 @@
     <classEntry path="com.kitschpatrol.futil.Random"/>
     <classEntry path="com.kitschpatrol.futil.drawing.Path"/>
     <classEntry path="com.kitschpatrol.futil.drawing.DashedLine"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.PointUtil"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

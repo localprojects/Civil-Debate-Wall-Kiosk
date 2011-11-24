@@ -1,6 +1,7 @@
 package com.kitschpatrol.futil.utilitites {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
@@ -36,6 +37,9 @@ package com.kitschpatrol.futil.utilitites {
 		}		
 		
 		
+
+		
+		
 		// Put in futil? or kind of heretical?
 		// blocks to this better
 		public static function setRegistrationPoint(s:DisplayObject, regx:Number, regy:Number, showRegistration:Boolean = false):void {
@@ -52,6 +56,14 @@ package com.kitschpatrol.futil.utilitites {
 				mark.graphics.lineTo(5, -5);
 				s.parent.addChild(mark);
 			}
+		}		
+		
+		
+		// these operate in place on any graphics object
+		public static function fillRect(g:Graphics, width:Number, height:Number, color:uint = 0x000000, alpha:Number = 1):void {
+			g.beginFill(color, alpha);
+			g.drawRect(0, 0, width, height);
+			g.endFill();
 		}		
 		
 		

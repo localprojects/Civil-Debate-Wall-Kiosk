@@ -1,4 +1,4 @@
-// From senocular... no license?
+// From senocular... MIT license
 
 package com.kitschpatrol.futil.drawing {
 	
@@ -108,6 +108,11 @@ package com.kitschpatrol.futil.drawing {
 			_segments.push(new PathMoveSegment(_position, end));
 			_position = end;
 		}
+		
+		public function moveToPoint(point:Point):void {
+			moveTo(point.x, point.y);
+		}
+		
 		/**
 		 * Creates a line in the path from the current drawing position
 		 * to (x, y); the current drawing position is then set to (x, y).
@@ -123,6 +128,12 @@ package com.kitschpatrol.futil.drawing {
 			_segments.push(new PathLineSegment(_position, end));
 			_position = end;
 		}
+		
+		
+		public function lineToPoint(point:Point):void {
+			lineTo(point.x, point.y);
+		}
+		
 		/**
 		 * Creates a curve in the path from the current drawing position to
 		 * (x, y) using the control point specified by (cx, cy). The current  drawing position is then set
@@ -141,6 +152,11 @@ package com.kitschpatrol.futil.drawing {
 			_segments.push(new PathCurveSegment(_position, new Point(cx, cy), end));
 			_position = end;
 		}
+		
+		public function curveToPoint(cPoint:Point, point:Point):void {
+			curveTo(cPoint.x, cPoint.y, point.x, point.y);
+		}
+		
 		/**
 		 * Creates a circle segment in the path from the current drawing position to
 		 * (x, y) using a third intermediary point (cx, cy) which lies on the circular path

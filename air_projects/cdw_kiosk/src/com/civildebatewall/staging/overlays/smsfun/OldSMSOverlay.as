@@ -1,4 +1,4 @@
-package com.civildebatewall
+package com.civildebatewall.staging.overlays.smsfun
 {
 	import com.civildebatewall.data.TextMessage;
 	import com.civildebatewall.kiosk.blocks.OldBlockBase;
@@ -18,8 +18,10 @@ package com.civildebatewall
 	import flash.utils.Timer;
 	
 	import flashx.textLayout.formats.TextAlign;
+	import com.civildebatewall.Assets;
+	import com.civildebatewall.CivilDebateWall;
 	
-	public class SMSOverlay extends BlockBase	{
+	public class OldSMSOverlay extends BlockBase	{
 		
 		private var skipCountdownDuration:Number = 5; // TODO move to settings?
 		private var skipCountdownCounter:Number = skipCountdownDuration;
@@ -34,7 +36,7 @@ package com.civildebatewall
 		private var smsSuccessNote:BlockBitmap;
 		private var smsCountdownText:BlockText;		
 		
-		public function SMSOverlay(params:Object=null) {
+		public function OldSMSOverlay(params:Object=null) {
 			super({
 				width: 1080,
 				height: 1920,

@@ -22,17 +22,41 @@ package com.civildebatewall {
 		[Embed(source = '/assets/graphics/yesBubble.swf')] private static const yesBubbleClass:Class;
 		public static function getYesBubble():Sprite { return new yesBubbleClass() as Sprite; };
 		public static const yesBubble:Sprite = getYesBubble();
-		
-		// Default size 158 x 298		
+				
 		[Embed(source = '/assets/graphics/yesPhone.swf')] private static const yesPhoneClass:Class;
 		public static function getYesPhone():Sprite { return new yesPhoneClass() as Sprite; };
 		public static const yesPhone:Sprite = getYesPhone();
 		
-		// Default size 158 x 298		
 		[Embed(source = '/assets/graphics/noPhone.swf')] private static const noPhoneClass:Class;
 		public static function getNoPhone():Sprite { return new noPhoneClass() as Sprite; };
 		public static const noPhone:Sprite = getNoPhone();
 
+		[Embed(source = '/assets/graphics/noSuccessBubble.swf')] private static const noSuccessBubbleClass:Class;
+		public static function getNoSuccessBubble():Sprite { return new noSuccessBubbleClass() as Sprite; };
+		public static const noSuccessBubble:Sprite = getNoSuccessBubble();
+		
+		[Embed(source = '/assets/graphics/yesSuccessBubble.swf')] private static const yesSuccessBubbleClass:Class;
+		public static function getYesSuccessBubble():Sprite { return new yesSuccessBubbleClass() as Sprite; };
+		public static const yesSuccessBubble:Sprite = getYesSuccessBubble();
+		
+		[Embed(source = '/assets/graphics/noStopBubble.swf')] private static const noStopBubbleClass:Class;
+		public static function getNoStopBubble():Sprite { return new noStopBubbleClass() as Sprite; };
+		public static const noStopBubble:Sprite = getNoStopBubble();
+		
+		[Embed(source = '/assets/graphics/yesStopBubble.swf')] private static const yesStopBubbleClass:Class;
+		public static function getYesStopBubble():Sprite { return new yesStopBubbleClass() as Sprite; };
+		public static const yesStopBubble:Sprite = getYesStopBubble();
+		
+		[Embed(source = '/assets/graphics/yesFollowingBubble.swf')] private static const yesFollowingBubbleClass:Class;
+		public static function getYesFollowingBubble():Sprite { return new yesFollowingBubbleClass() as Sprite; };
+		public static const yesFollowingBubble:Sprite = getYesFollowingBubble();
+		
+		[Embed(source = '/assets/graphics/noFollowingBubble.swf')] private static const noFollowingBubbleClass:Class;
+		public static function getNoFollowingBubble():Sprite { return new noFollowingBubbleClass() as Sprite; };
+		public static const noFollowingBubble:Sprite = getNoFollowingBubble();
+		
+
+		
 		
 		
 		// Bitmaps
