@@ -25,6 +25,10 @@ package com.civildebatewall.wallsaver.core {
 		public function WallSaver()	{
 			super();
 			
+			// New sequence progression
+			// A. Quotes, Call to Action
+			// B: Graph, Face Grid
+			
 			// The wallsaver canvas
 			canvas = new Sprite();
 			canvas.alpha = 0;
@@ -88,31 +92,44 @@ package com.civildebatewall.wallsaver.core {
 		public function playSequenceA():void {
 			preSequenceBuildTasks();
 			
-			// Create display objects
 			var buttonSequence:ButtonSequence = new ButtonSequence();
-			canvas.addChild(buttonSequence);
+			canvas.addChild(buttonSequence);			
 			
 			var titleSequence:TitleSequence = new TitleSequence();
 			canvas.addChild(titleSequence);
 			
-			var questionSequence:QuestionSequence = new QuestionSequence();
-			canvas.addChild(questionSequence);
-			
-			var opinionSequence:OpinionSequence = new OpinionSequence();
-			canvas.addChild(opinionSequence);
-			
-			var callToActionSequence:CallToActionSequence = new CallToActionSequence();			
-			canvas.addChild(callToActionSequence);
-			
-			// Assemble the timeline
 			timeline.appendMultiple([
-				buttonSequence.getTimelineIn(),
-				titleSequence.getTimeline(),
-				questionSequence.getTimeline(),
-				opinionSequence.getTimeline(),
-				callToActionSequence.getTimeline(),
-				buttonSequence.getTimelineOut()				
+				buttonSequence.getTimelineIn(),				
+				titleSequence.getTimelineIn()
 			], 0, TweenAlign.SEQUENCE);
+			
+			
+			
+//			// Create display objects
+//			var buttonSequence:ButtonSequence = new ButtonSequence();
+//			canvas.addChild(buttonSequence);
+//			
+//			var titleSequence:TitleSequenceOld = new TitleSequenceOld();
+//			canvas.addChild(titleSequence);
+//			
+//			var questionSequence:QuestionSequence = new QuestionSequence();
+//			canvas.addChild(questionSequence);
+//			
+//			var opinionSequence:OpinionSequence = new OpinionSequence();
+//			canvas.addChild(opinionSequence);
+//			
+//			var callToActionSequence:CallToActionSequence = new CallToActionSequence();			
+//			canvas.addChild(callToActionSequence);
+//			
+//			// Assemble the timeline
+//			timeline.appendMultiple([
+//				buttonSequence.getTimelineIn(),
+//				titleSequence.getTimeline(),
+//				questionSequence.getTimeline(),
+//				opinionSequence.getTimeline(),
+//				callToActionSequence.getTimeline(),
+//				buttonSequence.getTimelineOut()				
+//			], 0, TweenAlign.SEQUENCE);
 			
 			postSequenceBuildTasks();
 		}
@@ -162,7 +179,7 @@ package com.civildebatewall.wallsaver.core {
 			var callToActionSequence:CallToActionSequence = new CallToActionSequence();
 			canvas.addChild(callToActionSequence);
 			
-			var titleSequence:TitleSequence = new TitleSequence();
+			var titleSequence:TitleSequenceOld = new TitleSequenceOld();
 			canvas.addChild(titleSequence);
 			
 			// Assemble the timeline
@@ -186,7 +203,7 @@ package com.civildebatewall.wallsaver.core {
 			var buttonSequence:ButtonSequence = new ButtonSequence();
 			canvas.addChild(buttonSequence);
 
-			var titleSequence:TitleSequence = new TitleSequence();
+			var titleSequence:TitleSequenceOld = new TitleSequenceOld();
 			canvas.addChild(titleSequence);			
 			
 			var questionSequence:QuestionSequence = new QuestionSequence();

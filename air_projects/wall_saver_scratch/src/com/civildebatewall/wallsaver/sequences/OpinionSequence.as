@@ -1,5 +1,4 @@
 package com.civildebatewall.wallsaver.sequences {
-	import com.kitschpatrol.futil.utilitites.StringUtil;
 	import com.civildebatewall.wallsaver.elements.OpinionBanner;
 	import com.civildebatewall.wallsaver.elements.OpinionRow;
 	import com.greensock.TimelineMax;
@@ -7,6 +6,8 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Linear;
 	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.Random;
+	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Sprite;
 	import flash.utils.getTimer;
@@ -35,7 +36,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// TODO replace with backend			
 			while (quotes.length < quotesDesired) {
-				var dummyQuote:String = StringUtil.trim(StringUtil.dummyText(Math2.randRange(20, 140)));
+				var dummyQuote:String = StringUtil.trim(StringUtil.dummyText(Random.range(20, 140)));
 				
 				if (Math.random() > 0.5)
 					quotes.push([dummyQuote,  "yes"]);
