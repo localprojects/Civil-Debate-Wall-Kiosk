@@ -6,6 +6,28 @@ package com.civildebatewall.resources {
 		import flash.display.*;		
 		import flash.utils.ByteArray;
 
+		// New Title Sequence
+		
+		[Embed(source = '/assets/graphics/titleChevron.png')] private static const titleChevronClass:Class;
+		public static function getTitleChevron():Bitmap { return new titleChevronClass() as Bitmap; };
+		public static const titleChevron:Bitmap = getTitleChevron();
+				
+		[Embed(source = '/assets/graphics/wallText.png')] private static const wallTextClass:Class;
+		public static function getWallText():Bitmap { return new wallTextClass() as Bitmap; };
+		public static const wallText:Bitmap = getWallText();
+		
+		[Embed(source = '/assets/graphics/theText.png')] private static const theTextClass:Class;
+		public static function getTheText():Bitmap { return new theTextClass() as Bitmap; };
+		public static const theText:Bitmap = getTheText();
+		
+		[Embed(source = '/assets/graphics/taglineText.png')] private static const taglineTextClass:Class;
+		public static function getTaglineText():Bitmap { return new taglineTextClass() as Bitmap; };
+		public static const taglineText:Bitmap = getTaglineText();
+		
+		
+		
+		
+		
 		// Wallsaver Arrows
 		[Embed(source = '/assets/graphics/questionArrowHead.png')] private static const questionArrowHeadClass:Class;
 		public static function getQuestionArrowHead():Bitmap { return new questionArrowHeadClass() as Bitmap; };
