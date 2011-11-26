@@ -2,9 +2,11 @@ package com.civildebatewall.staging.overlays {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
+	import com.civildebatewall.data.Word;
 	import com.civildebatewall.kiosk.elements.DebateList;
 	import com.civildebatewall.kiosk.elements.VoteStatBar;
 	import com.civildebatewall.kiosk.elements.WordCloud;
+	import com.civildebatewall.kiosk.elements.WordSearchResults;
 	import com.civildebatewall.staging.StatsTitleBarSelector;
 	import com.civildebatewall.staging.SuperlativesPortrait;
 	import com.civildebatewall.staging.elements.StatsTitleBar;
@@ -13,7 +15,11 @@ package com.civildebatewall.staging.overlays {
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockShape;
 	import com.kitschpatrol.futil.constants.Alignment;
+	import com.kitschpatrol.futil.constants.Char;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
+	import com.kitschpatrol.futil.utilitites.StringUtil;
+	
+	import flash.events.Event;
 	
 	public class StatsOverlay extends BlockBase	{
 		
@@ -27,6 +33,7 @@ package com.civildebatewall.staging.overlays {
 		private var debateList:DebateList;		
 		private var filler:BlockShape;
 		
+		private var searchResults:WordSearchResults;
 		
 
 		
@@ -67,14 +74,24 @@ package com.civildebatewall.staging.overlays {
 			wordCloud.visible = true;
 			addChild(wordCloud);						
 			
+			wordCloud.addEventListener(WordCloud.EVENT_WORD_SELECTED, onWordSelected);
+			wordCloud.addEventListener(WordCloud.EVENT_WORD_DESELECTED, onWordDeselected);
+			
 			searchResultsTitle = new StatsTitleBar(); // text set later
 			searchResultsTitle.backgroundColor = Assets.COLOR_GRAY_20;
 			searchResultsTitle.visible = true;
 			searchResultsTitle.x = 29;
 			searchResultsTitle.y = 625;
 			searchResultsTitle.leftDot.visible = false;
-			searchResultsTitle.rightDot.visible = false;	
+			searchResultsTitle.rightDot.visible = false;
+			searchResultsTitle.textColor = Assets.COLOR_GRAY_75;
 			addChild(searchResultsTitle);
+			
+			searchResults = new WordSearchResults();
+			searchResults.setDefaultTweenIn(0.75, {x: 29, y: 703});
+			searchResults.setDefaultTweenOut(0.75, {x: 29, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(searchResults);
+			
 			
 			superlativesTitle = new StatsTitleBarSelector();
 			superlativesTitle.x = 29;
@@ -83,13 +100,13 @@ package com.civildebatewall.staging.overlays {
 
 			//CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataChange);
 			superlativesPortrait = new SuperlativesPortrait();
-			superlativesPortrait.setDefaultTweenIn(1, {x: 29, y: 703, ease: Quart.easeInOut});
-			superlativesPortrait.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 703, ease: Quart.easeInOut});
+			superlativesPortrait.setDefaultTweenIn(.5, {x: 29, y: 703, ease: Quart.easeInOut});
+			superlativesPortrait.setDefaultTweenOut(.5, {x: Alignment.OFF_STAGE_LEFT, y: 703, ease: Quart.easeInOut});
 			addChild(superlativesPortrait);
 			
 			debateList = new DebateList();
-			debateList.setDefaultTweenIn(1, {x: 546, y: 703, ease: Quart.easeInOut});
-			debateList.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 703, ease: Quart.easeInOut});
+			debateList.setDefaultTweenIn(.5, {x: 546, y: 703, ease: Quart.easeInOut});
+			debateList.setDefaultTweenOut(.5, {x: Alignment.OFF_STAGE_RIGHT, y: 703, ease: Quart.easeInOut});
 			addChild(debateList);
 
 
@@ -102,6 +119,7 @@ package com.civildebatewall.staging.overlays {
 			addChild(filler);
 			
 			// todo create intro sequence?
+			searchResults.tweenOut();
 			superlativesPortrait.tweenIn();
 			debateList.tweenIn();			
 			// opinions results is just overlay
@@ -111,33 +129,56 @@ package com.civildebatewall.staging.overlays {
 			
 		}
 		
-		private var menuLowerDistance:String = "924"; // string makes it relative
+		private var menuLowerDistance:Number = 924; // string makes it relative
 		private var duration:Number = 0.6;
 		
 		
+		// TODO not relative!
 		public function lowerMenu():void {
 			TweenMax.to(filler, duration, {height:  924, ease: Quart.easeInOut});
-			TweenMax.to(wordCloudTitle, duration, {y: menuLowerDistance, ease: Quart.easeInOut});			
-			TweenMax.to(wordCloud, duration, {y: menuLowerDistance, ease: Quart.easeInOut});
-			TweenMax.to(searchResultsTitle, duration, {y: menuLowerDistance, alpha: 0, ease: Quart.easeInOut});			
-			TweenMax.to(superlativesTitle, duration, {y: menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
-			TweenMax.to(superlativesPortrait, duration, {y: menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
-			TweenMax.to(debateList, duration, {y: menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
 			
-						
 			
+			TweenMax.to(wordCloudTitle, duration, {y: 234 + menuLowerDistance, ease: Quart.easeInOut});			
+			TweenMax.to(wordCloud, duration, {y: 312 + menuLowerDistance, ease: Quart.easeInOut});
+			TweenMax.to(searchResultsTitle, duration, {y: 625 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});			
+			TweenMax.to(superlativesTitle, duration, {y: 625 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
+			TweenMax.to(superlativesPortrait, duration, {y: 703 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
+			TweenMax.to(debateList, duration, {y: 703 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
 		}
 		
 		public function raiseMenu():void {
 			TweenMax.to(filler, duration, {height:  0, ease: Quart.easeInOut});			
-			TweenMax.to(wordCloudTitle, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});			
-			TweenMax.to(wordCloud, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});
-			TweenMax.to(searchResultsTitle, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});	
-			TweenMax.to(superlativesTitle, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});
-			TweenMax.to(superlativesPortrait, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});
-			TweenMax.to(debateList, duration, {y: "-" + menuLowerDistance, alpha: 1, ease: Quart.easeInOut});	
+			TweenMax.to(wordCloudTitle, duration, {y: 234, alpha: 1, ease: Quart.easeInOut});			
+			TweenMax.to(wordCloud, duration, {y: 312, alpha: 1, ease: Quart.easeInOut});
+			TweenMax.to(searchResultsTitle, duration, {y: 625, alpha: 1, ease: Quart.easeInOut});	
+			TweenMax.to(superlativesTitle, duration, {y: 625, alpha: 1, ease: Quart.easeInOut});
+			TweenMax.to(superlativesPortrait, duration, {y: 703, alpha: 1, ease: Quart.easeInOut});
+			TweenMax.to(debateList, duration, {y: 703, alpha: 1, ease: Quart.easeInOut});	
 		}
 		
+		
+		private function onWordSelected(e:Event):void {
+			trace("word selected");
+			raiseMenu();			
+			
+			var word:Word = wordCloud.activeWord.word;
+			
+			searchResults.setWord(word);
+			
+			TweenMax.to(searchResultsTitle, 0.5, {text: Char.LEFT_SINGLE_QUOTE + word.theWord + Char.RIGHT_SINGLE_QUOTE + " used in " + word.posts.length + " " + StringUtil.plural("Opinion", word.posts.length)});
+			TweenMax.to(superlativesTitle, 0.5, {alpha: 0});
+			debateList.tweenOut();
+			superlativesPortrait.tweenOut();
+			searchResults.tweenIn();
+			
+		}
+		
+		private function onWordDeselected(e:Event):void {
+			TweenMax.to(superlativesTitle, 0.5, {alpha: 1});
+			debateList.tweenIn();
+			superlativesPortrait.tweenIn();
+			searchResults.tweenOut();
+		}		
 		
 		
 		

@@ -8,13 +8,13 @@ package com.civildebatewall.data {
 		public var noCases:uint = 0;
 		public var total:uint = 0;
 		public var posts:Array = [];
-		public var word:String;	
+		public var theWord:String;	
 		public var difference:Number;
 		public var normalDifference:Number;		
 		
 				
 		public function Word(theWord:String) {
-			word = theWord;
+			this.theWord = theWord;
 		}
 					
 

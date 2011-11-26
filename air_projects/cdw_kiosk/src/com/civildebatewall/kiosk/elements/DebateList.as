@@ -12,9 +12,7 @@ package com.civildebatewall.kiosk.elements {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import flashx.textLayout.elements.BreakElement;
 	
-	import sekati.layout.Arrange;
 	
 	public class DebateList extends BlockBase {
 		

@@ -24,36 +24,22 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.staging.overlays.InactivityOverlay;
 	import com.civildebatewall.staging.overlays.OpinionEntryOverlay;
 	import com.civildebatewall.staging.overlays.StatsOverlay;
-	import com.civildebatewall.staging.overlays.smsfun.Connection;
 	import com.civildebatewall.staging.overlays.smsfun.OldSMSOverlay;
-	import com.civildebatewall.staging.overlays.smsfun.Phone;
 	import com.civildebatewall.staging.overlays.smsfun.SMSOverlay;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
-	import com.kitschpatrol.futil.Random;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.constants.Alignment;
-	import com.kitschpatrol.futil.drawing.DashedLine;
-	import com.kitschpatrol.futil.drawing.Path;
-	import com.kitschpatrol.futil.easing.Ease;
-	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
-	import com.kitschpatrol.futil.utilitites.PointUtil;
 	
 	import flash.display.*;
 	import flash.events.*;
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.*;
-	
-	import flashx.textLayout.elements.BreakElement;
-	import flashx.textLayout.formats.TextAlign;
-	
-	import sekati.layout.Arrange;
 
 	public class View extends Sprite {
 		// convenience

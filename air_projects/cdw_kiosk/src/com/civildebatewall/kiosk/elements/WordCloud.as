@@ -39,8 +39,6 @@ package com.civildebatewall.kiosk.elements {
 			setWords(CivilDebateWall.data.frequentWords);			
 		}
 		
-
-		
 		public function setWords(source:Array):void {
 			row1 = [];
 			row2 = [];
@@ -79,9 +77,7 @@ package com.civildebatewall.kiosk.elements {
 			wordButtons = wordButtons.sortOn('difference', Array.DESCENDING | Array.NUMERIC);
 			
 			// do the fitting
-			trace("Words: " + wordButtons.length);
 			for (var k:int = 0; k < wordButtons.length - 4; k += 4) {
-				trace("pushing " + k);
 				row1.push(wordButtons[k]);
 				row2.push(wordButtons[k + 1]);
 				row3.push(wordButtons[k + 2]);
@@ -104,15 +100,15 @@ package com.civildebatewall.kiosk.elements {
 			// NOW we have the final list of words, normalize
 			// recalculate color based on new max and min
 			// find limits
-			trace("Buttons: " + wordButtons.length);	
+			// trace("Buttons: " + wordButtons.length);	
 			var maxDifference:Number = ArrayUtil.maxInObjectArray(wordButtons, "difference");
 			var minDifference:Number = ArrayUtil.minInObjectArray(wordButtons, "difference");
 	
-			trace("Max difference: " + maxDifference);
-			trace("Min difference: " + minDifference);
-			trace("Mapping -10: " + Math2.map(-10, minDifference, maxDifference, 0, 1));			
-			trace("Mapping -5: " + Math2.map(-5, minDifference, maxDifference, 0, 1));
-			trace("Mapping 2: " + Math2.map(2, minDifference, maxDifference, 0, 1));			
+//			trace("Max difference: " + maxDifference);
+//			trace("Min difference: " + minDifference);
+//			trace("Mapping -10: " + Math2.map(-10, minDifference, maxDifference, 0, 1));			
+//			trace("Mapping -5: " + Math2.map(-5, minDifference, maxDifference, 0, 1));
+//			trace("Mapping 2: " + Math2.map(2, minDifference, maxDifference, 0, 1));			
 			
 
 			for each (wordButton in wordButtons) {
@@ -121,8 +117,8 @@ package com.civildebatewall.kiosk.elements {
 				wordButton.updateColor();
 				
 				// also add listeners
-				wordButton.addEventListener(MouseEvent.MOUSE_DOWN, onDown);
-				wordButton.addEventListener(MouseEvent.MOUSE_DOWN, onUp);				
+				wordButton.onButtonDown.push(onDown);
+				wordButton.onButtonUp.push(onUp);
 			}			
 
 			
@@ -131,6 +127,8 @@ package com.civildebatewall.kiosk.elements {
 			addGrayBoxes(row2);
 			addGrayBoxes(row3);
 			addGrayBoxes(row4);
+			
+			activeWord = null;
 			
 			// TODO some kind of weighting system to find out which row combinations make the most sense
 			//words.push(new WordButton(wordInfo['word'], 
@@ -163,7 +161,12 @@ package com.civildebatewall.kiosk.elements {
 		
 		private function onDown(e:MouseEvent):void {
 			//fade everything else
-			var selectedWord:WordButton = e.target as WordButton;
+			trace("down");
+			
+			
+			var selectedWord:WordButton = e.currentTarget as WordButton;
+			trace("selected");
+			trace(selectedWord);
 			
 			// TODO dragable reselections
 			
