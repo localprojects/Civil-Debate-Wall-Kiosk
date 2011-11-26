@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.blocks.*;
 	import com.civildebatewall.data.Post;
+	import com.civildebatewall.kiosk.blocks.*;
 	import com.civildebatewall.kiosk.ui.*;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
@@ -18,6 +18,10 @@ package com.civildebatewall.kiosk.elements {
 		
 		public function SearchResult(post:Post, postNumber:int = -1) {		
 			super(post, postNumber);
+			
+			backgroundAlpha = 1;
+			backgroundColor = Assets.COLOR_GRAY_5;
+			
 			//_highlight = highlight;
 			//super(post, index, _highlight);
 		}

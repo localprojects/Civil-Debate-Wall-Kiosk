@@ -1,20 +1,18 @@
 package com.civildebatewall.kiosk {
 	
+	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Quart;
 	import com.greensock.plugins.ThrowPropsPlugin;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	
-	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
 	
 	
-	public class BlockInertialScroll extends BlockBase {
-		
-		
+	public class BlockInertialScroll extends BlockBase {	
 		// Constants for constraining scroll axis
 		public static const SCROLL_BOTH:String = "xy";
 		public static const SCROLL_X:String = "x";
@@ -24,9 +22,9 @@ package com.civildebatewall.kiosk {
 		// settings
 		private var wiggleThreshold:Number = 75; // How much mouse wiggle before we call it a drag instead of a click
 		private var resistance:Number = 800;
-		private var maxDuration:Number = 2; // max coast time, seconds
-		private var minDuration:Number = 0.25; // min coast time, seconds
-		private var overshootTolerance:Number = 0.5; // maximum time spent overshooting		
+		private var maxDuration:Number = 1; // max coast time, seconds
+		private var minDuration:Number = 0.1; // min coast time, seconds
+		private var overshootTolerance:Number = 0.25; // maximum time spent overshooting		
 				
 		// mouse blocker
 		private var mouseBlocker:Sprite;
@@ -48,10 +46,14 @@ package com.civildebatewall.kiosk {
 		private var mouseStartX:Number;
 		private var mouseStartY:Number;
 		
+		private var coastTween:TweenLite;
 		
 		public function BlockInertialScroll(params:Object = null)	{
 			super(params);
 			
+			// set initial scroll position
+			scrollX = 0;
+			scrollY = 0;			
 			
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);			
 		}
@@ -59,7 +61,10 @@ package com.civildebatewall.kiosk {
 		private function onMouseDown(e:MouseEvent):void {
 			
 			// stop any coasting, this is the "poke"
-			TweenMax.killTweensOf(this);			
+			//TweenMax.killTweensOf(this);
+			if (coastTween != null) coastTween.kill();
+			trace("killing");
+			
 			
 			// reset heuristics
 			lastMouseX = stage.mouseX;
@@ -77,10 +82,19 @@ package com.civildebatewall.kiosk {
 
 			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			this.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 1);
+			
+			
+			
 		}
 		
 		
+		
 		private function onMouseMove(e:MouseEvent):void {
+			
+			if (((scrollAxis == SCROLL_BOTH) && (isOverflowX || isOverflowY)) ||
+				  (scrollAxis == SCROLL_X && isOverflowX) ||
+					(scrollAxis == SCROLL_Y && isOverflowY)) {
+			
 			// Actually scroll the window
 			if((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_X)) scrollX = scrollStartX + (mouseStartX - stage.mouseX);
 			if((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_Y)) scrollY = scrollStartY + (mouseStartY - stage.mouseY);
@@ -105,10 +119,14 @@ package com.civildebatewall.kiosk {
 			// Keep mouse history for comparison
 			lastMouseX = stage.mouseX;
 			lastMouseY = stage.mouseY;
+			
+			}
 		}
 		
 		
 		private function onMouseUp(e:MouseEvent):void {
+			
+			
 			// Remove listeners
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			this.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
@@ -146,7 +164,7 @@ package com.civildebatewall.kiosk {
 				
 			// Stopped Here
 			if (!isClick) {
-				ThrowPropsPlugin.to(this, props, maxDuration, minDuration, overshootTolerance);
+				coastTween =	ThrowPropsPlugin.to(this, props, maxDuration, minDuration, overshootTolerance);
 				
 				// Restore child mouse functionality
 				enableChildren(content);
