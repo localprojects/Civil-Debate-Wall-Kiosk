@@ -9,21 +9,15 @@ package com.civildebatewall.kiosk.elements {
 	import flash.display.*;
 	import flash.events.Event;
 	
-	// TODO change aesthetics
 	public class SearchResult extends Comment {
 
-		public static const EVENT_GOTO_DEBATE:String = 'eventGoToDebate';		
-		
-		protected var leftPadding:Number = 32;
-		protected var rightPadding:Number = 32;
-		protected var topPadding:Number = 27;
-		protected var bottomPadding:Number = 22;		
-		
-		protected var goToDebateButton:IconButton;
+		//public static const EVENT_GOTO_DEBATE:String = 'eventGoToDebate';			
+//		protected var goToDebateButton:IconButton;
 		//protected var background:Shape;
 		
-		public function SearchResult() {
-			super(null, -1);
+		
+		public function SearchResult(post:Post, postNumber:int = -1) {		
+			super(post, postNumber);
 			//_highlight = highlight;
 			//super(post, index, _highlight);
 		}
@@ -180,11 +174,11 @@ package com.civildebatewall.kiosk.elements {
 //			// TODO debate button functionality
 //		}
 		
-		protected function onGoToDebate(e:Event):void {
-			// forward to parent
-			trace(" go to debate!");
-			this.dispatchEvent(new Event(EVENT_GOTO_DEBATE, true, true));
-		}
+//		protected function onGoToDebate(e:Event):void {
+//			// forward to parent
+//			trace(" go to debate!");
+//			this.dispatchEvent(new Event(EVENT_GOTO_DEBATE, true, true));
+//		}
 		
 	}
 }

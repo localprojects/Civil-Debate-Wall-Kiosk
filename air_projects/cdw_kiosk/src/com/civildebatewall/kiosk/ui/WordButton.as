@@ -33,7 +33,7 @@ package com.civildebatewall.kiosk.ui {
 			// set up the word button
 			height = 57;
 			backgroundRadius = 4;
-			text = StringUtil.capitalize(word.word);
+			text = StringUtil.capitalize(word.theWord);
 			textFont = Assets.FONT_BOLD;
 			letterSpacing = -1;	
 			textColor = 0xffffff;
@@ -46,6 +46,7 @@ package com.civildebatewall.kiosk.ui {
 			leading = 25; // make sure we don't wrap
 			backgroundColor = 0x000000;
 			alignmentPoint = Alignment.CENTER;
+			buttonMode = true;
 			
 			visible = true;
 			updateColor();

@@ -25,7 +25,6 @@ package com.civildebatewall.data {
 		public static const FLAG_UPDATE_LOCAL:String = "flagUpdateLocal";
 		public static const FLAG_UPDATE_SERVER:String = "flagUpdateServer";		
 		
-		
 		public var question:Question;
 		public var users:Array;
 		public var threads:Array;
@@ -180,7 +179,6 @@ package com.civildebatewall.data {
 			}
 			
 			
-			
 			frequentWords = [];
 			for each (var corpusWord:String in corpus) {
 				// filter out small words
@@ -207,7 +205,7 @@ package com.civildebatewall.data {
 					
 					for each (var wordInPost:String in wordsInPost) {
 						
-						if (wordInPost === word.word) {
+						if (wordInPost === word.theWord) {
 							if (post.stance == Post.STANCE_YES) {
 								word.yesCases++;
 							}

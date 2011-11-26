@@ -12,7 +12,7 @@ package com.civildebatewall.kiosk.ui {
 	
 	import com.civildebatewall.Assets;
 	
-	import sekati.converters.BoolConverter;
+	
 	
 	public class BlockButton extends ButtonBase	{
 

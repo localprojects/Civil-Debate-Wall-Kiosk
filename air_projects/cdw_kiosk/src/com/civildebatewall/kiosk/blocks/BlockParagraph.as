@@ -12,7 +12,6 @@ package com.civildebatewall.kiosk.blocks {
 	
 	import flashx.textLayout.elements.BreakElement;
 	
-	import sekati.layout.Arrange;
 	
 	// multi-line block text
 	public class BlockParagraph extends OldBlockBase {
