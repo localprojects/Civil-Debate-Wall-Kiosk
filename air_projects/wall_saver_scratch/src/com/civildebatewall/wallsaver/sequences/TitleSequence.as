@@ -13,9 +13,9 @@ package com.civildebatewall.wallsaver.sequences {
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	
-	public class TitleSequence extends Sprite implements ISequence	{		
+	public class TitleSequence extends Sprite implements ISequence {		
 		
-		
+		private var underlay:Shape;
 		private var maskShape:Shape;
 		private var theTitle:Bitmap;
 		private var wallTitle:Bitmap;
@@ -26,14 +26,18 @@ package com.civildebatewall.wallsaver.sequences {
 		private var topBar:Shape;
 		private var bottomBar:Shape;
 		private var question:BlockText;
-		
 
 		public function TitleSequence()	{
 			super();
 			
+			underlay = new Shape();
+			GraphicsUtil.fillRect(underlay.graphics, 1080, 1920, 0xffffff);
+			underlay.alpha = 0;
+			addChild(underlay);	
+			
 			// keep this screen masked... TODO fill the background with white?
 			maskShape = GraphicsUtil.shapeFromRect(Main.screens[0]);
-			addChild(maskShape);			
+			addChild(maskShape);
 			this.mask = maskShape;
 
 			// chevrons go below title text
@@ -87,17 +91,20 @@ package com.civildebatewall.wallsaver.sequences {
 		
 		public function getTimelineIn():TimelineMax	{
 			var timelineIn:TimelineMax = new TimelineMax({useFrames: true});
-			
-			
+
 			// centered y positions
 			var theTitleY:Number = (1920 - (theTitle.height + 48 + wallTitle.height)) / 2;
 			var wallTitleY:Number =  theTitleY + theTitle.height + 48;
+			
+			// show the underline
 			
 			// tween in the titles
 			timelineIn.appendMultiple([
 				TweenMax.fromTo(theTitle, 60, {x: 1080, y: theTitleY}, {x: 59, y: theTitleY, ease: Quart.easeInOut}),
 				TweenMax.fromTo(wallTitle, 60, {x: -wallTitle.width, y: wallTitleY}, {x: 59, y: wallTitleY, ease: Quart.easeInOut}),
 			]);
+			
+			timelineIn.append(TweenMax.fromTo(underlay, 0, {alpha: 0}, {alpha: 1}));			
 			
 			timelineIn.appendMultiple([
 				TweenMax.to(theTitle, 60, {y: 277, ease: Quart.easeInOut}),
@@ -108,7 +115,6 @@ package com.civildebatewall.wallsaver.sequences {
 			timelineIn.appendMultiple([
 				TweenMax.fromTo(tagline, 60, {x: 1080}, {x: 59, ease: Quart.easeInOut})
 			], -30);
-			
 			
 			// fade in the chevrons
 			timelineIn.appendMultiple([
@@ -121,20 +127,64 @@ package com.civildebatewall.wallsaver.sequences {
 			timelineIn.appendMultiple([
 				TweenMax.fromTo(topBar, 60, {y: -topBar.height, alpha: 0}, {y: 217, alpha: 1, ease: Quart.easeOut}),
 				TweenMax.fromTo(bottomBar, 60, {y: 1920, alpha: 0}, {y: 869, alpha: 1, ease: Quart.easeOut})
-			], -50);
+			], -100);
 
-			// scrollin the question
+			// scroll in the question
 			timelineIn.appendMultiple([
 				TweenMax.fromTo(question, 60, {x: -question.width}, {x: 59, ease: Quart.easeOut})
-			], -40);
+			], -60);
 			
 			return timelineIn;
 		}
 		
 		public function getTimelineOut():TimelineMax {
+			// Just flip the in timeline
 			var timelineOut:TimelineMax = new TimelineMax({useFrames: true});
-			timelineOut = getTimelineIn();
-			timelineOut.reversed = true;
+
+			
+			// centered y positions
+			var theTitleY:Number = (1920 - (theTitle.height + 48 + wallTitle.height)) / 2;
+			var wallTitleY:Number =  theTitleY + theTitle.height + 48;
+			
+			// scroll out the question
+			timelineOut.appendMultiple([
+				TweenMax.fromTo(question, 100, {x: 59}, {x: 1080, ease: Quart.easeIn})
+			]);
+			
+			// fade out the chevrons
+			timelineOut.appendMultiple([
+				TweenMax.fromTo(chevronA, 60, {x: 950, alpha: 1, ease: Quart.easeIn}, {x: 1080, alpha: 0}),
+				TweenMax.fromTo(chevronB, 60, {x: 889, alpha: 1, ease: Quart.easeIn}, {x: 1080, alpha: 0}),
+				TweenMax.fromTo(chevronC, 60, {x: 828, alpha: 1, ease: Quart.easeIn}, {x: 1080, alpha: 0})
+			], 0, TweenAlign.START, 20);			
+			
+			
+			// send outin the top and bottom bars			
+			timelineOut.appendMultiple([
+				TweenMax.fromTo(topBar, 60, {y: 217, alpha: 1, ease: Quart.easeIn}, {y: -topBar.height, alpha: 0}),
+				TweenMax.fromTo(bottomBar, 60, {y: 869, alpha: 1, ease: Quart.easeIn}, {y: 1920, alpha: 0})
+			], -100);
+			
+			// send out the tagline
+			timelineOut.appendMultiple([
+				TweenMax.fromTo(tagline, 60, {x: 59, ease: Quart.easeInOut}, {x: 1080})
+			], -30);
+			
+			
+			// remove title, push down
+			timelineOut.appendMultiple([
+				TweenMax.to(theTitle, 60, {y: theTitleY, ease: Quart.easeInOut}),
+				TweenMax.to(wallTitle, 60, {y: wallTitleY, ease: Quart.easeInOut})			
+			]);			
+			
+			timelineOut.append(TweenMax.fromTo(underlay, 0, {alpha: 1}, {alpha: 0}));			
+			
+			// send titles out
+			timelineOut.appendMultiple([
+				TweenMax.fromTo(theTitle, 60, {x: 59, y: theTitleY, ease: Quart.easeInOut}, {x: 1080, y: theTitleY}),
+				TweenMax.fromTo(wallTitle, 60, {x: 59, y: wallTitleY, ease: Quart.easeInOut}, {x: -wallTitle.width, y: wallTitleY}),
+			]);
+
 			return timelineOut;
 		}
 		

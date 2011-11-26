@@ -48,10 +48,11 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// Settings
 			vxIntro = 50;
-			vxMiddle = 20; // but only for the longest row, all others are slower!
+			vxMiddle = 15; // but only for the longest row, all others are slower!
 			vxOutro = 50;
-			easeIntroFrames = 300;
-			easeOutroFrames = 300;
+			easeIntroFrames = 500;
+			easeOutroFrames = 500;
+			
 			
 			
 			// generate the display quotes
@@ -71,22 +72,22 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			for (var i:int = 0; i < opinionRows.length; i++) {
 				var quoteLine:OpinionRow = new OpinionRow();
-				quoteLine.x = 0;
-				quoteLine.y = 123 + (i * (247 + 109));
+				quoteLine.x = 1080 + Main.bezels[0].width;
+				quoteLine.y = 123 + (i * 357);
 				addChild(quoteLine);
 				
-				 //alternating stances
-				if (i % 1 == 0) {
+				// alternating stances
+				if (i % 2 == 0) {
 					quoteLine.lastStance = "no";
 				}
 				else {
 					quoteLine.lastStance = "yes"					
 				}
-				
+
 				opinionRows[i] = quoteLine;
 			}			
 			
-			// add them to rows
+			// add opinions to rows
 			while ((yesQuotes.length > 0) && (noQuotes.length > 0)) {
 				// find the shortest row
 				var shortestRowIndex:int = 0;
@@ -97,8 +98,7 @@ package com.civildebatewall.wallsaver.sequences {
 						shortestRowIndex = j;
 					}
 				}
-				
-				// add opinions to the row
+
 				
 				// alternate stances
 				var tempQuotationBanner:OpinionBanner;
@@ -132,8 +132,7 @@ package com.civildebatewall.wallsaver.sequences {
 				if (opinionRows[l].width > longestRow.width) longestRow = opinionRows[l];
 			}
 			
-			
-			var start:int = getTimer();
+			// var start:int = getTimer();
 			
 			// First, calculate the longest row, since it determines the middle velocity of the rest
 			longestRow.calculateFrames(vxIntro, vxMiddle, vxOutro, easeIntroFrames, easeOutroFrames);
@@ -147,11 +146,11 @@ package com.civildebatewall.wallsaver.sequences {
 				}
 			}
 			
-			// Debug, review how long it took to generate velocities.
-			trace("Calculated opinion rows middle velocities in " + (getTimer() - start) + "ms.");
-			for each(var row:OpinionRow in opinionRows) {
-				trace("Frames: " + row.totalFrames);
-			}
+//			// Debug, review how long it took to generate velocities.
+//			trace("Calculated opinion rows middle velocities in " + (getTimer() - start) + "ms.");
+//			for each(var row:OpinionRow in opinionRows) {
+//				trace("Frames: " + row.totalFrames);
+//			}
 			
 		}
 		
@@ -171,20 +170,20 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			timeline.appendMultiple([
 				TweenMax.fromTo(opinionRows[0], opinionRows[0].totalFrames,
-					{frame: 0},
-					{frame: opinionRows[0].totalFrames, ease: Linear.easeNone}),
+					{frame: opinionRows[0].totalFrames, ease: Linear.easeNone},
+					{frame: 0}),				
 				TweenMax.fromTo(opinionRows[1], opinionRows[1].totalFrames,
 					{frame: opinionRows[1].totalFrames},
-					{frame: 0, ease: Linear.easeNone}),
+				{frame: 0, ease: Linear.easeNone}),				
 				TweenMax.fromTo(opinionRows[2], opinionRows[2].totalFrames,
-					{frame: 0},
-					{frame: opinionRows[2].totalFrames, ease: Linear.easeNone}),
+					{frame: opinionRows[2].totalFrames, ease: Linear.easeNone},
+				{frame: 0}),				
 				TweenMax.fromTo(opinionRows[3], opinionRows[3].totalFrames,
 					{frame: opinionRows[3].totalFrames},
-					{frame: 0, ease: Linear.easeNone}),
+				{frame: 0, ease: Linear.easeNone}),				
 				TweenMax.fromTo(opinionRows[4], opinionRows[4].totalFrames,
-					{frame: 0},
-					{frame: opinionRows[4].totalFrames, ease: Linear.easeNone})
+					{frame: opinionRows[4].totalFrames, ease: Linear.easeNone},
+					{frame: 0}),	
 			], 0, TweenAlign.START, 0);			
 			
 			return timeline;

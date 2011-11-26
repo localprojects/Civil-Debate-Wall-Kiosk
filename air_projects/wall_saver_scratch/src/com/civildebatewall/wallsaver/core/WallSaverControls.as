@@ -21,6 +21,9 @@ package com.civildebatewall.wallsaver.core {
 		private var timeSlider:Slider;
 		private var target:WallSaver;
 		
+		private var sequenceAButton:PushButton;
+		private var sequenceBButton:PushButton;
+		
 		
 		public function WallSaverControls(target:WallSaver)	{
 			this.target = target;
@@ -55,12 +58,16 @@ package com.civildebatewall.wallsaver.core {
 			var buttonPos:int = 5;
 			new PushButton(stage, buttonPos, 50, "Play", onPlayButton);
 			new PushButton(stage, buttonPos += 105, 50, "Pause", onPauseButton);
-			new PushButton(stage, buttonPos += 105, 50, "Sequence A", onSequenceA);
-			new PushButton(stage, buttonPos += 105, 50, "Sequence B", onSequenceB);
-			new PushButton(stage, buttonPos += 105, 50, "Sequence C", onSequenceC);
-			new PushButton(stage, buttonPos += 105, 50, "Sequence All", onSequenceAll);			
-			new PushButton(stage, buttonPos += 105, 50, "End Sequence", endSequence);
-			new PushButton(stage, buttonPos += 105, 50, "Full Screen", onFullScreen).toggle = true;			
+			sequenceAButton = new PushButton(stage, buttonPos += 105, 50, "Sequence A", onSequenceA);
+			sequenceBButton = new PushButton(stage, buttonPos += 105, 50, "Sequence B", onSequenceB);
+			
+			sequenceAButton.toggle = true;
+			sequenceAButton.selected = true;
+			
+			sequenceBButton.toggle = true;
+			
+//			new PushButton(stage, buttonPos += 105, 50, "End Sequence", endSequence);
+//			new PushButton(stage, buttonPos += 105, 50, "Full Screen", onFullScreen).toggle = true;			
 			
 
 			// Get updates from timeline and watch FPS
@@ -72,6 +79,10 @@ package com.civildebatewall.wallsaver.core {
 			this.y = Main.self.stage.nativeWindow.bounds.bottom;
 			
 			
+
+		}
+		
+		public function targetStageSetup():void {
 			target.stage.addEventListener(Event.FULLSCREEN, function():void {
 				
 				if (target.stage.displayState == StageDisplayState.FULL_SCREEN_INTERACTIVE) {
@@ -96,27 +107,21 @@ package com.civildebatewall.wallsaver.core {
 		
 		
 		private function onSequenceA(e:Event):void {
+			sequenceAButton.selected = true;
+			sequenceBButton.selected= false;			
 			target.playSequenceA();
-			updateTimeSlider();			
+			updateTimeSlider();
 		}
 		
 		
 		private function onSequenceB(e:Event):void {
+			sequenceAButton.selected = false;
+			sequenceBButton.selected = true;			
 			target.playSequenceB();
 			updateTimeSlider();			
 		}		
-		
-		
-		private function onSequenceC(e:Event):void {
-			target.playSequenceC();
-			updateTimeSlider();	
-		}
-		
-		private function onSequenceAll(e:Event):void {
-			target.playSequenceAll();
-			updateTimeSlider();	
-		}		
-		
+
+
 		
 		private function endSequence(e:Event):void {
 			target.endSequence();
@@ -137,7 +142,7 @@ package com.civildebatewall.wallsaver.core {
 		}
 		
 		
-		private function updateTimeSlider():void {
+		public function updateTimeSlider():void {
 			timeSlider.maximum = target.timeline.totalDuration;
 			timeSlider.value = target.timeline.currentTime;
 		}

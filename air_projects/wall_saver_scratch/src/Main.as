@@ -21,22 +21,24 @@ package {
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	
-	[SWF(width="5720", height="1920", frameRate="60", backgroundColor="0x000000")]
+	[SWF(width="5720", height="1920", frameRate="60")]
 	public class Main extends Sprite {
 		
 		// These will come in from FlashSpan
 		public static const screenWidth:int = 1080;
 		public static const screenHeight:int = 1920;
 		public static const screenCount:int = 5;
-		public static const bezelPixelWidth:int = 40;
+		public static const bezelPixelWidth:int = 40; // 1" bezel? not the gutter...
 		public static const totalWidth:int = (screenWidth * screenCount) + (bezelPixelWidth * 2 * (screenCount - 1));
 		public static const totalHeight:int = screenHeight;
+		public static const physicalScreenWidth = screenWidth + (bezelPixelWidth * 2);
 		public static var screens:Vector.<Rectangle> = new Vector.<Rectangle>(screenCount);
 		public static var bezels:Vector.<Rectangle> = new Vector.<Rectangle>;
 		
+		
 		// Debug
 		private const stageScaleFactor:Number = 4;		
-		private var controls:WallSaverControls;
+		public static var controls:WallSaverControls;
 		private var wallSaver:WallSaver;
 		
 		// Sample Content
@@ -61,7 +63,6 @@ package {
 			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			stage.align = StageAlign.LEFT;
 			stage.nativeWindow.width = totalWidth / stageScaleFactor;
-			
 
 			stage.nativeWindow.height = (totalHeight / stageScaleFactor) + 20; // Compensate for window height?
 			stage.nativeWindow.x = Screen.mainScreen.visibleBounds.left;
@@ -73,6 +74,7 @@ package {
 			
 			// Create global reference
 			self = this;
+			
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -106,11 +108,13 @@ package {
 			
 			// Add the Wallsaver
 			wallSaver = new WallSaver();
-			addChild(wallSaver);
+
 			
 			// Create the control window
 			controls = new WallSaverControls(wallSaver); 
-			controls.activate();			
+			controls.activate();
+			
+			addChild(wallSaver);			
 			
 			// Draw the bezels (Debug)
 			for each (var bezel:Rectangle in bezels) {

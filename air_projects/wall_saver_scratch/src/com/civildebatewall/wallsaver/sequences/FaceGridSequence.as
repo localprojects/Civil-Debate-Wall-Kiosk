@@ -33,12 +33,16 @@ package com.civildebatewall.wallsaver.sequences {
 			super();
 			
 			// build the grid
+			var gridWidth:int = Main.totalWidth - Main.physicalScreenWidth;			
 			var gridSpacing:Number = 30;
 			var gridRows:int = 5;
-			var gridCols:int = 20;
+			var gridCols:int = 16;
 			var portraitWidth:int = 233;
 			var portraitHeight:int = 311;
 			var wallsaverPaddingTop:int = 123;
+			
+			
+			
 			
 			var totalResponses:int = yesResponses + noResponses;
 
@@ -52,8 +56,8 @@ package com.civildebatewall.wallsaver.sequences {
 			for (var col:int = 0; col < gridCols; col++) {
 				portraits[col] = [];
 				
-				var screen:Rectangle = Main.screens[Math.floor(col / (gridCols / Main.screens.length))];
-				var screenCol:int = col % (gridCols / Main.screens.length);
+				var screen:Rectangle = Main.screens[Math.floor(col / (gridCols / (Main.screens.length - 1))) + 1];
+				var screenCol:int = col % (gridCols / (Main.screens.length - 1));
 				var arrowHeight:int = Math2.clamp(centerArrowHeight + ((borderColIndex - col) * 2), 0, gridRows); // find out how high the arrow is in this column
 				
 				for (var row:int = 0; row < gridRows; row++) {
@@ -89,10 +93,10 @@ package com.civildebatewall.wallsaver.sequences {
 			var gridTweenIn:Array = [];
 			
 			for each (var portrait:GridPortrait in gridCells) {
-				gridTweenIn.push(TweenMax.fromTo(portrait, 750, {step: 0}, {step: 1, ease: Linear.easeNone}));
+				gridTweenIn.push(TweenMax.fromTo(portrait, 50, {step: 0}, {step: 1, ease: Linear.easeNone}));
 			}
 			
-			timelineIn.appendMultiple(gridTweenIn, 0, TweenAlign.START, 5); // compensate for steppiness
+			timelineIn.appendMultiple(gridTweenIn, 0, TweenAlign.START, 2); // compensate for steppiness
 			
 			
 			return timelineIn;
@@ -105,10 +109,10 @@ package com.civildebatewall.wallsaver.sequences {
 			var gridTweenOut:Array = [];
 			
 			for each (var portrait:GridPortrait in gridCells) {
-				gridTweenOut.push(TweenMax.fromTo(portrait, 400, {step: 1}, {step: 0, ease: Expo.easeIn}));
+				gridTweenOut.push(TweenMax.fromTo(portrait, 100, {step: 1}, {step: 0, ease: Expo.easeIn}));
 			}
 			
-			timelineOut.appendMultiple(gridTweenOut, 100, TweenAlign.START, 5);
+			timelineOut.appendMultiple(gridTweenOut, 200, TweenAlign.START, 2);
 			
 			return timelineOut;
 		}

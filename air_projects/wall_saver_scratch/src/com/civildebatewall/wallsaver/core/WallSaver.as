@@ -25,10 +25,6 @@ package com.civildebatewall.wallsaver.core {
 		public function WallSaver()	{
 			super();
 			
-			// New sequence progression
-			// A. Quotes, Call to Action
-			// B: Graph, Face Grid
-			
 			// The wallsaver canvas
 			canvas = new Sprite();
 			canvas.alpha = 0;
@@ -36,6 +32,16 @@ package com.civildebatewall.wallsaver.core {
 			addChild(canvas);
 			
 			timeline = new TimelineMax({useFrames: true});
+			
+			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		}
+		
+		private function onAddedToStage(e:Event):void {
+			// default to sequence A
+			Main.controls.targetStageSetup();
+			
+			playSequenceA();
+			Main.controls.updateTimeSlider();			
 		}
 		
 		public function toggleFullScreen():void {
@@ -44,7 +50,7 @@ package com.civildebatewall.wallsaver.core {
 				stage.scaleMode = StageScaleMode.SHOW_ALL;
 				
 				// block off extras
-
+				// TODO fix this
 				topBar = GraphicsUtil.shapeFromSize(stage.stageWidth, 1080- Main.totalHeight / 2);
 				bottomBar = GraphicsUtil.shapeFromSize(stage.stageWidth,1080 - Main.totalHeight / 2);
 				
@@ -53,8 +59,6 @@ package com.civildebatewall.wallsaver.core {
 				canvas.y = topBar.height;
 				bottomBar.y = canvas.x + canvas.height;
 				addChild(bottomBar);
-				
-				
 			}
 			else {
 				stage.displayState = StageDisplayState.NORMAL;
@@ -92,44 +96,32 @@ package com.civildebatewall.wallsaver.core {
 		public function playSequenceA():void {
 			preSequenceBuildTasks();
 			
-			var buttonSequence:ButtonSequence = new ButtonSequence();
-			canvas.addChild(buttonSequence);			
+			var overlaySequence:OverlaySequence = new OverlaySequence();
+			canvas.addChild(overlaySequence);
+
+			var opinionSequence:OpinionSequence = new OpinionSequence();
+			canvas.addChild(opinionSequence);
 			
+			var calltoActionSequence:CallToActionSequence = new CallToActionSequence();
+			canvas.addChild(calltoActionSequence);
+			
+			// title goes over 4 screen animations
 			var titleSequence:TitleSequence = new TitleSequence();
 			canvas.addChild(titleSequence);
 			
-			timeline.appendMultiple([
-				buttonSequence.getTimelineIn(),				
-				titleSequence.getTimelineIn()
-			], 0, TweenAlign.SEQUENCE);
-			
-			
-			
-//			// Create display objects
-//			var buttonSequence:ButtonSequence = new ButtonSequence();
-//			canvas.addChild(buttonSequence);
-//			
-//			var titleSequence:TitleSequenceOld = new TitleSequenceOld();
-//			canvas.addChild(titleSequence);
-//			
-//			var questionSequence:QuestionSequence = new QuestionSequence();
-//			canvas.addChild(questionSequence);
-//			
-//			var opinionSequence:OpinionSequence = new OpinionSequence();
-//			canvas.addChild(opinionSequence);
-//			
-//			var callToActionSequence:CallToActionSequence = new CallToActionSequence();			
-//			canvas.addChild(callToActionSequence);
-//			
-//			// Assemble the timeline
-//			timeline.appendMultiple([
-//				buttonSequence.getTimelineIn(),
-//				titleSequence.getTimeline(),
-//				questionSequence.getTimeline(),
-//				opinionSequence.getTimeline(),
-//				callToActionSequence.getTimeline(),
-//				buttonSequence.getTimelineOut()				
-//			], 0, TweenAlign.SEQUENCE);
+			// buttons go over everything
+			var buttonSequence:ButtonSequence = new ButtonSequence();
+			canvas.addChild(buttonSequence);			
+
+			// build the timeline
+			timeline.append(overlaySequence.getTimelineIn());			
+			timeline.append(buttonSequence.getTimelineIn());			
+			timeline.append(titleSequence.getTimelineIn(), -60);
+			timeline.append(opinionSequence.getTimeline());
+			timeline.append(calltoActionSequence.getTimeline(), -60);
+			timeline.append(titleSequence.getTimelineOut(), -100);
+			timeline.append(buttonSequence.getTimelineOut());						
+			timeline.append(overlaySequence.getTimelineOut());
 			
 			postSequenceBuildTasks();
 		}
@@ -137,105 +129,35 @@ package com.civildebatewall.wallsaver.core {
 		public function playSequenceB():void {		
 			preSequenceBuildTasks();
 			
-			// Create display objects
-			var buttonSequence:ButtonSequence = new ButtonSequence();
-			canvas.addChild(buttonSequence);
-			
-			var questionSequence:QuestionSequence = new QuestionSequence();
-			canvas.addChild(questionSequence);
+			// B: Title, Graph, Face Grid			
+			var overlaySequence:OverlaySequence = new OverlaySequence();
+			canvas.addChild(overlaySequence);			
 			
 			var barGraphSequence:BarGraphSequence = new BarGraphSequence();
 			canvas.addChild(barGraphSequence);
 			
-			var callToActionSequence:CallToActionSequence = new CallToActionSequence();			
-			canvas.addChild(callToActionSequence);
+			var faceGridSequence:FaceGridSequence = new FaceGridSequence();
+			canvas.addChild(faceGridSequence);
 			
-			// Assemble the timeline
-			timeline.appendMultiple([
-				buttonSequence.getTimelineIn(),
-				questionSequence.getTimeline(),
-				barGraphSequence.getTimeline(),
-				callToActionSequence.getTimeline(),
-				buttonSequence.getTimelineOut()				
-			], 0, TweenAlign.SEQUENCE);
+			// title goes over 4 screen animations
+			var titleSequence:TitleSequence = new TitleSequence();
+			canvas.addChild(titleSequence);			
+			
+			// buttons go over everything
+			var buttonSequence:ButtonSequence = new ButtonSequence();
+			canvas.addChild(buttonSequence);
+
+			timeline.append(overlaySequence.getTimelineIn());			
+			timeline.append(buttonSequence.getTimelineIn());			
+			timeline.append(titleSequence.getTimelineIn(), -60);
+			timeline.append(barGraphSequence.getTimeline(), -60);
+			timeline.append(faceGridSequence.getTimeline());
+			timeline.append(titleSequence.getTimelineOut());
+			timeline.append(buttonSequence.getTimelineOut());						
+			timeline.append(overlaySequence.getTimelineOut());
 			
 			postSequenceBuildTasks();
 		}
-		
-		
-		public function playSequenceC():void {
-			preSequenceBuildTasks();
-			
-			// Create display objects
-			var buttonSequence:ButtonSequence = new ButtonSequence();
-			canvas.addChild(buttonSequence);
-			
-			var questionSequence:QuestionSequence = new QuestionSequence();
-			canvas.addChild(questionSequence);
-			
-			var faceGridSequence:FaceGridSequence = new FaceGridSequence();
-			canvas.addChild(faceGridSequence);
-			
-			var callToActionSequence:CallToActionSequence = new CallToActionSequence();
-			canvas.addChild(callToActionSequence);
-			
-			var titleSequence:TitleSequenceOld = new TitleSequenceOld();
-			canvas.addChild(titleSequence);
-			
-			// Assemble the timeline
-			timeline.appendMultiple([
-				buttonSequence.getTimelineIn(),
-				questionSequence.getTimeline(),
-				faceGridSequence.getTimeline(),
-				callToActionSequence.getTimeline(),	
-				titleSequence.getTimeline(),
-				buttonSequence.getTimelineOut()				
-			], 0, TweenAlign.SEQUENCE);
-			
-			postSequenceBuildTasks();			
-		}
-		
-		
-		public function playSequenceAll():void {
-			preSequenceBuildTasks();
-			
-			// Create display objects
-			var buttonSequence:ButtonSequence = new ButtonSequence();
-			canvas.addChild(buttonSequence);
-
-			var titleSequence:TitleSequenceOld = new TitleSequenceOld();
-			canvas.addChild(titleSequence);			
-			
-			var questionSequence:QuestionSequence = new QuestionSequence();
-			canvas.addChild(questionSequence);
-			
-			var opinionSequence:OpinionSequence = new OpinionSequence();
-			canvas.addChild(opinionSequence);			
-
-			var barGraphSequence:BarGraphSequence = new BarGraphSequence();
-			canvas.addChild(barGraphSequence);			
-			
-			var faceGridSequence:FaceGridSequence = new FaceGridSequence();
-			canvas.addChild(faceGridSequence);
-			
-			var callToActionSequence:CallToActionSequence = new CallToActionSequence();
-			canvas.addChild(callToActionSequence);
-			
-			
-			// Assemble the timeline
-			timeline.appendMultiple([
-				buttonSequence.getTimelineIn(),
-				titleSequence.getTimeline(),
-				questionSequence.getTimeline(),
-				opinionSequence.getTimeline(),
-				barGraphSequence.getTimeline(),
-				faceGridSequence.getTimeline(),				
-				callToActionSequence.getTimeline(),
-				buttonSequence.getTimelineOut()				
-			], 0, TweenAlign.SEQUENCE, 50);
-			
-			postSequenceBuildTasks();			
-		}		
 		
 		// Ends the sequence early, usually when someone touches the screen... move this to parent?
 		// TODO make the fade flow "out" from the touched screen.
