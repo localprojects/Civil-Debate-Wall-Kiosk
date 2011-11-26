@@ -356,9 +356,17 @@ package com.kitschpatrol.futil.blocks {
 		}
 		
 		
+		public function get isOverflowY():Boolean {
+			return (contentHeight > (background.height - _padding.vertical));
+		}
+		
+		public function get isOverflowX():Boolean {
+			return (contentWidth > (background.width - _padding.horizontal));
+		}		
+		
 		public function get maxScrollY():Number {
 			if (scrollLimitMode == SCROLL_LIMIT_AUTO) {			
-				return (contentWidth - (background.width - _padding.horizontal));
+				return (contentHeight - (background.height - _padding.vertical));
 			}
 			else if (scrollLimitMode == SCROLL_LIMIT_MANUAL) {
 				return _maxScrollY; 
@@ -784,6 +792,9 @@ package com.kitschpatrol.futil.blocks {
 		private var defaultOutDuration:Number = 0.75;
 		public var active:Boolean;
 		
+		private var theTweenIn:TweenMax;
+		private var theTweenOut:TweenMax;
+		
 		public function setDefaultTweenIn(duration:Number, params:Object):void {
 			defaultInDuration = duration;
 			defaultTweenInVars = ObjectUtil.mergeObjects(defaultTweenInVars, params);
@@ -830,7 +841,8 @@ package com.kitschpatrol.futil.blocks {
 		// Tweens to default location, or takes modifiers if called without arguments
 		public function tweenIn(duration:Number = -1, params:Object = null):void {
 			// THIS TRIES TO FIX THE MISSING BLOCK PROBLEM!!! // IT WORKS!s
-			TweenMax.killTweensOf(this); // stop tweening out if we're tweening out, keeps afterTweenOut from firing...
+			//TweenMax.killTweensOf(this); // stop tweening out if we're tweening out, keeps afterTweenOut from firing...
+			if (theTweenOut != null) theTweenOut.kill(); // try to be kinder and gentler
 			
 			active = true;
 			
@@ -838,7 +850,7 @@ package com.kitschpatrol.futil.blocks {
 			if (params == null) params = defaultTweenInVars;
 			else params = ObjectUtil.mergeObjects(defaultTweenInVars, params);
 			
-			TweenMax.to(this, duration, params);
+			theTweenIn = TweenMax.to(this, duration, params);
 		}		
 		
 		public function tweenOut(duration:Number = -1, params:Object = null):void {
@@ -846,7 +858,7 @@ package com.kitschpatrol.futil.blocks {
 			if (params == null)	params = defaultTweenOutVars;
 			else params = ObjectUtil.mergeObjects(defaultTweenOutVars, params);
 			
-			TweenMax.to(this, duration, params);
+			theTweenOut = TweenMax.to(this, duration, params);
 			active = true; // TODO WHY WAS THIS FALSE?
 		}
 		

@@ -11,6 +11,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.kiosk.ui.ButtonBase;
 	import com.civildebatewall.kiosk.ui.InertialScrollField;
 	import com.civildebatewall.kiosk.ui.WordButton;
+	import com.greensock.TweenMax;
 	import com.greensock.easing.Back;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
@@ -26,7 +27,7 @@ package com.civildebatewall.kiosk.elements {
 		public function WordSearchResults()	{
 			super({
 				backgroundColor: 0x000000,
-				//showBackground: false,
+				showBackground: false,
 				width: 1022,
 				height: 846,
 				maxSizeBehavior: BlockBase.MAX_SIZE_CLIPS,
@@ -36,19 +37,28 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		
+		
 		public function setWord(word:Word):void {
-			this.word = word;
+			trace("setting");
+			this.word = word;			
+			
+			TweenMax.to(this, .25, {alpha: 0, onComplete: onFadeOut});
+			
+			//this.tween(1, {x: 5, onUpdate: onFadeOut});
+		}
+		
+		public function onFadeOut():void {
+
+			trace("done");
 			GraphicsUtil.removeChildren(content);			
 			resultCount = word.posts.length;
 			
-			var paddingBottom:Number = 15;
+			var paddingBottom:Number = 14;
 			var yOffset:Number = 0;
 
 			for (var i:int = 0; i < word.posts.length; i++) {
 				// create object and add it to the scroll field
-				var searchResult:SearchResult = new SearchResult(word.posts[i], i);
-	
-				
+				var searchResult:SearchResult = new SearchResult(word.posts[i], i + 1);
 				
 				searchResult.x = 0;
 				searchResult.y = yOffset;
@@ -58,7 +68,7 @@ package com.civildebatewall.kiosk.elements {
 				addChild(searchResult);	
 			}
 			
-			
+			TweenMax.to(this, 0.25, {alpha: 1});			
 		}
 		
 //		private function onDown(e:Event):void {
