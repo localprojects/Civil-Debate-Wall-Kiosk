@@ -40,8 +40,8 @@ package com.civildebatewall.wallsaver.core {
 			super(windowOptions);
 			alwaysInFront = true;
 			title = "Timeline Controls";
-			minSize = new Point(845, 100);			
-			maxSize = new Point(845, 100);
+			minSize = new Point(425, 100);			
+			maxSize = new Point(425, 100);
 
 			// Set up stage
 			stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -53,7 +53,7 @@ package com.civildebatewall.wallsaver.core {
 			frameCountLabel = new Label(stage, 5, 6, "Frame: 0 / 0");
 			
 			timeSlider = new Slider("horizontal", stage, 5, 25, onTimeSlider);
-			timeSlider.width = 835;
+			timeSlider.width = 415;
 			
 			var buttonPos:int = 5;
 			new PushButton(stage, buttonPos, 50, "Play", onPlayButton);

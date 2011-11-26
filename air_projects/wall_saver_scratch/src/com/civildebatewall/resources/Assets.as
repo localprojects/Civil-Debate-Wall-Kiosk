@@ -42,15 +42,7 @@ package com.civildebatewall.resources {
 		public static const quoteNoOpen:Bitmap = getQuoteNoOpen();
 		
 		
-		// Wallsaver Arrows
-		[Embed(source = '/assets/graphics/questionArrowHead.png')] private static const questionArrowHeadClass:Class;
-		public static function getQuestionArrowHead():Bitmap { return new questionArrowHeadClass() as Bitmap; };
-		public static const questionArrowHead:Bitmap = getQuestionArrowHead();
-
-		[Embed(source = '/assets/graphics/questionArrowTail.png')] private static const questionArrowTailClass:Class;
-		public static function getQuestionArrowTail():Bitmap { return new questionArrowTailClass() as Bitmap; };
-		public static const questionArrowTail:Bitmap = getQuestionArrowTail();
-		
+		// Calls To Action
 		[Embed(source = '/assets/graphics/touchToBeginText.png')] private static const touchToBeginTextClass:Class;
 		public static function getTouchToBeginText():Bitmap { return new touchToBeginTextClass() as Bitmap; };
 		public static const touchToBeginText:Bitmap = getTouchToBeginText();
@@ -58,40 +50,6 @@ package com.civildebatewall.resources {
 		[Embed(source = '/assets/graphics/joinTheDebateText.png')] private static const joinTheDebateTextClass:Class;
 		public static function getJoinTheDebateText():Bitmap { return new joinTheDebateTextClass() as Bitmap; };
 		public static const joinTheDebateText:Bitmap = getJoinTheDebateText();
-
-		[Embed(source = '/assets/graphics/blueArrowHead.png')] private static const blueArrowHeadClass:Class;
-		public static function getBlueArrowHead():Bitmap { return new blueArrowHeadClass() as Bitmap; };
-		public static const blueArrowHead:Bitmap = getBlueArrowHead();
-
-		[Embed(source = '/assets/graphics/blueArrowTail.png')] private static const blueArrowTailClass:Class;
-		public static function getBlueArrowTail():Bitmap { return new blueArrowTailClass() as Bitmap; };
-		public static const blueArrowTail:Bitmap = getBlueArrowTail();
-		
-		[Embed(source = '/assets/graphics/orangeArrowHead.png')] private static const orangeArrowHeadClass:Class;
-		public static function getOrangeArrowHead():Bitmap { return new orangeArrowHeadClass() as Bitmap; };
-		public static const orangeArrowHead:Bitmap = getOrangeArrowHead();
-		
-		[Embed(source = '/assets/graphics/orangeArrowTail.png')] private static const orangeArrowTailClass:Class;
-		public static function getOrangeArrowTail():Bitmap { return new orangeArrowTailClass() as Bitmap; };
-		public static const orangeArrowTail:Bitmap = getOrangeArrowTail();
-		
-		// Vector for graph masking
-		[Embed(source = '/assets/graphics/blueArrowHeadVector.swf')] private static const blueArrowHeadVectorClass:Class;
-		public static function getBlueArrowHeadVector():Sprite { return new blueArrowHeadVectorClass() as Sprite; };
-		public static const blueArrowHeadVector:Sprite = getBlueArrowHeadVector();
-		
-		[Embed(source = '/assets/graphics/blueArrowTailVector.swf')] private static const blueArrowTailVectorClass:Class;
-		public static function getBlueArrowTailVector():Sprite { return new blueArrowTailVectorClass() as Sprite; };
-		public static const blueArrowTailVector:Sprite = getBlueArrowTailVector();
-		
-		[Embed(source = '/assets/graphics/orangeArrowHeadVector.swf')] private static const orangeArrowHeadVectorClass:Class;
-		public static function getOrangeArrowHeadVector():Sprite { return new orangeArrowHeadVectorClass() as Sprite; };
-		public static const orangeArrowHeadVector:Sprite = getOrangeArrowHeadVector();
-		
-		[Embed(source = '/assets/graphics/orangeArrowTailVector.swf')] private static const orangeArrowTailVectorClass:Class;
-		public static function getOrangeArrowTailVector():Sprite { return new orangeArrowTailVectorClass() as Sprite; };
-		public static const orangeArrowTailVector:Sprite = getOrangeArrowTailVector();		
-		
 
 		// Graph Labels
 		[Embed(source = '/assets/graphics/graphLabelNo.png')] private static const graphLabelNoClass:Class;
@@ -130,42 +88,7 @@ package com.civildebatewall.resources {
 		public static function getSamplePortrait4():Bitmap { return new samplePortrait4Class() as Bitmap; };
 		public static const samplePortrait4:Bitmap = getSamplePortrait4();
 		
-		
-		// Sliced up title
-		[Embed(source = '/assets/graphics/titleSlice_01.png')] private static const titleSlice_01Class:Class;
-		public static function getTitleSlice_01():Bitmap { return new titleSlice_01Class() as Bitmap; };
-		public static const titleSlice_01:Bitmap = getTitleSlice_01();
-		
-		[Embed(source = '/assets/graphics/titleSlice_02.png')] private static const titleSlice_02Class:Class;
-		public static function getTitleSlice_02():Bitmap { return new titleSlice_02Class() as Bitmap; };
-		public static const titleSlice_02:Bitmap = getTitleSlice_02();
-		
-		[Embed(source = '/assets/graphics/titleSlice_03.png')] private static const titleSlice_03Class:Class;
-		public static function getTitleSlice_03():Bitmap { return new titleSlice_03Class() as Bitmap; };
-		public static const titleSlice_03:Bitmap = getTitleSlice_03();
-		
-		[Embed(source = '/assets/graphics/titleSlice_04.png')] private static const titleSlice_04Class:Class;
-		public static function getTitleSlice_04():Bitmap { return new titleSlice_04Class() as Bitmap; };
-		public static const titleSlice_04:Bitmap = getTitleSlice_04();
-		
-		[Embed(source = '/assets/graphics/titleSlice_05.png')] private static const titleSlice_05Class:Class;
-		public static function getTitleSlice_05():Bitmap { return new titleSlice_05Class() as Bitmap; };
-		public static const titleSlice_05:Bitmap = getTitleSlice_05();
-		
-		[Embed(source = '/assets/graphics/titleSlice_06.png')] private static const titleSlice_06Class:Class;
-		public static function getTitleSlice_06():Bitmap { return new titleSlice_06Class() as Bitmap; };
-		public static const titleSlice_06:Bitmap = getTitleSlice_06();
-		
-		[Embed(source = '/assets/graphics/titleSlice_07.png')] private static const titleSlice_07Class:Class;
-		public static function getTitleSlice_07():Bitmap { return new titleSlice_07Class() as Bitmap; };
-		public static const titleSlice_07:Bitmap = getTitleSlice_07();
-		
 
-		// Shaders
-		[Embed(source="/assets/shaders/maskBlend.pbj", mimeType="application/octet-stream")] public static const MaskBlendFilter:Class;
-		public static function getMaskBlendFilter():Shader { return new Shader(new MaskBlendFilter() as ByteArray); };
-		
-		
 		// Fonts
 		[Embed(source='/assets/fonts/fonts.swf', symbol='RockwellLight')] public static const FontLight:Class;
 		public static const FONT_LIGHT:String = 'Rockwell Std Light';		

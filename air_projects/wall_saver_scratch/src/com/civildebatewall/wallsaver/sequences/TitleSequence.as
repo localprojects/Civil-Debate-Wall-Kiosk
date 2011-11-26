@@ -113,7 +113,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// bring in the tagline
 			timelineIn.appendMultiple([
-				TweenMax.fromTo(tagline, 60, {x: 1080}, {x: 59, ease: Quart.easeInOut})
+				TweenMax.fromTo(tagline, 40, {x: 1080}, {x: 59, ease: Quart.easeInOut})
 			], -30);
 			
 			// fade in the chevrons
@@ -132,7 +132,7 @@ package com.civildebatewall.wallsaver.sequences {
 			// scroll in the question
 			timelineIn.appendMultiple([
 				TweenMax.fromTo(question, 60, {x: -question.width}, {x: 59, ease: Quart.easeOut})
-			], -60);
+			], -80);
 			
 			return timelineIn;
 		}
@@ -156,7 +156,7 @@ package com.civildebatewall.wallsaver.sequences {
 				TweenMax.fromTo(chevronA, 60, {x: 950, alpha: 1, ease: Quart.easeIn}, {x: 1080, alpha: 0}),
 				TweenMax.fromTo(chevronB, 60, {x: 889, alpha: 1, ease: Quart.easeIn}, {x: 1080, alpha: 0}),
 				TweenMax.fromTo(chevronC, 60, {x: 828, alpha: 1, ease: Quart.easeIn}, {x: 1080, alpha: 0})
-			], 0, TweenAlign.START, 20);			
+			], -30, TweenAlign.START, 20);			
 			
 			
 			// send outin the top and bottom bars			
@@ -167,7 +167,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// send out the tagline
 			timelineOut.appendMultiple([
-				TweenMax.fromTo(tagline, 60, {x: 59, ease: Quart.easeInOut}, {x: 1080})
+				TweenMax.fromTo(tagline, 40, {x: 59, ease: Quart.easeInOut}, {x: 1080})
 			], -30);
 			
 			
