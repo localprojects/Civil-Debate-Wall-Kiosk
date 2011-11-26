@@ -7,7 +7,6 @@ package com.civildebatewall.resources {
 		import flash.utils.ByteArray;
 
 		// New Title Sequence
-		
 		[Embed(source = '/assets/graphics/titleChevron.png')] private static const titleChevronClass:Class;
 		public static function getTitleChevron():Bitmap { return new titleChevronClass() as Bitmap; };
 		public static const titleChevron:Bitmap = getTitleChevron();
@@ -25,7 +24,22 @@ package com.civildebatewall.resources {
 		public static const taglineText:Bitmap = getTaglineText();
 		
 		
+		// Quotation Marks
+		[Embed(source = '/assets/graphics/quoteNoClose.png')] private static const quoteNoCloseClass:Class;
+		public static function getQuoteNoClose():Bitmap { return new quoteNoCloseClass() as Bitmap; };
+		public static const quoteNoClose:Bitmap = getQuoteNoClose();
 		
+		[Embed(source = '/assets/graphics/quoteYesClose.png')] private static const quoteYesCloseClass:Class;
+		public static function getQuoteYesClose():Bitmap { return new quoteYesCloseClass() as Bitmap; };
+		public static const quoteYesClose:Bitmap = getQuoteYesClose();
+		
+		[Embed(source = '/assets/graphics/quoteYesOpen.png')] private static const quoteYesOpenClass:Class;
+		public static function getQuoteYesOpen():Bitmap { return new quoteYesOpenClass() as Bitmap; };
+		public static const quoteYesOpen:Bitmap = getQuoteYesOpen();
+		
+		[Embed(source = '/assets/graphics/quoteNoOpen.png')] private static const quoteNoOpenClass:Class;
+		public static function getQuoteNoOpen():Bitmap { return new quoteNoOpenClass() as Bitmap; };
+		public static const quoteNoOpen:Bitmap = getQuoteNoOpen();
 		
 		
 		// Wallsaver Arrows
@@ -60,6 +74,23 @@ package com.civildebatewall.resources {
 		[Embed(source = '/assets/graphics/orangeArrowTail.png')] private static const orangeArrowTailClass:Class;
 		public static function getOrangeArrowTail():Bitmap { return new orangeArrowTailClass() as Bitmap; };
 		public static const orangeArrowTail:Bitmap = getOrangeArrowTail();
+		
+		// Vector for graph masking
+		[Embed(source = '/assets/graphics/blueArrowHeadVector.swf')] private static const blueArrowHeadVectorClass:Class;
+		public static function getBlueArrowHeadVector():Sprite { return new blueArrowHeadVectorClass() as Sprite; };
+		public static const blueArrowHeadVector:Sprite = getBlueArrowHeadVector();
+		
+		[Embed(source = '/assets/graphics/blueArrowTailVector.swf')] private static const blueArrowTailVectorClass:Class;
+		public static function getBlueArrowTailVector():Sprite { return new blueArrowTailVectorClass() as Sprite; };
+		public static const blueArrowTailVector:Sprite = getBlueArrowTailVector();
+		
+		[Embed(source = '/assets/graphics/orangeArrowHeadVector.swf')] private static const orangeArrowHeadVectorClass:Class;
+		public static function getOrangeArrowHeadVector():Sprite { return new orangeArrowHeadVectorClass() as Sprite; };
+		public static const orangeArrowHeadVector:Sprite = getOrangeArrowHeadVector();
+		
+		[Embed(source = '/assets/graphics/orangeArrowTailVector.swf')] private static const orangeArrowTailVectorClass:Class;
+		public static function getOrangeArrowTailVector():Sprite { return new orangeArrowTailVectorClass() as Sprite; };
+		public static const orangeArrowTailVector:Sprite = getOrangeArrowTailVector();		
 		
 
 		// Graph Labels

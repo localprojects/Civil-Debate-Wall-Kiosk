@@ -45,7 +45,7 @@ package com.civildebatewall.wallsaver.elements {
 			// Calculate intro frames, from the left
 			var tempX:Number;
 			
-			tempX = -this.width - vxIntro; // a little off-screen padding
+			tempX = (-this.width - Main.screenWidth) - vxIntro; // a little off-screen padding
 			while (introFrames.length < (introFrameCount - easeIntroFrames)) {
 				introFrames.push(tempX);
 				tempX += vxIntro;

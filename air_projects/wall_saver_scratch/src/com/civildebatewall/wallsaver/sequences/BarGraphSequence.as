@@ -1,6 +1,6 @@
 package com.civildebatewall.wallsaver.sequences {
 	import com.civildebatewall.resources.Assets;
-	import com.civildebatewall.wallsaver.elements.GraphLabel;
+	import com.civildebatewall.wallsaver.elements.GraphCounter;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
@@ -8,6 +8,8 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.greensock.easing.Quart;
 	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.PixelSnapping;
 	import flash.display.Shader;
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -23,15 +25,22 @@ package com.civildebatewall.wallsaver.sequences {
 		private var scrollVelocity:Number;		
 		private var yesWidth:int;
 		private var noWidth:int;
-		private var noHead:Bitmap;
-		private var noTail:Bitmap;
-		private var yesHead:Bitmap;
-		private var yesTail:Bitmap;
+		private var noHead:Sprite;
+		private var noTail:Sprite;
+		private var yesHead:Sprite;
+		private var yesTail:Sprite;
 		
 		private var yesBar:Sprite;
 		private var noBar:Sprite;		
-		private var yesGraphLabel:GraphLabel;
-		private var noGraphLabel:GraphLabel;
+		
+		// redux
+		private var counter:GraphCounter;
+		private var shader:Shader;
+		private var yesShader:Shader;
+		private var noShader:Shader;
+		private var yesText:Bitmap;
+		private var noText:Bitmap;
+		private var labelLine:Bitmap;
 		
 		
 		public function BarGraphSequence() {
@@ -44,11 +53,11 @@ package com.civildebatewall.wallsaver.sequences {
 			var totalResponses:int = yesResponses + noResponses;
 			
 			// raw width
-			yesWidth = Math.round((yesResponses / totalResponses) * Main.totalWidth);
-			noWidth = Math.round((noResponses / totalResponses) * Main.totalWidth);			
+			yesWidth = Math.round((yesResponses / totalResponses) * (Main.totalWidth - Main.physicalScreenWidth)); // less one screen
+			noWidth = Math.round((noResponses / totalResponses) * (Main.totalWidth - Main.physicalScreenWidth)); // less one screen			
 			
 			// first, find where the division between the graphs falls
-			var borderIndex:int = Main.pointIsNearScreen(new Point(yesWidth, Main.totalHeight / 2));
+			var borderIndex:int = Main.pointIsNearScreen(new Point(yesWidth + Main.physicalScreenWidth, Main.totalHeight / 2));
 			var labelIndex:int;
 			
 			
@@ -62,56 +71,64 @@ package com.civildebatewall.wallsaver.sequences {
 			}
 			
 			
-			yesGraphLabel = new GraphLabel("yes");
-			noGraphLabel = new GraphLabel("no");
+			// label bar
+			labelLine = new Bitmap(new BitmapData(702, 9, false, 0xffffff), PixelSnapping.ALWAYS, false);
+			labelLine.x = Main.screens[labelIndex].x + 189;
+			labelLine.y = (1920 / 2) - (labelLine.height / 2);
 			
-			// Set text position
-			yesGraphLabel.x = Main.screens[labelIndex].x + 189;
-			noGraphLabel.x = Main.screens[labelIndex].x + 189;
-			
-			addChild(yesGraphLabel);
-			addChild(noGraphLabel);
+			// label counter
+			counter = new GraphCounter();
+			counter.x = Main.screens[labelIndex].x + 189;
+			counter.y = labelLine.y + labelLine.height + 100;
 			
 			// set text blending modes
-			var yesShader:Shader = Assets.getMaskBlendFilter();
-			yesShader.data.targetColor.value[0] = 50 / 255;
-			yesShader.data.targetColor.value[1] = 182 / 255;
-			yesShader.data.targetColor.value[2] = 255 / 255;
-			yesGraphLabel.blendShader = yesShader;
-			
-			var noShader:Shader = Assets.getMaskBlendFilter();
-			noShader.data.targetColor.value[0] = 247 / 255;
-			noShader.data.targetColor.value[1] = 94 / 255;
-			noShader.data.targetColor.value[2] = 0 / 255;
-			noGraphLabel.blendShader = noShader;			
-			
+
+
+			yesText = Assets.getGraphLabelYes();
+			yesText.x = labelLine.x;
+						
+			noText = Assets.getGraphLabelNo();
+			noText.x = labelLine.x + 46; // centered			
 
 			
-			// no points left
+			// start color set in tween
+			shader = Assets.getMaskBlendFilter();
+			yesShader = Assets.getMaskBlendFilter();			
+			noShader = Assets.getMaskBlendFilter();			
+			
+			// only the line and number have dynamic shader colors
+			labelLine.blendShader = shader;
+			counter.blendShader = shader;
+			yesText.blendShader = yesShader;
+			noText.blendShader = noShader;
+			
+			// no graph points left
 			noBar = new Sprite();
-			noHead = Assets.getOrangeArrowHead();
+			noHead = Assets.getOrangeArrowHeadVector();
 			noHead.scaleX = -1;
 			noHead.x += noHead.width;
-			noTail = Assets.getOrangeArrowTail();
+			noTail = Assets.getOrangeArrowTailVector();
 			noTail.scaleX = -1;
 			noBar.addChild(noHead);
 			noBar.graphics.beginFill(0xf75e00);
 			noBar.graphics.drawRect(noHead.width, 0, noWidth, noHead.height);
 			noBar.graphics.endFill();
-			noTail.x = noTail.width + noBar.width;
+			noTail.x = noTail.width + noBar.width + noHead.width; // extra bump since it's flipped
 			noBar.y = 123;
+			noBar.alpha = 0;
 			noBar.addChild(noTail);	
 			
-			// yes points right
+			// yes graph points right
 			yesBar = new Sprite();
-			yesHead = Assets.getBlueArrowHead();
-			yesTail = Assets.getBlueArrowTail();
+			yesHead = Assets.getBlueArrowHeadVector();
+			yesTail = Assets.getBlueArrowTailVector();
 			yesBar.addChild(yesTail);
 			yesBar.graphics.beginFill(0x32b6ff);
 			yesBar.graphics.drawRect(yesTail.width, 0, yesWidth, yesTail.height);
 			yesBar.graphics.endFill();
-			yesHead.x = yesBar.width;
+			yesHead.x = yesTail.width + yesBar.width;
 			yesBar.y = 123;			
+			yesBar.alpha = 0;
 			yesBar.addChild(yesHead);
 			
 			
@@ -129,40 +146,70 @@ package com.civildebatewall.wallsaver.sequences {
 			}			
 
 			// depth index doesn't matter
-			addChild(yesGraphLabel);
-			addChild(noGraphLabel);			
+			addChild(labelLine);
+			addChild(yesText);			
+			addChild(noText);	
+			addChild(counter);
+		}
+		
+		private function updateShaders():void {
+			// applies updates when the data changes
+			labelLine.blendShader = shader;
+			counter.blendShader = shader;
+			noText.blendShader = noShader;
+			yesText.blendShader = yesShader;
 		}
 		
 		
 		public function getTimelineIn():TimelineMax	{
-			var timelineIn:TimelineMax = new TimelineMax({useFrames: true});
+			var timelineIn:TimelineMax = new TimelineMax({useFrames: true, onUpdate: updateShaders}); // keep the shaders fresh
 
 			
-			var yesBarScrollDuration:int = (yesBar.width - yesTail.width)  / scrollVelocity;			
-			var yesBarTweenIn:TweenMax = TweenMax.fromTo(yesBar, yesBarScrollDuration, {x: -yesBar.width}, {x: -yesTail.width, ease: Quart.easeOut});
+			var yesBarScrollDuration:int = (yesBar.width - yesTail.width) / scrollVelocity;			
+			var yesBarTweenIn:TweenMax = TweenMax.fromTo(yesBar, yesBarScrollDuration, {x: -yesBar.width + Main.physicalScreenWidth}, {x: -yesTail.width + Main.physicalScreenWidth, ease: Quart.easeOut});
 			
-			var noBarScrollDuration:int = (Main.totalWidth - noWidth - noHead.width)  / scrollVelocity;						
+			var noBarScrollDuration:int = (Main.totalWidth - Main.physicalScreenWidth - noWidth - noHead.width)  / scrollVelocity;						
 			var noBarTweenIn:TweenMax = TweenMax.fromTo(noBar, noBarScrollDuration, {x: Main.totalWidth}, {x: Main.totalWidth - noWidth - noHead.width, ease: Quart.easeOut});			
 
-			// Smalles bar scrolls in first
+			// Smaller bar scrolls in first
 			if (noResponses <= yesResponses) {
 				
 				// No bar and label in (Design calls for steps, look sbetter simultaneously.
+				
+				// tween to orange, complicated because of the shader				
+				
 				timelineIn.appendMultiple([
+					// main bar tween
 					noBarTweenIn,
-					TweenMax.fromTo(noGraphLabel, 100, {count: 0}, {count: noResponses}),					
-					TweenMax.fromTo(noGraphLabel, 100, {y: -noGraphLabel.height}, {y: 633, ease: Quart.easeOut})
+					TweenMax.to(noBar, 0, {alpha: 1}),
+					
+					// label line from white to orange
+					TweenMax.fromTo(this, 60, {shaderR: 255, shaderG: 255, shaderB: 255}, {shaderR: 247, shaderG: 94, shaderB: 0, ease: Quart.easeOut}),
+					
+					// counter from white to orange, counts up
+					TweenMax.fromTo(counter, 60, {count: 0}, {count: noResponses, ease: Quart.easeOut}),
+					
+					// no text from white to orange and down from the top
+					TweenMax.fromTo(this, 60, {noShaderR: 255, noShaderG: 255, noShaderB: 255}, {noShaderR: 247, noShaderG: 94, noShaderB: 0, ease: Quart.easeOut}),
+					TweenMax.fromTo(noText, 60, {y: -noText.height}, {y: labelLine.y - 323, ease: Quart.easeOut})
 				], 0, TweenAlign.START, 0);
 				
 				// No label out, yes bar and label in
-				
-				timelineIn.appendMultiple([				
-					TweenMax.to(noGraphLabel, 100, {y: Main.screenHeight, ease: Quart.easeOut}),
-					TweenMax.fromTo(yesGraphLabel, 100, {count: 0}, {count: yesResponses}),					
-					TweenMax.fromTo(yesGraphLabel, 100, {y: -yesGraphLabel.height}, {y: 633, ease: Quart.easeOut})				
+				timelineIn.appendMultiple([
+					
+					// no text to white
+					TweenMax.fromTo(this, 60, {noShaderR: 247, noShaderG: 94, noShaderB: 0, ease: Quart.easeOut}, {noShaderR: 255, noShaderG: 255, noShaderB: 255}),					
+					
+					TweenMax.to(this, 60, {shaderR: 50, shaderG: 25582, shaderB: 255}), // tween to blue, complicated because of the shader
+					TweenMax.fromTo(yesText, 60, {y: -yesText.height}, {y: labelLine.y - 323, ease: Quart.easeOut})
+
+					//TweenMax.to(noGraphLabel, 100, {y: Main.screenHeight, ease: Quart.easeOut}),
+					//TweenMax.fromTo(yesGraphLabel, 100, {count: 0}, {count: yesResponses}),		
+					//TweenMax.fromTo(yesGraphLabel, 100, {y: -yesGraphLabel.height}, {y: 633, ease: Quart.easeOut})
 				], 300, TweenAlign.START, 0);
 					
 				timelineIn.appendMultiple([
+					TweenMax.to(yesBar, 0, {alpha: 1}),
 					yesBarTweenIn
 				], -50, TweenAlign.START, 0);
 				
@@ -182,11 +229,11 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			if (noResponses <= yesResponses) {
 				// Yes Label out
-				timelineOut.append(TweenMax.to(yesGraphLabel, 100, {alpha: 0, ease: Quart.easeIn}), 100);
+				//timelineOut.append(TweenMax.to(yesGraphLabel, 100, {alpha: 0, ease: Quart.easeIn}), 100);
 			}
 			else {
 				// No label out
-				timelineOut.append(TweenMax.to(noGraphLabel, 100, {alpha: 0, ease: Quart.easeIn}), 100); 
+				//timelineOut.append(TweenMax.to(noGraphLabel, 100, {alpha: 0, ease: Quart.easeIn}), 100); 
 			}
 			
 			
@@ -195,10 +242,12 @@ package com.civildebatewall.wallsaver.sequences {
 			var noBarOutDuration:int = (Main.totalWidth - noWidth - noHead.width)  / (scrollVelocity - 10);
 			
 			timelineOut.appendMultiple([
-				TweenMax.to(noBar, noBarOutDuration, {x: -noBar.width, ease: Quart.easeIn}),
+				TweenMax.to(noBar, noBarOutDuration, {x: -noBar.width + Main.physicalScreenWidth, ease: Quart.easeIn}),
 				TweenMax.to(yesBar, yesBarOutDuration, {x: Main.totalWidth, ease: Quart.easeIn})
 			], 100, TweenAlign.START, 0);			
 			
+			timelineOut.append(TweenMax.to(noBar, 0, {alpha: 0}))
+			timelineOut.append(TweenMax.to(yesBar, 0, {alpha: 0}))				
 
 			return timelineOut;
 		}
@@ -208,6 +257,30 @@ package com.civildebatewall.wallsaver.sequences {
 			timeline.append(getTimelineIn());
 			timeline.append(getTimelineOut());
 			return timeline;
-		}		
+		}
+		
+		// Accessors for tweening the shader, not ideal
+		public function get shaderR():Number { return shader.data.targetColor.value[0] * 255; }
+		public function set shaderR(value:Number):void { shader.data.targetColor.value[0] = value / 255; }		
+		public function get shaderG():Number { return shader.data.targetColor.value[1] * 255; }
+		public function set shaderG(value:Number):void { shader.data.targetColor.value[1] = value / 255; }		
+		public function get shaderB():Number { return shader.data.targetColor.value[2] * 255; }
+		public function set shaderB(value:Number):void { shader.data.targetColor.value[2] = value / 255; }			
+		
+		public function get noShaderR():Number { return noShader.data.targetColor.value[0] * 255; }
+		public function set noShaderR(value:Number):void { noShader.data.targetColor.value[0] = value / 255; }		
+		public function get noShaderG():Number { return noShader.data.targetColor.value[1] * 255; }
+		public function set noShaderG(value:Number):void { noShader.data.targetColor.value[1] = value / 255; }		
+		public function get noShaderB():Number { return noShader.data.targetColor.value[2] * 255; }
+		public function set noShaderB(value:Number):void { noShader.data.targetColor.value[2] = value; }
+		
+		public function get yesShaderR():Number { return yesShader.data.targetColor.value[0] * 255; }
+		public function set yesShaderR(value:Number):void { yesShader.data.targetColor.value[0] = value / 255; }		
+		public function get yesShaderG():Number { return yesShader.data.targetColor.value[1] * 255; }
+		public function set yesShaderG(value:Number):void { yesShader.data.targetColor.value[1] = value / 255; }		
+		public function get yesShaderB():Number { return yesShader.data.targetColor.value[2] * 255; }
+		public function set yesShaderB(value:Number):void { yesShader.data.targetColor.value[2] = value / 255; }		
+				
+		
 	}
 }
