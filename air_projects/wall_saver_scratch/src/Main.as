@@ -31,7 +31,7 @@ package {
 		public static const bezelPixelWidth:int = 40; // 1" bezel? not the gutter...
 		public static const totalWidth:int = (screenWidth * screenCount) + (bezelPixelWidth * 2 * (screenCount - 1));
 		public static const totalHeight:int = screenHeight;
-		public static const physicalScreenWidth = screenWidth + (bezelPixelWidth * 2);
+		public static const physicalScreenWidth:int = screenWidth + (bezelPixelWidth * 2);
 		public static var screens:Vector.<Rectangle> = new Vector.<Rectangle>(screenCount);
 		public static var bezels:Vector.<Rectangle> = new Vector.<Rectangle>;
 		

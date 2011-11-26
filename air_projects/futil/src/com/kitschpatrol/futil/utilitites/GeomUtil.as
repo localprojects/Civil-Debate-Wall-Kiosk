@@ -13,7 +13,12 @@ package com.kitschpatrol.futil.utilitites {
 		}
 		
 		// Move to DisplayObjectUtil class?
-		public static function centerWithin(containee:DisplayObject, container:DisplayObject):void {
+		public static function centerWithin(containee:DisplayObject, container:DisplayObject = null):void {
+			// use parent if null
+			if (container == null) {
+				container = containee.parent;
+			}
+			
 			containee.x = (container.width / 2) - (containee.width / 2);
 			containee.y = (container.height / 2) - (containee.height / 2);			
 		}
