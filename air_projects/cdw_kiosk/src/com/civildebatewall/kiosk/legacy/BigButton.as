@@ -16,8 +16,6 @@ package com.civildebatewall.kiosk.legacy {
 	import flash.geom.*;
 	import flash.text.*;
 	
-	import flashx.textLayout.formats.TextAlign;
-	
 	public class BigButton extends ButtonBase	{
 		
 		public var label:BlockText;
@@ -83,7 +81,7 @@ package com.civildebatewall.kiosk.legacy {
 				textFont: Assets.FONT_BOLD, 
 				textBold: true,
 				textSize: 24,
-				textAlignmentMode: TextAlign.CENTER,
+				textAlignmentMode: Alignment.TEXT_CENTER,
 				textColor: Assets.COLOR_GRAY_85,
 				backgroundAlpha: 0,
 				width: 484,

@@ -7,8 +7,6 @@ package com.civildebatewall.kiosk.buttons {
 	
 	import flash.events.MouseEvent;
 	
-	import flashx.textLayout.formats.TextAlign;
-	
 	public class WhiteButton extends BlockText {
 
 		public function WhiteButton(params:Object=null) {
@@ -19,7 +17,7 @@ package com.civildebatewall.kiosk.buttons {
 				textSize: 18,
 				textColor: ColorUtil.gray(77),
 				backgroundColor: 0xffffff,
-				textAlignmentMode: TextAlign.CENTER,
+				textAlignmentMode: Alignment.TEXT_CENTER,
 				backgroundRadius: 8,
 				alignmentPoint: Alignment.CENTER
 			});

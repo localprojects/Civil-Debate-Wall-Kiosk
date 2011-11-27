@@ -1,11 +1,12 @@
 package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.kiosk.buttons.StanceToggle;
 	import com.civildebatewall.data.Data;
+	import com.civildebatewall.kiosk.BlockInertialScroll;
 	import com.civildebatewall.kiosk.buttons.BackButton;
-	import com.civildebatewall.kiosk.keyboard.Keyboard;
 	import com.civildebatewall.kiosk.buttons.BigGrayButton;
+	import com.civildebatewall.kiosk.buttons.StanceToggle;
+	import com.civildebatewall.kiosk.keyboard.Keyboard;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockShape;
@@ -23,9 +24,6 @@ package com.civildebatewall.kiosk.overlays {
 	import flash.events.FocusEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Mouse;
-	
-	import flashx.textLayout.formats.TextAlign;
-	import com.civildebatewall.kiosk.BlockInertialScroll;
 
 	public class OpinionEntryOverlay extends BlockInertialScroll {
 		
@@ -219,7 +217,7 @@ package com.civildebatewall.kiosk.overlays {
 				textColor: ColorUtil.gray(79),
 				textSize: 16,
 				letterSpacing: -1,
-				textAlignmentMode: TextAlign.RIGHT,
+				textAlignmentMode: Alignment.TEXT_RIGHT,
 				registrationPoint: Alignment.TOP_RIGHT,
 				visible: true
 			});
@@ -272,7 +270,7 @@ package com.civildebatewall.kiosk.overlays {
 				textColor: ColorUtil.gray(79),
 				textSize: 16,
 				letterSpacing: -1,
-				textAlignmentMode: TextAlign.RIGHT,
+				textAlignmentMode: Alignment.TEXT_RIGHT,
 				registrationPoint: Alignment.TOP_RIGHT,
 				visible: true
 			});
@@ -297,7 +295,7 @@ package com.civildebatewall.kiosk.overlays {
 				textSize: 16,
 				letterSpacing: -1,
 				width: 260,
-				textAlignmentMode: TextAlign.CENTER,
+				textAlignmentMode: Alignment.TEXT_CENTER,
 				alignmentX: 0.5,
 				visible: true
 			});
@@ -339,7 +337,7 @@ package com.civildebatewall.kiosk.overlays {
 				textSize: 12,
 				letterSpacing: -1,
 				width: 260,
-				textAlignmentMode: TextAlign.RIGHT,
+				textAlignmentMode: Alignment.TEXT_RIGHT,
 				registrationPoint: Alignment.TOP_RIGHT,
 				visible: true
 			});

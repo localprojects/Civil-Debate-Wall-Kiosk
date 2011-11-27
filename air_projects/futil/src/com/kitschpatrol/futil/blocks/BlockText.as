@@ -18,7 +18,6 @@ package com.kitschpatrol.futil.blocks {
 	import flash.text.TextLineMetrics;
 	import flash.utils.getTimer;
 	
-	import flashx.textLayout.formats.Float;
 	
 	public class BlockText extends BlockBase {
 

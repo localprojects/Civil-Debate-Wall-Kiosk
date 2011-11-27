@@ -44,8 +44,7 @@ package com.civildebatewall.kiosk.core {
 	import flash.events.*;
 	import flash.geom.Rectangle;
 	import flash.net.*;
-	
-	import flashx.textLayout.formats.BackgroundColor;
+
 
 	public class View extends Sprite {
 		// convenience

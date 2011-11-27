@@ -8,8 +8,6 @@ package com.civildebatewall.kiosk.buttons {
 	
 	import flash.events.MouseEvent;
 	
-	import flashx.textLayout.formats.TextAlign;
-	
 	public class RespondButton extends BlockText {
 		
 		public function RespondButton(params:Object=null) {
@@ -22,7 +20,7 @@ package com.civildebatewall.kiosk.buttons {
 				letterSpacing: -1,
 				textColor: ColorUtil.gray(77),
 				backgroundColor: 0xffffff,
-				textAlignmentMode: TextAlign.CENTER,
+				textAlignmentMode: Alignment.TEXT_CENTER,
 				width: 397,
 				height: 143,
 				backgroundRadius: 20,

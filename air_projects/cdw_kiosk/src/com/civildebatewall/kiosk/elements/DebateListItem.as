@@ -1,22 +1,14 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.data.Post;
-	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.blocks.BlockBase;
-	import com.kitschpatrol.futil.blocks.BlockShape;
 	import com.kitschpatrol.futil.blocks.BlockText;
+	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
-	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
-	import flash.display.Bitmap;
-	import flash.display.Shape;
-	import flash.display.Sprite;
-	import flash.events.MouseEvent;
-	
-	import flashx.textLayout.formats.TextAlign;
 	
 	public class DebateListItem extends BlockBase {
 		
@@ -53,7 +45,7 @@ package com.civildebatewall.kiosk.elements {
 			numberLabel = new BlockText();
 			numberLabel.textFont = Assets.FONT_HEAVY;
 			numberLabel.textSize = 12;
-			numberLabel.textAlignmentMode = TextAlign.RIGHT;
+			numberLabel.textAlignmentMode = Alignment.TEXT_RIGHT;
 			numberLabel.width = 51;
 			numberLabel.height = 12;
 			numberLabel.text = _itemIndex +  ".";

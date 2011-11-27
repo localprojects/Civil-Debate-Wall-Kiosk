@@ -8,8 +8,6 @@ package com.civildebatewall.kiosk.buttons {
 	
 	import flash.events.MouseEvent;
 	
-	import flashx.textLayout.formats.TextAlign;
-	
 		public class BigGrayButton extends BlockText	{
 			
 			
@@ -21,7 +19,7 @@ package com.civildebatewall.kiosk.buttons {
 					textSize: 24,
 					textColor: ColorUtil.gray(77),
 					backgroundColor: 0xffffff,
-					textAlignmentMode: TextAlign.CENTER,
+					textAlignmentMode: Alignment.TEXT_CENTER,
 					width: 432,
 					height: 142,
 					backgroundRadius: 13,
