@@ -122,7 +122,7 @@ package com.civildebatewall.kiosk.camera {
 		}
 		
 		public function takePhoto():void {
-			CivilDebateWall.dashboard.log("Starting timeout timer");
+			// CivilDebateWall.dashboard.log("Starting timeout timer");
 			timeoutTimer.reset();
 			timeoutTimer.start();
 			slrProcess.standardInput.writeUTFBytes('p\n');
@@ -158,7 +158,7 @@ package com.civildebatewall.kiosk.camera {
 		}
 		
 		private function onTimeout(e:TimerEvent):void {
-			CivilDebateWall.dashboard.log("timeout!");
+			// CivilDebateWall.dashboard.log("timeout!");
 			timeoutTimer.stop();
 			timeoutTimer.reset();
 			onTimeoutFunction(e);
@@ -182,7 +182,7 @@ package com.civildebatewall.kiosk.camera {
 						onDownloadComplete();	
 					}
 					else if (line.indexOf("Saving image") > -1) {
-						CivilDebateWall.dashboard.log("Stopping timeout timer");
+						// CivilDebateWall.dashboard.log("Stopping timeout timer");
 						timeoutTimer.stop();
 						
 						var fileName:String = line.split(' ')[2];

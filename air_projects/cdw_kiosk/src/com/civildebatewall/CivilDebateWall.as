@@ -97,8 +97,9 @@ package com.civildebatewall {
 			graphics.endFill();
 			
 			// set up gui overlay TODO move to window
-			dashboard = new Dashboard(this.stage, 5, 5);
-			dashboard.visible = false;
+			dashboard = new Dashboard();
+			dashboard.visible = true;
+			
 			
 			if (settings.halfSize) {
 				dashboard.scaleX = 2;
@@ -129,6 +130,9 @@ package com.civildebatewall {
 			
 			// Load the data, which fills up everything through binding callbacks
 			data.load();			
+			
+			// dashboard goes on top... or add when active? 
+			addChild(dashboard);
 			
 		}
 		

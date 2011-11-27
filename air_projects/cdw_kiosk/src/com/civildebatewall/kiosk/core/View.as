@@ -691,7 +691,7 @@ package com.civildebatewall.kiosk.core {
 		
 		private function onSLRTimeout(e:Event):void {
 			// go back to photo page
-			CivilDebateWall.dashboard.log("SLR timeout callback");
+			// CivilDebateWall.dashboard.log("SLR timeout callback");
 			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 			photoBoothView();
 		}

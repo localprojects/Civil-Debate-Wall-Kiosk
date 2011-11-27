@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="com.kitschpatrol.flashspan.FlashSpan"/>
+    <classEntry path="com.kitschpatrol.flashspan.Settings"/>
+    <classEntry path="com.kitschpatrol.flashspan.NetworkedScreen"/>
+    <classEntry path="com.kitschpatrol.flashspan.CertifiedPacket"/>
+    <classEntry path="com.kitschpatrol.flashspan.events.FrameSyncEvent"/>
+    <classEntry path="com.kitschpatrol.flashspan.SpanSprite"/>
+    <classEntry path="com.kitschpatrol.flashspan.Random"/>
+    <classEntry path="com.kitschpatrol.flashspan.events.TimeSyncEvent"/>
+    <classEntry path="com.kitschpatrol.flashspan.events.CustomMessageEvent"/>
+    <classEntry path="com.kitschpatrol.flashspan.events.FlashSpanEvent"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
