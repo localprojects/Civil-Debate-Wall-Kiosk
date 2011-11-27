@@ -34,7 +34,14 @@ package com.civildebatewall {
 		// stat superlative types
 		public static const VIEW_MOST_DEBATED:int = 0;
 		public static const VIEW_MOST_LIKED:int = 1;		
-		public var statsView:int = VIEW_MOST_DEBATED;
+		public var statsView:int = VIEW_MOST_DEBATED; // triggers events
+		
+		// navigation
+		public var activeView:Function;
+		public var lastView:Function;
+		public var backDestination:Function;
+		
+		
 		public function setStatsView(type:int):void {
 			statsView = type;
 			dispatchEvent(new Event(ON_STATS_VIEW_CHANGE));
@@ -42,9 +49,7 @@ package com.civildebatewall {
 		
 		public var sortMode:int = SORT_BY_RECENT;
 		
-		public var activeView:Function;
-		public var lastView:Function;
-		public var backDestination:Function;
+
 		
 		public var lastThread:Thread = null;		
 		public var activeThread:Thread = null;
@@ -54,6 +59,7 @@ package com.civildebatewall {
 		public var threadOverlayOpen:Boolean = false;
 		
 		// for persistence accross reloads
+		// TODO ditch this?
 		public var activeThreadID:String = '';		
 		public var activePostID:String = '';		
 		
@@ -85,12 +91,16 @@ package com.civildebatewall {
 		public var userStanceText:String = ''; // add exclamation point		
 		public var userRespondingTo:Post; // which post we're debating
 		
-		public function setHighlightWord(word:String):void {
+		public function setHighlightWord(word:String, color:uint = 0x000000):void {
 			highlightWord = word;
+			highlightWordColor = color;
 			dispatchEvent(new Event(ON_HIGHLIGHT_WORD_CHANGE));
 		}
 		
+		public var highlightWordColor:uint = 0x000000;
 		public var highlightWord:String = null;
+		
+		
 		
 		// color state
 		public var userStanceColorLight:uint;

@@ -1,7 +1,7 @@
 package com.civildebatewall.staging.overlays {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.State;
 	import com.civildebatewall.data.Word;
 	import com.civildebatewall.kiosk.elements.DebateList;
 	import com.civildebatewall.kiosk.elements.VoteStatBar;
@@ -16,7 +16,6 @@ package com.civildebatewall.staging.overlays {
 	import com.kitschpatrol.futil.blocks.BlockShape;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.constants.Char;
-	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.events.Event;
@@ -32,10 +31,7 @@ package com.civildebatewall.staging.overlays {
 		private var superlativesPortrait:SuperlativesPortrait;
 		private var debateList:DebateList;		
 		private var filler:BlockShape;
-		
 		private var searchResults:WordSearchResults;
-		
-
 		
 		
 		public function StatsOverlay(params:Object=null) {
@@ -170,19 +166,23 @@ package com.civildebatewall.staging.overlays {
 			raiseMenu();			
 			
 			var word:Word = wordCloud.activeWord.word;
-			
 			searchResults.setWord(word);
+			
+			
+			CivilDebateWall.state.setHighlightWord(word.theWord, wordCloud.activeWord.backgroundColor);
 			
 			TweenMax.to(searchResultsTitle, 0.5, {text: Char.LEFT_SINGLE_QUOTE + StringUtil.capitalize(word.theWord) + Char.RIGHT_SINGLE_QUOTE + " used in " + word.posts.length + " " + StringUtil.plural("Opinion", word.posts.length)});
 			TweenMax.to(superlativesTitle, 0.5, {alpha: 0});
 			debateList.tweenOut();
 			superlativesPortrait.tweenOut();
 			searchResults.tweenIn();
-			
 		}
 		
 		private function onWordDeselected(e:Event):void {
 			wordCloud.activeWord = null;
+			
+			CivilDebateWall.state.setHighlightWord(null);			
+			
 			TweenMax.to(superlativesTitle, 0.5, {alpha: 1});
 			debateList.tweenIn();
 			superlativesPortrait.tweenIn();

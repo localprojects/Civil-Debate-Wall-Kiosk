@@ -24,21 +24,17 @@ package com.civildebatewall.kiosk.elements {
 				scrollAxis: SCROLL_Y
 			});
 			
-			
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 		}
 		
 		
 		private function onDataUpdate(e:Event):void {
 			refreshContent();
-			
 		}
 		
 		override protected function beforeTweenIn():void {
 			refreshContent();
 			super.beforeTweenIn();
-			
-	
 		}		
 			
 		private function refreshContent():void {

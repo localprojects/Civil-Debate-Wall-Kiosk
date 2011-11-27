@@ -3,14 +3,19 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.blocks.*;
 	import com.civildebatewall.kiosk.ui.*;
+	import com.civildebatewall.staging.BlockTextOpinion;
 	import com.civildebatewall.staging.elements.BalloonButton;
 	import com.kitschpatrol.futil.blocks.BlockBase;
+	import com.kitschpatrol.futil.blocks.BlockText;
+	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
 	
 	import flash.display.*;
 	import flash.events.Event;
+	
+	import flashx.textLayout.formats.TextAlign;
 
 	public class Comment extends BlockBase {
 		
@@ -24,22 +29,24 @@ package com.civildebatewall.kiosk.elements {
 		protected var portrait:Sprite;
 		protected var stanceLabel:BlockLabel;
 		
+		private var opinion:BlockText;
+		
 		public function Comment(post:Post, postNumber:int = -1) {
+			_post = post;
+			_postNumber = postNumber;
+
+			portraitWidth = 138;
+			portraitHeight = 189;						
+			
 			super({		
 				width: 1024,
 				minHeight: 257,
 				backgroundAlpha: 0,
 				paddingLeft: 30,
 				paddingRight: 30,
-				paddingTop: 34,
+				paddingTop: 30,
 				paddingBottom: 34
 			});
-			
-			portraitWidth = 138;
-			portraitHeight = 189;			
-			
-			_post = post;
-			this.postNumber = postNumber;
 			
 			draw();
 		}
@@ -70,58 +77,104 @@ package com.civildebatewall.kiosk.elements {
 			}
 			portrait.addChild(bannerText);
 			addChild(portrait);
+
+			// add the number
+			var postNumber:BlockText = new BlockText({
+				width: 22,
+				height: 12,
+				backgroundAlpha: 0,
+				textFont: Assets.FONT_BOLD,
+				textBold: true,
+				textSize: 12,
+				textColor: _post.stanceColorLight,				
+				leading: 12,
+				text: _postNumber.toString() + ".",
+				visible: true,
+				x: 187,
+				y: 17			
+			});
+			addChild(postNumber);
 			
 			// add the byline
 			var authorText:String = postNumberString + _post.user.usernameFormatted.toUpperCase() + '\u0027S RESPONSE';
-			var authorLabel:BlockLabel = new BlockLabel(authorText, 17, _post.stanceColorLight, 0x000000, Assets.FONT_HEAVY, false);
-			authorLabel.setPadding(0, 0, 0, 0);
-			authorLabel.visible = true;
+			var byline:BlockText = new BlockText({
+				maxWidth: 350,
+				height: 12, 
+				backgroundAlpha: 0,
+				textFont: Assets.FONT_BOLD,
+				textBold: true,
+				textSize: 12,
+				textColor: _post.stanceColorLight,				
+				leading: 12,
+				text: _post.user.usernameFormatted.toUpperCase() + '\u0027S RESPONSE',
+				visible: true,
+				x: 218,
+				y: 17
+			});
+			addChild(byline);
 			
-			authorLabel.x = 167;
-			authorLabel.y = 16;
 			
-			addChild(authorLabel);
+			// date posted
+			var timeString:String = NumberUtil.zeroPad(post.created.hours, 2) + NumberUtil.zeroPad(_post.created.minutes, 2);
+			var dateString:String = NumberUtil.zeroPad(post.created.month, 2) + NumberUtil.zeroPad(_post.created.date, 2) + (post.created.fullYear - 2000);
+			var timestamp:String = 'Posted at ' + timeString + ' hours on ' + dateString;			
 			
-			// add the timestamp
-			var timeString:String = NumberUtil.zeroPad(_post.created.hours, 2) + NumberUtil.zeroPad(_post.created.minutes, 2);
-			var dateString:String = NumberUtil.zeroPad(_post.created.month, 2) + NumberUtil.zeroPad(_post.created.date, 2) + (_post.created.fullYear - 2000);
-			var timestamp:String = 'Posted at ' + timeString + ' hours on ' + dateString;
-			
-			var timeLabel:BlockLabel = new BlockLabel(timestamp, 12, _post.stanceColorMedium, 0x000000, Assets.FONT_BOLD_ITALIC, false);
-			timeLabel.setPadding(0, 0, 0, 0);
-			timeLabel.visible = true;				
-			
-			timeLabel.x = authorLabel.x + authorLabel.width + 10;
-			timeLabel.y = 21;
-			
-			addChild(timeLabel);
-			
-			// flag button
-			var flagButton:FlagButton = new FlagButton();
-			flagButton.targetPost = _post;
-			flagButton.x = 802;
-			flagButton.y = 0;
-			flagButton.visible = true;
-			addChild(flagButton);
+			var datePosted:BlockText = new BlockText({
+				maxWidth: 222,
+				height: 9, 
+				backgroundAlpha: 0,
+				textFont: Assets.FONT_BOLD_ITALIC,
+				textBold: true,
+				textSize: 9,
+				textColor: _post.stanceColorLight,				
+				leading: 12,
+				text: timestamp,
+				visible: true,
+				x: byline.right + 12,
+				y: 20
+			});			
+			addChild(datePosted);
 			
 			// add the hairline
 			var hairline:Shape = new Shape();
 			hairline.graphics.lineStyle(1, _post.stanceColorLight, 0.6, true); // some alpha to make it appear thinner
 			hairline.graphics.moveTo(0, 0);
-			hairline.graphics.lineTo(652, 0);
+			hairline.graphics.lineTo(664, 0);
 			hairline.x = 167;
-			hairline.y = 42;
-			addChild(hairline);
+			hairline.y = 43 ;
+			addChild(hairline);			
 			
-			// Add the opinoin
-			var opinion:BlockParagraph = new BlockParagraph(652, _post.stanceColorLight, _post.textAt, 23);
-			opinion.setPadding(11, 18, 14, 18);
-			opinion.visible = true;
-			opinion.x = 167;
-			opinion.y = 60;
+			// flag button
+			var flagButton:FlagButton = new FlagButton();
+			flagButton.targetPost = _post;
+			flagButton.x = 802;
+			flagButton.y = -1;
+			flagButton.visible = true;
+			addChild(flagButton);			
+
 			
+			// add the opinion
+			opinion = new BlockTextOpinion({
+				minWidth: 100,
+				maxWidth: 662,
+				maxHeight: 500,				
+				paddingTop: 17,
+				paddingLeft: 21,
+				paddingRight: 21,
+				paddingBottom: 19,	
+				textFont: Assets.FONT_REGULAR,
+				textSize: 18,
+				textColor: 0xffffff,
+				leading: 11,
+				text: _post.text,
+				visible: true,
+				backgroundColor: _post.stanceColorLight,
+				x: 167,
+				y: 61
+			});
 			addChild(opinion);
 			
+
 			// Add the debate me button
 			var debateButton:BalloonButton = new BalloonButton();
 			debateButton.targetPost = _post;
@@ -141,16 +194,16 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		public function get postNumber():int { 
-			return _postNumber;
+			return postNumber;
 		}
 		
 		public function set postNumber(number:int):void {
-			_postNumber = number;
-			if (_postNumber == -1) {
+			postNumber = number;
+			if (postNumber == -1) {
 				postNumberString = "";
 			}
 			else {
-				postNumberString = _postNumber.toString() + ". ";
+				postNumberString = postNumber.toString() + ". ";
 			}
 		}		
 
