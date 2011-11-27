@@ -23,7 +23,7 @@
 	"mac": {
 		"halfSize": true,
 		"startFullScreen": false,
-		"useWebcam": false,	
+		"useWebcam": true,	
 		"useSLR": false,
 		"imagePath": "/Users/Mika/Desktop/CDWImages/",		
 		"serverPath": "http://0.0.0.0:8080"	

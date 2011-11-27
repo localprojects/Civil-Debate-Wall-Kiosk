@@ -74,22 +74,28 @@ package com.civildebatewall {
 				settings.localMultiScreenTest = true;
 				settings.useSLR = false;
 				settings.useWebcam = false;
+				settings.halfSize= false;
 			}
 			
 			// set up the stage
 			stage.quality = StageQuality.BEST;
 
-			
-			// temporarily squish screen for laptop development (half size)
-			if (settings.halfSize) {
+	
+			// three possible window modes
+			if (settings.localMultiScreenTest) {			
+				// dimensions come from app.xml
+				stage.scaleMode = StageScaleMode.EXACT_FIT;				
+			}
+			else if (settings.halfSize) {
+				// temporarily squish screen for laptop development (half size)				
 				stage.scaleMode = StageScaleMode.EXACT_FIT;
 				stage.nativeWindow.width = 540;
 				stage.nativeWindow.height = 960;
 			}
 			else {
-				// in this case, window dimensions are defined in app.xml
-				stage.scaleMode = StageScaleMode.NO_SCALE;
-				stage.align = StageAlign.TOP;
+				// window dimensions are defined in app.xml,
+				// but don't bother scaling
+				stage.scaleMode = StageScaleMode.NO_SCALE;					
 			}
 			
 			// make sure image folders exist
@@ -99,6 +105,7 @@ package com.civildebatewall {
 			}
 			else if (PlatformUtil.isMac) {
 				Utilities.createFolderIfNecessary(settings.imagePath);
+				// NO SLR, so no temp folder
 			}
 			
 			// fill the background
