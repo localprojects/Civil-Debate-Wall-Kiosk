@@ -43,11 +43,19 @@ package com.civildebatewall.kiosk.camera {
 			faceRect = new Rectangle();
 			
 			// respect aspect ratios
-			if(CivilDebateWall.settings.webcamOnly) {
+			
+			// just use native ratio if we're useing a pseudocam
+			maxSourceWidth = 1080 / 6;
+			maxSourceHeight = 1920 / 6;			
+			
+			// fall through to webcam...
+			if(CivilDebateWall.settings.useWebcam) {
 				maxSourceWidth = Math.round(190);
 				maxSourceHeight = Math.round(320);
 			}
-			else {
+			
+			// fall through to this if we're using an SLR
+			if (CivilDebateWall.settings.useSLR) {
 				maxSourceWidth = 213;
 				maxSourceHeight = 320;
 			}
@@ -101,6 +109,8 @@ package com.civildebatewall.kiosk.camera {
 		
 		public function searchBitmap(photo:BitmapData):void {
 			// resize
+			trace("maxSourceWidth", maxSourceWidth);
+			trace("maxSourceHeight", maxSourceHeight);
 			photo = BitmapUtil.scaleDataToFit(photo, maxSourceWidth, maxSourceHeight);
 			sourceCenter = new Point(photo.width / 2, photo.height / 2);
 			detector.detect(photo);

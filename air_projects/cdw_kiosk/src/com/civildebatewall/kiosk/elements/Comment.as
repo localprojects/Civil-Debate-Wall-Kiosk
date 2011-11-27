@@ -2,7 +2,6 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.buttons.*;
-	import com.civildebatewall.kiosk.ui.*;
 	import com.civildebatewall.kiosk.buttons.BalloonButton;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;

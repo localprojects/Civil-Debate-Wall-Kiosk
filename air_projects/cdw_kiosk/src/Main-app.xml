@@ -1,37 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <application xmlns="http://ns.adobe.com/air/application/2.6">
-
 	<id>net.localprojects.CivilDebateWall</id>
-
 	<filename>Civil Debate Wall</filename>
-	
 	<name>The Great Civil Debate Wall</name>
-	
 	<versionNumber>0.1</versionNumber>
-	
-	<versionLabel>Pre Alpha</versionLabel>
-	
+	<versionLabel>Beta</versionLabel>
 	<description>Front-end kiosk software for The Great Civil Debate Wall.</description>
 
 	<initialWindow>
-
 		<content>[This value will be overwritten by Flash Builder in the output app.xml]</content>
-
-		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
 		<systemChrome>standard</systemChrome>
-
 		<transparent>false</transparent>
-
 		<minimizable>true</minimizable>
-
 		<maximizable>true</maximizable>
-
 		<resizable>false</resizable>
-
 		<fullScreen>false</fullScreen>
-
 		<visible>true</visible>
-
+		<width>1080</width>
+		<height>1920</height>
+		<x>0</x>
+		<y>0</y>
 	</initialWindow>
 
 	<supportedProfiles>extendedDesktop</supportedProfiles>
@@ -45,5 +33,4 @@
 	<icon>
 		<image128x128>assets/graphics/appIcon.png</image128x128>
 	</icon>
-
 </application>

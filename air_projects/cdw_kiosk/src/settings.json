@@ -6,24 +6,27 @@
 		"flipWebcamVertical": true,	
 		"inactivityTimeout": 60,
 		"slrTimeout": 5,
-		"secretKey": "something_secret"
+		"secretKey": "something_secret",
+		"localMultiScreenTest": false
 	},
 	
 	"windows": {
 		"halfSize": true,
 		"startFullScreen": true,
-		"webcamOnly": false,
+		"useWebcam": true,
+		"useSLR": true,		
 		"imagePath": "",
 		"tempImagePath": "C:/temp/",
-		"serverPath": "http://0.0.0.0:8080"			
+		"serverPath": "http://staging.civildebatewall.com"			
 	},
 	
 	"mac": {
 		"halfSize": true,
 		"startFullScreen": false,
-		"webcamOnly": true,
+		"useWebcam": false,	
+		"useSLR": false,
 		"imagePath": "/Users/Mika/Desktop/CDWImages/",		
-		"serverPath": "http://staging.civildebatewall.com"	
+		"serverPath": "http://0.0.0.0:8080"	
 	}
 	
 }

@@ -1,7 +1,10 @@
 package {
 	
 	import com.civildebatewall.CivilDebateWall;
+	
+	import flash.desktop.NativeApplication;
 	import flash.display.Sprite;
+	import flash.events.InvokeEvent;
 
 	//import com.demonsters.debugger.MonsterDebugger;	
 	
@@ -12,7 +15,13 @@ package {
 			//MonsterDebugger.initialize(this);
 			//MonsterDebugger.trace(this, "Hello World!");			
 			
-			var civilDebateWall:CivilDebateWall = new CivilDebateWall();
+			// catch command line args
+			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvoke);									
+		}
+		
+		private function onInvoke(e:InvokeEvent):void {
+			
+			var civilDebateWall:CivilDebateWall = new CivilDebateWall(e.arguments);
 			addChild(civilDebateWall);
 		}
 	}

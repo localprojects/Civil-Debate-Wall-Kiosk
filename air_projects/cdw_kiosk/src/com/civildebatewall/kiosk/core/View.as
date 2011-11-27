@@ -673,24 +673,27 @@ package com.civildebatewall.kiosk.core {
 		private function onScreenBlack():void {
 			trace('screen black');
 			
-			// Do this in portrait camera instead?
-			if (CivilDebateWall.settings.webcamOnly) {
-				// using webcam
-				portraitCamera.takePhoto();
-				CivilDebateWall.state.userImage = portraitCamera.cameraBitmap; // store here temporarily	
-				detectFace(CivilDebateWall.state.userImage);
-			}
-			else {
+			if (CivilDebateWall.settings.useSLR) {
 				// using SLR
+				trace("using SLR");
 				portraitCamera.slr.setOnTimeout(onSLRTimeout);
 				portraitCamera.slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 				portraitCamera.slr.takePhoto();
+			}
+			else {
+				// using webcam or pseudocam
+				portraitCamera.takePhoto();
+				CivilDebateWall.state.userImage = portraitCamera.cameraBitmap; // store here temporarily
+				
+				
+				detectFace(CivilDebateWall.state.userImage);				
 			}
 		}
 		
 		private function onSLRTimeout(e:Event):void {
 			// go back to photo page
 			// CivilDebateWall.dashboard.log("SLR timeout callback");
+			// TODO tell the user
 			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 			photoBoothView();
 		}
