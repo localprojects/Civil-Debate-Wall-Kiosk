@@ -1,4 +1,4 @@
-package com.civildebatewall.kiosk.legacyBlocks {
+package com.civildebatewall.kiosk.legacy {
 	import com.civildebatewall.*;
 
 	import com.greensock.*;

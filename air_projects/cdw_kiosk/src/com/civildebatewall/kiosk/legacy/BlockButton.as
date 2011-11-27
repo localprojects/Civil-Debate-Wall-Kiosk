@@ -1,4 +1,4 @@
-package com.civildebatewall.kiosk.legacyBlocks {
+package com.civildebatewall.kiosk.legacy {
 	import com.bit101.components.Text;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;

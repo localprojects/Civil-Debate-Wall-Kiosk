@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk {
 	
 	import com.civildebatewall.*;
-	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
+	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;

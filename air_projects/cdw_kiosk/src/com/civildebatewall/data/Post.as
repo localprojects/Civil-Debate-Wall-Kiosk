@@ -3,7 +3,7 @@ package com.civildebatewall.data {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.Utilities;
-	import com.civildebatewall.kiosk.Kiosk;
+	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.kitschpatrol.futil.utilitites.DateUtil;
 	
 	import flash.events.Event;

@@ -2,8 +2,8 @@ package com.civildebatewall.kiosk.elements {
 	
 	import com.adobe.images.*;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
+	import com.civildebatewall.kiosk.core.Kiosk;
+	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.civildebatewall.kiosk.camera.*;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.Math2;

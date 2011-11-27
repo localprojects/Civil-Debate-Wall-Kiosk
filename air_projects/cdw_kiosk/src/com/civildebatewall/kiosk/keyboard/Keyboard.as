@@ -3,8 +3,8 @@ package com.civildebatewall.kiosk.keyboard {
 	import com.adobe.utils.StringUtil;
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.Utilities;
-	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
+	import com.civildebatewall.kiosk.core.Kiosk;
+	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.kitschpatrol.futil.Math2;
 	
 	import flash.display.InteractiveObject;

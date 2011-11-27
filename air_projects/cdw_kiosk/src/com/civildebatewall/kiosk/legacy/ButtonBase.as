@@ -1,4 +1,4 @@
-package com.civildebatewall.kiosk.legacyBlocks {
+package com.civildebatewall.kiosk.legacy {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
@@ -8,7 +8,7 @@ package com.civildebatewall.kiosk.legacyBlocks {
 	import flash.utils.Timer;
 	
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.kiosk.Kiosk;
+	import com.civildebatewall.kiosk.core.Kiosk;
 	
 	public class ButtonBase extends OldBlockBase {
 		

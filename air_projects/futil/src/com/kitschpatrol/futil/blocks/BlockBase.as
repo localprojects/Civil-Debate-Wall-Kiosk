@@ -121,7 +121,7 @@ package com.kitschpatrol.futil.blocks {
 			
 			// TODO devise and flip the update booleans (e.g. invalidate everything)
 
-
+			trace("APY INIT: " + _alignmentPoint.y);
 		
 			
 			// overwrites defaults and calls update
@@ -334,11 +334,16 @@ package com.kitschpatrol.futil.blocks {
 		
 		
 		public function get scrollY():Number {
+			trace("APY: " + _alignmentPoint.y);
 			return (contentHeight - (background.height - _padding.vertical)) * _alignmentPoint.y;
 		}
 		
 		public function set scrollY(pixels:Number):void { 			
-			alignmentY = pixels / (contentHeight - (background.height - _padding.vertical));			
+			
+			// check for divide by zero, can't scroll something with zero height
+			if ((contentHeight - (background.height - _padding.vertical)) > 0) {
+				alignmentY = pixels / (contentHeight - (background.height - _padding.vertical));
+			}
 		}		
 		
 		public function get minScrollY():Number {
@@ -646,7 +651,12 @@ package com.kitschpatrol.futil.blocks {
 				executeAll(onButtonCancel);
 			}
 		}
-
+		
+		// useful for cancelling events after mouse down
+		// note that it just gets added again on the next mouse down event
+		public function removeStageUpListener():void {
+			stage.removeEventListener(MouseEvent.MOUSE_UP, onStageUpInternal);			
+		}
 		
 		private function onButtonDownInternal(e:MouseEvent):void {
 			tempEvent = e;

@@ -2,7 +2,7 @@ package com.civildebatewall.data {
 	import com.adobe.protocols.dict.Database;
 	import com.adobe.serialization.json.JSON;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.kiosk.Kiosk;
+	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.DataLoader;
 	import com.greensock.loading.LoaderMax;

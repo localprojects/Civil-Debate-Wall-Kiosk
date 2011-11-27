@@ -1,7 +1,7 @@
 package com.civildebatewall {
 	import com.bit101.components.*;
 	import com.civildebatewall.data.Question;
-	import com.civildebatewall.kiosk.Kiosk;
+	import com.civildebatewall.kiosk.core.Kiosk;
 	
 	import flash.display.*;
 	import flash.events.Event;

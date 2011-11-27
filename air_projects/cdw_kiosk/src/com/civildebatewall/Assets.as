@@ -60,6 +60,14 @@ package com.civildebatewall {
 		
 		
 		// Bitmaps
+		[Embed(source = '/assets/graphics/thumbnailStanceTextYes.png')] private static const thumbnailStanceTextYesClass:Class;
+		public static function getThumbnailStanceTextYes():Bitmap { return new thumbnailStanceTextYesClass() as Bitmap; };
+		public static const thumbnailStanceTextYes:Bitmap = getThumbnailStanceTextYes();
+		
+		[Embed(source = '/assets/graphics/thumbnailStanceTextNo.png')] private static const thumbnailStanceTextNoClass:Class;
+		public static function getThumbnailStanceTextNo():Bitmap { return new thumbnailStanceTextNoClass() as Bitmap; };
+		public static const thumbnailStanceTextNo:Bitmap = getThumbnailStanceTextNo();
+		
 		[Embed(source = '/assets/graphics/lowerMenuCarat.png')] private static const lowerMenuCaratClass:Class;
 		public static function getLowerMenuCarat():Bitmap { return new lowerMenuCaratClass() as Bitmap; };
 		public static const lowerMenuCarat:Bitmap = getLowerMenuCarat();

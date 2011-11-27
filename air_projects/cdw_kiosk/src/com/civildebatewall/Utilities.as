@@ -16,7 +16,7 @@ package com.civildebatewall {
 	import flash.geom.*;
 	import flash.net.*;
 	import flash.utils.*;
-	import com.civildebatewall.kiosk.Kiosk;
+	import com.civildebatewall.kiosk.core.Kiosk;
 
 	public class Utilities {
 		

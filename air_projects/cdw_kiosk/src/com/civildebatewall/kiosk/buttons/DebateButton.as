@@ -6,6 +6,7 @@ package com.civildebatewall.kiosk.buttons {
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import flashx.textLayout.formats.TextAlign;
@@ -31,6 +32,7 @@ package com.civildebatewall.kiosk.buttons {
 			
 			onButtonDown.push(onDown);
 			onStageUp.push(onUp);
+
 		}
 		
 		override protected function beforeTweenIn():void {
@@ -39,15 +41,22 @@ package com.civildebatewall.kiosk.buttons {
 		}
 				
 		private function onDown(e:MouseEvent):void {
-			backgroundColor = ColorUtil.gray(77);
-			textColor = 0xffffff;
+			drawDown();
 		}
 		
 		private function onUp(e:MouseEvent):void {
-			TweenMax.to(this, 0.5, {backgroundColor: 0xffffff, textColor: ColorUtil.gray(77)});
+			drawUp();
 			
 			CivilDebateWall.state.userIsDebating = true;
 			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.debateStancePickerView);
+		}
+		
+		private function drawUp():void {
+			TweenMax.to(this, 0.5, {backgroundColor: 0xffffff, textColor: ColorUtil.gray(77)});			
+		}
+		
+		private function drawDown():void {
+			TweenMax.to(this, 0, {backgroundColor: ColorUtil.gray(77), textColor: 0xffffff});			
 		}
 		
 	}
