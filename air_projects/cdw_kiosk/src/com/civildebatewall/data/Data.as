@@ -37,13 +37,8 @@ package com.civildebatewall.data {
 		public var likeTotals:Object;
 		public var stanceTotals:Object;
 		public var yesPercent:Number; // normalized yes / total
+		public var stats:Object; // container
 		
-		// sms
-		public var latestTextMessages:Array;
-		
-		public var stats:Object;
-		
-		public var smsNumber:String;
 		
 		// a bunch of boring 3+ letter words (TODO get from server)
 		private const boringWords:Array = ["not", "for", "this", "and", "are", "but", "your", "has", "have", "the", "that", "they", "with"];		
@@ -63,29 +58,21 @@ package com.civildebatewall.data {
 			threads = [];
 			posts = [];
 			stats = {};			
-			smsNumber = '';
 			mostDebatedThreads = [];
 			mostLikedPosts = [];
 			frequentWords = [];
 			likeTotals = {};
-			stanceTotals = {};
-			latestTextMessages = [];			
+			stanceTotals = {};			
 		}
 		
 		public function load():void {
 			// load the question
 			clear();
 			
-
 			trace('Loading question');
-			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/sms/kiosk/' + CivilDebateWall.settings.kioskNumber, onPhoneNumberReceived); // TODO no need, grab it when we check the recents on SMS prompt page?
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/questions/current', onQuestionReceived);						
 		}
 		
-		private function onPhoneNumberReceived(r:Object):void {
-			trace('Got phone number, loading users');
-			smsNumber = r['number'];
-			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/questions/current', onQuestionReceived);			
-		}
 		
 		private function onQuestionReceived(r:Object):void {
 			trace('Question Loaded, getting users');
@@ -342,9 +329,7 @@ package com.civildebatewall.data {
 			Utilities.postRequestJSON(CivilDebateWall.settings.serverPath + '/api/users', {'phonenumber': phoneNumber, 'username': username}, callback);			
 		}	
 		
-		public function checkForUser(phoneNumber:String, callback:Function):void {
-			Utilities.postRequestJSON(CivilDebateWall.settings.serverPath + '/api/users/search', {'phone': phoneNumber}, callback); // TODO no need, grab it when we check the recents on SMS prompt page?			
-		}
+
 		
 		public function like(post:Post):void {
 			post.likes++;
@@ -372,38 +357,6 @@ package com.civildebatewall.data {
 		// NEW STUFF
 		
 		// User stuff
-		
-
-		
-		
-		
-
-		
-		
-		// SMS fetching
-		private var textCallback:Function;
-		public function fetchLatestTextMessages(callback:Function = null):void {
-			textCallback = callback;
-			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/sms/kiosk/' + CivilDebateWall.settings.kioskNumber, onLatestTextMessages); // TODO no need, grab it when we check the recents on SMS prompt page?			
-		}
-		
-		public function onLatestTextMessages(r:Object):void {
-			trace("got latest text messages");
-			latestTextMessages = [];
-			
-			var newMessages:Array = r['recentMessages'];
-			
-			// turn them into objects
-			for (var i:uint = 0; i < newMessages.length; i++) {
-				latestTextMessages.push(new TextMessage(newMessages[i]));				
-			}
-			
-			if (textCallback != null) textCallback();
-			textCallback = null;
-		}
-
-		
-
 		
 		public function getThreadByID(id:String):Thread {
 			for each (var thread:Thread in threads) {

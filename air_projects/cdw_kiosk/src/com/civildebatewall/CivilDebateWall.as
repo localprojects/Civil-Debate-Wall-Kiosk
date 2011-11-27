@@ -1,12 +1,11 @@
 package com.civildebatewall {
 	import com.adobe.crypto.SHA1;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.kiosk.buttons.*;
 	import com.civildebatewall.kiosk.camera.*;
+	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
-	import com.civildebatewall.kiosk.ui.*;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -39,8 +38,11 @@ package com.civildebatewall {
 		
 		public static var inactivityTimer:InactivityTimer;		
 		
-		public function CivilDebateWall()	{
+		private var commandLineArgs:Array;
+		
+		public function CivilDebateWall(commandLineArgs:Array = null)	{
 			self = this;
+			this.commandLineArgs = commandLineArgs;
 			
 			// Greensock plugins
 			TweenPlugin.activate([ThrowPropsPlugin]);			
@@ -64,10 +66,19 @@ package com.civildebatewall {
 			// load settings from a local JSON file			
 			settings = Settings.load();
 			
-
+			// if we're running in local multi-screen debug mode, we will receive certain command line args
+			// these can ovveride settings
+			// TODO genereic command line settings override system?
+			if (commandLineArgs.length > 0) {
+				settings.kioskNumber = commandLineArgs[0];
+				settings.localMultiScreenTest = true;
+				settings.useSLR = false;
+				settings.useWebcam = false;
+			}
 			
 			// set up the stage
 			stage.quality = StageQuality.BEST;
+
 			
 			// temporarily squish screen for laptop development (half size)
 			if (settings.halfSize) {
@@ -76,10 +87,9 @@ package com.civildebatewall {
 				stage.nativeWindow.height = 960;
 			}
 			else {
+				// in this case, window dimensions are defined in app.xml
 				stage.scaleMode = StageScaleMode.NO_SCALE;
 				stage.align = StageAlign.TOP;
-				stage.nativeWindow.width = 1080;
-				stage.nativeWindow.height = 1920;
 			}
 			
 			// make sure image folders exist
