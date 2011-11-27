@@ -13,3 +13,4 @@ bin-debug/
 
 air_projects/cdw_kiosk/build.properties
 org.eclipse.ltk.core.refactoring.prefs
+air_projects/.metadata/
