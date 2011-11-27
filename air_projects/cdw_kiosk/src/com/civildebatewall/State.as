@@ -3,7 +3,7 @@ package com.civildebatewall {
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.TextMessage;
 	import com.civildebatewall.data.Thread;
-	import com.civildebatewall.kiosk.Kiosk;
+	import com.civildebatewall.kiosk.core.Kiosk;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;

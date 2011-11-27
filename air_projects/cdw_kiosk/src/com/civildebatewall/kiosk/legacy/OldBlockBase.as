@@ -1,6 +1,6 @@
-package com.civildebatewall.kiosk.legacyBlocks {
+package com.civildebatewall.kiosk.legacy {
 	
-	import com.civildebatewall.kiosk.Kiosk;
+	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.Utilities;
 	import com.greensock.*;
 	import com.greensock.easing.*;

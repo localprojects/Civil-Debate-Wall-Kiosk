@@ -1,4 +1,4 @@
-package com.civildebatewall.kiosk {
+package com.civildebatewall.kiosk.core {
 
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.InactivityEvent;
@@ -8,7 +8,7 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.kiosk.camera.*;
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
-	import com.civildebatewall.kiosk.ui.*;
+
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;

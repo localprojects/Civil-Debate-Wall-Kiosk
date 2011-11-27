@@ -3,8 +3,8 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.State;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
+	import com.civildebatewall.kiosk.core.Kiosk;
+	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;

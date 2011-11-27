@@ -3,7 +3,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
+	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.civildebatewall.kiosk.buttons.WhiteButton;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;

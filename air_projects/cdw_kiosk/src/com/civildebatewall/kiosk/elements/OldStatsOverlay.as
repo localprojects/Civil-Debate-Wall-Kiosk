@@ -1,9 +1,9 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
+	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.civildebatewall.kiosk.blocks.BlockLabelBar;
-	import com.civildebatewall.kiosk.legacyBlocks.BlockButton;
+	import com.civildebatewall.kiosk.legacy.BlockButton;
 	import com.civildebatewall.kiosk.ui.IconButton;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;

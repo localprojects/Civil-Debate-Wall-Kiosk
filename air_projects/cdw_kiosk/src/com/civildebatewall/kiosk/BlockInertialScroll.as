@@ -81,15 +81,17 @@ package com.civildebatewall.kiosk {
 			isClick = true;
 
 			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			this.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 1);
+			this.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, -1);
 			
 			
-			
+			trace("scroll start y: " + scrollStartY);
 		}
 		
 		
 		
 		private function onMouseMove(e:MouseEvent):void {
+			
+			
 			
 			if (((scrollAxis == SCROLL_BOTH) && (isOverflowX || isOverflowY)) ||
 				  (scrollAxis == SCROLL_X && isOverflowX) ||
@@ -98,6 +100,8 @@ package com.civildebatewall.kiosk {
 			// Actually scroll the window
 			if((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_X)) scrollX = scrollStartX + (mouseStartX - stage.mouseX);
 			if((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_Y)) scrollY = scrollStartY + (mouseStartY - stage.mouseY);
+			
+			trace("Scroll y: " + scrollY);
 			
 			// Mouse odometry
 			mouseTravelX += Math.abs(stage.mouseX - lastMouseX);
@@ -161,7 +165,9 @@ package com.civildebatewall.kiosk {
 			}
 				
 			props.ease = Quart.easeOut;
-				
+			
+			trace("Throwing");
+			
 			// Stopped Here
 			if (!isClick) {
 				coastTween =	ThrowPropsPlugin.to(this, props, maxDuration, minDuration, overshootTolerance);

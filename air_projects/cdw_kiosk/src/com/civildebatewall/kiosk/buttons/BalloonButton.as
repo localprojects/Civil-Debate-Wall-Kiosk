@@ -54,6 +54,7 @@ package com.civildebatewall.kiosk.buttons
 		}
 		
 		public function onCancel(e:MouseEvent):void {
+			removeStageUpListener();
 			if (_targetPost != null) {
 				TweenMax.to(underlay, 0.5, {colorMatrixFilter:{colorize: _targetPost.stanceColorDark, amount: 1}});
 			}

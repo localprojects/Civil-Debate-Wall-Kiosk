@@ -1,9 +1,10 @@
 package com.civildebatewall.kiosk.buttons {
+	import com.bit101.components.PushButton;
 	import com.civildebatewall.*;
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.Thread;
-	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
+	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -12,24 +13,26 @@ package com.civildebatewall.kiosk.buttons {
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
 	import flash.display.*;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.text.*;
 	
 	public class ThumbnailButton extends BlockBase {
 	
-		private var _thread:Thread;
+		public var thread:Thread;
 		private var _backgroundColor:uint;
-		private var lines:Sprite;
+		private var lines:Shape;
 		private var roundedPortrait:Sprite;
 		private var _selected:Boolean;
-		private var textField:BlockText;
+		private var stanceText:Bitmap;
 		public var downBackgroundColor:uint = 0xffffff;		
 		private var textBackground:Sprite;
 		public var leftDot:Shape;
-		public  var rightDot:Shape;		
+		public  var rightDot:Shape;
+		
 		
 		public function ThumbnailButton(thread:Thread) {
-			_thread = thread;
-			_selected = false;
+			this.thread = thread;
 			
 			super({
 				width: 173,
@@ -38,7 +41,6 @@ package com.civildebatewall.kiosk.buttons {
 				visible: true			
 			});
 
-			
 			roundedPortrait = new Sprite();
 			var scaledPhotoData:BitmapData = BitmapUtil.scaleDataToFill(thread.firstPost.user.photo.bitmapData, 71, 96)
 			
@@ -49,43 +51,44 @@ package com.civildebatewall.kiosk.buttons {
 			this.cacheAsBitmap = false;
 			GeomUtil.centerWithin(roundedPortrait, this);			
 						
-			//  the text
-			textField = new BlockText({
-				textColor: 0xffffff,
-				textFont: Assets.FONT_BOLD,
-				textBold: true,
-				textSize: 14,
-				backgroundAlpha: 0,
-				visible: true,
-				text: _thread.firstPost.stanceFormatted
-			});
+			// text background
+			textBackground = new Sprite();
+			textBackground.graphics.beginFill(thread.firstPost.stanceColorLight);
+			textBackground.graphics.drawRect(0, 0, 71, 24);
+			textBackground.graphics.endFill();
+			textBackground.x = roundedPortrait.x;
+			textBackground.y = 85;				
 			
-			// down background color: _thread.firstPost.stanceColorWatermark;
-
+			//  the text
+			if (thread.firstPost.stance == Post.STANCE_YES) {
+				stanceText = Assets.getThumbnailStanceTextYes();
+			}
+			else if (thread.firstPost.stance == Post.STANCE_NO) {
+				stanceText = Assets.getThumbnailStanceTextNo();
+			}
+			else {
+				throw new Error("Invalid stance type \"" + thread.firstPost.stance + "\"");
+			}
+			
+			GeomUtil.centerWithin(stanceText, textBackground);
+			
+			// down background color: thread.firstPost.stanceColorWatermark;
 
 			// top line
-			lines = new Sprite();
+			lines = new Shape();
 			
-			lines.graphics.beginFill(_thread.firstPost.stanceColorLight);
+			lines.graphics.beginFill(thread.firstPost.stanceColorLight);
 			lines.graphics.drawRect(2, 4, 169, 3);			
 			lines.graphics.endFill();
 			
 			// bottom line
-			lines.graphics.beginFill(_thread.firstPost.stanceColorLight);
+			lines.graphics.beginFill(thread.firstPost.stanceColorLight);
 			lines.graphics.drawRect(2, 132, 169, 3);			
 			lines.graphics.endFill();		
 			
 			addChild(lines);
 
-			// text background			
-			textBackground = new Sprite();
-			textBackground.graphics.beginFill(_thread.firstPost.stanceColorLight);
-			textBackground.graphics.drawRect(0, 0, 71, 24);
-			textBackground.graphics.endFill();
-			textBackground.x = roundedPortrait.x;
-			textBackground.y = 85;					
 
-			
 			// dots
 			leftDot = new Shape();
 			rightDot = new Shape();			
@@ -93,26 +96,52 @@ package com.civildebatewall.kiosk.buttons {
 			setDotColor(Assets.COLOR_GRAY_50);
 			
 			leftDot.y = 70;
-			leftDot.x = 1;
+			leftDot.x = 0;
 						
 			rightDot.y = 70;
-			rightDot.x = width + 1;			
+			rightDot.x = width;			
 			
 				
 			addChild(roundedPortrait);
 			addChild(textBackground);
-			textBackground.addChild(textField);
+			textBackground.addChild(stanceText);
 			addChild(leftDot);
-			addChild(rightDot);			
-			
-			textField.x = ((textBackground.width - textField.background.width) / 2);
-			textField.y = ((textBackground.height - textField.background.height) / 2) - 2;			
-			
+			addChild(rightDot);
 
 			// override blockbase hiding behavior
 			visible = true;
 			
 			this.cacheAsBitmap = true;
+			
+			
+			buttonMode = true;
+			onStageUp.push(onUp);
+			onButtonDown.push(onDown);
+			onButtonCancel.push(onCancel);
+			
+			// clean up
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+
+			// set initial saturation
+			selected = false;
+		}
+		
+		private function onRemovedFromStage(e:Event):void {
+			this.buttonMode = false;
+			this.removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+		}
+		
+		private function onDown(e:MouseEvent):void {
+			if (!_selected)	drawDown();
+		}
+		
+		private function onUp(e:MouseEvent):void {
+			if (!_selected) CivilDebateWall.state.setActiveThread(thread);
+		}		
+		
+		private function onCancel(e:Event):void {
+			drawUp();
+			removeStageUpListener();			
 		}
 		
 		private function setDotColor(c:uint):void {
@@ -127,33 +156,42 @@ package com.civildebatewall.kiosk.buttons {
 			rightDot.graphics.endFill();			
 		}
 		
-		
-	
-		
-//		public function update():void {
-//			if(_selected) {
-//				// saturate
-//				TweenMax.to(roundedPortrait, 1, {colorMatrixFilter:{saturation: 1}, ease: Quart.easeInOut});
-//				TweenMax.to(textBackground, 0.5, {y: this.height, alpha: 0, ease: Quart.easeOut});				
-//				setDotColor(_thread.firstPost.stanceColorLight);
-//			}
-//			else {
-//				// desaturate
-//				TweenMax.to(roundedPortrait, 1, {colorMatrixFilter:{saturation: 0}, ease: Quart.easeInOut});
-//				TweenMax.to(textBackground, 0.5, {y: 85, alpha: 1, ease: Quart.easeOut});				
-//				setDotColor(Assets.COLOR_GRAY_50);				
-//			}
-//		}
-		
-		public function get thread():Thread { return _thread; }
-		
 		public function get selected():Boolean {
 			return _selected;
 		}
 		
+		private function drawSelected():void {
+			// saturate
+			TweenMax.to(roundedPortrait, 1, {colorMatrixFilter:{saturation: 1}, ease: Quart.easeInOut});
+			TweenMax.to(textBackground, 0.5, {y: this.height, alpha: 0, ease: Quart.easeOut});				
+			setDotColor(thread.firstPost.stanceColorLight);
+			drawDown();
+		}
+		
+		private function drawDeselected():void {
+			TweenMax.to(roundedPortrait, 1, {colorMatrixFilter:{saturation: 0}, ease: Quart.easeInOut});
+			TweenMax.to(textBackground, 0.5, {y: 85, alpha: 1, ease: Quart.easeOut});				
+			setDotColor(Assets.COLOR_GRAY_50);			
+			drawUp();
+		}
+		
+		private function drawDown():void {
+			TweenMax.to(this, 0, {backgroundColor: thread.firstPost.stanceColorWatermark});
+		}
+		
+		private function drawUp():void {
+			TweenMax.to(this, 0.5, {backgroundColor: 0xffffff});
+		}
+		
 		public function set selected(b:Boolean):void {
-			_selected = b;	
-			update();			
+			_selected = b;
+			
+			if(_selected) {
+				drawSelected();
+			}
+			else {
+				drawDeselected();
+			}
 		}		
 	}
 }

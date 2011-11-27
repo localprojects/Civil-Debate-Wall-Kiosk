@@ -1,7 +1,7 @@
 package com.civildebatewall {
 	import com.adobe.crypto.SHA1;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.kiosk.Kiosk;
+	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.kiosk.buttons.*;
 	import com.civildebatewall.kiosk.camera.*;
 	import com.civildebatewall.kiosk.elements.*;

@@ -1,4 +1,4 @@
-package com.civildebatewall.kiosk {
+package com.civildebatewall.kiosk.core {
 	import ObjectDetection.ObjectDetectorEvent;
 	
 	import com.adobe.serialization.json.*;
@@ -7,22 +7,22 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.State;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.*;
+	import com.civildebatewall.kiosk.DragLayer;
 	import com.civildebatewall.kiosk.buttons.*;
-	import com.civildebatewall.kiosk.camera.*;
-	import com.civildebatewall.kiosk.elements.*;
-	import com.civildebatewall.kiosk.keyboard.*;
-	import com.civildebatewall.kiosk.legacyBlocks.BigButton;
-	import com.civildebatewall.kiosk.legacyBlocks.CountdownButton;
-	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
-	import com.civildebatewall.kiosk.ui.*;
 	import com.civildebatewall.kiosk.buttons.BalloonButton;
 	import com.civildebatewall.kiosk.buttons.DebateButton;
 	import com.civildebatewall.kiosk.buttons.NavArrow;
-	import com.civildebatewall.kiosk.elements.OpinionTextHome;
-	import com.civildebatewall.kiosk.elements.QuestionHeader;
 	import com.civildebatewall.kiosk.buttons.RespondButton;
 	import com.civildebatewall.kiosk.buttons.SortLinks;
 	import com.civildebatewall.kiosk.buttons.StatsButton;
+	import com.civildebatewall.kiosk.camera.*;
+	import com.civildebatewall.kiosk.elements.*;
+	import com.civildebatewall.kiosk.elements.OpinionTextHome;
+	import com.civildebatewall.kiosk.elements.QuestionHeader;
+	import com.civildebatewall.kiosk.keyboard.*;
+	import com.civildebatewall.kiosk.legacy.BigButton;
+	import com.civildebatewall.kiosk.legacy.CountdownButton;
+	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.civildebatewall.kiosk.overlays.FlagOverlay;
 	import com.civildebatewall.kiosk.overlays.InactivityOverlay;
 	import com.civildebatewall.kiosk.overlays.OpinionEntryOverlay;
@@ -33,6 +33,7 @@ package com.civildebatewall.kiosk {
 	import com.greensock.plugins.*;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
+	import com.kitschpatrol.futil.blocks.BlockShape;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
@@ -62,7 +63,10 @@ package com.civildebatewall.kiosk {
 		private var rightArrow:NavArrow;
 		private var bigButton:BigButton; // TODO migrate to Futil?
 		private var statsButton:StatsButton;
-		private var debateStrip:DebateStrip;		
+		private var debateStripUnderlay:BlockBase;
+		private var debateStripLeftButton:DebateStripNavArrow;
+		private var debateStripRightButton:DebateStripNavArrow;		
+		private var debateStrip:DebateStrip;
 		private var sortLinks:SortLinks;
 		private var dragLayer:DragLayer;		
 
@@ -184,9 +188,25 @@ package com.civildebatewall.kiosk {
 			statsButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 796});
 			addChild(statsButton);			
 			
+			debateStripUnderlay = new BlockBase({width: 1080, height: 141, backgroundColor: 0xffffff});
+			debateStripUnderlay.setDefaultTweenIn(1, {x: 0, y: 1670});
+			debateStripUnderlay.setDefaultTweenOut(1, {x: 0, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(debateStripUnderlay);
+			
+			// buttons
+			debateStripLeftButton = new DebateStripNavArrow({bitmap: Assets.getLeftCarat()});
+			debateStripLeftButton.setDefaultTweenIn(1, {x: 0, y: 1670});
+			debateStripLeftButton.setDefaultTweenOut(1, {x: -50, y: 1670});
+			addChild(debateStripLeftButton);
+			
+			debateStripRightButton = new DebateStripNavArrow({bitmap: Assets.getRightCarat()});
+			debateStripRightButton.setDefaultTweenIn(1, {x: 1030, y: 1670});
+			debateStripRightButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 1670});
+			addChild(debateStripRightButton);	
+			
 			debateStrip = new DebateStrip();
-			debateStrip.setDefaultTweenIn(1, {x: 0, y: 1671});
-			debateStrip.setDefaultTweenOut(1, {x: 0, y: Alignment.OFF_STAGE_BOTTOM});
+			debateStrip.setDefaultTweenIn(1, {x: 50, y: 1670});
+			debateStrip.setDefaultTweenOut(1, {x: 50, y: Alignment.OFF_STAGE_BOTTOM});
 			addChild(debateStrip);			
 			
 			sortLinks = new SortLinks();
@@ -412,6 +432,12 @@ package com.civildebatewall.kiosk {
 			inactivityOverlay.setDefaultTweenOut(1, {});  // internal
 			addChild(inactivityOverlay);			
 
+			
+			// Set up global unchanging events...
+			debateStripLeftButton.onStageUp.push(onDebateStripLeftButton);
+			debateStripRightButton.onStageUp.push(onDebateStripRightButton);
+			
+			
 			// Watch state for changes
 			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
 			CivilDebateWall.state.addEventListener(State.VIEW_CHANGE, onViewChange);
@@ -458,10 +484,7 @@ package com.civildebatewall.kiosk {
 		
 		// ================================================================================================================================================
 		
-		
-		
 
-		
 		public function homeView(...args):void {
 			markAllInactive();
 			
@@ -488,6 +511,9 @@ package com.civildebatewall.kiosk {
 			viewCommentsButton.tweenIn();			
 			flagButton.tweenIn();			
 			bigButton.tweenIn();
+			debateStripUnderlay.tweenIn();
+			debateStripLeftButton.tweenIn();
+			debateStripRightButton.tweenIn();
 			debateStrip.tweenIn();
 			sortLinks.tweenIn();
 			
@@ -503,6 +529,17 @@ package com.civildebatewall.kiosk {
 			// clean up the old based on what's not active
 			tweenOutInactive();
 		}
+		
+		private function onDebateStripLeftButton(e:MouseEvent):void {
+			debateStrip.scrollLeft();
+		}
+		
+		private function onDebateStripRightButton(e:MouseEvent):void {
+			debateStrip.scrollRight();
+		}		
+		
+		
+		//-----------------
 		
 		// TODO these...
 		public function nextDebate():void {
