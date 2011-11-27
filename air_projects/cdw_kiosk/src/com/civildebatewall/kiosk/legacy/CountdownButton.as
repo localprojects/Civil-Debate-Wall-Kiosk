@@ -11,8 +11,6 @@ package com.civildebatewall.kiosk.legacy {
 	import flash.text.*;
 	import flash.utils.*;
 	
-	import flashx.textLayout.formats.TextAlign;
-	
 	public class CountdownButton extends ButtonBase {
 		
 		// time keeping
@@ -76,7 +74,7 @@ package com.civildebatewall.kiosk.legacy {
 				textSize: 41,
 				textColor: 0xffffff,
 				alignmentPoint: Alignment.CENTER,
-				textAlignmentMode: TextAlign.CENTER,
+				textAlignmentMode: Alignment.TEXT_CENTER,
 				registrationPoint: Alignment.CENTER,
 				visible: true,
 				width: outerRingRadius * 2,

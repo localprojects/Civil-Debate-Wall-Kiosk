@@ -7,7 +7,6 @@ package com.civildebatewall.kiosk.elements {
 	
 	import flash.display.Shape;
 	
-	import flashx.textLayout.formats.TextAlign;
 	
 	public class StatsTitleBar extends BlockText {
 		
@@ -22,7 +21,7 @@ package com.civildebatewall.kiosk.elements {
 			textBold = true;
 			textSize = 18;
 			textColor = 0xffffff;
-			textAlignmentMode = TextAlign.CENTER;
+			textAlignmentMode = Alignment.TEXT_CENTER;
 			alignmentPoint = Alignment.CENTER;
 			
 			content.mouseChildren = false;

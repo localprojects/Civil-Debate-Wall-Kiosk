@@ -12,7 +12,6 @@ package com.civildebatewall.kiosk.overlays {
 	
 	import flash.events.MouseEvent;
 	
-	import flashx.textLayout.formats.TextAlign;
 	
 	public class InactivityOverlay extends BlockBase {
 		
@@ -43,7 +42,7 @@ package com.civildebatewall.kiosk.overlays {
 				height: 64,
 				text: "ARE YOU STILL THERE?",
 				backgroundColor: 0xffffff,
-				textAlignmentMode: TextAlign.CENTER,
+				textAlignmentMode: Alignment.TEXT_CENTER,
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
 				textSize: 18,

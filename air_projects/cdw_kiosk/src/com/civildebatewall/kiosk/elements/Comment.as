@@ -13,8 +13,6 @@ package com.civildebatewall.kiosk.elements {
 	
 	import flash.display.*;
 	import flash.events.Event;
-	
-	import flashx.textLayout.formats.TextAlign;
 
 	public class Comment extends BlockBase {
 		

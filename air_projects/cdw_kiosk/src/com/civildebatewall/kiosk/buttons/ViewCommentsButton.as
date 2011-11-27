@@ -11,15 +11,13 @@ package com.civildebatewall.kiosk.buttons {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import flashx.textLayout.formats.TextAlign;
-	
 	public class ViewCommentsButton extends BlockText	{
 		public function ViewCommentsButton(params:Object=null) {
 			super({
 				textFont: Assets.FONT_REGULAR,
 				textSize: 18,
 				backgroundRadius: 8,
-				textAlignmentMode: TextAlign.CENTER,
+				textAlignmentMode: Alignment.TEXT_CENTER,
 				textColor: 0xffffff,
 				paddingLeft: 24,
 				buttonMode: true,

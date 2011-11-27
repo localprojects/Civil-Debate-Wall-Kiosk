@@ -7,7 +7,7 @@ package com.civildebatewall {
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
-	import fl.motion.Color;
+	
 	
 	import flash.display.*;
 	import flash.events.Event;
@@ -20,15 +20,18 @@ package com.civildebatewall {
 
 	public class Utilities {
 		
+		// TODO bake my own color interpolation into futil
 		public static function interpolateColorThroughWhite(start:uint, end:uint, step:Number):uint {
 			if (step <= 0.5) {
 				// towards white
-				return Color.interpolateColor(start, 0xffffff, step * 2);				
+				//return Color.interpolateColor(start, 0xffffff, step * 2);				
 			}
 			else {
 				// from white
-				return Color.interpolateColor(0xffffff, end, (step * 2) - 1);		
+				//return Color.interpolateColor(0xffffff, end, (step * 2) - 1);		
 			}
+			
+			return 0;
 		}
 				
 		

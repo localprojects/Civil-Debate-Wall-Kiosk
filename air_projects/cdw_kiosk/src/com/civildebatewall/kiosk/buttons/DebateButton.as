@@ -6,10 +6,7 @@ package com.civildebatewall.kiosk.buttons {
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	
-	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
-	import flashx.textLayout.formats.TextAlign;
 	
 	public class DebateButton extends BlockText {
 		
@@ -23,7 +20,7 @@ package com.civildebatewall.kiosk.buttons {
 				letterSpacing: -1,
 				textColor: ColorUtil.gray(77),
 				backgroundColor: 0xffffff,
-				textAlignmentMode: TextAlign.CENTER,
+				textAlignmentMode: Alignment.TEXT_CENTER,
 				width: 397,
 				height: 143,
 				backgroundRadius: 20,

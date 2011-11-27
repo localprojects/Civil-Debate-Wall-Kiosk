@@ -6,7 +6,7 @@ package com.civildebatewall.kiosk {
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	
-	import fl.motion.Color;
+	
 	
 	import flash.events.*;
 

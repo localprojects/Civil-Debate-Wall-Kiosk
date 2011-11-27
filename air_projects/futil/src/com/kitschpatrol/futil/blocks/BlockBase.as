@@ -120,9 +120,6 @@ package com.kitschpatrol.futil.blocks {
 			onButtonOut = new Vector.<Function>(0);
 			
 			// TODO devise and flip the update booleans (e.g. invalidate everything)
-
-			trace("APY INIT: " + _alignmentPoint.y);
-		
 			
 			// overwrites defaults and calls update
 			setParams(params);
@@ -334,7 +331,6 @@ package com.kitschpatrol.futil.blocks {
 		
 		
 		public function get scrollY():Number {
-			trace("APY: " + _alignmentPoint.y);
 			return (contentHeight - (background.height - _padding.vertical)) * _alignmentPoint.y;
 		}
 		

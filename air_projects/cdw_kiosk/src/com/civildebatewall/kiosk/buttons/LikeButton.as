@@ -18,8 +18,6 @@ package com.civildebatewall.kiosk.buttons {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	import flashx.textLayout.formats.TextAlign;
-	
 	public class LikeButton extends BlockBase {
 		
 		private var _targetPost:Post;		
@@ -44,7 +42,7 @@ package com.civildebatewall.kiosk.buttons {
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
 				textSize: 18,
-				textAlignmentMode: TextAlign.RIGHT,
+				textAlignmentMode: Alignment.TEXT_RIGHT,
 				textColor: 0xffffff,
 				backgroundAlpha: 0,
 				width: 50,

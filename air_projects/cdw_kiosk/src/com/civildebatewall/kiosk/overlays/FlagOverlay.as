@@ -11,8 +11,6 @@ package com.civildebatewall.kiosk.overlays {
 	
 	import flash.events.MouseEvent;
 	
-	import flashx.textLayout.formats.TextAlign;
-	
 	public class FlagOverlay extends BlockBase	{
 		
 		private var timerBar:ProgressBar;
@@ -48,7 +46,7 @@ package com.civildebatewall.kiosk.overlays {
 				width: 880,
 				height: 64,
 				backgroundColor: 0xffffff,
-				textAlignmentMode: TextAlign.CENTER,
+				textAlignmentMode: Alignment.TEXT_CENTER,
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
 				textSize: 18,

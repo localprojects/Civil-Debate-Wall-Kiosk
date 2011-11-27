@@ -1,16 +1,10 @@
 package com.civildebatewall.kiosk.buttons {
 	import com.civildebatewall.*;
 	import com.civildebatewall.data.Word;
-
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
-	
-	import fl.motion.Color;
-	
-	import flashx.textLayout.formats.TextAlign;
-	
 	
 	public class WordButton extends BlockText {
 		public var difference:Number;		
@@ -38,7 +32,7 @@ package com.civildebatewall.kiosk.buttons {
 			letterSpacing = -1;	
 			textColor = 0xffffff;
 			textSize = 25;
-			textAlignmentMode = TextAlign.CENTER;
+			textAlignmentMode = Alignment.TEXT_CENTER,
 			paddingTop = 0;
 			paddingRight = 13;
 			paddingBottom = 0;

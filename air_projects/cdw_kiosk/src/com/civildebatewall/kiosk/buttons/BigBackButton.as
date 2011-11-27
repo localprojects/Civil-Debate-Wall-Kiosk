@@ -6,8 +6,7 @@ package com.civildebatewall.kiosk.buttons {
 	import com.kitschpatrol.futil.constants.Alignment;
 	
 	import flash.events.MouseEvent;
-	
-	import flashx.textLayout.formats.TextAlign;
+
 	
 	public class BigBackButton extends BlockText	{
 		
@@ -19,7 +18,7 @@ package com.civildebatewall.kiosk.buttons {
 				textBold: true,
 				textSize: 25,
 				textColor: 0xffffff,
-				textAlignmentMode: TextAlign.CENTER,
+				textAlignmentMode: Alignment.TEXT_CENTER,
 				width: 1024,
 				height: 65,
 				backgroundRadius: 12,
