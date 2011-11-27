@@ -3,6 +3,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.data.Data;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBase;
+	import com.kitschpatrol.futil.blocks.BlockText;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
@@ -20,8 +21,8 @@ package com.civildebatewall.kiosk.elements {
 		private var midPoint:Number = 0;
 		
 		private var overlay:Sprite;
-		private var yesLabel:BarLabel;
-		private var noLabel:BarLabel;		
+		private var yesLabel:BlockText;
+		private var noLabel:BlockText;		
 		
 		public function VoteStatBar()	{
 			super();
@@ -36,14 +37,18 @@ package com.civildebatewall.kiosk.elements {
 			
 			overlay = new Sprite();
 			
-			yesLabel = new BarLabel('YES!', 255);
-			yesLabel.visible = true;
-			overlay.addChild(yesLabel);
 			
-			noLabel = new BarLabel('NO!', 5);
-			noLabel.visible = true;
-			noLabel.x = yesLabel.width + 30;
-			overlay.addChild(noLabel);
+			// TODO
+			yesLabel = new BlockText({
+				text: "YES!",
+				visible: true
+			});
+			
+			noLabel = new BlockText({
+				text: "NO!",
+				visible: true
+			});			
+			
 			
 			overlay.y = 36;
 			addChild(overlay);
@@ -57,7 +62,7 @@ package com.civildebatewall.kiosk.elements {
 		
 		private function onDataUpdate(e:Event):void {
 			barPercent = CivilDebateWall.data.yesPercent * 100;
-			setLabels(CivilDebateWall.data.stanceTotals.yes, CivilDebateWall.data.stanceTotals.no);
+			//setLabels(CivilDebateWall.data.stanceTotals.yes, CivilDebateWall.data.stanceTotals.no);
 		}
 		
 		public function get barPercent():Number {
@@ -91,14 +96,14 @@ package com.civildebatewall.kiosk.elements {
 			if(overlay.x + overlay.width > width - 20) overlay.x = height - 20 - overlay.width;
 			
 			// figure out the ratio?
-			yesLabel.setSize(_barPercent);
-			noLabel.setSize(Math.abs(100 - _barPercent));			
+//			yesLabel.setSize(_barPercent);
+//			noLabel.setSize(Math.abs(100 - _barPercent));			
 		}
 		
-		public function setLabels(yesValue:uint, noValue:uint):void {
-			yesLabel.setCount(yesValue);
-			noLabel.setCount(noValue);
-		}
+//		public function setLabels(yesValue:uint, noValue:uint):void {
+//			yesLabel.setCount(yesValue);
+//			noLabel.setCount(noValue);
+//		}
 		
 		
 		

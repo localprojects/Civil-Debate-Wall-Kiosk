@@ -5,8 +5,7 @@ package com.civildebatewall.kiosk.camera {
 		
 		public static const NEW_FRAME_EVENT:String = "newFrameEvent";		
 		
-		public function CameraFeedEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
-		{
+		public function CameraFeedEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false) {
 			super(type, bubbles, cancelable);
 		}
 	}

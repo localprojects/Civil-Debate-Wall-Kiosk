@@ -1,6 +1,6 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.kiosk.blocks.OldBlockBase;
+	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
 	import com.greensock.*;
 	import com.greensock.easing.Linear;
 	import com.kitschpatrol.futil.blocks.BlockBase;

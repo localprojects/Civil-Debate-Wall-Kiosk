@@ -4,7 +4,7 @@ package com.civildebatewall.kiosk.keyboard {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.blocks.OldBlockBase;
+	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
 	import com.kitschpatrol.futil.Math2;
 	
 	import flash.display.InteractiveObject;

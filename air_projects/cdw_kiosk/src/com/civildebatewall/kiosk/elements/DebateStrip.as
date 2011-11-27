@@ -1,8 +1,9 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.kiosk.blocks.OldBlockBase;
-	import com.civildebatewall.kiosk.ui.*;
+	import com.civildebatewall.kiosk.InertialScrollField;
+	import com.civildebatewall.kiosk.buttons.ThumbnailButton;
+	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.Math2;
@@ -129,13 +130,13 @@ package com.civildebatewall.kiosk.elements {
 						// deactivate the old on
 						if (activeThumbnail != null) {			
 							activeThumbnail.selected = false;
-							activeThumbnail.setBackgroundColor(0xffffff);
+						//	activeThumbnail.setBackgroundColor(0xffffff);
 							trace("deselecting: " + activeThumbnail);
 						}
 						
 						// select the new one
 						activeThumbnail = tempThumb;
-						activeThumbnail.setBackgroundColor(activeThumbnail.downBackgroundColor);
+				//		activeThumbnail.setBackgroundColor(activeThumbnail.downBackgroundColor);
 						scrollField.scrollSheet.setChildIndex(activeThumbnail, scrollField.scrollSheet.numChildren - 1); // make sure the colored dots are on top
 						activeThumbnail.selected = true;		
 					
@@ -186,7 +187,7 @@ package com.civildebatewall.kiosk.elements {
 
 		private function onThumbnailMouseDown(e:MouseEvent):void {
 			targetThumbnail = e.currentTarget as ThumbnailButton;			
-			targetThumbnail.setBackgroundColor(targetThumbnail.downBackgroundColor, true);
+		//	targetThumbnail.setBackgroundColor(targetThumbnail.downBackgroundColor, true);
 			
 			stage.addEventListener(MouseEvent.MOUSE_UP, onThumbnailMouseUp);			
 			
@@ -204,12 +205,12 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 			
-			if (activeThumbnail != targetThumbnail) targetThumbnail.setBackgroundColor(0xffffff);	
+		//	if (activeThumbnail != targetThumbnail) targetThumbnail.setBackgroundColor(0xffffff);	
 		}
 		
 
 		private function onNotClick(e:Event):void {
-			if ((targetThumbnail != null) && (targetThumbnail != activeThumbnail)) targetThumbnail.setBackgroundColor(0xffffff);			
+		//	if ((targetThumbnail != null) && (targetThumbnail != activeThumbnail)) targetThumbnail.setBackgroundColor(0xffffff);			
 		}		
 		
 	}

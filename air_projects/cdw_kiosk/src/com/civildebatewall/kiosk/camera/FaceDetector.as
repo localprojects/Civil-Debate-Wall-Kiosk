@@ -1,6 +1,8 @@
 package com.civildebatewall.kiosk.camera {
-	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.Utilities;
+	import ObjectDetection.ObjectDetector;
+	import ObjectDetection.ObjectDetectorEvent;
+	import ObjectDetection.ObjectDetectorOptions;
+	
 	import com.civildebatewall.CivilDebateWall;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
@@ -10,10 +12,6 @@ package com.civildebatewall.kiosk.camera {
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
-	import ObjectDetection.ObjectDetector;
-	import ObjectDetection.ObjectDetectorEvent;
-	import ObjectDetection.ObjectDetectorOptions;
 	
 	// Adapted from Mario Klingemann's code
 	// http://www.quasimondo.com/archives/000687.php

@@ -4,8 +4,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Post;
-	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.blocks.OldBlockBase;
+	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	
 	import flash.display.Bitmap;
@@ -71,6 +70,5 @@ package com.civildebatewall.kiosk.elements {
 			draw();			
 		}
 		
-
 	}
 }

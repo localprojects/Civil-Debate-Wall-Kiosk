@@ -76,7 +76,7 @@ package com.kitschpatrol.futil.blocks {
 		private var fieldLeading:Number; // actual leading passed to textfield
 		
 		// update flags
-		private var changedBounds:Boolean;
+		public var changedBounds:Boolean;
 		private var changedFormat:Boolean;	
 		private var changedTextField:Boolean;
 		
