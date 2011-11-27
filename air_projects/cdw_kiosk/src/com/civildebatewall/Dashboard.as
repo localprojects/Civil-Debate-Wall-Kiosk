@@ -56,9 +56,7 @@ package com.civildebatewall {
 			viewChooser.addEventListener(Event.SELECT, onViewSelect);
 			viewChooser.width = this.width - 10;
 			
-			new PushButton(this, 5, viewChooser.y + viewChooser.height + 5, "Simulate SMS", function():void {
-				CivilDebateWall.kiosk.view.oldSmsOverlay.simulateSMS();
-			});
+
 			
 			
 			

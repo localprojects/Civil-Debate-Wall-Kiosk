@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
 	import com.civildebatewall.data.Post;
-	import com.civildebatewall.kiosk.blocks.*;
+	import com.civildebatewall.kiosk.buttons.*;
 	import com.civildebatewall.kiosk.ui.*;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;

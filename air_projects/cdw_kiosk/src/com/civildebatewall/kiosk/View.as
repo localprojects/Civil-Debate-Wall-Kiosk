@@ -7,30 +7,33 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.State;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.*;
-	import com.civildebatewall.kiosk.blocks.*;
+	import com.civildebatewall.kiosk.buttons.*;
 	import com.civildebatewall.kiosk.camera.*;
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
+	import com.civildebatewall.kiosk.legacyBlocks.BigButton;
+	import com.civildebatewall.kiosk.legacyBlocks.CountdownButton;
+	import com.civildebatewall.kiosk.legacyBlocks.OldBlockBase;
 	import com.civildebatewall.kiosk.ui.*;
-	import com.civildebatewall.staging.elements.BalloonButton;
-	import com.civildebatewall.staging.elements.DebateButton;
-	import com.civildebatewall.staging.elements.NavArrow;
-	import com.civildebatewall.staging.elements.OpinionTextHome;
-	import com.civildebatewall.staging.elements.QuestionHeader;
-	import com.civildebatewall.staging.elements.RespondButton;
-	import com.civildebatewall.staging.elements.SortLinks;
-	import com.civildebatewall.staging.elements.StatsButton;
-	import com.civildebatewall.staging.overlays.FlagOverlay;
-	import com.civildebatewall.staging.overlays.InactivityOverlay;
-	import com.civildebatewall.staging.overlays.OpinionEntryOverlay;
-	import com.civildebatewall.staging.overlays.StatsOverlay;
-	import com.civildebatewall.staging.overlays.smsfun.OldSMSOverlay;
-	import com.civildebatewall.staging.overlays.smsfun.SMSOverlay;
+	import com.civildebatewall.kiosk.buttons.BalloonButton;
+	import com.civildebatewall.kiosk.buttons.DebateButton;
+	import com.civildebatewall.kiosk.buttons.NavArrow;
+	import com.civildebatewall.kiosk.elements.OpinionTextHome;
+	import com.civildebatewall.kiosk.elements.QuestionHeader;
+	import com.civildebatewall.kiosk.buttons.RespondButton;
+	import com.civildebatewall.kiosk.buttons.SortLinks;
+	import com.civildebatewall.kiosk.buttons.StatsButton;
+	import com.civildebatewall.kiosk.overlays.FlagOverlay;
+	import com.civildebatewall.kiosk.overlays.InactivityOverlay;
+	import com.civildebatewall.kiosk.overlays.OpinionEntryOverlay;
+	import com.civildebatewall.kiosk.overlays.StatsOverlay;
+	import com.civildebatewall.kiosk.overlays.smsfun.SMSOverlay;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
+	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
@@ -40,6 +43,8 @@ package com.civildebatewall.kiosk {
 	import flash.events.*;
 	import flash.geom.Rectangle;
 	import flash.net.*;
+	
+	import flashx.textLayout.formats.BackgroundColor;
 
 	public class View extends Sprite {
 		// convenience
@@ -90,7 +95,7 @@ package com.civildebatewall.kiosk {
 		// photo booth view (move to its own container?)
 		public var portraitCamera:PortraitCamera; // public for dashboard		
 		private var countdownButton:CountdownButton;
-		private var cameraTimeoutWarning:BlockLabel;
+		private var cameraTimeoutWarning:BlockText;
 		private var cameraOverlay:CameraOverlay;		
 		private var flashOverlay:BlockBitmap;
 		private var blackOverlay:BlockBitmap;		
@@ -109,7 +114,6 @@ package com.civildebatewall.kiosk {
 		private var closeTermsButton:CloseTermsButton;
 		
 		// sms prompt view // TODO?
-		public var oldSmsOverlay:OldSMSOverlay; // public for dashboard testing
 		public var smsOverlay:SMSOverlay;
 
 		// flag overlay
@@ -309,9 +313,16 @@ package com.civildebatewall.kiosk {
 			countdownButton.setDefaultTweenOut(1, {x: Alignment.CENTER_STAGE, y: Alignment.OFF_STAGE_TOP});
 			addChild(countdownButton);			
 			
-			cameraTimeoutWarning = new BlockLabel('The camera could not focus, please try again!', 26, 0xffffff, Assets.COLOR_GRAY_50, Assets.FONT_BOLD);
-			cameraTimeoutWarning.setDefaultTweenIn(1, {x: OldBlockBase.CENTER, y: OldBlockBase.CENTER});	
-			cameraTimeoutWarning.setDefaultTweenOut(1, {x: OldBlockBase.OFF_LEFT_EDGE, y: OldBlockBase.CENTER});
+			cameraTimeoutWarning = new BlockText({
+				textFont: Assets.FONT_BOLD,
+				textSize: 26,
+				textColor: 0xffffff,
+				backgroundColor: Assets.COLOR_GRAY_50,
+				text: "The camera could not focus, please try again!",
+				visible: true
+			});
+			cameraTimeoutWarning.setDefaultTweenIn(1, {x: Alignment.CENTER_STAGE, y: Alignment.CENTER_STAGE});	
+			cameraTimeoutWarning.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: Alignment.CENTER_STAGE});
 			addChild(cameraTimeoutWarning);			
 			
 			blackOverlay = new BlockBitmap({bitmap: new Bitmap(new BitmapData(stageWidth, stageHeight, false, 0x000000))});
@@ -383,11 +394,6 @@ package com.civildebatewall.kiosk {
 
 			
 			// sms prompt view
-			oldSmsOverlay = new OldSMSOverlay();
-			oldSmsOverlay.setDefaultTweenIn(0, {});
-			oldSmsOverlay.setDefaultTweenOut(1, {});
-			addChild(oldSmsOverlay);
-			
 			smsOverlay = new SMSOverlay();
 			smsOverlay.setDefaultTweenIn(0, {});
 			smsOverlay.setDefaultTweenOut(1, {});			

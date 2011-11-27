@@ -3,7 +3,6 @@ package com.civildebatewall.kiosk.elements
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-	import com.civildebatewall.staging.BlockTextOpinion;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;

@@ -1,10 +1,9 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
 	import com.civildebatewall.data.Post;
-	import com.civildebatewall.kiosk.blocks.*;
+	import com.civildebatewall.kiosk.buttons.*;
 	import com.civildebatewall.kiosk.ui.*;
-	import com.civildebatewall.staging.BlockTextOpinion;
-	import com.civildebatewall.staging.elements.BalloonButton;
+	import com.civildebatewall.kiosk.buttons.BalloonButton;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
@@ -27,9 +26,8 @@ package com.civildebatewall.kiosk.elements {
 		protected var portraitWidth:int;
 		protected var portraitHeight:int;
 		protected var portrait:Sprite;
-		protected var stanceLabel:BlockLabel;
 		
-		private var opinion:BlockText;
+		private var opinion:BlockTextOpinion;
 		
 		public function Comment(post:Post, postNumber:int = -1) {
 			_post = post;

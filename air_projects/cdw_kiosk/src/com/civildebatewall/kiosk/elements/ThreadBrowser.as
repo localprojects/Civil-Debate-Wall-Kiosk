@@ -3,7 +3,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Thread;
 	import com.civildebatewall.kiosk.BlockInertialScroll;
-	import com.civildebatewall.kiosk.blocks.*;
+	import com.civildebatewall.kiosk.buttons.*;
 	import com.civildebatewall.kiosk.ui.*;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	

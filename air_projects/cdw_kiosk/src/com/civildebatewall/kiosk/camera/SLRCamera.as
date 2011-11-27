@@ -1,5 +1,4 @@
-package com.civildebatewall.kiosk.camera
-{
+package com.civildebatewall.kiosk.camera {
 	import com.civildebatewall.*;
 	import com.kitschpatrol.futil.Math2;
 	
@@ -10,11 +9,8 @@ package com.civildebatewall.kiosk.camera
 	import flash.geom.Matrix;
 	import flash.net.*;
 	import flash.utils.*;
-	
-	
-	
-	public class SLRCamera extends EventDispatcher 
-	{
+
+	public class SLRCamera extends EventDispatcher {
 		
 		public static const PHOTO_TIMEOUT_EVENT:String = "photoTimeoutEvent";
 		
@@ -28,8 +24,7 @@ package com.civildebatewall.kiosk.camera
 		private var imageFolder:File;
 		public var image:Bitmap;
 		
-		public function SLRCamera()
-		{
+		public function SLRCamera() {
 			// set the image folder, will come from settings
 			imageFolder = new File();
 			imageFolder.nativePath = CivilDebateWall.settings.tempImagePath;
@@ -98,14 +93,11 @@ package com.civildebatewall.kiosk.camera
 			if (images.length > 0) {
 				// load the latest image
 				
-				
-				
 				loadImage(images[0]);
 				// stop the checking
 				trace("got image");
 				folderWatchTimer.stop();
 			}
-			
 		}
 		
 		// move to utilities

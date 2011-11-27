@@ -43,6 +43,8 @@ package com.civildebatewall.kiosk.elements {
 				// create object and add it to the scroll field
 				var searchResult:SearchResult = new SearchResult(word.posts[i], i + 1);
 				
+				
+				
 				searchResult.x = 0;
 				searchResult.y = yOffset;
 				searchResult.visible = true;

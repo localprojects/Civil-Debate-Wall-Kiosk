@@ -4,7 +4,7 @@ package com.civildebatewall.kiosk {
 	import com.civildebatewall.InactivityEvent;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.kiosk.blocks.*;
+	import com.civildebatewall.kiosk.buttons.*;
 	import com.civildebatewall.kiosk.camera.*;
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
