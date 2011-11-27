@@ -1,0 +1,57 @@
+<?xml version="1.0"?> 
+<project name="CDW Kiosk" basedir="." default="main">
+     
+    <property file="multiScreenTest.properties" />      
+	<property name="ADL" value="${SDK_HOME}/bin/adl" />     
+     
+	<!-- Ant Contrib -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+	    <pathelement location="${basedir}/build-resources/ant-contrib-1.0b3.jar" />
+	  </classpath>
+	</taskdef>
+	
+	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" onerror="fail">
+		<classpath>
+			<pathelement location="${basedir}/build-resources/ant-contrib-1.0b3.jar" />
+		</classpath>
+	</taskdef>
+	
+	<!-- XML Task http://today.java.net/pub/a/today/2006/11/01/xml-manipulation-using-xmltask.html -->
+	<!-- Note ":" namespace weirdness in xpaths -->
+	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" onerror="fail">
+		<classpath>
+			<pathelement location="${basedir}/build-resources/xmltask.jar" />
+		</classpath>
+	</taskdef>     
+     
+     
+	<target name="main" >
+		<echo message="Launching multiple screens. Debug gets built first by Eclipse." />
+		
+		<echo message="Copying App XML" />		
+		
+	    <for param="i" begin="1" end="${SCREEN_COUNT}"> 
+			<sequential>
+				<antcall target="create-app-xml">
+					<param name="screenID" value="@{i}"/>
+					<param name="destination" value="${EXAMPLE_APP_DEBUG_DIR}/main-app.xml"/>
+				</antcall>	
+			</sequential>		
+		</for>				
+				
+		
+		<echo message="Modifying App XML" />						
+		
+		<echo message="Launching via ADL" />		
+			
+				
+	</target>
+     
+ 	<target name="create-app-xml" description="Duplicates original app XML.">
+		<copy file="${EXAMPLE_APP_DEBUG_DIR}/Main-app.xml" tofile="${EXAMPLE_APP_DEBUG_DIR}/Main-app-${screenID}.xml" />
+	</target>	    
+     
+</project>
+
+	
