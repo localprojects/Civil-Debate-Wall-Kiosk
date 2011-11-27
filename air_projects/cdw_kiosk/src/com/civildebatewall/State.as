@@ -214,18 +214,18 @@ package com.civildebatewall {
 
 
 			// logs backwards... ugh
-			CivilDebateWall.dashboard.log('---------------------------------');			
+			// CivilDebateWall.dashboard.log('---------------------------------');			
 			
 			for (var i:uint = activeThread.posts.length - 1; i > 0; i--) {
 				trace(i);
-				CivilDebateWall.dashboard.log(activeThread.posts[i].id);
+				// CivilDebateWall.dashboard.log(activeThread.posts[i].id);
 			}
-			CivilDebateWall.dashboard.log(activeThread.posts[0].id);
+			// CivilDebateWall.dashboard.log(activeThread.posts[0].id);
 			
-			CivilDebateWall.dashboard.log('Posts:');			
-			CivilDebateWall.dashboard.log("Active thread:\n\t" + activeThread.id);			
+			// CivilDebateWall.dashboard.log('Posts:');			
+			// CivilDebateWall.dashboard.log("Active thread:\n\t" + activeThread.id);			
 			
-			CivilDebateWall.dashboard.log('---------------------------------');			
+			// CivilDebateWall.dashboard.log('---------------------------------');			
 			
 			// funky overrides for big-jump transitions
 			if (overridePrevious != null) {

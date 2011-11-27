@@ -22,43 +22,45 @@ package com.civildebatewall {
 			this.height = 500;
 			this.hasMinimizeButton = true;
 			this.minimized = true;
-			logBox = new TextArea(this, 5, 5, "Dashboard ready");
-			logBox.width = this.width - 10;
-			logBox.height = 90;
 			
-			overlaySlider = new Slider("horizontal", this, 120, 103, onOverlaySlider);
-			overlaySlider.minimum = 0;
-			overlaySlider.maximum = 1;
-			overlaySlider.value = 0.5;
 			
-			focalLengthSlider = new Slider("horizontal", this, 120, 120, onFocalLengthSlider);
-			focalLengthSlider.minimum = 1;
-			focalLengthSlider.maximum = 3;
-			focalLengthSlider.value = 1;	
 			
-		
 			
-			viewChooser = new ComboBox(this, 5, 140, 'View');
-			viewChooser.addItem('Home');
-			viewChooser.addItem('Debate Overlay');
-			viewChooser.addItem('Pick Stance');	
-			viewChooser.addItem('SMS Prompt');
-			viewChooser.addItem('Photo Booth');
-			viewChooser.addItem('Name Entry');
-			viewChooser.addItem('Verify Opinion');
-			viewChooser.addItem('Edit Opinion');	
-			viewChooser.addItem('Stats Overlay');
-			viewChooser.addItem('Inactivity Overlay');
-			viewChooser.addItem('Submit Overlay');			
 			
-			viewChooser.numVisibleItems = viewChooser.items.length;
-			
-			viewChooser.addEventListener(Event.SELECT, onViewSelect);
-			viewChooser.width = this.width - 10;
-			
+//			logBox = new TextArea(this, 5, 5, "Dashboard ready");
+//			logBox.width = this.width - 10;
+//			logBox.height = 90;
 
-			
-			
+//			
+//			
+//			focalLengthSlider = new Slider("horizontal", this, 120, 120, onFocalLengthSlider);
+//			focalLengthSlider.minimum = 1;
+//			focalLengthSlider.maximum = 3;
+//			focalLengthSlider.value = 1;	
+//			
+//		
+//			
+//			viewChooser = new ComboBox(this, 5, 140, 'View');
+//			viewChooser.addItem('Home');
+//			viewChooser.addItem('Debate Overlay');
+//			viewChooser.addItem('Pick Stance');	
+//			viewChooser.addItem('SMS Prompt');
+//			viewChooser.addItem('Photo Booth');
+//			viewChooser.addItem('Name Entry');
+//			viewChooser.addItem('Verify Opinion');
+//			viewChooser.addItem('Edit Opinion');	
+//			viewChooser.addItem('Stats Overlay');
+//			viewChooser.addItem('Inactivity Overlay');
+//			viewChooser.addItem('Submit Overlay');			
+//			
+//			viewChooser.numVisibleItems = viewChooser.items.length;
+//			
+//			viewChooser.addEventListener(Event.SELECT, onViewSelect);
+//			viewChooser.width = this.width - 10;
+//			
+//
+//			
+//			
 			
 		}
 		
