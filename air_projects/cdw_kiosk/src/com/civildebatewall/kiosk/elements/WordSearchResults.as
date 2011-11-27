@@ -1,18 +1,7 @@
 package com.civildebatewall.kiosk.elements {
-	import com.civildebatewall.Assets;
-	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.OrderedObject;
-	import com.civildebatewall.Utilities;
-	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.Word;
 	import com.civildebatewall.kiosk.BlockInertialScroll;
-	import com.civildebatewall.kiosk.Kiosk;
-	import com.civildebatewall.kiosk.blocks.OldBlockBase;
-	import com.civildebatewall.kiosk.ui.ButtonBase;
-	import com.civildebatewall.kiosk.ui.InertialScrollField;
-	import com.civildebatewall.kiosk.ui.WordButton;
 	import com.greensock.TweenMax;
-	import com.greensock.easing.Back;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
@@ -36,20 +25,14 @@ package com.civildebatewall.kiosk.elements {
 			});
 		}
 		
-		
-		
 		public function setWord(word:Word):void {
-			trace("setting");
 			this.word = word;			
 			
-			TweenMax.to(this, .25, {alpha: 0, onComplete: onFadeOut});
-			
-			//this.tween(1, {x: 5, onUpdate: onFadeOut});
+			// TODO scroll instead?
+			TweenMax.to(this, .3, {alpha: 0, onComplete: onFadeOut});
 		}
 		
 		public function onFadeOut():void {
-
-			trace("done");
 			GraphicsUtil.removeChildren(content);			
 			resultCount = word.posts.length;
 			
@@ -68,7 +51,9 @@ package com.civildebatewall.kiosk.elements {
 				addChild(searchResult);	
 			}
 			
-			TweenMax.to(this, 0.25, {alpha: 1});			
+			
+			
+			TweenMax.to(this, 0.3, {alpha: 1});			
 		}
 		
 //		private function onDown(e:Event):void {
