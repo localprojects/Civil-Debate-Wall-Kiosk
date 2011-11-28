@@ -11,6 +11,7 @@ package com.kitschpatrol.flashspan
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
+	import flash.geom.Point;
 	import flash.net.DatagramSocket;
 	import flash.net.NetworkInfo;
 	import flash.net.NetworkInterface;
@@ -143,7 +144,7 @@ package com.kitschpatrol.flashspan
 			millis = getTimer();
 			
 			// broadcast, factoring latency for each client
-			for each (var screen:NetworkedScreen in settings.networkMap) {
+			for each (var screen:NetworkedScreen in settings.screens) {
 				if (screen != settings.thisScreen) {
 					sendCertified(screen, TIME_SYNC_HEADER + (millis - (screen.latency / 2)));
 				}
@@ -169,7 +170,7 @@ package com.kitschpatrol.flashspan
 			}
 			else {
 				// clients should send request to server
-				sendCertified(settings.networkMap[0], START_SYNC_HEADER);				
+				sendCertified(settings.screens[0], START_SYNC_HEADER);				
 			}
 		}
 
@@ -226,7 +227,7 @@ package com.kitschpatrol.flashspan
 				}
 				else {
 					// send to server
-					sendCertified(settings.networkMap[0], STOP_REQUEST_HEADER);
+					sendCertified(settings.screens[0], STOP_REQUEST_HEADER);
 				}
 			}
 		}		
@@ -269,13 +270,6 @@ package com.kitschpatrol.flashspan
 			isSyncing = true;
 			this.dispatchEvent(new Event(FlashSpanEvent.START));			
 		}		
-		
-		
-		// returns a full-screen span sprite at the correct offset 
-		public function getSpanSprite():SpanSprite {
-			return new SpanSprite(settings.thisScreen.screenWidth, settings.thisScreen.screenHeight, settings.totalWidth, settings.totalHeight, settings.thisScreen.xOffset, settings.thisScreen.yOffset);
-		}
-
 		
 		public function random():Number {
 			// nicely seeded random
@@ -417,7 +411,7 @@ package com.kitschpatrol.flashspan
 		
 		// sends a message to everyone except for the sender
 		private function broadcastMessage(message:String):void {
-			for each (var screen:NetworkedScreen in settings.networkMap) {
+			for each (var screen:NetworkedScreen in settings.screens) {
 				if (screen != settings.thisScreen) {
 					send(screen, message);
 				}
@@ -426,7 +420,7 @@ package com.kitschpatrol.flashspan
 		
 		// sends a custom message to everyone, including self
 		public function broadcastCustomMessage(header:String, message:String = ''):void {
-			for each (var screen:NetworkedScreen in settings.networkMap) {
+			for each (var screen:NetworkedScreen in settings.screens) {
 				send(screen, CUSTOM_MESSAGE_HEADER + header + "," + message); 
 			}
 		}
@@ -436,7 +430,7 @@ package com.kitschpatrol.flashspan
 		}
 		
 		private function broadcastCertifiedMessage(message:String):void {
-			for each (var screen:NetworkedScreen in settings.networkMap) {
+			for each (var screen:NetworkedScreen in settings.screens) {
 				if (screen != settings.thisScreen) {
 					sendCertified(screen, message);
 				}
@@ -477,9 +471,9 @@ package com.kitschpatrol.flashspan
 			
 			var activeIPs:Array = listActiveIPs();
 			
-			for (var i:int = 0; i < settings.networkMap.length; i++) {
-				if (activeIPs.indexOf(settings.networkMap[i].ip) > -1) {
-					return settings.networkMap[i].id;
+			for (var i:int = 0; i < settings.screens.length; i++) {
+				if (activeIPs.indexOf(settings.screens[i].ip) > -1) {
+					return settings.screens[i].id;
 				}
 			}
 			
@@ -505,6 +499,43 @@ package com.kitschpatrol.flashspan
 			
 			return ips;
 		}		
+		
+		
+		// TODO put this into FlashSpan, returns screen index, or -1 if it's in the gutter or off the screen
+		public function pointIsOnScreen(p:Point):int {
+			for (var i:int = 0; i < settings.screenCount; i++) {
+				if (settings.screens[i].containsPoint(p)) return i;
+			}
+			return -1;
+		}
+		
+		// TODO put this in flashspan, too
+		public function pointIsNearScreen(p:Point):int {
+			var onScreen:int = pointIsOnScreen(p);
+			
+			if (onScreen > -1) {
+				return onScreen;
+			}
+			else {
+				var minDistance:Number = Number.MAX_VALUE;
+				var minDistanceIndex:int = -1;
+				
+				for (var i:int = 0; i < settings.screenCount; i++) {
+					var screenCenter:Point = new Point(settings.screens[i].x + (settings.screens[i].width / 2), settings.screens[i].y + (settings.screens[i].height / 2));
+					var distance:Number = Point.distance(p, screenCenter);
+					
+					if (distance < minDistance) {
+						minDistance = distance;
+						minDistanceIndex = i;
+					}
+				}
+				
+				return minDistanceIndex;
+			}
+			
+			// should never get here
+			return -1;
+		}				
 
 	}
 }

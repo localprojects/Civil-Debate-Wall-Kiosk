@@ -252,6 +252,91 @@ package com.civildebatewall {
 		public static function getStatsUnderlay():Bitmap { return new Bitmap(new BitmapData(1080, 1920, false, 0xffffff)); };
 		public static const statsUnderlay:Bitmap = getStatsUnderlay();
 		
+		// Wallsaver
+		// New Title Sequence
+		[Embed(source = '/assets/graphics/titleChevron.png')] private static const titleChevronClass:Class;
+		public static function getTitleChevron():Bitmap { return new titleChevronClass() as Bitmap; };
+		public static const titleChevron:Bitmap = getTitleChevron();
+		
+		[Embed(source = '/assets/graphics/wallText.png')] private static const wallTextClass:Class;
+		public static function getWallText():Bitmap { return new wallTextClass() as Bitmap; };
+		public static const wallText:Bitmap = getWallText();
+		
+		[Embed(source = '/assets/graphics/theText.png')] private static const theTextClass:Class;
+		public static function getTheText():Bitmap { return new theTextClass() as Bitmap; };
+		public static const theText:Bitmap = getTheText();
+		
+		[Embed(source = '/assets/graphics/taglineText.png')] private static const taglineTextClass:Class;
+		public static function getTaglineText():Bitmap { return new taglineTextClass() as Bitmap; };
+		public static const taglineText:Bitmap = getTaglineText();
+		
+		
+		// Quotation Marks
+		[Embed(source = '/assets/graphics/quoteNoClose.png')] private static const quoteNoCloseClass:Class;
+		public static function getQuoteNoClose():Bitmap { return new quoteNoCloseClass() as Bitmap; };
+		public static const quoteNoClose:Bitmap = getQuoteNoClose();
+		
+		[Embed(source = '/assets/graphics/quoteYesClose.png')] private static const quoteYesCloseClass:Class;
+		public static function getQuoteYesClose():Bitmap { return new quoteYesCloseClass() as Bitmap; };
+		public static const quoteYesClose:Bitmap = getQuoteYesClose();
+		
+		[Embed(source = '/assets/graphics/quoteYesOpen.png')] private static const quoteYesOpenClass:Class;
+		public static function getQuoteYesOpen():Bitmap { return new quoteYesOpenClass() as Bitmap; };
+		public static const quoteYesOpen:Bitmap = getQuoteYesOpen();
+		
+		[Embed(source = '/assets/graphics/quoteNoOpen.png')] private static const quoteNoOpenClass:Class;
+		public static function getQuoteNoOpen():Bitmap { return new quoteNoOpenClass() as Bitmap; };
+		public static const quoteNoOpen:Bitmap = getQuoteNoOpen();
+		
+		
+		// Calls To Action
+		[Embed(source = '/assets/graphics/touchToBeginText.png')] private static const touchToBeginTextClass:Class;
+		public static function getTouchToBeginText():Bitmap { return new touchToBeginTextClass() as Bitmap; };
+		public static const touchToBeginText:Bitmap = getTouchToBeginText();
+		
+		[Embed(source = '/assets/graphics/joinTheDebateText.png')] private static const joinTheDebateTextClass:Class;
+		public static function getJoinTheDebateText():Bitmap { return new joinTheDebateTextClass() as Bitmap; };
+		public static const joinTheDebateText:Bitmap = getJoinTheDebateText();
+		
+		// Graph Labels
+		[Embed(source = '/assets/graphics/graphLabelNo.png')] private static const graphLabelNoClass:Class;
+		public static function getGraphLabelNo():Bitmap { return new graphLabelNoClass() as Bitmap; };
+		public static const graphLabelNo:Bitmap = getGraphLabelNo();
+		
+		[Embed(source = '/assets/graphics/graphLabelYes.png')] private static const graphLabelYesClass:Class;
+		public static function getGraphLabelYes():Bitmap { return new graphLabelYesClass() as Bitmap; };
+		public static const graphLabelYes:Bitmap = getGraphLabelYes();
+		
+		// TODO REMOVE BELOW
+		// Sample Kiosks		
+		[Embed(source = '/assets/graphics/sampleKiosk1.jpg')] private static const sampleKiosk1Class:Class;
+		public static function getSampleKiosk1():Bitmap { return new sampleKiosk1Class() as Bitmap; };
+		public static const sampleKiosk1:Bitmap = getSampleKiosk1();
+		
+		[Embed(source = '/assets/graphics/sampleKiosk2.jpg')] private static const sampleKiosk2Class:Class;
+		public static function getSampleKiosk2():Bitmap { return new sampleKiosk2Class() as Bitmap; };
+		public static const sampleKiosk2:Bitmap = getSampleKiosk2();		
+		
+		
+		// Sample Portraits
+		[Embed(source = '/assets/graphics/samplePortrait1.jpg')] private static const samplePortrait1Class:Class;
+		public static function getSamplePortrait1():Bitmap { return new samplePortrait1Class() as Bitmap; };
+		public static const samplePortrait1:Bitmap = getSamplePortrait1();
+		
+		[Embed(source = '/assets/graphics/samplePortrait2.jpg')] private static const samplePortrait2Class:Class;
+		public static function getSamplePortrait2():Bitmap { return new samplePortrait2Class() as Bitmap; };
+		public static const samplePortrait2:Bitmap = getSamplePortrait2();
+		
+		[Embed(source = '/assets/graphics/samplePortrait3.jpg')] private static const samplePortrait3Class:Class;
+		public static function getSamplePortrait3():Bitmap { return new samplePortrait3Class() as Bitmap; };
+		public static const samplePortrait3:Bitmap = getSamplePortrait3();
+		
+		[Embed(source = '/assets/graphics/samplePortrait4.jpg')] private static const samplePortrait4Class:Class;
+		public static function getSamplePortrait4():Bitmap { return new samplePortrait4Class() as Bitmap; };
+		public static const samplePortrait4:Bitmap = getSamplePortrait4();
+		// TODO REMOVE ABOVE
+		
+		
 		
 		// Fonts
 		[Embed(source='/assets/fonts/fonts.swf', symbol='RockwellLight')] public static const FontLight:Class;
