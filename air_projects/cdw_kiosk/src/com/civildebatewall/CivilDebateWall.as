@@ -163,6 +163,7 @@ package com.civildebatewall {
 			
 			if (PlatformUtil.isWindows) {
 				// get ID from IP
+				MonsterDebugger.trace(this, "Getting kiosk ID from IP.");				
 				flashSpan = new FlashSpan(-1, File.applicationDirectory.nativePath + "/flash_span_settings.xml");
 			}
 			else {
