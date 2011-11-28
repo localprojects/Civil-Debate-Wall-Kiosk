@@ -78,7 +78,7 @@ package com.kitschpatrol.flashspan
 			seededRandom = new Random(1);	
 			
 			// if screen ID is -1, use the IP identification technique
-			if (screenID == -1) {
+			if (screenID == -1) { 
 				MonsterDebugger.trace(this, "Setting screen ID from IP");
 				settings.setMyID(getIDfromIP());
 			}
