@@ -18,7 +18,7 @@ package com.civildebatewall {
 			
 			if (PlatformUtil.isWindows) {
 				// use the NAS!
-				settingsPath = "e:\conf\kiosk_settings.json"
+				settingsPath = "E:/conf/kiosk_settings.json"
 			}
 			else if (PlatformUtil.isMac) {
 				settingsPath  = File.applicationDirectory.resolvePath("settings.json").url;				
@@ -26,6 +26,8 @@ package com.civildebatewall {
 			else {
 				throw new Error("Error detecting system type when loading settings.");
 			}
+			
+			MonsterDebugger.trace(null, "Settings path: " + settingsPath);			
 			
 			var settingsString:String = FileUtil.loadString(settingsPath);
 
