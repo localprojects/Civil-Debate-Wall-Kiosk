@@ -1,7 +1,7 @@
 {
 
 	"common" : {
-		"kioskNumber": 1,
+		"kioskNumber": 0,
 		"characterLimit": 140,
 		"flipWebcamVertical": true,	
 		"inactivityTimeout": 60,
@@ -26,7 +26,7 @@
 		"useWebcam": true,	
 		"useSLR": false,
 		"imagePath": "/Users/Mika/Desktop/CDWImages/",		
-		"serverPath": "http://0.0.0.0:8080"	
+		"serverPath": "http://0.0.0.0:8080"
 	}
 	
 }

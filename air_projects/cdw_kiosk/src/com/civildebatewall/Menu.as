@@ -39,6 +39,10 @@ package com.civildebatewall {
 			myContextMenu.customItems.push(quitItem);
 			quitItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onQuitSelect);
 			
+			var quitAllItem:ContextMenuItem = new ContextMenuItem("Quit All");
+			myContextMenu.customItems.push(quitAllItem);
+			quitAllItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onQuitAllSelect);	
+			
 			return myContextMenu;
 		}
 		
@@ -62,18 +66,17 @@ package com.civildebatewall {
 			CivilDebateWall.self.toggleFullScreen();
 		}
 		
-		
 		private static function onToggleDashboard(e:ContextMenuEvent):void {
 			CivilDebateWall.dashboard.visible = !CivilDebateWall.dashboard.visible;
 		}
-		
-		
 		
 		private static function onQuitSelect(e:ContextMenuEvent):void {
 			NativeApplication.nativeApplication.exit();
 		}		
 		
-		
+		private static function onQuitAllSelect(e:ContextMenuEvent):void {
+			CivilDebateWall.flashSpan.quitAll();
+		}
 		
 	}
 }
