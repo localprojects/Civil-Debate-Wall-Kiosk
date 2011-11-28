@@ -1,10 +1,9 @@
 package com.civildebatewall.resources {
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
+		import flash.display.*;	
 	
 	public class Assets {
 		
-		import flash.display.*;		
-		import flash.utils.ByteArray;
 
 		// New Title Sequence
 		[Embed(source = '/assets/graphics/titleChevron.png')] private static const titleChevronClass:Class;

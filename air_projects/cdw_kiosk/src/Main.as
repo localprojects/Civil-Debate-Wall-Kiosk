@@ -1,7 +1,7 @@
 package {
 	
 	import com.civildebatewall.CivilDebateWall;
-	import com.demonsters.debugger.MonsterDebugger;
+	//import com.demonsters.debugger.MonsterDebugger;
 	
 	import flash.desktop.NativeApplication;
 	import flash.display.Sprite;
@@ -11,7 +11,7 @@ package {
 	public class Main extends Sprite	{
 		
 		public function Main() {
-			MonsterDebugger.initialize(this);	
+		//	MonsterDebugger.initialize(this);	
 			
 			// catch command line args
 			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvoke);									

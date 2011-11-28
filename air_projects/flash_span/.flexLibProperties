@@ -6,7 +6,6 @@
     <classEntry path="com.kitschpatrol.flashspan.NetworkedScreen"/>
     <classEntry path="com.kitschpatrol.flashspan.CertifiedPacket"/>
     <classEntry path="com.kitschpatrol.flashspan.events.FrameSyncEvent"/>
-    <classEntry path="com.kitschpatrol.flashspan.SpanSprite"/>
     <classEntry path="com.kitschpatrol.flashspan.Random"/>
     <classEntry path="com.kitschpatrol.flashspan.events.TimeSyncEvent"/>
     <classEntry path="com.kitschpatrol.flashspan.events.CustomMessageEvent"/>

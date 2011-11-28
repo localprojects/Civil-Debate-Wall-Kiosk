@@ -1,55 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <settings>
-    <totalWidth>6360</totalWidth>
-    <totalHeight>1920</totalHeight>
-    <scaleFactor>1</scaleFactor>
     <server>auto</server>
     <syncMode>frame</syncMode>
+    <bezelWidth>120</bezelWidth>
+    <screenWidth>1080</screenWidth>
+	<screenHeight>1920</screenHeight>
     <networkMap>
         <screen>
             <id>0</id>
             <ip>127.0.0.1</ip>
             <port>63644</port>
-            <screenWidth>1080</screenWidth>
-            <screenHeight>1920</screenHeight>
-            <xOffset>0</xOffset>
-            <yOffset>0</yOffset>
         </screen>
         <screen>
             <id>1</id>
             <ip>127.0.0.1</ip>
             <port>63645</port>
-            <screenWidth>1080</screenWidth>
-            <screenHeight>1920</screenHeight>
-            <xOffset>1320</xOffset>
-            <yOffset>0</yOffset>
         </screen>
         <screen>
             <id>2</id>
             <ip>127.0.0.1</ip>
             <port>63646</port>
-            <screenWidth>1080</screenWidth>
-            <screenHeight>1920</screenHeight>
-            <xOffset>2640</xOffset>
-            <yOffset>0</yOffset>
         </screen>
         <screen>
             <id>3</id>
             <ip>127.0.0.1</ip>
             <port>63647</port>
-            <screenWidth>1080</screenWidth>
-            <screenHeight>1920</screenHeight>
-            <xOffset>3960</xOffset>
-            <yOffset>0</yOffset>
         </screen>        
         <screen>
             <id>4</id>
             <ip>127.0.0.1</ip>
             <port>63648</port>
-            <screenWidth>1080</screenWidth>
-            <screenHeight>1920</screenHeight>
-            <xOffset>5280</xOffset>
-            <yOffset>0</yOffset>
         </screen>
     </networkMap>
 </settings>

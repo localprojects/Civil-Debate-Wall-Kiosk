@@ -116,6 +116,8 @@ package com.civildebatewall.data {
 				threads.push(new Thread(jsonThread));
 			}
 			
+			
+			
 			postQueue.load();
 		}
 		

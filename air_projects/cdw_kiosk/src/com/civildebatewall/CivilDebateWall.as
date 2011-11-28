@@ -6,6 +6,7 @@ package com.civildebatewall {
 	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
+	import com.civildebatewall.wallsaver.core.WallSaver;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -34,12 +35,15 @@ package com.civildebatewall {
 		public static var settings:Object;
 		public static var self:CivilDebateWall;
 		
+		public static var wallSaver:WallSaver;
 		public static var kiosk:Kiosk;
 		public static var dashboard:Dashboard;
 		
 		public static var inactivityTimer:InactivityTimer;		
 		
 		private var commandLineArgs:Array;
+		
+		// For flashspan		
 		
 		public function CivilDebateWall(commandLineArgs:Array = null)	{
 			self = this;
@@ -147,9 +151,11 @@ package com.civildebatewall {
 			
 			// TODO create wallsaver here
 			
-			// Load the data, which fills up everything through binding callbacks
-			data.load();			
+			// Add the Wallsaver
+
 			
+			
+
 			// set up Flash Span
 			
 			// TODO put IP based screen ID in settings here
@@ -161,6 +167,14 @@ package com.civildebatewall {
 
 			flashSpan = new FlashSpan(settings.kioskNumber, File.applicationDirectory.nativePath + "/flash_span_settings.xml");
 
+			
+			wallSaver = new WallSaver();
+			addChild(wallSaver);
+			
+			// Load the data, which fills up everything through binding callbacks
+			data.load();			
+						
+			
 			
 			
 			// dashboard goes on top... or add when active? 
