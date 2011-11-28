@@ -117,7 +117,7 @@ package com.civildebatewall {
 			
 			// fill the background
 			graphics.beginFill(0x000000);
-			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			graphics.drawRect(0, 0, 1080, 1920);
 			graphics.endFill();
 			
 			// set up gui overlay TODO move to window
@@ -160,9 +160,13 @@ package com.civildebatewall {
 			// set up Flash Span
 			
 			// TODO put IP based screen ID in settings here
+			
+			if (PlatformUtil.isWindows) {
+				settings.kioskNumber = flashSpan.getIDfromIP();
+			}
+			
 			// settings.kioskNumber = flashSpan.getIDfromIP();
-			
-			
+						
 			
 			MonsterDebugger.trace(this, "KIOSK NUMBER: " + settings.kioskNumber);
 
