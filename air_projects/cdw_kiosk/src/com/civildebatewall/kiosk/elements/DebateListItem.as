@@ -1,6 +1,7 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.data.Post;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -99,7 +100,7 @@ package com.civildebatewall.kiosk.elements {
 		private var backTween:TweenMax = null;
 		
 		private function onDown(...args):void {
-			trace("down " + _itemIndex);
+			MonsterDebugger.trace(this, "down " + _itemIndex);
 			backgroundColor = _post.stanceColorMedium;
 			horizontalRule.backgroundColor = 0xffffff;
 			numberLabel.textColor = 0xffffff;

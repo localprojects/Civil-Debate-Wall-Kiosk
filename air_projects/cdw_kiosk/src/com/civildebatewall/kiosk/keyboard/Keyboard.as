@@ -5,6 +5,7 @@ package com.civildebatewall.kiosk.keyboard {
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.Math2;
 	
 	import flash.display.InteractiveObject;
@@ -170,19 +171,19 @@ package com.civildebatewall.kiosk.keyboard {
 						
 					}
 					else {
-						trace("nothing to delete");
+						MonsterDebugger.trace(this, "nothing to delete");
 					}
 					
 //					// TODO FIX THIS, check if selection is at the end?
 //					if (tf.selectionBeginIndex == tf.selectionEndIndex) {
 //						// insertion edits
-//						trace('insertion');
+//						MonsterDebugger.trace(this, 'insertion');
 //						tf.text = tf.text.substring(0, tf.selectionBeginIndex - 1) + tf.text.substr(tf.selectionEndIndex);
 //						tf.setSelection(tf.selectionBeginIndex - 1, tf.selectionBeginIndex - 1);						
 //					}
 //					else {
 //						// block edits
-//						trace('block');
+//						MonsterDebugger.trace(this, 'block');
 //						tf.text = tf.text.substring(0, tf.selectionBeginIndex - 1) + tf.text.substring(tf.selectionEndIndex);
 //						tf.setSelection(tf.selectionBeginIndex - 1, tf.selectionBeginIndex - 1);
 //					}

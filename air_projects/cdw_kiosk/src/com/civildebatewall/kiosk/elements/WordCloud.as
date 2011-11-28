@@ -2,8 +2,9 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Word;
-	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.civildebatewall.kiosk.buttons.WordButton;
+	import com.civildebatewall.kiosk.legacy.OldBlockBase;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -100,15 +101,15 @@ package com.civildebatewall.kiosk.elements {
 			// NOW we have the final list of words, normalize
 			// recalculate color based on new max and min
 			// find limits
-			// trace("Buttons: " + wordButtons.length);	
+			// MonsterDebugger.trace(this, "Buttons: " + wordButtons.length);	
 			var maxDifference:Number = ArrayUtil.maxInObjectArray(wordButtons, "difference");
 			var minDifference:Number = ArrayUtil.minInObjectArray(wordButtons, "difference");
 	
-//			trace("Max difference: " + maxDifference);
-//			trace("Min difference: " + minDifference);
-//			trace("Mapping -10: " + Math2.map(-10, minDifference, maxDifference, 0, 1));			
-//			trace("Mapping -5: " + Math2.map(-5, minDifference, maxDifference, 0, 1));
-//			trace("Mapping 2: " + Math2.map(2, minDifference, maxDifference, 0, 1));			
+//			MonsterDebugger.trace(this, "Max difference: " + maxDifference);
+//			MonsterDebugger.trace(this, "Min difference: " + minDifference);
+//			MonsterDebugger.trace(this, "Mapping -10: " + Math2.map(-10, minDifference, maxDifference, 0, 1));			
+//			MonsterDebugger.trace(this, "Mapping -5: " + Math2.map(-5, minDifference, maxDifference, 0, 1));
+//			MonsterDebugger.trace(this, "Mapping 2: " + Math2.map(2, minDifference, maxDifference, 0, 1));			
 			
 
 			for each (wordButton in wordButtons) {
@@ -161,12 +162,12 @@ package com.civildebatewall.kiosk.elements {
 		
 		private function onDown(e:MouseEvent):void {
 			//fade everything else
-			trace("down");
+			MonsterDebugger.trace(this, "down");
 			
 			
 			var selectedWord:WordButton = e.currentTarget as WordButton;
-			trace("selected");
-			trace(selectedWord);
+			MonsterDebugger.trace(this, "selected");
+			MonsterDebugger.trace(this, selectedWord);
 			
 			// TODO dragable reselections
 			
@@ -187,7 +188,7 @@ package com.civildebatewall.kiosk.elements {
 					}
 				}
 				
-				trace("selected");
+				MonsterDebugger.trace(this, "selected");
 				this.dispatchEvent(new Event(EVENT_WORD_SELECTED, true, true));				
 			}
 			
@@ -208,7 +209,7 @@ package com.civildebatewall.kiosk.elements {
 		private function positionRow(row:Array, rowNumber:int):void {
 			
 			
-			trace("row: " + rowNumber + " " + row);
+			MonsterDebugger.trace(this, "row: " + rowNumber + " " + row);
 			
 			if (row.length > 0) {
 			
@@ -216,7 +217,7 @@ package com.civildebatewall.kiosk.elements {
 			var xAccumulator:Number = 0;
 			
 			for(var i:int = 0; i < row.length; i++) {
-				trace(i + " / " + row.length);
+				MonsterDebugger.trace(this, i + " / " + row.length);
 			
 					if (!this.contains(row[i])) addChild(row[i]);				
 					
@@ -228,11 +229,11 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 			
-			trace("Row width: " + (row[row.length - 1].x + row[row.length - 1].width));
+			MonsterDebugger.trace(this, "Row width: " + (row[row.length - 1].x + row[row.length - 1].width));
 			if ((row[row.length - 1].x + row[row.length - 1].width) > (1022 - 30)) {
 				// too big, recurse
 				// TODO does this work?
-				trace("trimming");
+				MonsterDebugger.trace(this, "trimming");
 				
 				removeChild(row.pop());
 				positionRow(row, ++rowNumber);
@@ -240,7 +241,7 @@ package com.civildebatewall.kiosk.elements {
 			else {
 				// center it, we're done
 				var xOffset:Number = (1022 - (row[row.length - 1].x + row[row.length - 1].width)) / 2;
-				trace("we're done... center itX offset: " + xOffset);
+				MonsterDebugger.trace(this, "we're done... center itX offset: " + xOffset);
 				for(var j:int = 0; j < row.length; j++) {
 					row[j].x += xOffset;
 				}				

@@ -7,6 +7,7 @@ package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.kiosk.buttons.BigGrayButton;
 	import com.civildebatewall.kiosk.buttons.StanceToggle;
 	import com.civildebatewall.kiosk.keyboard.Keyboard;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockShape;
@@ -393,7 +394,7 @@ package com.civildebatewall.kiosk.overlays {
 		private function onInput(e:Event):void {
 			// check for profanity
 			
-			trace("INPUT!");
+			MonsterDebugger.trace(this, "INPUT!");
 			
 			if (StringUtil.isProfane(nameField.text) || StringUtil.isProfane(opinionField.text)) {
 				
@@ -429,12 +430,12 @@ package com.civildebatewall.kiosk.overlays {
 			
 			// keyboard follows focus
 			
-			trace("focus");
-			trace(stage.focus);
+			MonsterDebugger.trace(this, "focus");
+			MonsterDebugger.trace(this, stage.focus);
 			
 			if (stage.focus is BlockText) {
 				keyboard.target = (stage.focus as BlockText).textField;
-				trace("Keyboard target: " + keyboard.target);
+				MonsterDebugger.trace(this, "Keyboard target: " + keyboard.target);
 			}
 		}
 		
@@ -447,7 +448,7 @@ package com.civildebatewall.kiosk.overlays {
 		}
 		
 		private function onSubmit(e:MouseEvent):void {
-			trace("submit");
+			MonsterDebugger.trace(this, "submit");
 			
 			nameField.text = StringUtil.trim(nameField.text);
 			opinionField.text = StringUtil.trim(opinionField.text);
@@ -480,10 +481,10 @@ package com.civildebatewall.kiosk.overlays {
 			
 			
 			if (errors) {
-				trace("Errors! Won't submit");
+				MonsterDebugger.trace(this, "Errors! Won't submit");
 			}
 			else {
-				trace("Looks OK! Will submit.");
+				MonsterDebugger.trace(this, "Looks OK! Will submit.");
 				CivilDebateWall.state.userOpinion = opinionField.text;
 				CivilDebateWall.state.userName = nameField.text;
 				
@@ -511,7 +512,7 @@ package com.civildebatewall.kiosk.overlays {
 //			}
 //			else {
 //				// there was an error, the name probably already existed!
-//				trace("TODO handle name error");
+//				MonsterDebugger.trace(this, "TODO handle name error");
 //			}
 //		}		
 		

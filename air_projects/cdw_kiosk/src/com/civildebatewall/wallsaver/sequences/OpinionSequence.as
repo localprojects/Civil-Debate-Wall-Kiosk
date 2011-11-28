@@ -148,9 +148,9 @@ package com.civildebatewall.wallsaver.sequences {
 			}
 			
 //			// Debug, review how long it took to generate velocities.
-//			trace("Calculated opinion rows middle velocities in " + (getTimer() - start) + "ms.");
+//			MonsterDebugger.trace(this, "Calculated opinion rows middle velocities in " + (getTimer() - start) + "ms.");
 //			for each(var row:OpinionRow in opinionRows) {
-//				trace("Frames: " + row.totalFrames);
+//				MonsterDebugger.trace(this, "Frames: " + row.totalFrames);
 //			}
 			
 		}

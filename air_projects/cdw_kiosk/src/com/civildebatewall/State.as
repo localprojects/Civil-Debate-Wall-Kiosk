@@ -4,6 +4,7 @@ package com.civildebatewall {
 	import com.civildebatewall.data.TextMessage;
 	import com.civildebatewall.data.Thread;
 	import com.civildebatewall.kiosk.core.Kiosk;
+	import com.demonsters.debugger.MonsterDebugger;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -134,7 +135,7 @@ package com.civildebatewall {
 			
 			// sort the debate list
 			
-			trace("sorting by " + sortMode);
+			MonsterDebugger.trace(this, "sorting by " + sortMode);
 			
 			switch (sortMode) {
 				case SORT_BY_RECENT:
@@ -154,7 +155,7 @@ package com.civildebatewall {
 					break;				
 				
 				default:
-					trace("invalid sort type");
+					MonsterDebugger.trace(this, "invalid sort type");
 			}
 			
 			
@@ -217,7 +218,7 @@ package com.civildebatewall {
 			// CivilDebateWall.dashboard.log('---------------------------------');			
 			
 			for (var i:uint = activeThread.posts.length - 1; i > 0; i--) {
-				trace(i);
+				MonsterDebugger.trace(this, i);
 				// CivilDebateWall.dashboard.log(activeThread.posts[i].id);
 			}
 			// CivilDebateWall.dashboard.log(activeThread.posts[0].id);
@@ -242,9 +243,9 @@ package com.civildebatewall {
 				nextThread = getNextThread();
 			}
 
-			trace("Prev: " + previousThread);
-			trace("Active: " + activeThread);
-			trace("Next: " + nextThread);
+			MonsterDebugger.trace(this, "Prev: " + previousThread);
+			MonsterDebugger.trace(this, "Active: " + activeThread);
+			MonsterDebugger.trace(this, "Next: " + nextThread);
 			
 			this.dispatchEvent(new Event(ACTIVE_THREAD_CHANGE));
 			

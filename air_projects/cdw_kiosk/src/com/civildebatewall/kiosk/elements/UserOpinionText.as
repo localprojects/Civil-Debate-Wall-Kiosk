@@ -3,6 +3,7 @@ package com.civildebatewall.kiosk.elements
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
@@ -61,8 +62,8 @@ package com.civildebatewall.kiosk.elements
 		override protected function beforeTweenIn():void {
 			super.beforeTweenIn();
 			
-			trace("Setting name: " + CivilDebateWall.state.userName);
-			trace("Setting opinion: " + CivilDebateWall.state.userOpinion);
+			MonsterDebugger.trace(this, "Setting name: " + CivilDebateWall.state.userName);
+			MonsterDebugger.trace(this, "Setting opinion: " + CivilDebateWall.state.userOpinion);
 			
 			nameTag.backgroundColor = CivilDebateWall.state.userStanceColorDark;
 			nameTag.text = (CivilDebateWall.state.userName + " SAYS : " + CivilDebateWall.state.userStance + "!").toUpperCase();
