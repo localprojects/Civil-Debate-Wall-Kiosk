@@ -4,6 +4,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.data.Thread;
 	import com.civildebatewall.kiosk.BlockInertialScroll;
 	import com.civildebatewall.kiosk.buttons.*;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.*;
@@ -73,7 +74,7 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 
-			trace("Scroll limits: " + minScrollY +  " / " + maxScrollY);
+			MonsterDebugger.trace(this, "Scroll limits: " + minScrollY +  " / " + maxScrollY);
 			
 			// do we need to scroll?
 			//scrollField.scrollAllowed = (scrollField.scrollSheet.height > _maxHeight - 30);

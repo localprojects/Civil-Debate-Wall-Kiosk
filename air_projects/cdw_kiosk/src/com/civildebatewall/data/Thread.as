@@ -3,6 +3,7 @@ package com.civildebatewall.data {
 	import com.adobe.serialization.json.JSON;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.kiosk.core.Kiosk;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.DataLoader;
 	import com.greensock.loading.LoaderMax;
@@ -20,7 +21,7 @@ package com.civildebatewall.data {
 		
 		public function Thread(jsonObject:Object)	{
 			_id = jsonObject['id'];
-			//trace("creating thread " + _id);
+			//MonsterDebugger.trace(this, "creating thread " + _id);
 			_posts = [];
 			
 			// queue up post loading
@@ -28,21 +29,21 @@ package com.civildebatewall.data {
 		}
 		
 		private function onPostsLoaded(e:LoaderEvent):void {
-			//trace("Loaded posts for " + _id);
+			//MonsterDebugger.trace(this, "Loaded posts for " + _id);
 
 			var jsonObject:Object = JSON.decode(LoaderMax.getContent(_id));	
 				
 			for each (var jsonPost:Object in jsonObject['posts']) {
 				var tempPost:Post = new Post(jsonPost, this);
 				_posts.push(tempPost); // one copy in the thread
-				//trace("Created: " + tempPost.text); 				
+				//MonsterDebugger.trace(this, "Created: " + tempPost.text); 				
 				CivilDebateWall.data.posts.push(tempPost); // and one copy globally
 			}
 			
 
 			_posts.sortOn('created', Array.NUMERIC);
 			
-			trace("Posts: " + _posts.length);
+			MonsterDebugger.trace(this, "Posts: " + _posts.length);
 			
 			_created = _posts[0].created; // use the first post as the created date...
 			createdRaw = _created.time;

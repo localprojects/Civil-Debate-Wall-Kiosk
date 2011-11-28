@@ -3,6 +3,7 @@ package com.civildebatewall.kiosk.buttons {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
 	import com.greensock.layout.ScaleMode;
 	import com.kitschpatrol.futil.Math2;
@@ -84,7 +85,7 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onUp(e:Event):void {
-			trace("button up!");
+			MonsterDebugger.trace(this, "button up!");
 			draw();
 			CivilDebateWall.kiosk.view.statsView();
 		}

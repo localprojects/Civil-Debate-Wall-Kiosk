@@ -5,6 +5,7 @@ package com.civildebatewall.kiosk.buttons {
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Back;
 	import com.greensock.easing.Elastic;
@@ -100,7 +101,7 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onLike(e:Event):void {
-			trace("got event");
+			MonsterDebugger.trace(this, "got event");
 			counter.text = _targetPost.likes.toString();
 			label.text = StringUtil.plural("Like", _targetPost.likes);
 		}

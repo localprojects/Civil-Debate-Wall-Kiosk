@@ -68,13 +68,13 @@ package com.civildebatewall.kiosk.elements {
 //			targetSearchResult = e.target as SearchResult;			
 //			
 //			if (scrollField.isClick) {
-//				trace("Debate with post: " + targetSearchResult.post);
+//				MonsterDebugger.trace(this, "Debate with post: " + targetSearchResult.post);
 //				CivilDebateWall.state.userIsDebating = true;
 //				CivilDebateWall.state.userRespondingTo = targetSearchResult.post;				
 //		//		CivilDebateWall.kiosk.view.pickStanceView();
 //			}
 //			else {
-//				trace('Not a real click.');
+//				MonsterDebugger.trace(this, 'Not a real click.');
 //			}
 //		}
 //		
@@ -84,13 +84,13 @@ package com.civildebatewall.kiosk.elements {
 //			targetSearchResult = e.target as SearchResult;			
 //			
 //			if (scrollField.isClick) {
-//				trace("Flag post: " + targetSearchResult.post);
+//				MonsterDebugger.trace(this, "Flag post: " + targetSearchResult.post);
 //				// pull in the flag overlay
 //				CivilDebateWall.state.activePost = targetSearchResult.post;
 //				CivilDebateWall.kiosk.view.flagOverlayView();
 //			}
 //			else {
-//				trace('Not a real click.');
+//				MonsterDebugger.trace(this, 'Not a real click.');
 //			}
 //		}		
 //		

@@ -1,6 +1,7 @@
 package com.civildebatewall {
 	
 	import com.adobe.serialization.json.JSON;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	import com.kitschpatrol.futil.utilitites.PlatformUtil;
@@ -35,11 +36,11 @@ package com.civildebatewall {
 			
 			// Use the "Mac" or "Windows" settings depending on detected platform
 			if (PlatformUtil.isWindows) {
-				trace("Loading Windows Settings");
+				MonsterDebugger.trace(null, "Loading Windows Settings");
 				settings = ObjectUtil.mergeObjects(settings , rawSettings.windows);
 			}
 			else if (PlatformUtil.isMac) {
-				trace("Loading Mac Settings");
+				MonsterDebugger.trace(null, "Loading Mac Settings");
 				settings  = ObjectUtil.mergeObjects(settings , rawSettings.mac);				
 			}
 			else {

@@ -5,6 +5,7 @@ package com.civildebatewall.kiosk.elements
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.kiosk.buttons.CaratButton;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
 	
 	import flash.events.Event;
@@ -71,7 +72,7 @@ package com.civildebatewall.kiosk.elements
 					
 					break;
 				default:
-					trace("invalid stats view");
+					MonsterDebugger.trace(this, "invalid stats view");
 			}						
 			
 			

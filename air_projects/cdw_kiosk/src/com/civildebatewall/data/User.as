@@ -2,6 +2,7 @@ package com.civildebatewall.data {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.ImageLoader;
 	import com.greensock.loading.LoaderMax;
@@ -30,20 +31,20 @@ package com.civildebatewall.data {
 			
 			if (imageFile.exists) {
 				// load the portrait, estimate it at 150k
-				trace('Loading image from file for ' + _username);
+				MonsterDebugger.trace(this, 'Loading image from file for ' + _username);
 				CivilDebateWall.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes: 150000, onComplete: onImageLoaded}) );
 			}
 			else {
 				// use placeholder
-				trace('Using placeholder for ' + _username);
+				MonsterDebugger.trace(this, 'Using placeholder for ' + _username);
 				_photo = new Bitmap(Assets.portraitPlaceholder.bitmapData, PixelSnapping.AUTO, true);
 			}			
 			
-			trace("Loaded user " + _username);
+			MonsterDebugger.trace(this, "Loaded user " + _username);
 		}
 		
 		private function onImageLoaded(e:LoaderEvent):void {
-			trace("Loaded image for " + _username);
+			MonsterDebugger.trace(this, "Loaded image for " + _username);
 			_photo = new Bitmap(((LoaderMax.getContent(_id) as ContentDisplay).rawContent as Bitmap).bitmapData, PixelSnapping.AUTO, true);			
 		}
 		

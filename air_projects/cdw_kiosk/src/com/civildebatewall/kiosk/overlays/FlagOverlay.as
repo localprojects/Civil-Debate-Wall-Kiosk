@@ -1,8 +1,9 @@
 package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.kiosk.elements.ProgressBar;
 	import com.civildebatewall.kiosk.buttons.BigGrayButton;
+	import com.civildebatewall.kiosk.elements.ProgressBar;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
@@ -111,7 +112,7 @@ package com.civildebatewall.kiosk.overlays {
 		}
 		
 		override protected function beforeTweenOut():void {
-			trace("pre tween");
+			MonsterDebugger.trace(this, "pre tween");
 			TweenMax.to(this, 1, {backgroundAlpha: 0});			
 			timerBar.tweenOut();			
 			noButton.tweenOut();			

@@ -1,5 +1,6 @@
 package com.civildebatewall.kiosk.camera {
 	import com.civildebatewall.*;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.Math2;
 	
 	import flash.desktop.*;
@@ -76,26 +77,26 @@ package com.civildebatewall.kiosk.camera {
 			
 			if(imageFiles.length > 0) {
 				imageFiles.sortOn('creationDate', Array.DESCENDING);
-				trace(imageFiles.length + ' images');
-				trace('Latest is: ' + imageFiles[0].name);
+				MonsterDebugger.trace(this, imageFiles.length + ' images');
+				MonsterDebugger.trace(this, 'Latest is: ' + imageFiles[0].name);
 				return imageFiles;
 			}
 			else {
-				trace('no images in the folder');
+				MonsterDebugger.trace(this, 'no images in the folder');
 				return [];
 			}	
 		}
 		
 		private function onCheckFolder(e:TimerEvent):void {
 			var images:Array = listImages();
-			trace(images);
+			MonsterDebugger.trace(this, images);
 			
 			if (images.length > 0) {
 				// load the latest image
 				
 				loadImage(images[0]);
 				// stop the checking
-				trace("got image");
+				MonsterDebugger.trace(this, "got image");
 				folderWatchTimer.stop();
 			}
 		}
@@ -108,12 +109,12 @@ package com.civildebatewall.kiosk.camera {
 		
 		
 		private function onFormatButton(e:Event):void {
-			trace("format");
+			MonsterDebugger.trace(this, "format");
 			formatCard();
 		}
 		
 		private function onShutterButton(e:Event):void {
-			trace("shutter");
+			MonsterDebugger.trace(this, "shutter");
 			takePhoto();
 		}
 		
@@ -134,13 +135,13 @@ package com.civildebatewall.kiosk.camera {
 		}		
 		
 		private function loadImage(file:File):void {
-			trace("loading slr photo " + file.url);
+			MonsterDebugger.trace(this, "loading slr photo " + file.url);
 			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleImageLoad);
 			imageLoader.load(new URLRequest(file.url.replace('%0d', ''))); // completely weird filename bug
 		}
 		
 		private function handleImageLoad( e:Event ):void {
-			trace("loaded");
+			MonsterDebugger.trace(this, "loaded");
 			loadedBitmap = imageLoader.content as Bitmap;
 			loadedBitmap.smoothing = true;
 			
@@ -175,7 +176,7 @@ package com.civildebatewall.kiosk.camera {
 			
 			for each (var line:String in stdoutlines) {
 				if (line.length > 0) {
-					trace("Line: " + line);
+					MonsterDebugger.trace(this, "Line: " + line);
 					
 					if (line.indexOf("Download complete") > -1) {
 						// file is here
@@ -186,12 +187,12 @@ package com.civildebatewall.kiosk.camera {
 						timeoutTimer.stop();
 						
 						var fileName:String = line.split(' ')[2];
-						trace("Creating file: " + fileName);
+						MonsterDebugger.trace(this, "Creating file: " + fileName);
 						imageFile = new File();
 						imageFile.nativePath = fileName;
 					}
 					else if (line.indexOf("format complete") > -1) {
-						trace("format finished");
+						MonsterDebugger.trace(this, "format finished");
 					}
 				}
 			}
