@@ -4,6 +4,7 @@ package com.civildebatewall {
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	import com.kitschpatrol.futil.utilitites.PlatformUtil;
+	
 	import flash.filesystem.File;
 	
 	
@@ -11,7 +12,21 @@ package com.civildebatewall {
 		
 		// Loads settings from a JSON file
 		public static function load():Object {
-			var settingsString:String = FileUtil.loadString(File.applicationDirectory.resolvePath("settings.json").url);
+			
+			var settingsPath:String;
+			
+			if (PlatformUtil.isWindows) {
+				// use the NAS!
+				settingsPath = "e:\conf\kiosk_settings.json"
+			}
+			else if (PlatformUtil.isMac) {
+				settingsPath  = File.applicationDirectory.resolvePath("settings.json").url;				
+			}
+			else {
+				throw new Error("Error detecting system type when loading settings.");
+			}
+			
+			var settingsString:String = FileUtil.loadString(settingsPath);
 
 			var settings:Object = {}; // Holds final settings
 			var rawSettings:Object = JSON.decode(settingsString); // Raw settings from file

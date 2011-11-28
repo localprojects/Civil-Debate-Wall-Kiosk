@@ -14,10 +14,11 @@
 		"halfSize": true,
 		"startFullScreen": true,
 		"useWebcam": true,
-		"useSLR": true,		
+		"useSLR": true,
 		"imagePath": "",
 		"tempImagePath": "C:/temp/",
-		"serverPath": "http://staging.civildebatewall.com"			
+		"serverPath": "http://staging.civildebatewall.com",
+		"flashSpanConfig":  "e:/conf/flash_span_settings.xml"	
 	},
 	
 	"mac": {
@@ -26,7 +27,8 @@
 		"useWebcam": true,	
 		"useSLR": false,
 		"imagePath": "/Users/Mika/Desktop/CDWImages/",		
-		"serverPath": "http://0.0.0.0:8080"
+		"serverPath": "http://0.0.0.0:8080",
+		"flashSpanConfig":  "/Users/Mika/Code/CivilDebateWall/lp-cdw/air_projects/cdw_kiosk/bin-debug/flash_span_settings.xml"
 	}
 	
 }
