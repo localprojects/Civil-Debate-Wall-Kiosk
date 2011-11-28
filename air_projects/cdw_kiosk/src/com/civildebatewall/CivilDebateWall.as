@@ -165,11 +165,17 @@ package com.civildebatewall {
 			
 			trace("KIOSK NUMBER: " + settings.kioskNumber);
 
+			
+			
 			flashSpan = new FlashSpan(settings.kioskNumber, File.applicationDirectory.nativePath + "/flash_span_settings.xml");
 
 			
 			wallSaver = new WallSaver();
 			addChild(wallSaver);
+			
+			// temp disable wall saver mouse
+			wallSaver.mouseEnabled = false;
+			wallSaver.mouseChildren = false;
 			
 			// Load the data, which fills up everything through binding callbacks
 			data.load();			
