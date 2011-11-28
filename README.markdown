@@ -201,7 +201,23 @@ The ReadyNAS is accessible via the following protocols and credentials:
 * SSH : root / netgear1
 * CIFS: cdwmedia / cdwmedia
 
+
 #### Access 
 
 cdwuser / 
+
+
+#### Sync
+The NAS uses s3sync to push data from the NAS to S3 and keep the user portrait images synchronized between the website and the kiosk.
+
+The sync scripts are located in `/c/home/cdwmedia`, and are set to run via a cron job at 5 minute intervals.
+
+The NAS is structured as follows:
+
+* `/cdwmedia/app` Syncs S3 --> Local, contains binary installer from build process
+* `/cdwmedia/bin` Syncs S3 --> Local, install files for supporting software
+* `/cdwmedia/bin/Computer Configuration` Syncs S3 -->, files for setting up a build machine (TODO change this folder name to bin_build or something.)
+* `/cdwmedia/conf` Syncs Local --> S3, app configuration files
+* `/cdwmedia/var/kiosk_log` Syncs Local --> S3, app log files
+* `/cdwmedia/media/images` Syncs S3 <--> Local, user portraits from the kiosk and the web
 
