@@ -462,7 +462,7 @@ package com.kitschpatrol.flashspan
 				if (packetsInWaiting[i].packetID == packetID) return i;
 			}
 			return -1;
-		}	
+		}
 		
 
 		public function getIDfromIP():int {
