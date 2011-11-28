@@ -29,7 +29,8 @@ package com.kitschpatrol.flashspan {
 		
 		public function load(filePath:String):void {
 			// load text file
-			var file:File = File(filePath);
+			trace(filePath);
+			var file:File = new File(filePath);
 			var fileStream:FileStream = new FileStream();
 			fileStream.open(file, FileMode.READ);
 			

@@ -63,14 +63,15 @@
 	    <for param="i" begin="1" end="${SCREEN_COUNT}">
 	    	<sequential>
 				<math result="zeroIndex" operand1="@{i}" operation="-" operand2="1" datatype="int" />	    
-				<echo message="Launching Screen @{i}" />	    
+				<echo message="Launching Screen @{i} on index ${zeroIndex}" />	    
 				<exec executable="${ADL}" spawn="true">
 					<arg value="${DEBUG_DIR}/Main-app-@{i}.xml" />
 					<arg value="--" />
-					<arg value="${zeroIndex}}" />
+					<arg value="${zeroIndex}" />
 				</exec>
-			</sequential>			
+			</sequential>		
 		</for>	
+		
 	</target>
      
 </project>

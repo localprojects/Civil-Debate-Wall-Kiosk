@@ -9,6 +9,7 @@ package com.civildebatewall {
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
+	import com.kitschpatrol.flashspan.FlashSpan;
 	import com.kitschpatrol.futil.tweenPlugins.BackgroundColorPlugin;
 	import com.kitschpatrol.futil.tweenPlugins.FutilBlockPlugin;
 	import com.kitschpatrol.futil.tweenPlugins.NamedXPlugin;
@@ -18,6 +19,7 @@ package com.civildebatewall {
 	
 	import flash.display.*;
 	import flash.events.*;
+	import flash.filesystem.File;
 	import flash.net.*;
 	import flash.ui.Mouse;
 	import flash.ui.Multitouch;
@@ -26,8 +28,7 @@ package com.civildebatewall {
 	// Main entry point for the app.
 	// Manages display of Interactive Kiosk and Wallsaver modes.
 	public class CivilDebateWall extends Sprite	{
-
-		
+		public static var flashSpan:FlashSpan;		
 		public static var data:Data;
 		public static var state:State;
 		public static var settings:Object;
@@ -70,6 +71,7 @@ package com.civildebatewall {
 			// these can ovveride settings
 			// TODO genereic command line settings override system?
 			if (commandLineArgs.length > 0) {
+				trace("Args: " + commandLineArgs);
 				settings.kioskNumber = commandLineArgs[0];
 				settings.localMultiScreenTest = true;
 				settings.useSLR = false;
@@ -143,10 +145,23 @@ package com.civildebatewall {
 			kiosk = new Kiosk();
 			addChild(kiosk);
 			
-			// TODO create wallsaver
+			// TODO create wallsaver here
 			
 			// Load the data, which fills up everything through binding callbacks
 			data.load();			
+			
+			// set up Flash Span
+			
+			// TODO put IP based screen ID in settings here
+			// settings.kioskNumber = flashSpan.getIDfromIP();
+			
+			
+			
+			trace("KIOSK NUMBER: " + settings.kioskNumber);
+
+			flashSpan = new FlashSpan(settings.kioskNumber, File.applicationDirectory.nativePath + "/flash_span_settings.xml");
+
+			
 			
 			// dashboard goes on top... or add when active? 
 			addChild(dashboard);
