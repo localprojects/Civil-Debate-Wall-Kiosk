@@ -146,8 +146,25 @@ After the build machine is configured, moving from development on the Mac to a r
 
 1. For each CDW kiosk deployment machine, download the `CDW Kiosk.exe` file from S3 and run it to install the latest version of the software. (This step pending automation!)
 
-##### Updating Kiosk Machines:
-After a new binary is uploaded to S3, the kiosk machines need to download and install the latest. 
+
+#### Deployment
+
+Updating five instances of the kiosk software can be unwieldy, so the process has been heavily scripted.
+
+Computer 1 orchestrates automated application updates by running batch scripts on the other four computers via psexec.
+
+
+The basic flow of code updates is as follow:
+Development Machine (Flash Builder) --> Git Repository --> Build Machine (Windows VM, Flash Builder) --> S3 --> NAS --> Kiosk Computer
+ 
+
+// TODO finish this bit of documentation
+Put the automated install stuff in C:\TheWall
+
+Copy the ARH.exe to this folder. Make sure it is set to run with admin privileges.
+
+Copy the TheWall.exe installer file to the folder. Make sure it's set to Windows XP SP3 compatibility mode. This flips something in the registry, even after the file is deleted and re-downloaded, it will still run in compatibility mode since the registry is associated with the path and not the file itself. (And apparently does not clean up after itself.)
+// TODO finish this bit of documentation
 
 
 #### Screen Synchronization
@@ -158,6 +175,12 @@ TODO
 
 
 ## For System Administrators
+
+
+
+### Backups
+Run nightly to the NAS via Window's built in update system.
+
 
 ### READYNAS Network Accessible Store
 
