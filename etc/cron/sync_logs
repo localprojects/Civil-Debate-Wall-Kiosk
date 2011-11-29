@@ -80,8 +80,8 @@ sanity_check
 initialize
 
 # Then pull content from S3
-src="$MEDIA_STORE_PATH/logs/"
-dst="s3://$S3_BUCKET/logs/"
+src="$MEDIA_STORE_PATH/var/"
+dst="s3://$S3_BUCKET/var/"
 run_sync
 
 cleanup
