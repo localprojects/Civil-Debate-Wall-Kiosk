@@ -27,7 +27,7 @@
 		"useWebcam": true,	
 		"useSLR": false,
 		"imagePath": "/Users/Mika/Desktop/CDWImages/",		
-		"serverPath": "http://0.0.0.0:8080",
+		"serverPath": "http://ec2-184-73-127-164.compute-1.amazonaws.com",
 		"flashSpanConfig":  "/Users/Mika/Code/CivilDebateWall/lp-cdw/air_projects/cdw_kiosk/bin-debug/flash_span_settings.xml"
 	}
 	

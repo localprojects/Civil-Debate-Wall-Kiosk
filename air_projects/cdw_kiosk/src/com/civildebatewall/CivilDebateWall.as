@@ -160,7 +160,6 @@ package com.civildebatewall {
 			// set up Flash Span
 			
 			// TODO put IP based screen ID in settings here
-			
 			if (PlatformUtil.isWindows) {
 				// get ID from IP
 				MonsterDebugger.trace(this, "Getting kiosk ID from IP.");				
