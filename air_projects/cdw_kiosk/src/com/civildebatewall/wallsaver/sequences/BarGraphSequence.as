@@ -79,14 +79,14 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// label bar
 			labelLine = new Bitmap(new BitmapData(702, 9, false, 0xffffff), PixelSnapping.ALWAYS);
-			labelLine.x = CivilDebateWall.settings.screens[labelIndex].x + 189;
+			labelLine.x = CivilDebateWall.flashSpan.settings.screens[labelIndex].x + 189;
 			labelLine.y = (1920 / 2) - (labelLine.height / 2);
 			
 			labelLineWhite = new Bitmap(labelLine.bitmapData.clone(), PixelSnapping.ALWAYS);			
 			
 			// label counter
 			counter = new GraphCounter();
-			counter.x = CivilDebateWall.settings.screens[labelIndex].x + 189;
+			counter.x = CivilDebateWall.flashSpan.settings.screens[labelIndex].x + 189;
 			counter.y = labelLine.y + labelLine.height + 100;
 			
 			counterWhite = new GraphCounter();
