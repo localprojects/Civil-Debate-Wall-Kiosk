@@ -2,6 +2,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.TextMessage;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
@@ -28,7 +29,7 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		private function onRemovedFromStage(e:Event):void {
-			trace("Removing listeners");
+			MonsterDebugger.trace(this, "Removing listeners");
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 			//CivilDebateWall.state.removeEventListener(State.ON_HIGHLIGHT_WORD_CHANGE, onHighlightChange);			
 		}
@@ -110,20 +111,20 @@ package com.civildebatewall.kiosk.elements {
 			var highlightArea:Rectangle = new Rectangle();
 			
 			
-			trace("Text: " + text);
+			MonsterDebugger.trace(this, "Text: " + text);
 			
 			changedBounds = true;
 			update();
 			
 			super.text = textField.text;
 
-			trace("Lines: " + textField.numLines);
+			MonsterDebugger.trace(this, "Lines: " + textField.numLines);
 			
 			// left bounds, string up to the highlighted word
 			var onLine:int = textField.getLineIndexOfChar(start);
 			
-			trace("Width: " + textField.width);
-			trace("Position " + start + " On line: " + onLine);
+			MonsterDebugger.trace(this, "Width: " + textField.width);
+			MonsterDebugger.trace(this, "Position " + start + " On line: " + onLine);
 	
 			
 			var theLineText:String = textField.getLineText(onLine);
@@ -171,7 +172,7 @@ package com.civildebatewall.kiosk.elements {
 		
 		private function setHighlight(s:String):void {
 			
-			trace("highlighting " + s);
+			MonsterDebugger.trace(this, "highlighting " + s);
 			
 			if (s.length > 0) {
 				
@@ -179,12 +180,12 @@ package com.civildebatewall.kiosk.elements {
 				
 				highlightLayer.graphics.clear();
 
-				trace("searching for " + s + " in " + text);
+				MonsterDebugger.trace(this, "searching for " + s + " in " + text);
 				
 				var locations:Array = StringUtil.searchString(s, text);
 			
 				
-				trace("locations: " + locations);
+				MonsterDebugger.trace(this, "locations: " + locations);
 				
 				// highlight each one...
 				for (var i:int = 0; i < locations.length; i++) {

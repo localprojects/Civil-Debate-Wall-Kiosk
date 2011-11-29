@@ -3,6 +3,7 @@ package com.civildebatewall.kiosk.elements
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
@@ -23,7 +24,7 @@ package com.civildebatewall.kiosk.elements
 		
 		
 		private function onActiveDebateChange(e:Event):void {
-			trace("debate change!");
+			MonsterDebugger.trace(this, "debate change!");
 			setPost(CivilDebateWall.state.activeThread.firstPost);
 			
 			// inside container, origin is still in top left, even when registratio point moves...

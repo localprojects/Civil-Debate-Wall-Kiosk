@@ -2,12 +2,12 @@ package com.civildebatewall {
 	
 	import com.adobe.crypto.SHA1;
 	import com.adobe.serialization.json.*;
+	import com.civildebatewall.kiosk.core.Kiosk;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.DateUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
-	
-	
 	
 	import flash.display.*;
 	import flash.events.Event;
@@ -16,7 +16,6 @@ package com.civildebatewall {
 	import flash.geom.*;
 	import flash.net.*;
 	import flash.utils.*;
-	import com.civildebatewall.kiosk.core.Kiosk;
 
 	public class Utilities {
 		
@@ -80,7 +79,7 @@ package com.civildebatewall {
 				onComplete();
 			});
 			
-			trace('loading image from ' + file.url);
+			MonsterDebugger.trace(null, 'loading image from ' + file.url);
 			imageLoader.load(new URLRequest(file.url));
 		}
 
@@ -89,13 +88,13 @@ package com.civildebatewall {
 		
 		// Hmmm....
 		public static function traceObject(o:Object):void {
-			trace(JSON.encode(o));
+			MonsterDebugger.trace(null, JSON.encode(o));
 		}
 																			 
 		
 		// like post request, but automatically digests JSON
 		public static function postRequestJSON(url:String, payload:Object, callback:Function):void {
-			trace("posting json to " + url);
+			MonsterDebugger.trace(null, "posting json to " + url);
 			postRequest(url, payload, function(r:Object):void { callback(JSON.decode(r.toString()))	}); 
 		}		
 		
@@ -111,11 +110,11 @@ package com.civildebatewall {
 			// Security header
 			request.requestHeaders.push(new URLRequestHeader("X-Auth-Token", CivilDebateWall.settings.secretKeyHash));
 			
-			trace('sending variables: ' + variables.toString());
+			MonsterDebugger.trace(null, 'sending variables: ' + variables.toString());
 			
 			// Handlers
 			loader.addEventListener(Event.COMPLETE, function(e:Event):void { callback(e.target.data); });
-			loader.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent):void { trace('HTTP Status: ' + e.status); });
+			loader.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent):void { MonsterDebugger.trace(null, 'HTTP Status: ' + e.status); });
 			
 			loader.load(request);	
 		}
@@ -157,7 +156,7 @@ package com.civildebatewall {
 			var directory:File = new File(path);
 			
 			if (!directory.exists) {
-				trace('Directory "' + path + '" does not exist. Creating it.');
+				MonsterDebugger.trace(null, 'Directory "' + path + '" does not exist. Creating it.');
 				directory.createDirectory();
 			}
 		}
@@ -198,8 +197,8 @@ package com.civildebatewall {
 			
 			// TODO abort safety
 			while (!scaledSourceBounds.containsRect(targetBounds)) {
-				trace("Scaling... " + scaledSourceBounds);
-				trace("To fit within: " + targetBounds);
+				MonsterDebugger.trace(null, "Scaling... " + scaledSourceBounds);
+				MonsterDebugger.trace(null, "To fit within: " + targetBounds);
 				scaledSourceBounds.width += 1  * aspectRatio;
 				scaledSourceBounds.x -= (scaledSourceCenter.x / originalWidth) * aspectRatio;
 				
@@ -210,12 +209,12 @@ package com.civildebatewall {
 			var totalScaleX:Number = scaledSourceBounds.width / sourceBitmap.width;
 			var totalScaleY:Number = scaledSourceBounds.height / sourceBitmap.height;			
 			
-			trace("Scaled: " + totalScaleX + " x " + totalScaleY);
+			MonsterDebugger.trace(null, "Scaled: " + totalScaleX + " x " + totalScaleY);
 			
 			// TODO set some kind of scale threshold
 			
 			// now it fits, we have the the bounds of the final rectangle
-			trace("This fits: " + scaledSourceBounds);
+			MonsterDebugger.trace(null, "This fits: " + scaledSourceBounds);
 			
 			// draw the face cropped image it into a bitmap
 			var portraitBitmap:Bitmap = new Bitmap(new BitmapData(1080, 1920), PixelSnapping.NEVER, true);

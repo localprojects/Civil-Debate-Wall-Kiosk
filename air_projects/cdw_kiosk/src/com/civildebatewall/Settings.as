@@ -1,9 +1,11 @@
 package com.civildebatewall {
 	
 	import com.adobe.serialization.json.JSON;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	import com.kitschpatrol.futil.utilitites.PlatformUtil;
+	
 	import flash.filesystem.File;
 	
 	
@@ -11,7 +13,23 @@ package com.civildebatewall {
 		
 		// Loads settings from a JSON file
 		public static function load():Object {
-			var settingsString:String = FileUtil.loadString(File.applicationDirectory.resolvePath("settings.json").url);
+			
+			var settingsPath:String;
+			
+			if (PlatformUtil.isWindows) {
+				// use the NAS!
+				settingsPath = "E:/conf/kiosk_settings.json"
+			}
+			else if (PlatformUtil.isMac) {
+				settingsPath  = File.applicationDirectory.resolvePath("settings.json").url;				
+			}
+			else {
+				throw new Error("Error detecting system type when loading settings.");
+			}
+			
+			MonsterDebugger.trace(null, "Settings path: " + settingsPath);			
+			
+			var settingsString:String = FileUtil.loadString(settingsPath);
 
 			var settings:Object = {}; // Holds final settings
 			var rawSettings:Object = JSON.decode(settingsString); // Raw settings from file
@@ -20,11 +38,11 @@ package com.civildebatewall {
 			
 			// Use the "Mac" or "Windows" settings depending on detected platform
 			if (PlatformUtil.isWindows) {
-				trace("Loading Windows Settings");
+				MonsterDebugger.trace(null, "Loading Windows Settings");
 				settings = ObjectUtil.mergeObjects(settings , rawSettings.windows);
 			}
 			else if (PlatformUtil.isMac) {
-				trace("Loading Mac Settings");
+				MonsterDebugger.trace(null, "Loading Mac Settings");
 				settings  = ObjectUtil.mergeObjects(settings , rawSettings.mac);				
 			}
 			else {

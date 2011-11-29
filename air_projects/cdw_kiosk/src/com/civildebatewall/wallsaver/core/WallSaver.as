@@ -2,6 +2,7 @@ package com.civildebatewall.wallsaver.core {
 	
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.wallsaver.sequences.*;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
@@ -57,7 +58,7 @@ package com.civildebatewall.wallsaver.core {
 				bottomBar = GraphicsUtil.shapeFromSize(stage.stageWidth,1080 - CivilDebateWall.flashSpan.settings.totalHeight / 2);
 				
 				addChild(topBar);
-				trace(topBar.height)
+				MonsterDebugger.trace(this, topBar.height)
 				canvas.y = topBar.height;
 				bottomBar.y = canvas.x + canvas.height;
 				addChild(bottomBar);

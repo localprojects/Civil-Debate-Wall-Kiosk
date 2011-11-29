@@ -1,5 +1,6 @@
 package com.civildebatewall.kiosk {
 	
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Quart;
@@ -63,7 +64,7 @@ package com.civildebatewall.kiosk {
 			// stop any coasting, this is the "poke"
 			//TweenMax.killTweensOf(this);
 			if (coastTween != null) coastTween.kill();
-			trace("killing");
+			MonsterDebugger.trace(this, "killing");
 			
 			
 			// reset heuristics
@@ -84,7 +85,7 @@ package com.civildebatewall.kiosk {
 			this.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, -1);
 			
 			
-			trace("scroll start y: " + scrollStartY);
+			MonsterDebugger.trace(this, "scroll start y: " + scrollStartY);
 		}
 		
 		
@@ -101,7 +102,7 @@ package com.civildebatewall.kiosk {
 			if((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_X)) scrollX = scrollStartX + (mouseStartX - stage.mouseX);
 			if((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_Y)) scrollY = scrollStartY + (mouseStartY - stage.mouseY);
 			
-			trace("Scroll y: " + scrollY);
+			MonsterDebugger.trace(this, "Scroll y: " + scrollY);
 			
 			// Mouse odometry
 			mouseTravelX += Math.abs(stage.mouseX - lastMouseX);
@@ -115,7 +116,7 @@ package com.civildebatewall.kiosk {
 			else if(scrollAxis == SCROLL_Y) mouseTravel = mouseTravelY;			
 			
 			if (isClick && (mouseTravel > wiggleThreshold)) {
-				trace("Not a click.")
+				MonsterDebugger.trace(this, "Not a click.")
 				disableChildren(content);
 				isClick = false;
 			}
@@ -137,7 +138,7 @@ package com.civildebatewall.kiosk {
 			
 			// Calculate mouse velocity
 			var dragDuration:Number = (getTimer() - dragStartTime) / 1000;
-			trace("Drag duration: " + dragDuration);	
+			MonsterDebugger.trace(this, "Drag duration: " + dragDuration);	
 			xVelocity = (scrollX - scrollStartX) / dragDuration;
 			yVelocity = (scrollY - scrollStartY) / dragDuration;
 			
@@ -166,7 +167,7 @@ package com.civildebatewall.kiosk {
 				
 			props.ease = Quart.easeOut;
 			
-			trace("Throwing");
+			MonsterDebugger.trace(this, "Throwing");
 			
 			// Stopped Here
 			if (!isClick) {
@@ -174,8 +175,8 @@ package com.civildebatewall.kiosk {
 				
 				// Restore child mouse functionality
 				enableChildren(content);
-				// trace("Throw velocity was: " + xVelocity + " / " + yVelocity);
-				// trace("Mouse travel was: " + mouseTravel);
+				// MonsterDebugger.trace(this, "Throw velocity was: " + xVelocity + " / " + yVelocity);
+				// MonsterDebugger.trace(this, "Mouse travel was: " + mouseTravel);
 			}
 		}
 		

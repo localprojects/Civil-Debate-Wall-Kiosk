@@ -1,6 +1,7 @@
 package com.civildebatewall.kiosk.buttons {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	
 	import flash.display.Shape;
@@ -32,7 +33,7 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onUp(e:MouseEvent):void {
-			trace("going to terms and conditions view");
+			MonsterDebugger.trace(this, "going to terms and conditions view");
 			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.termsAndConditionsView);
 		}
 		

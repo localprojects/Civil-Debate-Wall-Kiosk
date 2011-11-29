@@ -179,7 +179,7 @@ package com.civildebatewall.kiosk.elements {
 		
 //		protected function onGoToDebate(e:Event):void {
 //			// forward to parent
-//			trace(" go to debate!");
+//			MonsterDebugger.trace(this, " go to debate!");
 //			this.dispatchEvent(new Event(EVENT_GOTO_DEBATE, true, true));
 //		}
 		

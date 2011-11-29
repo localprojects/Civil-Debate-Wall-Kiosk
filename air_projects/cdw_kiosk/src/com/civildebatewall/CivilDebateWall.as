@@ -7,6 +7,7 @@ package com.civildebatewall {
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
 	import com.civildebatewall.wallsaver.core.WallSaver;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -75,7 +76,7 @@ package com.civildebatewall {
 			// these can ovveride settings
 			// TODO genereic command line settings override system?
 			if (commandLineArgs.length > 0) {
-				trace("Args: " + commandLineArgs);
+				MonsterDebugger.trace(this, "Args: " + commandLineArgs);
 				settings.kioskNumber = commandLineArgs[0];
 				settings.localMultiScreenTest = true;
 				settings.useSLR = false;
@@ -116,7 +117,7 @@ package com.civildebatewall {
 			
 			// fill the background
 			graphics.beginFill(0x000000);
-			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			graphics.drawRect(0, 0, 1080, 1920);
 			graphics.endFill();
 			
 			// set up gui overlay TODO move to window
@@ -159,17 +160,31 @@ package com.civildebatewall {
 			// set up Flash Span
 			
 			// TODO put IP based screen ID in settings here
+			if (PlatformUtil.isWindows) {
+				// get ID from IP
+				MonsterDebugger.trace(this, "Getting kiosk ID from IP.");				
+				flashSpan = new FlashSpan(-1, File.applicationDirectory.nativePath + "/flash_span_settings.xml");
+			}
+			else {
+				flashSpan = new FlashSpan(settings.kioskNumber, File.applicationDirectory.nativePath + "/flash_span_settings.xml");
+			}
+			
 			// settings.kioskNumber = flashSpan.getIDfromIP();
+						
 			
-			
-			
-			trace("KIOSK NUMBER: " + settings.kioskNumber);
-
-			flashSpan = new FlashSpan(settings.kioskNumber, File.applicationDirectory.nativePath + "/flash_span_settings.xml");
+			MonsterDebugger.trace(this, "KIOSK NUMBER: " + settings.kioskNumber);
 
 			
-			wallSaver = new WallSaver();
-			addChild(wallSaver);
+			
+			
+
+			// crashes monster debugger
+//			wallSaver = new WallSaver();
+//			addChild(wallSaver);
+//			
+//			// temp disable wall saver mouse
+//			wallSaver.mouseEnabled = false;
+//			wallSaver.mouseChildren = false;
 			
 			// Load the data, which fills up everything through binding callbacks
 			data.load();			
@@ -189,7 +204,7 @@ package com.civildebatewall {
 		
 		
 		private function onInactive(e:InactivityEvent):void {
-			trace("inactive!");
+			MonsterDebugger.trace(this, "inactive!");
 			//view.inactivityOverlayView();
 		}		
 		
