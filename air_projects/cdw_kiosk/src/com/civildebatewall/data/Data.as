@@ -2,6 +2,7 @@ package com.civildebatewall.data {
 	import com.adobe.crypto.SHA1;
 	import com.adobe.serialization.json.*;
 	import com.civildebatewall.*;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.*;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.*;
@@ -69,13 +70,13 @@ package com.civildebatewall.data {
 			// load the question
 			clear();
 			
-			trace('Loading question');
+			MonsterDebugger.trace(this, 'Loading question');
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/questions/current', onQuestionReceived);						
 		}
 		
 		
 		private function onQuestionReceived(r:Object):void {
-			trace('Question Loaded, getting users');
+			MonsterDebugger.trace(this, 'Question Loaded, getting users');
 			
 			// Store the question
 			question = new Question(r);
@@ -96,16 +97,16 @@ package com.civildebatewall.data {
 		}
 			
 		private function progressHandler(event:LoaderEvent):void {
-			//trace("progress: " + event.target.progress);
+			//MonsterDebugger.trace(this, "progress: " + event.target.progress);
 		}
 		
 		private function errorHandler(event:LoaderEvent):void {
-			trace("error occured with " + event.target + ": " + event.text);
+			MonsterDebugger.trace(this, "error occured with " + event.target + ": " + event.text);
 		}		
 		
 		private function completeHandler(event:LoaderEvent):void {
-			//trace(event.target + " is complete!");
-			trace("loading threads");
+			//MonsterDebugger.trace(this, event.target + " is complete!");
+			MonsterDebugger.trace(this, "loading threads");
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/questions/' + question.id + '/threads', onThreadsReceived);
 		}
 		
@@ -122,7 +123,7 @@ package com.civildebatewall.data {
 		}
 		
 		private function onPostsLoaded(event:LoaderEvent):void {
-			trace("posts loaded, generating stats");
+			MonsterDebugger.trace(this, "posts loaded, generating stats");
 	
 			// get stats
 			// Use client side for this stuff for now
@@ -175,7 +176,7 @@ package com.civildebatewall.data {
 					// filter out boring words
 					// ignore boring words
 					if (boringWords.indexOf(corpusWord) > - 1) {
-						trace(corpusWord + " is boring, skipping it");
+						MonsterDebugger.trace(this, corpusWord + " is boring, skipping it");
 					}
 					else {
 						frequentWords.push(new Word(corpusWord));
@@ -212,7 +213,7 @@ package com.civildebatewall.data {
 			frequentWords.sortOn('total', Array.DESCENDING, Array.NUMERIC);
 			
 			
-			trace("Stance totals: ");
+			MonsterDebugger.trace(this, "Stance totals: ");
 			ObjectUtil.traceObject(stanceTotals);
 			
 			yesPercent = stanceTotals.yes / (stanceTotals.yes + stanceTotals.no); 
@@ -277,7 +278,7 @@ package com.civildebatewall.data {
 //			var i:int = 0;
 //			
 //			for (var commentID:String in debates[debateID]['comments']) {
-//				trace('comment ID: ' + commentID);
+//				MonsterDebugger.trace(this, 'comment ID: ' + commentID);
 //				i++;
 //			}
 //			return i;
@@ -326,8 +327,8 @@ package com.civildebatewall.data {
 		}		
 		
 		public function createUser(username:String, phoneNumber:String, callback:Function):void {
-			trace("Creating user with phone: " + phoneNumber);
-			trace("Creating user with username: " + username);			
+			MonsterDebugger.trace(this, "Creating user with phone: " + phoneNumber);
+			MonsterDebugger.trace(this, "Creating user with username: " + username);			
 			Utilities.postRequestJSON(CivilDebateWall.settings.serverPath + '/api/users', {'phonenumber': phoneNumber, 'username': username}, callback);			
 		}	
 		
@@ -345,12 +346,12 @@ package com.civildebatewall.data {
 		}
 		
 		private function onLikeUpdated(r:Object):void {
-			trace("likes updated server side for post " + r);
+			MonsterDebugger.trace(this, "likes updated server side for post " + r);
 			this.dispatchEvent(new Event(LIKE_UPDATE_SERVER));
 		}
 		
 		private function onFlagUpdated(r:Object):void {
-			trace("flags updated server side for post " + r);
+			MonsterDebugger.trace(this, "flags updated server side for post " + r);
 			this.dispatchEvent(new Event(FLAG_UPDATE_SERVER));
 		}		
 		

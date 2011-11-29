@@ -64,9 +64,9 @@ package com.civildebatewall.wallsaver.elements {
 //			
 			
 			
-			//trace("step: " + _step + " value: " + value); 
-//			trace("step: " + step);
-//			trace("value: " + value);
+			//MonsterDebugger.trace(this, "step: " + _step + " value: " + value); 
+//			MonsterDebugger.trace(this, "step: " + step);
+//			MonsterDebugger.trace(this, "value: " + value);
 			
 			// 0 to .5, fade in background
 			background.alpha = _step * 2;

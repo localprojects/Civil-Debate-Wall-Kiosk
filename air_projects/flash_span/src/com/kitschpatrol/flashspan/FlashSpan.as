@@ -78,7 +78,7 @@ package com.kitschpatrol.flashspan
 			seededRandom = new Random(1);	
 			
 			// if screen ID is -1, use the IP identification technique
-			if (screenID == -1) {
+			if (screenID == -1) { 
 				MonsterDebugger.trace(this, "Setting screen ID from IP");
 				settings.setMyID(getIDfromIP());
 			}
@@ -462,7 +462,7 @@ package com.kitschpatrol.flashspan
 				if (packetsInWaiting[i].packetID == packetID) return i;
 			}
 			return -1;
-		}	
+		}
 		
 
 		public function getIDfromIP():int {
@@ -470,6 +470,8 @@ package com.kitschpatrol.flashspan
 			// untested!
 			
 			var activeIPs:Array = listActiveIPs();
+			
+			MonsterDebugger.trace(this, activeIPs);
 			
 			for (var i:int = 0; i < settings.screens.length; i++) {
 				if (activeIPs.indexOf(settings.screens[i].ip) > -1) {

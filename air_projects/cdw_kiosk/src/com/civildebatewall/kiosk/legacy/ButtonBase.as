@@ -1,4 +1,7 @@
 package com.civildebatewall.kiosk.legacy {
+	import com.civildebatewall.Assets;
+	import com.civildebatewall.kiosk.core.Kiosk;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	
@@ -6,9 +9,6 @@ package com.civildebatewall.kiosk.legacy {
 	import flash.display.Sprite;
 	import flash.events.*;
 	import flash.utils.Timer;
-	
-	import com.civildebatewall.Assets;
-	import com.civildebatewall.kiosk.core.Kiosk;
 	
 	public class ButtonBase extends OldBlockBase {
 		
@@ -56,7 +56,7 @@ package com.civildebatewall.kiosk.legacy {
 		}
 		
 		private function onTimeout(e:TimerEvent):void {
-			trace('button back!');
+			MonsterDebugger.trace(this, 'button back!');
 			unlock();
 		}
 		
@@ -97,7 +97,7 @@ package com.civildebatewall.kiosk.legacy {
 		
 		
 		protected function defaultOnClick(e:MouseEvent):void {
-			trace("default button click, nothing to do");
+			MonsterDebugger.trace(this, "default button click, nothing to do");
 		}
 		
 		public function setDisabledColor(c:uint):void {
@@ -139,7 +139,7 @@ package com.civildebatewall.kiosk.legacy {
 		
 		
 		public function disable():void {
-			trace('disabled');
+			MonsterDebugger.trace(this, 'disabled');
 			this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 						
 			//this.removeEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			

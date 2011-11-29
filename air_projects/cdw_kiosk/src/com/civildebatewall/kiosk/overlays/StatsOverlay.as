@@ -4,12 +4,13 @@ package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Word;
 	import com.civildebatewall.kiosk.elements.DebateList;
+	import com.civildebatewall.kiosk.elements.StatsTitleBar;
+	import com.civildebatewall.kiosk.elements.StatsTitleBarSelector;
+	import com.civildebatewall.kiosk.elements.SuperlativesPortrait;
 	import com.civildebatewall.kiosk.elements.VoteStatBar;
 	import com.civildebatewall.kiosk.elements.WordCloud;
 	import com.civildebatewall.kiosk.elements.WordSearchResults;
-	import com.civildebatewall.kiosk.elements.StatsTitleBarSelector;
-	import com.civildebatewall.kiosk.elements.SuperlativesPortrait;
-	import com.civildebatewall.kiosk.elements.StatsTitleBar;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -162,7 +163,7 @@ package com.civildebatewall.kiosk.overlays {
 		
 		
 		private function onWordSelected(e:Event):void {
-			trace("word selected");
+			MonsterDebugger.trace(this, "word selected");
 			raiseMenu();			
 			
 			var word:Word = wordCloud.activeWord.word;

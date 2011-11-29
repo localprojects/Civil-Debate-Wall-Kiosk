@@ -5,6 +5,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
@@ -64,7 +65,7 @@ package com.civildebatewall.kiosk.elements {
 					
 					break;
 				default:
-					trace("invalid stats view");
+					MonsterDebugger.trace(this, "invalid stats view");
 			}
 			
 			// select the first item
@@ -99,7 +100,7 @@ package com.civildebatewall.kiosk.elements {
 						item.callout.text = item.post.likes + " " + StringUtil.plural("Like", item.post.likes);
 						break;
 					default:
-						trace("invalid stats view");
+						MonsterDebugger.trace(this, "invalid stats view");
 				}				
 				
 				
