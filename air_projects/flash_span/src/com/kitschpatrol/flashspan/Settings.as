@@ -75,7 +75,7 @@ package com.kitschpatrol.flashspan {
 			// fill in other variables
 			
 			totalWidth = (screenWidth * screenCount) + (bezelWidth * 2 * (screenCount - 1));
-			totalHeight= screenHeight;
+			totalHeight = screenHeight;
 			physicalScreenWidth = screenWidth + (bezelWidth * 2);			
 
 			
@@ -88,8 +88,6 @@ package com.kitschpatrol.flashspan {
 			}			
 			
 
-			
-			
 			// generate bezels			
 			bezels = new Vector.<Rectangle>;
 			
