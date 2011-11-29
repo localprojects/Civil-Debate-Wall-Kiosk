@@ -18,7 +18,8 @@ package com.civildebatewall {
 			
 			if (PlatformUtil.isWindows) {
 				// use the NAS!
-				settingsPath = "E:/conf/kiosk_settings.json"
+				//settingsPath = "E:/conf/kiosk_settings.json"
+				settingsPath = "//NAS-C0-AF-40/cdwmedia/conf/kiosk_settings.json";
 			}
 			else if (PlatformUtil.isMac) {
 				settingsPath  = File.applicationDirectory.resolvePath("settings.json").url;				
