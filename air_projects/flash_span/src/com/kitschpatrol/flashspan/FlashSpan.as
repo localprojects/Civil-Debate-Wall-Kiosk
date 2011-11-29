@@ -262,13 +262,13 @@ package com.kitschpatrol.flashspan
 		
 		private function dispatchStopEvent():void {
 			isSyncing = false;
-			this.dispatchEvent(new Event(FlashSpanEvent.STOP));
+			this.dispatchEvent(new FlashSpanEvent(FlashSpanEvent.STOP));
 		}
 		
 		
 		private function dispatchStartEvent():void {
 			isSyncing = true;
-			this.dispatchEvent(new Event(FlashSpanEvent.START));			
+			this.dispatchEvent(new FlashSpanEvent(FlashSpanEvent.START));			
 		}		
 		
 		public function random():Number {

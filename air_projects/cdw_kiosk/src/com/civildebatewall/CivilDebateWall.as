@@ -173,6 +173,8 @@ package com.civildebatewall {
 			}
 			
 			
+			flashSpan.addEventListener(FlashSpanEvent.START, onSyncStart);
+			flashSpan.addEventListener(FlashSpanEvent.STOP, onSyncStop);
 			flashSpan.addEventListener(CustomMessageEvent.MESSAGE_RECEIVED, onCustomMessageReceived);
 			flashSpan.addEventListener(FrameSyncEvent.SYNC, onFrameSync);
 			
@@ -186,7 +188,7 @@ package com.civildebatewall {
 			wallSaver.x = -flashSpan.settings.thisScreen.x; // shift content left
 			addChild(wallSaver);
 			
-			kiosk.visible = false;
+			
 //			
 //			// temp disable wall saver mouse
 //			wallSaver.mouseEnabled = false;
@@ -235,17 +237,27 @@ package com.civildebatewall {
 		
 		// message headers
 		private const CUE_SEQUENCE_A:String = 'a';
+		private const CUE_SEQUENCE_B:String = 'b';
+		
+		private function onSyncStart(e:FlashSpanEvent):void {
+			wallSaver.timeline.play();
+		}
+		
+		private function onSyncStop(e:FlashSpanEvent):void {
+			wallSaver.timeline.stop();			
+		}		
 		
 		public function cueSequenceA():void {
 			flashSpan.broadcastCustomMessage(CUE_SEQUENCE_A);
 		}
 		
 		public function cueSequenceB():void {
-			
+			flashSpan.broadcastCustomMessage(CUE_SEQUENCE_B);			
 		}
 		
 		public function startWallsaver():void {
 			flashSpan.start();
+			//wallSaver.timeline.play();
 		}
 		
 		public function stopWallsaver():void {
@@ -257,14 +269,15 @@ package com.civildebatewall {
 				MonsterDebugger.trace(this, "Cueing Sequence A");				
 				wallSaver.cueSequenceA();
 			}
+			else if (e.header == CUE_SEQUENCE_B) {
+				MonsterDebugger.trace(this, "Cueing Sequence B");
+				wallSaver.cueSequenceB();
+			}
 		}
 		
 		private function onFrameSync(e:FrameSyncEvent):void {
-			wallSaver.timeline.goto(e.frameCount, false);
+			wallSaver.timeline.gotoAndPlay(e.frameCount);
 		}
-		
-		
-		
 		
 		
 	}
