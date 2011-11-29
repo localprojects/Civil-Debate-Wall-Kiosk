@@ -109,7 +109,7 @@ package com.civildebatewall.wallsaver.core {
 		private function onSequenceA(e:Event):void {
 			sequenceAButton.selected = true;
 			sequenceBButton.selected= false;			
-			target.playSequenceA();
+			target.cueSequenceA();
 			updateTimeSlider();
 		}
 		
@@ -117,7 +117,7 @@ package com.civildebatewall.wallsaver.core {
 		private function onSequenceB(e:Event):void {
 			sequenceAButton.selected = false;
 			sequenceBButton.selected = true;			
-			target.playSequenceB();
+			target.cueSequenceB();
 			updateTimeSlider();			
 		}		
 

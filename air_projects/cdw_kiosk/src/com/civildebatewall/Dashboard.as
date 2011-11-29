@@ -16,12 +16,19 @@ package com.civildebatewall {
 		private var barTestSlider:Slider;		
 		
 		
+		
+		
 		public function Dashboard(parent:DisplayObjectContainer=null, xpos:Number=0, ypos:Number=0, title:String="Dashboard")	{
 			super(parent, xpos, ypos, title);
 			this.width = 250;
 			this.height = 500;
 			this.hasMinimizeButton = true;
 			this.minimized = true;
+			
+			new PushButton(this, 5, 5, "Cue Sequence A", function():void { CivilDebateWall.self.cueSequenceA(); });
+			new PushButton(this, 110, 5, "Cue Sequence B", function():void { CivilDebateWall.self.cueSequenceB(); });
+			new PushButton(this, 5, 50, "Play", function():void { CivilDebateWall.self.startWallsaver(); });
+			new PushButton(this, 110, 50, "Stop", function():void { CivilDebateWall.self.stopWallsaver(); });
 			
 			
 			
