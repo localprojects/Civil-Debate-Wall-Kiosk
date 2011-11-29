@@ -474,7 +474,9 @@ package com.kitschpatrol.flashspan
 			MonsterDebugger.trace(this, activeIPs);
 			
 			for (var i:int = 0; i < settings.screens.length; i++) {
+
 				if (activeIPs.indexOf(settings.screens[i].ip) > -1) {
+					MonsterDebugger.trace(this, "THIS SCREEN ID: " + i);
 					return settings.screens[i].id;
 				}
 			}

@@ -42,7 +42,7 @@ package com.civildebatewall.wallsaver.core {
 			// default to sequence A
 			//Main.controls.targetStageSetup();
 			
-			playSequenceA();
+			//playSequenceA();
 			//Main.controls.updateTimeSlider();			
 		}
 		
@@ -96,7 +96,8 @@ package com.civildebatewall.wallsaver.core {
 		}
 		
 		
-		public function playSequenceA():void {
+		public function cueSequenceA():void {
+			MonsterDebugger.trace(this, "Playing Wallsaver Sequence A.");
 			preSequenceBuildTasks();
 			
 			var overlaySequence:OverlaySequence = new OverlaySequence();
@@ -129,7 +130,7 @@ package com.civildebatewall.wallsaver.core {
 			postSequenceBuildTasks();
 		}
 		
-		public function playSequenceB():void {		
+		public function cueSequenceB():void {		
 			preSequenceBuildTasks();
 			
 			// B: Title, Graph, Face Grid			
