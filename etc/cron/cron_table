@@ -1,0 +1,19 @@
+# m h  dom mon dow   command
+
+# Notify administrators on status of tasks
+# MAILTO=
+
+# @yearly   0 0 1 1 *
+# @daily    0 0 * * *
+# @hourly   0 * * * *
+# @reboot   Run at startup.
+
+# Run media sync every 7 minutes
+# */7 *  *   *   *     /c/home/cdwmedia/sync_media
+
+# Sync logs every 30 mins
+# 30 *  *   *   *     /c/home/cdwmedia/sync_logs
+
+# Sync binaries irregularly
+# 45 */4 *  *   *    /c/home/cdwmedia/sync_binaries
+
