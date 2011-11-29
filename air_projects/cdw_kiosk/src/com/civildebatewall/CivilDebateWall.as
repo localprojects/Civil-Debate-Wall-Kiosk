@@ -169,8 +169,7 @@ package com.civildebatewall {
 				flashSpan = new FlashSpan(settings.kioskNumber, File.applicationDirectory.nativePath + "/flash_span_settings.xml");
 			}
 			
-			// settings.kioskNumber = flashSpan.getIDfromIP();
-						
+			settings.kioskNumber = flashSpan.settings.thisScreen.id;
 			
 			MonsterDebugger.trace(this, "KIOSK NUMBER: " + settings.kioskNumber);
 			
