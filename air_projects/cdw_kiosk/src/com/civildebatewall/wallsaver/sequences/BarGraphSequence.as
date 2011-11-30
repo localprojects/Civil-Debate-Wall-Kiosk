@@ -142,10 +142,7 @@ package com.civildebatewall.wallsaver.sequences {
 				addChild(noBar);
 				addChild(noBarMask);
 				
-				counterWhite.mask = noBarMask;
-				labelLineWhite.mask = noBarMask;
-				noTextWhite.mask = noBarMask;
-				yesTextWhite.mask = noBarMask;
+				whiteLayer.mask = noBarMask;
 			}
 			
 			// white goes over bars
@@ -194,61 +191,77 @@ package com.civildebatewall.wallsaver.sequences {
 			var noBarScrollDuration:int = (CivilDebateWall.flashSpan.settings.totalWidth - CivilDebateWall.flashSpan.settings.physicalScreenWidth - noWidth - arrowWidth)  / scrollVelocity;						
 			var noBarTweenIn:TweenMax = TweenMax.fromTo(noBar, noBarScrollDuration, {x: CivilDebateWall.flashSpan.settings.totalWidth}, {x: CivilDebateWall.flashSpan.settings.totalWidth - noWidth - arrowWidth, ease: Quart.easeOut});			
 
-			// Smaller bar scrolls in first
+			timelineIn.appendMultiple([
+				TweenMax.fromTo(labelLine, 1, {visible:false}, {visible: true}),
+				TweenMax.fromTo(noText, 1, {visible:false}, {visible: true}),
+				TweenMax.fromTo(yesText, 1, {visible:false}, {visible: true}),
+				TweenMax.fromTo(counter, 1, {visible:false}, {visible: true}),		
+				TweenMax.fromTo(labelLineWhite, 1, {visible:false}, {visible: true}),					
+				TweenMax.fromTo(noTextWhite, 1, {visible:false}, {visible: true}),
+				TweenMax.fromTo(yesTextWhite, 1, {visible:false}, {visible: true}),
+				TweenMax.fromTo(counterWhite, 1, {visible:false}, {visible: true}),
+				TweenMax.fromTo(noBar, 1, {visible:false}, {visible: true}),
+				TweenMax.fromTo(yesBar, 1, {visible:false}, {visible: true})
+			], 0, TweenAlign.START);
+			
+			
+			// Smaller bar scrolls in first			
 			if (CivilDebateWall.data.stats.postsNo <= CivilDebateWall.data.stats.postsYes) {
 				
-				// No bar and label in (Design calls for steps, look sbetter simultaneously.
-				// tween to orange, complicated because of the shader
+				// No bar and label in
 				timelineIn.appendMultiple([
-					TweenMax.fromTo(labelLine, 1, {visible:false}, {visible: true}),
-					TweenMax.fromTo(noText, 1, {visible:false}, {visible: true}),
-					TweenMax.fromTo(yesText, 1, {visible:false}, {visible: true}),
-					TweenMax.fromTo(counter, 1, {visible:false}, {visible: true}),		
-					TweenMax.fromTo(labelLineWhite, 1, {visible:false}, {visible: true}),					
-					TweenMax.fromTo(noTextWhite, 1, {visible:false}, {visible: true}),
-					TweenMax.fromTo(yesTextWhite, 1, {visible:false}, {visible: true}),
-					TweenMax.fromTo(counterWhite, 1, {visible:false}, {visible: true}),
-					TweenMax.fromTo(noBar, 1, {visible:false}, {visible: true}),
-					TweenMax.fromTo(yesBar, 1, {visible:false}, {visible: true}),
-					
 					noBarTweenIn,
-					
 					TweenMax.to(labelLine, 0, {colorTransform: {tint: Assets.COLOR_NO_LIGHT, tintAmount: 1}}),
 					TweenMax.to(counter, 0, {colorTransform: {tint: Assets.COLOR_NO_LIGHT, tintAmount: 1}}),
-					
-					// fade stuff in quickly
-					TweenMax.fromTo(labelLine, 30, {alpha: 0}, {alpha: 1, ease: Quart.easeOut}),
+					TweenMax.fromTo(labelLine, 30, {alpha: 0}, {alpha: 1, ease: Quart.easeOut}), // fade stuff in quickly
 					TweenMax.fromTo(counter, 30, {alpha: 0}, {alpha: 1, ease: Quart.easeOut}),
 					TweenMax.fromTo(noText, 30, {alpha: 0}, {alpha: 1, ease: Quart.easeOut}),					
-
-					// count up
-					TweenMax.fromTo(counter, noBarScrollDuration, {count: 0}, {count: CivilDebateWall.data.stats.postsNo, ease: Quart.easeOut}),
+					TweenMax.fromTo(counter, noBarScrollDuration, {count: 0}, {count: CivilDebateWall.data.stats.postsNo, ease: Quart.easeOut}),  // count up
 					TweenMax.fromTo(noText, 60, {y: -noText.height}, {y: labelLine.y - 323, ease: Quart.easeOut})
 				], 0, TweenAlign.START);
 				
 				// No label out, yes bar and label in
 				timelineIn.appendMultiple([
-					// remove the no
-					TweenMax.to(noText, 60, {alpha: 0, ease: Quart.easeOut}),
+					TweenMax.to(noText, 60, {alpha: 0, ease: Quart.easeOut}),	// remove the no
 					TweenMax.to(noText, 60, {y: 1920, ease: Quart.easeOut}),
-
-					// fade in the yes text
-					TweenMax.fromTo(yesText, 30, {alpha: 0}, {alpha: 1, ease: Quart.easeOut}),					
-					TweenMax.fromTo(yesText, 60, {y: -yesText.height}, {y: labelLine.y - 323, ease: Quart.easeOut}),					
-					
-					// change the line and counter color
+					TweenMax.fromTo(yesText, 30, {alpha: 0}, {alpha: 1, ease: Quart.easeOut}),	// fade in the yes text					
+					TweenMax.fromTo(yesText, 60, {y: -yesText.height}, {y: labelLine.y - 323, ease: Quart.easeOut}),	// change the line and counter color					
 					TweenMax.to(labelLine, 60, {colorTransform: {tint: Assets.COLOR_YES_LIGHT, tintAmount: 1}}),
 					TweenMax.to(counter, 60, {colorTransform: {tint: Assets.COLOR_YES_LIGHT, tintAmount: 1}}),
-					
 					TweenMax.to(counter, yesBarScrollDuration, {count: CivilDebateWall.data.stats.postsYes, ease: Quart.easeOut}),
-
 					TweenMax.to(yesBar, 0, {visible: true}),
-					yesBarTweenIn					
-					
+					yesBarTweenIn
 				], pauseBetweenBars, TweenAlign.START);				
 			}
 			else {
-				// TODO after above is solid				
+				
+				// Lots of duplication of above... hmm
+				
+				// Yes bar and label in
+				timelineIn.appendMultiple([
+					yesBarTweenIn,
+					TweenMax.to(labelLine, 0, {colorTransform: {tint: Assets.COLOR_YES_LIGHT, tintAmount: 1}}),
+					TweenMax.to(counter, 0, {colorTransform: {tint: Assets.COLOR_YES_LIGHT, tintAmount: 1}}),
+					TweenMax.fromTo(labelLine, 30, {alpha: 0}, {alpha: 1, ease: Quart.easeOut}), // fade stuff in quickly
+					TweenMax.fromTo(counter, 30, {alpha: 0}, {alpha: 1, ease: Quart.easeOut}),
+					TweenMax.fromTo(yesText, 30, {alpha: 0}, {alpha: 1, ease: Quart.easeOut}),					
+					TweenMax.fromTo(counter, yesBarScrollDuration, {count: 0}, {count: CivilDebateWall.data.stats.postsYes, ease: Quart.easeOut}),  // count up
+					TweenMax.fromTo(yesText, 60, {y: -yesText.height}, {y: labelLine.y - 323, ease: Quart.easeOut})
+				], 0, TweenAlign.START);				
+				
+				// Yes label out, yes bar and label in
+				timelineIn.appendMultiple([
+					TweenMax.to(yesText, 60, {alpha: 0, ease: Quart.easeOut}),	// remove the no
+					TweenMax.to(yesText, 60, {y: 1920, ease: Quart.easeOut}),
+					TweenMax.fromTo(noText, 30, {alpha: 0}, {alpha: 1, ease: Quart.easeOut}),	// fade in the yes text					
+					TweenMax.fromTo(noText, 60, {y: -noText.height}, {y: labelLine.y - 323, ease: Quart.easeOut}),	// change the line and counter color					
+					TweenMax.to(labelLine, 60, {colorTransform: {tint: Assets.COLOR_NO_LIGHT, tintAmount: 1}}),
+					TweenMax.to(counter, 60, {colorTransform: {tint: Assets.COLOR_NO_LIGHT, tintAmount: 1}}),
+					TweenMax.to(counter, yesBarScrollDuration, {count: CivilDebateWall.data.stats.postsNo, ease: Quart.easeOut}),
+					TweenMax.to(noBar, 0, {visible: true}),
+					noBarTweenIn
+				], pauseBetweenBars, TweenAlign.START);
+				
 			}
 
 			return timelineIn;
