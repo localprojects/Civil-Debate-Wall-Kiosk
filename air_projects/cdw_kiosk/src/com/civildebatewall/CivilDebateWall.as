@@ -242,53 +242,44 @@ package com.civildebatewall {
 		// Wallsaver control abstraction... these get broadcast to everyone through flashspan
 		
 		// message headers
-		private const CUE_SEQUENCE_A:String = 'a';
-		private const CUE_SEQUENCE_B:String = 'b';
+		private const PLAY_SEQUENCE_A:String = 'a';
+		private const PLAY_SEQUENCE_B:String = 'b';
+		
 		
 		private function onSyncStart(e:FlashSpanEvent):void {
 			//wallSaver.timeline.play();
 		}
 		
 		private function onSyncStop(e:FlashSpanEvent):void {
-			//wallSaver.timeline.stop();			
+			if (wallSaver.timeline.active) wallSaver.endSequence();
 		}		
 		
-		public function cueSequenceA():void {
-			flashSpan.broadcastCustomMessage(CUE_SEQUENCE_A);
-		}
-		
-		public function cueSequenceB():void {
-			flashSpan.broadcastCustomMessage(CUE_SEQUENCE_B);			
-		}
-		
-		public function startWallsaver():void {
-			flashSpan.start();
-			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-		}
-		
-		public function stopWallsaver():void {
+		public function PlaySequenceA():void {
 			flashSpan.stop();
-			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);			
-		}		
+			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_A);
+		}
 		
+		public function PlaySequenceB():void {
+			flashSpan.stop();
+			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_B);			
+		}
+		
+
 		private function onCustomMessageReceived(e:CustomMessageEvent):void {
-			if (e.header == CUE_SEQUENCE_A) {
-				MonsterDebugger.trace(this, "Cueing Sequence A");
+			if (e.header == PLAY_SEQUENCE_A) {
+				MonsterDebugger.trace(this, "Playing Sequence A");
 				wallSaver.cueSequenceA();
 				flashSpan.frameCount = 0;
-				wallSaver.timeline.stop();
+				flashSpan.start();			
 			}
-			else if (e.header == CUE_SEQUENCE_B) {
-				MonsterDebugger.trace(this, "Cueing Sequence B");
+			else if (e.header == PLAY_SEQUENCE_B) {
+				MonsterDebugger.trace(this, "Playing Sequence B");
 				wallSaver.cueSequenceB();
 				flashSpan.frameCount = 0;
-				wallSaver.timeline.stop();
+				flashSpan.start();
 			}
 		}
-	
-		private function onEnterFrame(e:Event):void {
-			//wallSaver.timeline.goto(flashSpan.frameCount);			
-		}
+
 		
 		private function onFrameSync(e:FrameSyncEvent):void {
 			wallSaver.timeline.gotoAndPlay(e.frameCount);

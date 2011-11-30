@@ -35,10 +35,8 @@ package com.civildebatewall {
 			framesRendered = 0;
 			
 			
-			new PushButton(this, 5, 5, "Cue Sequence A", function():void { CivilDebateWall.self.cueSequenceA(); });
-			new PushButton(this, 110, 5, "Cue Sequence B", function():void { CivilDebateWall.self.cueSequenceB(); });
-			new PushButton(this, 5, 30, "Play", function():void { CivilDebateWall.self.startWallsaver(); });
-			new PushButton(this, 110, 30, "Stop", function():void { CivilDebateWall.self.stopWallsaver(); });
+			new PushButton(this, 5, 5, "Play Sequence A", function():void { CivilDebateWall.self.PlaySequenceA(); });
+			new PushButton(this, 110, 5, "Play Sequence B", function():void { CivilDebateWall.self.PlaySequenceB(); });
 			new PushButton(this, 5, 55, "Slow", function():void { CoreUtil.sleep(1000); });			
 			wallsaverFrameLabel = new Label(this, 5, 100, "Frame Number:");
 			frameRateLabel = new Label(this, 5, 125, "Frame Rate:");
