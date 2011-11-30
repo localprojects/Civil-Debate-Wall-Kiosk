@@ -13,11 +13,12 @@ package com.civildebatewall.kiosk {
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.media.Camera;
+	import flash.utils.Timer;
 	
 	public class CameraCalibrationOverlay extends Sprite {
-		
-		
+
 		private var zoomSlider:Slider;
 		private var closeButton:PushButton;
 		
@@ -26,6 +27,8 @@ package com.civildebatewall.kiosk {
 		private var zoomLabel:Label;
 		
 		private var faceTarget:Shape;
+		
+		private var slrIntervalometer:Timer; 
 		
 		public function CameraCalibrationOverlay()	{
 			super();
@@ -63,12 +66,25 @@ package com.civildebatewall.kiosk {
 			
 			// watch slr
 			if (CivilDebateWall.settings.useSLR) {
-				CivilDebateWall.kiosk.view.portraitCamera.slr.takePhoto();
 				CivilDebateWall.kiosk.view.portraitCamera.slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onSlrCapture);				
 			}
 
 			// watch webcam
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);			
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			// SLR timer
+			slrIntervalometer = new Timer(5000);
+			slrIntervalometer.addEventListener(TimerEvent.TIMER, onSlrInterval);
+			slrIntervalometer.start();
+			
+		}
+		
+		private function onSlrInterval(e:TimerEvent):void {
+			trace("slr!");
+			if (CivilDebateWall.settings.useSLR) {
+				CivilDebateWall.kiosk.view.portraitCamera.slr.takePhoto();				
+			}			
+			
 		}
 		
 		private function onEnterFrame(e:Event):void {
@@ -84,7 +100,7 @@ package com.civildebatewall.kiosk {
 		
 																	
 		private function onSlrCapture(e:CameraFeedEvent):void {
-			slr.bitmapData = BitmapUtil.scaleDataToFill(CivilDebateWall.kiosk.view.portraitCamera.slr.image, 1080, 1920);
+			slr.bitmapData = BitmapUtil.scaleDataToFill(CivilDebateWall.kiosk.view.portraitCamera.slr.image.bitmapData, 1080, 1920);
 		}																	
 																	
 		
