@@ -150,8 +150,7 @@ package com.civildebatewall.wallsaver.core {
 		// TODO interactive button.
 		
 		private function onTimelineComplete():void {
-			trace("timeline complete!");
-			removeMouseUpListener();
+			postAnimationTasks();
 			CivilDebateWall.flashSpan.stop();			
 		}
 		
