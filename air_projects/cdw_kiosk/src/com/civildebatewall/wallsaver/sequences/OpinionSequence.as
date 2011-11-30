@@ -1,4 +1,6 @@
 package com.civildebatewall.wallsaver.sequences {
+	import avmplus.FLASH10_FLAGS;
+	
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
@@ -8,6 +10,9 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Linear;
+	import com.greensock.easing.Quart;
+	import com.kitschpatrol.flashspan.FlashSpan;
+	import com.kitschpatrol.flashspan.Settings;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
@@ -37,6 +42,10 @@ package com.civildebatewall.wallsaver.sequences {
 		public function OpinionSequence()	{
 			super();	
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
+		}
+		
+		private function compareRowLength(a:OpinionRow, b:OpinionRow):Number {
+			return a.width - b.width;			
 		}
 		
 		private function onDataUpdate(e:Event):void {
@@ -131,7 +140,11 @@ package com.civildebatewall.wallsaver.sequences {
 			// flip first, third, and fourth so they start as yes? Can't guarantee that a row will end on a "yes" or "no"
 			// just keep them random for now,
 
+			// sort the rows
+			opinionRows = opinionRows.sort(compareRowLength);
 			
+			
+			/*
 			
 			// Contruction done, now pre-calculate animation
 
@@ -161,6 +174,8 @@ package com.civildebatewall.wallsaver.sequences {
 //				MonsterDebugger.trace(this, "Frames: " + row.totalFrames);
 //			}
 			
+			*/
+			
 		}
 		
 		
@@ -177,28 +192,73 @@ package com.civildebatewall.wallsaver.sequences {
 		public function getTimeline():TimelineMax	{
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
 			
-			timeline.appendMultiple([
-				TweenMax.fromTo(opinionRows[0], opinionRows[0].totalFrames,
-					{frame: opinionRows[0].totalFrames, ease: Linear.easeNone},
-					{frame: 0}),				
-				TweenMax.fromTo(opinionRows[1], opinionRows[1].totalFrames,
-					{frame: opinionRows[1].totalFrames},
-				{frame: 0, ease: Linear.easeNone}),				
-				TweenMax.fromTo(opinionRows[2], opinionRows[2].totalFrames,
-					{frame: opinionRows[2].totalFrames, ease: Linear.easeNone},
-				{frame: 0}),				
-				TweenMax.fromTo(opinionRows[3], opinionRows[3].totalFrames,
-					{frame: opinionRows[3].totalFrames},
-				{frame: 0, ease: Linear.easeNone}),				
-				TweenMax.fromTo(opinionRows[4], opinionRows[4].totalFrames,
-					{frame: opinionRows[4].totalFrames, ease: Linear.easeNone},
-					{frame: 0}),	
-			], 0, TweenAlign.START, 0);			
+			var flashSpanSettings:Settings = CivilDebateWall.flashSpan.settings;
+			var scrollVelocity:Number = 10;
+			var duration:int = Math.round((flashSpanSettings.totalWidth - flashSpanSettings.screenWidth - flashSpanSettings.bezelWidth) / scrollVelocity);			
+			
+			var spacing:int = 109;
+			
+			var maxWidth:Number = opinionRows[opinionRows.length - 1].width;
+			
+			var rowTweens:Array = [];
+			for (var i:int = 0; i < opinionRows.length; i++) {
+				opinionRows[i].y = 123 + ((opinionRows[i].height + spacing) * i);
+				rowTweens.push(TweenMax.fromTo(opinionRows[i], duration, {x: flashSpanSettings.totalWidth + (maxWidth - opinionRows[i].width)}, {x: -opinionRows[i].width + flashSpanSettings.screenWidth + flashSpanSettings.bezelWidth - ((maxWidth - opinionRows[i].width)), ease: customEase}));
+			}
+			
+			
+			timeline.append(TweenMax.to(this, 0, {visible: true}));
+			timeline.appendMultiple(rowTweens, 0, TweenAlign.START);
+			timeline.append(TweenMax.to(this, 0, {visible: false}));			
+			
+//			timeline.appendMultiple([
+//				TweenMax.fromTo(opinionRows[0], opinionRows[0].totalFrames,
+//					{frame: opinionRows[0].totalFrames, ease: Linear.easeNone},
+//					{frame: 0}),				
+//				TweenMax.fromTo(opinionRows[1], opinionRows[1].totalFrames,
+//					{frame: opinionRows[1].totalFrames},
+//				{frame: 0, ease: Linear.easeNone}),				
+//				TweenMax.fromTo(opinionRows[2], opinionRows[2].totalFrames,
+//					{frame: opinionRows[2].totalFrames, ease: Linear.easeNone},
+//				{frame: 0}),				
+//				TweenMax.fromTo(opinionRows[3], opinionRows[3].totalFrames,
+//					{frame: opinionRows[3].totalFrames},
+//				{frame: 0, ease: Linear.easeNone}),				
+//				TweenMax.fromTo(opinionRows[4], opinionRows[4].totalFrames,
+//					{frame: opinionRows[4].totalFrames, ease: Linear.easeNone},
+//					{frame: 0}),	
+//			], 0, TweenAlign.START, 0);			
 			
 			
 			
 			return timeline;
 		}
+		
+		
+		import flash.geom.Point;
+		import fl.motion.BezierSegment;
+		
+		// Custom Easing Function for TweenMax
+		public var customEase:Function = function(t:Number, b:Number, c:Number, d:Number):Number{
+			var points:Array = [
+				{point:[0,0],pre:[0,0],post:[0,0.49]},
+				{point:[1,1],pre:[1,0.49],post:[1,1]},
+			];
+			var bezier:BezierSegment = null;
+			for (var i:int = 0; i < points.length - 1; i++) {
+				if (t / d >= points[i].point[0] && t / d <= points[i+1].point[0]) {
+					bezier = new BezierSegment(
+						new Point(points[i].point[0], points[i].point[1]),
+						new Point(points[i].post[0], points[i].post[1]),
+						new Point(points[i+1].pre[0], points[i+1].pre[1]),
+						new Point(points[i+1].point[0], points[i+1].point[1]));
+					break;
+				}
+			}
+			return c * bezier.getYForX(t / d) + b;
+		};
+		// Apply easing function such as...
+		//TweenMax.to(target_mc, 4, {x:400, ease:ease});		
 		
 	
 	}

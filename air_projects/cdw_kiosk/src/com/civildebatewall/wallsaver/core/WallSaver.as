@@ -106,9 +106,9 @@ package com.civildebatewall.wallsaver.core {
 			// build the timeline
 			timeline.append(overlaySequence.getTimelineIn());			
 			timeline.append(buttonSequence.getTimelineIn());			
-			timeline.append(titleSequence.getTimelineIn(), -60);
-			timeline.append(opinionSequence.getTimeline());
-			timeline.append(calltoActionSequence.getTimeline(), -60);
+			timeline.append(titleSequence.getTimelineIn(), -100);
+			timeline.append(opinionSequence.getTimeline(), -60);
+			timeline.append(calltoActionSequence.getTimeline());
 			timeline.append(titleSequence.getTimelineOut(), -100);
 			timeline.append(buttonSequence.getTimelineOut());						
 			timeline.append(overlaySequence.getTimelineOut());
@@ -139,8 +139,8 @@ package com.civildebatewall.wallsaver.core {
 
 			timeline.append(overlaySequence.getTimelineIn());			
 			timeline.append(buttonSequence.getTimelineIn());			
-			timeline.append(titleSequence.getTimelineIn(), -60);
-			timeline.append(barGraphSequence.getTimeline());
+			timeline.append(titleSequence.getTimelineIn(), -100);
+			timeline.append(barGraphSequence.getTimeline(), -60);
 			timeline.append(faceGridSequence.getTimeline());
 			timeline.append(titleSequence.getTimelineOut());
 			timeline.append(buttonSequence.getTimelineOut());						
