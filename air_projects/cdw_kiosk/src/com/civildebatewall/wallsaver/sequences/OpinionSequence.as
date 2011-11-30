@@ -55,12 +55,10 @@ package com.civildebatewall.wallsaver.sequences {
 		}
 		
 		private function onDataUpdate(e:Event):void {
-
 			// clear everything
 			GraphicsUtil.removeChildren(this);
 			quotes = new Vector.<Post>;
-			
-
+		
 			// Settings
 			maxQuotes = 40;
 			vxIntro = 50;
@@ -195,13 +193,16 @@ package com.civildebatewall.wallsaver.sequences {
 		public function getTimeline():TimelineMax	{
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
 			
-			var flashSpanSettings:Settings = CivilDebateWall.flashSpan.settings;
-			var scrollVelocity:Number = 10;
-			var duration:int = Math.round((flashSpanSettings.totalWidth - flashSpanSettings.screenWidth - flashSpanSettings.bezelWidth) / scrollVelocity);			
 			
+			var maxWidth:Number = opinionRows[opinionRows.length - 1].width;			
+			var flashSpanSettings:Settings = CivilDebateWall.flashSpan.settings;
+			var scrollVelocity:Number = 14;
+			var duration:int = Math.round((maxWidth + (flashSpanSettings.totalWidth - flashSpanSettings.screenWidth - flashSpanSettings.bezelWidth)) / scrollVelocity);			
 			var spacing:int = 109;
 			
-			var maxWidth:Number = opinionRows[opinionRows.length - 1].width;
+			trace("Duration: " + duration);
+			
+			
 			
 			var rowTweens:Array = [];
 			for (var i:int = 0; i < opinionRows.length; i++) {
