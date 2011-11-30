@@ -1,5 +1,6 @@
 package com.civildebatewall {
 	import com.adobe.crypto.SHA1;
+	import com.bit101.components.FPSMeter;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.kiosk.buttons.*;
 	import com.civildebatewall.kiosk.camera.*;
@@ -46,6 +47,7 @@ package com.civildebatewall {
 		public static var inactivityTimer:InactivityTimer;		
 		
 		private var commandLineArgs:Array;
+		public var fpsMeter:FPSMeter;
 		
 		// For flashspan		
 		
@@ -65,6 +67,10 @@ package com.civildebatewall {
 			// Work around for lack of mouse-down events
 			// http://forums.adobe.com/message/2794098?tstart=0
 			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;			
+			
+			fpsMeter = new FPSMeter(this);
+			fpsMeter.visible = false;
+			fpsMeter.start();
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -180,19 +186,17 @@ package com.civildebatewall {
 			
 			settings.kioskNumber = flashSpan.settings.thisScreen.id;
 			
-			MonsterDebugger.trace(this, "KIOSK NUMBER: " + settings.kioskNumber);
 			
-
-			// crashes monster debugger
 			wallSaver = new WallSaver();
 			wallSaver.x = -flashSpan.settings.thisScreen.x; // shift content left
 			addChild(wallSaver);
 			
 			
-//			
-//			// temp disable wall saver mouse
-//			wallSaver.mouseEnabled = false;
-//			wallSaver.mouseChildren = false;
+			
+			
+//		// temp disable wall saver mouse
+//		wallSaver.mouseEnabled = false;
+//		wallSaver.mouseChildren = false;
 			
 			// Load the data, which fills up everything through binding callbacks
 			data.load();			
@@ -268,10 +272,12 @@ package com.civildebatewall {
 			if (e.header == CUE_SEQUENCE_A) {
 				MonsterDebugger.trace(this, "Cueing Sequence A");				
 				wallSaver.cueSequenceA();
+				flashSpan.frameCount = 0;
 			}
 			else if (e.header == CUE_SEQUENCE_B) {
 				MonsterDebugger.trace(this, "Cueing Sequence B");
 				wallSaver.cueSequenceB();
+				flashSpan.frameCount = 0;
 			}
 		}
 		

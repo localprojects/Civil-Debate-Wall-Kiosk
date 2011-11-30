@@ -167,6 +167,11 @@ Copy the TheWall.exe installer file to the folder. Make sure it's set to Windows
 // TODO finish this bit of documentation
 
 
+Configuring Deployment Machines
+
+Psexec will perform very slowly (e.g. 30 seconds to run a command) unless "Remote Service Management" inbound rules are enabled.
+
+
 #### Screen Synchronization
 
 TODO
