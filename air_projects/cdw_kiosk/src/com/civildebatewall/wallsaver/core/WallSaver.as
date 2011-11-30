@@ -15,6 +15,7 @@ package com.civildebatewall.wallsaver.core {
 	import flash.display.StageDisplayState;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	public class WallSaver extends Sprite {
 		
@@ -45,7 +46,7 @@ package com.civildebatewall.wallsaver.core {
 			canvas.visible = false;
 			addChild(canvas);
 			
-			timeline = new TimelineMax({useFrames: true});
+			timeline = new TimelineMax({useFrames: true, onComplete: onTimelineComplete});
 			
 			// TODO more singleton sequences, ready for updates (or just update before animation?)
 			overlaySequence = new OverlaySequence();
@@ -70,25 +71,24 @@ package com.civildebatewall.wallsaver.core {
 		
 		private function preSequenceBuildTasks():void {
 			if (timeline.active) timeline.stop();
+			if (TweenMax.isTweening(canvas)) TweenMax.killTweensOf(canvas);
 			
 			// Clean up
 			GraphicsUtil.removeChildren(canvas);
 			
 			// Clear the timeline
-			timeline = new TimelineMax({useFrames: true});
+			timeline = new TimelineMax({useFrames: true, onComplete: onTimelineComplete});
 			
 			// Restore the canvas
 			canvas.alpha = 1;
 			canvas.visible = true;
+			
+			// watch for touches
+			canvas.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
 		
 		
-		private function postSequenceBuildTasks():void {
-			// make sure all of the froms are in position
-			timeline.goto(timeline.totalDuration); 
-			timeline.goto(0);			
-			timeline.stop();
-		}
+
 		
 		
 		public function cueSequenceA():void {
@@ -130,23 +130,49 @@ package com.civildebatewall.wallsaver.core {
 			timeline.append(titleSequence.getTimelineIn(), -100);
 			timeline.append(barGraphSequence.getTimeline(), -60);
 			timeline.append(faceGridSequence.getTimeline());
-			timeline.append(titleSequence.getTimelineOut(), -270);
+			timeline.append(titleSequence.getTimelineOut(), -250);
 			timeline.append(buttonSequence.getTimelineOut(), -100);						
 			timeline.append(overlaySequence.getTimelineOut());
 			
 			postSequenceBuildTasks();
 		}
 		
+		
+		private function postSequenceBuildTasks():void {
+			// make sure all of the froms are in position
+			timeline.goto(timeline.totalDuration); 
+			timeline.goto(0);			
+			timeline.stop();
+		}
+		
 		// Ends the sequence early, usually when someone touches the screen... move this to parent?
 		// TODO make the fade flow "out" from the touched screen.
 		// TODO interactive button.
+		
+		private function onTimelineComplete():void {
+			trace("timeline complete!");
+			removeMouseUpListener();
+			CivilDebateWall.flashSpan.stop();			
+		}
+		
+		
 		public function endSequence():void {
-			TweenMax.to(canvas, 1.5, {alpha: 0, onComplete: postAnimationTasks});
+			TweenMax.to(canvas, 0.5, {alpha: 0, onComplete: postAnimationTasks});
 		}
 		
 		private function postAnimationTasks():void {
 			timeline.stop();
+			removeMouseUpListener();
 			canvas.visible = false;
+		}
+		
+		private function removeMouseUpListener():void {
+			if (canvas.hasEventListener(MouseEvent.MOUSE_UP)) canvas.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+		}
+		
+		private function onMouseUp(e:MouseEvent):void {
+			removeMouseUpListener();
+			CivilDebateWall.flashSpan.stop();
 		}
 		
 		
