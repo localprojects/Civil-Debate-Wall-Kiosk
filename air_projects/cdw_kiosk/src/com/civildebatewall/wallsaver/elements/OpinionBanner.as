@@ -12,7 +12,7 @@ package com.civildebatewall.wallsaver.elements {
 		private var openQuote:Bitmap;
 		private var closeQuote:Bitmap;
 		private var quotation:BlockText;
-		private var post:Post;
+		public var post:Post;
 		
 		
 		public function OpinionBanner(post:Post) {

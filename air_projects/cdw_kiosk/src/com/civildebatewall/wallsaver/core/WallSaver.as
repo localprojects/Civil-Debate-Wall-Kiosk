@@ -27,7 +27,7 @@ package com.civildebatewall.wallsaver.core {
 		
 		// new approach, keep library of sequences. they get updated as needed before they're composited into timelines
 		private var opinionSequence:OpinionSequence;
-		
+		private var titleSequence:TitleSequence;
 		
 		public function WallSaver()	{
 			super();
@@ -42,6 +42,7 @@ package com.civildebatewall.wallsaver.core {
 			
 			// TODO more singleton sequences, ready for updates (or just update before animation?)
 			opinionSequence = new OpinionSequence();
+			titleSequence = new TitleSequence();
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -96,7 +97,6 @@ package com.civildebatewall.wallsaver.core {
 			canvas.addChild(calltoActionSequence);
 			
 			// title goes over 4 screen animations
-			var titleSequence:TitleSequence = new TitleSequence();
 			canvas.addChild(titleSequence);
 			
 			// buttons go over everything
@@ -106,11 +106,11 @@ package com.civildebatewall.wallsaver.core {
 			// build the timeline
 			timeline.append(overlaySequence.getTimelineIn());			
 			timeline.append(buttonSequence.getTimelineIn());			
-			timeline.append(titleSequence.getTimelineIn(), -100);
+			timeline.append(titleSequence.getTimelineIn(), -160);
 			timeline.append(opinionSequence.getTimeline(), -60);
 			timeline.append(calltoActionSequence.getTimeline());
 			timeline.append(titleSequence.getTimelineOut(), -100);
-			timeline.append(buttonSequence.getTimelineOut());						
+			timeline.append(buttonSequence.getTimelineOut(), -100);						
 			timeline.append(overlaySequence.getTimelineOut());
 			
 			postSequenceBuildTasks();
@@ -130,7 +130,6 @@ package com.civildebatewall.wallsaver.core {
 			canvas.addChild(faceGridSequence);
 			
 			// title goes over 4 screen animations
-			var titleSequence:TitleSequence = new TitleSequence();
 			canvas.addChild(titleSequence);			
 			
 			// buttons go over everything
