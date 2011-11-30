@@ -10,6 +10,7 @@ package com.civildebatewall {
 	import flash.display.BitmapData;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.geom.Rectangle;
 	
 	
 	
@@ -42,6 +43,8 @@ package com.civildebatewall {
 		public var lastView:Function;
 		public var backDestination:Function;
 		
+		
+		public var targetFaceRectangle:Rectangle = new Rectangle(294, 352, 494, 576);
 		
 		public function setStatsView(type:int):void {
 			statsView = type;

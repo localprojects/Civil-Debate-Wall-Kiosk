@@ -42,7 +42,7 @@ package com.civildebatewall.kiosk.camera {
 			cameraBitmap = new Bitmap(new BitmapData(1080, 1920));
 			
 			if (CivilDebateWall.settings.useWebcam) {
-				undersampleFactor = 2; // increase this to improve performance at the expense of quality			
+				undersampleFactor = CivilDebateWall.settings.webCamUndersampleFactor; // increase this to improve performance at the expense of quality			
 				cameraWidth = 1920 / undersampleFactor;
 				cameraHeight = 1080 / undersampleFactor;	
 				
@@ -78,7 +78,7 @@ package com.civildebatewall.kiosk.camera {
 				
 				// zoom around center
 				scaleMatrix = new Matrix();
-				focalLength = 1;
+				focalLength = CivilDebateWall.settings.webCamFocalLength;
 				setFocalLength(focalLength);
 				
 				video.attachCamera(camera);			
@@ -92,8 +92,14 @@ package com.civildebatewall.kiosk.camera {
 			if (CivilDebateWall.settings.useSLR) {
 				slr = new SLRCamera();
 			}
+			
+			
 		}
 		
+		
+		public function getFocalLength():Number {
+			return focalLength;
+		}
 		
 		public function setFocalLength(value:Number):void {
 			focalLength = value;
