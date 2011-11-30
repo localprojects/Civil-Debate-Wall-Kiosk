@@ -24,6 +24,11 @@ package com.civildebatewall.wallsaver.core {
 		private var topBar:Shape;
 		private var bottomBar:Shape;
 		
+		
+		// new approach, keep library of sequences. they get updated as needed before they're composited into timelines
+		private var opinionSequence:OpinionSequence;
+		
+		
 		public function WallSaver()	{
 			super();
 			
@@ -34,6 +39,9 @@ package com.civildebatewall.wallsaver.core {
 			addChild(canvas);
 			
 			timeline = new TimelineMax({useFrames: true});
+			
+			// TODO more singleton sequences, ready for updates (or just update before animation?)
+			opinionSequence = new OpinionSequence();
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -46,28 +54,7 @@ package com.civildebatewall.wallsaver.core {
 			//Main.controls.updateTimeSlider();			
 		}
 		
-		public function toggleFullScreen():void {
-			if (stage.displayState == StageDisplayState.NORMAL) {
-				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
-				stage.scaleMode = StageScaleMode.SHOW_ALL;
-				
-				// block off extras
-				// TODO fix this
-				
-				topBar = GraphicsUtil.shapeFromSize(stage.stageWidth, 1080- CivilDebateWall.flashSpan.settings.totalHeight / 2);
-				bottomBar = GraphicsUtil.shapeFromSize(stage.stageWidth,1080 - CivilDebateWall.flashSpan.settings.totalHeight / 2);
-				
-				addChild(topBar);
-				MonsterDebugger.trace(this, topBar.height)
-				canvas.y = topBar.height;
-				bottomBar.y = canvas.x + canvas.height;
-				addChild(bottomBar);
-			}
-			else {
-				stage.displayState = StageDisplayState.NORMAL;
-				stage.scaleMode = StageScaleMode.EXACT_FIT;				
-			}					
-		}
+
 		
 		
 		
@@ -103,7 +90,7 @@ package com.civildebatewall.wallsaver.core {
 			var overlaySequence:OverlaySequence = new OverlaySequence();
 			canvas.addChild(overlaySequence);
 
-			var opinionSequence:OpinionSequence = new OpinionSequence();
+			//var opinionSequence:OpinionSequence = new OpinionSequence();
 			canvas.addChild(opinionSequence);
 			
 			var calltoActionSequence:CallToActionSequence = new CallToActionSequence();

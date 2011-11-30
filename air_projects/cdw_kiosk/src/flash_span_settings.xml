@@ -5,6 +5,8 @@
     <bezelWidth>120</bezelWidth>
     <screenWidth>1080</screenWidth>
 	<screenHeight>1920</screenHeight>
+	<frameRate>60</frameRate>
+	<frameSyncInterval>10</frameSyncInterval>
     <networkMap>
         <screen>
             <id>0</id>

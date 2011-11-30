@@ -62,7 +62,7 @@ package com.kitschpatrol.futil.utilitites {
 			text = text.substr(0, characters);
 			
 			return text;
-		}				
+		}		
 		
 		// returns a tuple (array) of start / end indexes for the search word (word, not phrase?)
 		public static function searchString(needle:String, haystack:String, caseSensitive:Boolean = false):Array {

@@ -116,6 +116,12 @@ package com.kitschpatrol.flashspan
 				return _currentSeed;
 			}
 			
+			
+			public function range(low:Number, high:Number):Number {
+				return random() * (high - low + 1) + low;			
+			}
+			
+			
 			// public methods:
 			// random(); // returns a number between 0-1 exclusive.
 			public function random():Number {

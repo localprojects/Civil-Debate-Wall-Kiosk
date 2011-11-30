@@ -26,9 +26,6 @@
 	</taskdef>     
      
     
-	    
-     
-     
 	<target name="main" depends="create-app-xml, launch">
 		<echo message="Launching multiple screens. Debug gets built first by Eclipse." />
 	</target>	

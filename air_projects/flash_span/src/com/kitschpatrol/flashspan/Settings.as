@@ -33,10 +33,17 @@ package com.kitschpatrol.flashspan {
 		
 		public var thisScreen:NetworkedScreen; // reference...		
 		
+		public var frameRate:int = 60;
+		public var frameSyncInterval:int = 1; // how many frames between syncs
+		
 		public function Settings() {
 			// Constructor
 		}
 		
+		
+		private function sortById(a:NetworkedScreen, b:NetworkedScreen):Number {
+			return a.id - b.id;
+		}
 		
 		public function load(filePath:String):void {
 			// load text file
@@ -59,21 +66,21 @@ package com.kitschpatrol.flashspan {
 				if ((key != "networkMap") && this.hasOwnProperty(key)) {
 					this[key] = value;
 				}
-			}
-			
-			
-						
+			}			
 			
 			screenCount = xml.networkMap.children().length();
 			
-			screens = new Vector.<NetworkedScreen>(screenCount);			
+			screens = new Vector.<NetworkedScreen>;			
 			for each (var screenSettings:XML in xml.networkMap.children()) {
 				// NetworkedScreen constructor parses xml
-				screens[screenSettings.id] = new NetworkedScreen(screenSettings);
+				screens.push(new NetworkedScreen(screenSettings));
 			}
+			screens = screens.sort(sortById);
+			
+			MonsterDebugger.trace(this, screens);
+			
 			
 			// fill in other variables
-			
 			totalWidth = (screenWidth * screenCount) + (bezelWidth * 2 * (screenCount - 1));
 			totalHeight = screenHeight;
 			physicalScreenWidth = screenWidth + (bezelWidth * 2);			

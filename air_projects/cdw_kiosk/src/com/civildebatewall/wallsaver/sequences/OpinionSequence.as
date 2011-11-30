@@ -1,24 +1,26 @@
 package com.civildebatewall.wallsaver.sequences {
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.data.Data;
+	import com.civildebatewall.data.Post;
 	import com.civildebatewall.wallsaver.elements.OpinionBanner;
 	import com.civildebatewall.wallsaver.elements.OpinionRow;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Linear;
-	import com.kitschpatrol.futil.Math2;
-	import com.kitschpatrol.futil.Random;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Sprite;
-	import flash.utils.getTimer;
+	import flash.events.Event;
 	
 	// Scrolling User Opinions
 	public class OpinionSequence extends Sprite implements ISequence {
 		
 		// TODO replace with backend
-		private var quotesDesired:int = 20;
-		private var quotes:Array = [];
+		private var maxQuotes:int;
+		private var quotes:Vector.<Post>;
+		
 		// END Back end		
 		
 		// Settings
@@ -33,38 +35,42 @@ package com.civildebatewall.wallsaver.sequences {
 		
 		
 		public function OpinionSequence()	{
-			super();
+			super();	
+			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
+		}
+		
+		private function onDataUpdate(e:Event):void {
 			
-			// TODO replace with backend			
-			while (quotes.length < quotesDesired) {
-				var dummyQuote:String = StringUtil.trim(StringUtil.dummyText(Random.range(20, 140)));
-				
-				if (Math.random() > 0.5)
-					quotes.push([dummyQuote,  "yes"]);
-				else
-					quotes.push([dummyQuote, "no"]);			
-			}
-			// END Back end
+			// clear everything
+			GraphicsUtil.removeChildren(this);
+			quotes = new Vector.<Post>;
 			
-			
+
 			// Settings
+			maxQuotes = 20;
 			vxIntro = 50;
 			vxMiddle = 15; // but only for the longest row, all others are slower!
 			vxOutro = 50;
 			easeIntroFrames = 500;
 			easeOutroFrames = 500;
 			
+			// Try to get the number required. If there aren't enough, get as many as possible.
+			var quoteCount:int = Math.min(maxQuotes, CivilDebateWall.data.posts.length);
 			
+			for (var k:int = 0; k < quoteCount; k++) {
+				// most recent first? // some other selection filter here?
+				quotes.push(CivilDebateWall.data.posts[k]);
+			}			
 			
 			// generate the display quotes
-			var yesQuotes:Array = [];
-			var noQuotes:Array = [];
-			for each (var quoteSource:Array in quotes) {
-				if (quoteSource[1] == "yes") {
-					yesQuotes.push(new OpinionBanner(quoteSource[0], quoteSource[1]));
+			var yesQuotes:Vector.<OpinionBanner> = new Vector.<OpinionBanner>;
+			var noQuotes:Vector.<OpinionBanner> = new Vector.<OpinionBanner>;
+			for each (var quote:Post in quotes) {
+				if (quote.stance == Post.STANCE_YES) {
+					yesQuotes.push(new OpinionBanner(quote));
 				}
 				else {
-					noQuotes.push(new OpinionBanner(quoteSource[0], quoteSource[1]));
+					noQuotes.push(new OpinionBanner(quote));
 				}
 			}
 			
@@ -79,10 +85,10 @@ package com.civildebatewall.wallsaver.sequences {
 				
 				// alternating stances
 				if (i % 2 == 0) {
-					quoteLine.lastStance = "no";
+					quoteLine.lastStance = Post.STANCE_NO;
 				}
 				else {
-					quoteLine.lastStance = "yes"					
+					quoteLine.lastStance = Post.STANCE_YES;					
 				}
 
 				opinionRows[i] = quoteLine;
@@ -93,23 +99,23 @@ package com.civildebatewall.wallsaver.sequences {
 				// find the shortest row
 				var shortestRowIndex:int = 0;
 				var minWidth:Number = Number.MAX_VALUE;
-				for (var j:int = 0; j < opinionRows.length; j++) {
-					if (opinionRows[j].width < minWidth) {
-						minWidth = opinionRows[j].width;
-						shortestRowIndex = j;
+				for (var m:int = 0; m < opinionRows.length; m++) {
+					if (opinionRows[m].width < minWidth) {
+						minWidth = opinionRows[m].width;
+						shortestRowIndex = m;
 					}
 				}
 
 				
 				// alternate stances
 				var tempQuotationBanner:OpinionBanner;
-				if (opinionRows[shortestRowIndex].lastStance == "yes") {
+				if (opinionRows[shortestRowIndex].lastStance == Post.STANCE_YES) {
 					tempQuotationBanner = noQuotes.pop();
-					opinionRows[shortestRowIndex].lastStance = "no";
+					opinionRows[shortestRowIndex].lastStance = Post.STANCE_NO;
 				}
 				else {
 					tempQuotationBanner = yesQuotes.pop();
-					opinionRows[shortestRowIndex].lastStance = "yes";					
+					opinionRows[shortestRowIndex].lastStance = Post.STANCE_YES;					
 				}
 				
 				if (minWidth > 0) {
@@ -139,11 +145,11 @@ package com.civildebatewall.wallsaver.sequences {
 			longestRow.calculateFrames(vxIntro, vxMiddle, vxOutro, easeIntroFrames, easeOutroFrames);
 			
 			// Now calculate the rest, based on the longest row's total duration
-			for (var k:int = 0; k < opinionRows.length; k++) {			
-				if (opinionRows[k] != longestRow) {
+			for (var j:int = 0; j < opinionRows.length; j++) {			
+				if (opinionRows[j] != longestRow) {
 					//vxMiddle = (quoteRows[k].width) / (longestRow.totalFrames - longestRow.introFrameCount - longestRow.outroFrameCount);
 					// TODO a better guess at the vxMiddle before iterating towards it?
-					opinionRows[k].calculateFrames(vxIntro, vxMiddle, vxOutro, easeIntroFrames, easeOutroFrames, longestRow.totalFrames);
+					opinionRows[j].calculateFrames(vxIntro, vxMiddle, vxOutro, easeIntroFrames, easeOutroFrames, longestRow.totalFrames);
 				}
 			}
 			
