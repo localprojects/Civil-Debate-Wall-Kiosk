@@ -286,7 +286,7 @@ package com.civildebatewall {
 		}
 	
 		private function onEnterFrame(e:Event):void {
-			wallSaver.timeline.goto(flashSpan.frameCount);			
+			//wallSaver.timeline.goto(flashSpan.frameCount);			
 		}
 		
 		private function onFrameSync(e:FrameSyncEvent):void {
