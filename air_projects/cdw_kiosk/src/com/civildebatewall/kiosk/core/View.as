@@ -7,18 +7,11 @@ package com.civildebatewall.kiosk.core {
 	import com.civildebatewall.State;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.*;
+	import com.civildebatewall.kiosk.CameraCalibrationOverlay;
 	import com.civildebatewall.kiosk.DragLayer;
 	import com.civildebatewall.kiosk.buttons.*;
-	import com.civildebatewall.kiosk.buttons.BalloonButton;
-	import com.civildebatewall.kiosk.buttons.DebateButton;
-	import com.civildebatewall.kiosk.buttons.NavArrow;
-	import com.civildebatewall.kiosk.buttons.RespondButton;
-	import com.civildebatewall.kiosk.buttons.SortLinks;
-	import com.civildebatewall.kiosk.buttons.StatsButton;
 	import com.civildebatewall.kiosk.camera.*;
 	import com.civildebatewall.kiosk.elements.*;
-	import com.civildebatewall.kiosk.elements.OpinionTextHome;
-	import com.civildebatewall.kiosk.elements.QuestionHeader;
 	import com.civildebatewall.kiosk.keyboard.*;
 	import com.civildebatewall.kiosk.legacy.BigButton;
 	import com.civildebatewall.kiosk.legacy.CountdownButton;
@@ -34,7 +27,6 @@ package com.civildebatewall.kiosk.core {
 	import com.greensock.plugins.*;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
-	import com.kitschpatrol.futil.blocks.BlockShape;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
@@ -731,7 +723,7 @@ package com.civildebatewall.kiosk.core {
 				
 				MonsterDebugger.trace(this, "Scaled face rect: " + scaledFaceRect);
 				
-				CivilDebateWall.state.userImage = Utilities.cropToFace(CivilDebateWall.state.userImage, scaledFaceRect, new Rectangle(294, 352, 494, 576));				
+				CivilDebateWall.state.userImage = Utilities.cropToFace(CivilDebateWall.state.userImage, scaledFaceRect, CivilDebateWall.state.targetFaceRectangle);				
 			}
 			else {
 				MonsterDebugger.trace(this, 'no face found, saving as is');
@@ -823,6 +815,13 @@ package com.civildebatewall.kiosk.core {
 			// TODO rearm timer?
 		}
 		
+		
+		
+		
+		public function cameraCalibrationOverlayView(...args):void {
+			var cameraCalibrationOverlay:CameraCalibrationOverlay = new CameraCalibrationOverlay();
+			addChild(cameraCalibrationOverlay);
+		}
 
 		
 		
