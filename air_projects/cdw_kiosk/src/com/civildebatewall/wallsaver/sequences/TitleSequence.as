@@ -2,13 +2,11 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.wallsaver.core.WallSaver;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.blocks.BlockText;
-	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.Bitmap;

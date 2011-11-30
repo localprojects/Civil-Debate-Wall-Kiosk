@@ -1,5 +1,4 @@
 package com.civildebatewall.wallsaver.sequences {
-	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
@@ -12,18 +11,14 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
-	import com.kitschpatrol.futil.utilitites.VectorUtil;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
-	
-	
+		
 	public class FaceGridSequence extends Sprite implements ISequence {
 		
-				
 		private var portraitData:Array;
-		
 		
 		// Internal
 		private var gridCells:Array;
@@ -31,9 +26,7 @@ package com.civildebatewall.wallsaver.sequences {
 		
 		public function FaceGridSequence()	{
 			super();
-			
-	
-			
+		
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 		}
 		
@@ -47,14 +40,7 @@ package com.civildebatewall.wallsaver.sequences {
 			var portraitWidth:int = 233;
 			var portraitHeight:int = 311;
 			var wallsaverPaddingTop:int = 123;					
-			
-//		
-//			= [Assets.getSamplePortrait1(),
-//				Assets.getSamplePortrait2(),
-//				Assets.getSamplePortrait3(),
-//				Assets.getSamplePortrait4()
-//			];
-//		
+
 			GraphicsUtil.removeChildren(this);
 			
 			var portraits:Array = [];			
@@ -76,8 +62,6 @@ package com.civildebatewall.wallsaver.sequences {
 					noPosts.push(post);					
 				}
 			}
-
-			
 			
 			for (var col:int = 0; col < gridCols; col++) {
 				portraits[col] = [];
@@ -95,8 +79,6 @@ package com.civildebatewall.wallsaver.sequences {
 					}
 					
 					
-					
-					
 					var tempPortrait:GridPortrait;
 					if (stance == Post.STANCE_YES) {	
 						tempPortrait = new GridPortrait(stance, yesPosts[int(CivilDebateWall.flashSpan.random.range(0, yesPosts.length - 1))].user.photo);
@@ -104,7 +86,6 @@ package com.civildebatewall.wallsaver.sequences {
 					else {
 						tempPortrait = new GridPortrait(stance, noPosts[int(CivilDebateWall.flashSpan.random.range(0, noPosts.length - 1))].user.photo);
 					}
-					
 					
 					tempPortrait.x = (gridSpacing * (screenCol + 1)) + (screenCol * portraitWidth) + screen.x;
 					tempPortrait.y = (gridSpacing * row) + (row * portraitHeight) + wallsaverPaddingTop;
