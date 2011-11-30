@@ -37,9 +37,6 @@ package com.civildebatewall.wallsaver.sequences {
 			}
 			timelineIn.appendMultiple(overlayTweens, 0, TweenAlign.START, 20);
 			
-			timelineIn.stop();
-			timelineIn.goto(0);
-			
 			return timelineIn;
 		}
 		

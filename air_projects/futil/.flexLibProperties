@@ -41,6 +41,7 @@
     <classEntry path="com.kitschpatrol.futil.drawing.Path"/>
     <classEntry path="com.kitschpatrol.futil.drawing.DashedLine"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.PointUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.CoreUtil"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
