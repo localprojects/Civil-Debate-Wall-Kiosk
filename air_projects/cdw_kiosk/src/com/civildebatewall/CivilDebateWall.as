@@ -257,13 +257,13 @@ package com.civildebatewall {
 		public function PlaySequenceA():void {
 			flashSpan.stop();
 			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_A);
-			flashSpan.start();
+			TweenMax.delayedCall(1, flashSpan.start);  // wait for messages to land before starting
 		}
 		
 		public function PlaySequenceB():void {
 			flashSpan.stop();
 			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_B);
-			flashSpan.start();
+			TweenMax.delayedCall(1, flashSpan.start); // wait for messages to land before starting
 		}
 		
 

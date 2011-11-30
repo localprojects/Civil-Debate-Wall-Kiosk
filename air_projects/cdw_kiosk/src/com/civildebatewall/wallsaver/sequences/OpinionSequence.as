@@ -98,7 +98,6 @@ package com.civildebatewall.wallsaver.sequences {
 			for (var i:int = 0; i < opinionRows.length; i++) {
 				var opinionRow:OpinionRow = new OpinionRow();
 				opinionRow.x = 1080 + CivilDebateWall.flashSpan.settings.bezelWidth;
-				opinionRow.y = 123 + (i * (247 + 108));
 				addChild(opinionRow);
 				
 				// alternating stances
@@ -110,7 +109,7 @@ package com.civildebatewall.wallsaver.sequences {
 				}
 
 				opinionRows[i] = opinionRow;
-			}			
+			}
 			
 			// add opinions to rows
 			while ((yesQuotes.length > 0) && (noQuotes.length > 0)) {
@@ -144,6 +143,11 @@ package com.civildebatewall.wallsaver.sequences {
 			opinionRows = opinionRows.sort(compareRowLength);
 			
 			
+			// set y positions on sorted rows
+			for (var j:int = 0; j < opinionRows.length; j++) {
+				opinionRows[j].y = 123 + (j * (247 + 108));
+			}
+
 			/*
 			
 			// Contruction done, now pre-calculate animation
