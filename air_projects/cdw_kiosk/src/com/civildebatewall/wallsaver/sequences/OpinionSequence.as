@@ -96,20 +96,20 @@ package com.civildebatewall.wallsaver.sequences {
 			opinionRows = new Vector.<OpinionRow>(5);
 			
 			for (var i:int = 0; i < opinionRows.length; i++) {
-				var quoteLine:OpinionRow = new OpinionRow();
-				quoteLine.x = 1080 + CivilDebateWall.flashSpan.settings.bezelWidth;
-				quoteLine.y = 123 + (i * 357);
-				addChild(quoteLine);
+				var opinionRow:OpinionRow = new OpinionRow();
+				opinionRow.x = 1080 + CivilDebateWall.flashSpan.settings.bezelWidth;
+				opinionRow.y = 123 + (i * (247 + 108));
+				addChild(opinionRow);
 				
 				// alternating stances
 				if (i % 2 == 0) {
-					quoteLine.lastStance = Post.STANCE_NO;
+					opinionRow.lastStance = Post.STANCE_NO;
 				}
 				else {
-					quoteLine.lastStance = Post.STANCE_YES;					
+					opinionRow.lastStance = Post.STANCE_YES;					
 				}
 
-				opinionRows[i] = quoteLine;
+				opinionRows[i] = opinionRow;
 			}			
 			
 			// add opinions to rows
@@ -197,7 +197,7 @@ package com.civildebatewall.wallsaver.sequences {
 			var flashSpanSettings:Settings = CivilDebateWall.flashSpan.settings;
 			var scrollVelocity:Number = 14;
 			var duration:int = Math.round((maxWidth + (flashSpanSettings.totalWidth - flashSpanSettings.screenWidth - flashSpanSettings.bezelWidth)) / scrollVelocity);			
-			var spacing:int = 109;
+			
 			
 			trace("Duration: " + duration);
 			
@@ -205,7 +205,6 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			var rowTweens:Array = [];
 			for (var i:int = 0; i < opinionRows.length; i++) {
-				opinionRows[i].y = 123 + ((opinionRows[i].height + spacing) * i);
 				rowTweens.push(TweenMax.fromTo(opinionRows[i], duration, {x: flashSpanSettings.totalWidth + (maxWidth - opinionRows[i].width)}, {x: -opinionRows[i].width + flashSpanSettings.screenWidth + flashSpanSettings.bezelWidth - ((maxWidth - opinionRows[i].width)), ease: customEase}));
 			}
 			
