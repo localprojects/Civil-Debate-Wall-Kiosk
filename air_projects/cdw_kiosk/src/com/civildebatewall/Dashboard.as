@@ -18,6 +18,8 @@ package com.civildebatewall {
 		private var barTestSlider:Slider;		
 		
 		
+		private var randomOpinionToggle:CheckBox;
+		
 		
 		private var framesRendered:uint;
 		private var wallsaverFrameLabel:Label;
@@ -37,7 +39,9 @@ package com.civildebatewall {
 			
 			new PushButton(this, 5, 5, "Play Sequence A", function():void { CivilDebateWall.self.PlaySequenceA(); });
 			new PushButton(this, 110, 5, "Play Sequence B", function():void { CivilDebateWall.self.PlaySequenceB(); });
-			new PushButton(this, 5, 55, "Slow", function():void { CoreUtil.sleep(1000); });			
+			new PushButton(this, 5, 55, "Slow", function():void { CoreUtil.sleep(1000); });
+			//new CheckBox(this, 5, 75, "Ordered Opinion Rows", function():void {CivilDebateWall.wallSaver.orderedOpinionRows = !CivilDebateWall.wallSaver.orderedOpinionRows });
+			
 			wallsaverFrameLabel = new Label(this, 5, 100, "Frame Number:");
 			frameRateLabel = new Label(this, 5, 125, "Frame Rate:");
 			framesRenderedLabel = new Label(this, 5, 150, "Frames Rendered:");

@@ -46,6 +46,8 @@ package com.civildebatewall {
 		
 		public static var inactivityTimer:InactivityTimer;		
 		
+		
+		
 		private var commandLineArgs:Array;
 		public var fpsMeter:FPSMeter;
 		

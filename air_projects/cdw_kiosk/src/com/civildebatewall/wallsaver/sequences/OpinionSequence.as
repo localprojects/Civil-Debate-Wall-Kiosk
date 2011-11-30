@@ -4,6 +4,7 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
+	import com.civildebatewall.wallsaver.core.WallSaver;
 	import com.civildebatewall.wallsaver.elements.OpinionBanner;
 	import com.civildebatewall.wallsaver.elements.OpinionRow;
 	import com.greensock.TimelineMax;
@@ -13,6 +14,7 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.greensock.easing.Quart;
 	import com.kitschpatrol.flashspan.FlashSpan;
 	import com.kitschpatrol.flashspan.Settings;
+	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
@@ -141,12 +143,13 @@ package com.civildebatewall.wallsaver.sequences {
 
 			// sort the rows, shortest first
 			opinionRows = opinionRows.sort(compareRowLength);
+			opinionRows.reverse();
 			
-			
-			// set y positions on sorted rows
 			for (var j:int = 0; j < opinionRows.length; j++) {
 				opinionRows[j].y = 123 + (j * (247 + 108));
-			}
+			}			
+			
+
 
 			/*
 			
@@ -196,8 +199,26 @@ package com.civildebatewall.wallsaver.sequences {
 		public function getTimeline():TimelineMax	{
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
 			
+
 			
-			var maxWidth:Number = opinionRows[opinionRows.length - 1].width;			
+			 //Toggle randomness
+//						var indexes:Array = [0, 1, 2, 3, 4];
+//									
+//						// set y positions on sorted rows
+//						
+//							indexes = ArrayUtil.shuffle(indexes);
+//							trace(indexes);
+//						
+//						
+//						for (var j:int = 0; j < indexes.length; j++) {
+//							var index:int = indexes[j];
+//							opinionRows[index].y = 123 + (index * (247 + 108));
+//						}
+			// End toggle randomness			
+			
+			
+			// order them now so maxwidth works, better to write shuffle function for vector
+			var maxWidth:Number = opinionRows.sort(compareRowLength)[opinionRows.length - 1].width;			
 			var flashSpanSettings:Settings = CivilDebateWall.flashSpan.settings;
 			var scrollVelocity:Number = 14;
 			var duration:int = Math.round((maxWidth + (flashSpanSettings.totalWidth - flashSpanSettings.screenWidth - flashSpanSettings.bezelWidth)) / scrollVelocity);			
