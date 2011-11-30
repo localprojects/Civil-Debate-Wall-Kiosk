@@ -47,7 +47,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 
 			// Settings
-			maxQuotes = 20;
+			maxQuotes = 40;
 			vxIntro = 50;
 			vxMiddle = 15; // but only for the longest row, all others are slower!
 			vxOutro = 50;
