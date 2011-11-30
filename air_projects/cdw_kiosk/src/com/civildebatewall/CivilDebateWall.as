@@ -257,11 +257,13 @@ package com.civildebatewall {
 		public function PlaySequenceA():void {
 			flashSpan.stop();
 			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_A);
+			flashSpan.start();
 		}
 		
 		public function PlaySequenceB():void {
 			flashSpan.stop();
-			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_B);			
+			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_B);
+			flashSpan.start();
 		}
 		
 
@@ -270,13 +272,11 @@ package com.civildebatewall {
 				MonsterDebugger.trace(this, "Playing Sequence A");
 				wallSaver.cueSequenceA();
 				flashSpan.frameCount = 0;
-				flashSpan.start();			
 			}
 			else if (e.header == PLAY_SEQUENCE_B) {
 				MonsterDebugger.trace(this, "Playing Sequence B");
 				wallSaver.cueSequenceB();
 				flashSpan.frameCount = 0;
-				flashSpan.start();
 			}
 		}
 
