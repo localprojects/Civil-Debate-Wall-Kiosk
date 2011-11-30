@@ -193,6 +193,8 @@ package com.civildebatewall.wallsaver.sequences {
 					{frame: 0}),	
 			], 0, TweenAlign.START, 0);			
 			
+			timeline.stop();
+			
 			return timeline;
 		}
 		

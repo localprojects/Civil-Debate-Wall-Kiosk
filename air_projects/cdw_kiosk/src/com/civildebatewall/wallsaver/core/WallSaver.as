@@ -66,8 +66,7 @@ package com.civildebatewall.wallsaver.core {
 			GraphicsUtil.removeChildren(canvas);
 			
 			// Clear the timeline
-			timeline.clear();
-			timeline.currentTime = 0;
+			timeline = new TimelineMax({useFrames: true});
 			
 			// Restore the canvas
 			canvas.alpha = 1;
@@ -90,7 +89,7 @@ package com.civildebatewall.wallsaver.core {
 			var overlaySequence:OverlaySequence = new OverlaySequence();
 			canvas.addChild(overlaySequence);
 
-			//var opinionSequence:OpinionSequence = new OpinionSequence();
+			var opinionSequence:OpinionSequence = new OpinionSequence();
 			canvas.addChild(opinionSequence);
 			
 			var calltoActionSequence:CallToActionSequence = new CallToActionSequence();
