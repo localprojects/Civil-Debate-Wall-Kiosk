@@ -48,8 +48,9 @@ package com.civildebatewall.kiosk {
 			zoomSlider.height = 80;
 			zoomSlider.minimum = 1;
 			zoomSlider.maximum = 3;
+			zoomSlider.value = CivilDebateWall.kiosk.view.portraitCamera.getFocalLength();
 			
-			zoomLabel = new Label(this, 1920 - 80, 40, "ZOOM LEVEL: " + CivilDebateWall.kiosk.view.portraitCamera.getFocalLength());
+			zoomLabel = new Label(this, 40, 1920 - 80, "ZOOM LEVEL: " + CivilDebateWall.kiosk.view.portraitCamera.getFocalLength());
 			
 
 			closeButton = new PushButton(this, zoomSlider.x + zoomSlider.width + 20, zoomSlider.y, "DONE", onCloseButton);
