@@ -1,6 +1,8 @@
 package com.civildebatewall.wallsaver.sequences {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.data.Data;
+	import com.civildebatewall.data.Post;
 	import com.civildebatewall.wallsaver.elements.GridPortrait;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
@@ -9,22 +11,19 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.greensock.easing.Linear;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
+	import com.kitschpatrol.futil.utilitites.VectorUtil;
 	
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.geom.Rectangle;
 	
 	
 	public class FaceGridSequence extends Sprite implements ISequence {
 		
-		// TODO get these from back end
-		private var yesResponses:int = 215;
-		private var noResponses:int = 15;		
-		private var portraitData:Array = [Assets.getSamplePortrait1(),
-			Assets.getSamplePortrait2(),
-			Assets.getSamplePortrait3(),
-			Assets.getSamplePortrait4()
-		];
-		// END back end
+				
+		private var portraitData:Array;
+		
 		
 		// Internal
 		private var gridCells:Array;
@@ -33,23 +32,52 @@ package com.civildebatewall.wallsaver.sequences {
 		public function FaceGridSequence()	{
 			super();
 			
-			// build the grid
+	
+			
+			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
+		}
+		
+		private function onDataUpdate(e:Event):void {
+			
+			// grid settings (make global to class?)
 			var gridWidth:int = CivilDebateWall.flashSpan.settings.totalWidth - CivilDebateWall.flashSpan.settings.physicalScreenWidth;			
 			var gridSpacing:Number = 30;
 			var gridRows:int = 5;
 			var gridCols:int = 16;
 			var portraitWidth:int = 233;
 			var portraitHeight:int = 311;
-			var wallsaverPaddingTop:int = 123;
-
-			var totalResponses:int = yesResponses + noResponses;
-
+			var wallsaverPaddingTop:int = 123;					
+			
+//		
+//			= [Assets.getSamplePortrait1(),
+//				Assets.getSamplePortrait2(),
+//				Assets.getSamplePortrait3(),
+//				Assets.getSamplePortrait4()
+//			];
+//		
+			GraphicsUtil.removeChildren(this);
+			
 			var portraits:Array = [];			
 			
-			
-			var borderColIndex:int = Math.round(Math2.map(yesResponses / totalResponses, 0, 1, 0, gridCols - 1));			
+			var borderColIndex:int = Math.round(Math2.map(CivilDebateWall.data.stats.postsYes / CivilDebateWall.data.stats.postsTotal, 0, 1, 0, gridCols - 1));			
 			var middleRowIndex:int = Math.floor(gridRows / 2);
 			var centerArrowHeight:int = gridRows - middleRowIndex; // TODO test this
+			
+			
+			// create pools of yes and no posts
+			var yesPosts:Vector.<Post> = new Vector.<Post>;
+			var noPosts:Vector.<Post> = new Vector.<Post>;
+			
+			for each (var post:Post in CivilDebateWall.data.posts) {
+				if (post.stance == Post.STANCE_YES) {
+					yesPosts.push(post);
+				}
+				else {
+					noPosts.push(post);					
+				}
+			}
+
+			
 			
 			for (var col:int = 0; col < gridCols; col++) {
 				portraits[col] = [];
@@ -60,13 +88,24 @@ package com.civildebatewall.wallsaver.sequences {
 				
 				for (var row:int = 0; row < gridRows; row++) {
 					// set stance based on border index, create an "arrow" shape
-					var stance:String = "yes";
+					var stance:String = Post.STANCE_YES;
 					
 					if ((arrowHeight > 0) && (Math.abs(row - middleRowIndex) <= Math.floor(arrowHeight / 2))) {
-						stance = "no";
+						stance = Post.STANCE_NO;
 					}
 					
-					var tempPortrait:GridPortrait = new GridPortrait(stance, ArrayUtil.randomElement(portraitData));
+					
+					
+					
+					var tempPortrait:GridPortrait;
+					if (stance == Post.STANCE_YES) {	
+						tempPortrait = new GridPortrait(stance, yesPosts[int(CivilDebateWall.flashSpan.random.range(0, yesPosts.length - 1))].user.photo);
+					}
+					else {
+						tempPortrait = new GridPortrait(stance, noPosts[int(CivilDebateWall.flashSpan.random.range(0, noPosts.length - 1))].user.photo);
+					}
+					
+					
 					tempPortrait.x = (gridSpacing * (screenCol + 1)) + (screenCol * portraitWidth) + screen.x;
 					tempPortrait.y = (gridSpacing * row) + (row * portraitHeight) + wallsaverPaddingTop;
 					
@@ -91,7 +130,7 @@ package com.civildebatewall.wallsaver.sequences {
 			var gridTweenIn:Array = [];
 			
 			for each (var portrait:GridPortrait in gridCells) {
-				gridTweenIn.push(TweenMax.fromTo(portrait, 50, {step: 0}, {step: 1, ease: Linear.easeNone}));
+				gridTweenIn.push(TweenMax.fromTo(portrait, 40, {step: 0}, {step: 1, ease: Linear.easeNone}));
 			}
 			
 			timelineIn.appendMultiple(gridTweenIn, 0, TweenAlign.START, 2); // compensate for steppiness
@@ -101,16 +140,18 @@ package com.civildebatewall.wallsaver.sequences {
 		}
 		
 		
+		private const pauseAfterPortraitsIn:int = 60;
+		
 		public function getTimelineOut():TimelineMax	{
 			var timelineOut:TimelineMax = new TimelineMax({useFrames: true});
 			
 			var gridTweenOut:Array = [];
 			
 			for each (var portrait:GridPortrait in gridCells) {
-				gridTweenOut.push(TweenMax.fromTo(portrait, 100, {step: 1}, {step: 0, ease: Expo.easeIn}));
+				gridTweenOut.push(TweenMax.fromTo(portrait, 60, {step: 1}, {step: 0, ease: Expo.easeIn}));
 			}
 			
-			timelineOut.appendMultiple(gridTweenOut, 200, TweenAlign.START, 2);
+			timelineOut.appendMultiple(gridTweenOut, pauseAfterPortraitsIn, TweenAlign.START, 2);
 			
 			return timelineOut;
 		}

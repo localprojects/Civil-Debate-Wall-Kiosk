@@ -61,7 +61,7 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		private function onDataUpdate(e:Event):void {
-			barPercent = CivilDebateWall.data.yesPercent * 100;
+			barPercent = CivilDebateWall.data.stats.yesPercent * 100;
 			//setLabels(CivilDebateWall.data.stanceTotals.yes, CivilDebateWall.data.stanceTotals.no);
 		}
 		

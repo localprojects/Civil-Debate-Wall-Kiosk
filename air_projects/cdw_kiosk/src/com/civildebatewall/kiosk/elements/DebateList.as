@@ -47,8 +47,8 @@ package com.civildebatewall.kiosk.elements {
 					
 					// pull out the first posts so we're working with posts instead of threads
 					var mostDebatedFirstPosts:Array = [];
-					for (var i:int = 0; i < CivilDebateWall.data.mostDebatedThreads.length; i++) {
-						mostDebatedFirstPosts.push(CivilDebateWall.data.mostDebatedThreads[i].firstPost);
+					for (var i:int = 0; i < CivilDebateWall.data.stats.mostDebatedThreads.length; i++) {
+						mostDebatedFirstPosts.push(CivilDebateWall.data.stats.mostDebatedThreads[i].firstPost);
 					}
 					
 					setItems(mostDebatedFirstPosts);
@@ -57,8 +57,8 @@ package com.civildebatewall.kiosk.elements {
 				case State.VIEW_MOST_LIKED:
 					
 					var mostLikedPosts:Array = [];
-					for (var j:int = 0; j < CivilDebateWall.data.mostLikedPosts.length; j++) {
-						mostLikedPosts.push(CivilDebateWall.data.mostLikedPosts[j]);
+					for (var j:int = 0; j < CivilDebateWall.data.stats.mostLikedPosts.length; j++) {
+						mostLikedPosts.push(CivilDebateWall.data.stats.mostLikedPosts[j]);
 					}
 					
 					setItems(mostLikedPosts);

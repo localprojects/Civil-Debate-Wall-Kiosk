@@ -77,7 +77,7 @@ package com.civildebatewall.kiosk.buttons {
 		
 		private function onDataUpdate(e:Event):void {
 			// why can't tween?
-			percent = CivilDebateWall.data.yesPercent;
+			percent = CivilDebateWall.data.stats.yesPercent;
 		}
 		
 		private function onDown(e:Event):void {

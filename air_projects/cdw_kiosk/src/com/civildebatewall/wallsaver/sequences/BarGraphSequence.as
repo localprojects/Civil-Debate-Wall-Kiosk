@@ -1,6 +1,7 @@
 package com.civildebatewall.wallsaver.sequences {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.data.Data;
 	import com.civildebatewall.wallsaver.elements.ArrowBanner;
 	import com.civildebatewall.wallsaver.elements.GraphCounter;
 	import com.greensock.TimelineMax;
@@ -12,6 +13,7 @@ package com.civildebatewall.wallsaver.sequences {
 	import flash.display.BitmapData;
 	import flash.display.PixelSnapping;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.geom.Point;
 	
 	// Yes / No bar graphs
@@ -19,11 +21,6 @@ package com.civildebatewall.wallsaver.sequences {
 		
 		private const arrowWidth:int = 296;
 		private const arrowHeight:int = 1674;		
-		
-		// TODO get these from back end
-		private var yesResponses:int = 215;
-		private var noResponses:int = 15;
-		// END back end
 		
 		private var scrollVelocity:Number;		
 		private var yesWidth:int;
@@ -50,19 +47,22 @@ package com.civildebatewall.wallsaver.sequences {
 		public function BarGraphSequence() {
 			super();
 			
+			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
+		}
+		
+		private function onDataUpdate(e:Event):void {
+			
 			// Settings
 			scrollVelocity = 30;
 			
 			// Parse stats
-			var totalResponses:int = yesResponses + noResponses;
+			
 			
 			// raw width
-			yesWidth = Math.round((yesResponses / totalResponses) * (CivilDebateWall.flashSpan.settings.totalWidth - CivilDebateWall.flashSpan.settings.physicalScreenWidth)); // less one screen
-			noWidth = Math.round((noResponses / totalResponses) * (CivilDebateWall.flashSpan.settings.totalWidth - CivilDebateWall.flashSpan.settings.physicalScreenWidth)); // less one screen			
+			yesWidth = Math.round((CivilDebateWall.data.stats.postsYes / CivilDebateWall.data.stats.postsTotal) * (CivilDebateWall.flashSpan.settings.totalWidth - CivilDebateWall.flashSpan.settings.physicalScreenWidth)); // less one screen
+			noWidth = Math.round((CivilDebateWall.data.stats.postsNo / CivilDebateWall.data.stats.postsTotal) * (CivilDebateWall.flashSpan.settings.totalWidth - CivilDebateWall.flashSpan.settings.physicalScreenWidth)); // less one screen			
 			
 			// first, find where the division between the graphs falls
-			
-			
 			
 			var borderIndex:int = CivilDebateWall.flashSpan.pointIsNearScreen(new Point(yesWidth + CivilDebateWall.flashSpan.settings.physicalScreenWidth, CivilDebateWall.flashSpan.settings.totalHeight / 2));
 			var labelIndex:int;
@@ -128,7 +128,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// make sure the bars are added
 			// in the correct order
-			if (noResponses <= yesResponses) {
+			if (CivilDebateWall.data.stats.postsNo <= CivilDebateWall.data.stats.postsYes) {
 				// no is first
 				addChild(noBar);
 				addChild(yesBar);
@@ -182,6 +182,9 @@ package com.civildebatewall.wallsaver.sequences {
 		}
 		
 		
+		private const pauseBetweenBars:int = 60;
+		private const pauseBeforeExit:int = 60;
+		
 		public function getTimelineIn():TimelineMax	{
 			var timelineIn:TimelineMax = new TimelineMax({useFrames: true, onUpdate: updateWhiteOverlays}); // keep the white overlays aligned with their color representations
 
@@ -192,7 +195,7 @@ package com.civildebatewall.wallsaver.sequences {
 			var noBarTweenIn:TweenMax = TweenMax.fromTo(noBar, noBarScrollDuration, {x: CivilDebateWall.flashSpan.settings.totalWidth}, {x: CivilDebateWall.flashSpan.settings.totalWidth - noWidth - arrowWidth, ease: Quart.easeOut});			
 
 			// Smaller bar scrolls in first
-			if (noResponses <= yesResponses) {
+			if (CivilDebateWall.data.stats.postsNo <= CivilDebateWall.data.stats.postsYes) {
 				
 				// No bar and label in (Design calls for steps, look sbetter simultaneously.
 				// tween to orange, complicated because of the shader
@@ -219,7 +222,7 @@ package com.civildebatewall.wallsaver.sequences {
 					TweenMax.fromTo(noText, 30, {alpha: 0}, {alpha: 1, ease: Quart.easeOut}),					
 
 					// count up
-					TweenMax.fromTo(counter, noBarScrollDuration, {count: 0}, {count: noResponses, ease: Quart.easeOut}),
+					TweenMax.fromTo(counter, noBarScrollDuration, {count: 0}, {count: CivilDebateWall.data.stats.postsNo, ease: Quart.easeOut}),
 					TweenMax.fromTo(noText, 60, {y: -noText.height}, {y: labelLine.y - 323, ease: Quart.easeOut})
 				], 0, TweenAlign.START);
 				
@@ -237,12 +240,12 @@ package com.civildebatewall.wallsaver.sequences {
 					TweenMax.to(labelLine, 60, {colorTransform: {tint: Assets.COLOR_YES_LIGHT, tintAmount: 1}}),
 					TweenMax.to(counter, 60, {colorTransform: {tint: Assets.COLOR_YES_LIGHT, tintAmount: 1}}),
 					
-					TweenMax.to(counter, yesBarScrollDuration, {count: yesResponses, ease: Quart.easeOut}),
+					TweenMax.to(counter, yesBarScrollDuration, {count: CivilDebateWall.data.stats.postsYes, ease: Quart.easeOut}),
 
 					TweenMax.to(yesBar, 0, {visible: true}),
 					yesBarTweenIn					
 					
-				], 120, TweenAlign.START);				
+				], pauseBetweenBars, TweenAlign.START);				
 			}
 			else {
 				// TODO after above is solid				
@@ -266,7 +269,7 @@ package com.civildebatewall.wallsaver.sequences {
 				TweenMax.to(counter, 1, {visible: false}),	
 				TweenMax.to(noBar, noBarOutDuration, {x: -noBar.width + CivilDebateWall.flashSpan.settings.physicalScreenWidth, ease: Quart.easeIn}),
 				TweenMax.to(yesBar, yesBarOutDuration, {x: CivilDebateWall.flashSpan.settings.totalWidth, ease: Quart.easeIn})
-			], 100, TweenAlign.START);			
+			], 0, TweenAlign.START);			
 
 			timelineOut.appendMultiple([
 				TweenMax.to(noBar, 1, {visible: false}),
@@ -283,7 +286,7 @@ package com.civildebatewall.wallsaver.sequences {
 		public function getTimeline():TimelineMax {
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
 			timeline.append(getTimelineIn());
-			timeline.append(getTimelineOut());
+			timeline.append(getTimelineOut(), pauseBeforeExit);
 			return timeline;
 		}
 		

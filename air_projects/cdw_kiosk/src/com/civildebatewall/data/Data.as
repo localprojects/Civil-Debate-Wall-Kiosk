@@ -35,13 +35,10 @@ package com.civildebatewall.data {
 		public var posts:Array;
 		
 		// stats
-		public var mostDebatedThreads:Array;
-		public var mostLikedPosts:Array;
-		public var frequentWords:Array;
-		public var likeTotals:Object;
-		public var stanceTotals:Object;
-		public var yesPercent:Number; // normalized yes / total
-		public var stats:Object; // container
+		public var stats:Stats; // container		
+		
+
+		
 		
 		
 		// a bunch of boring 3+ letter words (TODO get from server)
@@ -61,12 +58,7 @@ package com.civildebatewall.data {
 			users = [];
 			threads = [];
 			posts = [];
-			stats = {};			
-			mostDebatedThreads = [];
-			mostLikedPosts = [];
-			frequentWords = [];
-			likeTotals = {};
-			stanceTotals = {};			
+			stats = new Stats();		
 		}
 		
 		public function load():void {
@@ -131,17 +123,21 @@ package com.civildebatewall.data {
 			// get stats
 			// Use client side for this stuff for now
 			
+			// TODO move this processing to stats constructor? Pass in data?
+			
 			// most liked debates
+			stats.mostLikedPosts = [];
 			posts.sortOn('likes', Array.DESCENDING | Array.NUMERIC);
 			for (var i:uint = 0; i < Math.min(posts.length, 5); i++) {
-				mostLikedPosts.push(posts[i]);
+				stats.mostLikedPosts.push(posts[i]);
 			}
 			
 			// most debated threads
+			stats.mostDebatedThreads = [];
 			threads.sortOn('postCount', Array.DESCENDING | Array.NUMERIC);
 			threads.sorton
 			for (var j:uint = 0; j < Math.min(threads.length, 5); j++) {
-				mostDebatedThreads.push(threads[j]);
+				stats.mostDebatedThreads.push(threads[j]);
 			}
 			
 			var yesLikes:uint = 0;
@@ -160,8 +156,13 @@ package com.civildebatewall.data {
 				}
 			}
 						
-			likeTotals = {'yes': yesLikes, 'no': noLikes};
-			stanceTotals = {'yes': yesPosts, 'no': noPosts};
+			stats.likesYes = yesLikes;
+			stats.likesNo = noLikes;
+			stats.likesTotal = yesLikes + noLikes;
+			
+			stats.postsYes = yesPosts;
+			stats.postsNo = noPosts;
+			stats.postsTotal = yesPosts + noPosts;
 				
 			// get this from server instead
 			// build the corpus
@@ -172,7 +173,7 @@ package com.civildebatewall.data {
 			}
 			
 			
-			frequentWords = [];
+			stats.frequentWords = [];
 			for each (var corpusWord:String in corpus) {
 				// filter out small words
 				if (corpusWord.length > 2) {
@@ -182,14 +183,14 @@ package com.civildebatewall.data {
 						MonsterDebugger.trace(this, corpusWord + " is boring, skipping it");
 					}
 					else {
-						frequentWords.push(new Word(corpusWord));
+						stats.frequentWords.push(new Word(corpusWord));
 					}
 				}
 			}
 			
 			
 			// find frequency, store in json for easy plug-in to future server side implementation
-			for each (var word:Word in frequentWords) {
+			for each (var word:Word in stats.frequentWords) {
 				// search all posts
 				for each (post in posts) {
 					var regex:RegExp = new RegExp(/\b/.source + word +  /\b/.source, 'g');					
@@ -213,13 +214,10 @@ package com.civildebatewall.data {
 				}
 			}			
 			
-			frequentWords.sortOn('total', Array.DESCENDING, Array.NUMERIC);
+			stats.frequentWords.sortOn('total', Array.DESCENDING, Array.NUMERIC);
 			
 			
-			MonsterDebugger.trace(this, "Stance totals: ");
-			ObjectUtil.traceObject(stanceTotals);
-			
-			yesPercent = stanceTotals.yes / (stanceTotals.yes + stanceTotals.no); 
+			stats.yesPercent = stats.postsYes / stats.postsTotal; 
 			
 			// end stats
 			

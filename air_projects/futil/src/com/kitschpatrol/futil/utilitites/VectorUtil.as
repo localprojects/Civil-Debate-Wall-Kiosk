@@ -1,4 +1,5 @@
 package com.kitschpatrol.futil.utilitites {
+	import com.kitschpatrol.futil.Random;
 	
 	public class VectorUtil {
 
@@ -11,6 +12,10 @@ package com.kitschpatrol.futil.utilitites {
 			return Math2.mapClamp(realIndex - lowIndex, 0, 1, vector[lowIndex], vector[highIndex]);
 		}	
 		*/
-		
+
+//		public static function randomElement(v:Vector):* {
+//			return v[];
+//		}
+//		
 	}
 }
