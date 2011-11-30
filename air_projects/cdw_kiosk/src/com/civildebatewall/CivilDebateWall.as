@@ -182,7 +182,7 @@ package com.civildebatewall {
 			flashSpan.addEventListener(FlashSpanEvent.START, onSyncStart);
 			flashSpan.addEventListener(FlashSpanEvent.STOP, onSyncStop);
 			flashSpan.addEventListener(CustomMessageEvent.MESSAGE_RECEIVED, onCustomMessageReceived);
-			//flashSpan.addEventListener(FrameSyncEvent.SYNC, onFrameSync);
+			flashSpan.addEventListener(FrameSyncEvent.SYNC, onFrameSync);
 			
 			settings.kioskNumber = flashSpan.settings.thisScreen.id;
 			
@@ -246,11 +246,11 @@ package com.civildebatewall {
 		private const CUE_SEQUENCE_B:String = 'b';
 		
 		private function onSyncStart(e:FlashSpanEvent):void {
-			wallSaver.timeline.play();
+			//wallSaver.timeline.play();
 		}
 		
 		private function onSyncStop(e:FlashSpanEvent):void {
-			wallSaver.timeline.stop();			
+			//wallSaver.timeline.stop();			
 		}		
 		
 		public function cueSequenceA():void {
@@ -264,7 +264,6 @@ package com.civildebatewall {
 		public function startWallsaver():void {
 			flashSpan.start();
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			//wallSaver.timeline.play();
 		}
 		
 		public function stopWallsaver():void {
@@ -277,11 +276,13 @@ package com.civildebatewall {
 				MonsterDebugger.trace(this, "Cueing Sequence A");
 				wallSaver.cueSequenceA();
 				flashSpan.frameCount = 0;
+				wallSaver.timeline.stop();
 			}
 			else if (e.header == CUE_SEQUENCE_B) {
 				MonsterDebugger.trace(this, "Cueing Sequence B");
 				wallSaver.cueSequenceB();
 				flashSpan.frameCount = 0;
+				wallSaver.timeline.stop();
 			}
 		}
 	
@@ -290,7 +291,7 @@ package com.civildebatewall {
 		}
 		
 		private function onFrameSync(e:FrameSyncEvent):void {
-			//wallSaver.timeline.gotoAndPlay(e.frameCount);
+			wallSaver.timeline.gotoAndPlay(e.frameCount);
 		}
 		
 		

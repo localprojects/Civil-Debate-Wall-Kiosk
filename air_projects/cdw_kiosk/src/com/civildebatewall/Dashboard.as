@@ -2,6 +2,8 @@ package com.civildebatewall {
 	import com.bit101.components.*;
 	import com.civildebatewall.data.Question;
 	import com.civildebatewall.kiosk.core.Kiosk;
+	import com.kitschpatrol.flashspan.Random;
+	import com.kitschpatrol.futil.utilitites.CoreUtil;
 	
 	import flash.display.*;
 	import flash.events.Event;
@@ -35,8 +37,9 @@ package com.civildebatewall {
 			
 			new PushButton(this, 5, 5, "Cue Sequence A", function():void { CivilDebateWall.self.cueSequenceA(); });
 			new PushButton(this, 110, 5, "Cue Sequence B", function():void { CivilDebateWall.self.cueSequenceB(); });
-			new PushButton(this, 5, 50, "Play", function():void { CivilDebateWall.self.startWallsaver(); });
-			new PushButton(this, 110, 50, "Stop", function():void { CivilDebateWall.self.stopWallsaver(); });
+			new PushButton(this, 5, 30, "Play", function():void { CivilDebateWall.self.startWallsaver(); });
+			new PushButton(this, 110, 30, "Stop", function():void { CivilDebateWall.self.stopWallsaver(); });
+			new PushButton(this, 5, 55, "Slow", function():void { CoreUtil.sleep(1000); });			
 			wallsaverFrameLabel = new Label(this, 5, 100, "Frame Number:");
 			frameRateLabel = new Label(this, 5, 125, "Frame Rate:");
 			framesRenderedLabel = new Label(this, 5, 150, "Frames Rendered:");

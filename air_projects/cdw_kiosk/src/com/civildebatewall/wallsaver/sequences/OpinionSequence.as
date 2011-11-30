@@ -41,6 +41,8 @@ package com.civildebatewall.wallsaver.sequences {
 		
 		private function onDataUpdate(e:Event):void {
 			
+			trace("data update");
+			
 			// clear everything
 			GraphicsUtil.removeChildren(this);
 			quotes = new Vector.<Post>;
@@ -193,7 +195,7 @@ package com.civildebatewall.wallsaver.sequences {
 					{frame: 0}),	
 			], 0, TweenAlign.START, 0);			
 			
-			timeline.stop();
+			
 			
 			return timeline;
 		}
