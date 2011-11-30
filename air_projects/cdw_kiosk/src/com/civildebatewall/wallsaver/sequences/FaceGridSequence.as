@@ -88,10 +88,10 @@ package com.civildebatewall.wallsaver.sequences {
 				
 				for (var row:int = 0; row < gridRows; row++) {
 					// set stance based on border index, create an "arrow" shape
-					var stance:String = Post.STANCE_YES;
+					var stance:String = Post.STANCE_NO;
 					
 					if ((arrowHeight > 0) && (Math.abs(row - middleRowIndex) <= Math.floor(arrowHeight / 2))) {
-						stance = Post.STANCE_NO;
+						stance = Post.STANCE_YES;
 					}
 					
 					
