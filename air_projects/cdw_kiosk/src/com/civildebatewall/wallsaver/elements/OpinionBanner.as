@@ -1,5 +1,6 @@
 package com.civildebatewall.wallsaver.elements {
 	import com.civildebatewall.Assets;
+	import com.civildebatewall.data.Post;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	
@@ -11,26 +12,17 @@ package com.civildebatewall.wallsaver.elements {
 		private var openQuote:Bitmap;
 		private var closeQuote:Bitmap;
 		private var quotation:BlockText;
-		private var backgroundColor:uint;
-		public var stance:String;		
+		private var post:Post;
 		
-		public function OpinionBanner(quote:String, stance:String) {
+		
+		public function OpinionBanner(post:Post) {
 			super();
-			this.stance = stance;
-
+			this.post = post;
 //			this.scaleX = 4;
 //			this.scaleY = 4;
-			
-			if (stance == "yes") {
-				openQuote = Assets.getQuoteYesOpen();
-				closeQuote = Assets.getQuoteYesClose();
-				backgroundColor = Assets.COLOR_YES_LIGHT;
-			}
-			else {
-				openQuote = Assets.getQuoteNoOpen();
-				closeQuote = Assets.getQuoteNoClose();
-				backgroundColor = Assets.COLOR_NO_LIGHT;				
-			}
+				
+			openQuote = (post.stance == Post.STANCE_YES) ? Assets.getQuoteYesOpen() : Assets.getQuoteNoOpen();
+			closeQuote = (post.stance == Post.STANCE_YES) ? Assets.getQuoteYesClose() : Assets.getQuoteNoClose();
 
 			openQuote.x = 0;
 			openQuote.y = 0;
@@ -38,13 +30,13 @@ package com.civildebatewall.wallsaver.elements {
 			
 			quotation = new BlockText({
 				height: 247,
-				backgroundColor: backgroundColor,
+				backgroundColor: post.stanceColorLight,
 				paddingLeft: 110,
 				paddingRight: 110,
 				alignmentPoint: Alignment.LEFT,
 				textSize: 142,				
 				textColor: 0xffffff,
-				text: quote,
+				text: post.text,
 				visible: true
 			});
 			

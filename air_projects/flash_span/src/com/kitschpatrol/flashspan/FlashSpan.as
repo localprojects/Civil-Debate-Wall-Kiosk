@@ -176,7 +176,7 @@ package com.kitschpatrol.flashspan
 
 		
 		private function startFrameSync():void {
-			syncTimer = new Timer(1000 / 50); // TODO best approach to this?
+			syncTimer = new Timer((1000 / settings.frameRate) * settings.frameSyncInterval); // TODO best approach to this?
 			syncTimer.addEventListener(TimerEvent.TIMER, onFrameSyncTimer);				
 			syncTimer.start();
 		}
@@ -242,7 +242,7 @@ package com.kitschpatrol.flashspan
 			}
 
 			this.dispatchEvent(new FrameSyncEvent(FrameSyncEvent.SYNC, frameCount));
-			frameCount++;			
+			frameCount += settings.frameSyncInterval;			
 		}
 		
 		private function dispatchTimeSyncEvent(time:int):void {
@@ -271,9 +271,11 @@ package com.kitschpatrol.flashspan
 			this.dispatchEvent(new FlashSpanEvent(FlashSpanEvent.START));			
 		}		
 		
-		public function random():Number {
+		
+		
+		public function get random():Random {
 			// nicely seeded random
-			return seededRandom.random();
+			return seededRandom;
 		}
 		
 

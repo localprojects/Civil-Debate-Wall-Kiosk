@@ -87,6 +87,8 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// join banners in
 			timeline.appendMultiple([
+				
+				
 				TweenMax.fromTo(joinBanner1, 100, {x: CivilDebateWall.flashSpan.settings.screens[1].x - joinBanner1.width}, {x: CivilDebateWall.flashSpan.settings.screens[1].x - arrowWidth, ease: Quart.easeOut, roundProps: ["x"]}),
 				TweenMax.fromTo(joinBanner2, 100, {x: CivilDebateWall.flashSpan.settings.screens[3].x - joinBanner2.width}, {x: CivilDebateWall.flashSpan.settings.screens[3].x - arrowWidth, ease: Quart.easeOut, roundProps: ["x"]})
 			], 50, TweenAlign.START, 0);

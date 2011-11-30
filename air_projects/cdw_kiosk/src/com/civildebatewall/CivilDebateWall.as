@@ -270,7 +270,7 @@ package com.civildebatewall {
 		
 		private function onCustomMessageReceived(e:CustomMessageEvent):void {
 			if (e.header == CUE_SEQUENCE_A) {
-				MonsterDebugger.trace(this, "Cueing Sequence A");				
+				MonsterDebugger.trace(this, "Cueing Sequence A");
 				wallSaver.cueSequenceA();
 				flashSpan.frameCount = 0;
 			}

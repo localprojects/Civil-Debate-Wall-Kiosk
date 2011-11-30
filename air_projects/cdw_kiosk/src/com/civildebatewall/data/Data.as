@@ -26,7 +26,10 @@ package com.civildebatewall.data {
 		public static const FLAG_UPDATE_LOCAL:String = "flagUpdateLocal";
 		public static const FLAG_UPDATE_SERVER:String = "flagUpdateServer";		
 		
+		
 		public var question:Question;
+		
+		// TODo switch to typed vectors!
 		public var users:Array;
 		public var threads:Array;
 		public var posts:Array;

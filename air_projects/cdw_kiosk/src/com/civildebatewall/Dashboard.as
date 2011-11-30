@@ -18,9 +18,10 @@ package com.civildebatewall {
 		
 		
 		private var framesRendered:uint;
-		public var wallsaverFrameLabel:Label;
-		public var frameRateLabel:Label;
-		public var framesRenderedLabel:Label;
+		private var wallsaverFrameLabel:Label;
+		private var frameRateLabel:Label;
+		private var framesRenderedLabel:Label;
+		private var latencyLabel:Label; 
 		
 		public function Dashboard(parent:DisplayObjectContainer=null, xpos:Number=0, ypos:Number=0, title:String="Dashboard")	{
 			super(parent, xpos, ypos, title);
@@ -38,7 +39,8 @@ package com.civildebatewall {
 			new PushButton(this, 110, 50, "Stop", function():void { CivilDebateWall.self.stopWallsaver(); });
 			wallsaverFrameLabel = new Label(this, 5, 100, "Frame Number:");
 			frameRateLabel = new Label(this, 5, 125, "Frame Rate:");
-			framesRenderedLabel = new Label(this, 5, 150, "Frames Rendered:");			
+			framesRenderedLabel = new Label(this, 5, 150, "Frames Rendered:");
+			latencyLabel = new Label(this, 5, 175, "Latency: ");
 			
 			CivilDebateWall.self.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
@@ -87,7 +89,7 @@ package com.civildebatewall {
 			wallsaverFrameLabel.text = "Frame Number: " + CivilDebateWall.flashSpan.frameCount;
 			frameRateLabel.text = "Frame Rate: " + CivilDebateWall.self.fpsMeter.fps;
 			framesRenderedLabel.text = "Frames Rendered: " + framesRendered++;
-			
+			latencyLabel.text = "Latency: " + CivilDebateWall.flashSpan.settings.thisScreen.latency;
 		}
 		
 		// logs a single line of text to the window
