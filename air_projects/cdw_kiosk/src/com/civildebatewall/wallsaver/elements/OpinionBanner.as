@@ -34,6 +34,8 @@ package com.civildebatewall.wallsaver.elements {
 				paddingLeft: 110,
 				paddingRight: 110,
 				alignmentPoint: Alignment.LEFT,
+				textFont: Assets.FONT_BOLD,
+				textBold: true,
 				textSize: 142,				
 				textColor: 0xffffff,
 				text: post.text,
