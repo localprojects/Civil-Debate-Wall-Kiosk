@@ -182,7 +182,7 @@ package com.civildebatewall {
 			flashSpan.addEventListener(FlashSpanEvent.START, onSyncStart);
 			flashSpan.addEventListener(FlashSpanEvent.STOP, onSyncStop);
 			flashSpan.addEventListener(CustomMessageEvent.MESSAGE_RECEIVED, onCustomMessageReceived);
-			flashSpan.addEventListener(FrameSyncEvent.SYNC, onFrameSync);
+			//flashSpan.addEventListener(FrameSyncEvent.SYNC, onFrameSync);
 			
 			settings.kioskNumber = flashSpan.settings.thisScreen.id;
 			
@@ -190,6 +190,8 @@ package com.civildebatewall {
 			wallSaver = new WallSaver();
 			wallSaver.x = -flashSpan.settings.thisScreen.x; // shift content left
 			addChild(wallSaver);
+			
+			
 			
 			
 			
@@ -261,11 +263,13 @@ package com.civildebatewall {
 		
 		public function startWallsaver():void {
 			flashSpan.start();
+			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			//wallSaver.timeline.play();
 		}
 		
 		public function stopWallsaver():void {
 			flashSpan.stop();
+			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);			
 		}		
 		
 		private function onCustomMessageReceived(e:CustomMessageEvent):void {
@@ -280,9 +284,13 @@ package com.civildebatewall {
 				flashSpan.frameCount = 0;
 			}
 		}
+	
+		private function onEnterFrame(e:Event):void {
+			wallSaver.timeline.goto(flashSpan.frameCount);			
+		}
 		
 		private function onFrameSync(e:FrameSyncEvent):void {
-			wallSaver.timeline.gotoAndPlay(e.frameCount);
+			//wallSaver.timeline.gotoAndPlay(e.frameCount);
 		}
 		
 		
