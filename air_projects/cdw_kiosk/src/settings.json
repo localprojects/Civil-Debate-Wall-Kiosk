@@ -8,7 +8,7 @@
 		"slrTimeout": 5,
 		"secretKey": "something_secret",
 		"localMultiScreenTest": false,
-		"webCamFocalLength": 1,
+		"webCamFocalLength": 1.2,
 		"webCamUndersampleFactor": 2
 	},
 	
