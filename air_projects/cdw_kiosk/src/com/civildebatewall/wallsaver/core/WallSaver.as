@@ -24,10 +24,17 @@ package com.civildebatewall.wallsaver.core {
 		private var topBar:Shape;
 		private var bottomBar:Shape;
 		
+		// static
+		private var overlaySequence:OverlaySequence;		
+		private var calltoActionSequence:CallToActionSequence;		
+		private var buttonSequence:ButtonSequence;
 		
-		// new approach, keep library of sequences. they get updated as needed before they're composited into timelines
+		// bound to data
 		private var opinionSequence:OpinionSequence;
 		private var titleSequence:TitleSequence;
+		private var barGraphSequence:BarGraphSequence;
+		private var faceGridSequence:FaceGridSequence;
+		
 		
 		public function WallSaver()	{
 			super();
@@ -41,8 +48,13 @@ package com.civildebatewall.wallsaver.core {
 			timeline = new TimelineMax({useFrames: true});
 			
 			// TODO more singleton sequences, ready for updates (or just update before animation?)
+			overlaySequence = new OverlaySequence();
+			calltoActionSequence = new CallToActionSequence();
+			buttonSequence = new ButtonSequence();
+			faceGridSequence = new FaceGridSequence();
 			opinionSequence = new OpinionSequence();
 			titleSequence = new TitleSequence();
+			barGraphSequence = new BarGraphSequence();
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -54,12 +66,8 @@ package com.civildebatewall.wallsaver.core {
 			//playSequenceA();
 			//Main.controls.updateTimeSlider();			
 		}
-		
 
 		
-		
-		
-		// TODO put this into a big conditional?
 		private function preSequenceBuildTasks():void {
 			if (timeline.active) timeline.stop();
 			
@@ -84,23 +92,13 @@ package com.civildebatewall.wallsaver.core {
 		
 		
 		public function cueSequenceA():void {
-			MonsterDebugger.trace(this, "Playing Wallsaver Sequence A.");
 			preSequenceBuildTasks();
 			
-			var overlaySequence:OverlaySequence = new OverlaySequence();
+			// add sequences to stage
 			canvas.addChild(overlaySequence);
-
-			//var opinionSequence:OpinionSequence = new OpinionSequence();
 			canvas.addChild(opinionSequence);
-			
-			var calltoActionSequence:CallToActionSequence = new CallToActionSequence();
 			canvas.addChild(calltoActionSequence);
-			
-			// title goes over 4 screen animations
 			canvas.addChild(titleSequence);
-			
-			// buttons go over everything
-			var buttonSequence:ButtonSequence = new ButtonSequence();
 			canvas.addChild(buttonSequence);			
 
 			// build the timeline
@@ -119,30 +117,21 @@ package com.civildebatewall.wallsaver.core {
 		public function cueSequenceB():void {		
 			preSequenceBuildTasks();
 			
-			// B: Title, Graph, Face Grid			
-			var overlaySequence:OverlaySequence = new OverlaySequence();
-			canvas.addChild(overlaySequence);			
-			
-			var barGraphSequence:BarGraphSequence = new BarGraphSequence();
+			// add sequences to stage
+			canvas.addChild(overlaySequence);
 			canvas.addChild(barGraphSequence);
-			
-			var faceGridSequence:FaceGridSequence = new FaceGridSequence();
 			canvas.addChild(faceGridSequence);
-			
-			// title goes over 4 screen animations
 			canvas.addChild(titleSequence);			
-			
-			// buttons go over everything
-			var buttonSequence:ButtonSequence = new ButtonSequence();
-			canvas.addChild(buttonSequence);
+			canvas.addChild(buttonSequence);			
 
-			timeline.append(overlaySequence.getTimelineIn());			
-			timeline.append(buttonSequence.getTimelineIn());			
+			// build the timeline			
+			timeline.append(overlaySequence.getTimelineIn());
+			timeline.append(buttonSequence.getTimelineIn());
 			timeline.append(titleSequence.getTimelineIn(), -100);
 			timeline.append(barGraphSequence.getTimeline(), -60);
 			timeline.append(faceGridSequence.getTimeline());
-			timeline.append(titleSequence.getTimelineOut());
-			timeline.append(buttonSequence.getTimelineOut());						
+			timeline.append(titleSequence.getTimelineOut(), -270);
+			timeline.append(buttonSequence.getTimelineOut(), -100);						
 			timeline.append(overlaySequence.getTimelineOut());
 			
 			postSequenceBuildTasks();

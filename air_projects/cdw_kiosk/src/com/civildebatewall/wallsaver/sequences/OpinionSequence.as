@@ -117,7 +117,6 @@ package com.civildebatewall.wallsaver.sequences {
 				// find the shortest row
 				var shortestRow:OpinionRow = opinionRows.sort(compareRowLength)[0];
 
-				
 				// alternate stances
 				var opinionBanner:OpinionBanner;
 				if (shortestRow.lastStance == Post.STANCE_YES) {

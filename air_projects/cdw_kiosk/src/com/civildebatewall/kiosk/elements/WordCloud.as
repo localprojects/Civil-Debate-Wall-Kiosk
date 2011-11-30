@@ -37,7 +37,7 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		private function onDataChange(e:Event):void {
-			setWords(CivilDebateWall.data.frequentWords);			
+			setWords(CivilDebateWall.data.stats.frequentWords);			
 		}
 		
 		public function setWords(source:Array):void {
