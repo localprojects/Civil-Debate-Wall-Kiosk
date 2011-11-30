@@ -22,9 +22,6 @@ package com.civildebatewall.wallsaver.core {
 		public var timeline:TimelineMax;		
 		private var canvas:Sprite;
 		
-		private var topBar:Shape;
-		private var bottomBar:Shape;
-		
 		// static
 		private var overlaySequence:OverlaySequence;		
 		private var calltoActionSequence:CallToActionSequence;		
@@ -36,9 +33,13 @@ package com.civildebatewall.wallsaver.core {
 		private var barGraphSequence:BarGraphSequence;
 		private var faceGridSequence:FaceGridSequence;
 		
+		public var orderedOpinionRows:Boolean;
+		
 		
 		public function WallSaver()	{
 			super();
+			
+			orderedOpinionRows = false;
 			
 			// The wallsaver canvas
 			canvas = new Sprite();
