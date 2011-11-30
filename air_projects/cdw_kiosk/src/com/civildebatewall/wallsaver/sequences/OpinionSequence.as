@@ -48,10 +48,14 @@ package com.civildebatewall.wallsaver.sequences {
 			return a.width - b.width;			
 		}
 		
+		
+		private function compareBannerDate(a:OpinionBanner, b:OpinionBanner):Number {
+			// sorts by date, newest first	
+			return b.post.created.time - a.post.created.time;
+		}
+		
 		private function onDataUpdate(e:Event):void {
-			
-			trace("data update");
-			
+
 			// clear everything
 			GraphicsUtil.removeChildren(this);
 			quotes = new Vector.<Post>;
@@ -85,6 +89,11 @@ package com.civildebatewall.wallsaver.sequences {
 				}
 			}
 			
+			// sort the quotes by date
+			yesQuotes = yesQuotes.sort(compareBannerDate);
+			noQuotes = noQuotes.sort(compareBannerDate);
+			
+			
 			// Generate the quote rows
 			opinionRows = new Vector.<OpinionRow>(5);
 			
@@ -108,39 +117,33 @@ package com.civildebatewall.wallsaver.sequences {
 			// add opinions to rows
 			while ((yesQuotes.length > 0) && (noQuotes.length > 0)) {
 				// find the shortest row
-				var shortestRowIndex:int = 0;
-				var minWidth:Number = Number.MAX_VALUE;
-				for (var m:int = 0; m < opinionRows.length; m++) {
-					if (opinionRows[m].width < minWidth) {
-						minWidth = opinionRows[m].width;
-						shortestRowIndex = m;
-					}
-				}
+				var shortestRow:OpinionRow = opinionRows.sort(compareRowLength)[0];
 
 				
 				// alternate stances
-				var tempQuotationBanner:OpinionBanner;
-				if (opinionRows[shortestRowIndex].lastStance == Post.STANCE_YES) {
-					tempQuotationBanner = noQuotes.pop();
-					opinionRows[shortestRowIndex].lastStance = Post.STANCE_NO;
+				var opinionBanner:OpinionBanner;
+				if (shortestRow.lastStance == Post.STANCE_YES) {
+					opinionBanner = noQuotes.pop();
+					shortestRow.lastStance = Post.STANCE_NO;
 				}
 				else {
-					tempQuotationBanner = yesQuotes.pop();
-					opinionRows[shortestRowIndex].lastStance = Post.STANCE_YES;					
+					opinionBanner = yesQuotes.pop();
+					shortestRow.lastStance = Post.STANCE_YES;					
 				}
 				
-				if (minWidth > 0) {
-					tempQuotationBanner.x = minWidth + 130;
-					tempQuotationBanner.y = 0;
+				// not the first, move it to the right
+				if (shortestRow.width > 0) {
+					opinionBanner.x = shortestRow.width + 130;
+					opinionBanner.y = 0;
 				}
 				
-				opinionRows[shortestRowIndex].addChild(tempQuotationBanner);
+				shortestRow.addChild(opinionBanner);
 			}
 			
 			// flip first, third, and fourth so they start as yes? Can't guarantee that a row will end on a "yes" or "no"
 			// just keep them random for now,
 
-			// sort the rows
+			// sort the rows, shortest first
 			opinionRows = opinionRows.sort(compareRowLength);
 			
 			
