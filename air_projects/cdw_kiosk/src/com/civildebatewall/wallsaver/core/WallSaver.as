@@ -2,18 +2,12 @@ package com.civildebatewall.wallsaver.core {
 	
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.wallsaver.sequences.*;
-	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TimelineMax;
-	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
-	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
-	import flash.display.Shape;
 	import flash.display.Sprite;
-	import flash.display.StageDisplayState;
-	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
