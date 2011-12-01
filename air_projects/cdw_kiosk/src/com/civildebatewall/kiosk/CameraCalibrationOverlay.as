@@ -111,8 +111,10 @@ package com.civildebatewall.kiosk {
 		
 		public function close():void {
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			slrIntervalometer.stop();
+			slrIntervalometer.removeEventListener(TimerEvent.TIMER, onSlrInterval);
 			CivilDebateWall.kiosk.view.portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onSlrCapture);
-			this.parent.removeChild(this);
+			CivilDebateWall.kiosk.view.removeCameraCalibrationOverlayView();
 		}
 	}
 }

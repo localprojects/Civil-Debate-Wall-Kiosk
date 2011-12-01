@@ -16,6 +16,7 @@ package com.civildebatewall.kiosk.buttons {
 	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
@@ -24,7 +25,7 @@ package com.civildebatewall.kiosk.buttons {
 		private var _targetPost:Post;		
 		
 		private var counter:BlockText;
-		private var icon:Bitmap;		
+		private var icon:Sprite;		
 		private var pipe:Shape;
 		private var label:BlockText;
 		
@@ -58,7 +59,7 @@ package com.civildebatewall.kiosk.buttons {
 			addChild(counter);
 			
 			// E> Icon
-			icon = Assets.getLikeIcon();
+			icon = Assets.getHeart();
 			icon.x = 54;
 			icon.y = 24;
 			addChild(icon);			

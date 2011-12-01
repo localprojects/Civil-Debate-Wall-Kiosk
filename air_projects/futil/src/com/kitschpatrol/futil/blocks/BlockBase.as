@@ -790,7 +790,7 @@ package com.kitschpatrol.futil.blocks {
 		// Animation stuff for CDW... this breaks Futil's the tween engine agnostic approach  
 		// Multiple inheritance sure would be nice...
 		// Defining stuff here is ugly, but keeps it out of the constructors
-		private var defaultTweenVars:Object = {cacheAsBitmap: true};
+		private var defaultTweenVars:Object = {}; // temp turn off cache as bitmap...might fix twitching
 		private var defaultTweenInVars:Object = ObjectUtil.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenIn, onComplete: afterTweenIn});
 		private var defaultTweenOutVars:Object = ObjectUtil.mergeObjects(defaultTweenVars, {ease: Quart.easeOut, onInit: beforeTweenOut, onComplete: afterTweenOut});
 		private var defaultDuration:Number = 1;

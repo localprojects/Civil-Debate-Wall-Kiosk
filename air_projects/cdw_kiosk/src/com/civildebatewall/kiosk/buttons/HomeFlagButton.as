@@ -15,11 +15,13 @@ package com.civildebatewall.kiosk.buttons {
 				backgroundRadius: 8
 			});
 			
-			// replace smaller one
+			// resize flag icon
 			removeChild(icon);
-			icon = Assets.getFlagIcon();
+			icon = Assets.getFlag();
+			icon.width = 20;
+			icon.height = 20;
 			addChild(icon);
-			
+
 			// listens for updates to the active thread
 			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);			
 		}
