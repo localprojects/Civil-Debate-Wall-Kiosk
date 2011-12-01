@@ -2,6 +2,7 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.wallsaver.elements.ArrowBanner;
+	import com.civildebatewall.wallsaver.sequences.ISequence;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;

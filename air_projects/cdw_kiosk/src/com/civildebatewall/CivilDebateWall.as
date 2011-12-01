@@ -113,7 +113,7 @@ package com.civildebatewall {
 			else {
 				// window dimensions are defined in app.xml,
 				// but don't bother scaling
-				stage.scaleMode = StageScaleMode.NO_SCALE;					
+				stage.scaleMode = StageScaleMode.NO_SCALE;
 			}
 			
 			// make sure image folders exist

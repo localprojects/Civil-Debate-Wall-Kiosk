@@ -118,6 +118,8 @@ package com.civildebatewall.kiosk.core {
 		// inactivity overlay
 		private var inactivityOverlay:InactivityOverlay;		
 		
+		// camera calibration
+		private var cameraCalibrationOverlay:CameraCalibrationOverlay; 
 		
 
 		// ================================================================================================================================================
@@ -819,10 +821,17 @@ package com.civildebatewall.kiosk.core {
 		
 		
 		public function cameraCalibrationOverlayView(...args):void {
-			var cameraCalibrationOverlay:CameraCalibrationOverlay = new CameraCalibrationOverlay();
+			cameraCalibrationOverlay= new CameraCalibrationOverlay();
 			addChild(cameraCalibrationOverlay);
 		}
-
+		
+		public function removeCameraCalibrationOverlayView(...args):void {
+			if (contains(cameraCalibrationOverlay)) {
+				cameraCalibrationOverlay.close();
+				removeChild(cameraCalibrationOverlay);
+				cameraCalibrationOverlay = null;
+			}
+		}
 		
 		
 		// ==============================================================================================================
@@ -834,6 +843,7 @@ package com.civildebatewall.kiosk.core {
 		
 		// =========================================================================
 		
+		// TODO no more!
 
 		
 		private function submitDebate():void {

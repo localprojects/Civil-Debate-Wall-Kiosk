@@ -46,7 +46,9 @@ The Windows 7 machines that run the kiosk should be set up as follows:
 - Install LogMeIn
 - TODO a few more steps...
 
-Note, you must use a Vista Aero theme to ensure that vertical sync is enabled. Otherwise animations will tear rather badly.
+- Disable the "auto right click" option in the eGalaxTouch configuration utility. (Right clicking is for administrators only!)
+
+- you must use a Vista Aero theme to ensure that vertical sync is enabled. Otherwise animations will tear rather badly.
 
 - - - - - - - - - - - - - - - -
 

@@ -55,6 +55,14 @@ package com.civildebatewall {
 		public static function getNoFollowingBubble():Sprite { return new noFollowingBubbleClass() as Sprite; };
 		public static const noFollowingBubble:Sprite = getNoFollowingBubble();
 		
+		[Embed(source = '/assets/graphics/heart.swf')] private static const heartClass:Class;
+		public static function getHeart():Sprite { return new heartClass() as Sprite; };
+		public static const heart:Sprite = getHeart();
+		
+		[Embed(source = '/assets/graphics/flag.swf')] private static const flagClass:Class;
+		public static function getFlag():Sprite { return new flagClass() as Sprite; };
+		public static const flag:Sprite = getFlag();
+		
 
 		
 		
@@ -142,9 +150,7 @@ package com.civildebatewall {
 		public static function getPortraitBannerNo():Bitmap { return new portraitBannerNoClass() as Bitmap; };
 		public static const portraitBannerNo:Bitmap = getPortraitBannerNo();
 		
-		[Embed(source = '/assets/graphics/flagIconSmall.png')] private static const flagIconSmallClass:Class;
-		public static function getFlagIconSmall():Bitmap { return new flagIconSmallClass() as Bitmap; };
-		public static const flagIconSmall:Bitmap = getFlagIconSmall();
+
 		
 		[Embed(source = '/assets/graphics/saysText.png')] private static const saysTextClass:Class;
 		public static function getSaysText():Bitmap { return new saysTextClass() as Bitmap; };
@@ -210,9 +216,7 @@ package com.civildebatewall {
 		public static function getButtonBackground():Bitmap { return new buttonBackgroundClass() as Bitmap; };
 		public static const buttonBackground:Bitmap = getButtonBackground();
 		
-		[Embed(source = '/assets/graphics/flagIcon.png')] private static const flagIconClass:Class;
-		public static function getFlagIcon():Bitmap { return new flagIconClass() as Bitmap; };
-		public static const flagIcon:Bitmap = getFlagIcon();
+
 
 		[Embed(source = '/assets/graphics/leftButtonTile.png')] private static const leftButtonTileClass:Class;
 		public static function getLeftButtonTile():Bitmap { return new leftButtonTileClass() as Bitmap; };
@@ -220,11 +224,7 @@ package com.civildebatewall {
 		
 		[Embed(source = '/assets/graphics/leftEdgeMask.png')] private static const leftEdgeMaskClass:Class;
 		public static function getLeftEdgeMask():Bitmap { return new leftEdgeMaskClass() as Bitmap; };
-		public static const leftEdgeMask:Bitmap = getLeftEdgeMask();
-		
-		[Embed(source = '/assets/graphics/likeIcon.png')] private static const likeIconClass:Class;
-		public static function getLikeIcon():Bitmap { return new likeIconClass() as Bitmap; };
-		public static const likeIcon:Bitmap = getLikeIcon();		
+		public static const leftEdgeMask:Bitmap = getLeftEdgeMask();		
 		
 		[Embed(source = '/assets/graphics/portraitPlaceholder.png')] private static const portraitPlaceholderClass:Class;
 		public static function getPortraitPlaceholder():Bitmap { return new portraitPlaceholderClass() as Bitmap; };

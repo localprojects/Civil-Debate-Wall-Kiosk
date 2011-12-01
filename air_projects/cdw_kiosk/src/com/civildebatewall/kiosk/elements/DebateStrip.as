@@ -8,6 +8,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.utilitites.DepthUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.events.Event;
@@ -87,6 +88,7 @@ package com.civildebatewall.kiosk.elements {
 			var timeline:TimelineMax = new TimelineMax();
 			var i:int;
 			var tempThumb:ThumbnailButton;
+			var scrollToX:Number = 0;
 			
 			// fade out all dots
 			for (i = 0; i < content.numChildren; i++) {
@@ -96,6 +98,10 @@ package com.civildebatewall.kiosk.elements {
 					timeline.insert(TweenMax.to(tempThumb.rightDot, 0.25, {alpha: 0}));
 				}
 			}
+			
+
+			
+			
 			
 			// animate the thumbnails into their new position
 			for (i = 0; i < content.numChildren; i++) {
@@ -107,14 +113,32 @@ package com.civildebatewall.kiosk.elements {
 					for (var j:int = 0; j < CivilDebateWall.data.threads.length; j++) {
 						if (tempThumb.thread.id == CivilDebateWall.data.threads[j].id) {
 							newX = (tempThumb.width - 6) * j;
+							
+							// scroll to the first one if nothing is active (only at startup)
+							if (j == 0)	scrollToX = newX;
+							
 							break;
 						}
 					}
 					
 					// tween it over
 					timeline.insert(TweenMax.to(tempThumb, 1, {x: newX, ease: Quart.easeInOut}), .25);
+					
+					// if we have an active thumb, scroll to that instead of the first
+					if ((activeThumbnail != null) && (tempThumb == activeThumbnail)) {
+						DepthUtil.bringToFront(activeThumbnail);
+						scrollToX = newX;
+					}
 				}
 			}
+			
+			
+			// tween the scroll view to the active item
+			
+			scrollToX = (tempThumb == null) ? 0 : Math2.clamp(scrollToX - (width / 2) + (tempThumb.width / 2), minScrollX, maxScrollX);
+			timeline.insert(TweenMax.to(this, 1, {scrollX: scrollToX, ease: Quart.easeInOut}), .25);
+			trace(scrollToX);
+			
 			
 			// fade the (Correct) dots back in
 			for (i = 0; i < content.numChildren; i++) {
@@ -149,11 +173,18 @@ package com.civildebatewall.kiosk.elements {
 		
 		public function scrollToActive():void {
 			if (activeThumbnail != null) {
+				TweenMax.to(this, 1, {scrollX: getActiveThumbnailX(), ease: Quart.easeInOut});
+			}
+		}
+		
+		private function getActiveThumbnailX():Number {
+			if (activeThumbnail != null) {
 				var activeThumbnailX:Number = activeThumbnail.x - (width / 2) + (activeThumbnail.width / 2);
-			
 				// handle literal edge cases (don't scroll past bounds)
-				activeThumbnailX = Math2.clamp(activeThumbnailX, minScrollX, maxScrollX); 
-				TweenMax.to(this, 1, {scrollX: activeThumbnailX, ease: Quart.easeInOut});
+				return Math2.clamp(activeThumbnailX, minScrollX, maxScrollX);
+			}
+			else {
+				return 0;
 			}
 		}
 

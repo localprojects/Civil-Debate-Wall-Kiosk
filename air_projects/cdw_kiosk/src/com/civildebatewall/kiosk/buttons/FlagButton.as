@@ -7,14 +7,14 @@ package com.civildebatewall.kiosk.buttons {
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.constants.Alignment;
 	
-	import flash.display.Bitmap;
+	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
 	public class FlagButton extends BlockBase {
 		
 		private var _targetPost:Post;		
 		
-		public var icon:Bitmap;
+		public var icon:Sprite;
 		
 		public function FlagButton() {
 			super({
@@ -23,10 +23,14 @@ package com.civildebatewall.kiosk.buttons {
 				height: 30,
 				backgroundRadius: 4,
 				alignmentPoint: Alignment.CENTER,
-				icon: Assets.getFlagIconSmall()
+				icon: Assets.getFlag()
 			});
 			
 			addChild(icon);
+			
+			icon.width = 10;
+			icon.height = 10;
+			
 			
 			buttonTimeout = 5000;
 			onButtonDown.push(onDown);
