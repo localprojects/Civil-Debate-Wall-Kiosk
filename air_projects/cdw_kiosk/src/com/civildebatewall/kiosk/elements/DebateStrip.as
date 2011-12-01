@@ -24,7 +24,8 @@ package com.civildebatewall.kiosk.elements {
 				width: 980,
 				height: 141,
 				maxSizeBehavior: MAX_SIZE_CLIPS,
-				scrollAxis: SCROLL_X
+				scrollAxis: SCROLL_X,
+				assumeButtons: true // always check for click vs. scroll, never assume scroll
 			});
 			
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);

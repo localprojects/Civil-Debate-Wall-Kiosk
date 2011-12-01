@@ -29,6 +29,7 @@ package com.kitschpatrol.futil.blocks {
 
 		private var _text:String;
 		private var _textBold:Boolean;
+		private var _textItalic:Boolean;
 		private var _textColor:uint;
 		private var _textSizePixels:Number;
 		private var _textFont:String;
@@ -109,6 +110,7 @@ package com.kitschpatrol.futil.blocks {
 			_textAlpha = 1.0;
 			_text = "AA";
 			_textBold = false;
+			_textItalic = false;
 			_textFont = DefaultAssets.DEFAULT_FONT
 			_sizeFactorGlyphs = Char.SET_OF_ASCENT_LETTERS;
 			_boundingMode = OPTICAL_BOUNDING;
@@ -148,8 +150,8 @@ package com.kitschpatrol.futil.blocks {
 			textFormat.font =  _textFont;
 			textFormat.align = _textAlignmentMode;
 			textFormat.size = s;
+			textFormat.italic = _textItalic;
 			textFormat.bold = _textBold;
-			
 			
 			if (forMeasurement) {
 				textFormat.leading = 0;
@@ -163,8 +165,8 @@ package com.kitschpatrol.futil.blocks {
 			// field is overwritte
 			var tempTextField:TextField = new TextField();
 			
+			tempTextField.embedFonts = true;
 			tempTextField.defaultTextFormat = textFormat;
-			tempTextField.embedFonts = true;			
 			tempTextField.multiline = true;
 			tempTextField.antiAliasType = AntiAliasType.ADVANCED;
 
@@ -815,6 +817,17 @@ package com.kitschpatrol.futil.blocks {
 			textFormat.bold = _textBold;
 			update();
 		}
+		
+		public function get textItalic():Boolean {
+			return _textItalic;
+		}
+		
+		public function set textItalic(value:Boolean):void {
+			changedFormat = true;
+			_textItalic = value;
+			textFormat.italic = _textItalic;
+			update();
+		}		
 		
 	}
 }
