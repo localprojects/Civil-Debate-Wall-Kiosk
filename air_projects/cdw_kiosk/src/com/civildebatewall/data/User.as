@@ -19,34 +19,33 @@ package com.civildebatewall.data {
 		private var _phoneNumber:String;
 		private var _id:String;
 		private var _photo:Bitmap;
+		// TODO more photo sizes
 		
 		public function User(jsonObject:Object) 	{
 			_username = jsonObject['username'];
 			_phoneNumber = jsonObject['phoneNumber']
 			_id = jsonObject['id'];
-			trace (_id);
-				
-			// load portrait image, first see if it exists
+			_photo = Assets.portraitPlaceholder;
+			
+			// try to load portrait 
+			// then load at leisure, "data" is all here
 			var imageFile:File = new File(CivilDebateWall.settings.imagePath + _id + '.jpg');
 			
 			if (imageFile.exists) {
 				// load the portrait, estimate it at 150k
-				MonsterDebugger.trace(this, 'Loading image from file for ' + _username);
+				trace('Loading image from file for ' + _username);
 				CivilDebateWall.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes: 150000, onComplete: onImageLoaded}) );
 			}
 			else {
-				// use placeholder
-				MonsterDebugger.trace(this, 'Using placeholder for ' + _username);
-				_photo = new Bitmap(Assets.portraitPlaceholder.bitmapData, PixelSnapping.AUTO, true);
-			}			
-			
-			MonsterDebugger.trace(this, "Loaded user " + _username);
+				trace('Using placeholder for ' + _username);
+			}
 		}
 		
 		private function onImageLoaded(e:LoaderEvent):void {
 			MonsterDebugger.trace(this, "Loaded image for " + _username);
 			_photo = new Bitmap(((LoaderMax.getContent(_id) as ContentDisplay).rawContent as Bitmap).bitmapData, PixelSnapping.AUTO, true);			
 		}
+		
 		
 		// TODO set photo...
 		// TODo save photo...
@@ -55,5 +54,7 @@ package com.civildebatewall.data {
 		public function get id():String { return _id; }				
 		public function get photo():Bitmap { return _photo;	}
 		public function get usernameFormatted():String { return StringUtil.capitalize(_username); }		
+		
+		
 	}
 }

@@ -6,7 +6,7 @@
 		"flipWebcamVertical": true,	
 		"inactivityTimeout": 60,
 		"slrTimeout": 5,
-		"secretKey": "something_secret",
+		"secretKey": "secretkey",
 		"localMultiScreenTest": false,
 		"webCamFocalLength": 1.2,
 		"webCamUndersampleFactor": 2
@@ -29,7 +29,7 @@
 		"useWebcam": false,	
 		"useSLR": false,
 		"imagePath": "/Users/Mika/Desktop/CDWImages",		
-		"serverPath": "http://0.0.0.0:8080",
+		"serverPath": "http://staging.civildebatewall.com",
 		"flashSpanConfig":  "/Users/Mika/Code/CivilDebateWall/lp-cdw/air_projects/cdw_kiosk/bin-debug/flash_span_settings.xml"
 	}
 	

@@ -1,6 +1,7 @@
 package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.buttons.BigGrayButton;
 	import com.civildebatewall.kiosk.elements.ProgressBar;
 	import com.demonsters.debugger.MonsterDebugger;
@@ -18,6 +19,7 @@ package com.civildebatewall.kiosk.overlays {
 		private var yesButton:BigGrayButton;
 		private var noButton:BigGrayButton;
 		private var message:BlockText;
+		public var targetPost:Post;
 		
 		public function FlagOverlay(params:Object=null)	{
 			
@@ -82,6 +84,9 @@ package com.civildebatewall.kiosk.overlays {
 		private function flagItem(e:MouseEvent):void {			
 			// TODO actually flag it!
 			// this.dispatchEvent(
+			CivilDebateWall.data.flag(targetPost);
+			
+			
 			
 			TweenMax.to(message, 1, {text: "FLAGGED FOR REVIEW. WE WILL LOOK INTO IT."});			
 			yesButton.tweenOut();
@@ -89,7 +94,7 @@ package com.civildebatewall.kiosk.overlays {
 			
 			// fade out the bar
 			timerBar.pause();
-			//TweenMax.to(timerBar, 1, {alpha: 0});
+			TweenMax.to(timerBar, 1, {alpha: 0});
 			
 			// after delay, go back
 			TweenMax.delayedCall(3, closeOverlay);			
@@ -97,7 +102,7 @@ package com.civildebatewall.kiosk.overlays {
 		
 		override protected function beforeTweenIn():void {
 			message.text = "FLAG AS INAPPROPRIATE?";
-			timerBar.alpha = 1;
+			TweenMax.to(timerBar, 0, {alpha: 1});
 			super.beforeTweenIn();
 		}
 		

@@ -444,7 +444,7 @@ package com.civildebatewall.kiosk.overlays {
 		}		
 		
 		private function onDataUpdate(e:Event):void {
-			question.text = CivilDebateWall.data.question.text;
+			question.text = CivilDebateWall.state.question.text;
 		}
 		
 		private function onSubmit(e:MouseEvent):void {

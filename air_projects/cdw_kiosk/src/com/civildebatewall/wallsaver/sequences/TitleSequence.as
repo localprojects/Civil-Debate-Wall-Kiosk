@@ -90,7 +90,7 @@ package com.civildebatewall.wallsaver.sequences {
 		}
 			
 		private function onDataUpdate(e:Event):void {
-			question.text = CivilDebateWall.data.question.text;
+			question.text = CivilDebateWall.state.question.text;
 		}
 		
 		public function getTimelineIn():TimelineMax	{

@@ -3,8 +3,8 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.civildebatewall.kiosk.buttons.WhiteButton;
+	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
@@ -27,7 +27,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		
 		private var smsUnderlay:BlockBase;
 		private var smsSkipButton:WhiteButton;
-		private var smsTestButton:WhiteButton; // TEMP
 
 		private var connections:Connection; // holds the dashed line
 		private var phones:Vector.<Phone>; 		
@@ -48,8 +47,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			smsUnderlay = new BlockBase({
 				width: 1080,
 				height: 1920,
-				backgroundColor: 0x000000,
-				backgroundAlpha: 0.85
+				backgroundColor: 0x000000
 			});
 			
 			smsUnderlay.setDefaultTweenIn(1, {alpha: 1});
@@ -59,6 +57,26 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			// happy fun visualization
 			phoneGrid = new Sprite();
 			GraphicsUtil.fillRect(phoneGrid.graphics, width, height, 0, 0);
+			addChild(phoneGrid);
+			
+			// add the skip button (over the visualization)
+			smsSkipButton = new WhiteButton({
+				text: "SKIP",
+				width: 188,
+				height: 64
+			});
+			
+			smsSkipButton.onButtonUp.push(onSkipButtonUp);
+			smsSkipButton.setDefaultTweenIn(1, {x: 446, y: 1826});
+			smsSkipButton.setDefaultTweenOut(1, {x: 446, y: Alignment.OFF_STAGE_BOTTOM});
+			addChild(smsSkipButton);			
+		}
+		
+		private function init():void {
+			
+			// TODO set color?
+
+			GraphicsUtil.removeChildren(phoneGrid);
 			
 			connections = new Connection();
 			phones = new Vector.<Phone>(0);			
@@ -124,33 +142,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			connections.visible = false;
 			
 			phoneGrid.addChildAt(connections, 0); // lines go below phones
-			addChild(phoneGrid);
-			
-			
-			// add the skip button (over the visualization)
-			smsSkipButton = new WhiteButton({
-				text: "SKIP",
-				width: 188,
-				height: 64
-			});
-			
-			smsSkipButton.onButtonUp.push(onSkipButtonUp);
-			smsSkipButton.setDefaultTweenIn(1, {x: 446, y: 1826});
-			smsSkipButton.setDefaultTweenOut(1, {x: 446, y: Alignment.OFF_STAGE_BOTTOM});
-			addChild(smsSkipButton);			
 
-			smsTestButton = new WhiteButton({
-				text: "TEST",
-				width: 140,
-				height: 64,
-				textColor: 0x00000,
-				backgroundAlpha: 0.2
-			});
-			
-			smsTestButton.onButtonUp.push(onTestButton);
-			smsTestButton.setDefaultTweenIn(1, {x: 30, y: 1826});
-			smsTestButton.setDefaultTweenOut(1, {x: 30, y: Alignment.OFF_STAGE_BOTTOM});
-			addChild(smsTestButton);
 			
 			// animation
 			timeline = new TimelineMax({onComplete: onTimelineComplete});			
@@ -185,6 +177,8 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			userPhone.addEventListener(UserPhone.NUMBER_SUBMITTED_EVENT, onNumberSubmitted);
 		}
 		
+		
+		
 
 		// Views....
 		override protected function beforeTweenIn():void {
@@ -194,25 +188,37 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		}
 		
 		override protected function beforeTweenOut():void {
+			
+			
+			
+			
 			markAllInactive();
 			tweenOutInactive();
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			if ((userPhone != null) && userPhone.hasEventListener(UserPhone.NUMBER_SUBMITTED_EVENT)) {
+				userPhone.removeEventListener(UserPhone.NUMBER_SUBMITTED_EVENT, onNumberSubmitted);
+			}
 			super.beforeTweenOut();
 		}	
 		
-
+		override protected  function afterTweenIn():void {
+			connections.visible = true;
+			timeline.tweenFromTo(0, "userPhonePause");			
+		}
+		
 		
 		private function homeView():void {
+			init();
+			
 			markAllInactive();
 			smsUnderlay.tweenIn();
 			smsSkipButton.tweenIn();
-			smsTestButton.tweenIn();
 			tweenOutInactive();
 		}
 		
 		private function onTestButton(e:MouseEvent):void {
 			connections.visible = true;
-			smsTestButton.tweenOut();
 			//timeline.goto("userPhonePause");
 			//timeline.tweenFromTo(0, "userPhonePause");
 			timeline.tweenFromTo(0, "userPhonePause");
@@ -222,17 +228,43 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		private function onNumberSubmitted(e:Event):void {
 			// finish animation
 			
+			trace("save and submit");
+			trace("User phone: " + userPhone.phoneNumber);			
+			
+			CivilDebateWall.state.userPhoneNumber = userPhone.phoneNumber;
+			
+			
 			smsSkipButton.tweenOut();
 			timeline.tweenFromTo("userPhonePause", timeline.duration);			
-			//CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);	
 		}
 		
 
 		private function skippedPhone():void {
 			// skip the rest of the animation
-			timeline.tweenFromTo("userPhonePause", timeline.duration);			
-			//CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);						
+			timeline.tweenFromTo("userPhonePause", timeline.duration);
+			//CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);
+			
+			CivilDebateWall.state.userPhoneNumber = null;		
 		}
+		
+		
+		private function submitPost():void {
+			
+			CivilDebateWall.data.submitDebate();
+			// create user
+			
+			
+			// save image
+			
+			// save DB
+			
+			// reload data
+			
+			// go home
+			//CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);			
+			
+		}
+		
 		
 		
 		private function onSkipButtonUp(e:MouseEvent):void {
@@ -240,7 +272,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		}
 		
 		private function onTimelineComplete():void {
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);
+			submitPost();
 		}
 		
 

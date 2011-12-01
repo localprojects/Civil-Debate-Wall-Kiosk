@@ -1,4 +1,4 @@
-package com.civildebatewall.kiosk {
+package com.civildebatewall.kiosk.overlays {
 	import com.bit101.components.Label;
 	import com.bit101.components.PushButton;
 	import com.bit101.components.Slider;

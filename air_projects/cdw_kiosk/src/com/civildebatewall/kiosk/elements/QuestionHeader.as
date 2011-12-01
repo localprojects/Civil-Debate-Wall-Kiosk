@@ -78,7 +78,7 @@ package com.civildebatewall.kiosk.elements {
 		}
 
 		private function onDataChange(e:Event):void {
-			text = CivilDebateWall.data.question.text;
+			text = CivilDebateWall.state.question.text;
 		}
 		
 		private function onViewChange(e:Event):void {

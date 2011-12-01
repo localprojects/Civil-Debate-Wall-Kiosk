@@ -19,7 +19,7 @@ package com.civildebatewall.data {
 		public static const ORIGIN_WEB:String = 'web';
 		
 		public static const STANCE_YES:String = 'yes';
-		public static const STANCE_NO:String = 'no';		
+		public static const STANCE_NO:String = 'no';	
 		
 		private var _id:String;
 		private var _likes:uint;
@@ -43,6 +43,8 @@ package com.civildebatewall.data {
 		
 		public var isThreadStarter:Boolean;		
 		public var stanceFormatted:String;
+		
+		private var _userID:String;
 
 		// link back to thread, too?
 		
@@ -54,10 +56,10 @@ package com.civildebatewall.data {
 			_likes = jsonObject['likes'];
 			_text = jsonObject['text'];
 			_origin = ORIGIN_KIOSK; // todo support other origins
-			_user = CivilDebateWall.data.getUserByID(jsonObject['author']['id']);
+			_user = null;
 			_created = DateUtil.parseJsonDate(jsonObject['created']);
 			_thread = parentThread;
-			
+			_userID = jsonObject['author']['id']; // for later
 			
 			responseToID = jsonObject['responseTo'];
 			
@@ -124,6 +126,10 @@ package com.civildebatewall.data {
 		}
 		public function get thread():Thread { return _thread; }		
 		
+		
+		public function initUser():void {
+			_user = CivilDebateWall.data.getUserByID(_userID);
+		}
 		
 	}
 }	

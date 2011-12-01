@@ -1,6 +1,7 @@
 package com.civildebatewall {
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.Question;
 	import com.civildebatewall.data.TextMessage;
 	import com.civildebatewall.data.Thread;
 	import com.civildebatewall.kiosk.core.Kiosk;
@@ -43,6 +44,8 @@ package com.civildebatewall {
 		public var lastView:Function;
 		public var backDestination:Function;
 		
+		public var question:Question;
+		
 		
 		public var targetFaceRectangle:Rectangle = new Rectangle(294, 352, 494, 576);
 		
@@ -80,7 +83,45 @@ package com.civildebatewall {
 			activePost = post;
 			dispatchEvent(new Event(ON_ACTIVE_POST_CHANGE));
 		}
+		
+		private function varToString(name:String):String {
+			var parts:Array = name.split(".");
+			var out:String = name + ": ";
+			
+			var target:Object = this;			
+			for (var i:int = 0; i < parts.length; i++) {
+				if (target == null) {
+					target = "null";
+					break;
+				}
+				else {		
+					target = target[parts[i]];
+				}
+			}
+			
+			out += target + "\n";
+			return out;
+		}
+		
+		public function stateLog():String {
+			var out:String = "";
+			out += "--- GLOBAL ---\n"
+			out += varToString("activeThread.id");
+			out += varToString("activePost.id");
+			out += varToString("highlightWord");
+			out += "--- USER ---\n"
+			out += varToString("userPhoneNumber");
+			out += varToString("userName");
+			out += varToString("userStance");
+			out += varToString("userOpinion");			
+			out += varToString("userImageFull");
+			out += varToString("userImage");
+			out += varToString("userIsDebating");
+			out += varToString("userRespondingTo.id");			
+			return out;
+		}
 				
+		
 		
 		// scratch user... TODO wrap this up in the object?
 		public var userStance:String = 'yes';
@@ -90,8 +131,6 @@ package com.civildebatewall {
 		public var userID:String = '';
 		public var userImage:Bitmap = null;
 		public var userImageFull:Bitmap = null;		
-		public var lastTextMessageTime:Date;
-		public var textMessage:TextMessage; // the message we're working with
 		public var userStanceText:String = ''; // add exclamation point		
 		public var userRespondingTo:Post; // which post we're debating
 		
@@ -142,25 +181,27 @@ package com.civildebatewall {
 			
 			switch (sortMode) {
 				case SORT_BY_RECENT:
-					CivilDebateWall.data.threads.sortOn('created', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?					
+					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareCreatedDescending);
 					break;
 				
 				case SORT_BY_YES:
-					CivilDebateWall.data.threads.sortOn('firstStance', Array.DESCENDING); // newest first // Is this working?					
+					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareCreatedDescending);
+					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareStanceYes); // but still newest first? TODO TEST
 					break;
 				
 				case SORT_BY_NO:
-					CivilDebateWall.data.threads.sortOn('firstStance'); // newest first // Is this working?					
+					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareCreatedDescending);					
+					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareStanceNo);
 					break;				
 				
 				case SORT_BY_MOST_DEBATED:
-					CivilDebateWall.data.threads.sortOn('postCount', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?					
+					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareCreatedDescending);
+					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.comparePostCountDescending); // but still newest first? TODO TEST
 					break;				
 				
 				default:
 					MonsterDebugger.trace(this, "invalid sort type");
 			}
-			
 			
 			this.dispatchEvent(new Event(SORT_CHANGE));
 		}
@@ -177,8 +218,6 @@ package com.civildebatewall {
 			userIsDebating = false;
 			userImageFull = null;
 			userRespondingTo = null;
-			textMessage = null;
-			lastTextMessageTime = null;
 			//highlightWord = null;
 		}
 		

@@ -13,7 +13,7 @@ package com.civildebatewall.kiosk {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.geom.Point;
+	import flash.geom.Point;	
 	import flash.utils.getTimer;
 	
 	
@@ -27,9 +27,9 @@ package com.civildebatewall.kiosk {
 		// settings
 		private var wiggleVelocityThreshold:Number = 20; // How much mouse wiggle before we call it a drag instead of a click // TODO DO THIS ON VELOCITY
 		private var wiggleTravelThreshold:Number = 5; // How much mouse wiggle before we call it a drag instead of a click // TODO DO THIS ON VELOCITY
-		private var resistance:Number = 300;
-		private var maxDuration:Number = 5; // max coast time, seconds
-		private var minDuration:Number = 0.3; // min coast time, seconds
+		private var resistance:Number = 800;
+		private var maxDuration:Number = 1; // max coast time, seconds
+		private var minDuration:Number = 0.1; // min coast time, seconds
 		private var overshootTolerance:Number = 0.25; // maximum time spent overshooting		
 				
 		// mouse blocker
@@ -74,8 +74,6 @@ package com.civildebatewall.kiosk {
 		
 		private function onMouseDown(e:MouseEvent):void {
 			
-			trace("down!");
-			
 			// stop any coasting, this is the "poke"
 			if (coastTween != null) coastTween.kill();
 			
@@ -116,8 +114,6 @@ package com.civildebatewall.kiosk {
 			// are we over a button?
 			var objectsUnderMouse:Array = stage.getObjectsUnderPoint(new Point(stage.mouseX, stage.mouseY));
 			
-			trace("Object: " + objectsUnderMouse.length);
-			
 			for (var i:int = 0; i < objectsUnderMouse.length; i++) {
 				var displayObject:DisplayObject = objectsUnderMouse[i] as DisplayObject;
 				if (displayObject.toString().indexOf("instance") > -1) return true; // ugh... long story
@@ -138,7 +134,7 @@ package com.civildebatewall.kiosk {
 			
 			y2 = y1;
 			y1 = stage.mouseY;
-			
+				
 			x2 = x1;
 			x1 = stage.mouseX;
 			
@@ -168,15 +164,7 @@ package com.civildebatewall.kiosk {
 			else {
 				xVelocity = actualXVelocity;
 				zeroCount = 0;
-			}			
-			
-			
-			
-			
-			
-			trace("time: " + time);
-			trace("yVelocity: " + yVelocity);	
-			trace("xVelocity: " + xVelocity);	
+			}
 		}		
 		
 
@@ -196,11 +184,9 @@ package com.civildebatewall.kiosk {
 				
 				if (isButtonPress) {
 				
-				// Mouse odometry
+					// Mouse odometry
 					mouseTravelX += Math.abs(stage.mouseX - lastMouseX);
 					mouseTravelY += Math.abs(stage.mouseY - lastMouseY);		
-					
-					trace("mouseTravelY: " + mouseTravelY);
 					
 					// velocity tells between a click and scroll
 					var velocity:Number;
@@ -219,9 +205,6 @@ package com.civildebatewall.kiosk {
 						velocity = yVelocity;
 						mouseTravel = mouseTravelX;
 					}
-					
-					trace("velocity " + velocity);
-					trace("travel " + mouseTravel);
 				
 					if ((velocity > wiggleVelocityThreshold) || (mouseTravel > wiggleTravelThreshold)) {
 						MonsterDebugger.trace(this, "Not a click.")
@@ -255,7 +238,7 @@ package com.civildebatewall.kiosk {
 			if ((scrollAxis == SCROLL_X) || (scrollAxis == SCROLL_BOTH)) {
 				// X Stuff
 				props.throwProps.scrollX = {};
-				props.throwProps.scrollX.velocity = xVelocity;
+				props.throwProps.scrollX.velocity = -xVelocity;
 				props.throwProps.scrollX.min = minScrollX;
 				props.throwProps.scrollX.max = maxScrollX;
 				props.throwProps.scrollX.resistance = resistance; // coasting time (less is "heavier"!	

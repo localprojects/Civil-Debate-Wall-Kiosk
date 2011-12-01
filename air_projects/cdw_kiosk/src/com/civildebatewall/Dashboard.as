@@ -3,7 +3,9 @@ package com.civildebatewall {
 	import com.civildebatewall.data.Question;
 	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.kitschpatrol.flashspan.Random;
+	import com.kitschpatrol.futil.toStr;
 	import com.kitschpatrol.futil.utilitites.CoreUtil;
+	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
 	import flash.display.*;
 	import flash.events.Event;
@@ -17,9 +19,7 @@ package com.civildebatewall {
 		private var focalLengthSlider:Slider;
 		private var barTestSlider:Slider;		
 		
-		
 		private var randomOpinionToggle:CheckBox;
-		
 		
 		private var framesRendered:uint;
 		private var wallsaverFrameLabel:Label;
@@ -27,10 +27,12 @@ package com.civildebatewall {
 		private var framesRenderedLabel:Label;
 		private var latencyLabel:Label; 
 		
+		private var stateTextArea:TextArea;
+		
 		public function Dashboard(parent:DisplayObjectContainer=null, xpos:Number=0, ypos:Number=0, title:String="Dashboard")	{
 			super(parent, xpos, ypos, title);
 			this.width = 250;
-			this.height = 250;
+			this.height = 700;
 			this.hasMinimizeButton = true;
 			this.minimized = true;
 			
@@ -49,6 +51,10 @@ package com.civildebatewall {
 			frameRateLabel = new Label(this, 5, 125, "Frame Rate:");
 			framesRenderedLabel = new Label(this, 5, 150, "Frames Rendered:");
 			latencyLabel = new Label(this, 5, 175, "Latency: ");
+			
+			stateTextArea = new TextArea(this, 5, 200, "State")
+			stateTextArea.width = 240;
+			stateTextArea.height = 500;
 			
 			CivilDebateWall.self.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
@@ -98,6 +104,11 @@ package com.civildebatewall {
 			frameRateLabel.text = "Frame Rate: " + CivilDebateWall.self.fpsMeter.fps;
 			framesRenderedLabel.text = "Frames Rendered: " + framesRendered++;
 			latencyLabel.text = "Latency: " + CivilDebateWall.flashSpan.settings.thisScreen.latency;
+			
+			//ObjectUtil.toString(CivilDebateWall.state);
+			//stateTextArea.text = toStr(CivilDebateWall.state, false, 2);
+			stateTextArea.text = CivilDebateWall.state.stateLog();
+
 		}
 		
 		// logs a single line of text to the window
