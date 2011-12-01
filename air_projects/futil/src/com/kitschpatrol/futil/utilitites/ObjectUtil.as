@@ -1,8 +1,8 @@
 package com.kitschpatrol.futil.utilitites {
 	
 	
-	import flash.utils.getQualifiedClassName;
 	import flash.utils.ByteArray;
+	import flash.utils.getQualifiedClassName;
 
 	public class ObjectUtil	{
 		
@@ -23,15 +23,24 @@ package com.kitschpatrol.futil.utilitites {
 		
 		// via http://www.actionscript.org/forums/showthread.php3?t=158117
 		// TODO only works for dynamic objects, need to split for reflection
+		// broken?
 		public static function traceObject(obj:*, level:int = 0):void {
+			trace(toString(obj, level));
+		}
+		
+		// broken?
+		public static function toString(obj:*, level:int = 0):String {
+			var out:String = "";
 			var tabs:String = "";
 			
 			for (var i:int = 0; i < level; i++)	tabs += "\t";
 			
 			for (var prop:String in obj) {
-				trace(tabs + "[" + prop + "] -> " + obj[ prop ]);
-				traceObject(obj[ prop ], level + 1);
-			}
+				out += tabs + "[" + prop + "] -> " + obj[ prop ] + "\n";
+				out += toString(obj[ prop ], level + 1) + "\n";
+			}			
+			
+			return out;
 		}
 				
 		

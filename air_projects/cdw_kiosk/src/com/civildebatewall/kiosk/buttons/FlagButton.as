@@ -30,10 +30,7 @@ package com.civildebatewall.kiosk.buttons {
 			icon.height = 10;
 			icon.x = -5;
 			icon.y = -5;
-			
-			trace(icon.width);
-			trace(icon.height);
-			
+
 
 			addChild(icon);
 			
@@ -77,13 +74,12 @@ package com.civildebatewall.kiosk.buttons {
 			if (mouseEnabled) {
 				
 				// confimation overlay...
+				CivilDebateWall.kiosk.view.flagOverlay.targetPost = _targetPost;				
 				CivilDebateWall.kiosk.view.flagOverlayView();
 				
 				//CivilDebateWall.data.flag(_targetPost);
 			
 				// Spin animation
-				
-
 
 				TweenMax.to(icon, 0.50, {transformAroundCenter:{rotation: 360}, ease: Quart.easeInOut});				
 				TweenMax.to(icon, 0.25, {transformAroundCenter:{scaleX: 2, scaleY: 2}, alpha: 0.75, ease: Quart.easeIn});

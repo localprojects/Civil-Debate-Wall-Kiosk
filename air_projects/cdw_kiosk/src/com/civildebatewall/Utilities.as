@@ -129,8 +129,16 @@ package com.civildebatewall {
 			loader.load(request);	
 		}
 		
-		public static function getRequestJSON(url:String, callback:Function):void {
-			getRequest(url, function(r:Object):void { callback(JSON.decode(r.toString()))	}); 	
+		// optionally pass extra args
+		public static function getRequestJSON(url:String, callback:Function, extraArgs:Object = null):void {
+			getRequest(url, function(r:Object):void {
+				if (extraArgs == null) {
+					callback(JSON.decode(r.toString()))
+				}
+				else {
+					callback(JSON.decode(r.toString()), extraArgs);
+				}
+			}); 	
 		}	
 		
 		// via http://www.jadbox.com/2009/01/object-to-urlvariables/

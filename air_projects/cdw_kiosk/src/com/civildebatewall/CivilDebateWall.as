@@ -206,7 +206,7 @@ package com.civildebatewall {
 			data.load();			
 
 			// dashboard goes on top... or add when active? 
-			addChild(dashboard);
+			addChild(dashboard);			
 		}
 		
 
@@ -215,7 +215,7 @@ package com.civildebatewall {
 		
 		
 		
-		
+		 
 		
 		
 		private function onInactive(e:InactivityEvent):void {

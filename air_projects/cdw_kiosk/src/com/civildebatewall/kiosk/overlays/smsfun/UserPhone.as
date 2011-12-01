@@ -31,6 +31,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		private var stopBubble:Sprite;	
 		private var formerActiveBubble:Sprite; // pointer		
 		private var invalid:Boolean;		
+		public var phoneNumber:String;
 		
 		public function UserPhone()	{
 			// temp set color
@@ -247,8 +248,16 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		public function onBubbleSequenceComplete():void {
 									
 			// keep the animation going
-			dispatchEvent(new Event(NUMBER_SUBMITTED_EVENT));			
+
+			phoneNumber = numberField.text.replace(/[^\d]/g, "");
+
+			
+			dispatchEvent(new Event(NUMBER_SUBMITTED_EVENT));
+			
+			
 		}
+		
+		
 		
 		
 		private function onSubmitInvalid():void {

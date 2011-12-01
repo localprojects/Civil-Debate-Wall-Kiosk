@@ -7,7 +7,7 @@ package com.civildebatewall.kiosk.core {
 	import com.civildebatewall.State;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.*;
-	import com.civildebatewall.kiosk.CameraCalibrationOverlay;
+	import com.civildebatewall.kiosk.overlays.CameraCalibrationOverlay;
 	import com.civildebatewall.kiosk.DragLayer;
 	import com.civildebatewall.kiosk.buttons.*;
 	import com.civildebatewall.kiosk.camera.*;
@@ -113,7 +113,7 @@ package com.civildebatewall.kiosk.core {
 		public var smsOverlay:SMSOverlay;
 
 		// flag overlay
-		private var flagOverlay:FlagOverlay;
+		public var flagOverlay:FlagOverlay;
 		
 		// inactivity overlay
 		private var inactivityOverlay:InactivityOverlay;		
@@ -723,8 +723,6 @@ package com.civildebatewall.kiosk.core {
 				var scaleFactor:Number = CivilDebateWall.state.userImage.height / faceDetector.maxSourceHeight; 
 				var scaledFaceRect:Rectangle = GeomUtil.scaleRect(faceDetector.faceRect, scaleFactor);
 				
-				MonsterDebugger.trace(this, "Scaled face rect: " + scaledFaceRect);
-				
 				CivilDebateWall.state.userImage = Utilities.cropToFace(CivilDebateWall.state.userImage, scaledFaceRect, CivilDebateWall.state.targetFaceRectangle);				
 			}
 			else {
@@ -794,7 +792,7 @@ package com.civildebatewall.kiosk.core {
 		public function flagOverlayView(...args):void {
 			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
 			CivilDebateWall.state.activeView = flagOverlayView;
-			flagOverlay.tweenIn();		
+			flagOverlay.tweenIn();
 		}
 		
 		public function removeFlagOverlayView(...args):void {
@@ -841,54 +839,7 @@ package com.civildebatewall.kiosk.core {
 				
 	
 		
-		// =========================================================================
-		
-		// TODO no more!
 
-		
-		private function submitDebate():void {
-			// Syncs state up to the cloud
-			
-			// save the images to disk, one full res and one scaled and cropped 
-			if(CivilDebateWall.state.userImageFull != null) FileUtil.saveJpeg(CivilDebateWall.state.userImageFull, CivilDebateWall.settings.imagePath, CivilDebateWall.state.userID + '-full.jpg');			
-			var imageName:String = FileUtil.saveJpeg(CivilDebateWall.state.userImage, CivilDebateWall.settings.imagePath, CivilDebateWall.state.userID + '.jpg');
-			var payload:Object;
-			
-			if (CivilDebateWall.state.userIsDebating) {
-				// create and upload new comment
-				MonsterDebugger.trace(this, "Uploading response post");
-				
-				// TODO "userInProgress" and "postInProgress" objects in state
-				// TODO need to set "CDW.state.userRespondingTo"
-				
-				MonsterDebugger.trace(this, "Responding to: " + CivilDebateWall.state.userRespondingTo.id);
-				
-				CivilDebateWall.data.uploadResponse(CivilDebateWall.state.activeThread.id, CivilDebateWall.state.userRespondingTo.id, CivilDebateWall.state.userID, CivilDebateWall.state.userOpinion, CivilDebateWall.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
-			}
-			else {
-				// create and upload new debate
-				MonsterDebugger.trace(this, "Uploading new thread");				
-				CivilDebateWall.data.uploadThread(CivilDebateWall.data.question.id, CivilDebateWall.state.userID, CivilDebateWall.state.userOpinion, CivilDebateWall.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
-			}			
-		}
-		
-		
-		private function onDebateUploaded(r:Object):void {
-			MonsterDebugger.trace(this, "submitting");
-			//submitOverlayContinueButton.tweenOut(-1, {alpha: 0, x: submitOverlayContinueButton.x, y: submitOverlayContinueButton.y});
-			
-			if (CivilDebateWall.state.activeThread != null) {
-				CivilDebateWall.state.activeThreadID = CivilDebateWall.state.activeThread.id; // store the strings since objects will be wiped
-				CivilDebateWall.state.activeThread = null;
-			}
-			
-			if (CivilDebateWall.state.activePost != null) {			
-				CivilDebateWall.state.activePostID = CivilDebateWall.state.activePost.id; // store the strings since objects will be wiped				
-				CivilDebateWall.state.activePost = null;			
-			}			
-			
-			CivilDebateWall.data.load();
-		}
 		
 		
 		// =========================================================================		
