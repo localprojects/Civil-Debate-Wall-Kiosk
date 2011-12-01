@@ -93,6 +93,8 @@ package com.civildebatewall.kiosk.buttons {
 
 			CivilDebateWall.data.addEventListener(Data.LIKE_UPDATE_LOCAL, onLike);
 			CivilDebateWall.data.addEventListener(Data.LIKE_UPDATE_SERVER, onLike);
+			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onLike);
+			
 			
 			buttonTimeout = 5000;
 			onButtonDown.push(onDown);

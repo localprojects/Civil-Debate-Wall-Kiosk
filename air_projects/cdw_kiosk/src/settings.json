@@ -26,9 +26,9 @@
 	"mac": {
 		"halfSize": true,
 		"startFullScreen": false,
-		"useWebcam": false,	
+		"useWebcam": true,	
 		"useSLR": false,
-		"imagePath": "/Users/Mika/Desktop/CDWImages",		
+		"imagePath": "/Volumes/cdwmedia/media/images/",		
 		"serverPath": "http://staging.civildebatewall.com",
 		"flashSpanConfig":  "/Users/Mika/Code/CivilDebateWall/lp-cdw/air_projects/cdw_kiosk/bin-debug/flash_span_settings.xml"
 	}
