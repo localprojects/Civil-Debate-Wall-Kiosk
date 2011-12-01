@@ -10,11 +10,9 @@ package com.civildebatewall.data {
 	import com.greensock.loading.display.*;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
-	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.filesystem.File;
 	import flash.net.*;
 	
 	public class Data extends EventDispatcher {
@@ -58,10 +56,13 @@ package com.civildebatewall.data {
 		public function onLoadComplete():void {
 			trace("Load complete");
 			
-			CivilDebateWall.state.activeThread = threads[0];
-			
-			this.dispatchEvent(new Event(Data.DATA_PRE_UPDATE_EVENT));
+			if (CivilDebateWall.state.firstLoad) {
+				this.dispatchEvent(new Event(Data.DATA_PRE_UPDATE_EVENT));
+				CivilDebateWall.state.activeThread = ArrayUtil.randomElement(threads);
+			}
 			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
+			
+			CivilDebateWall.state.firstLoad = false;
 		}
 		
 		
@@ -248,6 +249,8 @@ package com.civildebatewall.data {
 			trace("Calculating stats");
 			
 			// most liked debates
+			stats = new Stats();			
+			
 			stats.mostLikedPosts = [];
 			posts.sortOn('likes', Array.DESCENDING | Array.NUMERIC);
 			for (var i:uint = 0; i < Math.min(posts.length, 5); i++) {
@@ -342,105 +345,18 @@ package com.civildebatewall.data {
 			stats.yesPercent = stats.postsYes / stats.postsTotal; 
 			
 			// end stats
-			
-
 			// now sort by date
-			
 			// TODO go back to sorting based on state?
 			CivilDebateWall.state.setSort(CivilDebateWall.state.sortMode);
 			
-			
-			//threads.sortOn('created', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?
-			//posts.sortOn('created', Array.DESCENDING); // newest first			
-							
-			
-			
-			
-			
-			
+			threads.sortOn('created', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?
+			posts.sortOn('created', Array.DESCENDING); // newest first
 		}
 		
 
 			
-
-
-
-
 		
-//		
-//		// STUBS
-//		public function getQuestionText():String {
-//			return question['question'];
-//		}
-//		
-//		public function getActivePortrait():Bitmap {
-//			return getDebateAuthorPortrait(CDW.state.activeDebate);
-//		}
-//		
-//		public function getDebateAuthor(debateID:String):String {
-//			return debates[debateID]['author']['_id']['$oid'];
-//		}
-//		
-//		public function getDebateAuthorPortrait(debateID:String):Bitmap {
-//			return portraits[getDebateAuthor(debateID)]; 
-//		}
-//		
-//		public function getPortrait(authorID:String):Bitmap {
-//			return portraits[authorID]; 
-//		}		
-//		
-//		public function getDebateAuthorName(debateID:String):String {
-//			return Utilities.toTitleCase(debates[debateID]['author']['firstName']); 
-//		}		
-//		
-//		public function getOpinion(debateID:String):String {
-//			return debates[debateID]['opinion'];
-//		}
-//		
-//		public function getStance(debateID:String):String {
-//			return debates[debateID]['stance'];
-//		}
-//		
-
-//		
-//		public function getCommentCount(debateID:String):int {
-//			var i:int = 0;
-//			
-//			for (var commentID:String in debates[debateID]['comments']) {
-//				MonsterDebugger.trace(this, 'comment ID: ' + commentID);
-//				i++;
-//			}
-//			return i;
-//		}		
-//		
-//		
-//		public function cloneDebateAuthorPortrait(debateID:String):Bitmap {
-//			return new MetaBitmap(portraits[getDebateAuthor(debateID)].bitmapData.clone());
-//		}
-//		
-//		// returns list of IDs of most debated posts
-//		public function getMostDebatedList():Array {
-//			var mostDebated:Array = [];
-//			
-//			for each (var row:Object in stats['mostDebatedOpinions']) {
-//				mostDebated.push(row['id']);
-//			}
-//			
-//			return mostDebated;
-//		}
-//		
-//		// returns list of IDs of most debated posts
-//		public function getMostLikedList():Array {
-//			var mostLiked:Array = [];
-//			
-//			for each (var row:Object in stats['mostLikedDebates']) {
-//				mostLiked.push(row['id']);
-//			}
-//			
-//			return mostLiked;
-//		}		
-//		
-//		
+		// ====== UPDATES =================
 		
 		// mutate server
 		public function uploadResponse(threadID:String, responseTo:String, userID:String, opinion:String, stance:String, origin:String, callback:Function):void {
@@ -491,12 +407,14 @@ package com.civildebatewall.data {
 		public function submitDebate():void {
 			// Syncs state up to the cloud
 
-			createUser(CivilDebateWall.state.userName, CivilDebateWall.state.userPhoneNumber, function(r:Object):void {
+			if (CivilDebateWall.state.userPhoneNumber == null) CivilDebateWall.state.userPhoneNumber = "";
+			
+			createUser(CivilDebateWall.state.userName, CivilDebateWall.state.userPhoneNumber, function(response:Object):void {
 				trace("Created user");
-				trace(r);
-				
+				trace(response["id"]);
+
 				// user id,
-				CivilDebateWall.state.userID = "TODO";				// TODO					
+				CivilDebateWall.state.userID = response["id"];					
 				
 				// save the images // TODO fix directory structure
 				if (CivilDebateWall.state.userImageFull != null) FileUtil.saveJpeg(CivilDebateWall.state.userImageFull, CivilDebateWall.settings.imagePath, CivilDebateWall.state.userID + '-full.jpg');			
@@ -510,68 +428,42 @@ package com.civildebatewall.data {
 					
 					// TODO "userInProgress" and "postInProgress" objects in state
 					trace("Responding to: " + CivilDebateWall.state.userRespondingTo.id);
-					
 					CivilDebateWall.data.uploadResponse(CivilDebateWall.state.activeThread.id, CivilDebateWall.state.userRespondingTo.id, CivilDebateWall.state.userID, CivilDebateWall.state.userOpinion, CivilDebateWall.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
 				}
 				else {
 					// create and upload new thread
-					MonsterDebugger.trace(this, "Uploading new thread");				
+					trace("Uploading new thread");				
 					CivilDebateWall.data.uploadThread(CivilDebateWall.state.question.id, CivilDebateWall.state.userID, CivilDebateWall.state.userOpinion, CivilDebateWall.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
 				}				
 				
 			});
 		}
 		
-			
-			
-			
-//			
-//			// save the images to disk, one full res and one scaled and cropped 
-//			if(CivilDebateWall.state.userImageFull != null) FileUtil.saveJpeg(CivilDebateWall.state.userImageFull, CivilDebateWall.settings.imagePath, CivilDebateWall.state.userID + '-full.jpg');			
-//			var imageName:String = FileUtil.saveJpeg(CivilDebateWall.state.userImage, CivilDebateWall.settings.imagePath, CivilDebateWall.state.userID + '.jpg');
-//			var payload:Object;
-//			
-//			if (CivilDebateWall.state.userIsDebating) {
-//				// create and upload new comment
-//				MonsterDebugger.trace(this, "Uploading response post");
-//				
-//				// TODO "userInProgress" and "postInProgress" objects in state
-//				// TODO need to set "CDW.state.userRespondingTo"
-//				
-//				MonsterDebugger.trace(this, "Responding to: " + CivilDebateWall.state.userRespondingTo.id);
-//				
-//				CivilDebateWall.data.uploadResponse(CivilDebateWall.state.activeThread.id, CivilDebateWall.state.userRespondingTo.id, CivilDebateWall.state.userID, CivilDebateWall.state.userOpinion, CivilDebateWall.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
-//			}
-//			else {
-//				// create and upload new debate
-//				MonsterDebugger.trace(this, "Uploading new thread");				
-//				CivilDebateWall.data.uploadThread(CivilDebateWall.data.question.id, CivilDebateWall.state.userID, CivilDebateWall.state.userOpinion, CivilDebateWall.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
-//			}			
-//		}
-//		
-		
 		private function onDebateUploaded(r:Object):void {
 			MonsterDebugger.trace(this, "submitting");
+			
+			trace("Debate uploaded");
+			CivilDebateWall.state.userThreadID = r['id'];
+			// CivilDebateWall.state.userPostID;; // comes later
+			
 			//submitOverlayContinueButton.tweenOut(-1, {alpha: 0, x: submitOverlayContinueButton.x, y: submitOverlayContinueButton.y});
 			
-			if (CivilDebateWall.state.activeThread != null) {
-				CivilDebateWall.state.activeThreadID = CivilDebateWall.state.activeThread.id; // store the strings since objects will be wiped
-				CivilDebateWall.state.activeThread = null;
-			}
+//			if (CivilDebateWall.state.activeThread != null) {
+//				CivilDebateWall.state.activeThreadID = CivilDebateWall.state.activeThread.id; // store the strings since objects will be wiped
+//				CivilDebateWall.state.activeThread = null;
+//			}
+//			
+//			if (CivilDebateWall.state.activePost != null) {			
+//				CivilDebateWall.state.activePostID = CivilDebateWall.state.activePost.id; // store the strings since objects will be wiped				
+//				CivilDebateWall.state.activePost = null;			
+//			}			
 			
-			if (CivilDebateWall.state.activePost != null) {			
-				CivilDebateWall.state.activePostID = CivilDebateWall.state.activePost.id; // store the strings since objects will be wiped				
-				CivilDebateWall.state.activePost = null;			
-			}			
 			
 			CivilDebateWall.data.load();
 		}		
 		
 		
-		// NEW STUFF
-		
-		// User stuff
-		
+		// ID Lookup
 		public function getCategoryById(id:String):Category {
 			for each (var category:Category in categories) {
 				if (category.id == id) return category;
@@ -610,15 +502,7 @@ package com.civildebatewall.data {
 			// todo else raise error
 		}
 		
-		public function getUserByPhoneNumber(phoneNumber:String):User {
-			phoneNumber = phoneNumber.replace('+1', '');
-			
-			for each (var user:User in users) {
-				if (user.phoneNumber == phoneNumber) return user;
-			}
-			return null;
-			// todo else raise error
-		}		
+	
 		
 	}
 }

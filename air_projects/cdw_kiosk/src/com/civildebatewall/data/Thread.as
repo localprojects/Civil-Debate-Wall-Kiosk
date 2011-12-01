@@ -33,30 +33,7 @@ package com.civildebatewall.data {
 		public function get created():Date { return _created; }	
 		public function get createdRaw():uint { return _createdRaw; }	
 		
-		// sorting			
-		// negative means a before b
-		// positive means a after b
-		// zero means no difference
-		public static function compareCreatedDescending(a:Thread, b:Thread):Number {
-			return b.created.time - a.created.time;
-		}
-		
-		public static function compareStanceYes(a:Thread, b:Thread):Number {
-			if ((a.firstStance == Post.STANCE_YES) && (b.firstStance == Post.STANCE_NO)) return -1;
-			if ((a.firstStance == Post.STANCE_NO) && (b.firstStance == Post.STANCE_YES)) return 1;
-			return 0;
-		}		
-		
-		public static function compareStanceNo(a:Thread, b:Thread):Number {
-			if ((a.firstStance == Post.STANCE_YES) && (b.firstStance == Post.STANCE_NO)) return 1;
-			if ((a.firstStance == Post.STANCE_NO) && (b.firstStance == Post.STANCE_YES)) return -1;
-			return 0;
-		}				
-		
-		public static function comparePostCountDescending(a:Thread, b:Thread):Number {
-			return b.postCount - a.postCount;
-		}
-		
+
 		// sets a bunch of convenience variables after the posts are loaded
 		public function init():void {
 			_posts.sortOn('created', Array.NUMERIC);			

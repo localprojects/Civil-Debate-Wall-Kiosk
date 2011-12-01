@@ -203,7 +203,9 @@ package com.civildebatewall {
 //		wallSaver.mouseChildren = false;
 			
 			// Load the data, which fills up everything through binding callbacks
-			data.load();			
+			CivilDebateWall.state.firstLoad = true;
+			data.load();
+			
 
 			// dashboard goes on top... or add when active? 
 			addChild(dashboard);			
