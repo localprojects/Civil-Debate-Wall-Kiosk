@@ -5,6 +5,7 @@ package com.civildebatewall {
 	import com.kitschpatrol.flashspan.Random;
 	import com.kitschpatrol.futil.toStr;
 	import com.kitschpatrol.futil.utilitites.CoreUtil;
+	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
 	import flash.display.*;
@@ -42,7 +43,11 @@ package com.civildebatewall {
 			new PushButton(this, 5, 5, "Play Sequence A", function():void { CivilDebateWall.self.PlaySequenceA(); });
 			new PushButton(this, 110, 5, "Play Sequence B", function():void { CivilDebateWall.self.PlaySequenceB(); });
 			new PushButton(this, 5, 55, "Slow", function():void { CoreUtil.sleep(1000); });
-			
+			new PushButton(this, 110, 55, "Load Data", function():void { CivilDebateWall.data.load(); });
+			new PushButton(this, 110, 30, "Test Image Save", function():void { 
+				CivilDebateWall.kiosk.view.portraitCamera.takePhoto();
+				FileUtil.saveJpeg(CivilDebateWall.kiosk.view.portraitCamera.cameraBitmap, CivilDebateWall.settings.imagePath, "test-image.jpg");			
+			});
 			new PushButton(this, 5, 30, "Calibrate Camera", function():void { CivilDebateWall.kiosk.view.cameraCalibrationOverlayView(); });
 			
 			//new CheckBox(this, 5, 75, "Ordered Opinion Rows", function():void {CivilDebateWall.wallSaver.orderedOpinionRows = !CivilDebateWall.wallSaver.orderedOpinionRows });
