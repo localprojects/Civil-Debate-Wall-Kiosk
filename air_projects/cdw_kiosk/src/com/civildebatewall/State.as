@@ -1,4 +1,5 @@
 package com.civildebatewall {
+	
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.Question;
@@ -6,6 +7,7 @@ package com.civildebatewall {
 	import com.civildebatewall.data.Thread;
 	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.demonsters.debugger.MonsterDebugger;
+	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -46,6 +48,10 @@ package com.civildebatewall {
 		
 		public var question:Question;
 		
+		
+		public var userThreadID:String;
+		
+		public var firstLoad:Boolean;
 		
 		public var targetFaceRectangle:Rectangle = new Rectangle(294, 352, 494, 576);
 		
@@ -166,10 +172,11 @@ package com.civildebatewall {
 		private function onDataPreUpdate(e:Event):void {
 			// Initialize some stuff. only runs once at startup.
 			CivilDebateWall.state.activeView = CivilDebateWall.kiosk.view.homeView;
-			CivilDebateWall.state.setActiveThread(CivilDebateWall.data.threads[0]);
+			CivilDebateWall.state.setActiveThread(ArrayUtil.randomElement(CivilDebateWall.data.threads));
 			CivilDebateWall.data.removeEventListener(Data.DATA_UPDATE_EVENT, onDataPreUpdate);
-						
 		}				
+		
+		
 		
 		
 		public function setSort(sortMode:int):void {
@@ -181,23 +188,20 @@ package com.civildebatewall {
 			
 			switch (sortMode) {
 				case SORT_BY_RECENT:
-					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareCreatedDescending);
+					CivilDebateWall.data.threads.sortOn('created', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?                   
 					break;
 				
 				case SORT_BY_YES:
-					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareCreatedDescending);
-					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareStanceYes); // but still newest first? TODO TEST
+					CivilDebateWall.data.threads.sortOn('firstStance', Array.DESCENDING); // newest first // Is this working?                   
 					break;
 				
 				case SORT_BY_NO:
-					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareCreatedDescending);					
-					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareStanceNo);
-					break;				
+					CivilDebateWall.data.threads.sortOn('firstStance'); // newest first // Is this working?                 
+					break;              
 				
 				case SORT_BY_MOST_DEBATED:
-					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.compareCreatedDescending);
-					CivilDebateWall.data.threads = CivilDebateWall.data.threads.sort(Thread.comparePostCountDescending); // but still newest first? TODO TEST
-					break;				
+					CivilDebateWall.data.threads.sortOn('postCount', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?                 
+					break;              
 				
 				default:
 					MonsterDebugger.trace(this, "invalid sort type");

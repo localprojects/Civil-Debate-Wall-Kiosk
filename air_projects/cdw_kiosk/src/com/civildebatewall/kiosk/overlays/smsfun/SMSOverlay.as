@@ -1,6 +1,5 @@
 package com.civildebatewall.kiosk.overlays.smsfun {
 	
-	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.kiosk.buttons.WhiteButton;
