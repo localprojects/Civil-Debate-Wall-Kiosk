@@ -16,11 +16,10 @@ package com.civildebatewall.kiosk.buttons {
 			});
 			
 			// resize flag icon
-			removeChild(icon);
-			icon = Assets.getFlag();
+			icon.x = 0;
+			icon.y = 0;
 			icon.width = 20;
 			icon.height = 20;
-			addChild(icon);
 
 			// listens for updates to the active thread
 			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);			

@@ -1,5 +1,6 @@
 package com.civildebatewall.kiosk {
 	
+	import com.civildebatewall.kiosk.camera.FaceDetector;
 	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
@@ -7,9 +8,12 @@ package com.civildebatewall.kiosk {
 	import com.greensock.plugins.ThrowPropsPlugin;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	
+	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.utils.getTimer;
 	
 	
@@ -21,22 +25,18 @@ package com.civildebatewall.kiosk {
 		public var scrollAxis:String;
 		
 		// settings
-		private var wiggleThreshold:Number = 75; // How much mouse wiggle before we call it a drag instead of a click
-		private var resistance:Number = 800;
-		private var maxDuration:Number = 1; // max coast time, seconds
-		private var minDuration:Number = 0.1; // min coast time, seconds
+		private var wiggleVelocityThreshold:Number = 20; // How much mouse wiggle before we call it a drag instead of a click // TODO DO THIS ON VELOCITY
+		private var wiggleTravelThreshold:Number = 5; // How much mouse wiggle before we call it a drag instead of a click // TODO DO THIS ON VELOCITY
+		private var resistance:Number = 300;
+		private var maxDuration:Number = 5; // max coast time, seconds
+		private var minDuration:Number = 0.3; // min coast time, seconds
 		private var overshootTolerance:Number = 0.25; // maximum time spent overshooting		
 				
 		// mouse blocker
 		private var mouseBlocker:Sprite;
-		private var isClick:Boolean;
+		private var isButtonPress:Boolean;
 
-		// Drag Heuristics
-		private var dragStartTime:uint;
-		private var xVelocity:Number;
-		private var yVelocity:Number;
-		
-		// my heuristics		
+		// heuristics
 		private var lastMouseX:Number;
 		private var lastMouseY:Number;
 		private var mouseTravel:Number;		
@@ -45,9 +45,20 @@ package com.civildebatewall.kiosk {
 		private var scrollStartX:Number;
 		private var scrollStartY:Number;
 		private var mouseStartX:Number;
-		private var mouseStartY:Number;
+		private var mouseStartY:Number;		
 		
+		private var time:Number;
+		private var yVelocity:Number;
+		private var xVelocity:Number;		
+	  private var t1:uint;
+	  private var t2:uint;
+	  private var y1:Number;
+	  private var y2:Number;
+		private var x1:Number;
+		private var x2:Number;
 		private var coastTween:TweenLite;
+		
+		public var assumeButtons:Boolean; // always checks for buttons! // TODO make this a string mocal, with assumeScroll as well
 		
 		public function BlockInertialScroll(params:Object = null)	{
 			super(params);
@@ -55,95 +66,188 @@ package com.civildebatewall.kiosk {
 			// set initial scroll position
 			scrollX = 0;
 			scrollY = 0;			
+			isButtonPress = false;
+			assumeButtons = false;
 			
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);			
 		}
 		
 		private function onMouseDown(e:MouseEvent):void {
 			
+			trace("down!");
+			
 			// stop any coasting, this is the "poke"
-			//TweenMax.killTweensOf(this);
 			if (coastTween != null) coastTween.kill();
-			MonsterDebugger.trace(this, "killing");
 			
-			
-			// reset heuristics
-			lastMouseX = stage.mouseX;
-			lastMouseY = stage.mouseY;			
-			mouseTravelX = 0;
-			mouseTravelY = 0;
-			dragStartTime = getTimer();
+			x1 = x2 = stage.mouseX;
+			y1 = y2 = stage.mouseY;
+			t1 = t2 = getTimer();
 			
 			scrollStartX = scrollX;
 			scrollStartY = scrollY;
-			mouseStartX = stage.mouseX;
-			mouseStartY = stage.mouseY;
-			
-			isClick = true;
+			mouseTravelX = 0;
+			mouseTravelY = 0;
+			mouseStartX = lastMouseX = stage.mouseX;
+			mouseStartY = lastMouseY = stage.mouseY;
+			time = 0;
+			xVelocity = 0;
+			yVelocity = 0;	
 
+			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			this.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, -1);
 			
+
 			
-			MonsterDebugger.trace(this, "scroll start y: " + scrollStartY);
+			isButtonPress = assumeButtons ? true : isButtonUnderMouse(); // only discriminate between click and scroll if there's a button
+			
+			if (isButtonPress) {
+				trace("Could be button press.");
+			}
+			else {
+				trace("no buttons under there...");
+			}
+			
+			
+			
+		}
+		
+		private function isButtonUnderMouse():Boolean {
+			// are we over a button?
+			var objectsUnderMouse:Array = stage.getObjectsUnderPoint(new Point(stage.mouseX, stage.mouseY));
+			
+			trace("Object: " + objectsUnderMouse.length);
+			
+			for (var i:int = 0; i < objectsUnderMouse.length; i++) {
+				var displayObject:DisplayObject = objectsUnderMouse[i] as DisplayObject;
+				if (displayObject.toString().indexOf("instance") > -1) return true; // ugh... long story
+			}
+			return false; // not a button!
 		}
 		
 		
+		private var zeroCount:int = 0;
+		private var zeroPad:int = 5; // how many frames of zero before we actuall call it zero
 		
+		private var actualXVelocity:Number;
+		private var actualYVelocity:Number;
+		
+		private function onEnterFrame(e:Event):void {				
+			t2 = t1;
+			t1 = getTimer();
+			
+			y2 = y1;
+			y1 = stage.mouseY;
+			
+			x2 = x1;
+			x1 = stage.mouseX;
+			
+
+			time = (t1 - t2) / 1000;
+			actualXVelocity = (x1 - x2) / time;
+			actualYVelocity = (y1 - y2) / time;	
+			
+			
+			if (actualYVelocity == 0) {
+				if(zeroCount > zeroPad) {
+					yVelocity = actualYVelocity;	
+				}
+				zeroCount++;
+			}
+			else {
+				yVelocity = actualYVelocity;
+				zeroCount = 0;
+			}
+			
+			if (actualXVelocity == 0) {
+				if(zeroCount > zeroPad) {
+					xVelocity = actualXVelocity;	
+				}
+				zeroCount++;
+			}
+			else {
+				xVelocity = actualXVelocity;
+				zeroCount = 0;
+			}			
+			
+			
+			
+			
+			
+			trace("time: " + time);
+			trace("yVelocity: " + yVelocity);	
+			trace("xVelocity: " + xVelocity);	
+		}		
+		
+
 		private function onMouseMove(e:MouseEvent):void {
+
 			
-			
+					
 			
 			if (((scrollAxis == SCROLL_BOTH) && (isOverflowX || isOverflowY)) ||
 				  (scrollAxis == SCROLL_X && isOverflowX) ||
 					(scrollAxis == SCROLL_Y && isOverflowY)) {
 			
-			// Actually scroll the window
-			if((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_X)) scrollX = scrollStartX + (mouseStartX - stage.mouseX);
-			if((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_Y)) scrollY = scrollStartY + (mouseStartY - stage.mouseY);
-			
-			MonsterDebugger.trace(this, "Scroll y: " + scrollY);
-			
-			// Mouse odometry
-			mouseTravelX += Math.abs(stage.mouseX - lastMouseX);
-			mouseTravelY += Math.abs(stage.mouseY - lastMouseY);
-			
-			// Click or drag?
-			
-			// use the mouse travel values that apply to the axis we're scrolling
-			if(scrollAxis == SCROLL_BOTH) mouseTravel = Math.sqrt((mouseTravelX * mouseTravelX) + (mouseTravelY * mouseTravelY));
-			else if(scrollAxis == SCROLL_X) mouseTravel = mouseTravelX;
-			else if(scrollAxis == SCROLL_Y) mouseTravel = mouseTravelY;			
-			
-			if (isClick && (mouseTravel > wiggleThreshold)) {
-				MonsterDebugger.trace(this, "Not a click.")
-				disableChildren(content);
-				isClick = false;
-			}
-			
-			// Keep mouse history for comparison
-			lastMouseX = stage.mouseX;
-			lastMouseY = stage.mouseY;
-			
+				// Actually scroll the window
+				if ((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_X)) scrollX = scrollStartX + (mouseStartX - stage.mouseX);
+				if ((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_Y)) scrollY = scrollStartY + (mouseStartY - stage.mouseY);
+								
+				
+				if (isButtonPress) {
+				
+				// Mouse odometry
+					mouseTravelX += Math.abs(stage.mouseX - lastMouseX);
+					mouseTravelY += Math.abs(stage.mouseY - lastMouseY);		
+					
+					trace("mouseTravelY: " + mouseTravelY);
+					
+					// velocity tells between a click and scroll
+					var velocity:Number;
+					var mouseTravel:Number;
+	
+					// Click or drag?
+					if (scrollAxis == SCROLL_BOTH) {
+						velocity = Math.max(xVelocity, yVelocity);
+						mouseTravel = Math.sqrt((mouseTravelX * mouseTravelX) + (mouseTravelY * mouseTravelY));
+					}
+					else if (scrollAxis == SCROLL_X) {
+						velocity = xVelocity;
+						mouseTravel = mouseTravelY;
+					}
+					else if (scrollAxis == SCROLL_Y) {
+						velocity = yVelocity;
+						mouseTravel = mouseTravelX;
+					}
+					
+					trace("velocity " + velocity);
+					trace("travel " + mouseTravel);
+				
+					if ((velocity > wiggleVelocityThreshold) || (mouseTravel > wiggleTravelThreshold)) {
+						MonsterDebugger.trace(this, "Not a click.")
+						disableChildren(content);
+						isButtonPress = false;
+					}
+				}
+				
+				// Keep mouse history for comparison
+				lastMouseX = stage.mouseX;
+				lastMouseY = stage.mouseY;				
 			}
 		}
 		
 		
 		private function onMouseUp(e:MouseEvent):void {
-			
-			
+
 			// Remove listeners
+			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			this.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			
-			// Calculate mouse velocity
-			var dragDuration:Number = (getTimer() - dragStartTime) / 1000;
-			MonsterDebugger.trace(this, "Drag duration: " + dragDuration);	
-			xVelocity = (scrollX - scrollStartX) / dragDuration;
-			yVelocity = (scrollY - scrollStartY) / dragDuration;
+
 			
 			// zero velocity if we're out of bounds
 			if ((scrollY > maxScrollY) || (scrollY < minScrollY)) yVelocity = 0;
+			//if ((scrollX > maxScrollX) || (scrollX < minScrollX)) averageVelocity.x = 0;
 			
 			// Tween the flick
 			var props:Object = {throwProps: {}};
@@ -159,18 +263,17 @@ package com.civildebatewall.kiosk {
 			if ((scrollAxis == SCROLL_Y) || (scrollAxis == SCROLL_BOTH)) {
 				// Y Stuff
 				props.throwProps.scrollY = {};					
-				props.throwProps.scrollY.velocity = yVelocity;
+				props.throwProps.scrollY.velocity = -yVelocity;
 				props.throwProps.scrollY.min = minScrollY;
 				props.throwProps.scrollY.max = maxScrollY;
-				props.throwProps.scrollY.resistance = resistance;					
+				props.throwProps.scrollY.resistance = resistance;
+				
 			}
 				
-			props.ease = Quart.easeOut;
-			
-			MonsterDebugger.trace(this, "Throwing");
+			//props.ease = Quart.easeOut;
 			
 			// Stopped Here
-			if (!isClick) {
+			if (!isButtonPress) {
 				coastTween =	ThrowPropsPlugin.to(this, props, maxDuration, minDuration, overshootTolerance);
 				
 				// Restore child mouse functionality

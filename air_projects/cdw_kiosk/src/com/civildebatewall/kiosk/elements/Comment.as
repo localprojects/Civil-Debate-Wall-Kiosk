@@ -1,11 +1,13 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
+	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.buttons.*;
 	import com.civildebatewall.kiosk.buttons.BalloonButton;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
+	import com.kitschpatrol.futil.constants.Char;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
@@ -91,7 +93,7 @@ package com.civildebatewall.kiosk.elements {
 			addChild(postNumber);
 			
 			// add the byline
-			var authorText:String = postNumberString + _post.user.usernameFormatted.toUpperCase() + '\u0027S RESPONSE';
+			var authorText:String = postNumberString + _post.user.usernameFormatted.toUpperCase() + Char.APOSTROPHE + 's RESPONSE';
 			var byline:BlockText = new BlockText({
 				maxWidth: 350,
 				height: 12, 
@@ -101,7 +103,7 @@ package com.civildebatewall.kiosk.elements {
 				textSize: 12,
 				textColor: _post.stanceColorLight,				
 				leading: 12,
-				text: _post.user.usernameFormatted.toUpperCase() + '\u0027S RESPONSE',
+				text: _post.user.usernameFormatted.toUpperCase() + Char.APOSTROPHE + 'S RESPONSE',
 				visible: true,
 				x: 218,
 				y: 17
@@ -119,6 +121,7 @@ package com.civildebatewall.kiosk.elements {
 				height: 9, 
 				backgroundAlpha: 0,
 				textFont: Assets.FONT_BOLD_ITALIC,
+				// textItalic: true, // TODO doesn't work, font name collision? Edit font?
 				textBold: true,
 				textSize: 9,
 				textColor: _post.stanceColorLight,				
@@ -126,8 +129,11 @@ package com.civildebatewall.kiosk.elements {
 				text: timestamp,
 				visible: true,
 				x: byline.right + 12,
-				y: 20
-			});			
+				y: byline.bottom - 9
+			});	
+			
+			
+			//datePosted.textField.htmlText = "<i><b>yes</b></i>";
 			addChild(datePosted);
 			
 			// add the hairline
@@ -161,7 +167,7 @@ package com.civildebatewall.kiosk.elements {
 				textSize: 18,
 				textColor: 0xffffff,
 				leading: 11,
-				text: _post.text,
+				text: Char.LEFT_QUOTE + _post.text + Char.RIGHT_QUOTE,
 				visible: true,
 				backgroundColor: _post.stanceColorLight,
 				x: 167,
