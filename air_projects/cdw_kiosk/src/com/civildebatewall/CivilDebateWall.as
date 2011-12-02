@@ -133,7 +133,7 @@ package com.civildebatewall {
 			
 			// set up gui overlay TODO move to window
 			dashboard = new Dashboard();
-			dashboard.visible = true;
+			dashboard.visible = false;
 			
 			
 			if (settings.halfSize) {

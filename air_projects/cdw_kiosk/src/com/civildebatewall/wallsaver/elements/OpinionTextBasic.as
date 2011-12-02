@@ -32,7 +32,7 @@ package com.civildebatewall.wallsaver.elements {
 			defaultTextFormat = textFormat;			
 			autoSize = TextFieldAutoSize.LEFT;
 			
-			text = text;
+			this.text = text;
 
 			scaleX = 4;
 			scaleY = 4;			
