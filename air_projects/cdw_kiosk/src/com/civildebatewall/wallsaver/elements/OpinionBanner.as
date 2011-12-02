@@ -39,7 +39,7 @@ package com.civildebatewall.wallsaver.elements {
 			closeQuote.y = 111;
 			addChild(closeQuote);
 			
-			this.cacheAsBitmap = true; // helps?
+			//this.cacheAsBitmap = true; // helps?
 		}
 		
 	}
