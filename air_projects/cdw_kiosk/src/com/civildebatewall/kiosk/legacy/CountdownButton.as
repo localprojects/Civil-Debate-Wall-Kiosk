@@ -82,8 +82,8 @@ package com.civildebatewall.kiosk.legacy {
 				height: outerRingRadius * 2,
 				backgroundAlpha: 0
 			});
-			countLabel.x = outerRingRadius;
-			countLabel.y = outerRingRadius;
+			countLabel.x = outerRingRadius - 2;
+			countLabel.y = outerRingRadius - 2;
 			addChild(countLabel);
 						
 
@@ -205,14 +205,14 @@ package com.civildebatewall.kiosk.legacy {
 			var lineWeight:Number = 6;
 			
 			progressRing.graphics.clear();
-			progressRing.graphics.lineStyle(lineWeight, progressColor, 1);
+			progressRing.graphics.lineStyle(lineWeight, progressColor, 1, false, LineScaleMode.NORMAL, CapsStyle.SQUARE);
 			
 			progressRing.graphics.moveTo(0, -radius);
 			// TODO optimize by not clearing buffer? or taking bigger steps?
 			for (var i:int = 0; i < 360; i++)	{
 				var rad:Number = (i - 90) * Math.PI / 180;
 				
-				if (i > highlightDegrees) progressRing.graphics.lineStyle(lineWeight, ringColor, 0);
+				if (i > highlightDegrees) progressRing.graphics.lineStyle(lineWeight, ringColor, 0, false, LineScaleMode.NORMAL, CapsStyle.SQUARE);
 				progressRing.graphics.lineTo(Math.cos(rad) * radius, Math.sin(rad) * radius);
 			}
 			

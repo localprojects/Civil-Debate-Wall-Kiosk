@@ -1,4 +1,4 @@
-package com.civildebatewall.kiosk.elements {
+package com.civildebatewall.kiosk.elements.opinion_text {
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.TextMessage;

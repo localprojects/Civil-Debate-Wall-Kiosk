@@ -173,7 +173,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			TweenMax.to(horizontalRule, 0.5, {alpha: 1, delay: 6.5});		
 		}
 		
-		private function clearKeypad():void {
+		public function clearKeypad():void {
 			TweenMax.to(keypad, 0.5, {y: screenHeight});
 			TweenMax.to(horizontalRule, 0.5, {alpha: 0});
 			TweenMax.to(numberRequest, 0.5, {y: -numberRequest.height});
