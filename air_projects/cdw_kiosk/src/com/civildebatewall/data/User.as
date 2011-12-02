@@ -33,17 +33,36 @@ package com.civildebatewall.data {
 			
 			if (imageFile.exists) {
 				// load the portrait, estimate it at 150k
-				trace('Loading image from file for ' + _username);
+				trace('Loading image from file for ' + _username + "\t(" + _id + ")");
 				CivilDebateWall.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes: 150000, onComplete: onImageLoaded}) );
 			}
 			else {
-				trace('Using placeholder for ' + _username);
+				trace('Using placeholder for ' + _username + "\t(" + _id + ")");
 			}
 		}
 		
 		private function onImageLoaded(e:LoaderEvent):void {
-			MonsterDebugger.trace(this, "Loaded image for " + _username);
-			_photo = new Bitmap(((LoaderMax.getContent(_id) as ContentDisplay).rawContent as Bitmap).bitmapData, PixelSnapping.AUTO, true);			
+			trace("Loaded image for " + _username);
+			_photo = new Bitmap(((LoaderMax.getContent(_id) as ContentDisplay).rawContent as Bitmap).bitmapData, PixelSnapping.AUTO, true);
+			
+			// search and update, use some kind of bitmap binding instead?
+			// wallsaver
+			if (!CivilDebateWall.wallSaver.timeline.active) {
+				CivilDebateWall.wallSaver.rebuildFaceGrid();
+			}
+			
+			// carousell
+			CivilDebateWall.kiosk.view.debateStrip.updateUserPhoto(this);
+			
+			// main portrait
+			if (CivilDebateWall.state.activeThread.firstPost.user == this) {
+				CivilDebateWall.kiosk.view.portrait.setImage(_photo);
+			}
+			
+			// stats?
+			if (CivilDebateWall.state.superlativePost.user == this) {
+				CivilDebateWall.kiosk.view.statsOverlay.superlativesPortrait.portrait.setImage(_photo);
+			}
 		}
 		
 		

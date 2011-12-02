@@ -49,7 +49,7 @@ package com.civildebatewall {
 		public var question:Question;
 		
 		
-		public var userThreadID:String;
+		
 		
 		public var firstLoad:Boolean;
 		
@@ -123,33 +123,36 @@ package com.civildebatewall {
 			out += varToString("userImageFull");
 			out += varToString("userImage");
 			out += varToString("userIsDebating");
-			out += varToString("userRespondingTo.id");			
+			out += varToString("userRespondingTo.id");
+			out += varToString("userThreadID");
+			out += varToString("userPostID");
 			return out;
 		}
 				
 		
 		
-		// scratch user... TODO wrap this up in the object?
+		// scratch user... TODO wrap this up in the object
 		public var userStance:String = 'yes';
 		public var userName:String = '';
 		public var userOpinion:String = '';
-		public var userPhoneNumber:String = '#########';
+		public var userPhoneNumber:String = "";
 		public var userID:String = '';
+		public var userThreadID:String = '';
+		public var userPostID:String = '';		
 		public var userImage:Bitmap = null;
 		public var userImageFull:Bitmap = null;		
 		public var userStanceText:String = ''; // add exclamation point		
 		public var userRespondingTo:Post; // which post we're debating
 		
 		public function setHighlightWord(word:String, color:uint = 0x000000):void {
-			highlightWord = word;
-			highlightWordColor = color;
-			dispatchEvent(new Event(ON_HIGHLIGHT_WORD_CHANGE));
+			// OFF FOR NOW, TOO SLOW AND GLITCHY
+//			highlightWord = word;
+//			highlightWordColor = color;
+//			dispatchEvent(new Event(ON_HIGHLIGHT_WORD_CHANGE));
 		}
 		
 		public var highlightWordColor:uint = 0x000000;
 		public var highlightWord:String = null;
-		
-		
 		
 		// color state
 		public var userStanceColorLight:uint;
@@ -206,6 +209,9 @@ package com.civildebatewall {
 				default:
 					MonsterDebugger.trace(this, "invalid sort type");
 			}
+			
+			
+			// TODO update next / previous / etc.
 			
 			this.dispatchEvent(new Event(SORT_CHANGE));
 		}

@@ -1,8 +1,6 @@
 package com.civildebatewall.wallsaver.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.data.Post;
-	import com.kitschpatrol.futil.blocks.BlockText;
-	import com.kitschpatrol.futil.constants.Alignment;
 	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
@@ -11,15 +9,12 @@ package com.civildebatewall.wallsaver.elements {
 
 		private var openQuote:Bitmap;
 		private var closeQuote:Bitmap;
-		private var quotation:BlockText;
 		public var post:Post;
-		
+		private var opinionText:OpinionTextBasic;
 		
 		public function OpinionBanner(post:Post) {
 			super();
 			this.post = post;
-//			this.scaleX = 4;
-//			this.scaleY = 4;
 				
 			openQuote = (post.stance == Post.STANCE_YES) ? Assets.getQuoteYesOpen() : Assets.getQuoteNoOpen();
 			closeQuote = (post.stance == Post.STANCE_YES) ? Assets.getQuoteYesClose() : Assets.getQuoteNoClose();
@@ -28,24 +23,19 @@ package com.civildebatewall.wallsaver.elements {
 			openQuote.y = 0;
 			addChild(openQuote);
 			
-			quotation = new BlockText({
-				height: 247,
-				backgroundColor: post.stanceColorLight,
-				paddingLeft: 110,
-				paddingRight: 110,
-				alignmentPoint: Alignment.LEFT,
-				textFont: Assets.FONT_REGULAR,
-				textSize: 142,				
-				textColor: 0xffffff,
-				text: post.text,
-				visible: true
-			});
+			opinionText = new OpinionTextBasic(post.text);
 			
-			quotation.x = openQuote.width + 33;
-			quotation.y = 0;
-			addChild(quotation);
+			// background
+			this.graphics.beginFill(post.stanceColorLight);
+			this.graphics.drawRect(openQuote.width + 33, 0, opinionText.width , 247);
+			this.graphics.endFill();
 			
-			closeQuote.x = quotation.x + quotation.width + 33; 
+			opinionText.x = openQuote.width + 33;
+			opinionText.y = 37;
+			addChild(opinionText);
+				
+
+			closeQuote.x = opinionText.x + opinionText.width + 33; 
 			closeQuote.y = 111;
 			addChild(closeQuote);
 			

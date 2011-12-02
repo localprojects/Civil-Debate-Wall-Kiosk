@@ -81,9 +81,9 @@ package com.civildebatewall.kiosk.buttons {
 			
 				// Spin animation
 
-				TweenMax.to(icon, 0.50, {transformAroundCenter:{rotation: 360}, ease: Quart.easeInOut});				
-				TweenMax.to(icon, 0.25, {transformAroundCenter:{scaleX: 2, scaleY: 2}, alpha: 0.75, ease: Quart.easeIn});
-				TweenMax.to(icon, 0.25, {transformAroundCenter:{scaleX: 1, scaleY: 1}, alpha: 1, ease: Quart.easeOut, delay: .25});
+				TweenMax.to(icon, 0.8, {transformAroundCenter:{rotation: 360}, ease: Quart.easeInOut});				
+				TweenMax.to(icon, 0.4, {transformAroundCenter:{scaleX: 2, scaleY: 2}, alpha: 0.75, ease: Quart.easeIn});
+				TweenMax.to(icon, 0.4, {transformAroundCenter:{scaleX: 1, scaleY: 1}, alpha: 1, ease: Quart.easeOut, delay: .4});
 			}
 		}
 		

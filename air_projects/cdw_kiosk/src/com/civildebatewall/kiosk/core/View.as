@@ -49,7 +49,7 @@ package com.civildebatewall.kiosk.core {
 		public const stageHeight:Number = 1920;
 		
 		// home view
-		private var portrait:Portrait;
+		public var portrait:PortraitMain;
 		private var questionHeaderHome:QuestionHeaderHome;
 		private var opinionHome:OpinionTextHome;
 		private var likeButton:HomeLikeButton;
@@ -62,7 +62,7 @@ package com.civildebatewall.kiosk.core {
 		private var debateStripUnderlay:BlockBase;
 		private var debateStripLeftButton:DebateStripNavArrow;
 		private var debateStripRightButton:DebateStripNavArrow;		
-		private var debateStrip:DebateStrip;
+		public var debateStrip:DebateStrip;
 		private var sortLinks:SortLinks;
 		private var dragLayer:DragLayer;
 
@@ -139,7 +139,7 @@ package com.civildebatewall.kiosk.core {
 			// they'll get tweened in and out as necessary
 			
 			// home view
-			portrait = new Portrait();
+			portrait = new PortraitMain();
 			portrait.setDefaultTweenIn(1, {alpha: 1});
 			portrait.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(portrait);
@@ -336,8 +336,8 @@ package com.civildebatewall.kiosk.core {
 				textSize: 26,
 				textColor: 0xffffff,
 				backgroundColor: Assets.COLOR_GRAY_50,
-				text: "The camera could not focus, please try again!",
-				visible: true
+				padding: 40,
+				text: "The camera could not focus, please try again!"
 			});
 			cameraTimeoutWarning.setDefaultTweenIn(1, {x: Alignment.CENTER_STAGE, y: Alignment.CENTER_STAGE});	
 			cameraTimeoutWarning.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: Alignment.CENTER_STAGE});
@@ -487,7 +487,6 @@ package com.civildebatewall.kiosk.core {
 			markAllInactive();
 			
 			CivilDebateWall.inactivityTimer.disarm();
-			CivilDebateWall.state.clearUser(); // Reset user info (TODO move this!)
 						
 			bigButton.y = 1470;			
 			bigButton.setText('JOIN THE DEBATE'); // TODO move to listener?
@@ -655,12 +654,12 @@ package com.civildebatewall.kiosk.core {
 			countdownButton.start();			
 			
 			// Todo update this
-//			if (CivilDebateWall.state.lastView == photoBoothView) {
-//				// we timed out! show the message for five seconds
-//				cameraTimeoutWarning.tweenIn();
-//				TweenMax.delayedCall(5, function():void { cameraTimeoutWarning.tweenOut(-1, {x: OldBlockBase.OFF_RIGHT_EDGE})});
-//			}
-//			
+			if (CivilDebateWall.state.lastView == photoBoothView) {
+				// we timed out! show the message for five seconds
+				cameraTimeoutWarning.tweenIn();
+				TweenMax.delayedCall(5, function():void { cameraTimeoutWarning.tweenOut(-1, {x: Alignment.OFF_STAGE_RIGHT})});
+			}
+			
 			tweenOutInactive();
 		}
 		
@@ -691,8 +690,6 @@ package com.civildebatewall.kiosk.core {
 		
 		private function onSLRTimeout(e:Event):void {
 			// go back to photo page
-			// CivilDebateWall.dashboard.log("SLR timeout callback");
-			// TODO tell the user
 			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 			photoBoothView();
 		}
@@ -812,7 +809,7 @@ package com.civildebatewall.kiosk.core {
 
 		
 		public function inactivityOverlayView(...args):void {
-			// tween a bunch of stuff out
+			// tween a bunch of stuff out	
 			CivilDebateWall.inactivityTimer.disarm();			
 			inactivityOverlay.tweenIn();
 		}

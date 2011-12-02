@@ -48,7 +48,7 @@ package com.civildebatewall.kiosk.overlays {
 			message.x = 100;		
 			
 			message.setDefaultTweenIn(1, {y: 982});
-			message.setDefaultTweenOut(1, {y: Alignment.OFF_STAGE_TOP});
+			message.setDefaultTweenOut(1, {y: Alignment.OFF_STAGE_LEFT});
 			addChild(message);
 			
 			timerBar = new ProgressBar({width: 880, height: 1, duration: 10});

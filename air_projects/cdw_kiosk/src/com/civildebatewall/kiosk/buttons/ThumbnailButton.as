@@ -31,6 +31,18 @@ package com.civildebatewall.kiosk.buttons {
 		public  var rightDot:Shape;
 		
 		
+		public function updatePortrait():void {
+			if (roundedPortrait != null) {
+				var scaledPhotoData:BitmapData = BitmapUtil.scaleDataToFill(thread.firstPost.user.photo.bitmapData, 71, 96)
+					
+				roundedPortrait.graphics.clear();
+				roundedPortrait.graphics.beginBitmapFill(scaledPhotoData, null, false, true);
+				roundedPortrait.graphics.drawRoundRect(0, 0, 71, 96, 15, 15);
+				roundedPortrait.graphics.endFill();							
+			}
+		}
+		
+		
 		public function ThumbnailButton(thread:Thread) {
 			this.thread = thread;
 			

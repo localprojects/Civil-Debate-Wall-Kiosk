@@ -30,6 +30,10 @@ package com.civildebatewall.wallsaver.core {
 		public var orderedOpinionRows:Boolean;
 		
 		
+		public function rebuildFaceGrid():void {
+			faceGridSequence.buildPortraits();
+		}
+		
 		public function WallSaver()	{
 			super();
 			

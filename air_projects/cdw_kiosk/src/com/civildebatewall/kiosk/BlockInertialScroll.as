@@ -172,19 +172,17 @@ package com.civildebatewall.kiosk {
 
 		private function onMouseMove(e:MouseEvent):void {
 			
-			trace("scrollAxis" + scrollAxis);
-			trace("isOverflowY" + isOverflowY);
 			
 			if (((scrollAxis == SCROLL_BOTH) && (isOverflowX || isOverflowY)) ||
-				  (scrollAxis == SCROLL_X && isOverflowX) ||
-					(scrollAxis == SCROLL_Y && isOverflowY)) {
+				  ((scrollAxis == SCROLL_X) && isOverflowX) ||
+					((scrollAxis == SCROLL_Y) && isOverflowY)) {
 				
 				
-			
 				// Actually scroll the window
 				if ((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_X)) scrollX = scrollStartX + (mouseStartX - stage.mouseX);
 				if ((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_Y)) scrollY = scrollStartY + (mouseStartY - stage.mouseY);
 								
+
 				
 				if (isButtonPress) {
 				

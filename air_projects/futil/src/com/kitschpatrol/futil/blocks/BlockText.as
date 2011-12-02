@@ -377,10 +377,15 @@ package com.kitschpatrol.futil.blocks {
 							
 							
 							//trace("num lines: " + textField.numLines);
-							// todo overflow off the right							
+							// todo overflow off the right
+							// TODO DUCT TAPE FOR LOOPER
+							var maxWhile:int = 1080;
+							
 							while (textField.numLines > maxLines) {
 								textField.width++;
-								textField.text = textField.text;								
+								textField.text = textField.text;
+								maxWhile--;
+								if (maxWhile == 0) break;
 							}
 							
 							

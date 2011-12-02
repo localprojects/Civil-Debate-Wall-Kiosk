@@ -222,6 +222,7 @@ package com.civildebatewall {
 		
 		private function onInactive(e:InactivityEvent):void {
 			MonsterDebugger.trace(this, "inactive!");
+			CivilDebateWall.state.clearUser();			
 			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.inactivityOverlayView);
 		}		
 		
