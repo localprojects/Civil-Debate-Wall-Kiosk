@@ -31,7 +31,10 @@ package com.civildebatewall.wallsaver.sequences {
 		}
 		
 		private function onDataUpdate(e:Event):void {
-			
+			buildPortraits();
+		}
+		
+		public function buildPortraits():void {
 			// grid settings (make global to class?)
 			var gridWidth:int = CivilDebateWall.flashSpan.settings.totalWidth - CivilDebateWall.flashSpan.settings.physicalScreenWidth;			
 			var gridSpacing:Number = 30;
@@ -40,7 +43,7 @@ package com.civildebatewall.wallsaver.sequences {
 			var portraitWidth:int = 233;
 			var portraitHeight:int = 311;
 			var wallsaverPaddingTop:int = 123;					
-
+			
 			GraphicsUtil.removeChildren(this);
 			
 			var portraits:Array = [];			

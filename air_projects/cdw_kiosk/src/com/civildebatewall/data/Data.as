@@ -10,6 +10,7 @@ package com.civildebatewall.data {
 	import com.greensock.loading.display.*;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
+	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -17,18 +18,15 @@ package com.civildebatewall.data {
 	
 	public class Data extends EventDispatcher {
 		
-		
 		public static const DATA_UPDATE_EVENT:String = "dataUpdateEvent";
 		public static const DATA_PRE_UPDATE_EVENT:String = "dataPreUpdateEvent";
-		
 		
 		public static const LIKE_UPDATE_LOCAL:String = "likeUpdateLocal";
 		public static const LIKE_UPDATE_SERVER:String = "likeUpdateServer";		
 		public static const FLAG_UPDATE_LOCAL:String = "flagUpdateLocal";
 		public static const FLAG_UPDATE_SERVER:String = "flagUpdateServer";		
 		
-		
-		// TODO back to arrays... faster for objects and easier to grow / shrink
+		// the data
 		public var badWords:Vector.<String>;
 		public var boringWords:Vector.<String>;
 		public var categories:Array;
@@ -36,29 +34,27 @@ package com.civildebatewall.data {
 		public var users:Array;
 		public var threads:Array;
 		public var posts:Array;
-		
-		// stats
-		public var stats:Stats; // container		
+		public var stats:Stats;		
 		
 			
 		public function Data() {
 			super();
 			// Hash the secret key (just once at start up)
 			CivilDebateWall.settings.secretKeyHash = SHA1.hash(CivilDebateWall.settings.secretKey);
+			trace(CivilDebateWall.settings.secretKeyHash);
 		}
 		
-		
+		// Run once at startup
 		public function load():void {
-			MonsterDebugger.trace(this, "Loading data");
 			loadBadWords();
 		}
 		
 		public function onLoadComplete():void {
-			MonsterDebugger.trace(this, "Load complete");
+			MonsterDebugger.trace(null, "Load complete");
 			
 			if (CivilDebateWall.state.firstLoad) {
 				this.dispatchEvent(new Event(Data.DATA_PRE_UPDATE_EVENT));
-				CivilDebateWall.state.activeThread = ArrayUtil.randomElement(threads);
+				CivilDebateWall.state.setActiveThread(ArrayUtil.randomElement(threads));
 			}
 			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
 			
@@ -66,20 +62,29 @@ package com.civildebatewall.data {
 		}
 		
 		
-		// Implementation ========================================================================================================================
+		
+		public function update():void {
+			MonsterDebugger.trace(null, "Updating data");
+			updateThreads();
+		}
+		
+		public function onUpdateComplete():void {
+			MonsterDebugger.trace(null, "Update complete");
+			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
+		}
 		
 		
-
+		// Load Routine
 
 		// loaders in function variables for chaining
 		private function loadBadWords(onLoad:Function = null):void {
-			MonsterDebugger.trace(this, "Loading bad words");
+			MonsterDebugger.trace(null, "Loading bad words");
 			// TODO get this from back end!
 			var response:Array = [];
 			badWords = new Vector.<String>();
 			for each (var badWord:String in response) badWords.push(badWord);			
 			badWords.fixed = true;
-			MonsterDebugger.trace(this, "Loaded " + badWords.length + " bad words");
+			MonsterDebugger.trace(null, "Loaded " + badWords.length + " bad words");
 			(onLoad != null) ? onLoad() :	onLoadBadWords();
 		}
 			
@@ -88,13 +93,13 @@ package com.civildebatewall.data {
 		}
 		
 		private function loadBoringWords(onLoad:Function = null):void {
-			MonsterDebugger.trace(this, "Loading boring words");
+			MonsterDebugger.trace(null, "Loading boring words");
 			// TODO get this from back end!
 			var response:Array = ["not", "for", "this", "and", "are", "but", "your", "has", "have", "the", "that", "they", "with"];
 			boringWords = new Vector.<String>();
 			for each (var boringWord:String in response) boringWords.push(boringWord);
 			boringWords.fixed = true;
-			MonsterDebugger.trace(this, "Loaded " + boringWord.length + " boring words");
+			MonsterDebugger.trace(null, "Loaded " + boringWord.length + " boring words");
 			(onLoad != null) ? onLoad() :	onLoadBoringWords();
 		}
 			
@@ -103,11 +108,11 @@ package com.civildebatewall.data {
 		}			
 		
 		private function loadCategories(onLoad:Function = null):void {
-			MonsterDebugger.trace(this, "Loading categories");
+			MonsterDebugger.trace(null, "Loading categories");
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/questions/categories", function(response:Object):void {
 				categories = [];
 				for each (var category:Object in response) categories.push(new Category(category));
-				MonsterDebugger.trace(this, "Loaded " + categories.length + " categories");				
+				MonsterDebugger.trace(null, "Loaded " + categories.length + " categories");				
 				(onLoad != null) ? onLoad() :	onLoadCategories();
 			});
 		}
@@ -118,28 +123,26 @@ package com.civildebatewall.data {
 		
 		// depends on categories...
 		private function loadQuestions(onLoad:Function = null):void {
-			MonsterDebugger.trace(this, "Loading questions.");
+			MonsterDebugger.trace(null, "Loading questions.");
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/questions", function(response:Object):void {
 				questions = [];
 				for each (var question:Object in response) questions.push(new Question(question));
-				MonsterDebugger.trace(this, "Loaded " + questions.length + " questions");	
+				MonsterDebugger.trace(null, "Loaded " + questions.length + " questions");	
 				(onLoad != null) ? onLoad() :	onLoadQuestions();
 			});
 		}
 		
-		
-			
 		private function onLoadQuestions():void {
 			getActiveQuestion();
 		}
 		
 		private function getActiveQuestion(onLoad:Function = null):void {
-			MonsterDebugger.trace(this, "Loading active question");
+			MonsterDebugger.trace(null, "Loading active question");
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/questions/current", function(response:Object):void {
 				CivilDebateWall.state.question = getQuestionByID(response.id);
-				MonsterDebugger.trace(this, "Loaded active question: \"" + CivilDebateWall.state.question.text + "\"");
+				MonsterDebugger.trace(null, "Loaded active question: \"" + CivilDebateWall.state.question.text + "\"");
 				CivilDebateWall.state.question = CivilDebateWall.state.question;
-				MonsterDebugger.trace(this, "In category: \"" + CivilDebateWall.state.question.category.name + "\"");
+				MonsterDebugger.trace(null, "In category: \"" + CivilDebateWall.state.question.category.name + "\"");
 				(onLoad != null) ? onLoad() :	onGetActiveQuestion();
 			});
 		}
@@ -151,7 +154,7 @@ package com.civildebatewall.data {
 			
 		// depends on active question
 		private function loadThreads(onLoad:Function = null):void {
-			MonsterDebugger.trace(this, "Loading threads");
+			MonsterDebugger.trace(null, "Loading threads");
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/questions/' + CivilDebateWall.state.question.id + '/threads', function(response:Object):void {
 				threads = [];
 				for each (var thread:Object in response) threads.push(new Thread(thread));
@@ -180,7 +183,7 @@ package com.civildebatewall.data {
 		private function onThreadPostsLoaded(response:Object, thread:Thread):void {
 			threadsLoaded++;
 
-			MonsterDebugger.trace(this, "Loaded thread posts " + threadsLoaded + " / " + threads.length + " (" + thread.id + ")");
+			MonsterDebugger.trace(null, "Loaded thread posts " + threadsLoaded + " / " + threads.length + " (" + thread.id + ")");
 			
 			// push global
 			for each (var jsonPost:Object in response['posts']) {
@@ -201,32 +204,35 @@ package com.civildebatewall.data {
 		
 		public var photoQueue:LoaderMax;
 		private function loadUsers():void {
-			MonsterDebugger.trace(this, "Loading users");
+			MonsterDebugger.trace(null, "Loading users");
 			// TODO only get users active for this question
 			photoQueue = new LoaderMax({name:"portraitQueue", onProgress:progressHandler, onComplete:completeHandler, onError:errorHandler});			
 			
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/users', function(response:Object):void {
-				MonsterDebugger.trace(this, "Loaded users");
+				MonsterDebugger.trace(null, "Loaded users");
 				users = [];
 				for each (var json:Object in response) users.push(new User(json));
 				onLoadUsers();
 			});						
 			
 			
-			MonsterDebugger.trace(this, "Loading images");
-			photoQueue.load();
+			MonsterDebugger.trace(null, "Loading images");
+			
 		}
 		
 		private function progressHandler(event:LoaderEvent):void {
+			trace("progress");
 			//MonsterDebugger.trace( this, "progress: " + event.target.progress);
 		}
 		
 		private function errorHandler(event:LoaderEvent):void {
+			trace("error");
 			MonsterDebugger.trace( this, "error occured loading image " + event.target + ": " + event.text);
 		}		
 		
 		private function completeHandler(event:LoaderEvent):void {
-			MonsterDebugger.trace(this, "Image loading complete.");
+			trace("complete");
+			MonsterDebugger.trace(null, "Image loading complete.");
 		}		
 		
 		
@@ -238,15 +244,153 @@ package com.civildebatewall.data {
 				post.initUser();
 			}
 			
-			
+			photoQueue.load();
 			calculateStats();
 			onLoadComplete();
 		}	
 		
 		/// END LOADING IMPLEMENTATION ======================================================================
 		
+		
+		// TODO, if the question is new, reload everything
+		// TODO D.R.Y.
+		// TODO deletion
+		
+		private var newThreads:Array;
+		private var newPosts:Array;
+		private var newUsers:Array;
+		
+		// depends on active question
+		private function updateThreads():void {
+			MonsterDebugger.trace(null, "Updating threads");
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/questions/' + CivilDebateWall.state.question.id + '/threads', function(response:Object):void {
+				newThreads = [];
+				for each (var jsonObject:Object in response) {
+					// Check for unique
+					var id:String = jsonObject['id'];
+					
+					if (getThreadByID(jsonObject['id']) == null) {
+						newThreads.push(new Thread(jsonObject));
+					}
+				}
+				MonsterDebugger.trace(null, "Updated " + newThreads.length + " threads");
+				onUpdateThreads();
+			});
+		}
+		
+		private function onUpdateThreads():void {
+			
+			// put the new threads in with our existing threads
+			for (var i:int = 0; i < newThreads.length; i++) {
+				threads.push(newThreads[i]);
+			}
+			
+			updatePosts();
+		}
+		
+		// depends on threads	
+		private function updatePosts():void {
+			newPosts = [];
+			
+			threadsLoaded = 0;
+			// loads posts for each thread (not just new ones!)
+			for (var i:int = 0; i < threads.length; i++) {
+				Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/threads/' + threads[i].id, onThreadPostsUpdated, threads[i]);
+			}
+		}
+		
+		private function onThreadPostsUpdated(response:Object, thread:Thread):void {
+			threadsLoaded++;
+			
+			MonsterDebugger.trace(null, "Updating thread posts " + threadsLoaded + " / " + threads.length + " (" + thread.id + ")");
+			
+			// push global
+			for each (var jsonPost:Object in response['posts']) {
+				var id:String = jsonPost['id'];
+				
+				if (getPostByID(id) == null) {
+					var tempPost:Post = new Post(jsonPost, thread);
+					newPosts.push(tempPost); // // global comes later
+					thread.posts.push(tempPost); // push another reference to thread					
+				}
+			}
+			thread.init();			
+			
+			if (threadsLoaded == threads.length) {
+				onUpdatePosts();
+			}
+		};					
+		
+		private function onUpdatePosts():void {
+			
+			MonsterDebugger.trace(null, newPosts.length + " new posts.");
+			
+			// put the new posts in with our existing posts 
+			for (var i:int = 0; i < newPosts.length; i++) {
+				posts.push(newPosts[i]);
+			}
+			
+			updateUsers();
+		}
+		
+		private function updateUsers():void {
+			MonsterDebugger.trace(null, "Updating users");
+
+			// TODO only get users active for this question
+			// photo queue already instantiated
+			
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/users', function(response:Object):void {
+				MonsterDebugger.trace(null, "Updated users");
+				newUsers = [];
+				for each (var json:Object in response) {
+					var id:String = json['id'];
+					
+					if (getUserByID(id) == null) {
+						users.push(new User(json));	
+					}
+				}
+				onUpdateUsers();
+			});						
+			
+		
+		}
+
+		
+		
+		// last batch, images load in background
+		private function onUpdateUsers():void {
+			
+			MonsterDebugger.trace(null, "Loaded " + newUsers.length + " new user");
+			
+			// put the new posts in with our existing posts 
+			for (var i:int = 0; i < newUsers.length; i++) {
+				users.push(newUsers[i]);
+			}
+			
+			// fill in user references in posts
+			for each (var newPost:Post in newPosts) {
+				newPost.initUser();
+			}
+			
+			MonsterDebugger.trace(null, "Loading new images");
+			photoQueue.load();			
+			
+			
+			calculateStats();
+			onUpdateComplete();
+		}	
+		
+		
+		
+		// ===============================================================================================================================================================================
+		
+		
+		
+		
+		
+		
 		private function calculateStats():void {
-			MonsterDebugger.trace(this, "Calculating stats");
+			MonsterDebugger.trace(null, "Calculating stats");
 			
 			// most liked debates
 			stats = new Stats();			
@@ -372,9 +516,14 @@ package com.civildebatewall.data {
 		}		
 		
 		public function createUser(username:String, phoneNumber:String, callback:Function):void {
-			MonsterDebugger.trace(this, "Creating user with phone: " + phoneNumber);
-			MonsterDebugger.trace(this, "Creating user with username: " + username);			
-			Utilities.postRequestJSON(CivilDebateWall.settings.serverPath + '/api/users', {'phonenumber': phoneNumber, 'username': username}, callback);			
+			MonsterDebugger.trace(null, "Creating user with phone: " + phoneNumber);
+			MonsterDebugger.trace(null, "Creating user with username: " + username);			
+
+			// only add phone number if we have it
+			var payload:Object = {'username': username};
+			if (phoneNumber != "" || phoneNumber != null) payload['phonenumber'] = phoneNumber;
+				
+			Utilities.postRequestJSON(CivilDebateWall.settings.serverPath + '/api/users', payload, callback);			
 		}	
 		
 
@@ -386,7 +535,7 @@ package com.civildebatewall.data {
 		}
 		
 		public function flag(post:Post):void {
-			MonsterDebugger.trace(this, "flagging");
+			MonsterDebugger.trace(null, "flagging");
 			Utilities.postRequest(CivilDebateWall.settings.serverPath + '/api/posts/' + post.id + '/flag', {}, onFlagUpdated);
 			this.dispatchEvent(new Event(FLAG_UPDATE_LOCAL));
 		}
@@ -397,7 +546,7 @@ package com.civildebatewall.data {
 		}
 		
 		private function onFlagUpdated(r:Object):void {
-			MonsterDebugger.trace(this, "flags updated server side for post " + r);
+			MonsterDebugger.trace(null, "flags updated server side for post " + r);
 			this.dispatchEvent(new Event(FLAG_UPDATE_SERVER));
 		}		
 		
@@ -410,9 +559,12 @@ package com.civildebatewall.data {
 			if (CivilDebateWall.state.userPhoneNumber == null) CivilDebateWall.state.userPhoneNumber = "";
 			
 			createUser(CivilDebateWall.state.userName, CivilDebateWall.state.userPhoneNumber, function(response:Object):void {
-				MonsterDebugger.trace(this, "Created user");
-				MonsterDebugger.trace(this, response["id"]);
+				MonsterDebugger.trace(null, "Created user");
+				MonsterDebugger.trace(null, response["id"]);
 
+				
+				ObjectUtil.traceObject(response);
+				
 				// user id,
 				CivilDebateWall.state.userID = response["id"];					
 				
@@ -424,15 +576,15 @@ package com.civildebatewall.data {
 
 				if (CivilDebateWall.state.userIsDebating) {
 					// create and upload new post
-					MonsterDebugger.trace(this, "Uploading response post");
+					MonsterDebugger.trace(null, "Uploading response post");
 					
 					// TODO "userInProgress" and "postInProgress" objects in state
-					MonsterDebugger.trace(this, "Responding to: " + CivilDebateWall.state.userRespondingTo.id);
+					MonsterDebugger.trace(null, "Responding to: " + CivilDebateWall.state.userRespondingTo.id);
 					CivilDebateWall.data.uploadResponse(CivilDebateWall.state.activeThread.id, CivilDebateWall.state.userRespondingTo.id, CivilDebateWall.state.userID, CivilDebateWall.state.userOpinion, CivilDebateWall.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
 				}
 				else {
 					// create and upload new thread
-					MonsterDebugger.trace(this, "Uploading new thread");				
+					MonsterDebugger.trace(null, "Uploading new thread");				
 					CivilDebateWall.data.uploadThread(CivilDebateWall.state.question.id, CivilDebateWall.state.userID, CivilDebateWall.state.userOpinion, CivilDebateWall.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
 				}				
 				
@@ -440,27 +592,45 @@ package com.civildebatewall.data {
 		}
 		
 		private function onDebateUploaded(r:Object):void {
-			MonsterDebugger.trace( this, "submitting");
+			ObjectUtil.traceObject(r);
+			MonsterDebugger.trace(null, "submitting");
 			
-			MonsterDebugger.trace(this, "Debate uploaded");
-			CivilDebateWall.state.userThreadID = r['id'];
-			// CivilDebateWall.state.userPostID;; // comes later
+			if (CivilDebateWall.state.userIsDebating) {
+				CivilDebateWall.state.userPostID = r["id"];		
+			}
+			else {
+				CivilDebateWall.state.userPostID = r["firstPost"]["id"];				
+			}
 			
-			//submitOverlayContinueButton.tweenOut(-1, {alpha: 0, x: submitOverlayContinueButton.x, y: submitOverlayContinueButton.y});
-			
-//			if (CivilDebateWall.state.activeThread != null) {
-//				CivilDebateWall.state.activeThreadID = CivilDebateWall.state.activeThread.id; // store the strings since objects will be wiped
-//				CivilDebateWall.state.activeThread = null;
-//			}
-//			
-//			if (CivilDebateWall.state.activePost != null) {			
-//				CivilDebateWall.state.activePostID = CivilDebateWall.state.activePost.id; // store the strings since objects will be wiped				
-//				CivilDebateWall.state.activePost = null;			
-//			}			
-			
-			
-			CivilDebateWall.data.load();
+			addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
+			update();
 		}		
+		
+		private function onDataUpdate(e:Event):void {
+			trace("Post data update!");
+			removeEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
+			
+			// get the thread
+			var userThread:Thread = getThreadByPostID(CivilDebateWall.state.userPostID);
+			CivilDebateWall.state.userThreadID = userThread.id;
+			CivilDebateWall.state.setActiveThread(userThread);
+			
+			if (CivilDebateWall.state.userIsDebating) {
+				// go to comment
+				trace("go to comment");
+				CivilDebateWall.state.setActivePost(getPostByID(CivilDebateWall.state.userPostID));
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.threadView);					
+			}
+			else {
+				// go to thread
+				trace("go to thread");
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);			
+			}
+			
+			// clear most user data
+			CivilDebateWall.state.clearUser();			
+			
+		}
 		
 		
 		// ID Lookup
@@ -469,6 +639,15 @@ package com.civildebatewall.data {
 				if (category.id == id) return category;
 			}
 			return null;	
+		}
+		
+		public function getThreadByPostID(id:String):Thread {
+			for each (var thread:Thread in threads) {
+				for each (var post:Post in thread.posts) {
+					if (post.id == id) return thread;
+				}
+			}
+			return null;			
 		}
 		
 		public function getQuestionByID(id:String):Question {

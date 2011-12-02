@@ -162,12 +162,12 @@ package com.civildebatewall.kiosk.elements {
 		
 		private function onDown(e:MouseEvent):void {
 			//fade everything else
-			MonsterDebugger.trace(this, "down");
+			//MonsterDebugger.trace(this, "down");
 			
 			
 			var selectedWord:WordButton = e.currentTarget as WordButton;
-			MonsterDebugger.trace(this, "selected");
-			MonsterDebugger.trace(this, selectedWord);
+			//MonsterDebugger.trace(this, "selected");
+			//MonsterDebugger.trace(this, selectedWord);
 			
 			// TODO dragable reselections
 			
@@ -188,7 +188,7 @@ package com.civildebatewall.kiosk.elements {
 					}
 				}
 				
-				MonsterDebugger.trace(this, "selected");
+				//MonsterDebugger.trace(this, "selected");
 				this.dispatchEvent(new Event(EVENT_WORD_SELECTED, true, true));				
 			}
 			
@@ -209,7 +209,7 @@ package com.civildebatewall.kiosk.elements {
 		private function positionRow(row:Array, rowNumber:int):void {
 			
 			
-			MonsterDebugger.trace(this, "row: " + rowNumber + " " + row);
+			//MonsterDebugger.trace(this, "row: " + rowNumber + " " + row);
 			
 			if (row.length > 0) {
 			
@@ -217,7 +217,7 @@ package com.civildebatewall.kiosk.elements {
 			var xAccumulator:Number = 0;
 			
 			for(var i:int = 0; i < row.length; i++) {
-				MonsterDebugger.trace(this, i + " / " + row.length);
+				//MonsterDebugger.trace(this, i + " / " + row.length);
 			
 					if (!this.contains(row[i])) addChild(row[i]);				
 					
@@ -229,11 +229,11 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 			
-			MonsterDebugger.trace(this, "Row width: " + (row[row.length - 1].x + row[row.length - 1].width));
+			//MonsterDebugger.trace(this, "Row width: " + (row[row.length - 1].x + row[row.length - 1].width));
 			if ((row[row.length - 1].x + row[row.length - 1].width) > (1022 - 30)) {
 				// too big, recurse
 				// TODO does this work?
-				MonsterDebugger.trace(this, "trimming");
+				//MonsterDebugger.trace(this, "trimming");
 				
 				removeChild(row.pop());
 				positionRow(row, ++rowNumber);
@@ -241,7 +241,7 @@ package com.civildebatewall.kiosk.elements {
 			else {
 				// center it, we're done
 				var xOffset:Number = (1022 - (row[row.length - 1].x + row[row.length - 1].width)) / 2;
-				MonsterDebugger.trace(this, "we're done... center itX offset: " + xOffset);
+				//MonsterDebugger.trace(this, "we're done... center itX offset: " + xOffset);
 				for(var j:int = 0; j < row.length; j++) {
 					row[j].x += xOffset;
 				}				

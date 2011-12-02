@@ -2,6 +2,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
+	import com.civildebatewall.data.User;
 	import com.civildebatewall.kiosk.BlockInertialScroll;
 	import com.civildebatewall.kiosk.buttons.ThumbnailButton;
 	import com.greensock.TimelineMax;
@@ -55,6 +56,20 @@ package com.civildebatewall.kiosk.elements {
 				// remove the right dot from the last one				
 				if (i == CivilDebateWall.data.threads.length - 1) threadThumbnail.rightDot.alpha = 0;
 				addChild(threadThumbnail);
+			}
+		}
+		
+		
+		
+		public function updateUserPhoto(user:User):void {
+			for (var i:int = 0; i < content.numChildren; i++) {
+				if (content.getChildAt(i) is ThumbnailButton) {		
+					var tempThumb:ThumbnailButton = content.getChildAt(i) as ThumbnailButton;
+					if (tempThumb.thread.firstPost.user == user) {
+						// rebuild the portrait
+						tempThumb.updatePortrait();
+					}
+				}
 			}
 		}
 		

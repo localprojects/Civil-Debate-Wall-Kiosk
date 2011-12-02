@@ -21,8 +21,7 @@ package com.civildebatewall.kiosk.buttons {
 					height: 142,
 					backgroundRadius: 13,
 					alignmentPoint: Alignment.CENTER,
-					buttonMode: true,
-					showRegistrationPoint: true
+					buttonMode: true
 				});
 				
 				

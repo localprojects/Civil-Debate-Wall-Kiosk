@@ -29,7 +29,7 @@ package com.civildebatewall.kiosk.overlays {
 		private var wordCloud:WordCloud;
 		private var searchResultsTitle:StatsTitleBar;
 		private var superlativesTitle:StatsTitleBarSelector;
-		private var superlativesPortrait:SuperlativesPortrait;
+		public var superlativesPortrait:SuperlativesPortrait;
 		private var debateList:DebateList;		
 		private var filler:BlockShape;
 		private var searchResults:WordSearchResults;
@@ -162,7 +162,7 @@ package com.civildebatewall.kiosk.overlays {
 		
 		
 		private function onWordSelected(e:Event):void {
-			MonsterDebugger.trace(this, "word selected");
+			MonsterDebugger.trace(null, "word selected");
 			raiseMenu();			
 			
 			var word:Word = wordCloud.activeWord.word;

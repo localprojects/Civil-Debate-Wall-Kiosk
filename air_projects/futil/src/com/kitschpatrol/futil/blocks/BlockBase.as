@@ -340,9 +340,12 @@ package com.kitschpatrol.futil.blocks {
 //			trace("pixels: " + pixels);
 //			// check for divide by zero, can't scroll something with zero height
 //			trace("height: " + (contentHeight - (background.height - _padding.vertical)));
-//			if ((contentHeight - (background.height - _padding.vertical)) > 0) {
-				alignmentY = pixels / (contentHeight - (background.height - _padding.vertical));
-//			}
+				if ((contentHeight - (background.height - _padding.vertical)) > 0) {
+					alignmentY = pixels / (contentHeight - (background.height - _padding.vertical));
+				}
+				else {
+					alignmentY = pixels / ((contentHeight - (background.height - _padding.vertical) + 1));					
+				}
 		}		
 		
 		public function get minScrollY():Number {

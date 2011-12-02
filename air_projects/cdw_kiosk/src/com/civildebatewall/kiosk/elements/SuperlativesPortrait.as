@@ -7,20 +7,21 @@ package com.civildebatewall.kiosk.elements
 	import com.civildebatewall.kiosk.buttons.BalloonButton;
 	import com.civildebatewall.kiosk.buttons.DebateButton;
 	import com.civildebatewall.kiosk.buttons.GoToDebateButton;
+	import com.civildebatewall.kiosk.elements.opinion_text.OpinionTextSuperlative;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	
 	import flash.display.Bitmap;
+	import flash.display.PixelSnapping;
 	import flash.events.Event;
-	import com.civildebatewall.kiosk.elements.opinion_text.OpinionTextSuperlative;
 	
 	public class SuperlativesPortrait extends BlockBase	{
 		
 		private var post:Post;
 		private var opinionText:OpinionTextSuperlative;
-		private var portrait:BlockBitmap;
+		public var portrait:PortraitBase;
 		private var debateButton:BalloonButton;
 		private var goToDebateButton:GoToDebateButton;
 		
@@ -32,10 +33,12 @@ package com.civildebatewall.kiosk.elements
 			height = 845;			
 			
 			// TODO fix block bitmap tweening...
-			portrait = new BlockBitmap({bitmap: BitmapUtil.scaleToFill(Assets.getPortraitPlaceholder(), width, height)});
+			portrait = new PortraitBase();
 			portrait.visible = true;
-			addChild(portrait );
+			portrait.setImage(BitmapUtil.scaleToFill(Assets.getPortraitPlaceholder(), width, height), true);
+			addChild(portrait);
 			
+		
 
 			opinionText = new OpinionTextSuperlative();
 			opinionText.visible = true;
@@ -75,10 +78,7 @@ package com.civildebatewall.kiosk.elements
 			goToDebateButton.y = opinionText.bottom + 14;
 			
 			// fade in portrait
-			TweenMax.to(portrait, 1, {bitmap: new Bitmap(BitmapUtil.scaleDataToFill(post.user.photo.bitmapData, width, height), "auto", true)});
-			
-			
-			
+			portrait.setImage(BitmapUtil.scaleToFill(post.user.photo, width, height));
 		}
 	}
 }

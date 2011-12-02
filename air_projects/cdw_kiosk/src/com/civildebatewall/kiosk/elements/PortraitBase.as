@@ -1,6 +1,6 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
-
+	
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -13,21 +13,17 @@ package com.civildebatewall.kiosk.elements {
 	
 	
 	
-	public class Portrait extends BlockBase {
+	public class PortraitBase extends BlockBase {
 		
 		private var image:Bitmap;
 		private var targetImage:Bitmap;
 		
 		
-		public function Portrait() {
+		public function PortraitBase() {
 			super();
 			init();
 		}
 		
-		private function onActiveDebateChange(e:Event):void {
-			CivilDebateWall.state.activeThread.firstPost;
-			setImage(CivilDebateWall.state.activeThread.firstPost.user.photo);
-		}
 		
 		private function init():void {
 			image = new Bitmap();
@@ -37,8 +33,6 @@ package com.civildebatewall.kiosk.elements {
 			addChild(targetImage);
 			
 			targetImage.alpha = 0;
-			
-			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
 		}
 		
 		public function setImage(i:Bitmap, instant:Boolean = false):void {
@@ -66,6 +60,6 @@ package com.civildebatewall.kiosk.elements {
 			targetImage.alpha = step;
 		}
 		
-	
+		
 	}
 }

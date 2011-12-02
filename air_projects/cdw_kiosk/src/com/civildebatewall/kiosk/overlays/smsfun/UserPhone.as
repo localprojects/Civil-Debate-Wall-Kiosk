@@ -73,17 +73,17 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			instructions = new BlockText({
 				width: screenWidth,
 				height: screenHeight,
-				padding: 30,				
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
 				textSize: 33, // TODO  auto
-				leading: 16,
+				leading: 24,
 				textAlignmentMode: Alignment.TEXT_LEFT,	
 				text: "GET REPLIES TO YOUR OPINION AND CONTINUE YOUR DEBATE VIA SMS",				
 				textColor: Assets.COLOR_GRAY_85,
 				backgroundAlpha: 0,
 				alignmentPoint: Alignment.CENTER,
 				visible:true,
+				padding: 30,				
 				y: screenHeight
 			});
 			screen.addChild(instructions);

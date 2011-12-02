@@ -113,6 +113,7 @@ package com.civildebatewall.kiosk.overlays {
 				alignmentPoint: Alignment.LEFT,
 				maxWidth: 742,
 				height: 54,
+				leading: 54,
 				visible: true
 			});
 			respondingToName.x = 221;

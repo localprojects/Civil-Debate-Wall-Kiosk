@@ -40,6 +40,7 @@ package com.civildebatewall.kiosk.elements.question_text {
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
 				textColor: 0x000000,
+				textAlignmentMode: Alignment.TEXT_CENTER,
 				alignmentPoint: Alignment.CENTER, // for the lines
 				showLines: true
 			});
