@@ -30,15 +30,13 @@ package com.civildebatewall.kiosk.overlays {
 				backgroundAlpha: 0
 			});
 			
-			yesButton = new BigGrayButton();
-			yesButton.text = "YES!";
+			yesButton = new BigGrayButton(Assets.getBigYes());
 			yesButton.y = 1060;			
 			yesButton.setDefaultTweenIn(1, {x: 100});
 			yesButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT});	
 			addChild(yesButton);
 			
-			noButton = new BigGrayButton();
-			noButton.text = "NO!";
+			noButton = new BigGrayButton(Assets.getBigNo());
 			noButton.y = 1060;			
 			noButton.setDefaultTweenIn(1, {x: 547});
 			noButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT});	

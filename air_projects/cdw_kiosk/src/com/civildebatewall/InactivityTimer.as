@@ -1,9 +1,9 @@
 package com.civildebatewall {
+	import com.civildebatewall.InactivityEvent;
+	
 	import flash.display.Stage;
 	import flash.events.*;
-	import flash.utils.Timer;	
-	
-	import com.civildebatewall.InactivityEvent;
+	import flash.utils.Timer;
 	
 	public class InactivityTimer extends EventDispatcher {
 		
@@ -24,9 +24,11 @@ package com.civildebatewall {
 			//stageRef.addEventListener(TouchEvent.TOUCH_BEGIN, onActivity, false, 0, true);			
 
 			// Set the timer
-			timer = new Timer(seconds * 1000);
+			timer = new Timer(1000, seconds);
 		}
 		
+		
+		// broadcast inactivity over flashspan? to invoke wallsaver? even if not armed?
 		
 		private function onInactivity(e:TimerEvent):void {
 			timer.stop();
@@ -41,11 +43,19 @@ package com.civildebatewall {
 		public function arm():void {
 			timer.reset();
 			timer.start();
-			timer.addEventListener(TimerEvent.TIMER, onInactivity);			
+			timer.addEventListener(TimerEvent.TIMER_COMPLETE, onInactivity);
 		}		
 		
 		public function disarm():void {
-			timer.removeEventListener(TimerEvent.TIMER, onInactivity);
+			timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onInactivity);
+		}
+		
+		public function get secondsInactive():int {
+			return timer.currentCount;
+		}
+		
+		public function get armed():Boolean {
+			return timer.hasEventListener(TimerEvent.TIMER_COMPLETE);
 		}
 		
 	}

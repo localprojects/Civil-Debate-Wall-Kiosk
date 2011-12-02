@@ -13,7 +13,6 @@ package com.civildebatewall.kiosk.core {
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.elements.opinion_text.OpinionTextHome;
 	import com.civildebatewall.kiosk.elements.opinion_text.UserOpinionText;
-	import com.civildebatewall.kiosk.elements.question_text.QuestionHeaderBase;
 	import com.civildebatewall.kiosk.elements.question_text.QuestionHeaderDecision;
 	import com.civildebatewall.kiosk.elements.question_text.QuestionHeaderHome;
 	import com.civildebatewall.kiosk.elements.question_text.QuestionHeaderThread;
@@ -36,7 +35,6 @@ package com.civildebatewall.kiosk.core {
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
-	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
 	import flash.display.*;
@@ -489,7 +487,7 @@ package com.civildebatewall.kiosk.core {
 			markAllInactive();
 			
 			CivilDebateWall.inactivityTimer.disarm();
-			CivilDebateWall.state.clearUser(); // Reset user info
+			CivilDebateWall.state.clearUser(); // Reset user info (TODO move this!)
 						
 			bigButton.y = 1470;			
 			bigButton.setText('JOIN THE DEBATE'); // TODO move to listener?
@@ -564,7 +562,7 @@ package com.civildebatewall.kiosk.core {
 		
 		public function threadView(...args):void {			
 			markAllInactive();
-			CivilDebateWall.inactivityTimer.disarm();
+			CivilDebateWall.inactivityTimer.arm();
 			
 			// Do this on event callback instead?
 			debateThisButton.targetPost = CivilDebateWall.state.activeThread.firstPost;
@@ -594,7 +592,7 @@ package com.civildebatewall.kiosk.core {
 			CivilDebateWall.inactivityTimer.arm();
 			CivilDebateWall.state.backDestination = homeView;  
 			
-			portrait.tweenIn(1, {alpha: 0.25});
+			portrait.tweenIn(1, {alpha: 0.45});
 			backButton.tweenIn();
 			questionHeaderDecision.tweenIn();
 			respondButton.tweenIn();
@@ -616,7 +614,7 @@ package com.civildebatewall.kiosk.core {
 			CivilDebateWall.inactivityTimer.arm();
 			CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.view.debateTypePickerView;
 			
-			portrait.tweenIn(1, {alpha: 0.25});
+			portrait.tweenIn(1, {alpha: 0.15});
 			backButton.tweenIn();
 			questionHeaderDecision.tweenIn();
 			yesButton.tweenIn();
@@ -778,6 +776,7 @@ package com.civildebatewall.kiosk.core {
 		// ================================================================================================================================================		
 		
 		public function termsAndConditionsView(...args):void {
+			CivilDebateWall.inactivityTimer.arm();
 			termsAndConditionsUnderlay.tweenIn();
 			termsAndConditionsText.tweenIn();
 			closeTermsButton.tweenIn();
@@ -786,16 +785,17 @@ package com.civildebatewall.kiosk.core {
 		// ================================================================================================================================================		
 		
 		public function smsPromptView(...args):void {
+			CivilDebateWall.inactivityTimer.disarm();
 			markAllInactive();
 			portrait.tweenIn();			
 			smsOverlay.tweenIn();
-			tweenOutInactive();			
-			// CivilDebateWall.inactivityTimer.arm();	
+			tweenOutInactive();	
 		}
 
 		// ================================================================================================================================================
 		
 		public function flagOverlayView(...args):void {
+			CivilDebateWall.inactivityTimer.arm();			
 			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
 			CivilDebateWall.state.activeView = flagOverlayView;
 			flagOverlay.tweenIn();
@@ -812,19 +812,14 @@ package com.civildebatewall.kiosk.core {
 
 		
 		public function inactivityOverlayView(...args):void {
+			// tween a bunch of stuff out
 			CivilDebateWall.inactivityTimer.disarm();			
 			inactivityOverlay.tweenIn();
 		}
 		
-		public function removeInactivityOverlayView(...args):void {
-			inactivityOverlay.tweenOut();
-			// TODO rearm timer?
-		}
-		
-		
-		
 		
 		public function cameraCalibrationOverlayView(...args):void {
+			CivilDebateWall.inactivityTimer.disarm();
 			cameraCalibrationOverlay= new CameraCalibrationOverlay();
 			addChild(cameraCalibrationOverlay);
 		}
@@ -853,6 +848,7 @@ package com.civildebatewall.kiosk.core {
 		
 		
 		public function statsView(...args):void {
+			CivilDebateWall.inactivityTimer.arm();			
 			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
 			CivilDebateWall.state.activeView = statsView;	
 			markAllInactive();

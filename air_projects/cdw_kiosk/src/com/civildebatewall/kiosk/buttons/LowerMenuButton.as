@@ -2,10 +2,12 @@ package com.civildebatewall.kiosk.buttons {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.greensock.TweenMax;
+	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	
 	import flash.display.Bitmap;
+	import flash.display.Shape;
 	import flash.events.MouseEvent;
 	
 	
@@ -13,6 +15,8 @@ package com.civildebatewall.kiosk.buttons {
 	
 		private var icon:Bitmap;
 		private var lowered:Boolean;
+		
+		private var line:Shape;
 		
 		public function LowerMenuButton() {
 			super({
@@ -41,6 +45,15 @@ package com.civildebatewall.kiosk.buttons {
 			
 			lowered = false;
 			
+//			line = new Shape();
+//			line.graphics.beginFill(0xffffff);
+//			line.graphics.drawRect(0, 0, 1, icon.height);
+//			line.graphics.endFill();
+//			line.x = 183;
+//			line.y = 25;
+//			addChild(line);
+//			
+//			
 		}
 		
 		override protected function beforeTweenIn():void {
@@ -59,11 +72,14 @@ package com.civildebatewall.kiosk.buttons {
 			if (!lowered) {
 				lowered = true;
 				TweenMax.to(this, 0.5, {text: "Raise Menu"})
+				TweenMax.to(icon, 0.50, {transformAroundCenter:{scaleY: -1}, ease: Quart.easeInOut});								
+					
 				CivilDebateWall.kiosk.view.statsOverlay.lowerMenu();
 			}
 			else {
 				lowered = false;
 				TweenMax.to(this, 0.5, {text: "Lower Menu"})
+				TweenMax.to(icon, 0.50, {transformAroundCenter:{scaleY: 1}, ease: Quart.easeInOut});													
 				CivilDebateWall.kiosk.view.statsOverlay.raiseMenu();					
 			}
 			

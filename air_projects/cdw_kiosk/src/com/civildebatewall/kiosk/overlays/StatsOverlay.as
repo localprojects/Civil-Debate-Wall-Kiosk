@@ -133,8 +133,7 @@ package com.civildebatewall.kiosk.overlays {
 		// TODO not relative!
 		public function lowerMenu():void {
 			TweenMax.to(filler, duration, {height:  924, ease: Quart.easeInOut});
-			
-			
+
 			TweenMax.to(wordCloudTitle, duration, {y: 234 + menuLowerDistance, ease: Quart.easeInOut});			
 			TweenMax.to(wordCloud, duration, {y: 312 + menuLowerDistance, ease: Quart.easeInOut});
 			TweenMax.to(searchResultsTitle, duration, {y: 625 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});

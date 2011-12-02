@@ -349,13 +349,11 @@ package com.civildebatewall.kiosk.overlays {
 			dragInstructions.y = 872;
 			formContainer.addChild(dragInstructions);
 
-			var submitButton:BigGrayButton = new BigGrayButton();
+			var submitButton:BigGrayButton = new BigGrayButton(Assets.getBigSubmit());
 			submitButton.x = 560;
 			submitButton.y = 653;
 			submitButton.visible = true;
-			formContainer.addChild(submitButton);			
-			
-
+			formContainer.addChild(submitButton);
 			
 			keyboardContainer = new BlockBase({
 				backgroundColor: 0xffffff,
