@@ -68,6 +68,10 @@ package com.civildebatewall {
 		
 		
 		// Bitmaps
+		[Embed(source = '/assets/graphics/bigSubmit.png')] private static const bigSubmitClass:Class;
+		public static function getBigSubmit():Bitmap { return new bigSubmitClass() as Bitmap; };
+		public static const bigSubmit:Bitmap = getBigSubmit();
+		
 		[Embed(source = '/assets/graphics/thumbnailStanceTextYes.png')] private static const thumbnailStanceTextYesClass:Class;
 		public static function getThumbnailStanceTextYes():Bitmap { return new thumbnailStanceTextYesClass() as Bitmap; };
 		public static const thumbnailStanceTextYes:Bitmap = getThumbnailStanceTextYes();
@@ -87,6 +91,16 @@ package com.civildebatewall {
 		[Embed(source = '/assets/graphics/rightCaratWhite.png')] private static const rightCaratWhiteClass:Class;
 		public static function getRightCaratWhite():Bitmap { return new rightCaratWhiteClass() as Bitmap; };
 		public static const rightCaratWhite:Bitmap = getRightCaratWhite();
+		
+		[Embed(source = '/assets/graphics/bigYes.png')] private static const bigYesClass:Class;
+		public static function getBigYes():Bitmap { return new bigYesClass() as Bitmap; };
+		public static const bigYes:Bitmap = getBigYes();
+		
+		[Embed(source = '/assets/graphics/bigNo.png')] private static const bigNoClass:Class;
+		public static function getBigNo():Bitmap { return new bigNoClass() as Bitmap; };
+		public static const bigNo:Bitmap = getBigNo();
+		
+		
 		
 		
 		

@@ -5,11 +5,13 @@
 		"characterLimit": 140,
 		"flipWebcamVertical": true,	
 		"inactivityTimeout": 60,
+		"wallsaverTimein": 60,
 		"slrTimeout": 5,
 		"secretKey": "secretkey",
 		"localMultiScreenTest": false,
 		"webCamFocalLength": 1.2,
 		"webCamUndersampleFactor": 2
+
 	},
 	
 	"windows": {

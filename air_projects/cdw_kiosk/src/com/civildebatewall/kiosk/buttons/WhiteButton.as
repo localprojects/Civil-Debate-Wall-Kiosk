@@ -27,7 +27,7 @@ package com.civildebatewall.kiosk.buttons {
 			onStageUp.push(onUp);
 			onButtonCancel.push(onCancel);
 			
-			setParams(params);
+			setParams(params)	;
 		}
 		
 		private function onDown(e:MouseEvent):void {

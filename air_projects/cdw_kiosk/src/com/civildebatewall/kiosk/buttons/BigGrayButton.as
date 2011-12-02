@@ -1,44 +1,44 @@
 package com.civildebatewall.kiosk.buttons {
-	import com.civildebatewall.Assets;
-	import com.civildebatewall.CivilDebateWall;
 	import com.greensock.TweenMax;
-	import com.kitschpatrol.futil.blocks.BlockText;
+	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	
+	import flash.display.Bitmap;
 	import flash.events.MouseEvent;
+
 	
-		public class BigGrayButton extends BlockText	{
+		public class BigGrayButton extends BlockBitmap	{
 			
+			private var _overColor:uint;
 			
-			public function BigGrayButton(params:Object=null) {
+			public function BigGrayButton(b:Bitmap) {
 				super({
-					buttonMode: true,
-					textFont: Assets.FONT_BOLD,
-					textBold: true,
-					textSize: 24,
-					textColor: ColorUtil.gray(77),
+					bitmap: b,
+					overColor: ColorUtil.gray(77),
 					backgroundColor: 0xffffff,
-					textAlignmentMode: Alignment.TEXT_CENTER,
 					width: 432,
 					height: 142,
 					backgroundRadius: 13,
 					alignmentPoint: Alignment.CENTER,
-					text: "SUBMIT"
+					buttonMode: true,
+					showRegistrationPoint: true
 				});
+				
 				
 				onButtonDown.push(onDown);
 				onStageUp.push(onUp);
 				onButtonCancel.push(onCancel);
+				
+				drawUp();
 			}
-			
+
 			private function onDown(e:MouseEvent):void {
 				drawDown();			
 			}
 			
 			private function onUp(e:MouseEvent):void {
 				drawUp();
-				// Validation and processing handled in OpinionEntryOverlay
 			}
 			
 			private function onCancel(e:MouseEvent):void {
@@ -47,14 +47,16 @@ package com.civildebatewall.kiosk.buttons {
 			}
 			
 			private function drawUp():void {
-				TweenMax.to(this, 0.5, {backgroundColor: 0xffffff, textColor: ColorUtil.gray(77)});
+				TweenMax.to(this, 0.5, {backgroundColor: 0xffffff});
+				TweenMax.to(bitmap, 0.5, {colorMatrixFilter: {colorize: _overColor, amount: 1}});
 			}
 			
 			private function drawDown():void {
-				TweenMax.to(this, 0.5, {backgroundColor: ColorUtil.gray(77), textColor: 0xffffff});
+				TweenMax.to(this, 0, {backgroundColor: _overColor});
+				TweenMax.to(bitmap, 0, {colorMatrixFilter: {colorize: 0xffffff, amount: 1}});
 			}
 			
-			
-			
+			public function get overColor():uint {return _overColor; }
+			public function set overColor(value:uint):void { _overColor = value; }
 	}
 }

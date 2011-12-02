@@ -28,6 +28,8 @@ package com.civildebatewall {
 		private var framesRenderedLabel:Label;
 		private var latencyLabel:Label; 
 		
+		private var inactivityLabel:Label;
+		
 		private var stateTextArea:TextArea;
 		
 		public function Dashboard(parent:DisplayObjectContainer=null, xpos:Number=0, ypos:Number=0, title:String="Dashboard")	{
@@ -44,10 +46,12 @@ package com.civildebatewall {
 			new PushButton(this, 110, 5, "Play Sequence B", function():void { CivilDebateWall.self.PlaySequenceB(); });
 			new PushButton(this, 5, 55, "Slow", function():void { CoreUtil.sleep(1000); });
 			new PushButton(this, 110, 55, "Load Data", function():void { CivilDebateWall.data.load(); });
-			new PushButton(this, 110, 30, "Test Image Save", function():void { 
+			new PushButton(this, 110, 30, "Test Image Save", function():void {
 				CivilDebateWall.kiosk.view.portraitCamera.takePhoto();
 				FileUtil.saveJpeg(CivilDebateWall.kiosk.view.portraitCamera.cameraBitmap, CivilDebateWall.settings.imagePath, "test-image.jpg");			
 			});
+			
+			new PushButton(this, 5, 80, "Inactive", function():void { CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.inactivityOverlayView) });			
 			new PushButton(this, 5, 30, "Calibrate Camera", function():void { CivilDebateWall.kiosk.view.cameraCalibrationOverlayView(); });
 			
 			//new CheckBox(this, 5, 75, "Ordered Opinion Rows", function():void {CivilDebateWall.wallSaver.orderedOpinionRows = !CivilDebateWall.wallSaver.orderedOpinionRows });
@@ -56,6 +60,7 @@ package com.civildebatewall {
 			frameRateLabel = new Label(this, 5, 125, "Frame Rate:");
 			framesRenderedLabel = new Label(this, 5, 150, "Frames Rendered:");
 			latencyLabel = new Label(this, 5, 175, "Latency: ");
+			inactivityLabel = new Label(this, 5, 162, "Inactivity:");
 			
 			stateTextArea = new TextArea(this, 5, 200, "State")
 			stateTextArea.width = 240;
@@ -113,7 +118,12 @@ package com.civildebatewall {
 			//ObjectUtil.toString(CivilDebateWall.state);
 			//stateTextArea.text = toStr(CivilDebateWall.state, false, 2);
 			stateTextArea.text = CivilDebateWall.state.stateLog();
-
+			
+			var armedString:String = CivilDebateWall.inactivityTimer.armed ? "(ARMED)" : "(DISARMED)";
+			
+			inactivityLabel.text = "Inactivity: " + CivilDebateWall.inactivityTimer.secondsInactive + " / " + CivilDebateWall.settings.inactivityTimeout + " " + armedString;
+			
+			
 		}
 		
 		// logs a single line of text to the window

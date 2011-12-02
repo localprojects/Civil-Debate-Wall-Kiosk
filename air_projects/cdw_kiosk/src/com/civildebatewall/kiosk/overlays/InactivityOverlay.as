@@ -1,16 +1,13 @@
 package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.Utilities;
-	import com.civildebatewall.kiosk.elements.ProgressBar;
 	import com.civildebatewall.kiosk.buttons.BigGrayButton;
+	import com.civildebatewall.kiosk.elements.ProgressBar;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
-	
-	import flash.events.MouseEvent;
 	
 	
 	public class InactivityOverlay extends BlockBase {
@@ -28,9 +25,8 @@ package com.civildebatewall.kiosk.overlays {
 				backgroundAlpha: 0
 			});
 			
-			yesButton = new BigGrayButton();
+			yesButton = new BigGrayButton(Assets.getBigYes());
 			yesButton.width = 880;
-			yesButton.text = "YES!";
 			yesButton.y = 1060;			
 			yesButton.setDefaultTweenIn(1, {x: 100});
 			yesButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT});	
@@ -55,7 +51,7 @@ package com.civildebatewall.kiosk.overlays {
 			message.setDefaultTweenOut(1, {y: Alignment.OFF_STAGE_TOP});
 			addChild(message);
 			
-			timerBar = new ProgressBar({width: 880, height: 10, duration: 10});
+			timerBar = new ProgressBar({width: 880, height: 1, duration: 10});
 			timerBar.x = 100;
 			timerBar.setDefaultTweenIn(1, {x: 100, y: 964});
 			timerBar.setDefaultTweenOut(1, {x: 100, y: Alignment.OFF_STAGE_TOP});
@@ -66,13 +62,13 @@ package com.civildebatewall.kiosk.overlays {
 		}
 		
 		private function goHome(...args):void {
-			closeOverlay();			
-			CivilDebateWall.kiosk.view.homeView();
+			closeOverlay();		
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);
 		}
 		
 		private function closeOverlay(...args):void {
 			timerBar.pause();
-			CivilDebateWall.kiosk.view.removeInactivityOverlayView();
+			CivilDebateWall.state.setView(CivilDebateWall.state.lastView);
 		}
 		
 		override protected function beforeTweenIn():void {
