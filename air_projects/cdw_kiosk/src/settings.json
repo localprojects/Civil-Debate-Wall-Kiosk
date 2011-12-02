@@ -26,7 +26,7 @@
 	"mac": {
 		"halfSize": true,
 		"startFullScreen": false,
-		"useWebcam": true,	
+		"useWebcam": false,	
 		"useSLR": false,
 		"imagePath": "/Volumes/cdwmedia/media/images/",		
 		"serverPath": "http://staging.civildebatewall.com",

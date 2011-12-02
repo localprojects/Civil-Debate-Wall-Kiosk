@@ -28,16 +28,30 @@ package com.civildebatewall.kiosk.buttons {
 				});
 				
 				onButtonDown.push(onDown);
-				onButtonUp.push(onUp);
+				onStageUp.push(onUp);
+				onButtonCancel.push(onCancel);
 			}
 			
 			private function onDown(e:MouseEvent):void {
-				TweenMax.to(this, 0, {backgroundColor: ColorUtil.gray(77), textColor: 0xffffff});			
+				drawDown();			
 			}
 			
 			private function onUp(e:MouseEvent):void {
-				TweenMax.to(this, 0.5, {backgroundColor: 0xffffff, textColor: ColorUtil.gray(77)});
+				drawUp();
 				// Validation and processing handled in OpinionEntryOverlay
+			}
+			
+			private function onCancel(e:MouseEvent):void {
+				removeStageUpListener();
+				drawUp();
+			}
+			
+			private function drawUp():void {
+				TweenMax.to(this, 0.5, {backgroundColor: 0xffffff, textColor: ColorUtil.gray(77)});
+			}
+			
+			private function drawDown():void {
+				TweenMax.to(this, 0.5, {backgroundColor: ColorUtil.gray(77), textColor: 0xffffff});
 			}
 			
 			

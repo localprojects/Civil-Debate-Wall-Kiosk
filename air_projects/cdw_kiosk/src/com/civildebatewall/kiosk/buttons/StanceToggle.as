@@ -1,4 +1,7 @@
 package com.civildebatewall.kiosk.buttons {
+	import com.civildebatewall.Assets;
+	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.State;
 	import com.civildebatewall.data.Post;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -9,9 +12,6 @@ package com.civildebatewall.kiosk.buttons {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import com.civildebatewall.Assets;
-	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.State;
 	
 	
 	
@@ -48,8 +48,10 @@ package com.civildebatewall.kiosk.buttons {
 //			yesText.y = height;
 //			noText.y = height;
 			
+			
+			onButtonCancel.push(onCancel);
 			onButtonDown.push(onDown);
-			onButtonUp.push(onUp);
+			onStageUp.push(onUp);
 			CivilDebateWall.state.addEventListener(State.USER_STANCE_CHANGE, onUserStanceChange);
 		}
 		
@@ -68,6 +70,11 @@ package com.civildebatewall.kiosk.buttons {
 					CivilDebateWall.state.setUserStance(Post.STANCE_YES);				
 				}
 			}
+		}
+		
+		private function onCancel(e:MouseEvent):void {
+			removeStageUpListener();
+			TweenMax.to(this, .35, {backgroundColor: CivilDebateWall.state.userStanceColorLight});
 		}
 		
 		private function onUserStanceChange(e:Event):void {

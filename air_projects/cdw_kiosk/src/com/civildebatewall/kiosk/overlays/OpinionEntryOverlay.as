@@ -53,9 +53,11 @@ package com.civildebatewall.kiosk.overlays {
 				height: 1920,
 				backgroundAlpha: 0,
 				paddingLeft: 29,
-				paddingTop: 30,
-				scrollAxis: SCROLL_Y,
-				scrollLimitMode: SCROLL_LIMIT_MANUAL
+				paddingTop: 0,
+				assumeButtons: true,
+				scrollLimitMode: SCROLL_LIMIT_MANUAL,
+				maxSizeBehavior: MAX_SIZE_CLIPS,
+				scrollAxis: SCROLL_Y				
 			});
 			
 			question = new BlockText({
@@ -127,6 +129,7 @@ package com.civildebatewall.kiosk.overlays {
 				paddingTop: 20,
 				paddingBottom: 27,
 				maxWidth: 742,
+				maxHeight: 402, // TODO too big
 				visible: true
 			});
 			respondingToOpinion.x = 221;
@@ -153,11 +156,11 @@ package com.civildebatewall.kiosk.overlays {
 					textColor: 0xffffff,
 					letterSpacing: -1,
 					backgroundColor: Assets.COLOR_RED_SELECTION,
-					textBold: true,				
+					textBold: true,
 					textSize: 16,
 					paddingLeft: 42,
 					alignmentPoint: Alignment.LEFT,
-					width: 963, 
+					width: 963,
 					height: 64		
 			};
 			
@@ -198,7 +201,7 @@ package com.civildebatewall.kiosk.overlays {
 				borderThickness: 5,
 				borderAlpha: 0,
 				showBorder: true,
-				maxChars: 18,
+				maxChars: 16,
 				width: 530,
 				height: 141,
 				paddingLeft: 42,
@@ -360,8 +363,9 @@ package com.civildebatewall.kiosk.overlays {
 				backgroundRadiusBottomRight: 12,
 				padding: 30,
 				width: 1022,
-				height: 495,
-				visible: true
+				height: 495 - 79,
+				visible: true,
+				alignmentX: 0.5
 			});
 
 			keyboardContainer.x = 0;
@@ -389,12 +393,16 @@ package com.civildebatewall.kiosk.overlays {
 			submitButton.onButtonUp.push(onSubmit);
 			
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
+			
+			
+			
+			
 		}
 		
 		private function onInput(e:Event):void {
 			// check for profanity
 			
-			MonsterDebugger.trace(this, "INPUT!");
+			trace("INPUT!");
 			
 			if (StringUtil.isProfane(nameField.text) || StringUtil.isProfane(opinionField.text)) {
 				
@@ -430,12 +438,12 @@ package com.civildebatewall.kiosk.overlays {
 			
 			// keyboard follows focus
 			
-			MonsterDebugger.trace(this, "focus");
-			MonsterDebugger.trace(this, stage.focus);
+			trace("focus");
+			trace(stage.focus);
 			
 			if (stage.focus is BlockText) {
 				keyboard.target = (stage.focus as BlockText).textField;
-				MonsterDebugger.trace(this, "Keyboard target: " + keyboard.target);
+				trace("Keyboard target: " + keyboard.target);
 			}
 		}
 		
@@ -448,7 +456,7 @@ package com.civildebatewall.kiosk.overlays {
 		}
 		
 		private function onSubmit(e:MouseEvent):void {
-			MonsterDebugger.trace(this, "submit");
+			trace("submit");
 			
 			nameField.text = StringUtil.trim(nameField.text);
 			opinionField.text = StringUtil.trim(opinionField.text);
@@ -471,6 +479,11 @@ package com.civildebatewall.kiosk.overlays {
 				errorMessage.tweenIn();
 				errors = true;
 			}
+			else if (nameField.text.length < 2) {
+				errorMessage.text = "YOUR NAME IS TOO SHORT."
+				errorMessage.tweenIn();
+				errors = true;
+			}			
 			else if (opinionField.text.length == 0) {
 				errorMessage.text = "PLEASE ADD YOUR OPINION."
 				errorMessage.tweenIn();
@@ -481,10 +494,10 @@ package com.civildebatewall.kiosk.overlays {
 			
 			
 			if (errors) {
-				MonsterDebugger.trace(this, "Errors! Won't submit");
+				trace("Errors! Won't submit");
 			}
 			else {
-				MonsterDebugger.trace(this, "Looks OK! Will submit.");
+				trace("Looks OK! Will submit.");
 				CivilDebateWall.state.userOpinion = opinionField.text;
 				CivilDebateWall.state.userName = nameField.text;
 				
@@ -500,6 +513,13 @@ package com.civildebatewall.kiosk.overlays {
 		}
 		
 		
+		override protected function onMouseDown(e:MouseEvent):void {
+			// are we over keyboard? block scrolling.	
+			if (content.mouseY < keyboardContainer.y) super.onMouseDown(e)
+		}
+		
+		
+		
 		// Try to create the user, check for existing username
 //		CivilDebateWall.data.createUser(CivilDebateWall.state.userName, CivilDebateWall.state.userPhoneNumber, onUserCreated);
 //		
@@ -512,7 +532,7 @@ package com.civildebatewall.kiosk.overlays {
 //			}
 //			else {
 //				// there was an error, the name probably already existed!
-//				MonsterDebugger.trace(this, "TODO handle name error");
+//				trace("TODO handle name error");
 //			}
 //		}		
 		
@@ -547,9 +567,8 @@ package com.civildebatewall.kiosk.overlays {
 				keyboardContainer.y = formContainer.bottom + 14;
 				
 				// allow overscroll
-				minScrollY = 0;
+				minScrollY = -(1920 - keyboardContainer.y) - 14;
 				maxScrollY = question.height + respondingToContainer.height + (paddingTop * 2);
-				
 			}
 			else {
 				opinionLabel.text = "WHAT IS YOUR OPINION? ";			
@@ -559,10 +578,12 @@ package com.civildebatewall.kiosk.overlays {
 				keyboardContainer.y = formContainer.bottom + 14;
 				
 				// allow overscroll
-				minScrollY = 0;
-				maxScrollY = question.height + (paddingTop * 2);				
+				minScrollY = -(1920 - keyboardContainer.y) - 14;
+				maxScrollY = question.height + (paddingTop * 2);
 			}
 
+			scrollY = -30;			
+			
 		}
 				
 	}

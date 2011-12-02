@@ -195,6 +195,7 @@ package com.kitschpatrol.futil.blocks {
 				content.x += _alignmentPoint.x * ((background.width - _padding.horizontal) - (contentWidth - _contentCrop.horizontal));
 				content.y += _alignmentPoint.y * ((background.height - _padding.vertical) - (contentHeight - _contentCrop.vertical));
 				
+				
 				// Crop if we need to
 				content.x -= _contentCrop.left;
 				content.y -= _contentCrop.top;
@@ -336,10 +337,12 @@ package com.kitschpatrol.futil.blocks {
 		
 		public function set scrollY(pixels:Number):void { 			
 			
-			// check for divide by zero, can't scroll something with zero height
-			if ((contentHeight - (background.height - _padding.vertical)) > 0) {
+//			trace("pixels: " + pixels);
+//			// check for divide by zero, can't scroll something with zero height
+//			trace("height: " + (contentHeight - (background.height - _padding.vertical)));
+//			if ((contentHeight - (background.height - _padding.vertical)) > 0) {
 				alignmentY = pixels / (contentHeight - (background.height - _padding.vertical));
-			}
+//			}
 		}		
 		
 		public function get minScrollY():Number {
@@ -358,10 +361,12 @@ package com.kitschpatrol.futil.blocks {
 		
 		
 		public function get isOverflowY():Boolean {
+			if (scrollLimitMode == SCROLL_LIMIT_MANUAL) return true;			
 			return (contentHeight > (background.height - _padding.vertical));
 		}
 		
 		public function get isOverflowX():Boolean {
+			if (scrollLimitMode == SCROLL_LIMIT_MANUAL) return true;
 			return (contentWidth > (background.width - _padding.horizontal));
 		}		
 		

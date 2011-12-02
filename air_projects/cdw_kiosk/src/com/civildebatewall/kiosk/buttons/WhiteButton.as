@@ -6,6 +6,7 @@ package com.civildebatewall.kiosk.buttons {
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	
 	import flash.events.MouseEvent;
+	import flash.ui.Mouse;
 	
 	public class WhiteButton extends BlockText {
 
@@ -24,6 +25,7 @@ package com.civildebatewall.kiosk.buttons {
 			
 			onButtonDown.push(onDown);
 			onButtonUp.push(onUp);
+			onButtonCancel.push(onCancel);
 			
 			setParams(params);
 		}
@@ -34,6 +36,11 @@ package com.civildebatewall.kiosk.buttons {
 		
 		private function onUp(e:MouseEvent):void {
 			TweenMax.to(this, 0.5, {backgroundColor: 0xffffff, textColor: ColorUtil.gray(77)});
-		}				
+		}
+		
+		private function onCancel(e:MouseEvent):void {
+			removeStageUpListener();
+			TweenMax.to(this, 0.5, {backgroundColor: 0xffffff, textColor: ColorUtil.gray(77)});
+		}
 	}
 }
