@@ -29,7 +29,7 @@ package com.civildebatewall.wallsaver.elements {
 			defaultTextFormat = textFormat;			
 			autoSize = TextFieldAutoSize.LEFT;
 			
-			this.text = text;
+			htmlText = text;
 
 			scaleX = 4;
 			scaleY = 4;			
