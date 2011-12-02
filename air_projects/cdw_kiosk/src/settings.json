@@ -12,7 +12,7 @@
 		"webCamFocalLength": 1.2,
 		"webCamUndersampleFactor": 2
 
-	},
+	}, 
 	
 	"windows": {
 		"halfSize": true,
