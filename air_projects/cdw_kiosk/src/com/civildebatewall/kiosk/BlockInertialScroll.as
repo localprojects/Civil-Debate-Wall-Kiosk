@@ -13,7 +13,7 @@ package com.civildebatewall.kiosk {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.geom.Point;	
+	import flash.geom.Point;
 	import flash.utils.getTimer;
 	
 	
@@ -25,8 +25,8 @@ package com.civildebatewall.kiosk {
 		public var scrollAxis:String;
 		
 		// settings
-		private var wiggleVelocityThreshold:Number = 20; // How much mouse wiggle before we call it a drag instead of a click // TODO DO THIS ON VELOCITY
-		private var wiggleTravelThreshold:Number = 5; // How much mouse wiggle before we call it a drag instead of a click // TODO DO THIS ON VELOCITY
+		private var wiggleVelocityThreshold:Number = 2500; // How much mouse wiggle before we call it a drag instead of a click // TODO DO THIS ON VELOCITY
+		private var wiggleTravelThreshold:Number = 40; // How much mouse wiggle before we call it a drag instead of a click // TODO DO THIS ON VELOCITY
 		private var resistance:Number = 800;
 		private var maxDuration:Number = 1; // max coast time, seconds
 		private var minDuration:Number = 0.1; // min coast time, seconds
@@ -61,18 +61,20 @@ package com.civildebatewall.kiosk {
 		public var assumeButtons:Boolean; // always checks for buttons! // TODO make this a string mocal, with assumeScroll as well
 		
 		public function BlockInertialScroll(params:Object = null)	{
+			assumeButtons = false; // default			
+			
 			super(params);
 			
 			// set initial scroll position
 			scrollX = 0;
 			scrollY = 0;			
 			isButtonPress = false;
-			assumeButtons = false;
+			
 			
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);			
 		}
 		
-		private function onMouseDown(e:MouseEvent):void {
+		protected function onMouseDown(e:MouseEvent):void {
 			
 			// stop any coasting, this is the "poke"
 			if (coastTween != null) coastTween.kill();
@@ -169,13 +171,15 @@ package com.civildebatewall.kiosk {
 		
 
 		private function onMouseMove(e:MouseEvent):void {
-
 			
-					
+			trace("scrollAxis" + scrollAxis);
+			trace("isOverflowY" + isOverflowY);
 			
 			if (((scrollAxis == SCROLL_BOTH) && (isOverflowX || isOverflowY)) ||
 				  (scrollAxis == SCROLL_X && isOverflowX) ||
 					(scrollAxis == SCROLL_Y && isOverflowY)) {
+				
+				
 			
 				// Actually scroll the window
 				if ((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_X)) scrollX = scrollStartX + (mouseStartX - stage.mouseX);
@@ -206,7 +210,7 @@ package com.civildebatewall.kiosk {
 						mouseTravel = mouseTravelX;
 					}
 				
-					if ((velocity > wiggleVelocityThreshold) || (mouseTravel > wiggleTravelThreshold)) {
+					if ((Math.abs(velocity) > wiggleVelocityThreshold) || (mouseTravel > wiggleTravelThreshold)) {
 						MonsterDebugger.trace(this, "Not a click.")
 						disableChildren(content);
 						isButtonPress = false;
@@ -253,10 +257,15 @@ package com.civildebatewall.kiosk {
 				
 			}
 				
+			trace("Velocity: " + yVelocity);
+			
 			//props.ease = Quart.easeOut;
 			
 			// Stopped Here
 			if (!isButtonPress) {
+				
+				
+				
 				coastTween =	ThrowPropsPlugin.to(this, props, maxDuration, minDuration, overshootTolerance);
 				
 				// Restore child mouse functionality

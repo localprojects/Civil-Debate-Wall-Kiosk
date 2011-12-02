@@ -32,7 +32,7 @@ package com.civildebatewall.kiosk.keyboard {
 		private function init():void {
 			// background
 			this.graphics.beginFill(0xffffff);
-			this.graphics.drawRect(0, 0, 962 + (7 * 2), 435); // add padding
+			this.graphics.drawRect(0, 0, 798, 356); // add padding
 			this.graphics.endFill();
 			
 			

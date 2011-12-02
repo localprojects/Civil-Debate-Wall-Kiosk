@@ -11,7 +11,8 @@ package com.civildebatewall.kiosk.buttons {
 				height: 64
 			});
 			
-			onButtonUp.push(onUp);
+			onStageUp.push(onUp);
+			
 			setParams(params);
 		}
 
