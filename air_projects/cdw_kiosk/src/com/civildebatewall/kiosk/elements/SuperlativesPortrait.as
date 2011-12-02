@@ -14,6 +14,7 @@ package com.civildebatewall.kiosk.elements
 	
 	import flash.display.Bitmap;
 	import flash.events.Event;
+	import com.civildebatewall.kiosk.elements.opinion_text.OpinionTextSuperlative;
 	
 	public class SuperlativesPortrait extends BlockBase	{
 		

@@ -65,10 +65,10 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 				height: 64
 			});
 			
-			smsSkipButton.onButtonUp.push(onSkipButtonUp);
+			smsSkipButton.onStageUp.push(onSkipButtonUp);
 			smsSkipButton.setDefaultTweenIn(1, {x: 446, y: 1826});
 			smsSkipButton.setDefaultTweenOut(1, {x: 446, y: Alignment.OFF_STAGE_BOTTOM});
-			addChild(smsSkipButton);			
+			addChild(smsSkipButton);
 		}
 		
 		private function init():void {
@@ -111,7 +111,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 							// north phone, just above user center
 							northPhone = tempPhone;
 						}
-						
 					}
 					
 					tempPhone.position = new Point(((x + 1) * gridStepX) - (cellWidth / 2), ((y + 1) * gridStepY) - (cellHeight / 2) + gridYOffset);
@@ -144,7 +143,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 
 			
 			// animation
-			timeline = new TimelineMax({onComplete: onTimelineComplete});			
+			timeline = new TimelineMax({onComplete: submitPost, onReverseComplete: submitPost});			
 			timeline.append(new TweenMax(connections, 4.5, {step: 0.5, ease: Linear.easeNone, delay: 0}));
 			
 			
@@ -160,7 +159,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 				new TweenMax(phoneGrid, 1.5, {transformAroundPoint:{point: userPhone.position, scale: 1}, ease: Quart.easeInOut})
 			], 0, TweenAlign.START);
 			
-
 			timeline.append(new TweenMax(connections, 4.5, {step: 1, ease: Linear.easeNone, delay: -.5}));						
 			
 			var phoneTweens:Array = new Array();
@@ -187,10 +185,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		}
 		
 		override protected function beforeTweenOut():void {
-			
-			
-			
-			
 			markAllInactive();
 			tweenOutInactive();
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -206,10 +200,8 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			timeline.tweenFromTo(0, "userPhonePause");			
 		}
 		
-		
 		private function homeView():void {
 			init();
-			
 			markAllInactive();
 			smsUnderlay.tweenIn();
 			smsSkipButton.tweenIn();
@@ -226,12 +218,10 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		
 		private function onNumberSubmitted(e:Event):void {
 			// finish animation
-			
 			trace("save and submit");
 			trace("User phone: " + userPhone.phoneNumber);			
 			
-			CivilDebateWall.state.userPhoneNumber = userPhone.phoneNumber;
-			
+			CivilDebateWall.state.userPhoneNumber = userPhone.phoneNumber;			
 			
 			smsSkipButton.tweenOut();
 			timeline.tweenFromTo("userPhonePause", timeline.duration);			
@@ -239,47 +229,65 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		
 
 		private function skippedPhone():void {
-			// skip the rest of the animation
-			timeline.tweenFromTo("userPhonePause", timeline.duration);
-			//CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);
+			smsSkipButton.tweenOut();
 			
-			CivilDebateWall.state.userPhoneNumber = null;		
+			trace("skipped!");
+			// roll back the animation
+			// unpop
+			//for each (var phone:Phone in phones) phone.popped = false;
+			
+			TweenMax.killTweensOf(timeline);
+			timeline.stop();
+			timeline.pause();
+			timeline = new TimelineMax({onComplete: submitPost});
+			
+			var phoneTweens:Array = new Array();
+			for (var i:int = 0; i < phones.length; i++) {
+				phoneTweens.push(new TweenMax(phones[i], 1, {scaleX: 0, scaleY: 0, ease: Quart.easeOut}));
+			}
+			
+			
+			// zoomed in?
+			var delay:Number = 0;
+			if (phoneGrid.scaleX != 1) {
+				timeline.insert(new TweenMax(phoneGrid, 1, {transformAroundPoint:{point: userPhone.position, scale: 1}, ease: Quart.easeInOut})); // zoom out
+				delay = 1;
+			}
+
+			timeline.insert(new TweenMax(connections, 1.5, {alpha: 0}), delay);	// fade lines
+			timeline.insertMultiple(phoneTweens, delay, TweenAlign.START); // shrink phones
+			timeline.goto(0);
+			timeline.play();
+			
+			// zoom out, fade everything out
+			
+			
+//			timeline.pause();
+//			timeline.reverse();
+//			TweenMax.to(timeline, 1, {timeScale: 5});
+//			CivilDebateWall.state.userPhoneNumber = null;
+			// fires submit post once it's finished
 		}
+
 		
 		
 		private function submitPost():void {
-			
 			CivilDebateWall.data.submitDebate();
-			// create user
-			
-			
-			// save image
-			
-			// save DB
-			
-			// reload data
-			
-			// go home
-			//CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);			
-			
 		}
-		
 		
 		
 		private function onSkipButtonUp(e:MouseEvent):void {
 			skippedPhone();
 		}
-		
-		private function onTimelineComplete():void {
-			submitPost();
-		}
+
 		
 
 		private function onEnterFrame(e:Event):void {
 			// phones tweening in is triggered by proximity to the dashed line's pen
 			for (var i:int = 0; i < phones.length; i++) {
 				if (!phones[i].popped && (Point.distance(phones[i].position, connections.penPosition) < distanceThreshold)) {
-					
+
+
 					// pop everyone else's message bubble
 					for (var j:int = 0; j < phones.length; j++) {
 						if (phones[j].popped) {
@@ -287,12 +295,22 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 						}
 					}
 					
-					// bring in the phone
-					TweenMax.to(phones[i], 0.5, {scaleX: .25, scaleY: .25});
-					phones[i].popped = true;
+					// phones in and out
+					if (timeline != null) {
+						if (!timeline.reversed) {
+							// tweening forward, bring in the phone						
+							TweenMax.to(phones[i], 0.5, {scaleX: .25, scaleY: .25});
+							phones[i].popped = true;						
+							if (phones[i] == userPhone) userPhone.showKeypad();						
+						}
+						else {
+							// tweening backward (canceled), send out the phone
+							if (phones[i] == userPhone) userPhone.clearKeypad();												
+							TweenMax.to(phones[i], 0.5, {scaleX: 0, scaleY: 0, alpha: 0});
+						}
+					}
 					
-					if (phones[i] == userPhone) userPhone.showKeypad();					
-					
+				
 					break;
 				}
 			}

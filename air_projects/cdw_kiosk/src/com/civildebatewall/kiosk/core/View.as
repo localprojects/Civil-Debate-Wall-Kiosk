@@ -7,15 +7,21 @@ package com.civildebatewall.kiosk.core {
 	import com.civildebatewall.State;
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.*;
-	import com.civildebatewall.kiosk.overlays.CameraCalibrationOverlay;
 	import com.civildebatewall.kiosk.DragLayer;
 	import com.civildebatewall.kiosk.buttons.*;
 	import com.civildebatewall.kiosk.camera.*;
 	import com.civildebatewall.kiosk.elements.*;
+	import com.civildebatewall.kiosk.elements.opinion_text.OpinionTextHome;
+	import com.civildebatewall.kiosk.elements.opinion_text.UserOpinionText;
+	import com.civildebatewall.kiosk.elements.question_text.QuestionHeaderBase;
+	import com.civildebatewall.kiosk.elements.question_text.QuestionHeaderDecision;
+	import com.civildebatewall.kiosk.elements.question_text.QuestionHeaderHome;
+	import com.civildebatewall.kiosk.elements.question_text.QuestionHeaderThread;
 	import com.civildebatewall.kiosk.keyboard.*;
 	import com.civildebatewall.kiosk.legacy.BigButton;
 	import com.civildebatewall.kiosk.legacy.CountdownButton;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
+	import com.civildebatewall.kiosk.overlays.CameraCalibrationOverlay;
 	import com.civildebatewall.kiosk.overlays.FlagOverlay;
 	import com.civildebatewall.kiosk.overlays.InactivityOverlay;
 	import com.civildebatewall.kiosk.overlays.OpinionEntryOverlay;
@@ -44,10 +50,10 @@ package com.civildebatewall.kiosk.core {
 		public const stageWidth:Number = 1080;
 		public const stageHeight:Number = 1920;
 		
-		// home view		
+		// home view
 		private var portrait:Portrait;
-		private var questionHeaderHome:QuestionHeader;		
-		private var opinionHome:OpinionTextHome;	
+		private var questionHeaderHome:QuestionHeaderHome;
+		private var opinionHome:OpinionTextHome;
 		private var likeButton:HomeLikeButton;
 		private var viewCommentsButton:ViewCommentsButton;
 		private var flagButton:HomeFlagButton;
@@ -60,10 +66,10 @@ package com.civildebatewall.kiosk.core {
 		private var debateStripRightButton:DebateStripNavArrow;		
 		private var debateStrip:DebateStrip;
 		private var sortLinks:SortLinks;
-		private var dragLayer:DragLayer;		
+		private var dragLayer:DragLayer;
 
 		// comment thread view
-		private var questionHeader:QuestionHeader;
+		private var questionHeaderThread:QuestionHeaderThread;
 		private var opinionUnderlay:BlockBase;
 		private var debateThisButton:BalloonButton;
 		private var bigBackButton:BigBackButton;
@@ -75,7 +81,7 @@ package com.civildebatewall.kiosk.core {
 		private var lowerMenuButton:LowerMenuButton;
 		
 		// pick debate type view
-		private var questionHeaderDecision:QuestionHeader;
+		private var questionHeaderDecision:QuestionHeaderDecision;
 		private var backButton:BackButton;
 		private var respondButton:RespondButton;
 		private var debateButton:DebateButton;
@@ -140,7 +146,7 @@ package com.civildebatewall.kiosk.core {
 			portrait.setDefaultTweenOut(1, {alpha: 0});			
 			addChild(portrait);
 			
-			questionHeaderHome = new QuestionHeader({width: 1080, height: 313, textSize: 39, leading: 29});
+			questionHeaderHome = new QuestionHeaderHome();
 			questionHeaderHome.setDefaultTweenIn(1, { alpha: 1});
 			questionHeaderHome.setDefaultTweenOut(1, { alpha: 0});
 			addChild(questionHeaderHome);			
@@ -215,9 +221,9 @@ package com.civildebatewall.kiosk.core {
 						
 			
 			// comment thread view
-			questionHeader = new QuestionHeader({width: 1024, height: 250, textSize: 28,	leading: 22});
-			questionHeader.setDefaultTweenIn(1, {x: 28, alpha: 1});
-			questionHeader.setDefaultTweenOut(1, {x: 28, alpha: 0});
+			questionHeaderThread = new QuestionHeaderThread();
+			questionHeaderThread.setDefaultTweenIn(1, {x: 28, alpha: 1});
+			questionHeaderThread.setDefaultTweenOut(1, {x: 28, alpha: 0});
 			// defer adding to stage so it's over the stats underlay
 			
 			opinionUnderlay = new BlockBase({backgroundColor: 0xffffff, backgroundAlpha: 0.85, width: 1024}); // height determined by opinion
@@ -258,7 +264,7 @@ package com.civildebatewall.kiosk.core {
 			addChild(statsOverlay);	
 
 			addChild(bigBackButton);	// deferred for draw order over the stats		
-			addChild(questionHeader); // deferred for draw order over the stats			
+			addChild(questionHeaderThread); // deferred for draw order over the stats			
 			
 			lowerMenuButton = new LowerMenuButton();
 			lowerMenuButton.setDefaultTweenIn(1, {x: 813, y: 1826});
@@ -266,7 +272,7 @@ package com.civildebatewall.kiosk.core {
 			addChild(lowerMenuButton);
 			
 			// pick debate type view
-			questionHeaderDecision = new QuestionHeader({width: 880, height: 157, textSize: 26, leading: 18});
+			questionHeaderDecision = new QuestionHeaderDecision();
 			questionHeaderDecision.setDefaultTweenIn(1, {x: 100, y: 1060});
 			questionHeaderDecision.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1060});
 			addChild(questionHeaderDecision);			
@@ -571,7 +577,7 @@ package com.civildebatewall.kiosk.core {
 			bigBackButton.width = 1022;
 			
 			portrait.tweenIn();
-			questionHeader.tweenIn();
+			questionHeaderThread.tweenIn();
 			opinionUnderlay.tweenIn();			
 			opinionHome.tweenIn(1, {y: 327});
 			threadOverlayBrowser.tweenIn(1, {y: opinionUnderlay.y + opinionUnderlay.height + 14});
@@ -855,7 +861,7 @@ package com.civildebatewall.kiosk.core {
 			bigBackButton.tweenIn();
 			
 			statsUnderlay.tweenIn();
-			questionHeader.tweenIn();			
+			questionHeaderThread.tweenIn();			
 			lowerMenuButton.tweenIn();
 			statsOverlay.tweenIn();
 			tweenOutInactive();
