@@ -146,9 +146,9 @@ package com.civildebatewall {
 		
 		public function setHighlightWord(word:String, color:uint = 0x000000):void {
 			// OFF FOR NOW, TOO SLOW AND GLITCHY
-//			highlightWord = word;
-//			highlightWordColor = color;
-//			dispatchEvent(new Event(ON_HIGHLIGHT_WORD_CHANGE));
+			highlightWord = word;
+			highlightWordColor = color;
+			dispatchEvent(new Event(ON_HIGHLIGHT_WORD_CHANGE));
 		}
 		
 		public var highlightWordColor:uint = 0x000000;

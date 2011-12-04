@@ -21,7 +21,6 @@ package com.civildebatewall.kiosk.elements {
 		protected var _post:Post;
 		protected var _postNumber:int;
 		protected var postNumberString:String;
-		public var _highlight:String;
 		
 		protected var portraitWidth:int;
 		protected var portraitHeight:int;
