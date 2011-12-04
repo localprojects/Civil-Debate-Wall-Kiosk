@@ -10,6 +10,7 @@ package com.civildebatewall {
 	
 	import flash.display.*;
 	import flash.events.Event;
+	import flash.system.System;
 	
 	
 	public class Dashboard extends Window	{
@@ -25,6 +26,7 @@ package com.civildebatewall {
 		private var framesRendered:uint;
 		private var wallsaverFrameLabel:Label;
 		private var frameRateLabel:Label;
+		private var memoryUsageLabel:Label;
 		private var framesRenderedLabel:Label;
 		private var latencyLabel:Label; 
 		
@@ -35,7 +37,7 @@ package com.civildebatewall {
 		public function Dashboard(parent:DisplayObjectContainer=null, xpos:Number=0, ypos:Number=0, title:String="Dashboard")	{
 			super(parent, xpos, ypos, title);
 			this.width = 250;
-			this.height = 700;
+			this.height = 500;
 			this.hasMinimizeButton = true;
 			this.minimized = true;
 			
@@ -58,13 +60,14 @@ package com.civildebatewall {
 			
 			wallsaverFrameLabel = new Label(this, 5, 100, "Frame Number:");
 			frameRateLabel = new Label(this, 5, 125, "Frame Rate:");
+			memoryUsageLabel = new Label(this, 5, 135, "Memory Usage:");
 			framesRenderedLabel = new Label(this, 5, 150, "Frames Rendered:");
 			latencyLabel = new Label(this, 5, 175, "Latency: ");
 			inactivityLabel = new Label(this, 5, 162, "Inactivity:");
 			
 			stateTextArea = new TextArea(this, 5, 200, "State")
 			stateTextArea.width = 240;
-			stateTextArea.height = 500;
+			stateTextArea.height = 300;
 			
 			CivilDebateWall.self.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
@@ -114,6 +117,10 @@ package com.civildebatewall {
 			frameRateLabel.text = "Frame Rate: " + CivilDebateWall.self.fpsMeter.fps;
 			framesRenderedLabel.text = "Frames Rendered: " + framesRendered++;
 			latencyLabel.text = "Latency: " + CivilDebateWall.flashSpan.settings.thisScreen.latency;
+			memoryUsageLabel.text = "Memory Usage: " + Number(System.totalMemory / 1024 / 1024 ).toFixed(2) + 'Mb'; 
+				
+							
+			
 			
 			//ObjectUtil.toString(CivilDebateWall.state);
 			//stateTextArea.text = toStr(CivilDebateWall.state, false, 2);
