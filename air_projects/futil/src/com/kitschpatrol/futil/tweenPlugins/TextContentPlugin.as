@@ -1,12 +1,12 @@
 package com.kitschpatrol.futil.tweenPlugins {
+	
 	import com.greensock.TweenLite;
-	import com.greensock.TweenMax;
 	import com.greensock.plugins.TweenPlugin;
+	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockText;
+	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	
 	import flash.text.TextField;
-
-	
 
 	public class TextContentPlugin extends TweenPlugin {
 		
@@ -20,7 +20,8 @@ package com.kitschpatrol.futil.tweenPlugins {
 		private var newContentWidth:Number;
 		private var newContentHeight:Number;
 		
-		
+		private var oldFields:Array;
+		private var oldAlphas:Array;
 		
 		private var originalOnComplete:Function;
 	
@@ -40,14 +41,16 @@ package com.kitschpatrol.futil.tweenPlugins {
 			
 			this.target = target as BlockText;
 			
+			oldFields = [];
+			oldAlphas = [];
+			
 			// put old text  in a new field
 			oldText = target.generateTextField(this.target.text);
-			
+
 			// set the text field dimensions
 			oldText.width = target.textField.width;
 			oldText.height = target.textField.height;
 			
-
 			// get the starting dimensions
 			oldContentWidth = this.target.contentWidth;
 			oldContentHeight = this.target.contentHeight;						
@@ -55,37 +58,44 @@ package com.kitschpatrol.futil.tweenPlugins {
 			// put the new text in the main field
 			this.target.text = String(value);
 			
-			// get the ending dimensions
+			// remove any lingering transition text fields temporarily so we can measure target dimensinos
+			for (var i:int = this.target.numChildren - 1; i >= 0; i--) {
+				if ((this.target.getChildAt(i) is TextField) && ((this.target.getChildAt(i) as TextField).text != this.target.text)) {
+					oldFields.push(this.target.getChildAt(i) as TextField);
+					oldAlphas.push((this.target.getChildAt(i) as TextField).alpha);
+					this.target.removeChildAt(i);
+				}
+			}			
+			
 			newContentWidth = this.target.contentWidth;
-			newContentHeight = this.target.contentHeight;
+			newContentHeight = this.target.contentHeight;			
 			
-			// For now, just support crossfade
-			// if MODE = "crossfade"			
-			oldText.alpha = 1;
-			//oldText.x = this.target.textField.x;
-			//oldText.y = this.target.textField.y;
-			this.target.addChild(oldText);
+			oldFields.push(oldText);
+			oldAlphas.push(1);
 			
+			for (var j:int = 0; j < oldFields.length; j++) {			
+				this.target.addChild(oldFields[j]);
+			}
+
+			// prepare to fade in
 			this.target.textField.alpha = 0;
-			
-			
-			// override oncomplete function
-			this.onComplete = onCrossfadeComplete;
 			
 			return true;
 		}
 		
-		private function onCrossfadeComplete():void {
-			trace("crossfade complete");
-			target.removeChild(oldText);
-		}
-		
-		
-		
 		override public function set changeFactor(n:Number):void {
 			// crossfade
 			target.textField.alpha = n;
-			oldText.alpha = 1 - n;
+			
+			for (var i:int = 0; i < oldFields.length; i++) {
+				oldFields[i].alpha = Math2.map(n, 0, 1, oldAlphas[i], 0);
+				
+				if (oldFields[i].alpha == 0) {
+					target.removeChild(oldFields[i]);
+					ArrayUtil.removeElement(oldFields, oldFields[i]);
+					ArrayUtil.removeElement(oldAlphas, oldAlphas[i]);
+				}
+			}
 			
 			// content size tweem
 			var contentWidth:Number = oldContentWidth + ((newContentWidth - oldContentWidth) * n);

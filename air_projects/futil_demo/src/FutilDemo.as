@@ -68,7 +68,7 @@ package {
 				visible: true
 			});		
 			
-			testBlock.x = 200;
+			testBlock.x = 700;
 			testBlock.y = 250;
 			
 			
@@ -220,7 +220,7 @@ package {
 		
 		private function onRandomText():void {
 			
-			TweenMax.to(testBlock, 5, {y: Alignment.OFF_STAGE_BOTTOM});
+			TweenMax.to(testBlock, 1, {text: Random.range(0, 1000000000).toString()});
 			
 			
 			//testBlock.text = "Bla bla";
