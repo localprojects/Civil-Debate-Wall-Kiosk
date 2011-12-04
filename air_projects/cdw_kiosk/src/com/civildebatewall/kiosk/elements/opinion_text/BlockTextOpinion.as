@@ -1,9 +1,13 @@
 package com.civildebatewall.kiosk.elements.opinion_text {
+	import com.bit101.components.TextArea;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.TextMessage;
 	import com.demonsters.debugger.MonsterDebugger;
 	import com.kitschpatrol.futil.blocks.BlockText;
+	import com.kitschpatrol.futil.blocks.Padding;
+	import com.kitschpatrol.futil.tweenPlugins.FutilBlockPlugin;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Shape;
@@ -12,41 +16,43 @@ package com.civildebatewall.kiosk.elements.opinion_text {
 	import flash.text.TextLineMetrics;
 	
 	public class BlockTextOpinion extends BlockText	{
-	
-		private var highlightLayer:Shape;
+
+		// Adds special background drawing and highlighting functionality to block text
+		
 		private var _highlightColor:uint;
+		private var _highlightText:String;		
+		private var _highlightPadding:Padding;
+		private var highlightLayer:Shape;
 		
 		public function BlockTextOpinion(params:Object = null) {
 			highlightLayer = new Shape();
 			
+			_highlightColor = CivilDebateWall.state.highlightWordColor;
+			_highlightPadding = new Padding(8, 8, 10, 8);
+			_highlightText = (CivilDebateWall.state.highlightWord == null) ? "" : CivilDebateWall.state.highlightWord;
 			
 			super(params);
 			
 			content.addChildAt(highlightLayer, getChildIndex(textField));
 			
+			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		}
+		
+		private function onAddedToStage(e:Event):void {
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-			//CivilDebateWall.state.addEventListener(State.ON_HIGHLIGHT_WORD_CHANGE, onHighlightChange);
+			CivilDebateWall.state.addEventListener(State.ON_HIGHLIGHT_WORD_CHANGE, onHighlightChange);
 		}
 		
 		private function onRemovedFromStage(e:Event):void {
-			//MonsterDebugger.trace(this, "Removing listeners");
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-			//CivilDebateWall.state.removeEventListener(State.ON_HIGHLIGHT_WORD_CHANGE, onHighlightChange);			
+			CivilDebateWall.state.removeEventListener(State.ON_HIGHLIGHT_WORD_CHANGE, onHighlightChange);			
 		}
-		
-		
-		
-		
-		override public function set text(textContent:String):void {
-			super.text = textContent;
-			// update the highlight
-			updateHighlight();
-			
-		}
-		
+
+
 		override public function update(contentWidth:Number = -1, contentHeight:Number = -1):void {
 			super.update(contentWidth, contentHeight);
 			drawBackground();
+			drawHighlight();			
 		}
 		
 		protected function drawBackground():void {
@@ -74,136 +80,138 @@ package com.civildebatewall.kiosk.elements.opinion_text {
 		}
 		
 		private function onHighlightChange(e:Event):void {
-			updateHighlight();
+			_highlightColor = CivilDebateWall.state.highlightWordColor;
+			_highlightText = CivilDebateWall.state.highlightWord;
+			update();
 		}
 		
-		public function updateHighlight():void {
+		public function drawHighlight():void {
 			if (textField != null) {
-				clearHighlight();
 				
-				if (CivilDebateWall.state.highlightWord != null) {
-					highlightColor = CivilDebateWall.state.highlightWordColor;
-					setHighlight(CivilDebateWall.state.highlightWord);
+				
+				// celar the existing highlight
+				highlightLayer.graphics.clear();
+				
+				if ((_highlightText != "")) {
+					trace("searching for " + _highlightText + " in " + text);
+					// find locations
+					var locations:Array = StringUtil.searchString(_highlightText, text);
+					
+					// draw if we found anything
+					for (var i:int = 0; i < locations.length; i++) {
+						trace("drawing highlight for " + this.name);
+						drawHighlightRange(locations[i][0], locations[i][1]);
+					}					
+					
+					
 				}
 			}
 		}
+
 		
+
 		
-		// highlighting
-		protected var highlightedString:String = ''; // TODO, no need?
-		
-		// todo put in padding object
-		protected var highlightPaddingTop:Number = 0; //7;
-		protected var highlightPaddingBottom:Number = 0; //9; // 9;
-		protected var highlightPaddingLeft:Number = 0; //9; // 9;
-		protected var highlightPaddingRight:Number = 0; //9; // 9;
-		
-		
-		
-//		private function correctMetrics(metrics:TextLineMetrics):TextLineMetrics {
-//			return new TextLineMetrics(metrics.x + contentCropLeft, metrics.width - contentCropRight, metrics.height - contentCropTop - contentCropBottom,
-//			metrics.ascent, metrics.descent, metrics.leading);
-//		}
-		
-		private function highlightPosition(start:int, end:int):void {
-			// add space to end
+
+		private function drawHighlightRange(start:int, end:int):void {
 			var existingText:String = text;
 			var highlightArea:Rectangle = new Rectangle();
-			
-			
-			//MonsterDebugger.trace(this, "Text: " + text);
-			
-			changedBounds = true;
-			update();
-			
-			super.text = textField.text;
 
-			//MonsterDebugger.trace(this, "Lines: " + textField.numLines);
+			var startBounds:Rectangle = textField.getCharBoundaries(start);
+			var endBounds:Rectangle = textField.getCharBoundaries(end);
 			
-			// left bounds, string up to the highlighted word
-			var onLine:int = textField.getLineIndexOfChar(start);
-			
-			//MonsterDebugger.trace(this, "Width: " + textField.width);
-			//MonsterDebugger.trace(this, "Position " + start + " On line: " + onLine);
-	
-			
-			var theLineText:String = textField.getLineText(onLine);
-			var lineLeftIndex:int = textField.getLineOffset(onLine);
-			var leftStringExclusive:String = theLineText.substring(0, start - lineLeftIndex);
-			super.text =  leftStringExclusive; // call super so we don't trigger the highlight update...
-			
-			var leftExclusiveMetrics:TextLineMetrics = textField.getLineMetrics(0);
-
-			highlightArea.x = leftExclusiveMetrics.x + leftExclusiveMetrics.width;
-			highlightArea.y = (leftExclusiveMetrics.height * onLine);				
-						
-			// right bounds, string up to and including the highlighted word
-			var leftStringInclusive:String = theLineText.substring(0, end - lineLeftIndex);
-			
-			super.text =  leftStringInclusive;
-			var leftInclusiveMetrics:TextLineMetrics = textField.getLineMetrics(0);
-			highlightArea.width = (leftInclusiveMetrics.x + leftInclusiveMetrics.width) - highlightArea.x;
-			highlightArea.height = leftInclusiveMetrics.height;						
-			
-			super.text =  existingText;
-			
-			// apply padding
-			highlightArea.y -= highlightPaddingTop;			
-			highlightArea.x -= highlightPaddingLeft;
-			highlightArea.x += textField.x + contentCropLeft;
-			highlightArea.y += textField.y;
-			highlightArea.width += highlightPaddingLeft + highlightPaddingRight;
-			highlightArea.height += highlightPaddingTop + highlightPaddingBottom;
+			highlightArea.x = startBounds.x + contentCropLeft - _highlightPadding.left;
+			highlightArea.y = startBounds.y - _highlightPadding.top;
+			highlightArea.width = endBounds.x - startBounds.x + _highlightPadding.horizontal;
+			highlightArea.height = textSize + _highlightPadding.vertical;
 			
 			// draw the hilite
 			highlightLayer.graphics.beginFill(_highlightColor);
 			highlightLayer.graphics.drawRect(highlightArea.x, highlightArea.y, highlightArea.width, highlightArea.height);
 			highlightLayer.graphics.endFill();
 		}
+
+		public function get highlightColor():uint {
+			return _highlightColor;
+		}		
 		
 		public function set highlightColor(c:uint):void {
 			_highlightColor = c;
-			setHighlight(highlightedString);			
+			update();			
 		}
-		
-		public function get highlightColor():uint {
-			return _highlightColor;
-		}
-		
-		private function setHighlight(s:String):void {
-			
-			//MonsterDebugger.trace(this, "highlighting " + s);
-			
-			if (s.length > 0) {
-				
-				highlightedString = s;
-				
-				highlightLayer.graphics.clear();
 
-				//MonsterDebugger.trace(this, "searching for " + s + " in " + text);
-				
-				var locations:Array = StringUtil.searchString(s, text);
-			
-				
-				//MonsterDebugger.trace(this, "locations: " + locations);
-				
-				// highlight each one...
-				for (var i:int = 0; i < locations.length; i++) {
-					highlightPosition(locations[i][0], locations[i][1]);
-				}
-			}
-			else {
-				clearHighlight();
-			}
+		public function get highlightText():String {
+			return _highlightText;
+		}		
+		
+		public function set highlightText(value:String):void {
+			_highlightText = value;
+			update();
 		}
 		
-		private function clearHighlight():void {
-			highlightLayer.graphics.clear();
-			highlightedString = '';
+		public function get highlightPaddingTop():Number { return _highlightPadding.top; }
+		public function set highlightPaddingTop(amount:Number):void {
+			_highlightPadding.top = amount;
+			update();
 		}
-				
+		
+		public function get highlightPaddingRight():Number { return _highlightPadding.right; }
+		public function set highlightPaddingRight(amount:Number):void {
+			_highlightPadding.right = amount;
+			update();
+		}		
+		
+		public function get highlightPaddingBottom():Number { return _highlightPadding.bottom; }
+		public function set highlightPaddingBottom(amount:Number):void {
+			_highlightPadding.bottom = amount;
+			update();
+		}
+		
+		public function get highlightPaddingLeft():Number { return _highlightPadding.left; }
+		public function set highlightPaddingLeft(amount:Number):void {
+			_highlightPadding.left = amount;
+			update();
+		}
+		
+		public function get highlightPadding():Number { return _highlightPadding.top;	} // TODO fix this, should really return object
+		public function set highlightPadding(amount:Number):void {
+			_highlightPadding.horizontal = amount;
+			_highlightPadding.vertical = amount;
+			update();
+		}		
 		
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+//		private function setHighlight(s:String):void {
+//			
+//			//MonsterDebugger.trace(this, "highlighting " + s);
+//			
+//			if (s.length > 0) {
+//				highlightedString = s;				
+//				update();
+//			}
+//			else {
+//				clearHighlight();
+//			}
+//		}
+//		
+//		private function clearHighlight():void {
+//			highlightLayer.graphics.clear();
+//			highlightedString = '';
+//		}
+//				
+//		
+//		
 		
 		
 		
