@@ -29,7 +29,7 @@ package com.civildebatewall.data {
 			
 			// try to load portrait 
 			// then load at leisure, "data" is all here
-			var imageFile:File = new File(CivilDebateWall.settings.imagePath + _id + '.jpg');
+			var imageFile:File = new File(CivilDebateWall.settings.imagePath + "kiosk/" + _id + '.jpg');
 			
 			if (imageFile.exists) {
 				// load the portrait, estimate it at 150k
@@ -67,8 +67,6 @@ package com.civildebatewall.data {
 		}
 		
 		
-		// TODO set photo...
-		// TODo save photo...
 		public function get username():String {	return _username;	}
 		public function get phoneNumber():String { return _phoneNumber; }		
 		public function get id():String { return _id; }				

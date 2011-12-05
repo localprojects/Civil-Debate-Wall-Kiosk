@@ -566,8 +566,8 @@ package com.civildebatewall.data {
 				CivilDebateWall.state.userID = response["id"];					
 				
 				// save the images // TODO fix directory structure
-				if (CivilDebateWall.state.userImageFull != null) FileUtil.saveJpeg(CivilDebateWall.state.userImageFull, CivilDebateWall.settings.imagePath, CivilDebateWall.state.userID + '-full.jpg');			
-				if (CivilDebateWall.state.userImage != null) FileUtil.saveJpeg(CivilDebateWall.state.userImage, CivilDebateWall.settings.imagePath, CivilDebateWall.state.userID + '.jpg');
+				if (CivilDebateWall.state.userImageFull != null) FileUtil.saveJpeg(CivilDebateWall.state.userImageFull, CivilDebateWall.settings.imagePath + "original/", CivilDebateWall.state.userID + '.jpg');			
+				if (CivilDebateWall.state.userImage != null) FileUtil.saveJpeg(CivilDebateWall.state.userImage, CivilDebateWall.settings.imagePath + "kiosk/", CivilDebateWall.state.userID + '.jpg');
 				
 				var payload:Object;
 
