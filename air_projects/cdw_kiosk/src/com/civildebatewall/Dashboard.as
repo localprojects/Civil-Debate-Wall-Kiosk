@@ -51,7 +51,7 @@ package com.civildebatewall {
 			
 			//new CheckBox(this, 5, 75, "Ordered Opinion Rows", function():void {CivilDebateWall.wallSaver.orderedOpinionRows = !CivilDebateWall.wallSaver.orderedOpinionRows });
 			
-			wallsaverFrameLabel = new Label(this, 5, 100, "Frame Number:");
+			wallsaverFrameLabel = new Label(this, 5, 100, "Sync Frame Number:");
 			frameRateLabel = new Label(this, 5, 125, "Frame Rate:");
 			memoryUsageLabel = new Label(this, 5, 135, "Memory Usage:");
 			framesRenderedLabel = new Label(this, 5, 150, "Frames Rendered:");

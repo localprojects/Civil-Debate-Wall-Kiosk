@@ -75,7 +75,7 @@ package com.civildebatewall.data {
 		}
 		
 		public function onUpdateComplete():void {
-			trace("Total Update time: " + (getTimer() - updateStartTime));
+			CivilDebateWall.state.updateTotalTime = getTimer() - updateStartTime;
 			
 			MonsterDebugger.trace(null, "Update complete");
 			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
@@ -295,7 +295,8 @@ package com.civildebatewall.data {
 				threads.push(newThreads[i]);
 			}
 			
-			trace("Update threads time: " + (getTimer() - updateIntermediateTime));
+			
+			CivilDebateWall.state.updateThreadsTime = getTimer() - updateIntermediateTime;
 			
 			updatePosts();
 		}
@@ -344,9 +345,7 @@ package com.civildebatewall.data {
 				posts.push(newPosts[i]);
 			}
 			
-			
-			trace("Update posts time: " + (getTimer() - updateIntermediateTime));			
-			
+			CivilDebateWall.state.updatePostsTime = getTimer() - updateIntermediateTime; 
 			updateUsers();
 		}
 		
@@ -391,14 +390,14 @@ package com.civildebatewall.data {
 				newPost.initUser();
 			}
 			
-			trace("Update users time: " + (getTimer() - updateIntermediateTime));			
+			CivilDebateWall.state.updateUsersTime = getTimer() - updateIntermediateTime; 
 			
 			MonsterDebugger.trace(null, "Loading new images");
 			photoQueue.load();			
 			
 			updateIntermediateTime = getTimer();
-			calculateStats();			
-			trace("Update stats time: " + (getTimer() - updateIntermediateTime));			
+			calculateStats();
+			CivilDebateWall.state.updateStatsTime = getTimer() - updateIntermediateTime;
 			
 			onUpdateComplete();
 		}	
