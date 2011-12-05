@@ -656,6 +656,9 @@ package com.civildebatewall.kiosk.core {
 			countdownButton.setOnFinish(onCountdownFinish);
 			
 			// blocks
+			
+			MonsterDebugger.trace(null, "Tweening in cameras.");			
+			
 			portraitCamera.tweenIn();
 			cameraOverlay.tweenIn();
 			countdownButton.tweenIn();
@@ -664,11 +667,11 @@ package com.civildebatewall.kiosk.core {
 			countdownButton.start();			
 			
 			// Todo update this
-			if (CivilDebateWall.state.lastView == photoBoothView) {
-				// we timed out! show the message for five seconds
-				cameraTimeoutWarning.tweenIn();
-				TweenMax.delayedCall(5, function():void { cameraTimeoutWarning.tweenOut(-1, {x: Alignment.OFF_STAGE_RIGHT})});
-			}
+//			if (CivilDebateWall.state.lastView == photoBoothView) {
+//				// we timed out! show the message for five seconds
+//				cameraTimeoutWarning.tweenIn();
+//				TweenMax.delayedCall(5, function():void { cameraTimeoutWarning.tweenOut(-1, {x: Alignment.OFF_STAGE_RIGHT})});
+//			}
 			
 			tweenOutInactive();
 		}
