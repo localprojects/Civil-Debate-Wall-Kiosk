@@ -50,6 +50,10 @@ package com.civildebatewall.kiosk.camera {
 			
 			timeoutTimer = new Timer(CivilDebateWall.settings.slrTimeout * 1000); // go back to photo page after five seconds... assume focus is lost
 			timeoutTimer.addEventListener(TimerEvent.TIMER, onTimeout);
+			
+			// format the card before we get started
+			MonsterDebugger.trace(null, "Starting SLR, requesting card format.");
+			formatCard();
 		}
 		
 		// move this to utils

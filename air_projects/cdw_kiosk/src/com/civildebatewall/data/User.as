@@ -71,23 +71,18 @@ package com.civildebatewall.data {
 			}
 			
 			// TODO update comment thumbs!
-			
-			
-			
-			
-			// web full
-			var webFull:Bitmap = new Bitmap(new BitmapData(550, 650, false));
-			webFull.bitmapData.copyPixels(BitmapUtil.scaleDataToFill(_photo.bitmapData, 550, 978), new Rectangle(0, 51, 550, 650), new Point(0, 0));
-			FileUtil.saveJpeg(webFull, CivilDebateWall.settings.imagePath + "web/", _id + '.jpg');
-			
-			// web thumb
-			var webThumb:Bitmap = new Bitmap(new BitmapData(71, 96, false));
-			webThumb.bitmapData.copyPixels(BitmapUtil.scaleDataToFill(_photo.bitmapData, 118, 210), new Rectangle(24, 35, 71, 96), new Point(0, 0));
-			FileUtil.saveJpeg(webThumb, CivilDebateWall.settings.imagePath + "thumbnails/", _id + '.jpg');
-			
-			
-			
-			
+
+
+			// generate thumbnails... uncomment this to run the batch
+//			// web full
+//			var webFull:Bitmap = new Bitmap(new BitmapData(550, 650, false));
+//			webFull.bitmapData.copyPixels(BitmapUtil.scaleDataToFill(_photo.bitmapData, 550, 978), new Rectangle(0, 51, 550, 650), new Point(0, 0));
+//			FileUtil.saveJpeg(webFull, CivilDebateWall.settings.imagePath + "web/", _id + '.jpg');
+//			
+//			// web thumb
+//			var webThumb:Bitmap = new Bitmap(new BitmapData(71, 96, false));
+//			webThumb.bitmapData.copyPixels(BitmapUtil.scaleDataToFill(_photo.bitmapData, 118, 210), new Rectangle(24, 35, 71, 96), new Point(0, 0));
+//			FileUtil.saveJpeg(webThumb, CivilDebateWall.settings.imagePath + "thumbnails/", _id + '.jpg');			
 		}
 		
 		
