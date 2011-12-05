@@ -17,8 +17,7 @@ package com.civildebatewall.kiosk.elements.opinion_text {
 	
 	public class BlockTextOpinion extends BlockText	{
 
-		// Adds special background drawing and highlighting functionality to block text
-		
+		// Adds background drawing and highlighting functionality to block text
 		private var _highlightColor:uint;
 		private var _highlightText:String;		
 		private var _highlightPadding:Padding;
@@ -34,7 +33,6 @@ package com.civildebatewall.kiosk.elements.opinion_text {
 			super(params);
 			
 			content.addChildAt(highlightLayer, getChildIndex(textField));
-			
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
@@ -48,12 +46,12 @@ package com.civildebatewall.kiosk.elements.opinion_text {
 			CivilDebateWall.state.removeEventListener(State.ON_HIGHLIGHT_WORD_CHANGE, onHighlightChange);			
 		}
 
-
 		override public function update(contentWidth:Number = -1, contentHeight:Number = -1):void {
 			super.update(contentWidth, contentHeight);
 			drawBackground();
 			drawHighlight();			
 		}
+
 		
 		protected function drawBackground():void {
 			background.graphics.clear();
@@ -88,29 +86,20 @@ package com.civildebatewall.kiosk.elements.opinion_text {
 		public function drawHighlight():void {
 			if (textField != null) {
 				
-				
 				// celar the existing highlight
 				highlightLayer.graphics.clear();
 				
-				if ((_highlightText != "")) {
-					trace("searching for " + _highlightText + " in " + text);
+				if ((_highlightText != null) && (_highlightText != "")) {
 					// find locations
 					var locations:Array = StringUtil.searchString(_highlightText, text);
 					
 					// draw if we found anything
 					for (var i:int = 0; i < locations.length; i++) {
-						trace("drawing highlight for " + this.name);
 						drawHighlightRange(locations[i][0], locations[i][1]);
-					}					
-					
-					
+					}
 				}
 			}
 		}
-
-		
-
-		
 
 		private function drawHighlightRange(start:int, end:int):void {
 			var existingText:String = text;
@@ -177,44 +166,7 @@ package com.civildebatewall.kiosk.elements.opinion_text {
 			_highlightPadding.horizontal = amount;
 			_highlightPadding.vertical = amount;
 			update();
-		}		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-//		private function setHighlight(s:String):void {
-//			
-//			//MonsterDebugger.trace(this, "highlighting " + s);
-//			
-//			if (s.length > 0) {
-//				highlightedString = s;				
-//				update();
-//			}
-//			else {
-//				clearHighlight();
-//			}
-//		}
-//		
-//		private function clearHighlight():void {
-//			highlightLayer.graphics.clear();
-//			highlightedString = '';
-//		}
-//				
-//		
-//		
-		
-		
-		
+		}
 		
 	}
 }

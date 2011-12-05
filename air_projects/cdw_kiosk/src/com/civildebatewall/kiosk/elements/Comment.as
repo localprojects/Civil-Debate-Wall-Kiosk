@@ -1,20 +1,16 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.*;
-	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.buttons.*;
-	import com.civildebatewall.kiosk.buttons.BalloonButton;
+	import com.civildebatewall.kiosk.elements.opinion_text.BlockTextOpinion;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
-	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.constants.Char;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
 	
 	import flash.display.*;
-	import flash.events.Event;
-	import com.civildebatewall.kiosk.elements.opinion_text.BlockTextOpinion;
 
 	public class Comment extends BlockBase {
 		
@@ -153,7 +149,6 @@ package com.civildebatewall.kiosk.elements {
 			flagButton.visible = true;
 			addChild(flagButton);			
 
-			
 			// add the opinion
 			opinion = new BlockTextOpinion({
 				minWidth: 100,
@@ -175,7 +170,6 @@ package com.civildebatewall.kiosk.elements {
 			});
 			addChild(opinion);
 			
-
 			// Add the debate me button
 			var debateButton:BalloonButton = new BalloonButton();
 			debateButton.targetPost = _post;

@@ -3,12 +3,14 @@ package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Word;
+	import com.civildebatewall.kiosk.elements.ClearTagButton;
 	import com.civildebatewall.kiosk.elements.DebateList;
 	import com.civildebatewall.kiosk.elements.StatsTitleBar;
 	import com.civildebatewall.kiosk.elements.StatsTitleBarSelector;
 	import com.civildebatewall.kiosk.elements.SuperlativesPortrait;
 	import com.civildebatewall.kiosk.elements.VoteStatBar;
 	import com.civildebatewall.kiosk.elements.WordCloud;
+	import com.civildebatewall.kiosk.elements.WordCloudTitleBar;
 	import com.civildebatewall.kiosk.elements.WordSearchResults;
 	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
@@ -25,7 +27,7 @@ package com.civildebatewall.kiosk.overlays {
 		
 		private var graphTitle:StatsTitleBar;		
 		private var voteStatBar:VoteStatBar;	
-		private var wordCloudTitle:StatsTitleBar;		
+		private var wordCloudTitle:WordCloudTitleBar;		
 		private var wordCloud:WordCloud;
 		private var searchResultsTitle:StatsTitleBar;
 		private var superlativesTitle:StatsTitleBarSelector;
@@ -33,7 +35,7 @@ package com.civildebatewall.kiosk.overlays {
 		private var debateList:DebateList;		
 		private var filler:BlockShape;
 		private var searchResults:WordSearchResults;
-		
+
 		
 		public function StatsOverlay(params:Object=null) {
 			
@@ -56,14 +58,16 @@ package com.civildebatewall.kiosk.overlays {
 			voteStatBar.visible = true;
 			addChild(voteStatBar);
 						
-			
 			// Word cloud
-			wordCloudTitle = new StatsTitleBar();
+			wordCloudTitle = new WordCloudTitleBar();
 			wordCloudTitle.text = "Most Frequently Used Words";
 			wordCloudTitle.x = 29;
 			wordCloudTitle.y = 234;
 			wordCloudTitle.visible = true;
 			addChild(wordCloudTitle);
+			
+			
+
 			
 			wordCloud = new WordCloud();
 			wordCloud.x = 29;
@@ -73,6 +77,7 @@ package com.civildebatewall.kiosk.overlays {
 			
 			wordCloud.addEventListener(WordCloud.EVENT_WORD_SELECTED, onWordSelected);
 			wordCloud.addEventListener(WordCloud.EVENT_WORD_DESELECTED, onWordDeselected);
+			wordCloudTitle.clearTagButton.addEventListener(ClearTagButton.CLEAR_TAG_EVENT, onClearTag);
 			
 			searchResultsTitle = new StatsTitleBar(); // text set later
 			searchResultsTitle.backgroundColor = Assets.COLOR_GRAY_20;
@@ -89,11 +94,15 @@ package com.civildebatewall.kiosk.overlays {
 			searchResults.setDefaultTweenOut(0.75, {x: 29, y: Alignment.OFF_STAGE_BOTTOM});
 			addChild(searchResults);
 			
+
 			
 			superlativesTitle = new StatsTitleBarSelector();
 			superlativesTitle.x = 29;
 			superlativesTitle.y = 625;
 			addChild(superlativesTitle);
+			
+			
+			
 
 			//CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataChange);
 			superlativesPortrait = new SuperlativesPortrait();
@@ -176,9 +185,19 @@ package com.civildebatewall.kiosk.overlays {
 			debateList.tweenOut();
 			superlativesPortrait.tweenOut();
 			searchResults.tweenIn();
+			wordCloudTitle.clearTagButton.tweenIn();			
 		}
 		
+		private function onClearTag(e:Event):void {
+			wordCloud.deselect();
+			onWordDeselected(e);
+		}
+
+		
+		
 		private function onWordDeselected(e:Event):void {
+			
+			
 			wordCloud.activeWord = null;
 			
 			CivilDebateWall.state.setHighlightWord(null);			
@@ -187,6 +206,8 @@ package com.civildebatewall.kiosk.overlays {
 			debateList.tweenIn();
 			superlativesPortrait.tweenIn();
 			searchResults.tweenOut();
+			wordCloudTitle.clearTagButton.tweenOut();
+			
 		}		
 		
 		

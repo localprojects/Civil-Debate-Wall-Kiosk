@@ -14,7 +14,7 @@ package com.civildebatewall {
 		
 		// Embed code is generated dynamically by embedgen.py
 
-		// Vector
+		// Vector TODO issues with long reloading process everyt time get method is called?
 		[Embed(source = '/assets/graphics/noBubble.swf')] private static const noBubbleClass:Class;
 		public static function getNoBubble():Sprite { return new noBubbleClass() as Sprite; };
 		public static const noBubble:Sprite = getNoBubble();
@@ -68,6 +68,12 @@ package com.civildebatewall {
 		
 		
 		// Bitmaps
+		[Embed(source = '/assets/graphics/clearIcon.png')] private static const clearIconClass:Class;
+		public static function getClearIcon():Bitmap { return new clearIconClass() as Bitmap; };
+		public static const clearIcon:Bitmap = getClearIcon();
+		
+		
+		
 		[Embed(source = '/assets/graphics/bigSubmit.png')] private static const bigSubmitClass:Class;
 		public static function getBigSubmit():Bitmap { return new bigSubmitClass() as Bitmap; };
 		public static const bigSubmit:Bitmap = getBigSubmit();

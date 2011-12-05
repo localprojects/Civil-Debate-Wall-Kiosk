@@ -3,10 +3,8 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
-	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.Shape;
-	
 	
 	public class StatsTitleBar extends BlockText {
 		
@@ -17,19 +15,22 @@ package com.civildebatewall.kiosk.elements {
 			
 			super(params);			
 			
-			textFont = Assets.FONT_BOLD;
-			textBold = true;
-			textSize = 18;
-			textColor = 0xffffff;
-			textAlignmentMode = Alignment.TEXT_CENTER;
-			alignmentPoint = Alignment.CENTER;
+			setParams({
+				textFont: Assets.FONT_BOLD,
+				textBold: true,
+				textSize: 18,
+				textColor: 0xffffff,
+				letterSpacing: -1,
+				textAlignmentMode: Alignment.TEXT_CENTER,
+				alignmentPoint: Alignment.CENTER,
+				width: 1022,
+				height: 64,
+				backgroundColor: 0x000000				
+			});
+			
 			
 			content.mouseChildren = false;
 			content.mouseEnabled = false;
-			
-			width = 1022;
-			height = 64;
-			backgroundColor = 0x000000;
 			
 			leftDot = new Shape();
 			leftDot.graphics.beginFill(Assets.COLOR_YES_LIGHT);
