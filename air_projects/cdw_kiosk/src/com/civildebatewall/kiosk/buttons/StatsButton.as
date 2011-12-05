@@ -85,9 +85,8 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onUp(e:Event):void {
-			MonsterDebugger.trace(this, "button up!");
 			draw();
-			CivilDebateWall.kiosk.view.statsView();
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.statsView);
 		}
 		
 		// tween this

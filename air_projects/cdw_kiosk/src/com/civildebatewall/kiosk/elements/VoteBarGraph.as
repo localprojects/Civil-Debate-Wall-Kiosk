@@ -27,6 +27,8 @@ package com.civildebatewall.kiosk.elements {
 				height: 141, 
 				backgroundColor: Assets.COLOR_NO_LIGHT			
 			});
+			
+			
 						
 			bar = new Shape();
 			addChild(bar);

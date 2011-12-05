@@ -2,6 +2,7 @@ package com.civildebatewall.kiosk.buttons {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
+	import com.civildebatewall.data.Data;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
@@ -28,7 +29,8 @@ package com.civildebatewall.kiosk.buttons {
 			});
 			
 			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
-			// TODO on data change?
+			CivilDebateWall.state.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
+			
 			
 			onButtonDown.push(onDown);
 			onStageUp.push(onUp);
@@ -44,12 +46,15 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		
-	
+		private function onDataUpdate(e:Event):void {
+			updateButton();
+		}
 		
-
 		private function onActiveDebateChange(e:Event):void {
-			
-			
+			updateButton();
+		}	
+		
+		private function updateButton():void {
 			if (CivilDebateWall.state.activeThread.postCount > 2) {
 				backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDark;				
 				// Iteratively truncate the text of the first post to fit in the button
@@ -71,8 +76,8 @@ package com.civildebatewall.kiosk.buttons {
 				backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled;				
 				
 				text = "No responses yet. Be the first!";				
-			}
-		}		
+			}			
+		}
 		
 		private function wrapText(s:String):String {
 		 return Char.LEFT_QUOTE + s + Char.RIGHT_QUOTE + " + " + (CivilDebateWall.state.activeThread.postCount - 1) + " responses";

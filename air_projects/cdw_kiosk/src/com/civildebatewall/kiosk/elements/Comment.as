@@ -74,9 +74,9 @@ package com.civildebatewall.kiosk.elements {
 
 			// add the number
 			var postNumber:BlockText = new BlockText({
-				width: 22,
+				width: 42,
 				height: 12,
-				backgroundAlpha: 0,
+				showBackground: false,
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
 				textSize: 12,

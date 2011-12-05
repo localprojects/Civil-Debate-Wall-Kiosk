@@ -15,7 +15,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
-	
 	public class UserPhone extends Phone {
 		
 		public static var NUMBER_SUBMITTED_EVENT:String = "numberSubmittedEvent";
@@ -35,14 +34,13 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		
 		public function UserPhone()	{
 			// temp set color
-			var type:int = Phone.YES;
-			CivilDebateWall.state.userStanceColorLight = Assets.COLOR_YES_LIGHT;
-			CivilDebateWall.state.userStanceColorDark = Assets.COLOR_YES_DARK;				
+			var type:int = (CivilDebateWall.state.userStance == Post.STANCE_YES) ? Phone.YES : Phone.NO;
+			//CivilDebateWall.state.userStanceColorLight = Assets.COLOR_YES_LIGHT;
+			//CivilDebateWall.state.userStanceColorDark = Assets.COLOR_YES_DARK;				
 			
 			//var type:int = (CivilDebateWall.state.userStance == Post.STANCE_YES) ? YES : NO;			
 			super(type);
-			
-			
+
 			
 			// special success bubble
 			// TODO why are these backwards?
@@ -216,16 +214,20 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		}	
 		
 		public function isValid(number:String):Boolean {
-			// TODO some more serious validation...
-			// for now just make sure it's the right length
+			// strip the parentheses and dashes
 			var bareNumber:String = number.replace(/[^\d]/gs, '');
-			return (bareNumber.length == 10);
+			
+			// make sure it's the right length and doesn't start with 0
+			if (bareNumber.match(/^[1-9]\d{9}$/g).length > 0) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 				
 		
 		public function onSubmit():void {
-			// TODO save to DB
-
 			clearKeypad();
 
 			// play the bubble sequence
@@ -246,19 +248,10 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		}
 		
 		public function onBubbleSequenceComplete():void {
-									
-			// keep the animation going
-
+			// store the number, and keep the animation going
 			phoneNumber = numberField.text.replace(/[^\d]/g, "");
-
-			
 			dispatchEvent(new Event(NUMBER_SUBMITTED_EVENT));
-			
-			
 		}
-		
-		
-		
 		
 		private function onSubmitInvalid():void {
 			TweenMax.fromTo(errorMessage, 0.5, {x: screenWidth}, {x: 30});

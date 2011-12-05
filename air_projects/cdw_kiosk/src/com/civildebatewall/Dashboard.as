@@ -1,29 +1,21 @@
 package com.civildebatewall {
-	import com.bit101.components.*;
-	import com.civildebatewall.data.Question;
-	import com.civildebatewall.kiosk.core.Kiosk;
-	import com.kitschpatrol.flashspan.Random;
-	import com.kitschpatrol.futil.toStr;
+	
+	import com.bit101.components.CheckBox;
+	import com.bit101.components.Label;
+	import com.bit101.components.PushButton;
+	import com.bit101.components.TextArea;
+	import com.bit101.components.Window;
 	import com.kitschpatrol.futil.utilitites.CoreUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
-	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
-	import flash.display.*;
+	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.system.System;
 	
-	
 	public class Dashboard extends Window	{
-		
-		private var logBox:TextArea;
-		private var viewChooser:ComboBox;
-		private var overlaySlider:Slider;
-		private var focalLengthSlider:Slider;
-		private var barTestSlider:Slider;		
-		
 		private var randomOpinionToggle:CheckBox;
 		
-		private var framesRendered:uint;
+		
 		private var wallsaverFrameLabel:Label;
 		private var frameRateLabel:Label;
 		private var memoryUsageLabel:Label;
@@ -34,15 +26,16 @@ package com.civildebatewall {
 		
 		private var stateTextArea:TextArea;
 		
-		public function Dashboard(parent:DisplayObjectContainer=null, xpos:Number=0, ypos:Number=0, title:String="Dashboard")	{
+		private var framesRendered:uint;		
+		private var memory:int;
+		private var maxMemory:int;
+		
+		public function Dashboard(parent:DisplayObjectContainer = null, xpos:Number=0, ypos:Number=0, title:String = "Dashboard")	{
 			super(parent, xpos, ypos, title);
 			this.width = 250;
 			this.height = 500;
 			this.hasMinimizeButton = true;
 			this.minimized = true;
-			
-			framesRendered = 0;
-			
 			
 			new PushButton(this, 5, 5, "Play Sequence A", function():void { CivilDebateWall.self.PlaySequenceA(); });
 			new PushButton(this, 110, 5, "Play Sequence B", function():void { CivilDebateWall.self.PlaySequenceB(); });
@@ -70,44 +63,6 @@ package com.civildebatewall {
 			stateTextArea.height = 300;
 			
 			CivilDebateWall.self.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			
-				
-			
-//			logBox = new TextArea(this, 5, 5, "Dashboard ready");
-//			logBox.width = this.width - 10;
-//			logBox.height = 90;
-
-//			
-//			
-//			focalLengthSlider = new Slider("horizontal", this, 120, 120, onFocalLengthSlider);
-//			focalLengthSlider.minimum = 1;
-//			focalLengthSlider.maximum = 3;
-//			focalLengthSlider.value = 1;	
-//			
-//		
-//			
-//			viewChooser = new ComboBox(this, 5, 140, 'View');
-//			viewChooser.addItem('Home');
-//			viewChooser.addItem('Debate Overlay');
-//			viewChooser.addItem('Pick Stance');	
-//			viewChooser.addItem('SMS Prompt');
-//			viewChooser.addItem('Photo Booth');
-//			viewChooser.addItem('Name Entry');
-//			viewChooser.addItem('Verify Opinion');
-//			viewChooser.addItem('Edit Opinion');	
-//			viewChooser.addItem('Stats Overlay');
-//			viewChooser.addItem('Inactivity Overlay');
-//			viewChooser.addItem('Submit Overlay');			
-//			
-//			viewChooser.numVisibleItems = viewChooser.items.length;
-//			
-//			viewChooser.addEventListener(Event.SELECT, onViewSelect);
-//			viewChooser.width = this.width - 10;
-//			
-//
-//			
-//			
-			
 		}
 		
 		
@@ -117,46 +72,18 @@ package com.civildebatewall {
 			frameRateLabel.text = "Frame Rate: " + CivilDebateWall.self.fpsMeter.fps;
 			framesRenderedLabel.text = "Frames Rendered: " + framesRendered++;
 			latencyLabel.text = "Latency: " + CivilDebateWall.flashSpan.settings.thisScreen.latency;
-			memoryUsageLabel.text = "Memory Usage: " + Number(System.totalMemory / 1024 / 1024 ).toFixed(2) + 'Mb'; 
+			
+			memory = Math.round(System.totalMemory / 1024 / 1024)
+			maxMemory = Math.max(memory, maxMemory);
+			memoryUsageLabel.text = "Memory Usage: " + memory + " MB \tMax: " + maxMemory + " MB"; 
 				
-							
-			
-			
-			//ObjectUtil.toString(CivilDebateWall.state);
-			//stateTextArea.text = toStr(CivilDebateWall.state, false, 2);
 			stateTextArea.text = CivilDebateWall.state.stateLog();
 			
 			var armedString:String = CivilDebateWall.inactivityTimer.armed ? "(ARMED)" : "(DISARMED)";
 			
 			inactivityLabel.text = "Inactivity: " + CivilDebateWall.inactivityTimer.secondsInactive + " / " + CivilDebateWall.settings.inactivityTimeout + " " + armedString;
-			
-			
 		}
-		
-		// logs a single line of text to the window
-		public function log(s:String):void {
-			logBox.text = s + "\n" + logBox.text;
-		}
-		
-		private function onOverlaySlider(e:Event):void {
-			Kiosk.testOverlay.alpha = overlaySlider.value;
-		}
-		
-		private function onFocalLengthSlider(e:Event):void {
-			CivilDebateWall.kiosk.view.portraitCamera.setFocalLength(focalLengthSlider.value);
-		}
-		
 
-		
-		private function onViewSelect(e:Event):void {
-			var selection:String = e.target.selectedItem;
-
-			if (selection == 'Home') CivilDebateWall.kiosk.view.homeView();
-			if (selection == 'Debate Overlay') CivilDebateWall.kiosk.view.threadView();
-			if (selection == 'Photo Booth') CivilDebateWall.kiosk.view.photoBoothView();
-			if (selection == 'Stats Overlay') CivilDebateWall.kiosk.view.statsView();
-			if (selection == 'Inactivity Overlay') CivilDebateWall.kiosk.view.inactivityOverlayView();			
-		}
 		
 		
 	}

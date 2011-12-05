@@ -2,6 +2,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.buttons.WhiteButton;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.greensock.TimelineMax;
@@ -72,8 +73,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		}
 		
 		private function init():void {
-			
-			// TODO set color?
 
 			GraphicsUtil.removeChildren(phoneGrid);
 			
@@ -105,7 +104,12 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 					}
 					else {
 						// other
-						tempPhone = new Phone(phones.length % 2);
+						if (CivilDebateWall.state.userStance == Post.STANCE_YES) {
+							tempPhone = new Phone(phones.length % 2);
+						}
+						else {
+							tempPhone = new Phone((phones.length + 1) % 2);							
+						}
 						
 						if (y == (Math.floor(gridRows / 2) - 1) && (x == Math.floor(gridCols / 2))) {
 							// north phone, just above user center

@@ -15,6 +15,7 @@ package com.civildebatewall.data {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.net.*;
+	import flash.utils.getTimer;
 	
 	public class Data extends EventDispatcher {
 		
@@ -62,13 +63,20 @@ package com.civildebatewall.data {
 		}
 		
 		
+		// keep track of how long this takes..
+		private var updateStartTime:uint;
+		private var updateIntermediateTime:uint;
 		
 		public function update():void {
+			updateStartTime = getTimer();
+			updateIntermediateTime = getTimer();
 			MonsterDebugger.trace(null, "Updating data");
 			updateThreads();
 		}
 		
 		public function onUpdateComplete():void {
+			trace("Total Update time: " + (getTimer() - updateStartTime));
+			
 			MonsterDebugger.trace(null, "Update complete");
 			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
 		}
@@ -95,7 +103,7 @@ package com.civildebatewall.data {
 		private function loadBoringWords(onLoad:Function = null):void {
 			MonsterDebugger.trace(null, "Loading boring words");
 			// TODO get this from back end!
-			var response:Array = ["not", "for", "this", "and", "are", "but", "your", "has", "have", "the", "that", "they", "with"];
+			var response:Array = ["not", "for", "this", "and", "are", "but", "your", "has", "have", "the", "that", "they", "with", "its", "it's", "this", "them"];
 			boringWords = new Vector.<String>();
 			for each (var boringWord:String in response) boringWords.push(boringWord);
 			boringWords.fixed = true;
@@ -262,6 +270,8 @@ package com.civildebatewall.data {
 		
 		// depends on active question
 		private function updateThreads():void {
+			updateIntermediateTime = getTimer();
+			
 			MonsterDebugger.trace(null, "Updating threads");
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/questions/' + CivilDebateWall.state.question.id + '/threads', function(response:Object):void {
 				newThreads = [];
@@ -285,11 +295,15 @@ package com.civildebatewall.data {
 				threads.push(newThreads[i]);
 			}
 			
+			trace("Update threads time: " + (getTimer() - updateIntermediateTime));
+			
 			updatePosts();
 		}
 		
 		// depends on threads	
 		private function updatePosts():void {
+			updateIntermediateTime = getTimer();
+			
 			newPosts = [];
 			
 			threadsLoaded = 0;
@@ -330,10 +344,15 @@ package com.civildebatewall.data {
 				posts.push(newPosts[i]);
 			}
 			
+			
+			trace("Update posts time: " + (getTimer() - updateIntermediateTime));			
+			
 			updateUsers();
 		}
 		
 		private function updateUsers():void {
+			updateIntermediateTime = getTimer();
+			
 			MonsterDebugger.trace(null, "Updating users");
 
 			// TODO only get users active for this question
@@ -372,21 +391,21 @@ package com.civildebatewall.data {
 				newPost.initUser();
 			}
 			
+			trace("Update users time: " + (getTimer() - updateIntermediateTime));			
+			
 			MonsterDebugger.trace(null, "Loading new images");
 			photoQueue.load();			
 			
+			updateIntermediateTime = getTimer();
+			calculateStats();			
+			trace("Update stats time: " + (getTimer() - updateIntermediateTime));			
 			
-			calculateStats();
 			onUpdateComplete();
 		}	
 		
 		
 		
 		// ===============================================================================================================================================================================
-		
-		
-		
-		
 		
 		
 		private function calculateStats():void {
@@ -409,92 +428,71 @@ package com.civildebatewall.data {
 				stats.mostDebatedThreads.push(threads[j]);
 			}
 			
-			var yesLikes:uint = 0;
-			var noLikes:uint = 0;
-			var yesPosts:uint = 0;
-			var noPosts:uint = 0;			
-			
 			for each (var post:Post in posts) {
 				if (post.stance == Post.STANCE_YES) {
-					yesLikes += post.likes;
-					yesPosts++;
+					stats.likesYes += post.likes;
+					stats.postsYes++;
 				}
 				else {
-					noLikes += post.likes;				
-					noPosts++;
+					stats.likesNo += post.likes;				
+					stats.postsNo++;
 				}
 			}
-						
-			stats.likesYes = yesLikes;
-			stats.likesNo = noLikes;
-			stats.likesTotal = yesLikes + noLikes;
 			
-			stats.postsYes = yesPosts;
-			stats.postsNo = noPosts;
-			stats.postsTotal = yesPosts + noPosts;
-				
-			// get this from server instead
-			// build the corpus
-			var wordSearch:RegExp = new RegExp(/\w*\w/g);
-			var corpus:Array = [];
-			for each (post in posts) {
-				corpus = ArrayUtil.mergeUnique(corpus, post.text.toLowerCase().match(wordSearch));
-			}
+			stats.likesTotal = stats.likesYes + stats.likesNo;
+			stats.postsTotal = stats.postsYes + stats.postsNo;
+			stats.yesPercent = stats.postsYes / stats.postsTotal;
 			
 			
+			// just take the top 50
 			stats.frequentWords = [];
-			for each (var corpusWord:String in corpus) {
-				// filter out small words
-				if (corpusWord.length > 2) {
-					// filter out boring words
-					// ignore boring words
-					if (boringWords.indexOf(corpusWord) > - 1) {
-						MonsterDebugger.trace( this, corpusWord + " is boring, skipping it");
-					}
-					else {
-						stats.frequentWords.push(new Word(corpusWord));
-					}
-				}
-			}
+			var wordSearch:RegExp = new RegExp(/\w{2,}\w/g); // at least 3 letters long
+			var words:Array; 
+			var word:String;
+			var corpusWord:Word;
+			var index:int;
 			
-			
-			// find frequency, store in json for easy plug-in to future server side implementation
-			for each (var word:Word in stats.frequentWords) {
-				// search all posts
-				for each (post in posts) {
-					var regex:RegExp = new RegExp(/\b/.source + word +  /\b/.source, 'g');					
+			for each (post in posts) {
+				words = post.text.toLowerCase().match(wordSearch);
+				
+				for (var k:int = 0; k < words.length; k++) {
+					word = words[k];
 					
-					var wordsInPost:Array = post.text.toLowerCase().match(wordSearch);
-					
-					for each (var wordInPost:String in wordsInPost) {
+					if (boringWords.indexOf(word) == -1) {
 						
-						if (wordInPost === word.theWord) {
-							if (post.stance == Post.STANCE_YES) {
-								word.yesCases++;
+						// is it already in the list?
+						index = -1;
+						for (var m:int = 0; m < stats.frequentWords.length; m++) {
+							if (stats.frequentWords[m].theWord == word) {
+								index = m;
+								break; 
 							}
-							else {
-								word.noCases++;
-							}
-							
-							ArrayUtil.pushIfUnique(word.posts, post);
-							word.total++;
+						}
+						
+						if (index == -1) {
+							// add it to the array
+							corpusWord = new Word(word);
+							corpusWord.total++;
+							(post.stance == Post.STANCE_YES) ? corpusWord.yesCases++ : corpusWord.noCases++;
+							corpusWord.posts.push(post);
+							stats.frequentWords.push(corpusWord);
+						}
+						else {
+							// increment it	
+							stats.frequentWords[index].total++;
+							(post.stance == Post.STANCE_YES) ? stats.frequentWords[index].yesCases++ : stats.frequentWords[index].noCases++;
+							ArrayUtil.pushIfUnique(stats.frequentWords[index].posts, post);
 						}
 					}
 				}
-			}			
+			}
 			
+			// sort and trim
+			var maxCorpusSize:int = 50;
 			stats.frequentWords.sortOn('total', Array.DESCENDING, Array.NUMERIC);
-			
-			
-			stats.yesPercent = stats.postsYes / stats.postsTotal; 
-			
-			// end stats
-			// now sort by date
-			// TODO go back to sorting based on state?
+			stats.frequentWords = stats.frequentWords.slice(0, Math.min(maxCorpusSize, stats.frequentWords.length));
+
 			CivilDebateWall.state.setSort(CivilDebateWall.state.sortMode);
-			
-			threads.sortOn('created', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?
-			posts.sortOn('created', Array.DESCENDING); // newest first
 		}
 		
 

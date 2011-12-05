@@ -145,7 +145,6 @@ package com.civildebatewall {
 		public var userRespondingTo:Post; // which post we're debating
 		
 		public function setHighlightWord(word:String, color:uint = 0x000000):void {
-			// OFF FOR NOW, TOO SLOW AND GLITCHY
 			highlightWord = word;
 			highlightWordColor = color;
 			dispatchEvent(new Event(ON_HIGHLIGHT_WORD_CHANGE));
@@ -255,6 +254,14 @@ package com.civildebatewall {
 		}
 		
 		public function setView(view:Function):void {
+			
+			// clear the highlighting if unless we're coming from the stats page 
+			if ((highlightWord != null) && (highlightWord != "")) {
+				if (lastView != CivilDebateWall.kiosk.view.statsView) {
+					setHighlightWord("");
+				}
+			}			
+			
 			lastView = activeView;
 			activeView = view;
 			dispatchEvent(new Event(VIEW_CHANGE));
@@ -264,6 +271,14 @@ package com.civildebatewall {
 		public function setActiveThread(thread:Thread, overridePrevious:Thread = null, overrideNext:Thread = null):void {
 			lastThread = activeThread;
 			activeThread = thread;
+			
+			// clear the highlighting if unless we're coming from the stats page 
+			if ((highlightWord != null) && (highlightWord != "")) {
+				if (activeView != CivilDebateWall.kiosk.view.statsView) {
+					setHighlightWord("");
+				}
+			}
+			
 
 
 			// logs backwards... ugh
