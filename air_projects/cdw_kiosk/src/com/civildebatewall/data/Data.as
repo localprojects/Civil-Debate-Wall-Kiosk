@@ -9,11 +9,17 @@ package com.civildebatewall.data {
 	import com.greensock.loading.*;
 	import com.greensock.loading.display.*;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.PixelSnapping;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.net.*;
 	import flash.utils.getTimer;
 	
@@ -565,9 +571,37 @@ package com.civildebatewall.data {
 				// user id,
 				CivilDebateWall.state.userID = response["id"];					
 				
-				// save the images // TODO fix directory structure
-				if (CivilDebateWall.state.userImageFull != null) FileUtil.saveJpeg(CivilDebateWall.state.userImageFull, CivilDebateWall.settings.imagePath + "original/", CivilDebateWall.state.userID + '.jpg');			
-				if (CivilDebateWall.state.userImage != null) FileUtil.saveJpeg(CivilDebateWall.state.userImage, CivilDebateWall.settings.imagePath + "kiosk/", CivilDebateWall.state.userID + '.jpg');
+				// save the images
+				if (CivilDebateWall.state.userImageFull != null) {
+					FileUtil.saveJpeg(CivilDebateWall.state.userImageFull, CivilDebateWall.settings.imagePath + "original/", CivilDebateWall.state.userID + '.jpg');			
+					CivilDebateWall.state.userImageFull.bitmapData.dispose();
+					CivilDebateWall.state.userImageFull = null;
+				}
+				if (CivilDebateWall.state.userImage != null) {
+					FileUtil.saveJpeg(CivilDebateWall.state.userImage, CivilDebateWall.settings.imagePath + "kiosk/", CivilDebateWall.state.userID + '.jpg');
+				}
+				
+				//
+				if (CivilDebateWall.state.userImage != null) {
+					
+					// web full
+					var webFull:Bitmap = new Bitmap(new BitmapData(550, 650, false));
+					webFull.bitmapData.copyPixels(BitmapUtil.scaleDataToFill(CivilDebateWall.state.userImage.bitmapData, 550, 978), new Rectangle(0, 51, 550, 650), new Point(0, 0));
+					FileUtil.saveJpeg(webFull, CivilDebateWall.settings.imagePath + "web/", CivilDebateWall.state.userID + '.jpg');
+					
+					// web thumb
+					var webThumb:Bitmap = new Bitmap(new BitmapData(71, 96, false));
+					webThumb.bitmapData.copyPixels(BitmapUtil.scaleDataToFill(CivilDebateWall.state.userImage.bitmapData, 118, 210), new Rectangle(24, 35, 71, 96), new Point(0, 0));
+					FileUtil.saveJpeg(webThumb, CivilDebateWall.settings.imagePath + "thumbnails/", CivilDebateWall.state.userID + '.jpg');
+					
+					// Clean up
+					webFull.bitmapData.dispose();
+					webFull = null;
+					webThumb.bitmapData.dispose();
+					webThumb = null;
+					CivilDebateWall.state.userImage.bitmapData.dispose();					
+					CivilDebateWall.state.userImage = null;
+				}
 				
 				var payload:Object;
 
