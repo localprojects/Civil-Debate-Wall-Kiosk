@@ -8,7 +8,7 @@ package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.kiosk.elements.StatsTitleBar;
 	import com.civildebatewall.kiosk.elements.StatsTitleBarSelector;
 	import com.civildebatewall.kiosk.elements.SuperlativesPortrait;
-	import com.civildebatewall.kiosk.elements.VoteStatBar;
+	import com.civildebatewall.kiosk.elements.VoteBarGraph;
 	import com.civildebatewall.kiosk.elements.WordCloud;
 	import com.civildebatewall.kiosk.elements.WordCloudTitleBar;
 	import com.civildebatewall.kiosk.elements.WordSearchResults;
@@ -25,7 +25,7 @@ package com.civildebatewall.kiosk.overlays {
 	public class StatsOverlay extends BlockBase	{
 		
 		private var graphTitle:StatsTitleBar;		
-		private var voteStatBar:VoteStatBar;	
+		private var voteBarGraph:VoteBarGraph;	
 		private var wordCloudTitle:WordCloudTitleBar;		
 		private var wordCloud:WordCloud;
 		private var searchResultsTitle:StatsTitleBar;
@@ -51,11 +51,11 @@ package com.civildebatewall.kiosk.overlays {
 			graphTitle.visible = true;
 			addChild(graphTitle);
 			
-			voteStatBar = new VoteStatBar();
-			voteStatBar.x = 29;
-			voteStatBar.y = 78;
-			voteStatBar.visible = true;
-			addChild(voteStatBar);
+			voteBarGraph = new VoteBarGraph();
+			voteBarGraph.x = 29;
+			voteBarGraph.y = 78;
+			voteBarGraph.visible = true;
+			addChild(voteBarGraph);
 						
 			// Word cloud
 			wordCloudTitle = new WordCloudTitleBar();
