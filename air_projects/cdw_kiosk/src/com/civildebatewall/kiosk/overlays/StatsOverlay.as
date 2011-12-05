@@ -3,6 +3,7 @@ package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Word;
+	import com.civildebatewall.kiosk.buttons.WordButton;
 	import com.civildebatewall.kiosk.elements.ClearTagButton;
 	import com.civildebatewall.kiosk.elements.DebateList;
 	import com.civildebatewall.kiosk.elements.StatsTitleBar;
@@ -169,11 +170,15 @@ package com.civildebatewall.kiosk.overlays {
 		private function onWordSelected(e:Event):void {
 			raiseMenuThroughButton();
 
-			var word:Word = wordCloud.activeWord.word;
+			var wordButton:WordButton = wordCloud.activeWord; 
+			var word:Word = wordButton.word;
+			
 			searchResults.setWord(word);
+
+			// Clamp to extreme color instead of using gradient from word.backgroundColor, which has contrast issues
+			var highlightColor:uint =  wordButton.normalDifference < 0.5 ? Assets.COLOR_NO_HIGHLIGHT : Assets.COLOR_YES_HIGHLIGHT; 
 			
-			
-			CivilDebateWall.state.setHighlightWord(word.theWord, wordCloud.activeWord.backgroundColor);
+			CivilDebateWall.state.setHighlightWord(word.theWord, highlightColor);
 			
 			TweenMax.to(searchResultsTitle, 0.5, {text: Char.LEFT_SINGLE_QUOTE + StringUtil.capitalize(word.theWord) + Char.RIGHT_SINGLE_QUOTE + " used in " + word.posts.length + " " + StringUtil.plural("Opinion", word.posts.length)});
 			TweenMax.to(superlativesTitle, 0.5, {alpha: 0});

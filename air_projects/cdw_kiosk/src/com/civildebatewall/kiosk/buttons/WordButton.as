@@ -48,6 +48,7 @@ package com.civildebatewall.kiosk.buttons {
 		
 		// todo normal difference setter?
 		public function updateColor():void {
+			
 			backgroundColor =	BitmapUtil.getPixelAtNormal(Assets.wordCloudGradient, normalDifference, 0);			
 		}
 		

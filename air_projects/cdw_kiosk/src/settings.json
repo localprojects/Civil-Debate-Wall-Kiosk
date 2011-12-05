@@ -25,7 +25,7 @@
 	},
 	
 	"mac": {
-		"halfSize": false,
+		"halfSize": true,
 		"startFullScreen": false,
 		"useWebcam": true,	
 		"useSLR": false,

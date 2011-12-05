@@ -6,6 +6,7 @@ package com.civildebatewall.kiosk.keyboard {
 	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.demonsters.debugger.MonsterDebugger;
+	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	
 	import flash.display.InteractiveObject;
@@ -88,7 +89,6 @@ package com.civildebatewall.kiosk.keyboard {
 					key.addEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
 					//key.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);					
 					
-					
 					keys[key.letter] = key;
 					
 					addChild(key);
@@ -101,7 +101,13 @@ package com.civildebatewall.kiosk.keyboard {
 
 
 		public function showSpacebar(b:Boolean):void {
-			keys[' '].visible = b;
+			if (b) {
+				keys[' '].visible = true;
+				TweenMax.to(keys[' '], 0.25, {alpha: 1});				
+			}
+			else {
+				TweenMax.to(keys[' '], 0.25, {alpha: 0, onComplete: function():void { keys[' '].visible = false; }});
+			}
 		}
 		
 		private function upperCase():void {

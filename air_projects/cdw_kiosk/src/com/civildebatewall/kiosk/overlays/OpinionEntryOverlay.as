@@ -80,10 +80,7 @@ package com.civildebatewall.kiosk.overlays {
 				height: 188,
 				visible: true
 			});
-
 			addChild(question);
-			
-			
 			
 			respondingToContainer = new BlockBase({
 				minHeight: 311,
@@ -93,7 +90,6 @@ package com.civildebatewall.kiosk.overlays {
 				paddingLeft: 30,
 				visible: true
 			});
-			
 			addChild(respondingToContainer);
 			
 			respondingToPortrait = new BlockShape();
@@ -136,10 +132,7 @@ package com.civildebatewall.kiosk.overlays {
 			respondingToOpinion.x = 221;
 			respondingToOpinion.y = 83;
 			respondingToContainer.addChild(respondingToOpinion);
-			
-			
-			
-			
+
 			formContainer = new BlockBase({
 				backgroundColor: ColorUtil.gray(211),
 				width: 1022,
@@ -150,7 +143,6 @@ package com.civildebatewall.kiosk.overlays {
 			
 			formContainer.y = question.bottom;
 			addChild(formContainer);
-
 			
 			var errorStyle:Object = {
 				textFont: Assets.FONT_BOLD,
@@ -360,6 +352,7 @@ package com.civildebatewall.kiosk.overlays {
 				backgroundColor: 0xffffff,
 				backgroundRadiusBottomLeft: 12,
 				backgroundRadiusBottomRight: 12,
+				maxSizeBehavior: BlockBase.MAX_SIZE_CLIPS,
 				padding: 30,
 				width: 1022,
 				height: 495 - 79,
@@ -371,32 +364,30 @@ package com.civildebatewall.kiosk.overlays {
 			keyboardContainer.y = formContainer.bottom + 14;
 			addChild(keyboardContainer);
 			
-
 			keyboard = new Keyboard();			
 			keyboard.setColor(ColorUtil.gray(77));
 			keyboard.setBackgroundColor(ColorUtil.gray(77));
 			keyboard.visible = true;
 			keyboard.x = -7; // compensate for key padding
 			keyboardContainer.addChild(keyboard);
-			
 
 			// Events
 			nameField.onInput.push(onNameFieldInput);
 			nameField.onInput.push(onInput);
 			nameField.onFocus.push(onFieldFocus);
+			nameField.onFocus.push(onNameFieldFocus);
 			nameField.onBlur.push(onFieldBlur);
 			opinionField.onInput.push(onOpinionFieldInput);
 			opinionField.onInput.push(onInput);
 			opinionField.onFocus.push(onFieldFocus);
+			opinionField.onFocus.push(onOpinionFieldFocus);
 			opinionField.onBlur.push(onFieldBlur);
 			submitButton.onButtonUp.push(onSubmit);
 			
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
-			
-			
-			
-			
 		}
+		
+
 		
 		private function onInput(e:Event):void {
 			// check for profanity
@@ -436,18 +427,25 @@ package com.civildebatewall.kiosk.overlays {
 			TweenMax.to(e.target.parent.parent, 0, {borderAlpha: 1});
 			
 			// keyboard follows focus
-			
-			trace("focus");
 			trace(stage.focus);
 			
 			if (stage.focus is BlockText) {
 				keyboard.target = (stage.focus as BlockText).textField;
-				trace("Keyboard target: " + keyboard.target);
 			}
 		}
 		
 		private function onFieldBlur(e:FocusEvent):void {
 			TweenMax.to(e.target.parent.parent, 0.5, {borderAlpha: 0});
+		}
+		
+		private function onNameFieldFocus(e:FocusEvent):void {
+			// remove space bar
+			keyboard.showSpacebar(false);
+		}
+		
+		private function onOpinionFieldFocus(e:FocusEvent):void {
+			// restore space bar
+			keyboard.showSpacebar(true);			
 		}		
 		
 		private function onDataUpdate(e:Event):void {
