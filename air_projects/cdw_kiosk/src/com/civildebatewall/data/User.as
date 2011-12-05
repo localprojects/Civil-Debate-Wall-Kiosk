@@ -35,7 +35,7 @@ package com.civildebatewall.data {
 				// load the portrait, estimate it at 150k
 				trace('Loading image from file for ' + _username + "\t(" + _id + ")");
 				// TEMP off for performance
-				//CivilDebateWall.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes: 150000, onComplete: onImageLoaded}) );
+				CivilDebateWall.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes: 150000, onComplete: onImageLoaded}) );
 			}
 			else {
 				trace('Using placeholder for ' + _username + "\t(" + _id + ")");
