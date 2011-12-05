@@ -72,6 +72,14 @@ package com.civildebatewall {
 		public static function getClearIcon():Bitmap { return new clearIconClass() as Bitmap; };
 		public static const clearIcon:Bitmap = getClearIcon();
 		
+		[Embed(source = '/assets/graphics/barGraphNoLabel.png')] private static const barGraphNoLabelClass:Class;
+		public static function getBarGraphNoLabel():Bitmap { return new barGraphNoLabelClass() as Bitmap; };
+		public static const barGraphNoLabel:Bitmap = getBarGraphNoLabel();
+		
+		[Embed(source = '/assets/graphics/barGraphYesLabel.png')] private static const barGraphYesLabelClass:Class;
+		public static function getBarGraphYesLabel():Bitmap { return new barGraphYesLabelClass() as Bitmap; };
+		public static const barGraphYesLabel:Bitmap = getBarGraphYesLabel();		
+		
 		[Embed(source = '/assets/graphics/goToDebateText.png')] private static const goToDebateTextClass:Class;
 		public static function getGoToDebateText():Bitmap { return new goToDebateTextClass() as Bitmap; };
 		public static const goToDebateText:Bitmap = getGoToDebateText();
