@@ -1,6 +1,5 @@
 package com.civildebatewall.data {
 	
-	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.demonsters.debugger.MonsterDebugger;
@@ -9,6 +8,7 @@ package com.civildebatewall.data {
 	import com.greensock.loading.LoaderMax;
 	import com.greensock.loading.display.ContentDisplay;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
+	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Bitmap;
@@ -38,7 +38,7 @@ package com.civildebatewall.data {
 			
 			if (imageFile.exists) {
 				// load the portrait, estimate it at 150k
-				trace('Loading image from file for ' + _username + "\t(" + _id + ")");
+				MonsterDebugger.trace(null, 'Loading image from file for ' + _username + "\t(" + _id + ")");
 				// TEMP off for performance
 				CivilDebateWall.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes: 15000, onComplete: onImageLoaded}) );
 			}
@@ -48,7 +48,7 @@ package com.civildebatewall.data {
 		}
 		
 		private function onImageLoaded(e:LoaderEvent):void {
-			trace("Loaded image for " + _username);
+			MonsterDebugger.trace(null, "Loaded image for " + _username + "\t(" + _id + ")");
 			_photo = new Bitmap(((LoaderMax.getContent(_id) as ContentDisplay).rawContent as Bitmap).bitmapData, PixelSnapping.AUTO, true);
 			
 			// search and update, use some kind of bitmap binding instead?
