@@ -14,7 +14,7 @@ package com.civildebatewall.kiosk.buttons {
 	public class LowerMenuButton extends BlockText	{
 	
 		private var icon:Bitmap;
-		private var lowered:Boolean;
+		public var lowered:Boolean;
 		
 		private var line:Shape;
 		
@@ -83,6 +83,12 @@ package com.civildebatewall.kiosk.buttons {
 				CivilDebateWall.kiosk.view.statsOverlay.raiseMenu();					
 			}
 			
-		}			
+		}
+		
+		public function toggle():void {
+			onUp(new MouseEvent(MouseEvent.MOUSE_UP));
+		}
+		
+
 	}
 }

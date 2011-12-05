@@ -12,7 +12,6 @@ package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.kiosk.elements.WordCloud;
 	import com.civildebatewall.kiosk.elements.WordCloudTitleBar;
 	import com.civildebatewall.kiosk.elements.WordSearchResults;
-	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -90,8 +89,8 @@ package com.civildebatewall.kiosk.overlays {
 			addChild(searchResultsTitle);
 			
 			searchResults = new WordSearchResults();
-			searchResults.setDefaultTweenIn(0.75, {x: 29, y: 703});
-			searchResults.setDefaultTweenOut(0.75, {x: 29, y: Alignment.OFF_STAGE_BOTTOM});
+			searchResults.setDefaultTweenIn(0.75, {alpha: 1, x: 29, y: 703});
+			searchResults.setDefaultTweenOut(0.75, {alpha: 0, x: 29, y: Alignment.OFF_STAGE_BOTTOM});
 			addChild(searchResults);
 			
 
@@ -130,14 +129,11 @@ package com.civildebatewall.kiosk.overlays {
 			debateList.tweenIn();			
 			// opinions results is just overlay
 			
-			// show search results if they change...
-			
-			
+			// show search results if they change...	
 		}
 		
 		private var menuLowerDistance:Number = 924; // string makes it relative
 		private var duration:Number = 0.6;
-		
 		
 		// TODO not relative!
 		public function lowerMenu():void {
@@ -171,9 +167,8 @@ package com.civildebatewall.kiosk.overlays {
 		
 		
 		private function onWordSelected(e:Event):void {
-			MonsterDebugger.trace(null, "word selected");
-			raiseMenu();			
-			
+			raiseMenuThroughButton();
+
 			var word:Word = wordCloud.activeWord.word;
 			searchResults.setWord(word);
 			
@@ -184,7 +179,7 @@ package com.civildebatewall.kiosk.overlays {
 			TweenMax.to(superlativesTitle, 0.5, {alpha: 0});
 			debateList.tweenOut();
 			superlativesPortrait.tweenOut();
-			searchResults.tweenIn();
+			//searchResults.tweenIn();
 			wordCloudTitle.clearTagButton.tweenIn();			
 		}
 		
@@ -192,12 +187,24 @@ package com.civildebatewall.kiosk.overlays {
 			wordCloud.deselect();
 			onWordDeselected(e);
 		}
+		
+		override protected function beforeTweenIn():void {
+			wordCloud.deselect();
+			onWordDeselected(new Event(ClearTagButton.CLEAR_TAG_EVENT));
+			wordCloudTitle.clearTagButton.tweenOut(0); // start off screen
+			super.beforeTweenIn();
+		}
 
+		
+		private function raiseMenuThroughButton():void {
+			if (CivilDebateWall.kiosk.view.lowerMenuButton.lowered) {
+				CivilDebateWall.kiosk.view.lowerMenuButton.toggle();				
+			}
+		}
 		
 		
 		private function onWordDeselected(e:Event):void {
-			
-			
+			raiseMenuThroughButton();			
 			wordCloud.activeWord = null;
 			
 			CivilDebateWall.state.setHighlightWord(null);			
