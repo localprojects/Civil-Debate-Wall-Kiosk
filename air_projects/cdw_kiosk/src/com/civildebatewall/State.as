@@ -49,6 +49,14 @@ package com.civildebatewall {
 		public var question:Question;
 		
 		
+		// network performance, TODO put on dashboard
+		public var updateThreadsTime:int;
+		public var updatePostsTime:int;
+		public var updateUsersTime:int;
+		public var updateStatsTime:int;
+		public var updateTotalTime:int;
+		
+		
 		
 		
 		public var firstLoad:Boolean;
@@ -126,6 +134,12 @@ package com.civildebatewall {
 			out += varToString("userRespondingTo.id");
 			out += varToString("userThreadID");
 			out += varToString("userPostID");
+			out += "--- PERFORMANCE ---\n"			
+			out += varToString("updateThreadsTime");
+			out += varToString("updatePostsTime");
+			out += varToString("updateUsersTime");
+			out += varToString("updateStatsTime");
+			out += varToString("updateTotalTime");
 			return out;
 		}
 				
