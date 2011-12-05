@@ -20,6 +20,7 @@ package com.civildebatewall {
 		private var frameRateLabel:Label;
 		private var memoryUsageLabel:Label;
 		private var framesRenderedLabel:Label;
+		private var imagesLoadedLabel:Label;
 		private var latencyLabel:Label; 
 		
 		private var inactivityLabel:Label;
@@ -52,6 +53,7 @@ package com.civildebatewall {
 			//new CheckBox(this, 5, 75, "Ordered Opinion Rows", function():void {CivilDebateWall.wallSaver.orderedOpinionRows = !CivilDebateWall.wallSaver.orderedOpinionRows });
 			
 			wallsaverFrameLabel = new Label(this, 5, 100, "Sync Frame Number:");
+			imagesLoadedLabel = new Label(this, 5, 115, "Images: ");
 			frameRateLabel = new Label(this, 5, 125, "Frame Rate:");
 			memoryUsageLabel = new Label(this, 5, 135, "Memory Usage:");
 			framesRenderedLabel = new Label(this, 5, 150, "Frames Rendered:");
@@ -72,6 +74,10 @@ package com.civildebatewall {
 			frameRateLabel.text = "Frame Rate: " + CivilDebateWall.self.fpsMeter.fps;
 			framesRenderedLabel.text = "Frames Rendered: " + framesRendered++;
 			latencyLabel.text = "Latency: " + CivilDebateWall.flashSpan.settings.thisScreen.latency;
+			
+			if (CivilDebateWall.data.photoQueue != null) {			
+				imagesLoadedLabel.text = "Images loaded: " + CivilDebateWall.data.photoQueue.bytesLoaded + " / " + CivilDebateWall.data.photoQueue.bytesTotal;
+			}
 			
 			memory = Math.round(System.totalMemory / 1024 / 1024)
 			maxMemory = Math.max(memory, maxMemory);
