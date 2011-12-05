@@ -217,6 +217,7 @@ package com.civildebatewall.data {
 		}
 		
 		public var photoQueue:LoaderMax;
+		
 		private function loadUsers():void {
 			MonsterDebugger.trace(null, "Loading users");
 			// TODO only get users active for this question
@@ -258,8 +259,8 @@ package com.civildebatewall.data {
 				post.initUser();
 			}
 			
-			// TEMP off for testing
-			//photoQueue.load();
+			// TEMP off for testing... turning this off fixes webcam
+			photoQueue.load();
 			calculateStats();
 			onLoadComplete();
 		}	
