@@ -459,12 +459,9 @@ package com.civildebatewall.kiosk.overlays {
 			opinionField.text = StringUtil.trim(opinionField.text);
 			
 			// clear messages
-						
-
 			if (!errorMessage.visible) {
 				errorMessage.x = 1022; // come in from right
 			}
-
 			
 			if ((nameField.text.length == 0) && (opinionField.text.length == 0)) {
 				errorMessage.text = "PLEASE FILL IN BOTH FIELDS BEFORE CONTINUING."
@@ -491,17 +488,20 @@ package com.civildebatewall.kiosk.overlays {
 			
 			
 			if (errors) {
-				trace("Errors! Won't submit");
+				MonsterDebugger.trace(null, "Errors! Won't submit.");
+								
 			}
 			else {
-				trace("Looks OK! Will submit.");
+				MonsterDebugger.trace(null, "Looks fine, submitting.");
 				CivilDebateWall.state.userOpinion = opinionField.text;
 				CivilDebateWall.state.userName = nameField.text;
 				
-				if (CivilDebateWall.state.userImage == null) { 
+				if (CivilDebateWall.state.userImage == null) {
+					MonsterDebugger.trace(null, "No user image, going to photo booth view.");
 					CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.photoBoothView);
 				}
 				else {
+					MonsterDebugger.trace(null, "Have user image, must be editing. going to opinion review view.");
 					CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.opinionReviewView);					
 				}
 			}
