@@ -2,14 +2,9 @@ package com.civildebatewall.kiosk.elements.opinion_text
 {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.State;
-	import com.demonsters.debugger.MonsterDebugger;
-	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.constants.Char;
-	
-	import flash.events.Event;
 	
 	public class UserOpinionText extends BlockTextOpinion	{
 		
@@ -52,7 +47,6 @@ package com.civildebatewall.kiosk.elements.opinion_text
 				visible: true
 			});
 			
-			
 			addChild(nameTag);
 			opinion.y = nameTag.height;
 			
@@ -61,10 +55,7 @@ package com.civildebatewall.kiosk.elements.opinion_text
 		
 		override protected function beforeTweenIn():void {
 			super.beforeTweenIn();
-			
-			MonsterDebugger.trace(this, "Setting name: " + CivilDebateWall.state.userName);
-			MonsterDebugger.trace(this, "Setting opinion: " + CivilDebateWall.state.userOpinion);
-			
+
 			nameTag.backgroundColor = CivilDebateWall.state.userStanceColorDark;
 			nameTag.text = (CivilDebateWall.state.userName + " SAYS : " + CivilDebateWall.state.userStance + "!").toUpperCase();
 			
@@ -74,9 +65,6 @@ package com.civildebatewall.kiosk.elements.opinion_text
 			opinion.y = opinion.height;
 			nameTag.y = opinion.top - nameTag.height;
 		}
-		
-		
-		
-		
+
 	}
 }

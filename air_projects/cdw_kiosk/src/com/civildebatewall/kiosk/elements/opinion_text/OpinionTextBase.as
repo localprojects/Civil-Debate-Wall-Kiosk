@@ -1,16 +1,10 @@
 package com.civildebatewall.kiosk.elements.opinion_text
 {
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.State;
 	import com.civildebatewall.data.Post;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
-	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.constants.Char;
-	
-	import flash.events.Event;
-	
 	
 	public class OpinionTextBase extends BlockBase	{
 		
@@ -19,12 +13,10 @@ package com.civildebatewall.kiosk.elements.opinion_text
 		
 		public function OpinionTextBase()	{
 			super({
-				//registrationPoint: Alignment.BOTTOM_LEFT,
 				width: 880,
 				maxHeight: 1000,
 				backgroundAlpha: 0
 			});
-			
 			
 			nameTag = new BlockText({
 				minWidth: 100,
@@ -71,8 +63,6 @@ package com.civildebatewall.kiosk.elements.opinion_text
 			
 			update();			
 		}
-		
-
 		
 	}
 }
