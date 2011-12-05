@@ -1,5 +1,6 @@
 package com.civildebatewall.data {
 	
+	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.demonsters.debugger.MonsterDebugger;
@@ -7,11 +8,15 @@ package com.civildebatewall.data {
 	import com.greensock.loading.ImageLoader;
 	import com.greensock.loading.LoaderMax;
 	import com.greensock.loading.display.ContentDisplay;
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.PixelSnapping;
 	import flash.filesystem.File;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	public class User extends Object {
 		
@@ -35,7 +40,7 @@ package com.civildebatewall.data {
 				// load the portrait, estimate it at 150k
 				trace('Loading image from file for ' + _username + "\t(" + _id + ")");
 				// TEMP off for performance
-				CivilDebateWall.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes: 150000, onComplete: onImageLoaded}) );
+				CivilDebateWall.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes: 15000, onComplete: onImageLoaded}) );
 			}
 			else {
 				trace('Using placeholder for ' + _username + "\t(" + _id + ")");
@@ -64,6 +69,25 @@ package com.civildebatewall.data {
 			if (CivilDebateWall.state.superlativePost.user == this) {
 				CivilDebateWall.kiosk.view.statsOverlay.superlativesPortrait.portrait.setImage(_photo);
 			}
+			
+			// TODO update comment thumbs!
+			
+			
+			
+			
+			// web full
+			var webFull:Bitmap = new Bitmap(new BitmapData(550, 650, false));
+			webFull.bitmapData.copyPixels(BitmapUtil.scaleDataToFill(_photo.bitmapData, 550, 978), new Rectangle(0, 51, 550, 650), new Point(0, 0));
+			FileUtil.saveJpeg(webFull, CivilDebateWall.settings.imagePath + "web/", _id + '.jpg');
+			
+			// web thumb
+			var webThumb:Bitmap = new Bitmap(new BitmapData(71, 96, false));
+			webThumb.bitmapData.copyPixels(BitmapUtil.scaleDataToFill(_photo.bitmapData, 118, 210), new Rectangle(24, 35, 71, 96), new Point(0, 0));
+			FileUtil.saveJpeg(webThumb, CivilDebateWall.settings.imagePath + "thumbnails/", _id + '.jpg');
+			
+			
+			
+			
 		}
 		
 		
