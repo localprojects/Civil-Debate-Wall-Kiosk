@@ -45,7 +45,7 @@ package com.civildebatewall.kiosk.camera {
 			//var shutterButton:PushButton = new PushButton(this, 10, 10, "TAKE PHOTO", onShutterButton);
 			//var formatButton:PushButton = new PushButton(this, 10, 40, "FORMAT CARD", onFormatButton);
 			
-			folderWatchTimer = new Timer(100);
+			folderWatchTimer = new Timer(150);
 			folderWatchTimer.addEventListener(TimerEvent.TIMER, onCheckFolder);
 			
 			timeoutTimer = new Timer(CivilDebateWall.settings.slrTimeout * 1000); // go back to photo page after five seconds... assume focus is lost
@@ -164,6 +164,7 @@ package com.civildebatewall.kiosk.camera {
 		
 		private function onTimeout(e:TimerEvent):void {
 			// CivilDebateWall.dashboard.log("timeout!");
+			MonsterDebugger.trace(this, 'SLR timeout');
 			timeoutTimer.stop();
 			timeoutTimer.reset();
 			onTimeoutFunction(e);

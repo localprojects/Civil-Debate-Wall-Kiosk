@@ -684,7 +684,7 @@ package com.civildebatewall.kiosk.core {
 			if (CivilDebateWall.settings.useSLR) {
 				// using SLR
 				MonsterDebugger.trace(this, "using SLR");
-				portraitCamera.slr.setOnTimeout(onSLRTimeout);
+				//portraitCamera.slr.setOnTimeout(onSLRTimeout);
 				portraitCamera.slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 				portraitCamera.slr.takePhoto();
 			}
@@ -700,8 +700,8 @@ package com.civildebatewall.kiosk.core {
 		
 		private function onSLRTimeout(e:Event):void {
 			// go back to photo page
-			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
-			photoBoothView();
+			//portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
+			//photoBoothView();
 		}
 		
 		private function onPhotoCapture(e:CameraFeedEvent):void {
