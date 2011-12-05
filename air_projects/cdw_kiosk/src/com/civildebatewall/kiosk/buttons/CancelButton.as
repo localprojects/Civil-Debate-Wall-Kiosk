@@ -16,6 +16,7 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onUp(e:MouseEvent):void {
+			CivilDebateWall.state.clearUser();
 			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);
 		}
 		
