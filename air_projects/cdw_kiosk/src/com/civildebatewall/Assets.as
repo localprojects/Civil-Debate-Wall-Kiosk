@@ -72,7 +72,9 @@ package com.civildebatewall {
 		public static function getClearIcon():Bitmap { return new clearIconClass() as Bitmap; };
 		public static const clearIcon:Bitmap = getClearIcon();
 		
-		
+		[Embed(source = '/assets/graphics/goToDebateText.png')] private static const goToDebateTextClass:Class;
+		public static function getGoToDebateText():Bitmap { return new goToDebateTextClass() as Bitmap; };
+		public static const goToDebateText:Bitmap = getGoToDebateText();
 		
 		[Embed(source = '/assets/graphics/bigSubmit.png')] private static const bigSubmitClass:Class;
 		public static function getBigSubmit():Bitmap { return new bigSubmitClass() as Bitmap; };

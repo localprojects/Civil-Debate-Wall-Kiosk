@@ -76,7 +76,7 @@ package com.civildebatewall.kiosk.core {
 		// stats view
 		private var statsUnderlay:BlockBase;		
 		public var statsOverlay:StatsOverlay;
-		private var lowerMenuButton:LowerMenuButton;
+		public var lowerMenuButton:LowerMenuButton;
 		
 		// pick debate type view
 		private var questionHeaderDecision:QuestionHeaderDecision;
@@ -268,6 +268,8 @@ package com.civildebatewall.kiosk.core {
 			lowerMenuButton.setDefaultTweenIn(1, {x: 813, y: 1826});
 			lowerMenuButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 1826});	
 			addChild(lowerMenuButton);
+			
+			
 			
 			// pick debate type view
 			questionHeaderDecision = new QuestionHeaderDecision();
@@ -565,6 +567,14 @@ package com.civildebatewall.kiosk.core {
 			
 			// Do this on event callback instead?
 			debateThisButton.targetPost = CivilDebateWall.state.activeThread.firstPost;
+			
+			// position the main opinion for a non-diagonal tween in
+			if (CivilDebateWall.state.lastView == CivilDebateWall.kiosk.view.statsView) {
+				opinionHome.y = 327;
+			}
+			else {
+				
+			}
 			
 			// Alignment
 			opinionUnderlay.height = opinionHome.contentHeight + 233;

@@ -3,28 +3,23 @@ package com.civildebatewall.kiosk.buttons {
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Post;
 	import com.greensock.TweenMax;
+	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	
 	import flash.events.MouseEvent;
 	
-	public class GoToDebateButton extends BlockText	{
+	public class GoToDebateButton extends BlockBitmap	{
 		
 		private var _targetPost:Post;
 		
 		public function GoToDebateButton() {
 			super({
-				height: 33,
+				height: 30,
 				paddingLeft: 12,
 				paddingRight: 12,	
-				textFont: Assets.FONT_BOLD,
-				textBold: true,
-				textSize: 10,
 				alignmentPoint: Alignment.CENTER,
-				text: "GO TO DEBATE",
-				textColor: 0xffffff,
-				leading: 33,
-				letterSpacing: -1,
+				bitmap: Assets.getGoToDebateText(),
 				backgroundRadius: 4,
 				buttonMode: true
 			});
@@ -38,15 +33,11 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		public function set targetPost(post:Post):void {
 			_targetPost = post;
-			
-			
 			TweenMax.to(this, 0.3, {backgroundColor: _targetPost.stanceColorDark});
 			
 		}
 		
 		private function onDown(e:MouseEvent):void {
-			
-			
 			if (_targetPost != null) {
 				backgroundColor = _targetPost.stanceColorLight;
 			}			
@@ -64,11 +55,18 @@ package com.civildebatewall.kiosk.buttons {
 			if (_targetPost != null) {
 				TweenMax.to(this, 0.3, {backgroundColor: _targetPost.stanceColorDark});
 			}			
-			 
-			
+
 			CivilDebateWall.state.setActiveThread(_targetPost.thread);
 			CivilDebateWall.state.setActivePost(_targetPost);
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.threadView);
+			
+			if (_targetPost.thread.postCount == 1) {
+				// It's a single post
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);
+			}
+			else {
+				// It's a comment thread
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.threadView);				
+			}
 		}
 		
 	

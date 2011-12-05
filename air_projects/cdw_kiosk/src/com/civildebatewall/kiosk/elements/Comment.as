@@ -21,6 +21,7 @@ package com.civildebatewall.kiosk.elements {
 		protected var portraitWidth:int;
 		protected var portraitHeight:int;
 		protected var portrait:Sprite;
+		protected var flagButton:FlagButton;
 		
 		private var opinion:BlockTextOpinion;
 		
@@ -142,7 +143,7 @@ package com.civildebatewall.kiosk.elements {
 			addChild(hairline);			
 			
 			// flag button
-			var flagButton:FlagButton = new FlagButton();
+			flagButton = new FlagButton();
 			flagButton.targetPost = _post;
 			flagButton.x = 802;
 			flagButton.y = -1;

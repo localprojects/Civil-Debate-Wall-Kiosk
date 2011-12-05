@@ -11,6 +11,7 @@ package com.civildebatewall.kiosk.elements {
 			maxSizeBehavior = BlockBase.MAX_SIZE_CLIPS;
 
 			clearTagButton = new ClearTagButton();
+			clearTagButton.x = width;
 			clearTagButton.setDefaultTweenIn(0.5, {x: width - clearTagButton.width});
 			clearTagButton.setDefaultTweenOut(1, {x: width});
 			background.addChild(clearTagButton);
