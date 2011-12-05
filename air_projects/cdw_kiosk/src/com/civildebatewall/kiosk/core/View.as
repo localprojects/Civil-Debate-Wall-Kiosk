@@ -486,6 +486,9 @@ package com.civildebatewall.kiosk.core {
 		
 
 		public function homeView(...args):void {
+			// keep loading, but wait to tween in first
+			TweenMax.delayedCall(3, function():void { CivilDebateWall.data.photoQueue.resume(); });
+			
 			markAllInactive();
 			
 			CivilDebateWall.inactivityTimer.disarm();
@@ -498,6 +501,7 @@ package com.civildebatewall.kiosk.core {
 			});							
 			
 			
+			portrait.setImage(CivilDebateWall.state.activeThread.firstPost.user.photo);
 			
 			// blocks
 			portrait.tweenIn();
@@ -635,6 +639,8 @@ package com.civildebatewall.kiosk.core {
 		// ================================================================================================================================================		
 		
 		public function opinionEntryView(...args):void {
+			CivilDebateWall.data.photoQueue.pause(); // does this mess with the picture taking process?
+			
 			markAllInactive();			
 			CivilDebateWall.inactivityTimer.arm();
 			CivilDebateWall.state.backDestination = CivilDebateWall.state.lastView;
