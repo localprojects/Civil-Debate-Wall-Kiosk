@@ -52,8 +52,8 @@ package com.civildebatewall.kiosk.camera {
 			timeoutTimer.addEventListener(TimerEvent.TIMER, onTimeout);
 			
 			// format the card before we get started
-			MonsterDebugger.trace(null, "Starting SLR, requesting card format.");
-			formatCard();
+			//MonsterDebugger.trace(null, "Starting SLR, requesting card format.");
+			//formatCard();
 		}
 		
 		// move this to utils
