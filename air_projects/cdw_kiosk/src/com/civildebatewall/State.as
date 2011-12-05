@@ -235,10 +235,12 @@ package com.civildebatewall {
 		public function clearUser():void {
 			userID = '';
 			userName = '';
+			if (userImage != null) userImage.bitmapData.dispose();
 			userImage = null;
 			userPhoneNumber = '';
 			userOpinion = '';
 			userIsDebating = false;
+			if (userImageFull != null) userImageFull.bitmapData.dispose();
 			userImageFull = null;
 			userRespondingTo = null;
 			//highlightWord = null;

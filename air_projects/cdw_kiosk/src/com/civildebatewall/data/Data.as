@@ -258,7 +258,8 @@ package com.civildebatewall.data {
 				post.initUser();
 			}
 			
-			photoQueue.load();
+			// TEMP off for testing
+			//photoQueue.load();
 			calculateStats();
 			onLoadComplete();
 		}	

@@ -115,7 +115,6 @@ package com.civildebatewall.kiosk.overlays {
 		}
 		
 		override protected function beforeTweenOut():void {
-			MonsterDebugger.trace(this, "pre tween");
 			TweenMax.to(this, 1, {backgroundAlpha: 0});			
 			timerBar.tweenOut();			
 			noButton.tweenOut();			
@@ -123,7 +122,6 @@ package com.civildebatewall.kiosk.overlays {
 			message.tweenOut();			
 			
 			super.beforeTweenOut();
-			
 		}
 		
 		
