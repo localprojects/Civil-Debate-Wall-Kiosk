@@ -717,9 +717,9 @@ package com.civildebatewall.kiosk.core {
 			// process SLR image
 			MonsterDebugger.trace(null, "SLR Image: " );
 			MonsterDebugger.trace(this, portraitCamera.slr.image);
+			CivilDebateWall.state.userImage = new Bitmap(portraitCamera.slr.image.bitmapData.clone(), PixelSnapping.AUTO, true);
 			MonsterDebugger.trace(null, "User Image: " );
 			MonsterDebugger.trace(this, CivilDebateWall.state.userImage);
-			CivilDebateWall.state.userImage = new Bitmap(portraitCamera.slr.image.bitmapData.clone());
 			detectFace(CivilDebateWall.state.userImage);
 		}
 		
@@ -736,7 +736,12 @@ package com.civildebatewall.kiosk.core {
 			MonsterDebugger.trace(this, faceDetector.faceRect);
 			
 			// save a copy of the original image, we'll write it to disk later
-			CivilDebateWall.state.userImageFull = new Bitmap(CivilDebateWall.state.userImage.bitmapData.clone());
+			CivilDebateWall.state.userImageFull = new Bitmap(portraitCamera.slr.image.bitmapData.clone(), PixelSnapping.AUTO, true);
+			
+			
+			MonsterDebugger.trace(null, "user image full:");
+			MonsterDebugger.trace(this, CivilDebateWall.state.userImageFull);
+			
 			
 			if (faceDetector.faceRect != null) {
 				MonsterDebugger.trace(this, 'face found, cropping to it');
