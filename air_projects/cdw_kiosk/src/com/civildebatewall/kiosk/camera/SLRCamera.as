@@ -135,8 +135,8 @@ package com.civildebatewall.kiosk.camera {
 		}
 		
 		private function onDownloadComplete():void {
-			TweenMax.delayedCall(2, loadImage, [imageFile]);
-			TweenMax.delayedCall(2, formatCard); // try delaying the call
+			TweenMax.delayedCall(CivilDebateWall.settings.slrWaitTime, loadImage, [imageFile]);
+			TweenMax.delayedCall(CivilDebateWall.settings.slrWaitTime, formatCard); // try delaying the call
 		}		
 		
 		private function loadImage(file:File):void {

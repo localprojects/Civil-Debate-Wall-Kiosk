@@ -101,7 +101,7 @@ package com.civildebatewall.kiosk.core {
 		private var blackOverlay:BlockBitmap;		
 		
 		// opinion review view
-		private var userOpinion:UserOpinionText;
+		private var userOpinionReview:UserOpinionText;
 		private var everythingOkText:BlockBitmap;
 		private var cancelButton:CancelButton;
 		private var retakePhotoButton:RetakePhotoButton;
@@ -357,10 +357,10 @@ package com.civildebatewall.kiosk.core {
 			
 			
 			// opinion review view
-			userOpinion = new UserOpinionText();
-			userOpinion.setDefaultTweenIn(1, {x: 100, y: 1296});
-			userOpinion.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1296});
-			addChild(userOpinion);
+			userOpinionReview = new UserOpinionText();
+			userOpinionReview.setDefaultTweenIn(1, {x: 100});
+			userOpinionReview.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT});
+			addChild(userOpinionReview);
 			
 			everythingOkText = new BlockBitmap({bitmap: Assets.getEverythingOkText()});
 			everythingOkText.setDefaultTweenIn(1, {x: 100, y: 1341});
@@ -501,7 +501,9 @@ package com.civildebatewall.kiosk.core {
 			});							
 			
 			
+
 			portrait.setImage(CivilDebateWall.state.activeThread.firstPost.user.photo);
+
 			
 			// blocks
 			portrait.tweenIn();
@@ -736,8 +738,8 @@ package com.civildebatewall.kiosk.core {
 			MonsterDebugger.trace(this, faceDetector.faceRect);
 			
 			// save a copy of the original image, we'll write it to disk later
-			CivilDebateWall.state.userImageFull = new Bitmap(portraitCamera.slr.image.bitmapData.clone(), PixelSnapping.AUTO, true);
-			
+			//CivilDebateWall.state.userImageFull = new Bitmap(portraitCamera.slr.image.bitmapData.clone(), PixelSnapping.AUTO, true);
+			CivilDebateWall.state.userImageFull = new Bitmap(CivilDebateWall.state.userImage.bitmapData.clone());
 			
 			MonsterDebugger.trace(null, "user image full:");
 			MonsterDebugger.trace(this, CivilDebateWall.state.userImageFull);
@@ -778,14 +780,25 @@ package com.civildebatewall.kiosk.core {
 				CivilDebateWall.state.setView(smsPromptView);			
 			});							
 			
-			portrait.setImage(CivilDebateWall.state.userImage, true);
+			if (CivilDebateWall.state.userImage != null) {
+				portrait.setImage(CivilDebateWall.state.userImage, true);
+			}
+			else {
+				portrait.setImage(Assets.portraitPlaceholder, true);				
+			}
+			
+			userOpinionReview.y = 1341 - 45 - userOpinionReview.height; // position changes based on height
+			
 			bigButton.setText("SUBMIT MY OPINION", true);
 			bigButton.enable();
-			bigButton.y = 1607;			
+			bigButton.y = 1607;
+			
+			
+			
 			
 			portrait.tweenIn();
 			questionHeaderHome.tweenIn();
-			userOpinion.tweenIn();
+			userOpinionReview.tweenIn();
 			everythingOkText.tweenIn();
 			cancelButton.tweenIn();
 			retakePhotoButton.tweenIn();
