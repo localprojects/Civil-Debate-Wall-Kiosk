@@ -58,10 +58,8 @@ package com.civildebatewall.data {
 			//_photo = b;
 			
 			// search and update, use some kind of bitmap binding instead?
-			// wallsaver
-			if (!CivilDebateWall.wallSaver.timeline.active) {
-				CivilDebateWall.wallSaver.rebuildFaceGrid();
-			}
+			// wallsaver, updates through data once
+		
 			
 			// carousell
 			CivilDebateWall.kiosk.view.debateStrip.updateUserPhoto(this);
