@@ -1,6 +1,7 @@
 package com.civildebatewall.kiosk.camera {
 	import com.civildebatewall.*;
 	import com.demonsters.debugger.MonsterDebugger;
+	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	
 	import flash.desktop.*;
@@ -134,12 +135,13 @@ package com.civildebatewall.kiosk.camera {
 		}
 		
 		private function onDownloadComplete():void {
-			loadImage(imageFile);
-			formatCard();
+			TweenMax.delayedCall(2, loadImage, [imageFile]);
+			TweenMax.delayedCall(2, formatCard); // try delaying the call
 		}		
 		
 		private function loadImage(file:File):void {
 			MonsterDebugger.trace(this, "loading slr photo " + file.url);
+			
 			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleImageLoad);
 			imageLoader.load(new URLRequest(file.url.replace('%0d', ''))); // completely weird filename bug
 		}
