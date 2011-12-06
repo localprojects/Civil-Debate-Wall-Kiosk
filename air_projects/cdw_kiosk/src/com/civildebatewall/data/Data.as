@@ -90,7 +90,7 @@ package com.civildebatewall.data {
 			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
 			
 			MonsterDebugger.trace(null, "Loading new images");			
-			photoQueue.load(); // last minute			
+			photoQueue.load(); // last minute
 		}
 		
 		
@@ -254,6 +254,10 @@ package com.civildebatewall.data {
 		private function completeHandler(event:LoaderEvent):void {
 			trace("complete");
 			MonsterDebugger.trace(null, "Image loading complete.");
+			MonsterDebugger.trace(null, "Setting wallsaver face grid.");
+			if (!CivilDebateWall.wallSaver.timeline.active) {
+				CivilDebateWall.wallSaver.rebuildFaceGrid();
+			}
 		}		
 		
 		
