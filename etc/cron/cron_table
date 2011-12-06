@@ -1,3 +1,9 @@
+# 
+# INSTRUCTIONS:
+# Push this file to the remote host along with the scripts defined (and into their respective paths)
+# Load this file with 
+#   crontab this-file-name
+#
 # m h  dom mon dow   command
 
 # Notify administrators on status of tasks
@@ -9,11 +15,11 @@
 # @reboot   Run at startup.
 
 # Run media sync every 7 minutes
-# */7 *  *   *   *     /c/home/cdwmedia/sync_media
+*/7 *  *   *   *     /c/home/cdwmedia/sync_media
 
 # Sync logs every 30 mins
-# 30 *  *   *   *     /c/home/cdwmedia/sync_logs
+30 *  *   *   *     /c/home/cdwmedia/sync_logs
 
 # Sync binaries irregularly
-# 45 */4 *  *   *    /c/home/cdwmedia/sync_binaries
+45 */4 *  *   *    /c/home/cdwmedia/sync_binaries
 
