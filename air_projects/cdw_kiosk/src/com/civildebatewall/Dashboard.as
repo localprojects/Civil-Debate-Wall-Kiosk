@@ -75,9 +75,9 @@ package com.civildebatewall {
 			framesRenderedLabel.text = "Frames Rendered: " + framesRendered++;
 			latencyLabel.text = "Latency: " + CivilDebateWall.flashSpan.settings.thisScreen.latency;
 			
-//			if (CivilDebateWall.data.photoQueue != null) {			
-//				imagesLoadedLabel.text = "Images loaded: " + CivilDebateWall.data.photoQueue.bytesLoaded + " / " + CivilDebateWall.data.photoQueue.bytesTotal;
-//			}
+			if (CivilDebateWall.data.photoQueue != null) {			
+				imagesLoadedLabel.text = "Images loaded: " + CivilDebateWall.data.photoQueue.bytesLoaded + " / " + CivilDebateWall.data.photoQueue.bytesTotal;
+			}
 			
 			memory = Math.round(System.totalMemory / 1024 / 1024)
 			maxMemory = Math.max(memory, maxMemory);
