@@ -717,6 +717,8 @@ package com.civildebatewall.kiosk.core {
 			// process SLR image
 			MonsterDebugger.trace(null, "SLR Image: " );
 			MonsterDebugger.trace(this, portraitCamera.slr.image);
+			MonsterDebugger.trace(null, "User Image: " );
+			MonsterDebugger.trace(this, CivilDebateWall.state.userImage);
 			CivilDebateWall.state.userImage = new Bitmap(portraitCamera.slr.image.bitmapData.clone());
 			detectFace(CivilDebateWall.state.userImage);
 		}
