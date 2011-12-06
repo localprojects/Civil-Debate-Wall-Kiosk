@@ -216,12 +216,12 @@ package com.civildebatewall.data {
 			loadUsers();
 		}
 		
-		public var photoQueue:LoaderMax;
+		//public var photoQueue:LoaderMax;
 		
 		private function loadUsers():void {
 			MonsterDebugger.trace(null, "Loading users");
 			// TODO only get users active for this question
-			photoQueue = new LoaderMax({name:"portraitQueue", onProgress:progressHandler, onComplete:completeHandler, onError:errorHandler});			
+			//photoQueue = new LoaderMax({name:"portraitQueue", onProgress:progressHandler, onComplete:completeHandler, onError:errorHandler});			
 			
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/users', function(response:Object):void {
 				MonsterDebugger.trace(null, "Loaded users");
@@ -260,7 +260,7 @@ package com.civildebatewall.data {
 			}
 			
 			// TEMP off for testing... turning this off fixes webcam
-			photoQueue.load();
+			//photoQueue.load();
 			calculateStats();
 			onLoadComplete();
 		}	
@@ -401,7 +401,7 @@ package com.civildebatewall.data {
 			CivilDebateWall.state.updateUsersTime = getTimer() - updateIntermediateTime; 
 			
 			MonsterDebugger.trace(null, "Loading new images");
-			photoQueue.load();			
+			//photoQueue.load();			
 			
 			updateIntermediateTime = getTimer();
 			calculateStats();
@@ -507,6 +507,8 @@ package com.civildebatewall.data {
 		
 		// ====== UPDATES =================
 		
+		
+		
 		// mutate server
 		public function uploadResponse(threadID:String, responseTo:String, userID:String, opinion:String, stance:String, origin:String, callback:Function):void {
 			var yesno:uint = (stance == Post.STANCE_YES) ? 1 : 0;
@@ -526,8 +528,12 @@ package com.civildebatewall.data {
 
 			// only add phone number if we have it
 			var payload:Object = {'username': username};
-			if (phoneNumber != "" || phoneNumber != null) payload['phonenumber'] = phoneNumber;
+			if ((phoneNumber != "") && (phoneNumber != null)) payload['phonenumber'] = phoneNumber;
 				
+		trace("user post payload: " );
+		ObjectUtil.traceObject(payload);
+			
+			
 			Utilities.postRequestJSON(CivilDebateWall.settings.serverPath + '/api/users', payload, callback);			
 		}	
 		

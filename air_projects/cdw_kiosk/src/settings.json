@@ -31,7 +31,8 @@
 		"useSLR": false,
 		"imagePath": "/Users/Mika/Desktop/CDWImages/",		
 		"serverPath": "http://ec2-107-22-120-165.compute-1.amazonaws.com",
-		"flashSpanConfig":  "/Users/Mika/Code/CivilDebateWall/lp-cdw/air_projects/cdw_kiosk/bin-debug/flash_span_settings.xml"
+		"flashSpanConfig":  "/Users/Mika/Code/CivilDebateWall/lp-cdw/air_projects/cdw_kiosk/bin-debug/flash_span_settings.xml",
+		"imageCachePath": "/Users/Mika/Desktop/CDWImageCache/"
 	}
 	
 }
