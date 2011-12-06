@@ -487,7 +487,7 @@ package com.civildebatewall.kiosk.core {
 
 		public function homeView(...args):void {
 			// keep loading, but wait to tween in first
-			TweenMax.delayedCall(3, function():void { CivilDebateWall.data.photoQueue.resume(); });
+			//TweenMax.delayedCall(3, function():void { CivilDebateWall.data.photoQueue.resume(); });
 			
 			markAllInactive();
 			
@@ -639,7 +639,7 @@ package com.civildebatewall.kiosk.core {
 		// ================================================================================================================================================		
 		
 		public function opinionEntryView(...args):void {
-			CivilDebateWall.data.photoQueue.pause(); // does this mess with the picture taking process?
+//			CivilDebateWall.data.photoQueue.pause(); // does this mess with the picture taking process?
 			
 			markAllInactive();			
 			CivilDebateWall.inactivityTimer.arm();
