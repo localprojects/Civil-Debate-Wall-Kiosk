@@ -28,7 +28,7 @@ package com.civildebatewall.kiosk.overlays {
 
 	public class OpinionEntryOverlay extends BlockInertialScroll {
 		
-		private var question:BlockText;
+		public var question:BlockText;
 		private var nameCharacterCount:BlockText;		
 		private var nameField:BlockText;
 		private var formContainer:BlockBase;

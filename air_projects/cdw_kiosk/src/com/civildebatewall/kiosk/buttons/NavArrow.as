@@ -34,7 +34,9 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onActiveDebateChange(e:Event):void {
-			TweenMax.to(this, 1, {colorMatrixFilter:{colorize: CivilDebateWall.state.activeThread.firstPost.stanceColorLight, amount: 1}});			
+			if (CivilDebateWall.state.activeThread != null) {
+				TweenMax.to(this, 1, {colorMatrixFilter:{colorize: CivilDebateWall.state.activeThread.firstPost.stanceColorLight, amount: 1}});
+			}
 		}
 		
 		private function down(e:MouseEvent):void {

@@ -25,6 +25,7 @@ package com.civildebatewall.kiosk.elements.opinion_text
 		
 		private function onActiveDebateChange(e:Event):void {
 			MonsterDebugger.trace(this, "debate change!");
+			
 			setPost(CivilDebateWall.state.activeThread.firstPost);
 			
 			// inside container, origin is still in top left, even when registratio point moves...

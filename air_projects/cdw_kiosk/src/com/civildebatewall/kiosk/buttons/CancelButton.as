@@ -17,7 +17,13 @@ package com.civildebatewall.kiosk.buttons {
 		
 		private function onUp(e:MouseEvent):void {
 			CivilDebateWall.state.clearUser();
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);
+			
+			if (CivilDebateWall.data.threads.length == 0) {
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.noOpinionView);				
+			}
+			else {
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);
+			}
 		}
 		
 	}

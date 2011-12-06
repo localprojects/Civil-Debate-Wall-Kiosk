@@ -35,7 +35,9 @@ package com.civildebatewall.kiosk.elements {
 		}
 
 		private function onActiveDebateChange(e:Event):void {
-			setActiveThumbnail(CivilDebateWall.state.activeThread.id);
+			if (CivilDebateWall.state.activeThread != null) {
+				setActiveThumbnail(CivilDebateWall.state.activeThread.id);
+			}
 		}
 		
 		private function onDataUpdate(e:Event):void {
