@@ -58,11 +58,13 @@ package com.civildebatewall.wallsaver.sequences {
 			var noPosts:Vector.<Post> = new Vector.<Post>;
 			
 			for each (var post:Post in CivilDebateWall.data.posts) {
-				if (post.stance == Post.STANCE_YES) {
-					yesPosts.push(post);
-				}
-				else {
-					noPosts.push(post);					
+				if (post.user.photo != null) {
+					if (post.stance == Post.STANCE_YES) {
+						yesPosts.push(post);
+					}
+					else {
+						noPosts.push(post);					
+					}
 				}
 			}
 			

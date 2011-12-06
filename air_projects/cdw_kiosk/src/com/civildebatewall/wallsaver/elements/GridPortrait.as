@@ -17,6 +17,7 @@ package com.civildebatewall.wallsaver.elements {
 		
 		public function GridPortrait(stance:String, portrait:Bitmap)	{
 			
+			
 			this.portrait = BitmapUtil.scaleToFill(portrait, 233, 311);
 			
 			_step = 0;			
