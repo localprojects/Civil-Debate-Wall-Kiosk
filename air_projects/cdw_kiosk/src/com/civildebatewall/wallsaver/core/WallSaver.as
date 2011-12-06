@@ -173,6 +173,9 @@ package com.civildebatewall.wallsaver.core {
 			CivilDebateWall.flashSpan.stop();
 		}
 		
+		// TODO check for at least one response before starting
+		
+		
 		
 	}
 }

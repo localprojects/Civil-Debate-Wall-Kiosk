@@ -83,6 +83,10 @@ package com.civildebatewall.wallsaver.sequences {
 						stance = Post.STANCE_YES;
 					}
 					
+					// handle low data edge cases
+					if (noPosts.length == 0) stance = Post.STANCE_YES;
+					if (yesPosts.length == 0) stance = Post.STANCE_NO;
+					
 					
 					var tempPortrait:GridPortrait;
 					if (stance == Post.STANCE_YES) {	

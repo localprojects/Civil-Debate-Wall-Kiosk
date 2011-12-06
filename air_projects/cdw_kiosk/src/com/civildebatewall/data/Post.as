@@ -116,6 +116,8 @@ package com.civildebatewall.data {
 			return 	_text;
 		
 		}		
+		
+		public function set user(user:User):void { _user = user; }
 		public function get user():User {	return _user;	}
 		public function get created():Date { return _created; }
 		public function get responseTo():Post {
@@ -124,12 +126,7 @@ package com.civildebatewall.data {
 			}
 			return null;
 		}
-		public function get thread():Thread { return _thread; }		
-		
-		
-		public function initUser():void {
-			_user = CivilDebateWall.data.getUserByID(_userID);
-		}
+		public function get thread():Thread { return _thread; }
 		
 	}
 }	

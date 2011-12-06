@@ -25,7 +25,9 @@ package com.civildebatewall.kiosk.elements {
 		}
 		
 		private function onActiveDebateChange(e:Event):void {
-			setImage(CivilDebateWall.state.activeThread.firstPost.user.photo);
+			if (CivilDebateWall.state.activeThread != null) {
+				setImage(CivilDebateWall.state.activeThread.firstPost.user.photo);
+			}
 		}
 		
 		private function init():void {

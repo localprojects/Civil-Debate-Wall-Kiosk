@@ -50,9 +50,9 @@ package com.civildebatewall {
 		
 		
 		// network performance, TODO put on dashboard
+		public var updateQuestionTime:int;
 		public var updateThreadsTime:int;
-		public var updatePostsTime:int;
-		public var updateUsersTime:int;
+		public var updatePostsAndUsersTime:int;
 		public var updateStatsTime:int;
 		public var updateTotalTime:int;
 		
@@ -134,10 +134,10 @@ package com.civildebatewall {
 			out += varToString("userRespondingTo.id");
 			out += varToString("userThreadID");
 			out += varToString("userPostID");
-			out += "--- PERFORMANCE ---\n"			
+			out += "--- PERFORMANCE ---\n"
+			out += varToString("updateQuestionTime");
 			out += varToString("updateThreadsTime");
-			out += varToString("updatePostsTime");
-			out += varToString("updateUsersTime");
+			out += varToString("updatePostsAndUsersTime");
 			out += varToString("updateStatsTime");
 			out += varToString("updateTotalTime");
 			return out;
@@ -300,9 +300,11 @@ package com.civildebatewall {
 			// logs backwards... ugh
 			// CivilDebateWall.dashboard.log('---------------------------------');			
 			
-			for (var i:uint = activeThread.posts.length - 1; i > 0; i--) {
-				MonsterDebugger.trace(this, i);
+			if (activeThread != null) {
+				for (var i:uint = activeThread.posts.length - 1; i > 0; i--) {
+					MonsterDebugger.trace(this, i);
 				// CivilDebateWall.dashboard.log(activeThread.posts[i].id);
+				}
 			}
 			// CivilDebateWall.dashboard.log(activeThread.posts[0].id);
 			
@@ -330,7 +332,9 @@ package com.civildebatewall {
 			MonsterDebugger.trace(this, "Active: " + activeThread);
 			MonsterDebugger.trace(this, "Next: " + nextThread);
 			
-			this.dispatchEvent(new Event(ACTIVE_THREAD_CHANGE));
+			if (activeThread != null) {
+				this.dispatchEvent(new Event(ACTIVE_THREAD_CHANGE));
+			}
 			
 		}
 		

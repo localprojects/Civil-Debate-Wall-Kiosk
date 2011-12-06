@@ -13,7 +13,9 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onActiveDebateChange(e:Event):void {
-			targetPost = CivilDebateWall.state.activeThread.firstPost;
+			if (CivilDebateWall.state.activeThread != null) {
+				targetPost = CivilDebateWall.state.activeThread.firstPost;
+			}
 		}		
 		
 	}

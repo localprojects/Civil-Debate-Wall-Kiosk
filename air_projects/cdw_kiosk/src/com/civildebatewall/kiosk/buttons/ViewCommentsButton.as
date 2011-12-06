@@ -55,28 +55,30 @@ package com.civildebatewall.kiosk.buttons {
 		}	
 		
 		private function updateButton():void {
-			if (CivilDebateWall.state.activeThread.postCount > 2) {
-				backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDark;				
-				// Iteratively truncate the text of the first post to fit in the button
-				var firstCommentText:String = CivilDebateWall.state.activeThread.posts[0].text;
-				var commentLength:int = firstCommentText.length;
-				
-				text = wrapText(firstCommentText);
-				
-				while (textField.numLines > 1) {
-					commentLength--;
-					text = wrapText(StringUtil.truncate(firstCommentText, commentLength, Char.ELLIPSES));
+			if (CivilDebateWall.state.activeThread != null) {
+				if (CivilDebateWall.state.activeThread.postCount > 2) {
+					backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDark;				
+					// Iteratively truncate the text of the first post to fit in the button
+					var firstCommentText:String = CivilDebateWall.state.activeThread.posts[0].text;
+					var commentLength:int = firstCommentText.length;
+					
+					text = wrapText(firstCommentText);
+					
+					while (textField.numLines > 1) {
+						commentLength--;
+						text = wrapText(StringUtil.truncate(firstCommentText, commentLength, Char.ELLIPSES));
+					}
+					
+					unlock();
 				}
-				
-				unlock();
+				else {
+					
+					lock();
+					backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled;				
+					
+					text = "No responses yet. Be the first!";				
+				}
 			}
-			else {
-				
-				lock();
-				backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled;				
-				
-				text = "No responses yet. Be the first!";				
-			}			
 		}
 		
 		private function wrapText(s:String):String {

@@ -50,7 +50,7 @@ package com.civildebatewall.kiosk.core {
 		
 		// home view
 		public var portrait:PortraitMain;
-		private var questionHeaderHome:QuestionHeaderHome;
+		public var questionHeaderHome:QuestionHeaderHome;
 		private var opinionHome:OpinionTextHome;
 		private var likeButton:HomeLikeButton;
 		private var viewCommentsButton:ViewCommentsButton;
@@ -79,7 +79,7 @@ package com.civildebatewall.kiosk.core {
 		public var lowerMenuButton:LowerMenuButton;
 		
 		// pick debate type view
-		private var questionHeaderDecision:QuestionHeaderDecision;
+		public var questionHeaderDecision:QuestionHeaderDecision;
 		private var backButton:BackButton;
 		private var respondButton:RespondButton;
 		private var debateButton:DebateButton;
@@ -90,7 +90,7 @@ package com.civildebatewall.kiosk.core {
 		private var noButton:NoButton;
 		
 		// opinion entry view
-		private var opinionEntryOverlay:OpinionEntryOverlay;
+		public var opinionEntryOverlay:OpinionEntryOverlay;
 		
 		// photo booth view (move to its own container?)
 		public var portraitCamera:PortraitCamera; // public for dashboard		
@@ -470,7 +470,7 @@ package com.civildebatewall.kiosk.core {
 
 			// behaviors
 			bigButton.setOnClick(function():void {
-				CivilDebateWall.state.setView(debateTypePickerView);			
+				CivilDebateWall.state.setView(debateStancePickerView);			
 			});
 			
 			
@@ -627,7 +627,13 @@ package com.civildebatewall.kiosk.core {
 		public function debateStancePickerView(...args):void {
 			markAllInactive();
 			CivilDebateWall.inactivityTimer.arm();
-			CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.view.debateTypePickerView;
+			
+			if (CivilDebateWall.data.threads.length == 0) {
+				CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.view.noOpinionView;			
+			}
+			else {
+				CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.view.debateTypePickerView;
+			}
 			
 			portrait.tweenIn(1, {alpha: 0.15});
 			backButton.tweenIn();
