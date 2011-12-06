@@ -220,12 +220,12 @@ package com.civildebatewall.data {
 			loadUsers();
 		}
 		
-		public var photoQueue:LoaderMax;
+		//public var photoQueue:LoaderMax;
 		
 		private function loadUsers():void {
 			MonsterDebugger.trace(null, "Loading users");
 			// TODO only get users active for this question
-			photoQueue = new LoaderMax({name:"portraitQueue", onProgress:progressHandler, onComplete:completeHandler, onError:errorHandler});			
+			//photoQueue = new LoaderMax({name:"portraitQueue", onProgress:progressHandler, onComplete:completeHandler, onError:errorHandler});			
 			
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + '/api/users', function(response:Object):void {
 				MonsterDebugger.trace(null, "Loaded users");
@@ -264,6 +264,10 @@ package com.civildebatewall.data {
 			}
 			
 			// TEMP off for testing... turning this off fixes webcam
+<<<<<<< HEAD
+=======
+			//photoQueue.load();
+>>>>>>> origin/develop
 			calculateStats();
 			onLoadComplete();
 		}	
@@ -509,6 +513,8 @@ package com.civildebatewall.data {
 			
 		
 		// ====== UPDATES =================
+		
+		
 		
 		// mutate server
 		public function uploadResponse(threadID:String, responseTo:String, userID:String, opinion:String, stance:String, origin:String, callback:Function):void {
