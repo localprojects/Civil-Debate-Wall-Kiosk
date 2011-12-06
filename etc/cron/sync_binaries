@@ -31,7 +31,8 @@ usage() {
 }
 
 notify() {
-    echo -e "$1" >> $LOGFILE
+    TIMESTAMP=`date -u +%Y%m%d%H%M%S`
+    echo -e "($TIMESTAMP) $1" >> $LOGFILE
     # Tell someone that there's something going on
     if [ ! -z "$RECIPIENTS" ];then
         echo -e "$1" | mailx -s "$PROCESS_SUBJECT" $RECIPIENTS
@@ -54,7 +55,7 @@ initialize() {
 
 run_sync() { 
     notify "STARTED: Synchronizing media from $src to $dst"
-    s3cmd --config=$S3CFG_FILE --acl-private --no-delete-removed --recursive sync $src $dst >> $LOGFILE
+    s3cmd --config=$S3CFG_FILE --acl-private --no-delete-removed --recursive --rexclude="Thumbs.db" --rexclude=".AppleDouble" --rexclude=".DS_Store" sync $src $dst >> $LOGFILE
     notify "FINISHED: Synchronizing files from $src to $dst"    
 
     # Force set everything to private
