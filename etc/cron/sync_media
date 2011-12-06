@@ -32,7 +32,7 @@ usage() {
 
 notify() {
     TIMESTAMP=`date -u +%Y%m%d%H%M%S`
-    echo -e "$TIMESTAMP $1" >> $LOGFILE
+    echo -e "($TIMESTAMP) $1" >> $LOGFILE
     # Tell someone that there's something going on
     if [ ! -z "$RECIPIENTS" ];then
         echo -e "$1" | mailx -s "$PROCESS_SUBJECT" $RECIPIENTS
