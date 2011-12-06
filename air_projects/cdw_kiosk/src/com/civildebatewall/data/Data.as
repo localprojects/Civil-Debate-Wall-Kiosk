@@ -67,6 +67,7 @@ package com.civildebatewall.data {
 			
 			CivilDebateWall.state.firstLoad = false;
 			
+			MonsterDebugger.trace(null, "Loading new images");			
 			photoQueue.load(); // start at the last minute			
 		}
 		
@@ -88,6 +89,7 @@ package com.civildebatewall.data {
 			MonsterDebugger.trace(null, "Update complete");
 			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
 			
+			MonsterDebugger.trace(null, "Loading new images");			
 			photoQueue.load(); // last minute			
 		}
 		
@@ -402,10 +404,7 @@ package com.civildebatewall.data {
 			}
 			
 			CivilDebateWall.state.updateUsersTime = getTimer() - updateIntermediateTime; 
-			
-			MonsterDebugger.trace(null, "Loading new images");
-			//photoQueue.load();			
-			
+		
 			updateIntermediateTime = getTimer();
 			calculateStats();
 			CivilDebateWall.state.updateStatsTime = getTimer() - updateIntermediateTime;
