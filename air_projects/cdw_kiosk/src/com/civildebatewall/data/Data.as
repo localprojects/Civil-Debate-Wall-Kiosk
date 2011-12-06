@@ -66,6 +66,8 @@ package com.civildebatewall.data {
 			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
 			
 			CivilDebateWall.state.firstLoad = false;
+			
+			photoQueue.load(); // start at the last minute			
 		}
 		
 		
@@ -85,6 +87,8 @@ package com.civildebatewall.data {
 			
 			MonsterDebugger.trace(null, "Update complete");
 			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
+			
+			photoQueue.load(); // last minute			
 		}
 		
 		
@@ -260,7 +264,6 @@ package com.civildebatewall.data {
 			}
 			
 			// TEMP off for testing... turning this off fixes webcam
-			photoQueue.load();
 			calculateStats();
 			onLoadComplete();
 		}	

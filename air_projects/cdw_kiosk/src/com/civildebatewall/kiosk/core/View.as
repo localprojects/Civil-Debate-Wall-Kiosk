@@ -700,9 +700,7 @@ package com.civildebatewall.kiosk.core {
 			else {
 				// using webcam or pseudocam
 				portraitCamera.takePhoto();
-				CivilDebateWall.state.userImage = portraitCamera.cameraBitmap; // store here temporarily
-				
-				
+				CivilDebateWall.state.userImage = new Bitmap(portraitCamera.cameraBitmap.bitmapData.clone(), PixelSnapping.AUTO, true); // store here temporarily				
 				detectFace(CivilDebateWall.state.userImage);				
 			}
 		}
