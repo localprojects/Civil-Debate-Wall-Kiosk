@@ -29,7 +29,7 @@ package com.civildebatewall.kiosk.buttons {
 				alignmentPoint: Alignment.CENTER
 			});
 			
-			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
+			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveThreadChange);
 			CivilDebateWall.state.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 			
 			onButtonDown.push(onDown);
@@ -49,13 +49,13 @@ package com.civildebatewall.kiosk.buttons {
 			updateButton();
 		}
 		
-		private function onActiveDebateChange(e:Event):void {
+		private function onActiveThreadChange(e:Event):void {
 			updateButton();
 		}	
 		
 		private function updateButton():void {
 			if (CivilDebateWall.state.activeThread != null) {
-				if (CivilDebateWall.state.activeThread.postCount > 2) {
+				if (CivilDebateWall.state.activeThread.postCount > 1) {
 					backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDark;				
 					// Iteratively truncate the text of the first post to fit in the button
 					var firstCommentText:String = CivilDebateWall.state.activeThread.posts[0].text;

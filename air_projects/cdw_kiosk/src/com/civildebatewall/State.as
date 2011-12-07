@@ -197,6 +197,8 @@ package com.civildebatewall {
 			lastThread = activeThread;
 			activeThread = thread;
 			
+			logger.info("Setting active thread to " + activeThread.id);
+			
 			// clear the highlighting if unless we're coming from the stats page 
 			if ((highlightWord != null) && (highlightWord != "")) {
 				if (activeView != CivilDebateWall.kiosk.statsView) {
