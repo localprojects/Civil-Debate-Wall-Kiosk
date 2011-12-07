@@ -562,7 +562,6 @@ package com.civildebatewall.kiosk.core {
 				CivilDebateWall.state.setActiveThread(CivilDebateWall.state.nextThread);
 				CivilDebateWall.kiosk.opinionHome.x += stageWidth;
 			}
-			//homeView();
 		}
 		
 		public function previousDebate():void {
@@ -570,8 +569,7 @@ package com.civildebatewall.kiosk.core {
 				logger.info("Tansitioning to previos debate TOTO");
 				CivilDebateWall.state.setActiveThread(CivilDebateWall.state.previousThread);
 				CivilDebateWall.kiosk.opinionHome.x -= stageWidth;
-			}
-			//homeView();			
+			}			
 		}
 		
 		// ================================================================================================================================================
@@ -757,7 +755,7 @@ package com.civildebatewall.kiosk.core {
 				var scaleFactor:Number = CivilDebateWall.state.userImage.height / faceDetector.maxSourceHeight; 
 				var scaledFaceRect:Rectangle = GeomUtil.scaleRect(faceDetector.faceRect, scaleFactor);
 				
-				CivilDebateWall.state.userImage = Utilities.cropToFace(CivilDebateWall.state.userImage, scaledFaceRect, CivilDebateWall.state.targetFaceRectangle);				
+				CivilDebateWall.state.userImage = Utilities.cropToFace(CivilDebateWall.state.userImage, scaledFaceRect, CivilDebateWall.settings.targetFaceRectangle);				
 			}
 			else {
 				logger.warn("No face found, scaling to fill");

@@ -95,7 +95,7 @@ package com.civildebatewall.kiosk {
 				}
 				else {
 					// spring back to current
-					CivilDebateWall.kiosk.homeView();					
+					CivilDebateWall.state.setView(CivilDebateWall.kiosk.homeView);					
 				}
 			}
 		}		

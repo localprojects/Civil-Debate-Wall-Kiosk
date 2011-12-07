@@ -1,4 +1,5 @@
 package com.civildebatewall.staging.overlays {
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.kiosk.elements.VoteStatBar;
 	import com.civildebatewall.kiosk.elements.WordCloud;
@@ -69,9 +70,6 @@ package com.civildebatewall.staging.overlays {
 			superlativesTitle.x = 29;
 			superlativesTitle.y = 625;
 			addChild(superlativesTitle);
-
-			//CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataChange);
-			
 			
 			debatedSuperlativesPortrait = new SuperlativesPortrait();
 			debatedSuperlativesPortrait.setDefaultTweenIn(1, {x: 29, y: 703});
@@ -81,33 +79,9 @@ package com.civildebatewall.staging.overlays {
 			mostDebatedView();
 		}
 		
-		
 		private function mostDebatedView():void {
-			// portrait
-			
-			// list
 			debatedSuperlativesPortrait.tweenIn();
-
 		}
-		
-		private function mostLikedView():void {
-			
-
-		}
-		
-		private function searchResultsView():void {
-			
-			
-			
-		}
-		
-		
-			
-		
-		
-		
-		
-		
 		
 	}
 }

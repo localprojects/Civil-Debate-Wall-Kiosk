@@ -197,7 +197,7 @@ package com.civildebatewall.kiosk {
 					}
 				
 					if ((Math.abs(velocity) > wiggleVelocityThreshold) || (mouseTravel > wiggleTravelThreshold)) {
-						trace("Not a click.")
+						// trace("Not a click.")
 						disableChildren(content);
 						isButtonPress = false;
 					}

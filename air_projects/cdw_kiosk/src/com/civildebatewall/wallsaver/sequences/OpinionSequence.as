@@ -17,9 +17,14 @@ package com.civildebatewall.wallsaver.sequences {
 	import flash.events.Event;
 	import flash.geom.Point;
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
+	
 	// Scrolling User Opinions
 	public class OpinionSequence extends Sprite implements ISequence {
 
+		private static const logger:ILogger = getLogger(OpinionSequence);
+		
 		// Settings
 		private var scrollVelocity:Number;
 		private var maxQuotes:int;
@@ -77,7 +82,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// Try to get the number required. If there aren't enough, get as many as possible.
 			var quoteCount:int = Math.min(maxQuotes, CivilDebateWall.data.posts.length);			
-			trace("quotes: " + quoteCount);
+			logger.info("Creating opinion sequence with " + quoteCount + " quotes");
 			for (var m:int = 0; m < quoteCount; m++) {
 				// find the shortest row
 				var shortestRow:OpinionRow = opinionRows.sort(compareRowLength)[0];

@@ -23,6 +23,7 @@ package com.civildebatewall {
 	import com.kitschpatrol.flashspan.events.FlashSpanEvent;
 	import com.kitschpatrol.flashspan.events.FrameSyncEvent;
 	import com.kitschpatrol.futil.tweenPlugins.FutilBlockPlugin;
+	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.PlatformUtil;
 	
 	import flash.display.Sprite;
@@ -94,7 +95,7 @@ package com.civildebatewall {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);			
 			
 			// load settings from a local JSON file			
-			settings = Settings.load();
+			settings = SettingsLoader.load();
 			
 			// In local multi-screen debug mode, kiosk number is set via command line args instead of IP-based introspection
 			// TODO genereic command line settings override system?
@@ -168,11 +169,11 @@ package com.civildebatewall {
 			
 			// make sure image folders exist
 			if (PlatformUtil.isWindows) {
-				Utilities.createFolderIfNecessary(settings.imagePath);
-				Utilities.createFolderIfNecessary(settings.tempImagePath);				
+				FileUtil.createFolderIfNecessary(settings.imagePath);
+				FileUtil.createFolderIfNecessary(settings.tempImagePath);				
 			}
 			else if (PlatformUtil.isMac) {
-				Utilities.createFolderIfNecessary(settings.imagePath);
+				FileUtil.createFolderIfNecessary(settings.imagePath);
 				// NO SLR, so no temp folder
 			}
 			

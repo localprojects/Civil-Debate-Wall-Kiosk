@@ -54,7 +54,7 @@ package com.civildebatewall.kiosk.overlays {
 			
 			faceTarget = new Shape();
 			faceTarget.graphics.lineStyle(10, 0xffffff);
-			faceTarget.graphics.drawRect(CivilDebateWall.state.targetFaceRectangle.x, CivilDebateWall.state.targetFaceRectangle.y, CivilDebateWall.state.targetFaceRectangle.width, CivilDebateWall.state.targetFaceRectangle.height);
+			faceTarget.graphics.drawRect(CivilDebateWall.settings.targetFaceRectangle.x, CivilDebateWall.settings.targetFaceRectangle.y, CivilDebateWall.settings.targetFaceRectangle.width, CivilDebateWall.settings.targetFaceRectangle.height);
 			addChild(faceTarget);
 			
 			// watch slr
@@ -102,6 +102,5 @@ package com.civildebatewall.kiosk.overlays {
 			CivilDebateWall.kiosk.portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onSlrCapture);
 			CivilDebateWall.kiosk.removeCameraCalibrationOverlayView();
 		}
-		
 	}
 }
