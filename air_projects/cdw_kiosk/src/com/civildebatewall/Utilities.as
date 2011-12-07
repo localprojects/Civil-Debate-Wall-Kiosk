@@ -135,7 +135,6 @@ package com.civildebatewall {
 		// HTTP Request JSON Wrappers		
 		// optionally pass extra args
 		public static function getRequestJSON(url:String, callback:Function, extraArgs:Object = null):void {
-			logger.debug("JSON HTTP GET Request...");
 			getRequest(url, function(r:Object):void {
 				var jsonResponse:Object;
 					
@@ -153,12 +152,10 @@ package com.civildebatewall {
 				else {
 					callback(jsonResponse, extraArgs);
 				}
-				logger.debug("...finished JSON HTTP GET Request");
 			}); 	
 		}			
 		
-		public static function postRequestJSON(url:String, payload:Object, callback:Function):void {
-			logger.debug("JSON HTTP POST Request...");			
+		public static function postRequestJSON(url:String, payload:Object, callback:Function):void {			
 			postRequest(url, payload, function(r:Object):void {
 				var jsonResponse:Object;
 				
@@ -171,7 +168,6 @@ package com.civildebatewall {
 				}				
 				
 				callback(jsonResponse);
-				logger.debug("...finished JSON HTTP POST Request");				
 			});
 		}			
 		

@@ -84,6 +84,8 @@ package com.civildebatewall.data {
 			CivilDebateWall.state.firstLoad = false;
 			
 			loadImages();
+			
+
 		}
 
 		public function update():void {
@@ -297,10 +299,10 @@ package com.civildebatewall.data {
 						changedThreads.push(thread);
 					}
 				}
-				logger.info("...Updated " + newThreads.length + " threads");
-				
 				// Merge all changed threads so they're easier to work with below
-				newAndChangedThreads = newThreads.concat(changedThreads);				
+				newAndChangedThreads = newThreads.concat(changedThreads);
+				
+				logger.info("...Updated " + newAndChangedThreads.length + " threads");
 				
 				// nothing to update
 				if (newAndChangedThreads.length == 0) {
@@ -339,7 +341,7 @@ package com.civildebatewall.data {
 		private function onThreadPostsUpdated(response:Object, thread:Thread):void {
 			threadsLoaded++;
 			
-			logger.info("Updating thread posts " + threadsLoaded + " / " + threads.length + " (" + thread.id + ")");
+			logger.info("Updating thread posts " + threadsLoaded + " / " + newAndChangedThreads.length + " (" + thread.id + ")");
 			
 			// push global
 			for each (var jsonPost:Object in response["posts"]) {
@@ -641,7 +643,7 @@ package com.civildebatewall.data {
 		}		
 		
 		private function onDataUpdate(e:Event):void {
-			logger.warn("Data class got post-upload data update... going to whatever changed");
+			logger.info("Data class got post-upload data update... going to whatever changed");
 			removeEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 			
 			// get the thread
