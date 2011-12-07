@@ -2,7 +2,7 @@ package com.civildebatewall {
 	
 	import com.adobe.crypto.SHA1;
 	import com.adobe.serialization.json.*;
-	import com.civildebatewall.kiosk.core.Kiosk;
+
 
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.DateUtil;

@@ -1,5 +1,5 @@
-package com.civildebatewall.kiosk.elements.opinion_text
-{
+package com.civildebatewall.kiosk.elements.opinion_text {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.kitschpatrol.futil.blocks.BlockText;
@@ -13,7 +13,7 @@ package com.civildebatewall.kiosk.elements.opinion_text
 		
 		public function UserOpinionText()	{
 			super({
-				registrationPoint: Alignment.BOTTOM_LEFT,
+				registrationPoint: Alignment.BOTTOM_LEFT, // Note registration point!
 				width: 880,
 				maxHeight: 1000,
 				backgroundAlpha: 0

@@ -1,4 +1,5 @@
 package com.civildebatewall.kiosk.overlays.smsfun {
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Post;
@@ -15,7 +16,12 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
+	
 	public class UserPhone extends Phone {
+		
+		private static const logger:ILogger = getLogger(UserPhone);
 		
 		public static var NUMBER_SUBMITTED_EVENT:String = "numberSubmittedEvent";
 		
@@ -40,7 +46,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			
 			//var type:int = (CivilDebateWall.state.userStance == Post.STANCE_YES) ? YES : NO;			
 			super(type);
-
 			
 			// special success bubble
 			// TODO why are these backwards?
@@ -146,7 +151,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			
 			screen.addChild(numberField);
 			
-	
 			keypad = new Keypad();
 			keypad.y = screenHeight;
 			keypad.x = -3; // compensate for border width
@@ -157,9 +161,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			var temp:Sprite = activeBubble;
 			activeBubble = inactiveBubble;
 			inactiveBubble = temp;			
-			
 		}
-		
 		
 		public function showKeypad():void {
 			// show instructions
@@ -214,20 +216,24 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		}	
 		
 		public function isValid(number:String):Boolean {
+			logger.info("Validating number " + number + "...");
 			// strip the parentheses and dashes
 			var bareNumber:String = number.replace(/[^\d]/gs, "");
 			
 			// make sure it's the right length and doesn't start with 0
 			if (bareNumber.match(/^[1-9]\d{9}$/g).length > 0) {
+				logger.info("...number is valid");
 				return true;
 			}
 			else {
+				logger.info("...number is NOT valid");				
 				return false;
 			}
 		}
 				
 		
 		public function onSubmit():void {
+			logger.info("Submitting number from keypad");			
 			clearKeypad();
 
 			// play the bubble sequence

@@ -1,11 +1,12 @@
 package com.civildebatewall.kiosk.elements {
+
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	
 	public class WordCloudTitleBar extends StatsTitleBar {
 		
 		public var clearTagButton:ClearTagButton;
 		
-		public function WordCloudTitleBar(params:Object=null) {
+		public function WordCloudTitleBar(params:Object = null) {
 			super(params);
 			
 			maxSizeBehavior = BlockBase.MAX_SIZE_CLIPS;
@@ -18,5 +19,6 @@ package com.civildebatewall.kiosk.elements {
 			
 			clearTagButton.mask = clippingMask;			
 		}
+	
 	}
 }

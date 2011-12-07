@@ -1,22 +1,20 @@
 package com.civildebatewall.kiosk.elements {
-	import com.civildebatewall.*;
+	
+	import com.civildebatewall.Assets;
+	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.data.Word;
 	import com.civildebatewall.kiosk.buttons.WordButton;
-	import com.civildebatewall.kiosk.legacy.OldBlockBase;
-
-	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.Shape;
-	import flash.events.*;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	public class WordCloud extends BlockBase {
 		
-		// Events
 		public static const EVENT_WORD_SELECTED:String = "eventWordSelected";
 		public static const EVENT_WORD_DESELECTED:String = "eventWordDeselected";		
 		
@@ -29,10 +27,13 @@ package com.civildebatewall.kiosk.elements {
 		
 		public function WordCloud()	{
 			super();
-			width = 1022;
-			height = 299;
-			backgroundColor = Assets.COLOR_GRAY_5;
 			
+			setParams({
+				width: 1022,
+				height: 299,
+				backgroundColor: Assets.COLOR_GRAY_5
+			});
+
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataChange);
 		}
 		
@@ -51,7 +52,6 @@ package com.civildebatewall.kiosk.elements {
 
 			var wordLimit:uint = 30; // too high?
 
-			
 			// sort the source words by frequency
 			source.sortOn("total", Array.DESCENDING | Array.NUMERIC);
 			
@@ -90,7 +90,6 @@ package com.civildebatewall.kiosk.elements {
 			positionRow(row3, 3);
 			positionRow(row4, 4);			
 			
-			
 			// get the buttons that survived
 			wordButtons = [];
 			
@@ -100,18 +99,10 @@ package com.civildebatewall.kiosk.elements {
 
 			// NOW we have the final list of words, normalize
 			// recalculate color based on new max and min
-			// find limits
-			// trace("Buttons: " + wordButtons.length);	
+			// find limits	
 			var maxDifference:Number = ArrayUtil.maxInObjectArray(wordButtons, "difference");
 			var minDifference:Number = ArrayUtil.minInObjectArray(wordButtons, "difference");
-	
-//			trace("Max difference: " + maxDifference);
-//			trace("Min difference: " + minDifference);
-//			trace(1));			
-//			trace(1));
-//			trace(1));			
 			
-
 			for each (wordButton in wordButtons) {
 				// set the new difference and add listeners
 				wordButton.normalDifference = Math2.map(wordButton.difference, minDifference, maxDifference, 0, 1);
@@ -119,10 +110,8 @@ package com.civildebatewall.kiosk.elements {
 				
 				// also add listeners
 				wordButton.onButtonDown.push(onDown);
-				wordButton.onButtonUp.push(onUp);
 			}			
 
-			
 			// Add gray boxes
 			addGrayBoxes(row1);
 			addGrayBoxes(row2);
@@ -134,7 +123,6 @@ package com.civildebatewall.kiosk.elements {
 			// TODO some kind of weighting system to find out which row combinations make the most sense
 			//words.push(new WordButton(wordInfo["word"], 
 		}
-		
 		
 		private function addGrayBoxes(row:Array):void {
 			if (row.length > 0) {
@@ -159,18 +147,11 @@ package com.civildebatewall.kiosk.elements {
 			}
 		}
 		
-		
 		private function onDown(e:MouseEvent):void {
 			//fade everything else
-			//trace("down");
-			
-			
 			var selectedWord:WordButton = e.currentTarget as WordButton;
-			//trace("selected");
-			//trace(selectedWord);
 			
 			// TODO dragable reselections
-			
 			if (selectedWord == activeWord) {
 				// un-toggle
 				deselect();
@@ -187,13 +168,10 @@ package com.civildebatewall.kiosk.elements {
 						wordButtons[m].tween(0, {colorTransform: {tint: 0xffffff, tintAmount: 0}});						
 					}
 				}
-				
-				//trace("selected");
 				this.dispatchEvent(new Event(EVENT_WORD_SELECTED, true, true));				
 			}
 			
 		}
-		
 		
 		public function deselect():void {
 			for (var n:int = 0; n < wordButtons.length; n++) {
@@ -202,51 +180,33 @@ package com.civildebatewall.kiosk.elements {
 			activeWord = null;
 		}
 		
-		private function onUp(e:MouseEvent):void {
-			
-		}
-		
 		private function positionRow(row:Array, rowNumber:int):void {
-			
-			
-			//trace("row: " + rowNumber + " " + row);
-			
 			if (row.length > 0) {
-			
-			rowNumber--; // zero it
-			var xAccumulator:Number = 0;
-			
-			for(var i:int = 0; i < row.length; i++) {
-				//trace(i + " / " + row.length);
-			
+				rowNumber--; // zero it
+				var xAccumulator:Number = 0;
+				
+				for (var i:int = 0; i < row.length; i++) {
 					if (!this.contains(row[i])) addChild(row[i]);				
 					
 					row[i].x = xAccumulator;
 					xAccumulator += row[i].width + 15;
 					row[i].y = (row[i].height + 15) * (rowNumber) + 15;
 					row[i].visible = true;
-				
-			}
-			
-			
-			//trace("Row width: " + (row[row.length - 1].x + row[row.length - 1].width));
-			if ((row[row.length - 1].x + row[row.length - 1].width) > (1022 - 30)) {
-				// too big, recurse
-				// TODO does this work?
-				//trace("trimming");
-				
-				removeChild(row.pop());
-				positionRow(row, ++rowNumber);
-			}
-			else {
-				// center it, we're done
-				var xOffset:Number = (1022 - (row[row.length - 1].x + row[row.length - 1].width)) / 2;
-				//trace("we're done... center itX offset: " + xOffset);
-				for(var j:int = 0; j < row.length; j++) {
-					row[j].x += xOffset;
-				}				
-			}
+				}
+
+				if ((row[row.length - 1].x + row[row.length - 1].width) > (1022 - 30)) {
+					removeChild(row.pop());
+					positionRow(row, ++rowNumber);
+				}
+				else {
+					// center it, we're done
+					var xOffset:Number = (1022 - (row[row.length - 1].x + row[row.length - 1].width)) / 2;
+					for (var j:int = 0; j < row.length; j++) {
+						row[j].x += xOffset;
+					}				
+				}
 			}
 		}
+		
 	}
 }

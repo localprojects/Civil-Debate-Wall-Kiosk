@@ -64,13 +64,13 @@ package com.civildebatewall.kiosk.buttons {
 				TweenMax.to(this, 0.5, {text: "Raise Menu"})
 				TweenMax.to(icon, 0.50, {transformAroundCenter:{scaleY: -1}, ease: Quart.easeInOut});								
 					
-				CivilDebateWall.kiosk.view.statsOverlay.lowerMenu();
+				CivilDebateWall.kiosk.statsOverlay.lowerMenu();
 			}
 			else {
 				lowered = false;
 				TweenMax.to(this, 0.5, {text: "Lower Menu"})
 				TweenMax.to(icon, 0.50, {transformAroundCenter:{scaleY: 1}, ease: Quart.easeInOut});													
-				CivilDebateWall.kiosk.view.statsOverlay.raiseMenu();					
+				CivilDebateWall.kiosk.statsOverlay.raiseMenu();					
 			}
 			
 		}

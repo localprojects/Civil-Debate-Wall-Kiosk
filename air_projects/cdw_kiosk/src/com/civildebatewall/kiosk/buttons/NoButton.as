@@ -33,7 +33,7 @@ package com.civildebatewall.kiosk.buttons {
 		
 		private function onUp(e:MouseEvent):void {
 			CivilDebateWall.state.setUserStance(Post.STANCE_NO);
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.opinionEntryView);			
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.opinionEntryView);			
 			
 			TweenMax.to(this, 0.5, {backgroundColor: Assets.COLOR_NO_LIGHT});
 		}

@@ -1,12 +1,9 @@
 package com.civildebatewall.kiosk.elements.opinion_text {
-	import com.bit101.components.TextArea;
+	
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.blocks.Padding;
-	import com.kitschpatrol.futil.tweenPlugins.FutilBlockPlugin;
-	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Shape;
@@ -51,7 +48,6 @@ package com.civildebatewall.kiosk.elements.opinion_text {
 			drawHighlight();			
 		}
 
-		
 		protected function drawBackground():void {
 			background.graphics.clear();
 			
@@ -160,7 +156,7 @@ package com.civildebatewall.kiosk.elements.opinion_text {
 			update();
 		}
 		
-		public function get highlightPadding():Number { return _highlightPadding.top;	} // TODO fix this, should really return object
+		public function get highlightPadding():Number { return _highlightPadding.top;	} // TODO fix this? should really return object
 		public function set highlightPadding(amount:Number):void {
 			_highlightPadding.horizontal = amount;
 			_highlightPadding.vertical = amount;

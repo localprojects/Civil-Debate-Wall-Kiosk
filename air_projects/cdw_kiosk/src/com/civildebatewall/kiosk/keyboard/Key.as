@@ -1,21 +1,25 @@
 package com.civildebatewall.kiosk.keyboard {
+	
 	import com.adobe.utils.StringUtil;
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.Utilities;
 	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
-	import com.kitschpatrol.futil.Math2;
+	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.Random;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
-	import flash.text.*;
+	import flash.text.AntiAliasType;
+	import flash.text.GridFitType;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
 	import flash.utils.Timer;
 	
-	
 	public class Key extends Sprite {
+		
 		private var keyWidth:Number;
 		private var keyHeight:Number;
 		public var letter:String;
@@ -40,7 +44,6 @@ package com.civildebatewall.kiosk.keyboard {
 			letter = StringUtil.trim(_letter);
 			active = false; 
 			
-			
 			keyWidth = w;
 			keyHeight = h;
 			
@@ -59,7 +62,6 @@ package com.civildebatewall.kiosk.keyboard {
 			repeatIntervalTimer = new Timer(repeatInterval);
 			repeatIntervalTimer.addEventListener(TimerEvent.TIMER, onRepeatIntervalTimer);			
 			
-			
 			paddingTopBottom = 12;
 			paddingRightLeft = 7;
 			
@@ -75,7 +77,7 @@ package com.civildebatewall.kiosk.keyboard {
 			// text label
 			var textFormat:TextFormat = new TextFormat();			
 			textFormat.bold = true;
-			textFormat.font =  Assets.FONT_BOLD;
+			textFormat.font = Assets.FONT_BOLD;
 			textFormat.align = TextFormatAlign.CENTER;
 			textFormat.size = 20;
 			
@@ -163,7 +165,6 @@ package com.civildebatewall.kiosk.keyboard {
 			draw(); // redraw
 		}
 		
-		
 		public function onMouseOver(e:MouseEvent):void {
 			// are we dragging over?
 			if (e.buttonDown) {
@@ -182,8 +183,6 @@ package com.civildebatewall.kiosk.keyboard {
 				TweenMax.to(textField, 0, {textColor: color});
 			}
 		}
-		
-		
 		
 	}
 }

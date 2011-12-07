@@ -13,6 +13,20 @@ package com.kitschpatrol.futil.utilitites {
 			}			
 			return false;
 		}
+		
+		
+		// BROKEN
+		// returns the specific bad words from a string
+		public static function findProfanity(text:String):Array {
+			var testString:String = stripLinebreaks(text);
+			var profanity:Array = [];
+			
+			for (var i:int = 0; i < badWords.length; i++) {
+				ArrayUtil.mergeUnique(profanity, testString.match(badWords));
+			}						
+			
+			return profanity;
+		}
 
 		// Takes a word and a count, returns plural form if necessary
 		public static function plural(word:String, count:Number):String {

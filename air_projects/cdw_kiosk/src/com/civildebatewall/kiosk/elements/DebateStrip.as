@@ -1,4 +1,5 @@
 package com.civildebatewall.kiosk.elements {
+
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
@@ -60,9 +61,7 @@ package com.civildebatewall.kiosk.elements {
 				addChild(threadThumbnail);
 			}
 		}
-		
-		
-		
+
 		public function updateUserPhoto(user:User):void {
 			for (var i:int = 0; i < content.numChildren; i++) {
 				if (content.getChildAt(i) is ThumbnailButton) {		
@@ -74,7 +73,6 @@ package com.civildebatewall.kiosk.elements {
 				}
 			}
 		}
-		
 		
 		public function setActiveThumbnail(id:String):void {
 			for (var i:int = 0; i < content.numChildren; i++) {
@@ -101,7 +99,6 @@ package com.civildebatewall.kiosk.elements {
 			scrollToActive();			
 		}
 		
-		
 		private function onSortChange(e:Event):void {
 			var timeline:TimelineMax = new TimelineMax();
 			var i:int;
@@ -116,11 +113,7 @@ package com.civildebatewall.kiosk.elements {
 					timeline.insert(TweenMax.to(tempThumb.rightDot, 0.25, {alpha: 0}));
 				}
 			}
-			
 
-			
-			
-			
 			// animate the thumbnails into their new position
 			for (i = 0; i < content.numChildren; i++) {
 				if (content.getChildAt(i) is ThumbnailButton) {
@@ -150,14 +143,10 @@ package com.civildebatewall.kiosk.elements {
 				}
 			}
 			
-			
 			// tween the scroll view to the active item
-			
 			scrollToX = (tempThumb == null) ? 0 : Math2.clamp(scrollToX - (width / 2) + (tempThumb.width / 2), minScrollX, maxScrollX);
 			timeline.insert(TweenMax.to(this, 1, {scrollX: scrollToX, ease: Quart.easeInOut}), .25);
-			trace(scrollToX);
-			
-			
+
 			// fade the (Correct) dots back in
 			for (i = 0; i < content.numChildren; i++) {
 				if (content.getChildAt(i) is ThumbnailButton) {
@@ -187,7 +176,6 @@ package com.civildebatewall.kiosk.elements {
 			var targetX:Number = Math2.clamp(scrollX + width, minScrollX, maxScrollX); 
 			TweenMax.to(this, 1, {scrollX: targetX, ease: Quart.easeInOut});			
 		}
-		
 		
 		public function scrollToActive():void {
 			if (activeThumbnail != null) {

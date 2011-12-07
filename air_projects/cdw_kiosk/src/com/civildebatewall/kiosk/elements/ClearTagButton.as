@@ -1,4 +1,5 @@
 package com.civildebatewall.kiosk.elements {
+
 	import com.civildebatewall.Assets;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockText;
@@ -8,9 +9,7 @@ package com.civildebatewall.kiosk.elements {
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
-	
-	
+
 	public class ClearTagButton extends BlockText	{
 		
 		public static const CLEAR_TAG_EVENT:String = "clearTagEvent";		

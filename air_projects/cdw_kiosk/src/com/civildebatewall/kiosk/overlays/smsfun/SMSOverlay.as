@@ -1,29 +1,29 @@
 package com.civildebatewall.kiosk.overlays.smsfun {
 	
-	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.buttons.WhiteButton;
-	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Linear;
 	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.blocks.BlockBase;
-	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.drawing.Path;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
-	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
+	
 	public class SMSOverlay extends BlockBase	{		
+
+		private static const logger:ILogger = getLogger(SMSOverlay);
 		
 		private var smsUnderlay:BlockBase;
 		private var smsSkipButton:WhiteButton;
@@ -36,7 +36,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		private var phoneGrid:Sprite; // contains phones (so skip button doesn't zoom out of view)
 		private var timeline:TimelineMax;
 		
-		public function SMSOverlay(params:Object=null) {
+		public function SMSOverlay(params:Object = null) {
 			super({
 				width: 1080,
 				height: 1920,
@@ -73,7 +73,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		}
 		
 		private function init():void {
-
 			GraphicsUtil.removeChildren(phoneGrid);
 			
 			connections = new Connection();
@@ -142,14 +141,11 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			connections.path.lineTo(width, phones[14].position.y);			
 			
 			connections.visible = false;
-			
 			phoneGrid.addChildAt(connections, 0); // lines go below phones
-
 			
 			// animation
 			timeline = new TimelineMax({onComplete: submitPost, onReverseComplete: submitPost});			
 			timeline.append(new TweenMax(connections, 4.5, {step: 0.5, ease: Linear.easeNone, delay: 0}));
-			
 			
 			timeline.appendMultiple([
 				new TweenMax(northPhone, 1, {alpha: 0, ease: Quart.easeInOut}),
@@ -178,9 +174,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			userPhone.addEventListener(UserPhone.NUMBER_SUBMITTED_EVENT, onNumberSubmitted);
 		}
 		
-		
-		
-
 		// Views....
 		override protected function beforeTweenIn():void {
 			super.beforeTweenIn();
@@ -222,20 +215,18 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		
 		private function onNumberSubmitted(e:Event):void {
 			// finish animation
-			trace("save and submit");
-			trace("User phone: " + userPhone.phoneNumber);			
+			logger.info("Save and submitting phone number " + userPhone.phoneNumber);
 			
 			CivilDebateWall.state.userPhoneNumber = userPhone.phoneNumber;			
 			
 			smsSkipButton.tweenOut();
 			timeline.tweenFromTo("userPhonePause", timeline.duration);			
 		}
-		
 
 		private function skippedPhone():void {
 			smsSkipButton.tweenOut();
 			
-			trace("skipped!");
+			logger.info("Skipped phone number entry");
 			// roll back the animation
 			// unpop
 			//for each (var phone:Phone in phones) phone.popped = false;
@@ -250,7 +241,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 				phoneTweens.push(new TweenMax(phones[i], 1, {scaleX: 0, scaleY: 0, ease: Quart.easeOut}));
 			}
 			
-			
 			// zoomed in?
 			var delay:Number = 0;
 			if (phoneGrid.scaleX != 1) {
@@ -264,8 +254,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			timeline.play();
 			
 			// zoom out, fade everything out
-			
-			
 //			timeline.pause();
 //			timeline.reverse();
 //			TweenMax.to(timeline, 1, {timeScale: 5});
@@ -273,24 +261,18 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			// fires submit post once it's finished
 		}
 
-		
-		
 		private function submitPost():void {
 			CivilDebateWall.data.submitDebate();
 		}
 		
-		
 		private function onSkipButtonUp(e:MouseEvent):void {
 			skippedPhone();
 		}
-
 		
-
 		private function onEnterFrame(e:Event):void {
 			// phones tweening in is triggered by proximity to the dashed line's pen
 			for (var i:int = 0; i < phones.length; i++) {
 				if (!phones[i].popped && (Point.distance(phones[i].position, connections.penPosition) < distanceThreshold)) {
-
 
 					// pop everyone else's message bubble
 					for (var j:int = 0; j < phones.length; j++) {
@@ -314,12 +296,10 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 						}
 					}
 					
-				
 					break;
 				}
 			}
 		}			
-		
 		
 		// helper for turning between rows
 		private function turnRight(targetPath:Path, start:Point, end:Point, curveOvershoot:Number, curveRadius:Number):void {
@@ -336,18 +316,10 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			targetPath.curveTo(end.x - curveOvershoot - curveRadius, end.y, end.x - curveOvershoot, end.y);			
 		}		
 				
-		
 		// Move these to block base?
 		private function markAllInactive():void {
 			// marks all FIRST LEVEL blocks as inactive
-			for (var i:int = 0; i < this.numChildren; i++) {
-				//if ((this.getChildAt(i) is BlockBase) && (this.getChildAt(i).visible)) {
-				// attempt to fix blank screen issue....
-				if (this.getChildAt(i) is OldBlockBase) {				
-					(this.getChildAt(i) as OldBlockBase).active = false;
-				}
-				
-				// Run on the new block base too, this is ugly...				
+			for (var i:int = 0; i < this.numChildren; i++) {				
 				if (this.getChildAt(i) is BlockBase) {				
 					(this.getChildAt(i) as BlockBase).active = false;
 				}
@@ -355,17 +327,8 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		}
 		
 		private function tweenOutInactive(instant:Boolean = false):void {	
-			for (var i:int = 0; i < this.numChildren; i++) {
-				if ((this.getChildAt(i) is OldBlockBase) && !(this.getChildAt(i) as OldBlockBase).active) {
-					if (instant)
-						(this.getChildAt(i) as OldBlockBase).tweenOut(0);
-					else
-						(this.getChildAt(i) as OldBlockBase).tweenOut();
-				}
-			}
-			
 			// Run on the new block base too, this is ugly...
-			for (i = 0; i < this.numChildren; i++) {
+			for (var i:int = 0; i < this.numChildren; i++) {
 				if ((this.getChildAt(i) is BlockBase) && !(this.getChildAt(i) as BlockBase).active) {
 					if (instant)
 						(this.getChildAt(i) as BlockBase).tweenOut(0);

@@ -1,10 +1,6 @@
 package com.civildebatewall.kiosk {
 	
-	import com.civildebatewall.kiosk.camera.FaceDetector;
-
 	import com.greensock.TweenLite;
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Quart;
 	import com.greensock.plugins.ThrowPropsPlugin;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	
@@ -16,8 +12,13 @@ package com.civildebatewall.kiosk {
 	import flash.geom.Point;
 	import flash.utils.getTimer;
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
 	
-	public class BlockInertialScroll extends BlockBase {	
+	public class BlockInertialScroll extends BlockBase {
+		
+		private static const logger:ILogger = getLogger(BlockInertialScroll);
+		
 		// Constants for constraining scroll axis
 		public static const SCROLL_BOTH:String = "xy";
 		public static const SCROLL_X:String = "x";
@@ -70,12 +71,10 @@ package com.civildebatewall.kiosk {
 			scrollY = 0;			
 			isButtonPress = false;
 			
-			
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);			
 		}
 		
 		protected function onMouseDown(e:MouseEvent):void {
-			
 			// stop any coasting, this is the "poke"
 			if (coastTween != null) coastTween.kill();
 			
@@ -96,20 +95,15 @@ package com.civildebatewall.kiosk {
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			this.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, -1);
-			
 
-			
 			isButtonPress = assumeButtons ? true : isButtonUnderMouse(); // only discriminate between click and scroll if there's a button
 			
 			if (isButtonPress) {
-				trace("Could be button press.");
+				//trace("Could be button press.");
 			}
 			else {
-				trace("no buttons under there...");
+				//trace("no buttons under there...");
 			}
-			
-			
-			
 		}
 		
 		private function isButtonUnderMouse():Boolean {
@@ -171,21 +165,15 @@ package com.civildebatewall.kiosk {
 		
 
 		private function onMouseMove(e:MouseEvent):void {
-			
-			
 			if (((scrollAxis == SCROLL_BOTH) && (isOverflowX || isOverflowY)) ||
 				  ((scrollAxis == SCROLL_X) && isOverflowX) ||
 					((scrollAxis == SCROLL_Y) && isOverflowY)) {
 				
-				
 				// Actually scroll the window
 				if ((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_X)) scrollX = scrollStartX + (mouseStartX - stage.mouseX);
 				if ((scrollAxis == SCROLL_BOTH) || (scrollAxis == SCROLL_Y)) scrollY = scrollStartY + (mouseStartY - stage.mouseY);
-								
-
 				
 				if (isButtonPress) {
-				
 					// Mouse odometry
 					mouseTravelX += Math.abs(stage.mouseX - lastMouseX);
 					mouseTravelY += Math.abs(stage.mouseY - lastMouseY);		
@@ -221,15 +209,12 @@ package com.civildebatewall.kiosk {
 			}
 		}
 		
-		
 		private function onMouseUp(e:MouseEvent):void {
-
 			// Remove listeners
 			this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			this.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 
-			
 			// zero velocity if we're out of bounds
 			if ((scrollY > maxScrollY) || (scrollY < minScrollY)) yVelocity = 0;
 			//if ((scrollX > maxScrollX) || (scrollX < minScrollX)) averageVelocity.x = 0;
@@ -255,15 +240,10 @@ package com.civildebatewall.kiosk {
 				
 			}
 				
-			trace("Velocity: " + yVelocity);
-			
-			//props.ease = Quart.easeOut;
+			//trace("Velocity: " + yVelocity);
 			
 			// Stopped Here
 			if (!isButtonPress) {
-				
-				
-				
 				coastTween =	ThrowPropsPlugin.to(this, props, maxDuration, minDuration, overshootTolerance);
 				
 				// Restore child mouse functionality

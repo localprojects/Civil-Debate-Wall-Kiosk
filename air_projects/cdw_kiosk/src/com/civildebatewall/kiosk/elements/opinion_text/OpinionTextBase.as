@@ -1,5 +1,4 @@
-package com.civildebatewall.kiosk.elements.opinion_text
-{
+package com.civildebatewall.kiosk.elements.opinion_text {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.data.Post;
 	import com.kitschpatrol.futil.blocks.BlockBase;

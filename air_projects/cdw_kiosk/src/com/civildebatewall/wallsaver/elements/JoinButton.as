@@ -1,4 +1,5 @@
 package com.civildebatewall.wallsaver.elements {
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.greensock.TweenMax;
@@ -7,16 +8,12 @@ package com.civildebatewall.wallsaver.elements {
 	
 	import flash.events.MouseEvent;
 	import flash.text.TextFormatAlign;
-	
 
-	
 	public class JoinButton extends BlockText {
 		
 		private var downBackgroundColor:uint; // alternates based on scree
 		
-		public function JoinButton(params:Object=null) {
-
-			// TODO add button functionality
+		public function JoinButton(params:Object = null) {
 			super({
 				text: "JOIN THE DEBATE. TOUCH TO BEGIN.",
 				backgroundColor: Assets.COLOR_GRAY_85,
@@ -47,7 +44,6 @@ package com.civildebatewall.wallsaver.elements {
 			TweenMax.to(this, 0.5, {backgroundColor: Assets.COLOR_GRAY_85});
 			CivilDebateWall.flashSpan.stop(); // fades everything out
 		}
-		
-		
+
 	}
 }

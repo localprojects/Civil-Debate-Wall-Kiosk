@@ -1,4 +1,5 @@
 package com.civildebatewall.kiosk.overlays {
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
@@ -7,7 +8,6 @@ package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.kiosk.buttons.BigGrayButton;
 	import com.civildebatewall.kiosk.buttons.StanceToggle;
 	import com.civildebatewall.kiosk.keyboard.Keyboard;
-
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockShape;
@@ -16,17 +16,19 @@ package com.civildebatewall.kiosk.overlays {
 	import com.kitschpatrol.futil.constants.Char;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
-	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Bitmap;
-	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.FocusEvent;
 	import flash.events.MouseEvent;
-	import flash.ui.Mouse;
+	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
 
 	public class OpinionEntryOverlay extends BlockInertialScroll {
+		
+		private static const logger:ILogger = getLogger(OpinionEntryOverlay);
 		
 		public var question:BlockText;
 		private var nameCharacterCount:BlockText;		
@@ -164,9 +166,6 @@ package com.civildebatewall.kiosk.overlays {
 			formContainer.addChild(errorMessage);
 
 			errors = false;
-			
-			
-			
 			
 			// The form
 			var nameLabel:BlockText = new BlockText({
@@ -387,16 +386,15 @@ package com.civildebatewall.kiosk.overlays {
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 		}
 		
-
-		
 		private function onInput(e:Event):void {
 			// check for profanity
-			
-			trace("INPUT!");
-			
-			if (StringUtil.isProfane(nameField.text) || StringUtil.isProfane(opinionField.text)) {
-				
+			if (StringUtil.isProfane(nameField.text + " " + opinionField.text)) {
 				errors = true;
+				logger.info("Bad words: " + nameField.text + " " + opinionField.text);
+				
+				// log the bad words (TODO, broken)
+				// var theBadWords:Array = StringUtil.findProfanity(nameField.text + " " + opinionField.text);
+				//logger.info("Bad words: " + theBadWords);
 				
 				if (!errorMessage.visible) {
 					errorMessage.x = 1022; // come in from right					
@@ -407,10 +405,8 @@ package com.civildebatewall.kiosk.overlays {
 			}
 			else {
 				errorMessage.tweenOut();
-				
 				errors = false;
 			}
-			
 		}
 		
 		private function onNameFieldInput(e:Event):void {
@@ -426,9 +422,7 @@ package com.civildebatewall.kiosk.overlays {
 		private function onFieldFocus(e:FocusEvent):void {
 			TweenMax.to(e.target.parent.parent, 0, {borderAlpha: 1});
 			
-			// keyboard follows focus
-			trace(stage.focus);
-			
+			// keyboard follows focus			
 			if (stage.focus is BlockText) {
 				keyboard.target = (stage.focus as BlockText).textField;
 			}
@@ -449,11 +443,11 @@ package com.civildebatewall.kiosk.overlays {
 		}		
 		
 		private function onDataUpdate(e:Event):void {
-			question.text = CivilDebateWall.state.question.text;
+			question.text = CivilDebateWall.state.activeQuestion.text;
 		}
 		
 		private function onSubmit(e:MouseEvent):void {
-			trace("submit");
+			logger.info("Attempting to submit opinion...");
 			
 			nameField.text = StringUtil.trim(nameField.text);
 			opinionField.text = StringUtil.trim(opinionField.text);
@@ -484,55 +478,28 @@ package com.civildebatewall.kiosk.overlays {
 				errors = true;				
 			}
 			
-			// TODO username taken?			
-			
-			
 			if (errors) {
-				trace("Errors! Won't submit.");
-								
+				logger.info("...Validation errors, won't submit");
 			}
 			else {
-				trace("submitting.");
+				logger.info("...submission looks OK, continuing");
 				CivilDebateWall.state.userOpinion = opinionField.text;
 				CivilDebateWall.state.userName = nameField.text;
 				
 				if (CivilDebateWall.state.userImage == null) {
-					trace("going to photo booth view.");
-					CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.photoBoothView);
+					CivilDebateWall.state.setView(CivilDebateWall.kiosk.photoBoothView);
 				}
 				else {
-					trace("must be editing. going to opinion review view.");
-					CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.opinionReviewView);					
+					logger.info("User must be editing, skip photo and go straight to review");					
+					CivilDebateWall.state.setView(CivilDebateWall.kiosk.opinionReviewView);					
 				}
 			}
-
-			
 		}
-		
 		
 		override protected function onMouseDown(e:MouseEvent):void {
 			// are we over keyboard? block scrolling.	
 			if (content.mouseY < keyboardContainer.y) super.onMouseDown(e)
 		}
-		
-		
-		
-		// Try to create the user, check for existing username
-//		CivilDebateWall.data.createUser(CivilDebateWall.state.userName, CivilDebateWall.state.userPhoneNumber, onUserCreated);
-//		
-//		private function onUserCreated(r:Object):void {
-//			if (r["error"] == null) {
-//				// It worked!
-//				var tempUser:User = new User(r);
-//				CivilDebateWall.state.userID = tempUser.id;
-//				//verifyOpinionView();
-//			}
-//			else {
-//				// there was an error, the name probably already existed!
-//				trace("TODO handle name error");
-//			}
-//		}		
-		
 		
 		override protected function beforeTweenIn():void {
 			super.beforeTweenIn();
@@ -579,8 +546,7 @@ package com.civildebatewall.kiosk.overlays {
 				maxScrollY = question.height + (paddingTop * 2);
 			}
 
-			scrollY = -30;			
-			
+			scrollY = -30;
 		}
 				
 	}

@@ -14,7 +14,7 @@ package com.civildebatewall.kiosk.buttons {
 	import flash.events.MouseEvent;
 	
 	public class ViewCommentsButton extends BlockText	{
-		public function ViewCommentsButton(params:Object=null) {
+		public function ViewCommentsButton(params:Object = null) {
 			super({
 				textFont: Assets.FONT_REGULAR,
 				textSize: 18,
@@ -42,7 +42,7 @@ package com.civildebatewall.kiosk.buttons {
 		
 		private function onUp(e:MouseEvent):void {
 			TweenMax.to(this, 0.3, {backgroundColor: CivilDebateWall.state.activeThread.firstPost.stanceColorDark});
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.threadView);
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.threadView);
 		}
 		
 		private function onDataUpdate(e:Event):void {

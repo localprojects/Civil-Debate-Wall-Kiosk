@@ -4,17 +4,19 @@ package com.civildebatewall {
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.Question;
 	import com.civildebatewall.data.Thread;
-	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	
 	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
-
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
+
 	public class State extends EventDispatcher {
+
+		private static const logger:ILogger = getLogger(State);
 		
 		// events
 		public static const VIEW_CHANGE:String = "viewChange";
@@ -43,7 +45,6 @@ package com.civildebatewall {
 		public var lastView:Function;
 		public var backDestination:Function;
 		
-		public var question:Question;
 		
 		
 		// network performance, TODO put on dashboard
@@ -66,24 +67,20 @@ package com.civildebatewall {
 		}
 		
 		public var sortMode:int = SORT_BY_RECENT;
-		
 
-		
+		public var activeQuestion:Question;
 		public var lastThread:Thread = null;		
 		public var activeThread:Thread = null;
+		public var nextThread:Thread = null;		
 		public var activePost:Post = null;		
-		public var nextThread:Thread = null;
-		public var previousThread:Thread = null;		
-		public var threadOverlayOpen:Boolean = false;
+		public var previousThread:Thread = null;	
+		public var threadOverlayOpen:Boolean = false;		
 		
-		// for persistence accross reloads
-		// TODO ditch this?
-		public var activeThreadID:String = "";		
-		public var activePostID:String = "";		
-		
-
 		// stats
 		public var superlativePost:Post = null; // from stats
+		
+		
+		// SETTERS ========================================================================
 		
 		public function setSuperlativePost(post:Post):void {
 			superlativePost = post;
@@ -95,24 +92,7 @@ package com.civildebatewall {
 			dispatchEvent(new Event(ON_ACTIVE_POST_CHANGE));
 		}
 		
-		private function varToString(name:String):String {
-			var parts:Array = name.split(".");
-			var out:String = name + ": ";
-			
-			var target:Object = this;			
-			for (var i:int = 0; i < parts.length; i++) {
-				if (target == null) {
-					target = "null";
-					break;
-				}
-				else {		
-					target = target[parts[i]];
-				}
-			}
-			
-			out += target + "\n";
-			return out;
-		}
+
 		
 		public function stateLog():String {
 			var out:String = "";
@@ -184,7 +164,7 @@ package com.civildebatewall {
 		
 		private function onDataPreUpdate(e:Event):void {
 			// Initialize some stuff. only runs once at startup.
-			CivilDebateWall.state.activeView = CivilDebateWall.kiosk.view.homeView;
+			CivilDebateWall.state.activeView = CivilDebateWall.kiosk.homeView;
 			CivilDebateWall.state.setActiveThread(ArrayUtil.randomElement(CivilDebateWall.data.threads));
 			CivilDebateWall.data.removeEventListener(Data.DATA_UPDATE_EVENT, onDataPreUpdate);
 		}				
@@ -198,6 +178,8 @@ package com.civildebatewall {
 			// sort the debate list
 			
 			trace("sorting by " + sortMode);
+			
+			
 			
 			switch (sortMode) {
 				case SORT_BY_RECENT:
@@ -273,7 +255,7 @@ package com.civildebatewall {
 			
 			// clear the highlighting if unless we're coming from the stats page 
 			if ((highlightWord != null) && (highlightWord != "")) {
-				if (lastView != CivilDebateWall.kiosk.view.statsView) {
+				if (lastView != CivilDebateWall.kiosk.statsView) {
 					setHighlightWord("");
 				}
 			}			
@@ -290,7 +272,7 @@ package com.civildebatewall {
 			
 			// clear the highlighting if unless we're coming from the stats page 
 			if ((highlightWord != null) && (highlightWord != "")) {
-				if (activeView != CivilDebateWall.kiosk.view.statsView) {
+				if (activeView != CivilDebateWall.kiosk.statsView) {
 					setHighlightWord("");
 				}
 			}
@@ -302,7 +284,6 @@ package com.civildebatewall {
 			
 			if (activeThread != null) {
 				for (var i:uint = activeThread.posts.length - 1; i > 0; i--) {
-					trace(i);
 				// CivilDebateWall.dashboard.log(activeThread.posts[i].id);
 				}
 			}
@@ -371,12 +352,31 @@ package com.civildebatewall {
 			return null;
 		}		
 		
+		// HELPERS =======================================================================================================================
+		
 		// convenience for logging
 		public function getUpdateTimeString():String {
 			return "Question: " + updateQuestionTime + " Threads: " + updateThreadsTime + " Posts and Users:" + updatePostsAndUsersTime +  " Stats:" + updateStatsTime + " Total:" + updateTotalTime; 			
 		}	
-		
-		
 
+		private function varToString(name:String):String {
+			var parts:Array = name.split(".");
+			var out:String = name + ": ";
+			
+			var target:Object = this;			
+			for (var i:int = 0; i < parts.length; i++) {
+				if (target == null) {
+					target = "null";
+					break;
+				}
+				else {		
+					target = target[parts[i]];
+				}
+			}
+			
+			out += target + "\n";
+			return out;
+		}
+		
 	}
 }

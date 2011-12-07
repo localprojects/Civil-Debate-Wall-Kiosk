@@ -7,7 +7,6 @@ package com.civildebatewall.kiosk.elements {
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	
 	import flash.display.Shape;
-	import flash.display.Sprite;
 	import flash.events.Event;
 
 	public class VoteBarGraph extends BlockBase {
@@ -27,8 +26,6 @@ package com.civildebatewall.kiosk.elements {
 				height: 141, 
 				backgroundColor: Assets.COLOR_NO_LIGHT			
 			});
-			
-			
 						
 			bar = new Shape();
 			addChild(bar);
@@ -96,5 +93,6 @@ package com.civildebatewall.kiosk.elements {
 			yesLabel.votes = CivilDebateWall.data.stats.postsYes;
 			noLabel.votes = CivilDebateWall.data.stats.postsNo;
 		}
+		
 	}
 }

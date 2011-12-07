@@ -1,4 +1,5 @@
 package com.civildebatewall.wallsaver.sequences {
+	
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
@@ -19,10 +20,7 @@ package com.civildebatewall.wallsaver.sequences {
 	public class FaceGridSequence extends Sprite implements ISequence {
 		
 		private var portraitData:Array;
-		
-		// Internal
-		private var gridCells:Array;
-		
+		private var gridCells:Array; // Internal
 		
 		public function FaceGridSequence()	{
 			super();
@@ -100,9 +98,7 @@ package com.civildebatewall.wallsaver.sequences {
 					tempPortrait.y = (gridSpacing * row) + (row * portraitHeight) + wallsaverPaddingTop;
 					
 					portraits[col][row] = addChild(tempPortrait);
-				}
-				
-				
+				}	
 			}
 			
 			// get a flat array of portraits
@@ -111,7 +107,6 @@ package com.civildebatewall.wallsaver.sequences {
 			// shuffle it
 			gridCells = ArrayUtil.shuffle(gridCells);			
 		}
-		
 		
 		public function getTimelineIn():TimelineMax {
 			var timelineIn:TimelineMax = new TimelineMax({useFrames: true});
@@ -129,7 +124,6 @@ package com.civildebatewall.wallsaver.sequences {
 			return timelineIn;
 		}
 		
-		
 		private const pauseAfterPortraitsIn:int = 60;
 		
 		public function getTimelineOut():TimelineMax	{
@@ -146,12 +140,12 @@ package com.civildebatewall.wallsaver.sequences {
 			return timelineOut;
 		}
 		
-		
 		public function getTimeline():TimelineMax {
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
 			timeline.append(getTimelineIn());
 			timeline.append(getTimelineOut());
 			return timeline;
 		}		
+		
 	}
 }

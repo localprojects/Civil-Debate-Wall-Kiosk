@@ -4,7 +4,7 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
+	import com.greensock.easing.Quad;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.Shape;
@@ -40,7 +40,6 @@ package com.civildebatewall.wallsaver.sequences {
 			return timelineIn;
 		}
 		
-		
 		public function getTimelineOut():TimelineMax {
 			var timelineOut:TimelineMax = new TimelineMax({useFrames: true});
 			timelineOut = getTimelineIn();
@@ -49,14 +48,12 @@ package com.civildebatewall.wallsaver.sequences {
 			return timelineOut;
 		}
 		
-		
 		public function getTimeline():TimelineMax {
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
 			timeline.append(getTimelineIn());
 			timeline.append(getTimelineOut());
 			return timeline;
 		}				
-		
 		
 	}
 }

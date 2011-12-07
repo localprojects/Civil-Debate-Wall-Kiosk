@@ -41,7 +41,7 @@ package com.civildebatewall.kiosk.buttons {
 			TweenMax.to(this, 0.5, {backgroundColor: 0xffffff, textColor: ColorUtil.gray(77)});
 			
 			CivilDebateWall.state.userIsDebating = false;
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.debateStancePickerView);
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.debateStancePickerView);
 		}
 		
 	}

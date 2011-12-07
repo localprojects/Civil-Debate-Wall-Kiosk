@@ -1,24 +1,14 @@
 package com.civildebatewall.kiosk.keyboard {
 	
-	import com.adobe.utils.StringUtil;
-	import com.civildebatewall.Assets;
-	import com.civildebatewall.Utilities;
-	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
-
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	
 	import flash.display.InteractiveObject;
-	import flash.display.Sprite;
-	import flash.events.*;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.text.TextField;
-	import flash.ui.Mouse;
-	
-	
-	
-	
+
 	public class Keyboard extends OldBlockBase {
 		
 		private var keys:Array;
@@ -35,7 +25,6 @@ package com.civildebatewall.kiosk.keyboard {
 			this.graphics.beginFill(0xffffff);
 			this.graphics.drawRect(0, 0, 798, 356); // add padding
 			this.graphics.endFill();
-			
 			
 			shift = false;
 			
@@ -99,7 +88,6 @@ package com.civildebatewall.kiosk.keyboard {
 			keys["DELETE"].repeats = true;			
 		}
 
-
 		public function showSpacebar(b:Boolean):void {
 			if (b) {
 				keys[" "].visible = true;
@@ -130,7 +118,6 @@ package com.civildebatewall.kiosk.keyboard {
 			// make sure the text ends up where we want it
 			//stage.focus = target;
 		}
-		
 		
 		private function onKeyPressed(e:MouseEvent):void {
 			//Assets.clickSound.play();
@@ -177,26 +164,11 @@ package com.civildebatewall.kiosk.keyboard {
 						
 					}
 					else {
-						trace("nothing to delete");
+						// Nothing to delete
 					}
-					
-//					// TODO FIX THIS, check if selection is at the end?
-//					if (tf.selectionBeginIndex == tf.selectionEndIndex) {
-//						// insertion edits
-//						trace("insertion");
-//						tf.text = tf.text.substring(0, tf.selectionBeginIndex - 1) + tf.text.substr(tf.selectionEndIndex);
-//						tf.setSelection(tf.selectionBeginIndex - 1, tf.selectionBeginIndex - 1);						
-//					}
-//					else {
-//						// block edits
-//						trace("block");
-//						tf.text = tf.text.substring(0, tf.selectionBeginIndex - 1) + tf.text.substring(tf.selectionEndIndex);
-//						tf.setSelection(tf.selectionBeginIndex - 1, tf.selectionBeginIndex - 1);
-//					}
 				}
 			}
-			else {
-				
+			else {				
 				// sending a keyboard event is just ignored by the text input fields
 				// via http://www.kirupa.com/forum/showthread.php?312829-Onscreen-Keyboard-how-to-send-event
 				if (this.stage.focus is TextField) {
@@ -210,9 +182,7 @@ package com.civildebatewall.kiosk.keyboard {
 					}
 				}
 
-				
 				// unstick the shift button if we're shifted
-
 				if (shift) {
 					keys["SHIFT"].removeEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
 					keys["SHIFT"].dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP, false));
@@ -226,8 +196,6 @@ package com.civildebatewall.kiosk.keyboard {
 				var tf2:TextField = this.stage.focus as TextField;
 				tf2.dispatchEvent(new Event(Event.CHANGE, true));
 			}
-			
-			
 		}
 		
 		// returns the number of "cells" a row of keys takes up
@@ -271,7 +239,6 @@ package com.civildebatewall.kiosk.keyboard {
 				key.setColor(c);
 			}
 		}
-		
 		
 		// recursively finds length of the longest array, regardless of how deeply it's nested
 		private function maxLength(a:Array, currentMax:int = 0):int {

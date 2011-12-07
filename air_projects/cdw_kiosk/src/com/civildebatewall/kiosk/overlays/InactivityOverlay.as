@@ -1,4 +1,5 @@
 package com.civildebatewall.kiosk.overlays {
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.kiosk.buttons.BigGrayButton;
@@ -8,7 +9,6 @@ package com.civildebatewall.kiosk.overlays {
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
-	
 	
 	public class InactivityOverlay extends BlockBase {
 		
@@ -63,7 +63,7 @@ package com.civildebatewall.kiosk.overlays {
 		
 		private function goHome(...args):void {
 			closeOverlay();		
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.homeView);
 		}
 		
 		private function closeOverlay(...args):void {

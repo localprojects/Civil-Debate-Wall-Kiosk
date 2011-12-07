@@ -1,15 +1,13 @@
 package com.civildebatewall.kiosk.elements {
-	import com.civildebatewall.*;
-	import com.civildebatewall.data.Data;
-	import com.civildebatewall.data.Thread;
-	import com.civildebatewall.kiosk.BlockInertialScroll;
-	import com.civildebatewall.kiosk.buttons.*;
 
+	import com.civildebatewall.Assets;
+	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.data.Data;
+	import com.civildebatewall.kiosk.BlockInertialScroll;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
-	import flash.display.*;
-	import flash.events.*;
-	import flash.text.*;
+	import flash.display.Shape;
+	import flash.events.Event;
 	
 	public class ThreadBrowser extends BlockInertialScroll	{
 		
@@ -25,7 +23,6 @@ package com.civildebatewall.kiosk.elements {
 			
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 		}
-		
 		
 		private function onDataUpdate(e:Event):void {
 			refreshContent();
@@ -55,9 +52,7 @@ package com.civildebatewall.kiosk.elements {
 				commentRow.visible = true;
 				addChild(commentRow);
 				
-				
 				yOffset += commentRow.height;
-				
 				
 				// add the lines between the comments				
 				if (i < CivilDebateWall.state.activeThread.postCount - 2) {
@@ -73,14 +68,10 @@ package com.civildebatewall.kiosk.elements {
 				yOffset += 1; // compensate for the line
 			}
 			
-
-			trace("Scroll limits: " + minScrollY +  " / " + maxScrollY);
-			
 			// do we need to scroll?
 			//scrollField.scrollAllowed = (scrollField.scrollSheet.height > _maxHeight - 30);
 			//minScrollY = 0;
 			//maxScrollY = content.height - height;			
-			
 		}
 		
 	}

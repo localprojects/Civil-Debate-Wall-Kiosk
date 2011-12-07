@@ -11,7 +11,7 @@ package com.civildebatewall.kiosk.buttons {
 	
 	public class NavArrow extends BlockBitmap {
 		
-		public function NavArrow(params:Object=null) {
+		public function NavArrow(params:Object = null) {
 			super(params);
 			buttonMode = true;
 			

@@ -62,7 +62,7 @@ package com.civildebatewall.data {
 			CivilDebateWall.settings.secretKeyHash = SHA1.hash(CivilDebateWall.settings.secretKey);			
 			logger.info("Hashed secret key: " + CivilDebateWall.settings.secretKeyHash);
 			
-			photoQueue = new LoaderMax({name:"portraitQueue", onProgress: photoProgressHandler, onComplete: photoCompleteHandler, onError: photoErrorHandler, maxConnections: 6});			
+			photoQueue = new LoaderMax({name:"portraitQueue", skipFailed: true, onProgress: photoProgressHandler, onComplete: photoCompleteHandler, onError: photoErrorHandler, maxConnections: 6});			
 		}
 		
 		// Run once at startup
@@ -72,7 +72,7 @@ package com.civildebatewall.data {
 		}
 		
 		public function onLoadComplete():void {
-			logger.info("...Load complete");
+			logger.info("...Data load complete");
 			
 			if (CivilDebateWall.state.firstLoad) {
 				logger.info("This is first load");
@@ -81,6 +81,7 @@ package com.civildebatewall.data {
 			}
 			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
 			
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.homeView);
 			CivilDebateWall.state.firstLoad = false;
 			
 			loadImages();
@@ -169,10 +170,10 @@ package com.civildebatewall.data {
 		private function getActiveQuestion(onLoad:Function = null):void {
 			logger.info("Loading active question...");
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/questions/current", function(response:Object):void {
-				CivilDebateWall.state.question = getQuestionByID(response.id);
-				logger.info("...Loaded active question: \"" + CivilDebateWall.state.question.text + "\"");
-				CivilDebateWall.state.question = CivilDebateWall.state.question;
-				logger.info("In category: \"" + CivilDebateWall.state.question.category.name + "\"");
+				CivilDebateWall.state.activeQuestion = getQuestionByID(response.id);
+				logger.info("...Loaded active question: " + CivilDebateWall.state.activeQuestion.text);
+				CivilDebateWall.state.activeQuestion = CivilDebateWall.state.activeQuestion;
+				logger.info("In category: " + CivilDebateWall.state.activeQuestion.category.name);
 				(onLoad != null) ? onLoad() :	loadThreads();
 			});
 		}
@@ -180,7 +181,7 @@ package com.civildebatewall.data {
 		// depends on active question
 		private function loadThreads(onLoad:Function = null):void {
 			logger.info("Loading threads...");
-			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/questions/" + CivilDebateWall.state.question.id + "/threads", function(response:Object):void {
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/questions/" + CivilDebateWall.state.activeQuestion.id + "/threads", function(response:Object):void {
 				threads = [];
 				for each (var thread:Object in response) threads.push(new Thread(thread));
 				logger.info("...Loaded " + threads.length + " threads");
@@ -188,10 +189,10 @@ package com.civildebatewall.data {
 				// empty case
 				if (threads.length == 0) {
 					logger.warn("All threads are empty... going to no opinion view.");					
-					CivilDebateWall.kiosk.view.questionHeaderHome.text = CivilDebateWall.state.question.text;
-					CivilDebateWall.kiosk.view.questionHeaderDecision.text = CivilDebateWall.state.question.text;
-					CivilDebateWall.kiosk.view.opinionEntryOverlay.question.text = CivilDebateWall.state.question.text;
-					CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.noOpinionView);
+					CivilDebateWall.kiosk.questionHeaderHome.text = CivilDebateWall.state.activeQuestion.text;
+					CivilDebateWall.kiosk.questionHeaderDecision.text = CivilDebateWall.state.activeQuestion.text;
+					CivilDebateWall.kiosk.opinionEntryOverlay.question.text = CivilDebateWall.state.activeQuestion.text;
+					CivilDebateWall.state.setView(CivilDebateWall.kiosk.noOpinionView);
 				}
 				else {
 					(onLoad != null) ? onLoad() :	loadPostsAndUsers();
@@ -260,8 +261,8 @@ package com.civildebatewall.data {
 			logger.info("Updating question...");
 			
 			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/questions/current", function(response:Object):void {
-				if (response.id != CivilDebateWall.state.question.id) {
-					logger.warn("...Question changed, need to restart. (From \"" + CivilDebateWall.state.question.id + "\" to \"" + response.id + "\)");
+				if (response.id != CivilDebateWall.state.activeQuestion.id) {
+					logger.warn("...Question changed, need to restart. (From " + CivilDebateWall.state.activeQuestion.id + " to " + response.id + ")");
 					logger.error("TODO implement question restart");  // TODO
 				}
 				else {
@@ -278,7 +279,7 @@ package com.civildebatewall.data {
 			updateIntermediateTime = getTimer();
 			
 			logger.info("Updating threads...");
-			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/questions/" + CivilDebateWall.state.question.id + "/threads", function(response:Object):void {
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/questions/" + CivilDebateWall.state.activeQuestion.id + "/threads", function(response:Object):void {
 				newThreads = [];
 				changedThreads = [];
 				newAndChangedThreads = [];
@@ -561,6 +562,7 @@ package com.civildebatewall.data {
 		// Syncs state up to the cloud		
 		public function submitDebate():void {
 			// Make sure phone nubmer is an emptry string instead of null
+			logger.info("Submitting Debate");
 			if (CivilDebateWall.state.userPhoneNumber == null) CivilDebateWall.state.userPhoneNumber = "";
 			createUser(CivilDebateWall.state.userName, CivilDebateWall.state.userPhoneNumber, onUserCreated);
 		}
@@ -615,7 +617,7 @@ package com.civildebatewall.data {
 			else {
 				// create and upload new thread
 				logger.info("Uploading new post to a new thread...");
-				CivilDebateWall.data.uploadThread(CivilDebateWall.state.question.id, CivilDebateWall.state.userID, CivilDebateWall.state.userOpinion, CivilDebateWall.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
+				CivilDebateWall.data.uploadThread(CivilDebateWall.state.activeQuestion.id, CivilDebateWall.state.userID, CivilDebateWall.state.userOpinion, CivilDebateWall.state.userStance, Post.ORIGIN_KIOSK, onDebateUploaded);
 			}
 		}
 		
@@ -652,12 +654,12 @@ package com.civildebatewall.data {
 				// go to comment
 				logger.info("Going to post " + CivilDebateWall.state.userPostID + " in thread " + CivilDebateWall.state.userThreadID);
 				CivilDebateWall.state.setActivePost(getPostByID(CivilDebateWall.state.userPostID));
-				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.threadView);					
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.threadView);					
 			}
 			else {
 				// go to thread
 				logger.info("Going to thread " + CivilDebateWall.state.userThreadID);
-				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);			
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.homeView);			
 			}
 
 			// TODO should this happen before view change?

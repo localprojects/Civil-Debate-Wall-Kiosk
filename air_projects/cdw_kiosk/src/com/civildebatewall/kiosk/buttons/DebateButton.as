@@ -10,7 +10,7 @@ package com.civildebatewall.kiosk.buttons {
 	
 	public class DebateButton extends BlockText {
 		
-		public function DebateButton(params:Object=null) {
+		public function DebateButton(params:Object = null) {
 			super({
 				buttonMode: true,
 				textFont: Assets.FONT_BOLD,
@@ -45,7 +45,7 @@ package com.civildebatewall.kiosk.buttons {
 			drawUp();
 			
 			CivilDebateWall.state.userIsDebating = true;
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.debateStancePickerView);
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.debateStancePickerView);
 		}
 		
 		private function drawUp():void {

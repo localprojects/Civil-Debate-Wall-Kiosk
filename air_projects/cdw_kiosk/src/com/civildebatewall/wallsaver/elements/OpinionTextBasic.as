@@ -1,11 +1,11 @@
 package com.civildebatewall.wallsaver.elements {
+	
 	import com.civildebatewall.Assets;
 	
 	import flash.text.AntiAliasType;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
-	import flash.text.TextInteractionMode;
 	
 	// work around for windows disappearing text glitches (showing up on some screens, not on others)
 	// replaces nicer block text approach, see OpinionRow.as in commit 95987b83129902d1c3eb009556649df484f2fbd5 for example
@@ -20,9 +20,7 @@ package com.civildebatewall.wallsaver.elements {
 			textFormat.color = 0xffffff;			
 			textFormat.rightMargin = 110 / 4;
 			textFormat.leftMargin = 110 / 4;
-			
-			
-			
+
 			multiline = false;
 			selectable = false;
 			embedFonts = true;
@@ -37,5 +35,6 @@ package com.civildebatewall.wallsaver.elements {
 			scaleX = 4;
 			scaleY = 4;			
 		}
+		
 	}
 }

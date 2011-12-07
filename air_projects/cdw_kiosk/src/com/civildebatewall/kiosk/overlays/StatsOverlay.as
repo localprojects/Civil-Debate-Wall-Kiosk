@@ -23,7 +23,12 @@ package com.civildebatewall.kiosk.overlays {
 	
 	import flash.events.Event;
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
+	
 	public class StatsOverlay extends BlockBase	{
+		
+		private static const logger:ILogger = getLogger(StatsOverlay);
 		
 		private var graphTitle:StatsTitleBar;		
 		private var voteBarGraph:VoteBarGraph;	
@@ -35,9 +40,10 @@ package com.civildebatewall.kiosk.overlays {
 		private var debateList:DebateList;		
 		private var filler:BlockShape;
 		private var searchResults:WordSearchResults;
-
+		private var menuLowerDistance:Number = 924;
+		private var duration:Number = 0.6;		
 		
-		public function StatsOverlay(params:Object=null) {
+		public function StatsOverlay(params:Object = null) {
 			
 			super(params);
 			
@@ -65,10 +71,7 @@ package com.civildebatewall.kiosk.overlays {
 			wordCloudTitle.y = 234;
 			wordCloudTitle.visible = true;
 			addChild(wordCloudTitle);
-			
-			
 
-			
 			wordCloud = new WordCloud();
 			wordCloud.x = 29;
 			wordCloud.y = 312;
@@ -94,17 +97,11 @@ package com.civildebatewall.kiosk.overlays {
 			searchResults.setDefaultTweenOut(0.75, {alpha: 0, x: 29, y: Alignment.OFF_STAGE_BOTTOM});
 			addChild(searchResults);
 			
-
-			
 			superlativesTitle = new StatsTitleBarSelector();
 			superlativesTitle.x = 29;
 			superlativesTitle.y = 625;
 			addChild(superlativesTitle);
-			
-			
-			
 
-			//CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataChange);
 			superlativesPortrait = new SuperlativesPortrait();
 			superlativesPortrait.setDefaultTweenIn(.5, {x: 29, y: 703, ease: Quart.easeInOut});
 			superlativesPortrait.setDefaultTweenOut(.5, {x: Alignment.OFF_STAGE_LEFT, y: 703, ease: Quart.easeInOut});
@@ -114,7 +111,6 @@ package com.civildebatewall.kiosk.overlays {
 			debateList.setDefaultTweenIn(.5, {x: 546, y: 703, ease: Quart.easeInOut});
 			debateList.setDefaultTweenOut(.5, {x: Alignment.OFF_STAGE_RIGHT, y: 703, ease: Quart.easeInOut});
 			addChild(debateList);
-
 
 			filler = new BlockShape();
 			filler.x = 29;
@@ -128,13 +124,8 @@ package com.civildebatewall.kiosk.overlays {
 			searchResults.tweenOut();
 			superlativesPortrait.tweenIn();
 			debateList.tweenIn();			
-			// opinions results is just overlay
-			
-			// show search results if they change...	
+			// opinions results is just overlay	
 		}
-		
-		private var menuLowerDistance:Number = 924; // string makes it relative
-		private var duration:Number = 0.6;
 		
 		// TODO not relative!
 		public function lowerMenu():void {
@@ -166,7 +157,6 @@ package com.civildebatewall.kiosk.overlays {
 			TweenMax.to(searchResults, duration, {y: 703, alpha: 1, ease: Quart.easeInOut});	
 		}
 		
-		
 		private function onWordSelected(e:Event):void {
 			raiseMenuThroughButton();
 
@@ -184,7 +174,6 @@ package com.civildebatewall.kiosk.overlays {
 			TweenMax.to(superlativesTitle, 0.5, {alpha: 0});
 			debateList.tweenOut();
 			superlativesPortrait.tweenOut();
-			//searchResults.tweenIn();
 			wordCloudTitle.clearTagButton.tweenIn();			
 		}
 		
@@ -199,14 +188,12 @@ package com.civildebatewall.kiosk.overlays {
 			wordCloudTitle.clearTagButton.tweenOut(0); // start off screen
 			super.beforeTweenIn();
 		}
-
 		
 		private function raiseMenuThroughButton():void {
-			if (CivilDebateWall.kiosk.view.lowerMenuButton.lowered) {
-				CivilDebateWall.kiosk.view.lowerMenuButton.toggle();				
+			if (CivilDebateWall.kiosk.lowerMenuButton.lowered) {
+				CivilDebateWall.kiosk.lowerMenuButton.toggle();				
 			}
 		}
-		
 		
 		private function onWordDeselected(e:Event):void {
 			raiseMenuThroughButton();			
@@ -219,41 +206,7 @@ package com.civildebatewall.kiosk.overlays {
 			superlativesPortrait.tweenIn();
 			searchResults.tweenOut();
 			wordCloudTitle.clearTagButton.tweenOut();
-			
 		}		
-		
-		
-		
-		
-		
-		
-		
-//		private function mostDebatedView():void {
-//			// portrait
-//			
-//			// list
-//			debatedSuperlativesPortrait.tweenIn();
-//
-//		}
-//		
-//		private function mostLikedView():void {
-//			
-//
-//		}
-//		
-//		private function searchResultsView():void {
-//			
-//			
-//			
-//		}
-//		
-		
-			
-		
-		
-		
-		
-		
-		
+
 	}
 }

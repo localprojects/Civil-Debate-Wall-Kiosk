@@ -2,20 +2,15 @@ package com.civildebatewall.kiosk.elements.question_text {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
 	import com.kitschpatrol.futil.blocks.BlockText;
-	import com.kitschpatrol.futil.blocks.Padding;
 	import com.kitschpatrol.futil.constants.Alignment;
-	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	
 	import flash.display.Shape;
 	import flash.events.Event;
 	
-
 	public class QuestionHeaderBase extends BlockText	{
 		
-		// Listen to state changes
 		private var _lineWidth:Number;
 		private var _lineInset:Number; // distance from top / bottom
 		private var _showLines:Boolean;		
@@ -23,7 +18,6 @@ package com.civildebatewall.kiosk.elements.question_text {
 		
 		private var topLine:Shape;
 		private var bottomLine:Shape;
-
 
 		public function QuestionHeaderBase() {
 			topLine = new Shape();
@@ -50,7 +44,6 @@ package com.civildebatewall.kiosk.elements.question_text {
 			
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataChange);
 		}
-		
 		
 		public function get lineWidth():Number { return _lineWidth; }
 		public function set lineWidth(value:Number):void {
@@ -82,7 +75,7 @@ package com.civildebatewall.kiosk.elements.question_text {
 			}
 		}
 		
-		private function drawLines():void {
+		protected function drawLines():void {
 			topLine.graphics.clear();
 			topLine.graphics.beginFill(Assets.COLOR_YES_LIGHT);
 			topLine.graphics.drawRect(0, 0, _lineWidth, _lineThickness);
@@ -99,9 +92,8 @@ package com.civildebatewall.kiosk.elements.question_text {
 		}
 
 		private function onDataChange(e:Event):void {
-			text = CivilDebateWall.state.question.text;
+			text = CivilDebateWall.state.activeQuestion.text;
 		}
-
 		
 	}
 }

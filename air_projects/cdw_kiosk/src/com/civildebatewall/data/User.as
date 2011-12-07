@@ -40,7 +40,7 @@ package com.civildebatewall.data {
 				CivilDebateWall.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes: 15000, onComplete: onImageLoaded}));
 			}
 			else {
-				logger.info("No photo found, using placeholder for " + _username + "\t(" + _id + ")");
+				logger.info("No photo found, using placeholder for " + _username + " (" + _id + ")");
 			}
 		}
 		
@@ -52,25 +52,25 @@ package com.civildebatewall.data {
 			// search and update, use some kind of bitmap binding instead?
 			// wallsaver, updates through data once	
 			// carousell
-			CivilDebateWall.kiosk.view.debateStrip.updateUserPhoto(this);
+			CivilDebateWall.kiosk.debateStrip.updateUserPhoto(this);
 			
 			// main portrait
 			if (CivilDebateWall.state.activeThread.firstPost.user == this) {
-				CivilDebateWall.kiosk.view.portrait.setImage(_photo);
+				CivilDebateWall.kiosk.portrait.setImage(_photo);
 			}
 			
 			// stats?
 			if (CivilDebateWall.state.superlativePost.user == this) {
-				CivilDebateWall.kiosk.view.statsOverlay.superlativesPortrait.portrait.setImage(_photo);
+				CivilDebateWall.kiosk.statsOverlay.superlativesPortrait.portrait.setImage(_photo);
 			}
 			
 			// Update comment thumbs. (Otherwise, they're updated on tween in.)
-			if (CivilDebateWall.state.activeView == CivilDebateWall.kiosk.view.threadView) {
+			if (CivilDebateWall.state.activeView == CivilDebateWall.kiosk.threadView) {
 				for (var i:int = 0; i < CivilDebateWall.state.activeThread.posts.length; i++) {
 					if (CivilDebateWall.state.activeThread.posts[i].user.id == _id) {
 						// We're in this thread
 						logger.info("Latest loaded photo is in the active thread  overlay browser, refreshing the browser");
-						CivilDebateWall.kiosk.view.threadOverlayBrowser.refreshContent();		
+						CivilDebateWall.kiosk.threadOverlayBrowser.refreshContent();		
 						break;
 					}
 				}

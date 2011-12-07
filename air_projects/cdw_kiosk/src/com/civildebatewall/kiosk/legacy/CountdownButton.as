@@ -1,17 +1,24 @@
 package com.civildebatewall.kiosk.legacy {
-	import com.civildebatewall.*;
 
+	import com.civildebatewall.Assets;
+	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.State;
 	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
+	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
-	import flash.display.*;
-	import flash.events.*;
-	import flash.text.*;
-	import flash.utils.*;
-	
+	import flash.display.Bitmap;
+	import flash.display.CapsStyle;
+	import flash.display.DisplayObject;
+	import flash.display.LineScaleMode;
+	import flash.display.Shape;
+	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	import flash.utils.getTimer;
+
 	public class CountdownButton extends ButtonBase {
 		
 		// time keeping
@@ -129,7 +136,6 @@ package com.civildebatewall.kiosk.legacy {
 			TweenMax.to(countLabel, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countLabel, 180, true), scaleX: 0, scaleY: 0, onComplete: onSecondTweenComplete});
 		}
 		
-		
 		private function onSecondTweenComplete():void {
 			// update the count, then bring back the text
 			countLabel.visible = true;
@@ -142,13 +148,11 @@ package com.civildebatewall.kiosk.legacy {
 			}
 			else if (countdownTimer.currentCount == 4) {
 				// stop spinning numbers, show the icon
-				trace("Showing icon");
 				TweenMax.to(countLabel, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countLabel, 0, true), scaleX: 0, scaleY: 0});
 				TweenMax.to(arrow, 0.2, {alpha: 1});
 				TweenMax.to(arrow, 0.25, {y: "-20", yoyo: true, repeat: -1});				
 			}
 		}
-		
 		
 		private function onTimerComplete(e:TimerEvent):void {
 			// timer's complete, forward the event
@@ -159,8 +163,7 @@ package com.civildebatewall.kiosk.legacy {
 			
 			// call the function
 			onCountdownFinish(e);
-		}		
-		
+		}
 		
 		private function onFinalTweenComplete():void {
 			
@@ -171,13 +174,11 @@ package com.civildebatewall.kiosk.legacy {
 			drawRing();			
 		}
 		
-		
 		// trace progress along the outer circle
 		private function onEnterFrame(e:Event):void {
 			progress = (getTimer() - startTime) / (duration * 1000);
 			drawRing();
 		}
-		
 		
 		// helper for directional rotation via http://forums.greensock.com/viewtopic.php?f=1&t=3176
 		private function getRotationChange(mc:DisplayObject, newRotation:Number, clockwise:Boolean):String {
@@ -186,8 +187,7 @@ package com.civildebatewall.kiosk.legacy {
 				dif += (clockwise) ? 360 : -360;
 			}
 			return String(dif);
-		}			
-
+		}	
 
 		// drawing
 		private function drawBackground():void {
@@ -249,12 +249,10 @@ package com.civildebatewall.kiosk.legacy {
 		}
 		
 		private function onUserStanceChange(e:Event):void {
-			setBackgroundColor(CivilDebateWall.state.userStanceColorLight, true);
-			setDownColor(CivilDebateWall.state.userStanceColorMedium);	
+			setBackgroundColor(CivilDebateWall.state.userStanceColorLight, true);	
 			setRingColor(CivilDebateWall.state.userStanceColorLight);
 			setProgressColor(0xffffff);			
 		}
 		
-
 	}
 }

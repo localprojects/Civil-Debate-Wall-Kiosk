@@ -10,7 +10,7 @@ package com.civildebatewall.kiosk.buttons {
 	
 	public class WhiteButton extends BlockText {
 
-		public function WhiteButton(params:Object=null) {
+		public function WhiteButton(params:Object = null) {
 			super({
 				buttonMode: true,
 				textFont: Assets.FONT_BOLD,

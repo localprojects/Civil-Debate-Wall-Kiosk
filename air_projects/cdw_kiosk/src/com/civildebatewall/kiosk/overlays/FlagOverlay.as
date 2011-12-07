@@ -1,10 +1,10 @@
 package com.civildebatewall.kiosk.overlays {
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.buttons.BigGrayButton;
 	import com.civildebatewall.kiosk.elements.ProgressBar;
-
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
@@ -21,7 +21,7 @@ package com.civildebatewall.kiosk.overlays {
 		private var message:BlockText;
 		public var targetPost:Post;
 		
-		public function FlagOverlay(params:Object=null)	{
+		public function FlagOverlay(params:Object = null)	{
 			
 			super({
 				backgroundColor: 0x000000,
@@ -69,23 +69,18 @@ package com.civildebatewall.kiosk.overlays {
 			addChild(timerBar);
 			
 			// actions
-			
 			noButton.onButtonUp.push(closeOverlay);
 			yesButton.onButtonUp.push(flagItem);
 		}
 		
 		private function closeOverlay(...args):void {
 			timerBar.pause();
-			CivilDebateWall.kiosk.view.removeFlagOverlayView();
+			CivilDebateWall.kiosk.removeFlagOverlayView();
 		}
 		
 		private function flagItem(e:MouseEvent):void {			
-			// TODO actually flag it!
-			// this.dispatchEvent(
 			CivilDebateWall.data.flag(targetPost);
-			
-			
-			
+
 			TweenMax.to(message, 1, {text: "FLAGGED FOR REVIEW. WE WILL LOOK INTO IT."});			
 			yesButton.tweenOut();
 			noButton.tweenOut();
@@ -123,7 +118,6 @@ package com.civildebatewall.kiosk.overlays {
 			
 			super.beforeTweenOut();
 		}
-		
 		
 	}
 }

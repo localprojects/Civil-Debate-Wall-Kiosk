@@ -1,4 +1,5 @@
 package com.civildebatewall.wallsaver.sequences {
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.wallsaver.elements.ArrowBanner;
@@ -6,13 +7,12 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
+	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
-
 	
 	public class CallToActionSequence extends Sprite implements ISequence {
 	
@@ -87,9 +87,7 @@ package com.civildebatewall.wallsaver.sequences {
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
 			
 			// join banners in
-			timeline.appendMultiple([
-				
-				
+			timeline.appendMultiple([				
 				TweenMax.fromTo(joinBanner1, 100, {x: CivilDebateWall.flashSpan.settings.screens[1].x - joinBanner1.width}, {x: CivilDebateWall.flashSpan.settings.screens[1].x - arrowWidth, ease: Quart.easeOut, roundProps: ["x"]}),
 				TweenMax.fromTo(joinBanner2, 100, {x: CivilDebateWall.flashSpan.settings.screens[3].x - joinBanner2.width}, {x: CivilDebateWall.flashSpan.settings.screens[3].x - arrowWidth, ease: Quart.easeOut, roundProps: ["x"]})
 			], 50, TweenAlign.START, 0);
@@ -112,5 +110,6 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			return timeline;
 		}
+		
 	}
 }

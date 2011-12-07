@@ -73,7 +73,7 @@ package com.civildebatewall.kiosk.buttons {
 		private function onUserStanceChange(e:Event):void {
 			// Only animate if we are on our own page
 			var duration:Number = 0;
-			if (CivilDebateWall.state.activeView == CivilDebateWall.kiosk.view.opinionEntryView) {
+			if (CivilDebateWall.state.activeView == CivilDebateWall.kiosk.opinionEntryView) {
 				duration = .35;
 			}
 			

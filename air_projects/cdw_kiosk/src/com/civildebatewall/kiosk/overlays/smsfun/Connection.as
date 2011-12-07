@@ -38,6 +38,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			dot.y = penHead.y;	
 			
 			super.draw();
-		}		
+		}	
+		
 	}
 }

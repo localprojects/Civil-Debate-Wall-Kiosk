@@ -60,11 +60,11 @@ package com.civildebatewall.kiosk.buttons {
 			
 			if (_targetPost.thread.postCount == 1) {
 				// It's a single post
-				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.homeView);
 			}
 			else {
 				// It's a comment thread
-				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.threadView);				
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.threadView);				
 			}
 		}
 		

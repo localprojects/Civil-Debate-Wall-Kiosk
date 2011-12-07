@@ -1,14 +1,10 @@
 package com.civildebatewall {
-	
-	
-	
+
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.display.Sprite;
-	
-	
+	import flash.display.Sprite;	
 	
 	public final class Assets	{
 		
@@ -62,10 +58,7 @@ package com.civildebatewall {
 		[Embed(source = "/assets/graphics/flag.swf")] private static const flagClass:Class;
 		public static function getFlag():Sprite { return new flagClass() as Sprite; };
 		public static const flag:Sprite = getFlag();
-		
 
-		
-		
 		
 		// Bitmaps
 		[Embed(source = "/assets/graphics/clearIcon.png")] private static const clearIconClass:Class;
@@ -115,11 +108,7 @@ package com.civildebatewall {
 		[Embed(source = "/assets/graphics/bigNo.png")] private static const bigNoClass:Class;
 		public static function getBigNo():Bitmap { return new bigNoClass() as Bitmap; };
 		public static const bigNo:Bitmap = getBigNo();
-		
-		
-		
-		
-		
+
 		[Embed(source = "/assets/graphics/smsSubscribeHeader.png")] private static const smsSubscribeHeaderClass:Class;
 		public static function getSmsSubscribeHeader():Bitmap { return new smsSubscribeHeaderClass() as Bitmap; };
 		public static const smsSubscribeHeader:Bitmap = getSmsSubscribeHeader();
@@ -179,9 +168,7 @@ package com.civildebatewall {
 		[Embed(source = "/assets/graphics/portraitBannerNo.png")] private static const portraitBannerNoClass:Class;
 		public static function getPortraitBannerNo():Bitmap { return new portraitBannerNoClass() as Bitmap; };
 		public static const portraitBannerNo:Bitmap = getPortraitBannerNo();
-		
 
-		
 		[Embed(source = "/assets/graphics/saysText.png")] private static const saysTextClass:Class;
 		public static function getSaysText():Bitmap { return new saysTextClass() as Bitmap; };
 		public static const saysText:Bitmap = getSaysText();		
@@ -246,8 +233,6 @@ package com.civildebatewall {
 		public static function getButtonBackground():Bitmap { return new buttonBackgroundClass() as Bitmap; };
 		public static const buttonBackground:Bitmap = getButtonBackground();
 		
-
-
 		[Embed(source = "/assets/graphics/leftButtonTile.png")] private static const leftButtonTileClass:Class;
 		public static function getLeftButtonTile():Bitmap { return new leftButtonTileClass() as Bitmap; };
 		public static const leftButtonTile:Bitmap = getLeftButtonTile();
@@ -337,37 +322,6 @@ package com.civildebatewall {
 		public static function getGraphLabelYes():Bitmap { return new graphLabelYesClass() as Bitmap; };
 		public static const graphLabelYes:Bitmap = getGraphLabelYes();
 		
-		// TODO REMOVE BELOW
-		// Sample Kiosks		
-		[Embed(source = "/assets/graphics/sampleKiosk1.jpg")] private static const sampleKiosk1Class:Class;
-		public static function getSampleKiosk1():Bitmap { return new sampleKiosk1Class() as Bitmap; };
-		public static const sampleKiosk1:Bitmap = getSampleKiosk1();
-		
-		[Embed(source = "/assets/graphics/sampleKiosk2.jpg")] private static const sampleKiosk2Class:Class;
-		public static function getSampleKiosk2():Bitmap { return new sampleKiosk2Class() as Bitmap; };
-		public static const sampleKiosk2:Bitmap = getSampleKiosk2();		
-		
-		
-		// Sample Portraits
-		[Embed(source = "/assets/graphics/samplePortrait1.jpg")] private static const samplePortrait1Class:Class;
-		public static function getSamplePortrait1():Bitmap { return new samplePortrait1Class() as Bitmap; };
-		public static const samplePortrait1:Bitmap = getSamplePortrait1();
-		
-		[Embed(source = "/assets/graphics/samplePortrait2.jpg")] private static const samplePortrait2Class:Class;
-		public static function getSamplePortrait2():Bitmap { return new samplePortrait2Class() as Bitmap; };
-		public static const samplePortrait2:Bitmap = getSamplePortrait2();
-		
-		[Embed(source = "/assets/graphics/samplePortrait3.jpg")] private static const samplePortrait3Class:Class;
-		public static function getSamplePortrait3():Bitmap { return new samplePortrait3Class() as Bitmap; };
-		public static const samplePortrait3:Bitmap = getSamplePortrait3();
-		
-		[Embed(source = "/assets/graphics/samplePortrait4.jpg")] private static const samplePortrait4Class:Class;
-		public static function getSamplePortrait4():Bitmap { return new samplePortrait4Class() as Bitmap; };
-		public static const samplePortrait4:Bitmap = getSamplePortrait4();
-		// TODO REMOVE ABOVE
-		
-		
-		
 		// Fonts
 		[Embed(source="/assets/fonts/fonts.swf", symbol="RockwellLight")] public static const FontLight:Class;
 		public static const FONT_LIGHT:String = "Rockwell Std Light";		
@@ -411,9 +365,7 @@ package com.civildebatewall {
 		public static const COLOR_NO_WATERMARK:uint = ColorUtil.rgb(255, 242, 235);
 		public static const COLOR_NO_DISABLED:uint = ColorUtil.rgb(140, 41, 4);		
 		public static const COLOR_NO_HIGHLIGHT:uint = COLOR_NO_DISABLED; // TBD		
-		
-		
-		
+
 		public static const COLOR_GRAY_2:uint = ColorUtil.rgb(248, 248, 248); // ?% K
 		public static const COLOR_GRAY_5:uint = ColorUtil.rgb(241, 242, 242); // 5% K
 		public static const COLOR_GRAY_15:uint = ColorUtil.rgb(220, 221, 222); // 15% K		
