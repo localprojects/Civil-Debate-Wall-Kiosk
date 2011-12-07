@@ -7,7 +7,7 @@ package com.civildebatewall {
 	
 	import flash.filesystem.File;	
 	
-	public dynamic class SettingsLoader extends Object {
+	public class SettingsLoader extends Object {
 		
 		// Loads settings from a JSON file
 		public static function load():Settings {
@@ -32,9 +32,6 @@ package com.civildebatewall {
 			// Apply common settings
 			ObjectUtil.setParams(settings, rawSettings.common);
 			
-			ObjectUtil.traceObject(settings);
-
-			
 			// Use the "Mac" or "Windows" settings depending on detected platform
 			if (PlatformUtil.isWindows) {
 				ObjectUtil.setParams(settings, rawSettings.windows);
@@ -45,8 +42,6 @@ package com.civildebatewall {
 			else {
 				throw new Error("Error detecting system type when loading settings.");
 			}
-			
-			ObjectUtil.traceObject(settings);	
 			
 			return settings;
 		}

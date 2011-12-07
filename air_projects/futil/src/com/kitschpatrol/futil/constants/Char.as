@@ -1,6 +1,7 @@
 package com.kitschpatrol.futil.constants {
 	
 	public class Char {
+		
 		// set what we will factor into size based on combination of sets
 		public static const SET_OF_UPPERCASE_LETTERS:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		public static const SET_OF_LOWERCASE_LETTERS:String = "abcdefghijklmnopqrstuvwxyz";

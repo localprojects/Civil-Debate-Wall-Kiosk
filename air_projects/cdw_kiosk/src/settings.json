@@ -11,7 +11,8 @@
 		"localMultiScreenTest": false,
 		"webCamFocalLength": 1.2,
 		"webCamUndersampleFactor": 2,
-		"slrWaitTime": 1
+		"slrWaitTime": 1,
+		"logFullHTTP": true
 	}, 
 	
 	"windows": {
@@ -38,7 +39,7 @@
 		"serverPath": "http://beta.civildebatewall.com",
 		"flashSpanConfig":  "/Users/Mika/Code/CivilDebateWall/lp-cdw/air_projects/cdw_kiosk/bin-debug/flash_span_settings.xml",
 		"logToTrace": true,
-		"logToMonster": true,
+		"logToMonster": false,
 		"logToFile": true,
 		"logFilePath": "/Users/Mika/Desktop/CDWLogs"
 	}

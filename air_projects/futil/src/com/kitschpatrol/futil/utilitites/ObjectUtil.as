@@ -3,8 +3,13 @@ package com.kitschpatrol.futil.utilitites {
 	
 	import flash.utils.ByteArray;
 	import flash.utils.getQualifiedClassName;
+	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
 
 	public class ObjectUtil	{
+		
+		public static const logger:ILogger = getLogger(ObjectUtil);
 		
 		public static function objectLength(o:Object):uint {
 			var len:uint = 0;
@@ -26,6 +31,10 @@ package com.kitschpatrol.futil.utilitites {
 		// broken?
 		public static function traceObject(obj:*, level:int = 0):void {
 			trace(toString(obj, level));
+		}
+		
+		public static function logObject(obj:*, level:int = 0):void {
+			logger.info(toString(obj, level));			
 		}
 		
 		// broken?

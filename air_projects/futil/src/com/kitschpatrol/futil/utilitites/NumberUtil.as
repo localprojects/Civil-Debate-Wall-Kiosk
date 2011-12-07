@@ -60,15 +60,13 @@ package com.kitschpatrol.futil.utilitites {
 		for(var i:Number = 0; i <= 1; i += 0.01) {
 			var quantized:Number = NumberUtil.quantizeInclusive(i, 0.2); 
 			
-			trace(i + " : " + quantized);
-			
 			// intiialize
 			if (!counts.hasOwnProperty(quantized.toString())) counts[quantized.toString()] = 0;
 			
 			// increment
 			counts[quantized.toString()]++;
 		}
-		Utilities.traceObject(counts);
+		
 		*/
 		
 		

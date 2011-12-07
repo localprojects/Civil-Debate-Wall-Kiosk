@@ -7,8 +7,6 @@ package com.kitschpatrol.futil {
 			throw new Error("Futil's Random is a static class and cannot be instantiated.");
 		}
 		
-		
-		
 		// Convenience function for picking screen locations "in the wings"
 		public static function randomOnScreenPoint(screenWidth:int, screenHeight:int):Point {
 			return new Point(Random.range(0, screenWidth), Random.range(0, screenHeight));

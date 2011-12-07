@@ -2,19 +2,16 @@ package com.civildebatewall {
 	
 	import com.adobe.serialization.json.JSON;
 	import com.adobe.serialization.json.JSONParseError;
-	import com.kitschpatrol.futil.utilitites.DateUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.display.Loader;
 	import flash.display.PixelSnapping;
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
-	import flash.filesystem.File;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -61,7 +58,7 @@ package com.civildebatewall {
 				event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, arguments.callee);
 
 				logger.debug("...Loading HTTP GET complete: Loaded " + event.target.bytesLoaded + " bytes");
-				if (CivilDebateWall.settings.logFullHTTP) logger.debug(event.target.data);
+				if (CivilDebateWall.settings.logFullHTTP) logger.debug(StringUtil.stripSerialSpaces(StringUtil.stripLinebreaks(event.target.data)));
 				callback(event.target.data);
 			});
 			
@@ -107,7 +104,7 @@ package com.civildebatewall {
 				event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, arguments.callee);
 				
 				logger.debug("...Loading HTTP POST complete: Loaded " + event.target.bytesLoaded + " bytes");
-				if (CivilDebateWall.settings.logFullHTTP) logger.debug(event.target.data);
+				if (CivilDebateWall.settings.logFullHTTP) logger.debug(StringUtil.stripSerialSpaces(StringUtil.stripLinebreaks(event.target.data)));
 				callback(event.target.data);
 			});
 			

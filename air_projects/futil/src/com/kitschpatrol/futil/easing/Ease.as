@@ -1,7 +1,10 @@
 package com.kitschpatrol.futil.easing {
 	
 	public class Ease {
-		public function Ease()
+		
+		public function Ease() {
+			// Nothing to construct	
+		}
 
 		public static function easeInExpo(t:Number, b:Number, c:Number, d:Number):Number {
 			return (t==0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b - c * 0.001;
@@ -18,8 +21,6 @@ package com.kitschpatrol.futil.easing {
 			return c*0.5 * (-Math.pow(2, -10 * --t) + 2) + b;
 		}
 		
-		
-
 		// Out and ins
 		// Via http://forums.greensock.com/viewtopic.php?f=1&t=2648
 		
@@ -75,8 +76,6 @@ package com.kitschpatrol.futil.easing {
 			return easeInBounce(t*2-d, 0, c, d) * .5 + c*.5 + b;
 		}
 		
-		
-		
 		public static function easeOutInExpo(t:Number, b:Number, c:Number, d:Number):Number {
 			if (t==0) return b;
 			if (t==d) return b+c;
@@ -100,14 +99,11 @@ package com.kitschpatrol.futil.easing {
 			return b+c*(4*tc + -6*ts + 3*t);
 		}		
 		
-		
 		public static function easeOutInStrong(t:Number, b:Number, c:Number, d:Number):Number {
 			t/=d/2;
 			return c/2*(--t*t*t*t*t+1) + b;
 		}
 		
-		
-
 		public static function easeInQuart (t:Number, b:Number, c:Number, d:Number):Number {
 			return c*(t/=d)*t*t*t + b;
 		}
@@ -118,7 +114,6 @@ package com.kitschpatrol.futil.easing {
 			if ((t/=d/2) < 1) return c/2*t*t*t*t + b;
 			return -c/2 * ((t-=2)*t*t*t - 2) + b;
 		}
-					
 		
 	}
 }

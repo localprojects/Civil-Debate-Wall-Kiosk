@@ -8,7 +8,6 @@ package com.kitschpatrol.futil.utilitites {
 			var timer:Timer = new Timer(d);
 			
 			var callback:Function = function(t:TimerEvent):void {
-				trace("fire");
 				t.target.stop();
 				t.target.removeEventListener(TimerEvent.TIMER, callback);
 				// call the function

@@ -14,6 +14,10 @@ package com.kitschpatrol.futil.utilitites {
 			return false;
 		}
 		
+		// replaces long strings of spaces with a single space
+		public static function stripSerialSpaces(text:String):String {
+			return text.replace(/\s{2,}/g, " ");
+		}
 		
 		// BROKEN
 		// returns the specific bad words from a string
