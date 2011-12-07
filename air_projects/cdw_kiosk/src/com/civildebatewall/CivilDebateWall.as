@@ -97,43 +97,41 @@ package com.civildebatewall {
 			// Pick computer name for logging folder prefix
 			var computerName:String;
 			if (PlatformUtil.isMac) {
-				if (settings.localMultiScreenTest) {
-					computerName = "LocalMac" + settings.kioskNumber;
-				}
-				else {
-					computerName = "LocalMac";
-				}
-				
+				settings.computerName = (settings.localMultiScreenTest) ? "LocalMac" + settings.kioskNumber : "LocalMacSingle";
 				init(); // Keep setting up
 			}
 			else if (PlatformUtil.isWindows) {
+				// Windows uses the conmputer's host name to prefix the log folder
 				PlatformUtil.getHostName(onHostName);
 			}
 		}
 		
 		private function onHostName(name:String):void {
-			trace("Computer name: " + name);
-			//init(); // Keep setting up
+			settings.computerName = name;
+			init(); // Keep setting up
 		}
 		
 		private function init():void {
 			// Set up logging via AS3 Commons Logging
 			// More info: http://as3commons.org/as3-commons-logging/
-			if (settings.LogToMonster) MonsterDebugger.initialize(this);
+			
+			if (settings.logToMonster) MonsterDebugger.initialize(this);
 			var monsterTarget:MonsterDebugger3TraceTarget = (settings.logToMonster) ? new MonsterDebugger3TraceTarget() : null; 
 			var traceTarget:TraceTarget = (settings.logToTrace) ? new TraceTarget() : null;			
-			var fileTarget:AirFileTarget = (settings.logToFile) ? new AirFileTarget(settings.logFilePath + "/Kiosk" + settings.kioskNumber + "/TheWallKiosk.{date}.log") : null; 			
+			var fileTarget:AirFileTarget = (settings.logToFile) ? new AirFileTarget(settings.logFilePath + "/Kiosk" + settings.computerName + "/TheWallKiosk.{date}.log") : null; 			
 			
 			LOGGER_FACTORY.setup = new SimpleTargetSetup(mergeTargets(traceTarget, fileTarget, monsterTarget));			
 			
-			logger.info("Starting The Wall Kiosk");			
+			logger.info("Starting The Wall Kiosk");
+			logger.info("Logging to: " + (settings.logToMonster ? "MonsterDebugger " : "") + "|" + (settings.logToTrace ? " Trace " : "") + "|" + (settings.logToFile ? " File" : ""));
+			logger.info("Server: " + settings.serverPath);			
 			
 			if (commandLineArgs.length > 0) {
 				logger.info("Command line args: " + commandLineArgs);
 			}
 			else {
 				logger.info("No command line args passed at startup");				
-			}			
+			}
 			
 
 			// set up the stage
@@ -189,27 +187,25 @@ package com.civildebatewall {
 			inactivityTimer = new InactivityTimer(stage, settings.inactivityTimeout);
 			inactivityTimer.addEventListener(InactivityEvent.INACTIVE, onInactive);			
 			
-			
 			// Set up the wall data stores
 			data = new Data();
 			state = new State();
 			
-			
 			// Interactive kiosk
 			kiosk = new Kiosk();
 			addChild(kiosk);
-			
-	
+
 			
 			if (PlatformUtil.isWindows) {
-				trace("Getting kiosk ID from IP.");				
+				logger.info("Getting Kiosk Number from IP");		
 				flashSpan = new FlashSpan(-1, settings.flashSpanConfigPath);
 			}
 			else {
 				flashSpan = new FlashSpan(settings.kioskNumber, File.applicationDirectory.nativePath + "/flash_span_settings.xml");
 			}
 			
-			
+			// Set up flash span
+			// TODO move this to its own class
 			flashSpan.addEventListener(FlashSpanEvent.START, onSyncStart);
 			flashSpan.addEventListener(FlashSpanEvent.STOP, onSyncStop);
 			flashSpan.addEventListener(CustomMessageEvent.MESSAGE_RECEIVED, onCustomMessageReceived);
@@ -217,6 +213,7 @@ package com.civildebatewall {
 			
 			settings.kioskNumber = flashSpan.settings.thisScreen.id;
 			
+			logger.info("Kiosk Number: " + settings.kioskNumber);
 			
 			wallSaver = new WallSaver();
 			wallSaver.x = -flashSpan.settings.thisScreen.x; // shift content left
