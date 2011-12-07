@@ -1,21 +1,21 @@
 package com.civildebatewall.kiosk.buttons {
-	import com.bit101.components.PushButton;
-	import com.civildebatewall.*;
+	
 	import com.civildebatewall.Assets;
+	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.Thread;
-	import com.civildebatewall.kiosk.legacy.OldBlockBase;
-	import com.greensock.*;
-	import com.greensock.easing.*;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Quart;
 	import com.kitschpatrol.futil.blocks.BlockBase;
-	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
-	import flash.display.*;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.text.*;
 	
 	public class ThumbnailButton extends BlockBase {
 	
@@ -29,19 +29,6 @@ package com.civildebatewall.kiosk.buttons {
 		private var textBackground:Sprite;
 		public var leftDot:Shape;
 		public  var rightDot:Shape;
-		
-		
-		public function updatePortrait():void {
-			if (roundedPortrait != null) {
-				var scaledPhotoData:BitmapData = BitmapUtil.scaleDataToFill(thread.firstPost.user.photo.bitmapData, 71, 96)
-					
-				roundedPortrait.graphics.clear();
-				roundedPortrait.graphics.beginBitmapFill(scaledPhotoData, null, false, true);
-				roundedPortrait.graphics.drawRoundRect(0, 0, 71, 96, 15, 15);
-				roundedPortrait.graphics.endFill();							
-			}
-		}
-		
 		
 		public function ThumbnailButton(thread:Thread) {
 			this.thread = thread;
@@ -125,7 +112,6 @@ package com.civildebatewall.kiosk.buttons {
 			
 			this.cacheAsBitmap = true;
 			
-			
 			buttonMode = true;
 			onStageUp.push(onUp);
 			onButtonDown.push(onDown);
@@ -137,6 +123,17 @@ package com.civildebatewall.kiosk.buttons {
 			// set initial saturation
 			selected = false;
 		}
+		
+		public function updatePortrait():void {
+			if (roundedPortrait != null) {
+				var scaledPhotoData:BitmapData = BitmapUtil.scaleDataToFill(thread.firstPost.user.photo.bitmapData, 71, 96)
+				
+				roundedPortrait.graphics.clear();
+				roundedPortrait.graphics.beginBitmapFill(scaledPhotoData, null, false, true);
+				roundedPortrait.graphics.drawRoundRect(0, 0, 71, 96, 15, 15);
+				roundedPortrait.graphics.endFill();							
+			}
+		}		
 		
 		private function onRemovedFromStage(e:Event):void {
 			this.buttonMode = false;
@@ -205,5 +202,6 @@ package com.civildebatewall.kiosk.buttons {
 				drawDeselected();
 			}
 		}		
+		
 	}
 }

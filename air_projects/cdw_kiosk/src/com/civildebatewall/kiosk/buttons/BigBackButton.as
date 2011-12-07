@@ -1,4 +1,5 @@
 package com.civildebatewall.kiosk.buttons {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.greensock.TweenMax;
@@ -6,7 +7,6 @@ package com.civildebatewall.kiosk.buttons {
 	import com.kitschpatrol.futil.constants.Alignment;
 	
 	import flash.events.MouseEvent;
-
 	
 	public class BigBackButton extends BlockText	{
 		
@@ -41,6 +41,7 @@ package com.civildebatewall.kiosk.buttons {
 		private function onUp(e:MouseEvent):void {
 			TweenMax.to(this, 0.5, {backgroundColor: CivilDebateWall.state.activeThread.firstPost.stanceColorMedium});
 			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView); // TODO dynamically go back to stats as well?
-		}			
+		}
+		
 	}
 }

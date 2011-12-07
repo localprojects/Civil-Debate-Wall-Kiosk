@@ -1,17 +1,13 @@
 package com.civildebatewall.kiosk.buttons {
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-	import com.civildebatewall.kiosk.core.Kiosk;
-	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	
 	import flash.display.Bitmap;
-	import flash.display.Shape;
-	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.text.TextField;
 	
 	public class SortLinks extends BlockBase	{
 		
@@ -23,11 +19,10 @@ package com.civildebatewall.kiosk.buttons {
 		private var noText:LinkButton;		
 		private var dividerC:BlockText;
 		private var mostDebatedText:LinkButton;
+		private var selectedLink:LinkButton;
+		private var clickedLink:LinkButton;	
 		
-		
-		private var selectedLink:LinkButton;		
-		
-		public function SortLinks(params:Object=null) {
+		public function SortLinks() {
 			super({
 				backgroundColor: Assets.COLOR_GRAY_5,
 				width: 1080,
@@ -88,37 +83,30 @@ package com.civildebatewall.kiosk.buttons {
 			
 			sortedText.x = xOffset;
 			sortedText.y = yOffset;
-			
 			addChild(sortedText);
 			
 			recentText.x = sortedText.x + sortedText.width + (spacing * 2);
 			recentText.y = yOffset;
-			
 			addChild(recentText);
 			
 			dividerA.x = recentText.x + recentText.width + spacing;
 			dividerA.y = yOffset;
-			
 			addChild(dividerA);
 			
 			yesText.x = dividerA.x + dividerA.width + spacing;
 			yesText.y = yOffset;
-			
 			addChild(yesText);
 			
 			dividerB.x = yesText.x + yesText.width + spacing;
 			dividerB.y = yOffset;
-			
 			addChild(dividerB);
 			
 			noText.x = dividerB.x + dividerB.width + spacing;
 			noText.y = yOffset;
-			
 			addChild(noText);
 			
 			dividerC.x = noText.x + noText.width + spacing;
-			dividerC.y = yOffset;
-			
+			dividerC.y = yOffset;			
 			addChild(dividerC);	
 			
 			mostDebatedText.x = dividerC.x + dividerC.width + spacing;
@@ -128,7 +116,6 @@ package com.civildebatewall.kiosk.buttons {
 
 			recentText.drawMouseDown();
 			selectedLink = recentText;
-			
 			
 			// Events, TODO drop these into block
 			recentText.onButtonDown.push(down);
@@ -141,9 +128,7 @@ package com.civildebatewall.kiosk.buttons {
 			noText.onButtonUp.push(up);
 			mostDebatedText.onButtonUp.push(up);			
 		}
-		
-		private var clickedLink:LinkButton;
-		
+
 		private function down(e:MouseEvent):void {
 			clickedLink = e.currentTarget as LinkButton;
 			clickedLink.drawMouseDown();
@@ -155,11 +140,7 @@ package com.civildebatewall.kiosk.buttons {
 				clickedLink.drawMouseDown();
 				selectedLink = clickedLink;
 				
-				
 				CivilDebateWall.state.setSort(selectedLink.value)
-				// change the order
-				
-				
 			}
 		}
 		

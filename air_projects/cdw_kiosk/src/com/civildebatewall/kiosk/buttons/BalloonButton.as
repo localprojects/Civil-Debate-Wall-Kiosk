@@ -1,5 +1,5 @@
-package com.civildebatewall.kiosk.buttons
-{
+package com.civildebatewall.kiosk.buttons {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Post;
@@ -60,6 +60,5 @@ package com.civildebatewall.kiosk.buttons
 			}
 		}
 
-		
 	}
 }

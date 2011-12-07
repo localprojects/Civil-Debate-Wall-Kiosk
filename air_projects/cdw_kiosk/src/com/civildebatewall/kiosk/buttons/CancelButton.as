@@ -1,4 +1,5 @@
 package com.civildebatewall.kiosk.buttons {
+	
 	import com.civildebatewall.CivilDebateWall;
 	
 	import flash.events.MouseEvent;

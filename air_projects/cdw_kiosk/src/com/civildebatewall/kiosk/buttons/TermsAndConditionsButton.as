@@ -1,16 +1,17 @@
 package com.civildebatewall.kiosk.buttons {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-
 	import com.kitschpatrol.futil.blocks.BlockText;
 	
 	import flash.display.Shape;
 	import flash.events.MouseEvent;
 	
 	public class TermsAndConditionsButton extends BlockText {
+	
 		private var underline:Shape;
 		
-		public function TermsAndConditionsButton(params:Object=null) {
+		public function TermsAndConditionsButton() {
 			super({
 				text: "Terms and Conditions",
 				textFont: Assets.FONT_REGULAR,
@@ -33,7 +34,6 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onUp(e:MouseEvent):void {
-			trace("going to terms and conditions view");
 			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.termsAndConditionsView);
 		}
 		

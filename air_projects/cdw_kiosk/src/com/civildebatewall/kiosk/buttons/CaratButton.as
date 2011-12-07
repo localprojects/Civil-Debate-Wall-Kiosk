@@ -1,5 +1,4 @@
-package com.civildebatewall.kiosk.buttons
-{
+package com.civildebatewall.kiosk.buttons {
 	
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
@@ -8,6 +7,7 @@ package com.civildebatewall.kiosk.buttons
 	import flash.events.MouseEvent;
 	
 	public class CaratButton extends BlockBitmap	{
+		
 		public function CaratButton(params:Object = null)		{
 			super(params);
 			buttonMode = true;

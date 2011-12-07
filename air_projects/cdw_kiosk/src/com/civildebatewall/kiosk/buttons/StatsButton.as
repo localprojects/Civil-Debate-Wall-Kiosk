@@ -1,33 +1,25 @@
 package com.civildebatewall.kiosk.buttons {
-	import com.bit101.charts.PieChart;
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
-
-	import com.greensock.TweenMax;
-	import com.greensock.layout.ScaleMode;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBase;
-	import com.kitschpatrol.futil.utilitites.GeomUtil;
-	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.Bitmap;
-	import flash.display.CapsStyle;
-	import flash.display.JointStyle;
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	public class StatsButton extends BlockBase {
-		
-		
+
 		private var _percent:Number;
 		private var yesRing:Shape;
 		private var noRing:Shape;
 		private var label:Bitmap;
 		private var degrees:Number; // how much ring to draw
 		
-		public function StatsButton(params:Object=null) {
+		public function StatsButton(params:Object = null) {
 			super(params);
 		
 			noRing = new Shape();
@@ -46,9 +38,7 @@ package com.civildebatewall.kiosk.buttons {
 			label.x = 15;
 			label.y = 15;
 			addChild(label);
-			
-			//setStats(0.5);
-			
+
 			_percent = 0;
 			buttonMode = true;
 			
@@ -57,7 +47,6 @@ package com.civildebatewall.kiosk.buttons {
 			
 			backgroundAlpha = 0;
 			
-			// todo get stats from data changes
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 		}
 		
@@ -67,13 +56,11 @@ package com.civildebatewall.kiosk.buttons {
 			setStats(_percent);
 		}
 		
-
 		private function onMove(e:MouseEvent):void {
 			if (this.stage != null) {
 				percent = Math2.map(this.stage.mouseX, 0, 1080, 0, 1);
 			}
-		}
-			
+		}	
 		
 		private function onDataUpdate(e:Event):void {
 			// why can't tween?
@@ -95,8 +82,6 @@ package com.civildebatewall.kiosk.buttons {
 			draw();
 		}
 		
-		//public function set degrees(value:Number
-		
 		private function draw():void {
 			noRing.graphics.clear();
 			noRing.graphics.beginFill(Assets.COLOR_NO_LIGHT);
@@ -112,7 +97,6 @@ package com.civildebatewall.kiosk.buttons {
 			noRing.graphics.endFill();			
 			drawSegment(yesRing, -90, degrees - 90, 71, 0, 0, 2, Assets.COLOR_YES_DARK);			
 		}		
-		
 		
 		private function drawSegment(holder:Shape, startAngle:Number, endAngle:Number, segmentRadius:Number, xpos:Number, ypos:Number,  step:Number, fillColor:Number):void {
 			holder.graphics.clear();
@@ -130,8 +114,7 @@ package com.civildebatewall.kiosk.buttons {
 			}
 			holder.graphics.lineTo(xpos + segmentRadius * Math.cos(endAngle), ypos + segmentRadius * Math.sin(endAngle));
 			holder.graphics.lineTo(xpos, ypos);
-		}		
-
+		}
 		
 	}
 }

@@ -1,4 +1,5 @@
 package com.civildebatewall.kiosk.buttons {
+	
 	import com.civildebatewall.Assets;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockText;
@@ -6,7 +7,6 @@ package com.civildebatewall.kiosk.buttons {
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	
 	import flash.events.MouseEvent;
-	import flash.ui.Mouse;
 	
 	public class WhiteButton extends BlockText {
 
@@ -42,5 +42,6 @@ package com.civildebatewall.kiosk.buttons {
 			removeStageUpListener();
 			TweenMax.to(this, 0.5, {backgroundColor: 0xffffff, textColor: ColorUtil.gray(77)});
 		}
+		
 	}
 }

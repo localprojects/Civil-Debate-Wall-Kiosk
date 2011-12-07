@@ -1,38 +1,34 @@
 package com.civildebatewall.kiosk.camera {
-	
-	import com.adobe.images.*;
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.Settings;
-	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
-
-	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.Math2;
 	
-	import flash.display.*;
-	import flash.events.*;
-	import flash.geom.*;
-	import flash.media.*;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.geom.Matrix;
+	import flash.media.Camera;
+	import flash.media.Video;
+	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
 	
 	public class PortraitCamera extends OldBlockBase {
 		
-		public var cameraBitmap:Bitmap;
-		private var onFaceShutter:Function;
-		public var slr:SLRCamera;
+		private static const logger:ILogger = getLogger(PortraitCamera);
 		
+		public var cameraBitmap:Bitmap;
+		public var slr:SLRCamera;
 		private var cameraWidth:int;
 		private var cameraHeight:int;
 		private var undersampleFactor:int;
-		
 		private var camera:Camera;
 		private var video:Video;
 		private var baseMatrix:Matrix;
 		private var scaleMatrix:Matrix;
 		private var combinedMatrix:Matrix;
-		
 		private var focalLength:Number;
-		
 		
 		public function PortraitCamera() {
 			super();
@@ -43,6 +39,8 @@ package com.civildebatewall.kiosk.camera {
 			cameraBitmap = new Bitmap(new BitmapData(1080, 1920));
 			
 			if (CivilDebateWall.settings.useWebcam) {
+				logger.info("Seting up webcam...");
+				
 				undersampleFactor = CivilDebateWall.settings.webCamUndersampleFactor; // increase this to improve performance at the expense of quality			
 				cameraWidth = 1920 / undersampleFactor;
 				cameraHeight = 1080 / undersampleFactor;	
@@ -85,20 +83,18 @@ package com.civildebatewall.kiosk.camera {
 				video.attachCamera(camera);			
 				addChild(video);
 				
-				trace("Set up webcam.");		
+				logger.info("...Set up webcam");
 			}
 			else {
 				// No webcam, just use placeholder
 				cameraBitmap = Assets.getPortraitPlaceholder();
+				logger.warn("No webcam, using pseudocam per the settings file");
 			}
 				
 			if (CivilDebateWall.settings.useSLR) {
 				slr = new SLRCamera();
 			}
-			
-			
 		}
-		
 		
 		public function getFocalLength():Number {
 			return focalLength;
@@ -122,11 +118,11 @@ package com.civildebatewall.kiosk.camera {
 		
 		public function takePhoto():void {
 			if (CivilDebateWall.settings.useWebcam) {
+				logger.info("Taking webcam photo");
 				cameraBitmap.bitmapData.draw(video, video.transform.matrix, null, null, null, true);
 			}
 			else {
-				// do nothing if we don't have a web cam...
-				
+				logger.warn("No webcam, using placeholder as camera photo");
 			}
 		}
 		

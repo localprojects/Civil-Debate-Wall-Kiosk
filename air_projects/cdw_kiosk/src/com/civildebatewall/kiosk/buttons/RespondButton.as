@@ -1,4 +1,5 @@
 package com.civildebatewall.kiosk.buttons {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.greensock.TweenMax;
@@ -10,7 +11,7 @@ package com.civildebatewall.kiosk.buttons {
 	
 	public class RespondButton extends BlockText {
 		
-		public function RespondButton(params:Object=null) {
+		public function RespondButton() {
 			super({
 				buttonMode: true,
 				text: "RESPOND TO THE QUESTION",

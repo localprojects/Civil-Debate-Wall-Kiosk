@@ -1,4 +1,5 @@
 package com.civildebatewall.data {
+	
 	import com.civildebatewall.CivilDebateWall;
 	
 	public class Question {

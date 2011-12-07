@@ -1,41 +1,63 @@
 package com.civildebatewall.kiosk.camera {
-	import com.civildebatewall.*;
 
+	import com.civildebatewall.CivilDebateWall;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
+	import com.kitschpatrol.futil.utilitites.FileUtil;
 	
-	import flash.desktop.*;
-	import flash.display.*;
-	import flash.events.*;
-	import flash.filesystem.*;
+	import flash.desktop.NativeProcess;
+	import flash.desktop.NativeProcessStartupInfo;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.Loader;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.ProgressEvent;
+	import flash.events.TimerEvent;
+	import flash.filesystem.File;
 	import flash.geom.Matrix;
-	import flash.net.*;
-	import flash.utils.*;
+	import flash.net.URLRequest;
+	import flash.utils.Timer;
+	import flash.utils.getTimer;
+	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
 
+	// This class integrates with Windows-only GCDWFoto.exe to control the Canon Rebel XS SLR camera used for high resolution portraits
+	
+	// Basic Process:
+	// 1. Initiate communication with SLR, this passes in target directory for image downloads from the SD to HD
+	// 2. Format the SLR's SD card, this makes sure we download the latest image only and prevents the card from filling up
+	// 3. Tell the SLR to take a photo
+	// 4. Get file name and download start notification from SLR after photo is taken
+	// 5. Get notification when file download is complete
+	// 6. Wait a little extra time, because it lies
+	// 7. Open and process the file in the target directory that matches the file sent from the SLR during step 4	
+	
 	public class SLRCamera extends EventDispatcher {
 		
-		public static const PHOTO_TIMEOUT_EVENT:String = "photoTimeoutEvent";
+		private static const logger:ILogger = getLogger(SLRCamera);
 		
 		private var slrProcess:NativeProcess;
-		private var folderWatchTimer:Timer;
 		private var writeDelayTimer:Timer; // wait until the camera is done writing.
 		private var timeoutTimer:Timer;
-		private var onTimeoutFunction:Function;
-		
-		private var imageFile:File;
-		private var imageFolder:File;
-		public var image:Bitmap;
+		private var timedOut:Boolean;
+		private var imageTargetFile:File;
+		private var imageTargetFolder:File;
+		private var imageLoader:Loader = new Loader();
+		private var loadedBitmap:Bitmap = new Bitmap();
+		private var takePhotoStartTime:int;
+		public var image:Bitmap;		
 		
 		public function SLRCamera() {
 			// set the image folder, will come from settings
-			imageFolder = new File();
-			imageFolder.nativePath = CivilDebateWall.settings.tempImagePath;
+			imageTargetFolder = File(CivilDebateWall.settings.tempImagePath);
 			
 			var slrControlApp:File = File.applicationDirectory.resolvePath("native/slrcontrol/GCDWFoto.exe");	
 			
 			var nativeProcessStartup:NativeProcessStartupInfo = new NativeProcessStartupInfo();
 			var args:Vector.<String> = new  Vector.<String>();
-			args.push(fileToWindowsPath(imageFolder)); // where to save images
+			args.push(FileUtil.fileToWindowsPath(imageTargetFolder)); // where to save images
 			
 			slrProcess = new NativeProcess();
 			slrProcess.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, onOutputData);
@@ -43,111 +65,93 @@ package com.civildebatewall.kiosk.camera {
 			nativeProcessStartup.arguments = args;
 			slrProcess.start(nativeProcessStartup);			
 			
-			//var shutterButton:PushButton = new PushButton(this, 10, 10, "TAKE PHOTO", onShutterButton);
-			//var formatButton:PushButton = new PushButton(this, 10, 40, "FORMAT CARD", onFormatButton);
-			
-			folderWatchTimer = new Timer(150);
-			folderWatchTimer.addEventListener(TimerEvent.TIMER, onCheckFolder);
-			
 			timeoutTimer = new Timer(CivilDebateWall.settings.slrTimeout * 1000); // go back to photo page after five seconds... assume focus is lost
 			timeoutTimer.addEventListener(TimerEvent.TIMER, onTimeout);
 			
 			// format the card before we get started
-			//trace(requesting card format.");
-			//formatCard();
-		}
-		
-		// move this to utils
-		// for passing as arg into the command line app, it needs two forward slashes between folders
-		public function fileToWindowsPath(f:File):String {
-			// double the slashes and add trailing
-			return f.nativePath.replace("\\", "//") + "//";
-		}
-		
-		public function setOnTimeout(f:Function):void {
-			onTimeoutFunction = f;
-		}
-		
-		private function listImages():Array {
-			var imageDirectoryContents:Array = imageFolder.getDirectoryListing();
-			
-			// build an array of image files
-			var imageFiles:Array = [];
-			for each(var file:File in imageDirectoryContents) {
-				if (file.extension == "JPG") {
-					imageFiles.push(file);
-					file.creationDate
-				}
-			}
-			
-			if(imageFiles.length > 0) {
-				imageFiles.sortOn("creationDate", Array.DESCENDING);
-				trace(imageFiles.length + " images");
-				trace("Latest is: " + imageFiles[0].name);
-				return imageFiles;
-			}
-			else {
-				trace("no images in the folder");
-				return [];
-			}	
-		}
-		
-		private function onCheckFolder(e:TimerEvent):void {
-			var images:Array = listImages();
-			trace(images);
-			
-			if (images.length > 0) {
-				// load the latest image
-				
-				loadImage(images[0]);
-				// stop the checking
-				trace("got image");
-				folderWatchTimer.stop();
-			}
-		}
-		
-		// move to utilities
-		
-		//var imageClip:MovieClip = new MovieClip();
-		private var imageLoader:Loader = new Loader();
-		private var loadedBitmap:Bitmap = new Bitmap();
-		
-		
-		private function onFormatButton(e:Event):void {
-			trace("format");
 			formatCard();
 		}
 		
-		private function onShutterButton(e:Event):void {
-			trace("shutter");
-			takePhoto();
-		}
 		
+		// SLR CONTROL ================================================================
+		
+		// Inputs
 		private function formatCard():void {
+			logger.info("Formatting card...");
 			slrProcess.standardInput.writeUTFBytes("f\n");			
 		}
 		
 		public function takePhoto():void {
-			// CivilDebateWall.dashboard.log("Starting timeout timer");
+			logger.info("Taking SLR photo...");
 			timeoutTimer.reset();
 			timeoutTimer.start();
+			timedOut = false;	
+			
+			takePhotoStartTime = getTimer();
 			slrProcess.standardInput.writeUTFBytes("p\n");
+		}		
+		
+		// Outputs
+		private function onOutputData(event:ProgressEvent):void 	{
+			var stdout:String = slrProcess.standardOutput.readUTFBytes(slrProcess.standardOutput.bytesAvailable); 
+			
+			// split on newlines
+			stdout = stdout.replace("\r", "");
+			stdout = stdout.replace("\n\n", "\n");
+			var stdoutlines:Array = stdout.split("\n");
+			
+			for each (var line:String in stdoutlines) {
+				if (line.length > 0) {
+					logger.info("Raw SLR output: " + line);
+					
+					if (line.indexOf("Saving image") > -1) {
+						// photo is taken, camera is starting download from SD to HD 
+						var fileName:String = line.split(" ")[2];
+						onDownloadStarted(fileName);
+					}
+					else if (line.indexOf("Download complete") > -1) {
+						// file has downloaded from SD to HD
+						onDownloadComplete();	
+					}					
+					else if (line.indexOf("format complete") > -1) {
+						logger.info("...Format complete");
+					}
+				}
+			}
+		}
+		
+		// Output handlers
+		private function onDownloadStarted(fileName:String):void {
+			logger.info("Image download to file \"" + fileName + "\" starting...");			
+			timeoutTimer.stop(); // photo was definitely taken
+			imageTargetFile = new File(fileName);
 		}
 		
 		private function onDownloadComplete():void {
-			TweenMax.delayedCall(CivilDebateWall.settings.slrWaitTime, loadImage, [imageFile]);
-			TweenMax.delayedCall(CivilDebateWall.settings.slrWaitTime, formatCard); // try delaying the call
-		}		
-		
-		private function loadImage(file:File):void {
-			trace("loading slr photo " + file.url);
+			logger.info("...Image download complete");
 			
+			// Alternative approach might watch file size for stabilization and then trigger load image
+			
+			if (!timedOut) {
+				TweenMax.delayedCall(CivilDebateWall.settings.slrWaitTime, loadImage, [imageTargetFile]);
+				TweenMax.delayedCall(CivilDebateWall.settings.slrWaitTime, formatCard); // try delaying the call
+			}
+		}
+		
+		
+		// IMAGE PROCESSING ============================================================
+				
+		private function loadImage(file:File):void {
+			logger.info("Loading SLR photo \"" + file.url + "\"...");
 			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleImageLoad);
 			imageLoader.load(new URLRequest(file.url.replace("%0d", ""))); // completely weird filename bug
 		}
 		
 		private function handleImageLoad( e:Event ):void {
-			trace("loaded");
+			logger.info("...SLR photo loaded.");
+			
+			imageLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, handleImageLoad);
+			
 			loadedBitmap = imageLoader.content as Bitmap;
 			loadedBitmap.smoothing = true;
 			
@@ -159,51 +163,21 @@ package com.civildebatewall.kiosk.camera {
 			image = new Bitmap(new BitmapData(loadedBitmap.height, loadedBitmap.width), "auto", true);
 			image.bitmapData.draw(loadedBitmap, matrix, null, null, null, true);			
 			
+			logger.info("SLR photo process took " + (getTimer() - takePhotoStartTime));
+			
 			this.dispatchEvent(new CameraFeedEvent(CameraFeedEvent.NEW_FRAME_EVENT));
 			
-			// TODO now move or delete the image!
+			// TODO clear the temp folder?
 		}
+
+		// ERROR HANDLING ============================================================
 		
 		private function onTimeout(e:TimerEvent):void {
-			// CivilDebateWall.dashboard.log("timeout!");
-			trace("SLR timeout");
+			logger.error("SLR timed out after " + (getTimer() - takePhotoStartTime) + "ms");
 			timeoutTimer.stop();
-			timeoutTimer.reset();
-			onTimeoutFunction(e);
+			timedOut = true;
+			this.dispatchEvent(new Event(CameraFeedEvent.CAMERA_TIMEOUT_EVENT));
 		}
-		
-		
-		private function onOutputData(event:ProgressEvent):void 	{
-			var stdout:String = slrProcess.standardOutput.readUTFBytes(slrProcess.standardOutput.bytesAvailable); 
-			
-			// split on newlines
-			stdout = stdout.replace("\r", "");
-			stdout = stdout.replace("\n\n", "\n");
-			var stdoutlines:Array = stdout.split("\n");
-			
-			for each (var line:String in stdoutlines) {
-				if (line.length > 0) {
-					trace("Line: " + line);
-					
-					if (line.indexOf("Download complete") > -1) {
-						// file is here
-						onDownloadComplete();	
-					}
-					else if (line.indexOf("Saving image") > -1) {
-						// CivilDebateWall.dashboard.log("Stopping timeout timer");
-						timeoutTimer.stop();
-						
-						var fileName:String = line.split(" ")[2];
-						trace("Creating file: " + fileName);
-						imageFile = new File();
-						imageFile.nativePath = fileName;
-					}
-					else if (line.indexOf("format complete") > -1) {
-						trace("format finished");
-					}
-				}
-			}
-		}
-		
+
 	}
 }

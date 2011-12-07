@@ -22,7 +22,8 @@ package com.civildebatewall.kiosk.buttons {
 					textColor: Assets.COLOR_GRAY_25,
 					textSize: 14,
 					buttonMode: true,
-					visible: true})
+					visible: true
+				})
 			);
 			
 			underline = new Shape();

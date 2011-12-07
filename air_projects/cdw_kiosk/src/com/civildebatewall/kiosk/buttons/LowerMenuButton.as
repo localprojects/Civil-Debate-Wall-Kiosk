@@ -1,4 +1,5 @@
 package com.civildebatewall.kiosk.buttons {
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.greensock.TweenMax;
@@ -9,7 +10,6 @@ package com.civildebatewall.kiosk.buttons {
 	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.events.MouseEvent;
-	
 	
 	public class LowerMenuButton extends BlockText	{
 	
@@ -44,16 +44,6 @@ package com.civildebatewall.kiosk.buttons {
 			background.addChild(icon);
 			
 			lowered = false;
-			
-//			line = new Shape();
-//			line.graphics.beginFill(0xffffff);
-//			line.graphics.drawRect(0, 0, 1, icon.height);
-//			line.graphics.endFill();
-//			line.x = 183;
-//			line.y = 25;
-//			addChild(line);
-//			
-//			
 		}
 		
 		override protected function beforeTweenIn():void {
@@ -89,6 +79,5 @@ package com.civildebatewall.kiosk.buttons {
 			onUp(new MouseEvent(MouseEvent.MOUSE_UP));
 		}
 		
-
 	}
 }

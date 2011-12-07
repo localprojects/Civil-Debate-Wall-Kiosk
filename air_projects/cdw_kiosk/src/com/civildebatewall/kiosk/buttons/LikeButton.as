@@ -1,20 +1,16 @@
-
 package com.civildebatewall.kiosk.buttons {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
-
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Back;
-	import com.greensock.easing.Elastic;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
-	import flash.display.Bitmap;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -36,7 +32,6 @@ package com.civildebatewall.kiosk.buttons {
 				backgroundRadius: 8,
 				buttonMode: true
 			});
-			
 
 			// Numeric counter
 			counter = new BlockText({
@@ -90,11 +85,9 @@ package com.civildebatewall.kiosk.buttons {
 			label.mouseEnabled = false;
 			addChild(label);
 			
-
 			CivilDebateWall.data.addEventListener(Data.LIKE_UPDATE_LOCAL, onLike);
 			CivilDebateWall.data.addEventListener(Data.LIKE_UPDATE_SERVER, onLike);
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onLike);
-			
 			
 			buttonTimeout = 5000;
 			onButtonDown.push(onDown);

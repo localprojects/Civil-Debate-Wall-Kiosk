@@ -1,5 +1,5 @@
 package com.civildebatewall.kiosk.buttons {
-	import com.civildebatewall.Assets;
+	
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	

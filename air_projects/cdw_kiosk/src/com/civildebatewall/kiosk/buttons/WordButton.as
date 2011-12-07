@@ -1,5 +1,6 @@
 package com.civildebatewall.kiosk.buttons {
-	import com.civildebatewall.*;
+
+	import com.civildebatewall.Assets;
 	import com.civildebatewall.data.Word;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
@@ -7,6 +8,7 @@ package com.civildebatewall.kiosk.buttons {
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	public class WordButton extends BlockText {
+		
 		public var difference:Number;		
 		public var normalDifference:Number;
 		private var _posts:Array;
@@ -16,8 +18,7 @@ package com.civildebatewall.kiosk.buttons {
 		
 		public function WordButton(_word:Word)	{
 			super();
-			
-			
+
 			word = _word;
 			normalDifference = word.normalDifference;
 			_posts = word.posts;
@@ -48,10 +49,8 @@ package com.civildebatewall.kiosk.buttons {
 		
 		// todo normal difference setter?
 		public function updateColor():void {
-			
 			backgroundColor =	BitmapUtil.getPixelAtNormal(Assets.wordCloudGradient, normalDifference, 0);			
 		}
-		
 		
 	}
 }

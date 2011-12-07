@@ -1,11 +1,11 @@
 package com.civildebatewall.kiosk.buttons {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Post;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
-	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
 	import flash.display.Bitmap;
@@ -13,18 +13,15 @@ package com.civildebatewall.kiosk.buttons {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	
-	
 	public class StanceToggle extends BlockBase	{
-		
-		
+			
 		private var yesText:Bitmap;
 		private var noText:Bitmap;		
 		
 		private var yesTarget:Number;
 		private var noTarget:Number;
 		
-		public function StanceToggle(params:Object=null) {
+		public function StanceToggle() {
 			super({
 				buttonMode: true,
 				width: 260, 
@@ -44,11 +41,7 @@ package com.civildebatewall.kiosk.buttons {
 			
 			yesTarget = yesText.y;
 			noTarget = noText.y;
-			
-//			yesText.y = height;
-//			noText.y = height;
-			
-			
+
 			onButtonCancel.push(onCancel);
 			onButtonDown.push(onDown);
 			onStageUp.push(onUp);
@@ -85,26 +78,16 @@ package com.civildebatewall.kiosk.buttons {
 			}
 			
 			if (CivilDebateWall.state.userStance == Post.STANCE_YES) {
-				
 				TweenMax.to(yesText, duration, {alpha: 1, transformAroundCenter: {scaleX: 1, scaleY: 1, rotation:getRotationChange(yesText, 0, true) }});
-				TweenMax.to(noText, duration, {alpha: 0, transformAroundCenter: {scaleX: 0, scaleY: 0, rotation:getRotationChange(noText, 180, true) }});
-								
-				//TweenMax.to(noText, duration, {alpha: 0, y: height});				
-				
-				
-								
+				TweenMax.to(noText, duration, {alpha: 0, transformAroundCenter: {scaleX: 0, scaleY: 0, rotation:getRotationChange(noText, 180, true) }});		
 			}
 			else {
-//				TweenMax.to(noText, duration, {alpha: 1, y: noTarget});				
-//				TweenMax.to(yesText, duration, {alpha: 0, y: height});
-				//noText.rotation = -180;
 				TweenMax.to(noText, duration, {alpha: 1, transformAroundCenter: {scaleX: 1, scaleY: 1, rotation:getRotationChange(noText, 0, true) }});
 				TweenMax.to(yesText, duration, {alpha: 0, transformAroundCenter: {scaleX: 0, scaleY: 0, rotation:getRotationChange(yesText, 180, true) }});				
 			}
 			
 			TweenMax.to(this, duration, {backgroundColor: CivilDebateWall.state.userStanceColorLight});
-		}
-		
+		}		
 		
 		// helper for directional rotation via http://forums.greensock.com/viewtopic.php?f=1&t=3176
 		private function getRotationChange(mc:DisplayObject, newRotation:Number, clockwise:Boolean):String {
@@ -114,9 +97,6 @@ package com.civildebatewall.kiosk.buttons {
 			}
 			return String(dif);
 		}				
-		
-		
-		// listens to user stance changes
-		
+
 	}
 }
