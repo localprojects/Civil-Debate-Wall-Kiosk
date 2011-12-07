@@ -26,7 +26,7 @@ package com.civildebatewall {
 		public var imagePath:String;
 		
 		// Screen Sync (Flash Span)
-		public var flashSpanConfig:String;
+		public var flashSpanConfigPath:String;
 		
 		// Logging and Debug
 		public var logToTrace:Boolean;
