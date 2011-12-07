@@ -182,6 +182,9 @@ package com.civildebatewall.wallsaver.sequences {
 		private const pauseBetweenBars:int = 60;
 		private const pauseBeforeExit:int = 60;
 		
+		
+		
+		
 		public function getTimelineIn():TimelineMax	{
 			var timelineIn:TimelineMax = new TimelineMax({useFrames: true, onUpdate: updateWhiteOverlays}); // keep the white overlays aligned with their color representations
 
@@ -202,7 +205,7 @@ package com.civildebatewall.wallsaver.sequences {
 				TweenMax.fromTo(counterWhite, 1, {visible:false}, {visible: true}),
 				TweenMax.fromTo(noBar, 1, {visible:false}, {visible: true}),
 				TweenMax.fromTo(yesBar, 1, {visible:false}, {visible: true})
-			], 0, TweenAlign.START);
+			], 1, TweenAlign.START);
 			
 			
 			// Smaller bar scrolls in first			
