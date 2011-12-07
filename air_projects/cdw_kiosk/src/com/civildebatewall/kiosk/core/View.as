@@ -498,7 +498,7 @@ package com.civildebatewall.kiosk.core {
 			bigButton.setOnClick(function():void {
 				CivilDebateWall.state.userRespondingTo = CivilDebateWall.state.activeThread.firstPost;
 				CivilDebateWall.state.setView(debateTypePickerView);			
-			});							
+			});
 			
 			
 
