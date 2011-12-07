@@ -7,7 +7,7 @@ package com.civildebatewall {
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
 	import com.civildebatewall.wallsaver.core.WallSaver;
-
+	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -27,7 +27,13 @@ package com.civildebatewall {
 	import flash.ui.MultitouchInputMode;
 	
 	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.LOGGER_FACTORY;
 	import org.as3commons.logging.api.getLogger;
+	import org.as3commons.logging.setup.SimpleTargetSetup;
+	import org.as3commons.logging.setup.target.AirFileTarget;
+	import org.as3commons.logging.setup.target.MonsterDebugger3TraceTarget;
+	import org.as3commons.logging.setup.target.TraceTarget;
+	import org.as3commons.logging.setup.target.mergeTargets;
 	
 	// Main entry point for the app.
 	// Manages display of Interactive Kiosk and Wallsaver modes.
@@ -46,35 +52,22 @@ package com.civildebatewall {
 		public static var dashboard:Dashboard;
 		
 		public static var inactivityTimer:InactivityTimer;		
-		
-		
-		
+
 		private var commandLineArgs:Array;
 		public var fpsMeter:FPSMeter;
 		
-		// For flashspan		
 		
 		public function CivilDebateWall(commandLineArgs:Array = null)	{
 			self = this;
 			this.commandLineArgs = commandLineArgs;
 			
-			if (commandLineArgs.length > 0) {
-				logger.info("Command line args: " + commandLineArgs);
-			}
-			else {
-				logger.info("No command line args passed at startup");				
-			}
-			
-			// Greensock plugins
-			TweenPlugin.activate([ThrowPropsPlugin]);			
-			TweenPlugin.activate([CacheAsBitmapPlugin]);	
-			TweenPlugin.activate([TransformAroundCenterPlugin]);
-			TweenPlugin.activate([TransformAroundPointPlugin]);	
+			// TweenMax Greensock plugins
+			TweenPlugin.activate([ThrowPropsPlugin, CacheAsBitmapPlugin, TransformAroundCenterPlugin, TransformAroundPointPlugin]);				
 
-			// Futil plugins
+			// TweenMax Futil plugins
 			TweenPlugin.activate([FutilBlockPlugin]);
 			
-			// Work around for lack of mouse-down events
+			// Work around for lack of mouse-down events (Still need this?)
 			// http://forums.adobe.com/message/2794098?tstart=0
 			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;			
 			
@@ -82,20 +75,18 @@ package com.civildebatewall {
 			fpsMeter.visible = false;
 			fpsMeter.start();
 			
-			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
 		private function onAddedToStage(event:Event):void {
-			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);			
+			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);			
 			
 			// load settings from a local JSON file			
 			settings = Settings.load();
 			
-			// if we're running in local multi-screen debug mode, we will receive certain command line args
-			// these can ovveride settings
+			// In local multi-screen debug mode, kiosk number is set via command line args instead of IP-based introspection
 			// TODO genereic command line settings override system?
 			if (commandLineArgs.length > 0) {
-				trace("Args: " + commandLineArgs);
 				settings.kioskNumber = commandLineArgs[0];
 				settings.localMultiScreenTest = true;
 				settings.useSLR = false;
@@ -103,9 +94,50 @@ package com.civildebatewall {
 				settings.halfSize= false;
 			}
 			
+			// Pick computer name for logging folder prefix
+			var computerName:String;
+			if (PlatformUtil.isMac) {
+				if (settings.localMultiScreenTest) {
+					computerName = "LocalMac" + settings.kioskNumber;
+				}
+				else {
+					computerName = "LocalMac";
+				}
+				
+				init(); // Keep setting up
+			}
+			else if (PlatformUtil.isWindows) {
+				PlatformUtil.getHostName(onHostName);
+			}
+		}
+		
+		private function onHostName(name:String):void {
+			trace("Computer name: " + name);
+			//init(); // Keep setting up
+		}
+		
+		private function init():void {
+			// Set up logging via AS3 Commons Logging
+			// More info: http://as3commons.org/as3-commons-logging/
+			if (settings.LogToMonster) MonsterDebugger.initialize(this);
+			var monsterTarget:MonsterDebugger3TraceTarget = (settings.logToMonster) ? new MonsterDebugger3TraceTarget() : null; 
+			var traceTarget:TraceTarget = (settings.logToTrace) ? new TraceTarget() : null;			
+			var fileTarget:AirFileTarget = (settings.logToFile) ? new AirFileTarget(settings.logFilePath + "/Kiosk" + settings.kioskNumber + "/TheWallKiosk.{date}.log") : null; 			
+			
+			LOGGER_FACTORY.setup = new SimpleTargetSetup(mergeTargets(traceTarget, fileTarget, monsterTarget));			
+			
+			logger.info("Starting The Wall Kiosk");			
+			
+			if (commandLineArgs.length > 0) {
+				logger.info("Command line args: " + commandLineArgs);
+			}
+			else {
+				logger.info("No command line args passed at startup");				
+			}			
+			
+
 			// set up the stage
 			stage.quality = StageQuality.BEST;
-
 	
 			// three possible window modes
 			if (settings.localMultiScreenTest) {			
@@ -119,8 +151,7 @@ package com.civildebatewall {
 				stage.nativeWindow.height = 960;
 			}
 			else {
-				// window dimensions are defined in app.xml,
-				// but don't bother scaling
+				// window dimensions are defined in app.xml, don't bother scaling
 				stage.scaleMode = StageScaleMode.NO_SCALE;
 			}
 			
@@ -139,14 +170,14 @@ package com.civildebatewall {
 			graphics.drawRect(0, 0, 1080, 1920);
 			graphics.endFill();
 			
-			// set up gui overlay TODO move to window
+			// set up gui overlay
 			dashboard = new Dashboard();
 			dashboard.visible = false;
 			
-			
+			// scale the dashboard according to
 			if (settings.halfSize) {
-				dashboard.scaleX = 2;
-				dashboard.scaleY = 2;
+				dashboard.scaleX = 1080 / stage.width;
+				dashboard.scaleY = 1920 / stage.height;
 			}
 			
 			// Set the custom context menu
@@ -158,29 +189,19 @@ package com.civildebatewall {
 			inactivityTimer = new InactivityTimer(stage, settings.inactivityTimeout);
 			inactivityTimer.addEventListener(InactivityEvent.INACTIVE, onInactive);			
 			
-
 			
-			// load the wall data
+			// Set up the wall data stores
 			data = new Data();
-			
-			// create local state
 			state = new State();
 			
+			
+			// Interactive kiosk
 			kiosk = new Kiosk();
 			addChild(kiosk);
 			
-			// TODO create wallsaver here
+	
 			
-			// Add the Wallsaver
-
-			
-			
-
-			// set up Flash Span
-			
-			// TODO put IP based screen ID in settings here
 			if (PlatformUtil.isWindows) {
-				// get ID from IP
 				trace("Getting kiosk ID from IP.");				
 				flashSpan = new FlashSpan(-1, settings.flashSpanConfigPath);
 			}
