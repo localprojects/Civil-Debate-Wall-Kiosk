@@ -1,11 +1,10 @@
 package com.kitschpatrol.futil.tweenPlugins {
+
 	import com.greensock.TweenLite;
 	import com.greensock.plugins.TweenPlugin;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	
-	
 	
 	
 	// UNDER CONSTRUCTION... faster to use custom container

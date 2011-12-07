@@ -1,6 +1,5 @@
-package com.kitschpatrol.flashspan
-{
-	import com.demonsters.debugger.MonsterDebugger;
+package com.kitschpatrol.flashspan {
+	
 	import com.kitschpatrol.flashspan.events.CustomMessageEvent;
 	import com.kitschpatrol.flashspan.events.FlashSpanEvent;
 	import com.kitschpatrol.flashspan.events.FrameSyncEvent;
@@ -8,7 +7,6 @@ package com.kitschpatrol.flashspan
 	
 	import flash.desktop.NativeApplication;
 	import flash.events.DatagramSocketDataEvent;
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
@@ -18,10 +16,14 @@ package com.kitschpatrol.flashspan
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
-
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
 	
 	public class FlashSpan extends EventDispatcher {
+		
+		private static const logger:ILogger = getLogger(FlashSpan);
+		
 		public var settings:Settings;
 		
 		// regular packets should be
@@ -66,9 +68,7 @@ package com.kitschpatrol.flashspan
 		public function FlashSpan(screenID:int = -1, settingsPath:String = "flash_span_settings.xml") {
 			super(null);
 			
-			// set up debugger
-			MonsterDebugger.initialize(this);
-			MonsterDebugger.trace(this, "Flash Span Constructed");
+			logger.info("Flash Span Constructed");
 
 			// load the settings
 			settings = new Settings();
@@ -79,11 +79,11 @@ package com.kitschpatrol.flashspan
 			
 			// if screen ID is -1, use the IP identification technique
 			if (screenID == -1) { 
-				MonsterDebugger.trace(this, "Setting screen ID from IP");
+				logger.info("Setting screen ID from IP");
 				settings.setMyID(getIDfromIP());
 			}
 			else {
-				MonsterDebugger.trace(this, "Setting screen ID from constructor");				
+				logger.info("Setting screen ID from constructor");				
 				settings.setMyID(screenID);
 			}
 			
@@ -92,18 +92,18 @@ package com.kitschpatrol.flashspan
 			
 			// Close the socket if it's already open
 			if (udpSocket.bound) {
-				MonsterDebugger.trace(this, "Closing existing port");
+				logger.warn("Closing existing UDP socket");
 				udpSocket.close();
 				udpSocket = new DatagramSocket();				
 			}
 			
-			MonsterDebugger.trace(this, "Binding to: " + settings.thisScreen.ip + ":" + settings.thisScreen.port);			
+			logger.info("Binding to: " + settings.thisScreen.ip + ":" + settings.thisScreen.port + "...");			
 			
 			udpSocket.bind(settings.thisScreen.port, settings.thisScreen.ip);
 			udpSocket.addEventListener(DatagramSocketDataEvent.DATA, onDataReceived);
 			udpSocket.receive();
 			
-			MonsterDebugger.trace(this, "Bound to: " + udpSocket.localAddress + ":" + udpSocket.localPort);
+			logger.info("...Bound to: " + udpSocket.localAddress + ":" + udpSocket.localPort);
 			
 			// Check for existing servers
 				
@@ -115,28 +115,23 @@ package com.kitschpatrol.flashspan
 //			connectionCheckTimer.start();
 		}
 		
-		
 		// For Time Sync Mode
 		public function getTime():int {
 			// add local time elapsed since last server time update to server time
 			return serverTime + (getTimer() - serverTimeReceived);
 		}		
 		
-		
 		// heartbeat
 		private function connectionCheck(e:TimerEvent):void {
-			MonsterDebugger.trace(this, "Pinging for connection");
-			MonsterDebugger.trace(this, settings);			
+			logger.info("Pinging for connection");
 			broadcastPing();
 		}
 				
-		
 		private function onFrameSyncTimer(e:TimerEvent):void {
 			// broadcast sync
 			broadcastMessage(FRAME_SYNC_HEADER);
 			dispatchFrameSyncEvent();
 		}
-		
 		
 		private var millis:int;
 		private function onTimeSyncTimer(e:TimerEvent):void {
@@ -154,7 +149,6 @@ package com.kitschpatrol.flashspan
 			dispatchTimeSyncEvent(millis);
 		}
 		
-		
 		public function start():void {
 			if (isServer) {			
 				// start syncing
@@ -165,7 +159,7 @@ package com.kitschpatrol.flashspan
 					startTimeSync();
 				}
 				else {
-					throw new Error("Invalid screen sync mode. Check your settings.xml file.");				
+					logger.fatal("Invalid screen sync mode. Check your settings.xml file.");
 				}
 			}
 			else {
@@ -174,20 +168,17 @@ package com.kitschpatrol.flashspan
 			}
 		}
 
-		
 		private function startFrameSync():void {
 			syncTimer = new Timer((1000 / settings.frameRate) * settings.frameSyncInterval); // TODO best approach to this?
 			syncTimer.addEventListener(TimerEvent.TIMER, onFrameSyncTimer);				
 			syncTimer.start();
 		}
 		
-		
 		private function startTimeSync():void {
 			syncTimer = new Timer(250); // figure this out
 			syncTimer.addEventListener(TimerEvent.TIMER, onTimeSyncTimer);				
 			syncTimer.start();
 		}		
-		
 		
 		public function quitAll():void {
 			// broadcast
@@ -197,11 +188,9 @@ package com.kitschpatrol.flashspan
 			quit();
 		}
 		
-		
 		private function quit():void {
 			NativeApplication.nativeApplication.exit();
 		}
-		
 		
 		public function stop():void {
 			if (isSyncing) {
@@ -218,7 +207,6 @@ package com.kitschpatrol.flashspan
 						syncTimer.removeEventListener(TimerEvent.TIMER, onTimeSyncTimer);
 					}
 					
-					
 					// broadcast stop to clients
 					broadcastMessage(STOP_COMPLETE_HEADER);
 					
@@ -231,8 +219,6 @@ package com.kitschpatrol.flashspan
 				}
 			}
 		}		
-		
-		
 		
 		// Event dispatch wrappers
 		private function dispatchFrameSyncEvent():void {
@@ -259,30 +245,25 @@ package com.kitschpatrol.flashspan
 			this.dispatchEvent(new TimeSyncEvent(TimeSyncEvent.SYNC, time));
 		}
 		
-		
 		private function dispatchStopEvent():void {
 			isSyncing = false;
 			this.dispatchEvent(new FlashSpanEvent(FlashSpanEvent.STOP));
 		}
 		
-		
 		private function dispatchStartEvent():void {
 			isSyncing = true;
 			this.dispatchEvent(new FlashSpanEvent(FlashSpanEvent.START));			
 		}		
-		
-		
-		
+
 		public function get random():Random {
 			// nicely seeded random
 			return seededRandom;
 		}
 		
-
 		private function onDataReceived(e:DatagramSocketDataEvent):void	{
 			var incoming:String = e.data.readUTFBytes(e.data.bytesAvailable);
 			
-			//MonsterDebugger.trace(this, "Received from " + e.srcAddress + ":" + e.srcPort + "> " +	incoming);
+			//logger.info("Received from " + e.srcAddress + ":" + e.srcPort + "> " +	incoming);
 			
 			if (incoming.length > 0) {
 				var header:String = incoming.substr(0, 1); // first character
@@ -304,8 +285,8 @@ package com.kitschpatrol.flashspan
 					body = incoming.substr(1); // second character onward is the body
 				}
 			
-				//MonsterDebugger.trace(this, "Header: " + header);
-				//MonsterDebugger.trace(this, "Body: " + body);
+				//logger.info("Header: " + header);
+				//logger.info("Body: " + body);
 				
 				switch (header) {
 					case PING_HEADER:
@@ -363,16 +344,14 @@ package com.kitschpatrol.flashspan
 						break;
 						
 					default:
-						MonsterDebugger.trace(this, "Unknown header.");
+						logger.error("Unknown header: " + header);
 						break;
 				}
 			}
 		}
 		
-		
 		protected function onTimeout(packet:CertifiedPacket):void {
-			MonsterDebugger.trace(this, "Send timed out!");
-			MonsterDebugger.trace(this, packet);
+			logger.warn("Packet send timed out: " + packet);
 			
 			// mark non-respondent as disconnected
 			packet.destination.connected = false;			
@@ -395,11 +374,10 @@ package com.kitschpatrol.flashspan
 				udpSocket.send(data, 0, 0, screen.ip, screen.port); 
 			}
 			catch (error:Error)	{
-				MonsterDebugger.trace(this, error.message);
+				logger.error("UDP Send error: " + error.errorID + " " + error.message);
 			}
 		}
 		
-
 		// Basic transmission functions
 		
 		// Sends a packet and requests a conformation from recipient		
@@ -409,7 +387,6 @@ package com.kitschpatrol.flashspan
 			packetsInWaiting.push(certifiedPacket);
 			send(screen, certifiedPacket.toMessage());
 		}
-		
 		
 		// sends a message to everyone except for the sender
 		private function broadcastMessage(message:String):void {
@@ -439,7 +416,6 @@ package com.kitschpatrol.flashspan
 			}
 		}
 		
-		
 		// Convenience transmission functions
 		
 		// Wrapped up for convenience
@@ -448,15 +424,9 @@ package com.kitschpatrol.flashspan
 			sendCertified(screen, PING_HEADER);
 		}
 		
-		
 		public function broadcastPing():void {
 			broadcastCertifiedMessage(PING_HEADER);
 		}		
-		
-		
-		
-		
-		
 		
 		// Utilities...
 		private function findPacketInWaitingIndex(packetID:int):int {
@@ -473,20 +443,23 @@ package com.kitschpatrol.flashspan
 			
 			var activeIPs:Array = listActiveIPs();
 			
-			MonsterDebugger.trace(this, activeIPs);
+			logger.info("Local IP addresses: " + activeIPs);
 			
 			for (var i:int = 0; i < settings.screens.length; i++) {
 
 				if (activeIPs.indexOf(settings.screens[i].ip) > -1) {
-					MonsterDebugger.trace(this, "THIS SCREEN ID: " + i);
 					return settings.screens[i].id;
 				}
 			}
 			
 			// call it off if we can't find anything
-			throw new Error("Could not find screen ID from machine IP!\n" + 
-							"Make sure this computer's static ethernet IP is in one of the <screen> elements in the settings.xml file.\n" +
-							"Alternately, set the screen ID manually by  calling settings.setMyID(id:int)\n");
+			logger.fatal(
+				"Could not find screen ID from machine IP!\n" + 
+				"Make sure this computer's static ethernet IP is in one of the <screen> elements in the settings.xml file.\n" +
+				"Alternately, set the screen ID manually by  calling settings.setMyID(id:int)\n"
+			);
+			
+			return -1;
 		}
 		
 		

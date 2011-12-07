@@ -15,12 +15,16 @@ package com.kitschpatrol.futil.blocks {
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
-	import flash.text.TextLineMetrics;
 	import flash.utils.getTimer;
+	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
 	
 	
 	public class BlockText extends BlockBase {
 
+		private static const logger:ILogger = getLogger(BlockText);
+		
 		// TODO write tween plugin
 		private var _textAlignmentMode:String;
 		
@@ -241,7 +245,7 @@ package com.kitschpatrol.futil.blocks {
 				
 				
 				if (changedBounds) {
-					//trace("changed bounds");
+					//logger.info("changed bounds");
 					var start:int = getTimer();
 					
 					if ((_minWidth == _maxWidth) && (_growthMode != MAXIMIZE_HEIGHT)) {
@@ -304,7 +308,7 @@ package com.kitschpatrol.futil.blocks {
 							textField.text = textField.text;
 							
 							var desiredLines:int = int((_leading + (_minHeight - _padding.vertical)) / (_leading + _textSizePixels));
-							//trace("Desired lines for " + textField.text + ": " + desiredLines);
+							//logger.info("Desired lines for " + textField.text + ": " + desiredLines);
 							//desiredLines = 3;
 							
 							// roughly divide the text width to get started
@@ -312,7 +316,7 @@ package com.kitschpatrol.futil.blocks {
 							if (desiredLines == 0) desiredLines = 1; 
 							
 							if (desiredLines > textField.numLines) {
-								//trace("Not enough lines");
+								//logger.info("Not enough lines");
 								
 								// jump to roughly the right width
 								textField.width /= desiredLines / textField.numLines; // TODO better squaring alogithm instead of dividing
@@ -332,10 +336,10 @@ package com.kitschpatrol.futil.blocks {
 							}
 							
 							// WAS WORKING HERE...
-							//trace("now we have " + textField.numLines);
+							//logger.info("now we have " + textField.numLines);
 							
 							if (textField.numLines > desiredLines) {
-								//trace("Too many lines");								
+								//logger.info("Too many lines");								
 								// need to expand width
 								// jump to roughly the right width
 								textField.width /= desiredLines / textField.numLines; // TODO better squaring alogithm instead of dividing
@@ -365,18 +369,18 @@ package com.kitschpatrol.futil.blocks {
 							
 							var maxLines:int = int((_maxHeight - _padding.vertical) / (_leading + _textSizePixels)); // take the floor
 							maxLines = Math.max(maxLines, 1); // at least 1
-							//trace("Max lines: " + maxLines);
+							//logger.info("Max lines: " + maxLines);
 							
 							textField.width = _maxWidth - _padding.horizontal;
 							textField.text = textField.text;
 							
-							//trace("max line width:" + getMaxLineWidth());
+							//logger.info("max line width:" + getMaxLineWidth());
 							
 							textField.width = Math2.clamp(getMaxLineWidth(), _minWidth - _padding.horizontal, _maxWidth - _padding.horizontal);
 							textField.text = textField.text;						
 							
 							
-							//trace("num lines: " + textField.numLines);
+							//logger.info("num lines: " + textField.numLines);
 							// todo overflow off the right
 							// TODO DUCT TAPE FOR LOOPER
 							var maxWhile:int = 1080;
@@ -421,23 +425,23 @@ package com.kitschpatrol.futil.blocks {
 					changedBounds = false;
 					
 					var elapsed:int = getTimer() - start;
-					// trace("Changing bounds took " + elapsed + " ms");
+					// logger.info("Changing bounds took " + elapsed + " ms");
 				}
 				
 				
 				// Update the mask if needed
 				// TODO finish this!
 				if (_maxSizeBehavior == BlockText.MAX_SIZE_RESIZES) {
-					//trace("content width: " + contentWidth);
+					//logger.info("content width: " + contentWidth);
 					
-					//trace("background width: " + background.width);					
+					//logger.info("background width: " + background.width);					
 					if(contentWidth > background.width) {
 						
 						// we're oversize!
-						//trace("fat");
+						//logger.info("fat");
 					}
 					else if (contentHeight > background.height) {
-						//trace("tall");						
+						//logger.info("tall");						
 					}
 				}				
 				
@@ -467,12 +471,12 @@ package com.kitschpatrol.futil.blocks {
 			var cacheKey:String = _textFont + _textBold + _sizeFactorGlyphs;
 			
 			if (BlockText.sizeMaps.hasOwnProperty(cacheKey)) {
-				//trace("In the cache, load that: " + cacheKey);
+				//logger.info("In the cache, load that: " + cacheKey);
 				sizeMap = BlockText.sizeMaps[cacheKey]["sizeMap"];
 				maxTextPixelSize = BlockText.sizeMaps[cacheKey]["maxTextPixelSize"];
 			}
 			else {
-				//trace("Not cached! Generating: " + cacheKey);
+				//logger.info("Not cached! Generating: " + cacheKey);
 				// rebuilds size set maping pixel sizes to flash TextField sizes
 				// height is maximum character height (in pixels) for a given internal size
 				BlockText.sizeMaps[cacheKey] = {};
@@ -502,11 +506,11 @@ package com.kitschpatrol.futil.blocks {
 					// index the field height to the pixel height
 					bounds = glyphCanvas.getColorBoundsRect(0xffffff, 0xffffff, false);
 					pixelHeight = bounds.height;
-					//trace(bounds);
+					//logger.info(bounds);
 					
 					BlockText.sizeMaps[cacheKey]["sizeMap"][pixelHeight] = new TextSize(pixelHeight, i, bounds.y, glyphCanvas.width - bounds.width - bounds.x, glyphCanvas.height - bounds.y - bounds.height, bounds.x);
 					
-					//trace("Pixel Height: " + pixelHeight + " Field Size: " + i);
+					//logger.info("Pixel Height: " + pixelHeight + " Field Size: " + i);
 					
 					// keep track of pixel size at max field size, will need
 					// this to know when to resort to scaling
@@ -516,7 +520,7 @@ package com.kitschpatrol.futil.blocks {
 				// fill holes
 				for(i = 1; i < maxTextPixelSize; i++) {
 					if (BlockText.sizeMaps[cacheKey]["sizeMap"][i] == null) {
-						//trace("Hole at " + i);
+						//logger.info("Hole at " + i);
 						// TODO implement lerp for this, for now just use last
 						BlockText.sizeMaps[cacheKey]["sizeMap"][i] = BlockText.sizeMaps[cacheKey]["sizeMap"][i - 1]; 
 					}
@@ -534,7 +538,7 @@ package com.kitschpatrol.futil.blocks {
 			textSize = _textSizePixels;
 		 	lockUpdates = false;
 			
-			//trace(getTimer() - startTime + " ms to build offset map");
+			//logger.info(getTimer() - startTime + " ms to build offset map");
 		}				
 		
 		
@@ -608,7 +612,7 @@ package com.kitschpatrol.futil.blocks {
 			if (_textSizePixels < 0) _textSizePixels = 0; 
 				
 			if (_textSizePixels > maxTextPixelSize) {
-				//trace("Drastic measures");
+				//logger.info("Drastic measures");
 				
 				
 				// Scale from the largest true text field sample we have
@@ -653,7 +657,7 @@ package com.kitschpatrol.futil.blocks {
 			leading = _leading; // refreshes the offset
 			lockUpdates = false;
 			
-			//trace("Field size: " + textSizeOffset.textFieldSize);
+			//logger.info("Field size: " + textSizeOffset.textFieldSize);
 			
 			changedFormat = true;
 			changedBounds = true;

@@ -1,8 +1,9 @@
-package com.kitschpatrol.flashspan
-{
+package com.kitschpatrol.flashspan {
+	
 	import flash.geom.Rectangle;
 
 	public class NetworkedScreen extends Rectangle {
+		
 		public var id:int;
 		public var ip:String;
 		public var port:int;	

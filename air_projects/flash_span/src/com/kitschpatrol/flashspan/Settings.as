@@ -1,16 +1,17 @@
 package com.kitschpatrol.flashspan {
-	
-	import com.demonsters.debugger.MonsterDebugger;
-	
+
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.geom.Rectangle;
-	import flash.xml.XMLDocument;
-	import flash.xml.XMLNode;
+	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
 	
 	public class Settings extends Object {
 		// This file modified significantly for CivilDebateWall
+		
+		private static const logger:ILogger = getLogger(Settings);
 		
 		// A collection of settings. These can be set manually or are loaded from an XML file
 		public static const SERVER_AUTO:String = "auto";
@@ -40,14 +41,13 @@ package com.kitschpatrol.flashspan {
 			// Constructor
 		}
 		
-		
 		private function sortById(a:NetworkedScreen, b:NetworkedScreen):Number {
 			return a.id - b.id;
 		}
 		
 		public function load(filePath:String):void {
 			// load text file
-			trace(filePath);
+			logger.info("Settings File Path: " + filePath);
 			var file:File = new File(filePath);
 			var fileStream:FileStream = new FileStream();
 			fileStream.open(file, FileMode.READ);
@@ -77,15 +77,11 @@ package com.kitschpatrol.flashspan {
 			}
 			screens = screens.sort(sortById);
 			
-			MonsterDebugger.trace(this, screens);
-			
-			
 			// fill in other variables
 			totalWidth = (screenWidth * screenCount) + (bezelWidth * 2 * (screenCount - 1));
 			totalHeight = screenHeight;
 			physicalScreenWidth = screenWidth + (bezelWidth * 2);			
 
-			
 			// then populate with calculated variables
 			for (var i:int = 0; i < screenCount; i++) {
 				screens[i].x = (i * screenWidth) + (i * 2 * bezelWidth);
@@ -94,12 +90,10 @@ package com.kitschpatrol.flashspan {
 				screens[i].height = screenHeight;			
 			}			
 			
-
 			// generate bezels			
 			bezels = new Vector.<Rectangle>;
 			
 			for (var j:int = 0; j < screenCount; j++) {
-				trace(j);
 				if (j > 0) {
 					bezels.push(new Rectangle(screens[j].x - bezelWidth, 0, bezelWidth, screenHeight)); // Left bezel
 				}
@@ -108,9 +102,6 @@ package com.kitschpatrol.flashspan {
 					bezels.push(new Rectangle(screens[j].x + screens[j].width, 0, bezelWidth, screenHeight)); // Right bezel
 				}
 			}			
-			
-			
-			MonsterDebugger.trace(this, this);
 		}
 		
 		public function setMyID(id:int):void {
@@ -126,5 +117,6 @@ package com.kitschpatrol.flashspan {
 			}
 			return null;			
 		}
+		
 	}
 }

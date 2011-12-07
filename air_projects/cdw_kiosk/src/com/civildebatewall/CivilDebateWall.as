@@ -210,7 +210,7 @@ package com.civildebatewall {
 			addChild(kiosk);
 
 			if (PlatformUtil.isWindows) {
-				logger.info("Getting Kiosk Number from IP");		
+				logger.info("Getting Kiosk Number from IP");
 				flashSpan = new FlashSpan(-1, settings.flashSpanConfigPath);
 			}
 			else {

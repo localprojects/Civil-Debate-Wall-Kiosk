@@ -9,14 +9,10 @@ package com.kitschpatrol.futil.tweenPlugins {
 		
 		public static const API:Number = 1.0;
 		
-		
 		public function TextColorPlugin() {
 			super();
 			this.propName = "textColor";
 		}
-		
-		
-		
 	}
 	
 }

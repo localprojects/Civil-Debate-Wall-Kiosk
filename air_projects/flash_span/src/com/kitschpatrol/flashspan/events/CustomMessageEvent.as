@@ -1,4 +1,5 @@
 package com.kitschpatrol.flashspan.events {
+	
 	import flash.events.Event;
 	
 	public class CustomMessageEvent extends Event {
@@ -13,4 +14,5 @@ package com.kitschpatrol.flashspan.events {
 			super(type, bubbles, cancelable);
 		}
 	}
+	
 }

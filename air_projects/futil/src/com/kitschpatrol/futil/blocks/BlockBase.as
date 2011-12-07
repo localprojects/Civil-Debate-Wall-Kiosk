@@ -16,6 +16,9 @@ package com.kitschpatrol.futil.blocks {
 	import flash.geom.Point;
 	import flash.utils.Timer;
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
+	
 	// Nested display object approach to registration management.
 	
 	// TODO Performance tests of this approach agains just iterating through
@@ -28,6 +31,7 @@ package com.kitschpatrol.futil.blocks {
 	
 	public class BlockBase extends Sprite {
 		
+		private static const logger:ILogger = getLogger(BlockBase);
 		
 		// Hidden children keep things in alignment while presenting
 		// a pure display object container elsewhere.
@@ -134,12 +138,11 @@ package com.kitschpatrol.futil.blocks {
 				for (var key:String in params) {
 					if (this.hasOwnProperty(key)) {
 						// set local
-						//trace("Setting " + key + " to " + params[key]);
+						//logger.info("Setting " + key + " to " + params[key]);
 						this[key] = params[key];
 					}
 					else {
-						throw new Error("NO SUCH PROPERTY: " + key + " on " + this);
-						// TODO throw error. This is a big problem?
+						logger.fatal("NO SUCH PROPERTY: " + key + " on " + this);
 					}
 				}
 				
@@ -337,9 +340,9 @@ package com.kitschpatrol.futil.blocks {
 		
 		public function set scrollY(pixels:Number):void { 			
 			
-//			trace("pixels: " + pixels);
+//			logger.info("pixels: " + pixels);
 //			// check for divide by zero, can't scroll something with zero height
-//			trace("height: " + (contentHeight - (background.height - _padding.vertical)));
+//			logger.info("height: " + (contentHeight - (background.height - _padding.vertical)));
 				if ((contentHeight - (background.height - _padding.vertical)) > 0) {
 					alignmentY = pixels / (contentHeight - (background.height - _padding.vertical));
 				}
@@ -717,7 +720,7 @@ package com.kitschpatrol.futil.blocks {
 		}
 		
 		private function onTimeout(e:TimerEvent):void {
-			//trace("button back!");
+			//logger.info("button back!");
 			unlock();
 		}
 		
@@ -727,7 +730,7 @@ package com.kitschpatrol.futil.blocks {
 		}
 		
 		public function unlock():void {
-			//trace("Button unlocked");
+			//logger.info("Button unlocked");
 			locked = false;
 			buttonTimer.stop();
 			executeAll(onButtonUnlock);

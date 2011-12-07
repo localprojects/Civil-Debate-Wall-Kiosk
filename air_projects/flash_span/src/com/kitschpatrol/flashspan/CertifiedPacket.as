@@ -1,11 +1,11 @@
-package com.kitschpatrol.flashspan
-{
+package com.kitschpatrol.flashspan {
+	
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
-	public class CertifiedPacket extends Object
-	{
+	public class CertifiedPacket extends Object	{
+		
 		private static var certifiedPacketCount:uint = 0;
 
 		public var message:String;

@@ -1,9 +1,8 @@
-package com.kitschpatrol.futil.utilitites
-{
+package com.kitschpatrol.futil.utilitites {
+	
 	import cmodule.aircall.CLibInit;
 	
 	import com.kitschpatrol.futil.jpeg.JPEGDecoder;
-	import com.kitschpatrol.futil.jpeg.JPEGEncoder;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -16,9 +15,14 @@ package com.kitschpatrol.futil.utilitites
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
+	
 	
 	// TODO break this out of Main Futil?
 	public class FileUtil	{
+		
+		private static const logger:ILogger = getLogger(FileUtil);
 		
 		// loads a bitmap, passes it to the callback
 		// TODO blocking version version?
@@ -38,7 +42,7 @@ package com.kitschpatrol.futil.utilitites
 			var directory:File = new File(path);
 			
 			if (!directory.exists) {
-				// trace("Directory \"" + path + "\" does not exist. Creating it.");
+				// logger.info("Directory \"" + path + "\" does not exist. Creating it.");
 				directory.createDirectory();
 			}
 		}		
@@ -75,7 +79,7 @@ package com.kitschpatrol.futil.utilitites
 //		// Synchronous, uses Alchemy for speed
 //		public static function saveJpeg(bitmap:Bitmap, path:String, name:String, quality:int = 80):String {
 //			var file:File = new File(path + name);
-//			trace("Saving image to " + file.nativePath);			
+//			logger.info("Saving image to " + file.nativePath);			
 //			
 //			var encoder:JPEGEncoder = new JPEGEncoder();
 //			var bytes:ByteArray = encoder.parse(bitmap.bitmapData, quality);
@@ -89,7 +93,7 @@ package com.kitschpatrol.futil.utilitites
 //				fs.close();
 //			}
 //			catch(e:Error) {
-//				trace(e.message);
+//				logger.info(e.message);
 //			}
 //			
 //			return name;
@@ -111,7 +115,7 @@ package com.kitschpatrol.futil.utilitites
 		public static function saveJpeg(bitmap:Bitmap, path:String, name:String, quality:int = 80):String {
 			var file:File = new File(path + name);
 			
-			trace("Saving image to " + file.nativePath);
+			logger.info("Saving image to " + file.nativePath);
 			
 			var targetBytes:ByteArray = new ByteArray();
 			var sourceBytes:ByteArray = bitmap.bitmapData.getPixels(bitmap.bitmapData.rect);			
@@ -128,8 +132,9 @@ package com.kitschpatrol.futil.utilitites
 				fs.writeBytes(targetBytes);
 				//close the file
 				fs.close();
-			} catch(e:Error) {
-				trace(e.message);
+			}
+			catch(error:Error) {
+				logger.error("Image save error: " + error.errorID + " "  + error.message);
 			}
 			
 			return name;
@@ -171,12 +176,5 @@ package com.kitschpatrol.futil.utilitites
 			saveString(strings.join("\n"), path);
 		}
 		
-			
-			
-		
-		
-
-			
-
 	}
 }
