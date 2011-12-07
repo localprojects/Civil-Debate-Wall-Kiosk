@@ -3,10 +3,8 @@ package com.civildebatewall {
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.data.Question;
-	import com.civildebatewall.data.TextMessage;
 	import com.civildebatewall.data.Thread;
 	import com.civildebatewall.kiosk.core.Kiosk;
-
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	
 	import flash.display.Bitmap;
@@ -14,8 +12,7 @@ package com.civildebatewall {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
-	
-	
+
 	
 	public class State extends EventDispatcher {
 		
@@ -55,7 +52,7 @@ package com.civildebatewall {
 		public var updatePostsAndUsersTime:int;
 		public var updateStatsTime:int;
 		public var updateTotalTime:int;
-		
+		public var photoLoadTime:int;
 		
 		
 		
@@ -233,6 +230,9 @@ package com.civildebatewall {
 		
  
 		public function clearUser():void {
+			
+			// TODO logger here
+			
 			userID = "";
 			userName = "";
 			if (userImage != null) userImage.bitmapData.dispose();
@@ -371,6 +371,10 @@ package com.civildebatewall {
 			return null;
 		}		
 		
+		// convenience for logging
+		public function getUpdateTimeString():String {
+			return "Question: " + updateQuestionTime + " Threads: " + updateThreadsTime + " Posts and Users:" + updatePostsAndUsersTime +  " Stats:" + updateStatsTime + " Total:" + updateTotalTime; 			
+		}	
 		
 		
 

@@ -1,20 +1,17 @@
 package com.civildebatewall.kiosk.buttons {
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.State;
-	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
-	import com.civildebatewall.data.User;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.constants.Alignment;
-	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
-	import flash.display.Bitmap;
 	import flash.events.MouseEvent;
 	
 	public class YesButton extends BlockBase {
-		public function YesButton(params:Object=null) 	{
+		
+		public function YesButton() 	{
 			super({
 				buttonMode: true,
 				width: 260, 

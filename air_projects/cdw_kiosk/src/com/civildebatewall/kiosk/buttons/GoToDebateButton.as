@@ -1,10 +1,10 @@
 package com.civildebatewall.kiosk.buttons {
+
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Post;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
-	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	
 	import flash.events.MouseEvent;
@@ -34,7 +34,6 @@ package com.civildebatewall.kiosk.buttons {
 		public function set targetPost(post:Post):void {
 			_targetPost = post;
 			TweenMax.to(this, 0.3, {backgroundColor: _targetPost.stanceColorDark});
-			
 		}
 		
 		private function onDown(e:MouseEvent):void {
@@ -68,10 +67,6 @@ package com.civildebatewall.kiosk.buttons {
 				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.threadView);				
 			}
 		}
-		
-	
-		
-		
 		
 	}
 }

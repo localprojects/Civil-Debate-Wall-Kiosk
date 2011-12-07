@@ -71,7 +71,7 @@ package com.civildebatewall.kiosk.core {
 		private var opinionUnderlay:BlockBase;
 		private var debateThisButton:BalloonButton;
 		private var bigBackButton:BigBackButton;
-		private var threadOverlayBrowser:ThreadBrowser;
+		public var threadOverlayBrowser:ThreadBrowser;
 		
 		// stats view
 		private var statsUnderlay:BlockBase;		

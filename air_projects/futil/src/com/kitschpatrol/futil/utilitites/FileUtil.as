@@ -86,6 +86,12 @@ package com.kitschpatrol.futil.utilitites
 //		}
 		
 		
+		// for passing as arg into the command line app, it needs two forward slashes between folders
+		public static function fileToWindowsPath(f:File):String {
+			// double the slashes and add trailing
+			return f.nativePath.replace("\\", "//") + "//"; // TODO did this get messed up in the grand " to ' conversion?
+		}		
+		
 		// faster jpeg encoding
 		// via http://segfaultlabs.com/devlogs/alchemy-asynchronous-jpeg-encoding-2		
 		/// init alchemy object

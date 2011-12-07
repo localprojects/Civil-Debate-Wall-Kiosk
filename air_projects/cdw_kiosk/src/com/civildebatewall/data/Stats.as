@@ -1,6 +1,7 @@
 package com.civildebatewall.data {
 	public class Stats {
 		
+		// Just a container for static type checking
 		public var likesTotal:int;
 		public var likesYes:int;
 		public var likesNo:int;
@@ -15,7 +16,7 @@ package com.civildebatewall.data {
 		public var yesPercent:Number; // normalized yes / total		
 		
 		public function Stats()	{
-
+		
 		}
 	}
 }

@@ -2,7 +2,6 @@ package com.civildebatewall.kiosk.elements.opinion_text {
 	import com.bit101.components.TextArea;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-	import com.civildebatewall.data.TextMessage;
 
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.blocks.Padding;

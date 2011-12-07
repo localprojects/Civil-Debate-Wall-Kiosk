@@ -34,12 +34,13 @@ package com.civildebatewall {
 	import org.as3commons.logging.setup.target.MonsterDebugger3TraceTarget;
 	import org.as3commons.logging.setup.target.TraceTarget;
 	import org.as3commons.logging.setup.target.mergeTargets;
+	import org.as3commons.logging.util.captureUncaughtErrors;
 	
 	// Main entry point for the app.
 	// Manages display of Interactive Kiosk and Wallsaver modes.
 	public class CivilDebateWall extends Sprite	{
 		
-		private static const logger:ILogger = getLogger(CivilDebateWall);		
+		private static const logger:ILogger = getLogger(CivilDebateWall);
 		
 		public static var flashSpan:FlashSpan;		
 		public static var data:Data;
@@ -118,10 +119,12 @@ package com.civildebatewall {
 			if (settings.logToMonster) MonsterDebugger.initialize(this);
 			var monsterTarget:MonsterDebugger3TraceTarget = (settings.logToMonster) ? new MonsterDebugger3TraceTarget() : null; 
 			var traceTarget:TraceTarget = (settings.logToTrace) ? new TraceTarget() : null;			
-			var fileTarget:AirFileTarget = (settings.logToFile) ? new AirFileTarget(settings.logFilePath + "/Kiosk" + settings.computerName + "/TheWallKiosk.{date}.log") : null; 			
+			var fileTarget:AirFileTarget = (settings.logToFile) ? new AirFileTarget(settings.logFilePath + "/" + settings.computerName + "/TheWallKiosk.{date}.log") : null; 			
 			
 			LOGGER_FACTORY.setup = new SimpleTargetSetup(mergeTargets(traceTarget, fileTarget, monsterTarget));			
-			
+
+			captureUncaughtErrors(loaderInfo); // log errors, does this always work?			
+
 			logger.info("Starting The Wall Kiosk");
 			logger.info("Logging to: " + (settings.logToMonster ? "MonsterDebugger " : "") + "|" + (settings.logToTrace ? " Trace " : "") + "|" + (settings.logToFile ? " File" : ""));
 			logger.info("Server: " + settings.serverPath);			
@@ -131,8 +134,7 @@ package com.civildebatewall {
 			}
 			else {
 				logger.info("No command line args passed at startup");				
-			}
-			
+			}			
 
 			// set up the stage
 			stage.quality = StageQuality.BEST;

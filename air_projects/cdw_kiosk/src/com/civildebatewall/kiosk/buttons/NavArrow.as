@@ -2,7 +2,6 @@ package com.civildebatewall.kiosk.buttons {
 	
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-	import com.civildebatewall.data.Data;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.constants.Alignment;
@@ -11,7 +10,6 @@ package com.civildebatewall.kiosk.buttons {
 	import flash.events.MouseEvent;
 	
 	public class NavArrow extends BlockBitmap {
-		
 		
 		public function NavArrow(params:Object=null) {
 			super(params);

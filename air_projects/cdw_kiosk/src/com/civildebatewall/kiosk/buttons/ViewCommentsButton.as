@@ -1,4 +1,5 @@
 package com.civildebatewall.kiosk.buttons {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
@@ -31,7 +32,6 @@ package com.civildebatewall.kiosk.buttons {
 			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
 			CivilDebateWall.state.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 			
-			
 			onButtonDown.push(onDown);
 			onStageUp.push(onUp);
 		}
@@ -44,7 +44,6 @@ package com.civildebatewall.kiosk.buttons {
 			TweenMax.to(this, 0.3, {backgroundColor: CivilDebateWall.state.activeThread.firstPost.stanceColorDark});
 			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.threadView);
 		}
-		
 		
 		private function onDataUpdate(e:Event):void {
 			updateButton();
@@ -72,17 +71,15 @@ package com.civildebatewall.kiosk.buttons {
 					unlock();
 				}
 				else {
-					
 					lock();
 					backgroundColor = CivilDebateWall.state.activeThread.firstPost.stanceColorDisabled;				
-					
 					text = "No responses yet. Be the first!";				
 				}
 			}
 		}
 		
 		private function wrapText(s:String):String {
-		 return Char.LEFT_QUOTE + s + Char.RIGHT_QUOTE + " + " + (CivilDebateWall.state.activeThread.postCount - 1) + " responses";
+			return Char.LEFT_QUOTE + s + Char.RIGHT_QUOTE + " + " + (CivilDebateWall.state.activeThread.postCount - 1) + " responses";
 		}
 		
 	}

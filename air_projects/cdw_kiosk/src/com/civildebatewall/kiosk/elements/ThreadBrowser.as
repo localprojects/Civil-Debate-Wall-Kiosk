@@ -36,7 +36,7 @@ package com.civildebatewall.kiosk.elements {
 			super.beforeTweenIn();
 		}		
 			
-		private function refreshContent():void {
+		public function refreshContent():void {
 			var yOffset:int = 0;
 		
 			// clean up, note it's awkward to call content instead of "this"... compromises of Futil

@@ -1,11 +1,12 @@
 package com.civildebatewall.kiosk.buttons {
+	
 	import com.civildebatewall.CivilDebateWall;
 	
 	import flash.events.MouseEvent;
 
 	public class RetakePhotoButton extends WhiteButton {
 		
-		public function RetakePhotoButton(params:Object=null)	{
+		public function RetakePhotoButton()	{
 			super({
 				text: "RETAKE PHOTO",
 				width: 283,
