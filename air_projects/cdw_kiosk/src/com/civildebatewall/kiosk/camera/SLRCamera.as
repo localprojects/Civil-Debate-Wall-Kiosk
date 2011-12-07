@@ -50,8 +50,10 @@ package com.civildebatewall.kiosk.camera {
 		public var image:Bitmap;		
 		
 		public function SLRCamera() {
+			logger.info("Setting up SLR...");
+			
 			// set the image folder, will come from settings
-			imageTargetFolder = File(CivilDebateWall.settings.tempImagePath);
+			imageTargetFolder = new File(CivilDebateWall.settings.tempImagePath);
 			
 			var slrControlApp:File = File.applicationDirectory.resolvePath("native/slrcontrol/GCDWFoto.exe");	
 			
@@ -70,6 +72,8 @@ package com.civildebatewall.kiosk.camera {
 			
 			// format the card before we get started
 			formatCard();
+			
+			logger.info("...Set up SLR");			
 		}
 		
 		
