@@ -73,7 +73,7 @@ package com.civildebatewall.kiosk.buttons {
 		
 		private function onUp(e:Event):void {
 			draw();
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.statsView);
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.statsView);
 		}
 		
 		// tween this

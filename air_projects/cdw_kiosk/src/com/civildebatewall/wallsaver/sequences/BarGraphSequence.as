@@ -1,4 +1,5 @@
 package com.civildebatewall.wallsaver.sequences {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
@@ -56,8 +57,7 @@ package com.civildebatewall.wallsaver.sequences {
 			scrollVelocity = 30;
 			
 			// Parse stats
-			
-			
+
 			// raw width
 			yesWidth = Math.round((CivilDebateWall.data.stats.postsYes / CivilDebateWall.data.stats.postsTotal) * (CivilDebateWall.flashSpan.settings.totalWidth - CivilDebateWall.flashSpan.settings.physicalScreenWidth)); // less one screen
 			noWidth = Math.round((CivilDebateWall.data.stats.postsNo / CivilDebateWall.data.stats.postsTotal) * (CivilDebateWall.flashSpan.settings.totalWidth - CivilDebateWall.flashSpan.settings.physicalScreenWidth)); // less one screen			

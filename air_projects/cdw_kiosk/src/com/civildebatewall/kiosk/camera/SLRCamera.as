@@ -4,6 +4,7 @@ package com.civildebatewall.kiosk.camera {
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
+	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
@@ -106,7 +107,7 @@ package com.civildebatewall.kiosk.camera {
 			
 			for each (var line:String in stdoutlines) {
 				if (line.length > 0) {
-					logger.info("Raw SLR output: " + line);
+					logger.info("Raw SLR output: " + StringUtil.stripLinebreaks(line));
 					
 					if (line.indexOf("Saving image") > -1) {
 						// photo is taken, camera is starting download from SD to HD 
@@ -126,7 +127,7 @@ package com.civildebatewall.kiosk.camera {
 		
 		// Output handlers
 		private function onDownloadStarted(fileName:String):void {
-			logger.info("Image download to file \"" + fileName + "\" starting...");			
+			logger.info("Image download to file " + fileName + " starting...");			
 			timeoutTimer.stop(); // photo was definitely taken
 			imageTargetFile = new File(fileName);
 		}
@@ -146,7 +147,7 @@ package com.civildebatewall.kiosk.camera {
 		// IMAGE PROCESSING ============================================================
 				
 		private function loadImage(file:File):void {
-			logger.info("Loading SLR photo \"" + file.url + "\"...");
+			logger.info("Loading SLR photo " + file.url + "...");
 			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleImageLoad);
 			imageLoader.load(new URLRequest(file.url.replace("%0d", ""))); // completely weird filename bug
 		}
@@ -167,7 +168,7 @@ package com.civildebatewall.kiosk.camera {
 			image = new Bitmap(new BitmapData(loadedBitmap.height, loadedBitmap.width), "auto", true);
 			image.bitmapData.draw(loadedBitmap, matrix, null, null, null, true);			
 			
-			logger.info("SLR photo process took " + (getTimer() - takePhotoStartTime));
+			logger.info("SLR photo process took " + (getTimer() - takePhotoStartTime) + "ms");
 			
 			this.dispatchEvent(new CameraFeedEvent(CameraFeedEvent.NEW_FRAME_EVENT));
 			

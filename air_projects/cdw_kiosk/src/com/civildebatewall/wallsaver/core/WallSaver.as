@@ -1,17 +1,27 @@
 package com.civildebatewall.wallsaver.core {
 	
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.wallsaver.sequences.*;
+	import com.civildebatewall.wallsaver.sequences.BarGraphSequence;
+	import com.civildebatewall.wallsaver.sequences.ButtonSequence;
+	import com.civildebatewall.wallsaver.sequences.CallToActionSequence;
+	import com.civildebatewall.wallsaver.sequences.FaceGridSequence;
+	import com.civildebatewall.wallsaver.sequences.OpinionSequence;
+	import com.civildebatewall.wallsaver.sequences.OverlaySequence;
+	import com.civildebatewall.wallsaver.sequences.TitleSequence;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
+	
 	public class WallSaver extends Sprite {
+		
+		private static const logger:ILogger = getLogger(WallSaver);
 		
 		public var timeline:TimelineMax;		
 		private var canvas:Sprite;
@@ -28,7 +38,6 @@ package com.civildebatewall.wallsaver.core {
 		private var faceGridSequence:FaceGridSequence;
 		
 		public var orderedOpinionRows:Boolean;
-		
 		
 		public function rebuildFaceGrid():void {
 			faceGridSequence.buildPortraits();
@@ -67,7 +76,6 @@ package com.civildebatewall.wallsaver.core {
 			//Main.controls.updateTimeSlider();			
 		}
 
-		
 		private function preSequenceBuildTasks():void {
 			if (timeline.active) timeline.stop();
 			if (TweenMax.isTweening(canvas)) TweenMax.killTweensOf(canvas);
@@ -85,10 +93,6 @@ package com.civildebatewall.wallsaver.core {
 			// watch for touches
 			canvas.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
-		
-		
-
-		
 		
 		public function cueSequenceA():void {
 			preSequenceBuildTasks();
@@ -136,7 +140,6 @@ package com.civildebatewall.wallsaver.core {
 			postSequenceBuildTasks();
 		}
 		
-		
 		private function postSequenceBuildTasks():void {
 			// make sure all of the froms are in position
 			timeline.goto(timeline.totalDuration); 
@@ -152,7 +155,6 @@ package com.civildebatewall.wallsaver.core {
 			postAnimationTasks();
 			CivilDebateWall.flashSpan.stop();			
 		}
-		
 		
 		public function endSequence():void {
 			TweenMax.to(canvas, 0.5, {alpha: 0, onComplete: postAnimationTasks});
@@ -172,10 +174,6 @@ package com.civildebatewall.wallsaver.core {
 			removeMouseUpListener();
 			CivilDebateWall.flashSpan.stop();
 		}
-		
-		// TODO check for at least one response before starting
-		
-		
 		
 	}
 }

@@ -1,11 +1,10 @@
 package com.civildebatewall.kiosk.legacy {
-	import com.civildebatewall.*;
 
-	import com.greensock.*;
-	import com.greensock.easing.*;
+	import com.civildebatewall.Assets;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Strong;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
-	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -13,8 +12,8 @@ package com.civildebatewall.kiosk.legacy {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.geom.*;
-	import flash.text.*;
+	import flash.geom.Matrix;
+	import flash.geom.Point;
 	
 	public class BigButton extends ButtonBase	{
 		
@@ -35,13 +34,11 @@ package com.civildebatewall.kiosk.legacy {
 		public var leftEdgeOffset:Number;
 		public var bottomEdgeOffset:Number;		
 		
-		
 		public function BigButton() {
 			super();
 			init();
 		}
 		
-
 		private function init():void {
 			buttonMode = true;
 			buttonWidth = 519;
@@ -89,9 +86,6 @@ package com.civildebatewall.kiosk.legacy {
 				alignmentPoint: Alignment.CENTER,
 				visible: true
 			});
-			
-
-		
 
 			// add children
 			button.addChild(bottomButtonEdge);
@@ -106,12 +100,10 @@ package com.civildebatewall.kiosk.legacy {
 			enable();
 		}
 		
-		
 		// pass through to the label
 		override public function setText(s:String, instant:Boolean = false):void {
 			label.text = s;
 		}
-		
 
 		private function onEnterFrame(e:Event):void {
 			// barber pole animation			
@@ -121,7 +113,6 @@ package com.civildebatewall.kiosk.legacy {
 			updateBarberPole();
 		}
 		
-		
 		private var andFire:Boolean;
 		override protected function onMouseDown(e:MouseEvent):void {
 			// No mouse up event listener!
@@ -129,7 +120,6 @@ package com.civildebatewall.kiosk.legacy {
 			andFire = true;
 			disable();
 		}
-		
 		
 		private function updateBarberPole():void {
 			leftButtonEdge.bitmapData.copyPixels(Assets.leftButtonTile.bitmapData, Assets.leftButtonTile.bitmapData.rect, new Point(leftEdgeOffset - Assets.leftEdgeMask.width, 0), Assets.leftEdgeMask.bitmapData, new Point(leftEdgeOffset - Assets.leftEdgeMask.width, 0), true);			
@@ -153,21 +143,17 @@ package com.civildebatewall.kiosk.legacy {
 			else {
 				// just diable the button...
 				TweenMax.to(button, 0.25, {x: -24, y: 24, ease:Strong.easeOut, colorMatrixFilter:{saturation: 0}});				
-			}
-			
-									
+			}					
 		}
-		
 
 		private function onBigButtonDisabled():void {
 			// don't wait for release
 			onClick();
 		}
-		
-		
+
 		override public function enable():void {
 			super.enable();
-			TweenMax.to(button, 0.1, {x: 0, y: 0, ease:Strong.easeOut, colorMatrixFilter:{saturation: 1}});
+			TweenMax.to(button, 0.1, {x: 0, y: 0, ease: Strong.easeOut, colorMatrixFilter: {saturation: 1}});
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);			
 		}
 

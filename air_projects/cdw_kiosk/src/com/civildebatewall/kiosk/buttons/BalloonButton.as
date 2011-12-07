@@ -50,7 +50,7 @@ package com.civildebatewall.kiosk.buttons {
 			TweenMax.to(underlay, 0.5, {colorMatrixFilter:{colorize: _targetPost.stanceColorDark, amount: 1}});
 			
 			CivilDebateWall.state.userRespondingTo = _targetPost;
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.debateTypePickerView);
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.debateTypePickerView);
 		}
 		
 		public function onCancel(e:MouseEvent):void {

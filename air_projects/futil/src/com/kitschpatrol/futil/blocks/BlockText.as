@@ -88,7 +88,7 @@ package com.kitschpatrol.futil.blocks {
 		public var onInput:Vector.<Function>;
 		
 		// Constructor
-		public function BlockText(params:Object=null)	{
+		public function BlockText(params:Object = null)	{
 			//super(null); // get the default block base, we'll pass params laters
 			
 			// Required Objects

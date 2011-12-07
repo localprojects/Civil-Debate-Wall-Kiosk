@@ -1,4 +1,5 @@
 package com.civildebatewall.wallsaver.elements {
+	
 	import flash.display.Sprite;
 	
 	public class ArrowBanner extends Sprite	{
@@ -51,5 +52,6 @@ package com.civildebatewall.wallsaver.elements {
 			
 			graphics.endFill();			
 		}
+		
 	}
 }

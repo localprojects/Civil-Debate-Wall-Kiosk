@@ -1,16 +1,23 @@
 package com.civildebatewall {
+	
 	import com.bit101.components.FPSMeter;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.kiosk.buttons.*;
-	import com.civildebatewall.kiosk.camera.*;
 	import com.civildebatewall.kiosk.core.Kiosk;
-	import com.civildebatewall.kiosk.elements.*;
-	import com.civildebatewall.kiosk.keyboard.*;
 	import com.civildebatewall.wallsaver.core.WallSaver;
 	import com.demonsters.debugger.MonsterDebugger;
-	import com.greensock.*;
-	import com.greensock.easing.*;
-	import com.greensock.plugins.*;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Cubic;
+	import com.greensock.easing.FastEase;
+	import com.greensock.easing.Linear;
+	import com.greensock.easing.Quad;
+	import com.greensock.easing.Quart;
+	import com.greensock.easing.Quint;
+	import com.greensock.easing.Strong;
+	import com.greensock.plugins.CacheAsBitmapPlugin;
+	import com.greensock.plugins.ThrowPropsPlugin;
+	import com.greensock.plugins.TransformAroundCenterPlugin;
+	import com.greensock.plugins.TransformAroundPointPlugin;
+	import com.greensock.plugins.TweenPlugin;
 	import com.kitschpatrol.flashspan.FlashSpan;
 	import com.kitschpatrol.flashspan.events.CustomMessageEvent;
 	import com.kitschpatrol.flashspan.events.FlashSpanEvent;
@@ -18,10 +25,12 @@ package com.civildebatewall {
 	import com.kitschpatrol.futil.tweenPlugins.FutilBlockPlugin;
 	import com.kitschpatrol.futil.utilitites.PlatformUtil;
 	
-	import flash.display.*;
-	import flash.events.*;
+	import flash.display.Sprite;
+	import flash.display.StageDisplayState;
+	import flash.display.StageQuality;
+	import flash.display.StageScaleMode;
+	import flash.events.Event;
 	import flash.filesystem.File;
-	import flash.net.*;
 	import flash.ui.Mouse;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
@@ -57,7 +66,6 @@ package com.civildebatewall {
 		private var commandLineArgs:Array;
 		public var fpsMeter:FPSMeter;
 		
-		
 		public function CivilDebateWall(commandLineArgs:Array = null)	{
 			self = this;
 			this.commandLineArgs = commandLineArgs;
@@ -67,6 +75,9 @@ package com.civildebatewall {
 
 			// TweenMax Futil plugins
 			TweenPlugin.activate([FutilBlockPlugin]);
+			
+			// TODO Problem for wallsaver? 
+			FastEase.activate([Linear, Quad, Cubic, Quart, Quint, Strong]);
 			
 			// Work around for lack of mouse-down events (Still need this?)
 			// http://forums.adobe.com/message/2794098?tstart=0
@@ -115,7 +126,6 @@ package com.civildebatewall {
 		private function init():void {
 			// Set up logging via AS3 Commons Logging
 			// More info: http://as3commons.org/as3-commons-logging/
-			
 			if (settings.logToMonster) MonsterDebugger.initialize(this);
 			var monsterTarget:MonsterDebugger3TraceTarget = (settings.logToMonster) ? new MonsterDebugger3TraceTarget() : null; 
 			var traceTarget:TraceTarget = (settings.logToTrace) ? new TraceTarget() : null;			
@@ -127,7 +137,8 @@ package com.civildebatewall {
 
 			logger.info("Starting The Wall Kiosk");
 			logger.info("Logging to: " + (settings.logToMonster ? "MonsterDebugger " : "") + "|" + (settings.logToTrace ? " Trace " : "") + "|" + (settings.logToFile ? " File" : ""));
-			logger.info("Server: " + settings.serverPath);			
+			logger.info("Server: " + settings.serverPath);
+			logger.info("Loaded settings from: " + settings.settingsPath);
 			
 			if (commandLineArgs.length > 0) {
 				logger.info("Command line args: " + commandLineArgs);
@@ -197,7 +208,6 @@ package com.civildebatewall {
 			kiosk = new Kiosk();
 			addChild(kiosk);
 
-			
 			if (PlatformUtil.isWindows) {
 				logger.info("Getting Kiosk Number from IP");		
 				flashSpan = new FlashSpan(-1, settings.flashSpanConfigPath);
@@ -221,40 +231,20 @@ package com.civildebatewall {
 			wallSaver.x = -flashSpan.settings.thisScreen.x; // shift content left
 			addChild(wallSaver);
 			
-			
-			
-			
-			
-			
-//		// temp disable wall saver mouse
-//		wallSaver.mouseEnabled = false;
-//		wallSaver.mouseChildren = false;
-			
 			// Load the data, which fills up everything through binding callbacks
 			CivilDebateWall.state.firstLoad = true;
 			data.load();
-			
 
 			// dashboard goes on top... or add when active? 
 			addChild(dashboard);			
 		}
 		
-
-	
-		
-		
-		
-		
-		 
-		
-		
 		private function onInactive(e:InactivityEvent):void {
 			logger.info("Inactivity Event Fired");
 			CivilDebateWall.state.clearUser();			
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.inactivityOverlayView);
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.inactivityOverlayView);
 		}		
-		
-		
+				
 		public function toggleFullScreen():void {		
 			if (stage.displayState == StageDisplayState.NORMAL) {
 				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
@@ -267,17 +257,13 @@ package com.civildebatewall {
 		}
 		
 		
-		
-		
-		
-		
+		// FLASH SPAN ====================================================================================================
 		
 		// Wallsaver control abstraction... these get broadcast to everyone through flashspan
 		
 		// message headers
 		private const PLAY_SEQUENCE_A:String = "a";
 		private const PLAY_SEQUENCE_B:String = "b";
-		
 		
 		private function onSyncStart(e:FlashSpanEvent):void {
 			//wallSaver.timeline.play();
@@ -299,25 +285,22 @@ package com.civildebatewall {
 			TweenMax.delayedCall(1, flashSpan.start); // wait for messages to land before starting
 		}
 		
-
 		private function onCustomMessageReceived(e:CustomMessageEvent):void {
 			if (e.header == PLAY_SEQUENCE_A) {
-				trace("Playing Sequence A");
+				logger.info("Playing Sequence A");
 				wallSaver.cueSequenceA();
 				flashSpan.frameCount = 0;
 			}
 			else if (e.header == PLAY_SEQUENCE_B) {
-				trace("Playing Sequence B");
+				logger.info("Playing Sequence B");
 				wallSaver.cueSequenceB();
 				flashSpan.frameCount = 0;
 			}
 		}
 
-		
 		private function onFrameSync(e:FrameSyncEvent):void {
 			wallSaver.timeline.gotoAndPlay(e.frameCount);
 		}
-		
 		
 	}
 }

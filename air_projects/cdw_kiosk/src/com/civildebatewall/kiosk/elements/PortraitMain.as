@@ -1,23 +1,17 @@
 package com.civildebatewall.kiosk.elements {
-	import com.civildebatewall.*;
 
+	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.State;
 	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	
-	import flash.display.*;
+	import flash.display.Bitmap;
 	import flash.events.Event;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.utils.ByteArray;
-	
-	
 	
 	public class PortraitMain extends BlockBase {
 		
 		private var image:Bitmap;
 		private var targetImage:Bitmap;
-		
 		
 		public function PortraitMain() {
 			super();
@@ -65,8 +59,7 @@ package com.civildebatewall.kiosk.elements {
 				targetImage.bitmapData = i.bitmapData;
 			}
 			targetImage.alpha = step;
-		}
-		
+		}	
 	
 	}
 }

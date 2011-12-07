@@ -1,4 +1,5 @@
 package com.civildebatewall.wallsaver.sequences {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
@@ -90,7 +91,7 @@ package com.civildebatewall.wallsaver.sequences {
 		}
 			
 		private function onDataUpdate(e:Event):void {
-			question.text = CivilDebateWall.state.question.text;
+			question.text = CivilDebateWall.state.activeQuestion.text;
 		}
 		
 		public function getTimelineIn():TimelineMax	{

@@ -1,20 +1,15 @@
-package com.civildebatewall.kiosk.elements
-{
+package com.civildebatewall.kiosk.elements {
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.buttons.BalloonButton;
-	import com.civildebatewall.kiosk.buttons.DebateButton;
 	import com.civildebatewall.kiosk.buttons.GoToDebateButton;
 	import com.civildebatewall.kiosk.elements.opinion_text.OpinionTextSuperlative;
-	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
-	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	
-	import flash.display.Bitmap;
-	import flash.display.PixelSnapping;
 	import flash.events.Event;
 	
 	public class SuperlativesPortrait extends BlockBase	{
@@ -25,7 +20,7 @@ package com.civildebatewall.kiosk.elements
 		private var debateButton:BalloonButton;
 		private var goToDebateButton:GoToDebateButton;
 		
-		public function SuperlativesPortrait(params:Object=null) {
+		public function SuperlativesPortrait(params:Object = null) {
 			super(params);
 
 			// listen to state
@@ -37,9 +32,7 @@ package com.civildebatewall.kiosk.elements
 			portrait.visible = true;
 			portrait.setImage(BitmapUtil.scaleToFill(Assets.getPortraitPlaceholder(), width, height), true);
 			addChild(portrait);
-			
 		
-
 			opinionText = new OpinionTextSuperlative();
 			opinionText.visible = true;
 			opinionText.x = 30;
@@ -57,14 +50,12 @@ package com.civildebatewall.kiosk.elements
 			goToDebateButton.visible = true;
 			addChild(goToDebateButton);
 			
-			// LISTEN TO STATE
 			CivilDebateWall.state.addEventListener(State.SUPERLATIVE_POST_CHANGE, onPostChange);
 		}
 		
 		private function onPostChange(e:Event):void {
 			setPost(CivilDebateWall.state.superlativePost);
 		}
-		
 		
 		public function setPost(post:Post):void {
 			this.post = post;
@@ -80,5 +71,6 @@ package com.civildebatewall.kiosk.elements
 			// fade in portrait
 			portrait.setImage(BitmapUtil.scaleToFill(post.user.photo, width, height));
 		}
+		
 	}
 }

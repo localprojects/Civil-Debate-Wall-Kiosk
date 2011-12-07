@@ -1,14 +1,9 @@
 package com.civildebatewall.kiosk.elements {
+	
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.kiosk.legacy.OldBlockBase;
-	import com.greensock.*;
+	import com.greensock.TweenMax;
 	import com.greensock.easing.Linear;
 	import com.kitschpatrol.futil.blocks.BlockBase;
-	import com.kitschpatrol.futil.blocks.BlockShape;
-	import com.kitschpatrol.futil.constants.Alignment;
-	
-	import flash.display.Shape;
-	import flash.events.Event;
 
 	public class ProgressBar extends BlockBase {
 		
@@ -57,7 +52,6 @@ package com.civildebatewall.kiosk.elements {
 		private function onCompleteFunctionInternal():void {
 			executeAll(onProgressComplete);
 		}
-		
 
 	}
 }

@@ -6,7 +6,7 @@ package com.civildebatewall.kiosk.buttons {
 	
 	public class CancelButton extends WhiteButton	{
 		
-		public function CancelButton(params:Object=null) {
+		public function CancelButton(params:Object = null) {
 			super({
 				text: "CANCEL",
 				width: 180,
@@ -20,10 +20,10 @@ package com.civildebatewall.kiosk.buttons {
 			CivilDebateWall.state.clearUser();
 			
 			if (CivilDebateWall.data.threads.length == 0) {
-				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.noOpinionView);				
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.noOpinionView);				
 			}
 			else {
-				CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView);
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.homeView);
 			}
 		}
 		

@@ -1,29 +1,19 @@
 package com.civildebatewall.kiosk.elements {
-	import com.civildebatewall.*;
 	
 	import com.greensock.TweenMax;
-	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	
-	import flash.display.*;
-	import flash.events.Event;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.utils.ByteArray;
-	
-	
-	
+	import flash.display.Bitmap;
+
 	public class PortraitBase extends BlockBase {
 		
 		private var image:Bitmap;
-		private var targetImage:Bitmap;
-		
+		private var targetImage:Bitmap;		
 		
 		public function PortraitBase() {
 			super();
 			init();
 		}
-		
 		
 		private function init():void {
 			image = new Bitmap();
@@ -59,7 +49,6 @@ package com.civildebatewall.kiosk.elements {
 			}
 			targetImage.alpha = step;
 		}
-		
 		
 	}
 }

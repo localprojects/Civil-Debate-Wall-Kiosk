@@ -11,7 +11,7 @@ package com.civildebatewall.kiosk.elements {
 		public var leftDot:Shape;
 		public var rightDot:Shape;		
 		
-		public function StatsTitleBar(params:Object=null)	{
+		public function StatsTitleBar(params:Object = null)	{
 			
 			super(params);			
 			
@@ -28,7 +28,6 @@ package com.civildebatewall.kiosk.elements {
 				backgroundColor: 0x000000				
 			});
 			
-			
 			content.mouseChildren = false;
 			content.mouseEnabled = false;
 			
@@ -44,5 +43,6 @@ package com.civildebatewall.kiosk.elements {
 			rightDot.graphics.endFill();			
 			background.addChild(rightDot);
 		}
+		
 	}
 }

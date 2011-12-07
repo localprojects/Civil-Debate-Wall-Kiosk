@@ -1,8 +1,11 @@
 package com.civildebatewall {
-	import com.civildebatewall.InactivityEvent;
 	
 	import flash.display.Stage;
-	import flash.events.*;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
 	public class InactivityTimer extends EventDispatcher {
@@ -26,9 +29,6 @@ package com.civildebatewall {
 			// Set the timer
 			timer = new Timer(1000, seconds);
 		}
-		
-		
-		// broadcast inactivity over flashspan? to invoke wallsaver? even if not armed?
 		
 		private function onInactivity(e:TimerEvent):void {
 			timer.stop();

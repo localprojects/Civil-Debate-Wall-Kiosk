@@ -1,16 +1,21 @@
 package com.civildebatewall {
+
 	import flash.desktop.NativeApplication;
 	import flash.display.StageAlign;
-	import flash.display.StageDisplayState;
 	import flash.events.ContextMenuEvent;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
-	import flash.ui.Mouse;
+	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
 
 	// Custom context menu controls for on-site Kiosk administration.
 	public class Menu	{
 		
+		private static const logger:ILogger = getLogger(Menu);
+		
 		public static function getMenu():ContextMenu {
+			
 			// set up a full screen option in the context menu
 			var myContextMenu:ContextMenu = new ContextMenu();
 			
@@ -71,10 +76,12 @@ package com.civildebatewall {
 		}
 		
 		private static function onQuitSelect(e:ContextMenuEvent):void {
+			logger.info("Qutting this screen intentionally");
 			NativeApplication.nativeApplication.exit();
 		}		
 		
 		private static function onQuitAllSelect(e:ContextMenuEvent):void {
+			logger.info("Qutting all screens intentionally");
 			CivilDebateWall.flashSpan.quitAll();
 		}
 		

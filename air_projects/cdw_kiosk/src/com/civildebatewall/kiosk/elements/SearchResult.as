@@ -11,8 +11,10 @@ package com.civildebatewall.kiosk.elements {
 		public function SearchResult(post:Post, postNumber:int = -1) {		
 			super(post, postNumber);
 			
-			backgroundAlpha = 1;
-			backgroundColor = Assets.COLOR_GRAY_5;
+			setParams({
+				backgroundAlpha: 1,
+				backgroundColor: Assets.COLOR_GRAY_5
+			})
 			
 			flagButton.x = 672;
 			

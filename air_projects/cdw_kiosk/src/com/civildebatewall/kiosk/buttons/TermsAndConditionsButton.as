@@ -34,7 +34,7 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onUp(e:MouseEvent):void {
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.termsAndConditionsView);
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.termsAndConditionsView);
 		}
 		
 	}

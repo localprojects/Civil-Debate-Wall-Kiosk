@@ -12,7 +12,7 @@ package com.civildebatewall.kiosk.buttons {
 		private var underline:Shape;
 		public var value:int;
 		
-		public function LinkButton(params:Object=null) {
+		public function LinkButton(params:Object = null) {
 			
 			super(
 				ObjectUtil.mergeObjects(

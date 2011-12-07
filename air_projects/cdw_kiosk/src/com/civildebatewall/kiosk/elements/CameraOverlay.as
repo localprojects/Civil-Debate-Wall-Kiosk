@@ -41,6 +41,7 @@ package com.civildebatewall.kiosk.elements {
 		private function draw():void {
 			this.graphics.clear();
 			
+			// Draw the frame
 			this.graphics.beginFill(backgroundColor, opacity);
 			this.graphics.drawRect(0, 0, 1080, window.y); // top
 			this.graphics.endFill();
@@ -56,7 +57,6 @@ package com.civildebatewall.kiosk.elements {
 			this.graphics.beginFill(backgroundColor, opacity);			
 			this.graphics.drawRect(0, window.y, 1080 - (window.x + window.width), window.height); // left
 			this.graphics.endFill();
-			
 		}
 		
 		private function onUserStanceChange(e:Event):void {

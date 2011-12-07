@@ -20,7 +20,7 @@ package com.civildebatewall.staging.overlays {
 		
 		private var debatedSuperlativesPortrait:SuperlativesPortrait;
 		
-		public function StatsOverlay(params:Object=null) {
+		public function StatsOverlay(params:Object = null) {
 			
 			super(params);
 			

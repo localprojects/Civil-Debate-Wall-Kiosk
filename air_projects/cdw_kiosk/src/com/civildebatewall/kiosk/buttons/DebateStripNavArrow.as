@@ -12,7 +12,7 @@ package com.civildebatewall.kiosk.buttons {
 	
 	public class DebateStripNavArrow extends BlockBitmap {
 		
-		public function DebateStripNavArrow(params:Object=null) {
+		public function DebateStripNavArrow(params:Object = null) {
 			super(params);
 			buttonMode = true;
 			

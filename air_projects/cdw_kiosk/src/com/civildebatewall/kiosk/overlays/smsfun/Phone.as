@@ -95,7 +95,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			popped = false;			
 		}
 		
-		
 		public function popMessage():void {
 			// fade out the old one
 			inactiveBubble.y = screenHeight + activeBubble.height;
@@ -111,17 +110,14 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			inactiveBubble = temp;
 		}
 		
-		
 		public function get position():Point {
 			return new Point(x, y);
 		}
-		
 		
 		public function set position(point:Point):void {
 			x = point.x;
 			y = point.y;
 		}
 		
-
 	}
 }

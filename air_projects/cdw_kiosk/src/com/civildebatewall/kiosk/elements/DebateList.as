@@ -1,11 +1,8 @@
 package com.civildebatewall.kiosk.elements {
+
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-	import com.civildebatewall.Utilities;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.kiosk.core.Kiosk;
-	import com.civildebatewall.kiosk.legacy.OldBlockBase;
-
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
@@ -13,14 +10,15 @@ package com.civildebatewall.kiosk.elements {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
 	
 	public class DebateList extends BlockBase {
 		
+		private static const logger:ILogger = getLogger(DebateList);
+		
 		private const numItems:int = 5;
-		private const yPadding:Number = 15;
-		
-		
+		private const yPadding:Number = 15;	
 		
 		public function DebateList() {
 			super();
@@ -65,21 +63,12 @@ package com.civildebatewall.kiosk.elements {
 					
 					break;
 				default:
-					trace("invalid stats view");
+					logger.error("Invalid stats view");
 			}
-			
-			// select the first item
-			
-			
-			
-			
-			
-			
-			
 			
 		}
 		
-		// takes a list of posts
+		// Takes a list of posts
 		public function setItems(items:Array):void {
 			GraphicsUtil.removeChildren(this);
 			
@@ -90,7 +79,6 @@ package com.civildebatewall.kiosk.elements {
 			for (var i:int = 0; i < items.length; i++) {
 				var item:DebateListItem = new DebateListItem(items[i], i + 1);
 				
-				
 				// What to call out?
 				switch (CivilDebateWall.state.statsView) {
 					case State.VIEW_MOST_DEBATED:
@@ -100,9 +88,8 @@ package com.civildebatewall.kiosk.elements {
 						item.callout.text = item.post.likes + " " + StringUtil.plural("Like", item.post.likes);
 						break;
 					default:
-						trace("invalid stats view");
-				}				
-				
+						logger.error("Invalid stats view");
+				}
 				
 				item.onButtonDown.push(onItemSelected);
 				item.visible = true;
@@ -124,9 +111,6 @@ package com.civildebatewall.kiosk.elements {
 				CivilDebateWall.state.setSuperlativePost((getChildAt(0) as DebateListItem).post);
 				item.activate();
 			}
-			
-						
-			
 		}
 		
 		public function deactivateAll():void {
@@ -137,9 +121,6 @@ package com.civildebatewall.kiosk.elements {
 		
 		public function onItemSelected(e:MouseEvent):void {
 			// deselect the others
-			
-			
-			
 			var clickedItem:DebateListItem = e.currentTarget as DebateListItem;			
 			
 			for(var i:int = 0; i < this.numChildren; i++) {
@@ -151,18 +132,7 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 			clickedItem.activate();			
-			
-			// activate the new one id it's not already				
-			
-				
-				// send event
-				
-				// tell the state!
 			CivilDebateWall.state.setSuperlativePost(clickedItem.post);
-				
-				
-				// if(onSelected != null) onSelected(clickedItem);				
-			
 		}
 		
 	}

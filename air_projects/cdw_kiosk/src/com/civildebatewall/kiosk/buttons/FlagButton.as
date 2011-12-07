@@ -71,8 +71,8 @@ package com.civildebatewall.kiosk.buttons {
 			if (mouseEnabled) {
 				
 				// confimation overlay...
-				CivilDebateWall.kiosk.view.flagOverlay.targetPost = _targetPost;				
-				CivilDebateWall.kiosk.view.flagOverlayView();
+				CivilDebateWall.kiosk.flagOverlay.targetPost = _targetPost;				
+				CivilDebateWall.kiosk.flagOverlayView();
 				
 				//CivilDebateWall.data.flag(_targetPost);
 			

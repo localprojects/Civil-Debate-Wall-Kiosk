@@ -1,7 +1,9 @@
 package com.civildebatewall.kiosk.elements {
-	import com.civildebatewall.*;
+	
+	import com.civildebatewall.Assets;
 	import com.civildebatewall.data.Post;
-	import com.civildebatewall.kiosk.buttons.*;
+	import com.civildebatewall.kiosk.buttons.BalloonButton;
+	import com.civildebatewall.kiosk.buttons.FlagButton;
 	import com.civildebatewall.kiosk.elements.opinion_text.BlockTextOpinion;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
@@ -10,7 +12,9 @@ package com.civildebatewall.kiosk.elements {
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
 	
-	import flash.display.*;
+	import flash.display.Bitmap;
+	import flash.display.Shape;
+	import flash.display.Sprite;	
 
 	public class Comment extends BlockBase {
 		
@@ -107,7 +111,6 @@ package com.civildebatewall.kiosk.elements {
 			});
 			addChild(byline);
 			
-			
 			// date posted
 			var timeString:String = NumberUtil.zeroPad(post.created.hours, 2) + NumberUtil.zeroPad(_post.created.minutes, 2);
 			var dateString:String = NumberUtil.zeroPad(post.created.month, 2) + NumberUtil.zeroPad(_post.created.date, 2) + (post.created.fullYear - 2000);
@@ -128,9 +131,6 @@ package com.civildebatewall.kiosk.elements {
 				x: byline.right + 12,
 				y: byline.bottom - 9
 			});	
-			
-			
-			//datePosted.textField.htmlText = "<i><b>yes</b></i>";
 			addChild(datePosted);
 			
 			// add the hairline
@@ -199,7 +199,7 @@ package com.civildebatewall.kiosk.elements {
 				postNumberString = "";
 			}
 			else {
-				postNumberString = postNumber.toString() + ". ";
+				postNumberString = postNumber.toString() + ".";
 			}
 		}		
 

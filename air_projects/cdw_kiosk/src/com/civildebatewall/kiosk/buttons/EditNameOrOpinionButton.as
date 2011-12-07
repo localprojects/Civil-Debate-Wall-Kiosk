@@ -17,7 +17,7 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onUp(e:MouseEvent):void {
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.opinionEntryView);
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.opinionEntryView);
 		}
 		
 	}

@@ -40,7 +40,7 @@ package com.civildebatewall.kiosk.buttons {
 		
 		private function onUp(e:MouseEvent):void {
 			TweenMax.to(this, 0.5, {backgroundColor: CivilDebateWall.state.activeThread.firstPost.stanceColorMedium});
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView); // TODO dynamically go back to stats as well?
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.homeView); // TODO dynamically go back to stats as well?
 		}
 		
 	}

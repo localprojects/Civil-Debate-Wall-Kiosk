@@ -1,38 +1,38 @@
 package com.civildebatewall.kiosk {
 	
-	import com.civildebatewall.*;
+	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
-
-	import com.greensock.TweenMax;
-	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	
-	import flash.events.*;
-
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
+	// Formerly used for flick-scrolling the big portraits, currently unused
+	// TODO reimplement this functionality
 	public class DragLayer extends OldBlockBase {
+		
 		private var mouseDown:Boolean;		
 		private var startX:int;
 		private var lastX:int;
 		private var currentX:int;
 		private var difference:int;
-		private var leftEdge:int;		
+		private var leftEdge:int;	
+		private var vxSamples:Array;
+		private var vxSampleDepth:int;
+		private var vxThreshold:Number; // velocity required until a flick is a transition	
 		
 		public function DragLayer()	{
 			super();
 			init();
-			
 		}
 		
 		// velocity based push-over
-		
 		private function init():void {
 			graphics.beginFill(0x000000, 0);
 			graphics.drawRect(0, 0, 1080, 1920);
 			graphics.endFill();
 			
-			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			//this.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);			
+			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);			
 			this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			mouseDown = false;
@@ -41,9 +41,7 @@ package com.civildebatewall.kiosk {
 			vxThreshold = 20;
 		}
 		
-
 		private function onMouseDown(e:MouseEvent):void {
-			
 			//if(!TweenMax.isTweening(CDW.view.nametag)) {
 //			
 //			mouseDown = true;
@@ -60,17 +58,8 @@ package com.civildebatewall.kiosk {
 //			TweenMax.killChildTweensOf(CivilDebateWall.kiosk.view.portrait);
 //			
 //			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-//			//}
-
-			
+//			//}	
 		}
-		
-		
-		
-		private var vxSamples:Array;
-		private var vxSampleDepth:int;
-		private var vxThreshold:Number; // velocity required until a flick is a transition
-		
 		
 		private function onEnterFrame(e:Event):void {
 			lastX = currentX;
@@ -84,13 +73,10 @@ package com.civildebatewall.kiosk {
 			while (vxSamples.length > vxSampleDepth) {
 				vxSamples.pop();
 			}
-	
 		}
 		
 		private function onMouseMove(e:Event):void {
 
-			
-			
 		}
 		
 		private function onMouseUp(e:MouseEvent):void {
@@ -99,19 +85,17 @@ package com.civildebatewall.kiosk {
 				this.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 				
 				var vxAverage:Number = ArrayUtil.average(vxSamples);
-				
-				trace("Mouse up. Velocity average: " + vxAverage);
 
 				// see if we need to transition
 				if ((CivilDebateWall.state.nextThread != null) &&(vxAverage < -vxThreshold) || (leftEdge < (stage.stageWidth / -2))) {
-					CivilDebateWall.kiosk.view.nextDebate();
+					CivilDebateWall.kiosk.nextDebate();
 				}
 				if ((CivilDebateWall.state.previousThread != null) && (vxAverage > vxThreshold) || (leftEdge > (stage.stageWidth / 2))) {
-					CivilDebateWall.kiosk.view.previousDebate();			
+					CivilDebateWall.kiosk.previousDebate();			
 				}
 				else {
 					// spring back to current
-					CivilDebateWall.kiosk.view.homeView();					
+					CivilDebateWall.kiosk.homeView();					
 				}
 			}
 		}		
