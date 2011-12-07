@@ -131,7 +131,7 @@ package com.civildebatewall.wallsaver.core {
 			timeline.append(overlaySequence.getTimelineIn());
 			timeline.append(buttonSequence.getTimelineIn());
 			timeline.append(titleSequence.getTimelineIn(), -100);
-			timeline.append(barGraphSequence.getTimeline(), -60);
+			timeline.append(barGraphSequence.getTimeline(), 0);
 			timeline.append(faceGridSequence.getTimeline());
 			timeline.append(titleSequence.getTimelineOut(), -250);
 			timeline.append(buttonSequence.getTimelineOut(), -100);						
