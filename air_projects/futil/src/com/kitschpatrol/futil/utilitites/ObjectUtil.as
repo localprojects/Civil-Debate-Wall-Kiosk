@@ -44,6 +44,18 @@ package com.kitschpatrol.futil.utilitites {
 		}
 				
 		
+		public static function setParams(target:*, params:*, strict:Boolean = true):void {
+			// set multiple settings in one pass
+			for (var key:String in params) {
+				if (target.hasOwnProperty(key)) {
+					target[key] = params[key];
+				}
+				else {
+					if (strict)	throw new Error("No such property: " + key + " on " + target);
+				}
+			}
+		}
+		
 		
 		// adapted from http://stackoverflow.com/questions/5350907/merging-objects-in-as3
 		// if both objects have the same field, object 2 overrides object 1

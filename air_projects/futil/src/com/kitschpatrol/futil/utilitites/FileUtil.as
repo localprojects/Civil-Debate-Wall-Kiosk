@@ -34,6 +34,16 @@ package com.kitschpatrol.futil.utilitites
 		}
 		
 		
+		public static function createFolderIfNecessary(path:String):void {
+			var directory:File = new File(path);
+			
+			if (!directory.exists) {
+				// trace("Directory \"" + path + "\" does not exist. Creating it.");
+				directory.createDirectory();
+			}
+		}		
+		
+		
 		// Synchronous!
 		public static function loadJpeg(path:String):Bitmap {
 			// Uses Alchemy Jpeg Decoder so we can do this synchronously

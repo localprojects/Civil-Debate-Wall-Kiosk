@@ -61,7 +61,6 @@ package com.civildebatewall.data {
 			// Hash the secret key (just once at start up)
 			CivilDebateWall.settings.secretKeyHash = SHA1.hash(CivilDebateWall.settings.secretKey);			
 			logger.info("Hashed secret key: " + CivilDebateWall.settings.secretKeyHash);
-			
 			photoQueue = new LoaderMax({name:"portraitQueue", skipFailed: true, onProgress: photoProgressHandler, onComplete: photoCompleteHandler, onError: photoErrorHandler, maxConnections: 6});			
 		}
 		

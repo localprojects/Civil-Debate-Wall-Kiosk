@@ -1,48 +1,55 @@
 package com.civildebatewall {
+	import flash.geom.Rectangle;
 	
-	import com.adobe.serialization.json.JSON;
-	import com.kitschpatrol.futil.utilitites.FileUtil;
-	import com.kitschpatrol.futil.utilitites.ObjectUtil;
-	import com.kitschpatrol.futil.utilitites.PlatformUtil;
-	
-	import flash.filesystem.File;	
-	
-	public dynamic class Settings extends Object {
+	public class Settings	{
 		
-		// Loads settings from a JSON file
-		public static function load():Object {
+		// Container for strict type checking of settings
+		
+		// Basic
+		public var characterLimit:int;
+		public var inactivityTimeout:Number;
+		public var wallsaverTimein:Number;
+		
+		// Network
+		public var secretKey:String;
+		public var serverPath:String;
+		
+		// Cameras
+		public var useWebcam:Boolean;	
+		public var useSLR:Boolean;
+		public var webCamFocalLength:Number;
+		public var webCamUndersampleFactor:Number;
+		public var slrWaitTime:Number;
+		public var slrTimeout:Number;
+		public var flipWebcamVertical:Boolean;
+		public var tempImagePath:String;		
+		public var imagePath:String;
+		
+		// Screen Sync (Flash Span)
+		public var flashSpanConfig:String;
+		
+		// Logging and Debug
+		public var logToTrace:Boolean;
+		public var logToMonster:Boolean;
+		public var logToFile:Boolean;
+		public var logFilePath:String;
+		public var localMultiScreenTest:Boolean;
+		public var halfSize:Number;
+		public var startFullScreen:Boolean;
+		public var logFullHTTP:Boolean = true; // Log full responses from server
+		
+		// Generated Settings
+		public var kioskNumber:int;
+		public var settingsPath:String;
+		public var secretKeyHash:String;
+		public var computerName:String;
+		
+		// Fixed settings (Not passed in from file)
+		public var targetFaceRectangle:Rectangle = new Rectangle(294, 352, 494, 576);
+		
+
+		public function Settings() {
 			
-			var settingsPath:String;
-			
-			if (PlatformUtil.isWindows) {
-				settingsPath = "//NAS-C0-AF-40/cdwmedia/conf/kiosk_settings.json"; // use the NAS!
-			}
-			else if (PlatformUtil.isMac) {
-				settingsPath  = File.applicationDirectory.resolvePath("settings.json").url;
-			}
-			else {
-				throw new Error("Error detecting system type when loading settings.");
-			}
-			
-			var settingsString:String = FileUtil.loadString(settingsPath);
-			var settings:Object = {}; // Holds final settings
-			var rawSettings:Object = JSON.decode(settingsString); // Raw settings from file
-			settings = rawSettings.common; // Always use the common settings
-			
-			// Use the "Mac" or "Windows" settings depending on detected platform
-			if (PlatformUtil.isWindows) {
-				settings = ObjectUtil.mergeObjects(settings , rawSettings.windows);
-			}
-			else if (PlatformUtil.isMac) {
-				settings  = ObjectUtil.mergeObjects(settings , rawSettings.mac);				
-			}
-			else {
-				throw new Error("Error detecting system type when loading settings.");
-			}
-			
-			settings.settingsPath = settingsPath;
-			return settings;
 		}
-		
 	}
 }

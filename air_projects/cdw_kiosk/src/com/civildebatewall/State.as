@@ -38,14 +38,6 @@ package com.civildebatewall {
 		// stat superlative types
 		public static const VIEW_MOST_DEBATED:int = 0;
 		public static const VIEW_MOST_LIKED:int = 1;		
-		public var statsView:int = VIEW_MOST_DEBATED; // triggers events
-		
-		// navigation
-		public var activeView:Function;
-		public var lastView:Function;
-		public var backDestination:Function;
-		
-		
 		
 		// network performance, TODO put on dashboard
 		public var updateQuestionTime:int;
@@ -53,76 +45,27 @@ package com.civildebatewall {
 		public var updatePostsAndUsersTime:int;
 		public var updateStatsTime:int;
 		public var updateTotalTime:int;
-		public var photoLoadTime:int;
+		public var photoLoadTime:int;		
 		
+		// ACTUAL STATE (THAT MATTERS) ========================================================================
 		
-		
-		public var firstLoad:Boolean;
-		
-		public var targetFaceRectangle:Rectangle = new Rectangle(294, 352, 494, 576);
-		
-		public function setStatsView(type:int):void {
-			statsView = type;
-			dispatchEvent(new Event(ON_STATS_VIEW_CHANGE));
-		}
-		
-		public var sortMode:int = SORT_BY_RECENT;
-
+		// navigation
 		public var activeQuestion:Question;
+		public var activeView:Function;
+		public var lastView:Function;
+		public var backDestination:Function;
+		public var firstLoad:Boolean;
 		public var lastThread:Thread = null;		
 		public var activeThread:Thread = null;
 		public var nextThread:Thread = null;		
 		public var activePost:Post = null;		
-		public var previousThread:Thread = null;	
-		public var threadOverlayOpen:Boolean = false;		
-		
-		// stats
+		public var previousThread:Thread = null;		
 		public var superlativePost:Post = null; // from stats
 		
+		public var sortMode:int = SORT_BY_RECENT;		
+		public var statsView:int = VIEW_MOST_DEBATED; // triggers events
 		
-		// SETTERS ========================================================================
-		
-		public function setSuperlativePost(post:Post):void {
-			superlativePost = post;
-			dispatchEvent(new Event(SUPERLATIVE_POST_CHANGE));
-		}
-		
-		public function setActivePost(post:Post):void {
-			activePost = post;
-			dispatchEvent(new Event(ON_ACTIVE_POST_CHANGE));
-		}
-		
-
-		
-		public function stateLog():String {
-			var out:String = "";
-			out += "--- GLOBAL ---\n"
-			out += varToString("activeThread.id");
-			out += varToString("activePost.id");
-			out += varToString("highlightWord");
-			out += "--- USER ---\n"
-			out += varToString("userPhoneNumber");
-			out += varToString("userName");
-			out += varToString("userStance");
-			out += varToString("userOpinion");			
-			out += varToString("userImageFull");
-			out += varToString("userImage");
-			out += varToString("userIsDebating");
-			out += varToString("userRespondingTo.id");
-			out += varToString("userThreadID");
-			out += varToString("userPostID");
-			out += "--- PERFORMANCE ---\n"
-			out += varToString("updateQuestionTime");
-			out += varToString("updateThreadsTime");
-			out += varToString("updatePostsAndUsersTime");
-			out += varToString("updateStatsTime");
-			out += varToString("updateTotalTime");
-			return out;
-		}
-				
-		
-		
-		// scratch user... TODO wrap this up in the object
+		// user (TODO wrap this up in the object?)
 		public var userStance:String = "yes";
 		public var userName:String = "";
 		public var userOpinion:String = "";
@@ -131,107 +74,87 @@ package com.civildebatewall {
 		public var userThreadID:String = "";
 		public var userPostID:String = "";		
 		public var userImage:Bitmap = null;
-		public var userImageFull:Bitmap = null;		
-		public var userStanceText:String = ""; // add exclamation point		
+		public var userImageFull:Bitmap = null;				
 		public var userRespondingTo:Post; // which post we're debating
+		public var userIsDebating:Boolean = false; // true if we're entering a debate through the "let's debate" button
 		
-		public function setHighlightWord(word:String, color:uint = 0x000000):void {
-			highlightWord = word;
-			highlightWordColor = color;
-			dispatchEvent(new Event(ON_HIGHLIGHT_WORD_CHANGE));
-		}
-		
-		public var highlightWordColor:uint = 0x000000;
-		public var highlightWord:String = null;
-		
-		// color state
 		public var userStanceColorLight:uint;
 		public var userStanceColorMedium:uint;
 		public var userStanceColorDark:uint;
 		public var userStanceColorOverlay:uint;
-		public var userStanceColorDisabled:uint;		
+		public var userStanceColorDisabled:uint;
 		
-		public var activeComment:String = null;
-		public var userIsDebating:Boolean = false; // true if we're entering a debate through the "let's debate" button
-		
-		public var questionTextColor:uint = 0xff0000;
-
-		
+		public var highlightWordColor:uint = 0x000000;
+		public var highlightWord:String = null;		
+				
 		public function State()	{
-			//activeView = CivilDebateWall.kiosk.view.homeView; // Start at home
 			CivilDebateWall.data.addEventListener(Data.DATA_PRE_UPDATE_EVENT, onDataPreUpdate);
 		}
 		
 		private function onDataPreUpdate(e:Event):void {
+			CivilDebateWall.data.removeEventListener(Data.DATA_UPDATE_EVENT, onDataPreUpdate);	
 			// Initialize some stuff. only runs once at startup.
 			CivilDebateWall.state.activeView = CivilDebateWall.kiosk.homeView;
 			CivilDebateWall.state.setActiveThread(ArrayUtil.randomElement(CivilDebateWall.data.threads));
-			CivilDebateWall.data.removeEventListener(Data.DATA_UPDATE_EVENT, onDataPreUpdate);
 		}				
 		
+		// SETTERS (with event dispatching) ================================================================================================================
 		
+		public function setStatsView(type:int):void {
+			statsView = type;
+			dispatchEvent(new Event(ON_STATS_VIEW_CHANGE));
+		}		
 		
+		public function setSuperlativePost(post:Post):void {
+			superlativePost = post;
+			logger.info("Superlative post: " + superlativePost.id);			
+			dispatchEvent(new Event(SUPERLATIVE_POST_CHANGE));
+		}
+		
+		public function setActivePost(post:Post):void {
+			activePost = post;
+			logger.info("Active post: " + activePost.id);
+			dispatchEvent(new Event(ON_ACTIVE_POST_CHANGE));
+		}		
+		
+		public function setHighlightWord(word:String, color:uint = 0x000000):void {
+			highlightWord = word;
+			highlightWordColor = color;
+			logger.info("Highlighting: " + highlightWord);
+			dispatchEvent(new Event(ON_HIGHLIGHT_WORD_CHANGE));
+		}		
 		
 		public function setSort(sortMode:int):void {
 			this.sortMode = sortMode;
 			
 			// sort the debate list
-			
-			trace("sorting by " + sortMode);
-			
-			
-			
 			switch (sortMode) {
 				case SORT_BY_RECENT:
+					logger.info("Sorting by recent");
 					CivilDebateWall.data.threads.sortOn("created", Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?                   
 					break;
-				
 				case SORT_BY_YES:
+					logger.info("Sorting by yes");					
 					CivilDebateWall.data.threads.sortOn("firstStance", Array.DESCENDING); // newest first // Is this working?                   
 					break;
-				
 				case SORT_BY_NO:
+					logger.info("Sorting by no");					
 					CivilDebateWall.data.threads.sortOn("firstStance"); // newest first // Is this working?                 
 					break;              
-				
 				case SORT_BY_MOST_DEBATED:
+					logger.info("Sorting by most debated");					
 					CivilDebateWall.data.threads.sortOn("postCount", Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?                 
 					break;              
-				
 				default:
-					trace("invalid sort type");
+					logger.error("Invalid thread sort mode '" + sortMode + "'");
 			}
 			
-			
 			// TODO update next / previous / etc.
-			
 			this.dispatchEvent(new Event(SORT_CHANGE));
 		}
 		
-		
-		
- 
-		public function clearUser():void {
-			
-			// TODO logger here
-			
-			userID = "";
-			userName = "";
-			if (userImage != null) userImage.bitmapData.dispose();
-			userImage = null;
-			userPhoneNumber = "";
-			userOpinion = "";
-			userIsDebating = false;
-			if (userImageFull != null) userImageFull.bitmapData.dispose();
-			userImageFull = null;
-			userRespondingTo = null;
-			//highlightWord = null;
-		}
-		
 		public function setUserStance(s:String):void {
-			userStance = s;
-			
-			userStanceText = userStance.toUpperCase() + "!";	
+			userStance = s;	
 			
 			if (userStance == "yes") {
 				userStanceColorLight = Assets.COLOR_YES_LIGHT;
@@ -240,31 +163,35 @@ package com.civildebatewall {
 				userStanceColorOverlay = Assets.COLOR_YES_OVERLAY;
 				userStanceColorDisabled = Assets.COLOR_YES_DISABLED;
 			}
-			else {
+			else if (userStance == "no") {
 				userStanceColorLight = Assets.COLOR_NO_LIGHT;
 				userStanceColorMedium = Assets.COLOR_NO_MEDIUM;
 				userStanceColorDark = Assets.COLOR_NO_DARK;
 				userStanceColorOverlay = Assets.COLOR_NO_OVERLAY;
 				userStanceColorDisabled = Assets.COLOR_NO_DISABLED;				
 			}
+			else {
+				logger.error("Invalid user stance '" + userStance + "'");
+			}
 			
 			this.dispatchEvent(new Event(USER_STANCE_CHANGE));
 		}
 		
 		public function setView(view:Function):void {
-			
 			// clear the highlighting if unless we're coming from the stats page 
 			if ((highlightWord != null) && (highlightWord != "")) {
 				if (lastView != CivilDebateWall.kiosk.statsView) {
+					logger.info("Clearing highlight");
 					setHighlightWord("");
 				}
 			}			
 			
 			lastView = activeView;
 			activeView = view;
+			
+			logger.info("Changing view: " + lastView + " --> " + activeView);			
 			dispatchEvent(new Event(VIEW_CHANGE));
 		}
-		
 		
 		public function setActiveThread(thread:Thread, overridePrevious:Thread = null, overrideNext:Thread = null):void {
 			lastThread = activeThread;
@@ -276,25 +203,9 @@ package com.civildebatewall {
 					setHighlightWord("");
 				}
 			}
-			
 
-
-			// logs backwards... ugh
-			// CivilDebateWall.dashboard.log("---------------------------------");			
-			
-			if (activeThread != null) {
-				for (var i:uint = activeThread.posts.length - 1; i > 0; i--) {
-				// CivilDebateWall.dashboard.log(activeThread.posts[i].id);
-				}
-			}
-			// CivilDebateWall.dashboard.log(activeThread.posts[0].id);
-			
-			// CivilDebateWall.dashboard.log("Posts:");			
-			// CivilDebateWall.dashboard.log("Active thread:\n\t" + activeThread.id);			
-			
-			// CivilDebateWall.dashboard.log("---------------------------------");			
-			
 			// funky overrides for big-jump transitions
+			/*
 			if (overridePrevious != null) {
 				previousThread = overridePrevious; 
 			}
@@ -308,16 +219,28 @@ package com.civildebatewall {
 			else {
 				nextThread = getNextThread();
 			}
+			*/
 
-			trace("Prev: " + previousThread);
-			trace("Active: " + activeThread);
-			trace("Next: " + nextThread);
-			
 			if (activeThread != null) {
 				this.dispatchEvent(new Event(ACTIVE_THREAD_CHANGE));
-			}
-			
+			}			
 		}
+		
+		// HELPERS =======================================================================================================================		
+		
+		public function clearUser():void {
+			logger.info("Clearing user");
+			userID = "";
+			userName = "";
+			if (userImage != null) userImage.bitmapData.dispose();
+			userImage = null;
+			userPhoneNumber = "";
+			userOpinion = "";
+			userIsDebating = false;
+			if (userImageFull != null) userImageFull.bitmapData.dispose();
+			userImageFull = null;
+			userRespondingTo = null;
+		}		
 		
 		public function getNextThread():Thread {
 			var grabNext:Boolean;
@@ -352,9 +275,34 @@ package com.civildebatewall {
 			return null;
 		}		
 		
-		// HELPERS =======================================================================================================================
+		// LOGGING HELPERS =======================================================================================================================
 		
-		// convenience for logging
+		public function stateLog():String {
+			var out:String = "";
+			out += "--- GLOBAL ---\n"
+			out += varToString("activeThread.id");
+			out += varToString("activePost.id");
+			out += varToString("highlightWord");
+			out += "--- USER ---\n"
+			out += varToString("userPhoneNumber");
+			out += varToString("userName");
+			out += varToString("userStance");
+			out += varToString("userOpinion");			
+			out += varToString("userImageFull");
+			out += varToString("userImage");
+			out += varToString("userIsDebating");
+			out += varToString("userRespondingTo.id");
+			out += varToString("userThreadID");
+			out += varToString("userPostID");
+			out += "--- PERFORMANCE ---\n"
+			out += varToString("updateQuestionTime");
+			out += varToString("updateThreadsTime");
+			out += varToString("updatePostsAndUsersTime");
+			out += varToString("updateStatsTime");
+			out += varToString("updateTotalTime");
+			return out;
+		}		
+		
 		public function getUpdateTimeString():String {
 			return "Question: " + updateQuestionTime + " Threads: " + updateThreadsTime + " Posts and Users:" + updatePostsAndUsersTime +  " Stats:" + updateStatsTime + " Total:" + updateTotalTime; 			
 		}	

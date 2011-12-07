@@ -46,7 +46,7 @@ package com.civildebatewall.data {
 		
 		//private function onImageLoaded(e:LoaderEvent):void {
 		private function onImageLoaded(e:LoaderEvent):void {
-			trace("...Loaded image for " + _username + "\t(" + _id + ")");
+			logger.info("...Loaded image for " + _username + " (" + _id + ")");
 			_photo = new Bitmap(((LoaderMax.getContent(_id) as ContentDisplay).rawContent as Bitmap).bitmapData, PixelSnapping.AUTO, true);
 		
 			// search and update, use some kind of bitmap binding instead?

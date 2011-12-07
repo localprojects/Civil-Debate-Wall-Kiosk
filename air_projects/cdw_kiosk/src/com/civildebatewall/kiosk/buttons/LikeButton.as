@@ -97,7 +97,6 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onLike(e:Event):void {
-			trace("got event");
 			counter.text = _targetPost.likes.toString();
 			label.text = StringUtil.plural("Like", _targetPost.likes);
 		}
