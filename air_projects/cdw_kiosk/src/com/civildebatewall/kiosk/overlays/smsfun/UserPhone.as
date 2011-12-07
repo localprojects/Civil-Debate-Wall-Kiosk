@@ -215,7 +215,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		
 		public function isValid(number:String):Boolean {
 			// strip the parentheses and dashes
-			var bareNumber:String = number.replace(/[^\d]/gs, '');
+			var bareNumber:String = number.replace(/[^\d]/gs, "");
 			
 			// make sure it's the right length and doesn't start with 0
 			if (bareNumber.match(/^[1-9]\d{9}$/g).length > 0) {

@@ -4,7 +4,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.data.Word;
 	import com.civildebatewall.kiosk.buttons.WordButton;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -53,7 +53,7 @@ package com.civildebatewall.kiosk.elements {
 
 			
 			// sort the source words by frequency
-			source.sortOn('total', Array.DESCENDING | Array.NUMERIC);
+			source.sortOn("total", Array.DESCENDING | Array.NUMERIC);
 			
 			// turn words into buttons
 			wordButtons = [];
@@ -75,7 +75,7 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 			// sort them by difference
-			wordButtons = wordButtons.sortOn('difference', Array.DESCENDING | Array.NUMERIC);
+			wordButtons = wordButtons.sortOn("difference", Array.DESCENDING | Array.NUMERIC);
 			
 			// do the fitting
 			for (var k:int = 0; k < wordButtons.length - 4; k += 4) {
@@ -101,15 +101,15 @@ package com.civildebatewall.kiosk.elements {
 			// NOW we have the final list of words, normalize
 			// recalculate color based on new max and min
 			// find limits
-			// MonsterDebugger.trace(this, "Buttons: " + wordButtons.length);	
+			// trace("Buttons: " + wordButtons.length);	
 			var maxDifference:Number = ArrayUtil.maxInObjectArray(wordButtons, "difference");
 			var minDifference:Number = ArrayUtil.minInObjectArray(wordButtons, "difference");
 	
-//			MonsterDebugger.trace(this, "Max difference: " + maxDifference);
-//			MonsterDebugger.trace(this, "Min difference: " + minDifference);
-//			MonsterDebugger.trace(this, "Mapping -10: " + Math2.map(-10, minDifference, maxDifference, 0, 1));			
-//			MonsterDebugger.trace(this, "Mapping -5: " + Math2.map(-5, minDifference, maxDifference, 0, 1));
-//			MonsterDebugger.trace(this, "Mapping 2: " + Math2.map(2, minDifference, maxDifference, 0, 1));			
+//			trace("Max difference: " + maxDifference);
+//			trace("Min difference: " + minDifference);
+//			trace(1));			
+//			trace(1));
+//			trace(1));			
 			
 
 			for each (wordButton in wordButtons) {
@@ -132,7 +132,7 @@ package com.civildebatewall.kiosk.elements {
 			activeWord = null;
 			
 			// TODO some kind of weighting system to find out which row combinations make the most sense
-			//words.push(new WordButton(wordInfo['word'], 
+			//words.push(new WordButton(wordInfo["word"], 
 		}
 		
 		
@@ -162,12 +162,12 @@ package com.civildebatewall.kiosk.elements {
 		
 		private function onDown(e:MouseEvent):void {
 			//fade everything else
-			//MonsterDebugger.trace(this, "down");
+			//trace("down");
 			
 			
 			var selectedWord:WordButton = e.currentTarget as WordButton;
-			//MonsterDebugger.trace(this, "selected");
-			//MonsterDebugger.trace(this, selectedWord);
+			//trace("selected");
+			//trace(selectedWord);
 			
 			// TODO dragable reselections
 			
@@ -188,7 +188,7 @@ package com.civildebatewall.kiosk.elements {
 					}
 				}
 				
-				//MonsterDebugger.trace(this, "selected");
+				//trace("selected");
 				this.dispatchEvent(new Event(EVENT_WORD_SELECTED, true, true));				
 			}
 			
@@ -209,7 +209,7 @@ package com.civildebatewall.kiosk.elements {
 		private function positionRow(row:Array, rowNumber:int):void {
 			
 			
-			//MonsterDebugger.trace(this, "row: " + rowNumber + " " + row);
+			//trace("row: " + rowNumber + " " + row);
 			
 			if (row.length > 0) {
 			
@@ -217,7 +217,7 @@ package com.civildebatewall.kiosk.elements {
 			var xAccumulator:Number = 0;
 			
 			for(var i:int = 0; i < row.length; i++) {
-				//MonsterDebugger.trace(this, i + " / " + row.length);
+				//trace(i + " / " + row.length);
 			
 					if (!this.contains(row[i])) addChild(row[i]);				
 					
@@ -229,11 +229,11 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 			
-			//MonsterDebugger.trace(this, "Row width: " + (row[row.length - 1].x + row[row.length - 1].width));
+			//trace("Row width: " + (row[row.length - 1].x + row[row.length - 1].width));
 			if ((row[row.length - 1].x + row[row.length - 1].width) > (1022 - 30)) {
 				// too big, recurse
 				// TODO does this work?
-				//MonsterDebugger.trace(this, "trimming");
+				//trace("trimming");
 				
 				removeChild(row.pop());
 				positionRow(row, ++rowNumber);
@@ -241,7 +241,7 @@ package com.civildebatewall.kiosk.elements {
 			else {
 				// center it, we're done
 				var xOffset:Number = (1022 - (row[row.length - 1].x + row[row.length - 1].width)) / 2;
-				//MonsterDebugger.trace(this, "we're done... center itX offset: " + xOffset);
+				//trace("we're done... center itX offset: " + xOffset);
 				for(var j:int = 0; j < row.length; j++) {
 					row[j].x += xOffset;
 				}				

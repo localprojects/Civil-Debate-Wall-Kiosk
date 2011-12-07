@@ -90,7 +90,7 @@ package com.civildebatewall.kiosk.elements {
 			addChild(postNumber);
 			
 			// add the byline
-			var authorText:String = postNumberString + _post.user.usernameFormatted.toUpperCase() + Char.APOSTROPHE + 's RESPONSE';
+			var authorText:String = postNumberString + _post.user.usernameFormatted.toUpperCase() + Char.APOSTROPHE + "s RESPONSE";
 			var byline:BlockText = new BlockText({
 				maxWidth: 350,
 				height: 12, 
@@ -100,7 +100,7 @@ package com.civildebatewall.kiosk.elements {
 				textSize: 12,
 				textColor: _post.stanceColorLight,				
 				leading: 12,
-				text: _post.user.usernameFormatted.toUpperCase() + Char.APOSTROPHE + 'S RESPONSE',
+				text: _post.user.usernameFormatted.toUpperCase() + Char.APOSTROPHE + "S RESPONSE",
 				visible: true,
 				x: 218,
 				y: 17
@@ -111,7 +111,7 @@ package com.civildebatewall.kiosk.elements {
 			// date posted
 			var timeString:String = NumberUtil.zeroPad(post.created.hours, 2) + NumberUtil.zeroPad(_post.created.minutes, 2);
 			var dateString:String = NumberUtil.zeroPad(post.created.month, 2) + NumberUtil.zeroPad(_post.created.date, 2) + (post.created.fullYear - 2000);
-			var timestamp:String = 'Posted at ' + timeString + ' hours on ' + dateString;			
+			var timestamp:String = "Posted at " + timeString + " hours on " + dateString;			
 			
 			var datePosted:BlockText = new BlockText({
 				maxWidth: 222,

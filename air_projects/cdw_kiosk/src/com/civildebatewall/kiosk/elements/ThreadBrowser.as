@@ -4,7 +4,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.data.Thread;
 	import com.civildebatewall.kiosk.BlockInertialScroll;
 	import com.civildebatewall.kiosk.buttons.*;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
 	import flash.display.*;
@@ -43,7 +43,7 @@ package com.civildebatewall.kiosk.elements {
 			GraphicsUtil.removeChildren(content);			
 
 			// sort
-			CivilDebateWall.state.activeThread.posts.sortOn('created', Array.DESCENDING | Array.NUMERIC);						
+			CivilDebateWall.state.activeThread.posts.sortOn("created", Array.DESCENDING | Array.NUMERIC);						
 
 			// skip the last one since it's the original post
 			for (var i:uint = 0; i < CivilDebateWall.state.activeThread.posts.length - 1; i++) {
@@ -74,7 +74,7 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 
-			MonsterDebugger.trace(this, "Scroll limits: " + minScrollY +  " / " + maxScrollY);
+			trace("Scroll limits: " + minScrollY +  " / " + maxScrollY);
 			
 			// do we need to scroll?
 			//scrollField.scrollAllowed = (scrollField.scrollSheet.height > _maxHeight - 30);

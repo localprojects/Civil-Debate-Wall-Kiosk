@@ -26,7 +26,7 @@ package com.civildebatewall.kiosk.core {
 	import com.civildebatewall.kiosk.overlays.OpinionEntryOverlay;
 	import com.civildebatewall.kiosk.overlays.StatsOverlay;
 	import com.civildebatewall.kiosk.overlays.smsfun.SMSOverlay;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -465,7 +465,7 @@ package com.civildebatewall.kiosk.core {
 			CivilDebateWall.inactivityTimer.disarm();
 			portrait.setImage(Assets.portraitPlaceholder);
 			bigButton.y = 1470;
-			bigButton.setText('ADD YOUR OPINION');
+			bigButton.setText("ADD YOUR OPINION");
 			CivilDebateWall.state.clearUser();
 
 			// behaviors
@@ -494,7 +494,7 @@ package com.civildebatewall.kiosk.core {
 			CivilDebateWall.inactivityTimer.disarm();
 						
 			bigButton.y = 1470;			
-			bigButton.setText('JOIN THE DEBATE'); // TODO move to listener?
+			bigButton.setText("JOIN THE DEBATE"); // TODO move to listener?
 			bigButton.setOnClick(function():void {
 				CivilDebateWall.state.userRespondingTo = CivilDebateWall.state.activeThread.firstPost;
 				CivilDebateWall.state.setView(debateTypePickerView);			
@@ -549,7 +549,7 @@ package com.civildebatewall.kiosk.core {
 		// TODO these...
 		public function nextDebate():void {
 			if (CivilDebateWall.state.nextThread != null) { 	
-				MonsterDebugger.trace(this, 'Transition to next.');
+				trace("Transition to next.");
 				CivilDebateWall.state.setActiveThread(CivilDebateWall.state.nextThread);
 				CivilDebateWall.kiosk.view.opinionHome.x += stageWidth;
 			}
@@ -558,7 +558,7 @@ package com.civildebatewall.kiosk.core {
 		
 		public function previousDebate():void {
 			if (CivilDebateWall.state.previousThread != null) {
-				MonsterDebugger.trace(this, 'Transition to previous.');
+				trace("Transition to previous.");
 				CivilDebateWall.state.setActiveThread(CivilDebateWall.state.previousThread);
 				CivilDebateWall.kiosk.view.opinionHome.x -= stageWidth;
 			}
@@ -671,7 +671,7 @@ package com.civildebatewall.kiosk.core {
 			
 			// blocks
 			
-			MonsterDebugger.trace(null, "Tweening in cameras.");			
+			trace("Tweening in cameras.");			
 			
 			portraitCamera.tweenIn();
 			cameraOverlay.tweenIn();
@@ -696,11 +696,11 @@ package com.civildebatewall.kiosk.core {
 		}
 		
 		private function onScreenBlack():void {
-			MonsterDebugger.trace(this, 'screen black');
+			trace("screen black");
 			
 			if (CivilDebateWall.settings.useSLR) {
 				// using SLR
-				MonsterDebugger.trace(this, "using SLR");
+				trace("using SLR");
 				//portraitCamera.slr.setOnTimeout(onSLRTimeout);
 				portraitCamera.slr.addEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 				portraitCamera.slr.takePhoto();
@@ -723,16 +723,16 @@ package com.civildebatewall.kiosk.core {
 			portraitCamera.slr.removeEventListener(CameraFeedEvent.NEW_FRAME_EVENT, onPhotoCapture);
 			
 			// process SLR image
-			MonsterDebugger.trace(null, "SLR Image: " );
-			MonsterDebugger.trace(this, portraitCamera.slr.image);
+			trace("SLR Image: " );
+			trace(portraitCamera.slr.image);
 			CivilDebateWall.state.userImage = new Bitmap(portraitCamera.slr.image.bitmapData.clone(), PixelSnapping.AUTO, true);
-			MonsterDebugger.trace(null, "User Image: " );
-			MonsterDebugger.trace(this, CivilDebateWall.state.userImage);
+			trace("User Image: " );
+			trace(CivilDebateWall.state.userImage);
 			detectFace(CivilDebateWall.state.userImage);
 		}
 		
 		private function detectFace(b:Bitmap):void {
-			MonsterDebugger.trace(this, 'face detection started');
+			trace("face detection started");
 			// find the face closest to the center
 			faceDetector.addEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onDetectionComplete);			
 			faceDetector.searchBitmap(b.bitmapData);
@@ -740,19 +740,19 @@ package com.civildebatewall.kiosk.core {
 		
 		private function onDetectionComplete(e:ObjectDetectorEvent):void {
 			faceDetector.removeEventListener(ObjectDetectorEvent.DETECTION_COMPLETE, onDetectionComplete);
-			MonsterDebugger.trace(this, 'face detection complete');
-			MonsterDebugger.trace(this, faceDetector.faceRect);
+			trace("face detection complete");
+			trace(faceDetector.faceRect);
 			
 			// save a copy of the original image, we'll write it to disk later
 			//CivilDebateWall.state.userImageFull = new Bitmap(portraitCamera.slr.image.bitmapData.clone(), PixelSnapping.AUTO, true);
 			CivilDebateWall.state.userImageFull = new Bitmap(CivilDebateWall.state.userImage.bitmapData.clone());
 			
-			MonsterDebugger.trace(null, "user image full:");
-			MonsterDebugger.trace(this, CivilDebateWall.state.userImageFull);
+			trace("user image full:");
+			trace(CivilDebateWall.state.userImageFull);
 			
 			
 			if (faceDetector.faceRect != null) {
-				MonsterDebugger.trace(this, 'face found, cropping to it');
+				trace("cropping to it");
 				
 				// Scale the face detector rectangle
 				var scaleFactor:Number = CivilDebateWall.state.userImage.height / faceDetector.maxSourceHeight; 
@@ -761,7 +761,7 @@ package com.civildebatewall.kiosk.core {
 				CivilDebateWall.state.userImage = Utilities.cropToFace(CivilDebateWall.state.userImage, scaledFaceRect, CivilDebateWall.state.targetFaceRectangle);				
 			}
 			else {
-				MonsterDebugger.trace(this, 'no face found, saving as is');
+				trace("saving as is");
 				CivilDebateWall.state.userImage.bitmapData = BitmapUtil.scaleDataToFill(CivilDebateWall.state.userImage.bitmapData, stageWidth, stageHeight);
 			}
 			

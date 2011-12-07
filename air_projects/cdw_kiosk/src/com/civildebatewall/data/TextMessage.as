@@ -12,12 +12,12 @@ package com.civildebatewall.data {
 		
 		
 		public function TextMessage(jsonObject:Object) {
-			_text = jsonObject['message'];
-			_created = DateUtil.parseJsonDate(jsonObject['created']);
-			_phoneNumber = jsonObject['phoneNumber'];
+			_text = jsonObject["message"];
+			_created = DateUtil.parseJsonDate(jsonObject["created"]);
+			_phoneNumber = jsonObject["phoneNumber"];
 			
-			if (jsonObject['profane'] != null) {
-				_profane = jsonObject['profane'];
+			if (jsonObject["profane"] != null) {
+				_profane = jsonObject["profane"];
 			}
 			else {
 				_profane = false;

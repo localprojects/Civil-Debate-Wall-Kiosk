@@ -8,7 +8,7 @@ package com.kitschpatrol.futil.utilitites {
 		public static const dayNamesLong:Array = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];		
 		
 		public static function parseJsonDate(s:String):Date {
-			return DateUtil.parseW3CDTF(s.replace(' ', 'T') + 'Z');			
+			return DateUtil.parseW3CDTF(s.replace(" ", "T") + "Z");			
 		}
 		
 		

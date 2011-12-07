@@ -1,6 +1,6 @@
 package com.civildebatewall.kiosk.legacy {
 	import com.civildebatewall.*;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.blocks.BlockText;
@@ -70,7 +70,7 @@ package com.civildebatewall.kiosk.legacy {
 			drawRing();
 			
 			countLabel = new BlockText({
-				text: '5',
+				text: "5",
 				textFont: Assets.FONT_BOLD,
 				textSize: 41,
 				textColor: 0xffffff,
@@ -142,7 +142,7 @@ package com.civildebatewall.kiosk.legacy {
 			}
 			else if (countdownTimer.currentCount == 4) {
 				// stop spinning numbers, show the icon
-				MonsterDebugger.trace(this, "Showing icon");
+				trace("Showing icon");
 				TweenMax.to(countLabel, 0.2, {ease: Quart.easeInOut, alpha: 0, rotation:getRotationChange(countLabel, 0, true), scaleX: 0, scaleY: 0});
 				TweenMax.to(arrow, 0.2, {alpha: 1});
 				TweenMax.to(arrow, 0.25, {y: "-20", yoyo: true, repeat: -1});				

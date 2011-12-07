@@ -41,7 +41,7 @@ package com.civildebatewall.wallsaver.elements {
 
 			// Recalculate VX if required (to match total travel time of the longest row)
 			if (targetFrameCount > -1) {
-				//MonsterDebugger.trace(this, vxMiddle);
+				//trace(vxMiddle);
 				vxMiddle -= 0.01; // smaller is more accurate... but a performance sink
 			}
 			
@@ -108,7 +108,7 @@ package com.civildebatewall.wallsaver.elements {
 		public function set frame(n:Number):void {
 			_frame = Math.round(n); // faster way?
 			this.x = xPositions[_frame];
-			//MonsterDebugger.trace(this, "Frame: " + _frame + "\tPosition: " + this.xPositions[_frame]);
+			//trace("Frame: " + _frame + "\tPosition: " + this.xPositions[_frame]);
 		}
 		
 

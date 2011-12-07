@@ -1,6 +1,6 @@
 package com.civildebatewall.kiosk.camera {
 	import com.civildebatewall.*;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	
@@ -31,7 +31,7 @@ package com.civildebatewall.kiosk.camera {
 			imageFolder = new File();
 			imageFolder.nativePath = CivilDebateWall.settings.tempImagePath;
 			
-			var slrControlApp:File = File.applicationDirectory.resolvePath('native/slrcontrol/GCDWFoto.exe');	
+			var slrControlApp:File = File.applicationDirectory.resolvePath("native/slrcontrol/GCDWFoto.exe");	
 			
 			var nativeProcessStartup:NativeProcessStartupInfo = new NativeProcessStartupInfo();
 			var args:Vector.<String> = new  Vector.<String>();
@@ -53,7 +53,7 @@ package com.civildebatewall.kiosk.camera {
 			timeoutTimer.addEventListener(TimerEvent.TIMER, onTimeout);
 			
 			// format the card before we get started
-			//MonsterDebugger.trace(null, "Starting SLR, requesting card format.");
+			//trace(requesting card format.");
 			//formatCard();
 		}
 		
@@ -61,7 +61,7 @@ package com.civildebatewall.kiosk.camera {
 		// for passing as arg into the command line app, it needs two forward slashes between folders
 		public function fileToWindowsPath(f:File):String {
 			// double the slashes and add trailing
-			return f.nativePath.replace('\\', '//') + '//';
+			return f.nativePath.replace("\\", "//") + "//";
 		}
 		
 		public function setOnTimeout(f:Function):void {
@@ -74,34 +74,34 @@ package com.civildebatewall.kiosk.camera {
 			// build an array of image files
 			var imageFiles:Array = [];
 			for each(var file:File in imageDirectoryContents) {
-				if (file.extension == 'JPG') {
+				if (file.extension == "JPG") {
 					imageFiles.push(file);
 					file.creationDate
 				}
 			}
 			
 			if(imageFiles.length > 0) {
-				imageFiles.sortOn('creationDate', Array.DESCENDING);
-				MonsterDebugger.trace(this, imageFiles.length + ' images');
-				MonsterDebugger.trace(this, 'Latest is: ' + imageFiles[0].name);
+				imageFiles.sortOn("creationDate", Array.DESCENDING);
+				trace(imageFiles.length + " images");
+				trace("Latest is: " + imageFiles[0].name);
 				return imageFiles;
 			}
 			else {
-				MonsterDebugger.trace(this, 'no images in the folder');
+				trace("no images in the folder");
 				return [];
 			}	
 		}
 		
 		private function onCheckFolder(e:TimerEvent):void {
 			var images:Array = listImages();
-			MonsterDebugger.trace(this, images);
+			trace(images);
 			
 			if (images.length > 0) {
 				// load the latest image
 				
 				loadImage(images[0]);
 				// stop the checking
-				MonsterDebugger.trace(this, "got image");
+				trace("got image");
 				folderWatchTimer.stop();
 			}
 		}
@@ -114,24 +114,24 @@ package com.civildebatewall.kiosk.camera {
 		
 		
 		private function onFormatButton(e:Event):void {
-			MonsterDebugger.trace(this, "format");
+			trace("format");
 			formatCard();
 		}
 		
 		private function onShutterButton(e:Event):void {
-			MonsterDebugger.trace(this, "shutter");
+			trace("shutter");
 			takePhoto();
 		}
 		
 		private function formatCard():void {
-			slrProcess.standardInput.writeUTFBytes('f\n');			
+			slrProcess.standardInput.writeUTFBytes("f\n");			
 		}
 		
 		public function takePhoto():void {
 			// CivilDebateWall.dashboard.log("Starting timeout timer");
 			timeoutTimer.reset();
 			timeoutTimer.start();
-			slrProcess.standardInput.writeUTFBytes('p\n');
+			slrProcess.standardInput.writeUTFBytes("p\n");
 		}
 		
 		private function onDownloadComplete():void {
@@ -140,14 +140,14 @@ package com.civildebatewall.kiosk.camera {
 		}		
 		
 		private function loadImage(file:File):void {
-			MonsterDebugger.trace(this, "loading slr photo " + file.url);
+			trace("loading slr photo " + file.url);
 			
 			imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleImageLoad);
-			imageLoader.load(new URLRequest(file.url.replace('%0d', ''))); // completely weird filename bug
+			imageLoader.load(new URLRequest(file.url.replace("%0d", ""))); // completely weird filename bug
 		}
 		
 		private function handleImageLoad( e:Event ):void {
-			MonsterDebugger.trace(this, "loaded");
+			trace("loaded");
 			loadedBitmap = imageLoader.content as Bitmap;
 			loadedBitmap.smoothing = true;
 			
@@ -166,7 +166,7 @@ package com.civildebatewall.kiosk.camera {
 		
 		private function onTimeout(e:TimerEvent):void {
 			// CivilDebateWall.dashboard.log("timeout!");
-			MonsterDebugger.trace(this, 'SLR timeout');
+			trace("SLR timeout");
 			timeoutTimer.stop();
 			timeoutTimer.reset();
 			onTimeoutFunction(e);
@@ -177,13 +177,13 @@ package com.civildebatewall.kiosk.camera {
 			var stdout:String = slrProcess.standardOutput.readUTFBytes(slrProcess.standardOutput.bytesAvailable); 
 			
 			// split on newlines
-			stdout = stdout.replace('\r', '');
-			stdout = stdout.replace('\n\n', '\n');
-			var stdoutlines:Array = stdout.split('\n');
+			stdout = stdout.replace("\r", "");
+			stdout = stdout.replace("\n\n", "\n");
+			var stdoutlines:Array = stdout.split("\n");
 			
 			for each (var line:String in stdoutlines) {
 				if (line.length > 0) {
-					MonsterDebugger.trace(this, "Line: " + line);
+					trace("Line: " + line);
 					
 					if (line.indexOf("Download complete") > -1) {
 						// file is here
@@ -193,13 +193,13 @@ package com.civildebatewall.kiosk.camera {
 						// CivilDebateWall.dashboard.log("Stopping timeout timer");
 						timeoutTimer.stop();
 						
-						var fileName:String = line.split(' ')[2];
-						MonsterDebugger.trace(this, "Creating file: " + fileName);
+						var fileName:String = line.split(" ")[2];
+						trace("Creating file: " + fileName);
 						imageFile = new File();
 						imageFile.nativePath = fileName;
 					}
 					else if (line.indexOf("format complete") > -1) {
-						MonsterDebugger.trace(this, "format finished");
+						trace("format finished");
 					}
 				}
 			}

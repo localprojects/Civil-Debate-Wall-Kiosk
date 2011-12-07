@@ -15,51 +15,51 @@ package com.civildebatewall {
 		// Embed code is generated dynamically by embedgen.py
 
 		// Vector TODO issues with long reloading process everyt time get method is called?
-		[Embed(source = '/assets/graphics/noBubble.swf')] private static const noBubbleClass:Class;
+		[Embed(source = "/assets/graphics/noBubble.swf")] private static const noBubbleClass:Class;
 		public static function getNoBubble():Sprite { return new noBubbleClass() as Sprite; };
 		public static const noBubble:Sprite = getNoBubble();
 		
-		[Embed(source = '/assets/graphics/yesBubble.swf')] private static const yesBubbleClass:Class;
+		[Embed(source = "/assets/graphics/yesBubble.swf")] private static const yesBubbleClass:Class;
 		public static function getYesBubble():Sprite { return new yesBubbleClass() as Sprite; };
 		public static const yesBubble:Sprite = getYesBubble();
 				
-		[Embed(source = '/assets/graphics/yesPhone.swf')] private static const yesPhoneClass:Class;
+		[Embed(source = "/assets/graphics/yesPhone.swf")] private static const yesPhoneClass:Class;
 		public static function getYesPhone():Sprite { return new yesPhoneClass() as Sprite; };
 		public static const yesPhone:Sprite = getYesPhone();
 		
-		[Embed(source = '/assets/graphics/noPhone.swf')] private static const noPhoneClass:Class;
+		[Embed(source = "/assets/graphics/noPhone.swf")] private static const noPhoneClass:Class;
 		public static function getNoPhone():Sprite { return new noPhoneClass() as Sprite; };
 		public static const noPhone:Sprite = getNoPhone();
 
-		[Embed(source = '/assets/graphics/noSuccessBubble.swf')] private static const noSuccessBubbleClass:Class;
+		[Embed(source = "/assets/graphics/noSuccessBubble.swf")] private static const noSuccessBubbleClass:Class;
 		public static function getNoSuccessBubble():Sprite { return new noSuccessBubbleClass() as Sprite; };
 		public static const noSuccessBubble:Sprite = getNoSuccessBubble();
 		
-		[Embed(source = '/assets/graphics/yesSuccessBubble.swf')] private static const yesSuccessBubbleClass:Class;
+		[Embed(source = "/assets/graphics/yesSuccessBubble.swf")] private static const yesSuccessBubbleClass:Class;
 		public static function getYesSuccessBubble():Sprite { return new yesSuccessBubbleClass() as Sprite; };
 		public static const yesSuccessBubble:Sprite = getYesSuccessBubble();
 		
-		[Embed(source = '/assets/graphics/noStopBubble.swf')] private static const noStopBubbleClass:Class;
+		[Embed(source = "/assets/graphics/noStopBubble.swf")] private static const noStopBubbleClass:Class;
 		public static function getNoStopBubble():Sprite { return new noStopBubbleClass() as Sprite; };
 		public static const noStopBubble:Sprite = getNoStopBubble();
 		
-		[Embed(source = '/assets/graphics/yesStopBubble.swf')] private static const yesStopBubbleClass:Class;
+		[Embed(source = "/assets/graphics/yesStopBubble.swf")] private static const yesStopBubbleClass:Class;
 		public static function getYesStopBubble():Sprite { return new yesStopBubbleClass() as Sprite; };
 		public static const yesStopBubble:Sprite = getYesStopBubble();
 		
-		[Embed(source = '/assets/graphics/yesFollowingBubble.swf')] private static const yesFollowingBubbleClass:Class;
+		[Embed(source = "/assets/graphics/yesFollowingBubble.swf")] private static const yesFollowingBubbleClass:Class;
 		public static function getYesFollowingBubble():Sprite { return new yesFollowingBubbleClass() as Sprite; };
 		public static const yesFollowingBubble:Sprite = getYesFollowingBubble();
 		
-		[Embed(source = '/assets/graphics/noFollowingBubble.swf')] private static const noFollowingBubbleClass:Class;
+		[Embed(source = "/assets/graphics/noFollowingBubble.swf")] private static const noFollowingBubbleClass:Class;
 		public static function getNoFollowingBubble():Sprite { return new noFollowingBubbleClass() as Sprite; };
 		public static const noFollowingBubble:Sprite = getNoFollowingBubble();
 		
-		[Embed(source = '/assets/graphics/heart.swf')] private static const heartClass:Class;
+		[Embed(source = "/assets/graphics/heart.swf")] private static const heartClass:Class;
 		public static function getHeart():Sprite { return new heartClass() as Sprite; };
 		public static const heart:Sprite = getHeart();
 		
-		[Embed(source = '/assets/graphics/flag.swf')] private static const flagClass:Class;
+		[Embed(source = "/assets/graphics/flag.swf")] private static const flagClass:Class;
 		public static function getFlag():Sprite { return new flagClass() as Sprite; };
 		public static const flag:Sprite = getFlag();
 		
@@ -68,51 +68,51 @@ package com.civildebatewall {
 		
 		
 		// Bitmaps
-		[Embed(source = '/assets/graphics/clearIcon.png')] private static const clearIconClass:Class;
+		[Embed(source = "/assets/graphics/clearIcon.png")] private static const clearIconClass:Class;
 		public static function getClearIcon():Bitmap { return new clearIconClass() as Bitmap; };
 		public static const clearIcon:Bitmap = getClearIcon();
 		
-		[Embed(source = '/assets/graphics/barGraphNoLabel.png')] private static const barGraphNoLabelClass:Class;
+		[Embed(source = "/assets/graphics/barGraphNoLabel.png")] private static const barGraphNoLabelClass:Class;
 		public static function getBarGraphNoLabel():Bitmap { return new barGraphNoLabelClass() as Bitmap; };
 		public static const barGraphNoLabel:Bitmap = getBarGraphNoLabel();
 		
-		[Embed(source = '/assets/graphics/barGraphYesLabel.png')] private static const barGraphYesLabelClass:Class;
+		[Embed(source = "/assets/graphics/barGraphYesLabel.png")] private static const barGraphYesLabelClass:Class;
 		public static function getBarGraphYesLabel():Bitmap { return new barGraphYesLabelClass() as Bitmap; };
 		public static const barGraphYesLabel:Bitmap = getBarGraphYesLabel();		
 		
-		[Embed(source = '/assets/graphics/goToDebateText.png')] private static const goToDebateTextClass:Class;
+		[Embed(source = "/assets/graphics/goToDebateText.png")] private static const goToDebateTextClass:Class;
 		public static function getGoToDebateText():Bitmap { return new goToDebateTextClass() as Bitmap; };
 		public static const goToDebateText:Bitmap = getGoToDebateText();
 		
-		[Embed(source = '/assets/graphics/bigSubmit.png')] private static const bigSubmitClass:Class;
+		[Embed(source = "/assets/graphics/bigSubmit.png")] private static const bigSubmitClass:Class;
 		public static function getBigSubmit():Bitmap { return new bigSubmitClass() as Bitmap; };
 		public static const bigSubmit:Bitmap = getBigSubmit();
 		
-		[Embed(source = '/assets/graphics/thumbnailStanceTextYes.png')] private static const thumbnailStanceTextYesClass:Class;
+		[Embed(source = "/assets/graphics/thumbnailStanceTextYes.png")] private static const thumbnailStanceTextYesClass:Class;
 		public static function getThumbnailStanceTextYes():Bitmap { return new thumbnailStanceTextYesClass() as Bitmap; };
 		public static const thumbnailStanceTextYes:Bitmap = getThumbnailStanceTextYes();
 		
-		[Embed(source = '/assets/graphics/thumbnailStanceTextNo.png')] private static const thumbnailStanceTextNoClass:Class;
+		[Embed(source = "/assets/graphics/thumbnailStanceTextNo.png")] private static const thumbnailStanceTextNoClass:Class;
 		public static function getThumbnailStanceTextNo():Bitmap { return new thumbnailStanceTextNoClass() as Bitmap; };
 		public static const thumbnailStanceTextNo:Bitmap = getThumbnailStanceTextNo();
 		
-		[Embed(source = '/assets/graphics/lowerMenuCarat.png')] private static const lowerMenuCaratClass:Class;
+		[Embed(source = "/assets/graphics/lowerMenuCarat.png")] private static const lowerMenuCaratClass:Class;
 		public static function getLowerMenuCarat():Bitmap { return new lowerMenuCaratClass() as Bitmap; };
 		public static const lowerMenuCarat:Bitmap = getLowerMenuCarat();
 		
-		[Embed(source = '/assets/graphics/leftCaratWhite.png')] private static const leftCaratWhiteClass:Class;
+		[Embed(source = "/assets/graphics/leftCaratWhite.png")] private static const leftCaratWhiteClass:Class;
 		public static function getLeftCaratWhite():Bitmap { return new leftCaratWhiteClass() as Bitmap; };
 		public static const leftCaratWhite:Bitmap = getLeftCaratWhite();
 		
-		[Embed(source = '/assets/graphics/rightCaratWhite.png')] private static const rightCaratWhiteClass:Class;
+		[Embed(source = "/assets/graphics/rightCaratWhite.png")] private static const rightCaratWhiteClass:Class;
 		public static function getRightCaratWhite():Bitmap { return new rightCaratWhiteClass() as Bitmap; };
 		public static const rightCaratWhite:Bitmap = getRightCaratWhite();
 		
-		[Embed(source = '/assets/graphics/bigYes.png')] private static const bigYesClass:Class;
+		[Embed(source = "/assets/graphics/bigYes.png")] private static const bigYesClass:Class;
 		public static function getBigYes():Bitmap { return new bigYesClass() as Bitmap; };
 		public static const bigYes:Bitmap = getBigYes();
 		
-		[Embed(source = '/assets/graphics/bigNo.png')] private static const bigNoClass:Class;
+		[Embed(source = "/assets/graphics/bigNo.png")] private static const bigNoClass:Class;
 		public static function getBigNo():Bitmap { return new bigNoClass() as Bitmap; };
 		public static const bigNo:Bitmap = getBigNo();
 		
@@ -120,160 +120,160 @@ package com.civildebatewall {
 		
 		
 		
-		[Embed(source = '/assets/graphics/smsSubscribeHeader.png')] private static const smsSubscribeHeaderClass:Class;
+		[Embed(source = "/assets/graphics/smsSubscribeHeader.png")] private static const smsSubscribeHeaderClass:Class;
 		public static function getSmsSubscribeHeader():Bitmap { return new smsSubscribeHeaderClass() as Bitmap; };
 		public static const smsSubscribeHeader:Bitmap = getSmsSubscribeHeader();
 		
-		[Embed(source = '/assets/graphics/smsPhoneLabel.png')] private static const smsPhoneLabelClass:Class;
+		[Embed(source = "/assets/graphics/smsPhoneLabel.png")] private static const smsPhoneLabelClass:Class;
 		public static function getSmsPhoneLabel():Bitmap { return new smsPhoneLabelClass() as Bitmap; };
 		public static const smsPhoneLabel:Bitmap = getSmsPhoneLabel();
 		
-		[Embed(source = '/assets/graphics/progressGradient.png')] private static const progressGradientClass:Class;
+		[Embed(source = "/assets/graphics/progressGradient.png")] private static const progressGradientClass:Class;
 		public static function getProgressGradient():Bitmap { return new progressGradientClass() as Bitmap; };
 		public static const progressGradient:Bitmap = getProgressGradient();
 		
-		[Embed(source = '/assets/graphics/smsSuccessText.png')] private static const smsSuccessTextClass:Class;
+		[Embed(source = "/assets/graphics/smsSuccessText.png")] private static const smsSuccessTextClass:Class;
 		public static function getSmsSuccessText():Bitmap { return new smsSuccessTextClass() as Bitmap; };
 		public static const smsSuccessText:Bitmap = getSmsSuccessText();
 		
-		[Embed(source = '/assets/graphics/smsSuccessNote.png')] private static const smsSuccessNoteClass:Class;
+		[Embed(source = "/assets/graphics/smsSuccessNote.png")] private static const smsSuccessNoteClass:Class;
 		public static function getSmsSuccessNote():Bitmap { return new smsSuccessNoteClass() as Bitmap; };
 		public static const smsSuccessNote:Bitmap = getSmsSuccessNote();
 		
-		[Embed(source = '/assets/graphics/termsAndConditions.png')] private static const termsAndConditionsClass:Class;
+		[Embed(source = "/assets/graphics/termsAndConditions.png")] private static const termsAndConditionsClass:Class;
 		public static function getTermsAndConditions():Bitmap { return new termsAndConditionsClass() as Bitmap; };
 		public static const termsAndConditions:Bitmap = getTermsAndConditions();		
 		
-		[Embed(source = '/assets/graphics/photoPrompt.png')] private static const photoPromptClass:Class;
+		[Embed(source = "/assets/graphics/photoPrompt.png")] private static const photoPromptClass:Class;
 		public static function getPhotoPrompt():Bitmap { return new photoPromptClass() as Bitmap; };
 		public static const photoPrompt:Bitmap = getPhotoPrompt();
 		
-		[Embed(source = '/assets/graphics/cameraArrowSmall.png')] private static const cameraArrowSmallClass:Class;
+		[Embed(source = "/assets/graphics/cameraArrowSmall.png")] private static const cameraArrowSmallClass:Class;
 		public static function getCameraArrowSmall():Bitmap { return new cameraArrowSmallClass() as Bitmap; };
 		public static const cameraArrowSmall:Bitmap = getCameraArrowSmall();
 		
-		[Embed(source = '/assets/graphics/everythingOkText.png')] private static const everythingOkTextClass:Class;
+		[Embed(source = "/assets/graphics/everythingOkText.png")] private static const everythingOkTextClass:Class;
 		public static function getEverythingOkText():Bitmap { return new everythingOkTextClass() as Bitmap; };
 		public static const everythingOkText:Bitmap = getEverythingOkText();
 
-		[Embed(source = '/assets/graphics/orText.png')] private static const orTextClass:Class;
+		[Embed(source = "/assets/graphics/orText.png")] private static const orTextClass:Class;
 		public static function getOrText():Bitmap { return new orTextClass() as Bitmap; };
 		public static const orText:Bitmap = getOrText();
 		
-		[Embed(source = '/assets/graphics/yesButtonLabelText.png')] private static const yesButtonLabelTextClass:Class;
+		[Embed(source = "/assets/graphics/yesButtonLabelText.png")] private static const yesButtonLabelTextClass:Class;
 		public static function getYesButtonLabelText():Bitmap { return new yesButtonLabelTextClass() as Bitmap; };
 		public static const yesButtonLabelText:Bitmap = getYesButtonLabelText();
 		
-		[Embed(source = '/assets/graphics/noButtonLabelText.png')] private static const noButtonLabelTextClass:Class;
+		[Embed(source = "/assets/graphics/noButtonLabelText.png")] private static const noButtonLabelTextClass:Class;
 		public static function getNoButtonLabelText():Bitmap { return new noButtonLabelTextClass() as Bitmap; };
 		public static const noButtonLabelText:Bitmap = getNoButtonLabelText();
 		
-		[Embed(source = '/assets/graphics/dragHandle.png')] private static const dragHandleClass:Class;
+		[Embed(source = "/assets/graphics/dragHandle.png")] private static const dragHandleClass:Class;
 		public static function getDragHandle():Bitmap { return new dragHandleClass() as Bitmap; };
 		public static const dragHandle:Bitmap = getDragHandle();		
 		
-		[Embed(source = '/assets/graphics/portraitBannerYes.png')] private static const portraitBannerYesClass:Class;
+		[Embed(source = "/assets/graphics/portraitBannerYes.png")] private static const portraitBannerYesClass:Class;
 		public static function getPortraitBannerYes():Bitmap { return new portraitBannerYesClass() as Bitmap; };
 		public static const portraitBannerYes:Bitmap = getPortraitBannerYes();
 		
-		[Embed(source = '/assets/graphics/portraitBannerNo.png')] private static const portraitBannerNoClass:Class;
+		[Embed(source = "/assets/graphics/portraitBannerNo.png")] private static const portraitBannerNoClass:Class;
 		public static function getPortraitBannerNo():Bitmap { return new portraitBannerNoClass() as Bitmap; };
 		public static const portraitBannerNo:Bitmap = getPortraitBannerNo();
 		
 
 		
-		[Embed(source = '/assets/graphics/saysText.png')] private static const saysTextClass:Class;
+		[Embed(source = "/assets/graphics/saysText.png")] private static const saysTextClass:Class;
 		public static function getSaysText():Bitmap { return new saysTextClass() as Bitmap; };
 		public static const saysText:Bitmap = getSaysText();		
 		
-		[Embed(source = '/assets/graphics/statsButtonCenter.png')] private static const statsButtonCenterClass:Class;
+		[Embed(source = "/assets/graphics/statsButtonCenter.png")] private static const statsButtonCenterClass:Class;
 		public static function getStatsButtonCenter():Bitmap { return new statsButtonCenterClass() as Bitmap; };
 		public static const statsButtonCenter:Bitmap = getStatsButtonCenter();
 		
-		[Embed(source = '/assets/graphics/balloonButtonBackground.png')] private static const balloonButtonBackgroundClass:Class;
+		[Embed(source = "/assets/graphics/balloonButtonBackground.png")] private static const balloonButtonBackgroundClass:Class;
 		public static function getBalloonButtonBackground():Bitmap { return new balloonButtonBackgroundClass() as Bitmap; };
 		public static const balloonButtonBackground:Bitmap = getBalloonButtonBackground();
 		
-		[Embed(source = '/assets/graphics/balloonButtonText.png')] private static const balloonButtonTextClass:Class;
+		[Embed(source = "/assets/graphics/balloonButtonText.png")] private static const balloonButtonTextClass:Class;
 		public static function getBalloonButtonText():Bitmap { return new balloonButtonTextClass() as Bitmap; };
 		public static const balloonButtonText:Bitmap = getBalloonButtonText();		
 		
-		[Embed(source = '/assets/graphics/sortedByText.png')] private static const sortedByTextClass:Class;
+		[Embed(source = "/assets/graphics/sortedByText.png")] private static const sortedByTextClass:Class;
 		public static function getSortedByText():Bitmap { return new sortedByTextClass() as Bitmap; };
 		public static const sortedByText:Bitmap = getSortedByText();
 		
-		[Embed(source = '/assets/graphics/leftCarat.png')] private static const leftCaratClass:Class;
+		[Embed(source = "/assets/graphics/leftCarat.png")] private static const leftCaratClass:Class;
 		public static function getLeftCarat():Bitmap { return new leftCaratClass() as Bitmap; };
 		public static const leftCarat:Bitmap = getLeftCarat();
 		
-		[Embed(source = '/assets/graphics/rightCarat.png')] private static const rightCaratClass:Class;
+		[Embed(source = "/assets/graphics/rightCarat.png")] private static const rightCaratClass:Class;
 		public static function getRightCarat():Bitmap { return new rightCaratClass() as Bitmap; };
 		public static const rightCarat:Bitmap = getRightCarat();
 		
-		[Embed(source = '/assets/graphics/leftCaratBig.png')] private static const leftCaratBigClass:Class;
+		[Embed(source = "/assets/graphics/leftCaratBig.png")] private static const leftCaratBigClass:Class;
 		public static function getLeftCaratBig():Bitmap { return new leftCaratBigClass() as Bitmap; };
 		public static const leftCaratBig:Bitmap = getLeftCaratBig();
 				
-		[Embed(source = '/assets/graphics/rightCaratBig.png')] private static const rightCaratBigClass:Class;
+		[Embed(source = "/assets/graphics/rightCaratBig.png")] private static const rightCaratBigClass:Class;
 		public static function getRightCaratBig():Bitmap { return new rightCaratBigClass() as Bitmap; };
 		public static const rightCaratBig:Bitmap = getRightCaratBig();
 		
-		[Embed(source = '/assets/graphics/closeButton.png')] private static const closeButtonClass:Class;
+		[Embed(source = "/assets/graphics/closeButton.png")] private static const closeButtonClass:Class;
 		public static function getCloseButton():Bitmap { return new closeButtonClass() as Bitmap; };
 		public static const closeButton:Bitmap = getCloseButton();				
 		
-		[Embed(source = '/assets/graphics/wordCloudGradient.png')] private static const wordCloudGradientClass:Class;
+		[Embed(source = "/assets/graphics/wordCloudGradient.png")] private static const wordCloudGradientClass:Class;
 		public static function getWordCloudGradient():Bitmap { return new wordCloudGradientClass() as Bitmap; };
 		public static const wordCloudGradient:Bitmap = getWordCloudGradient();				
 		
-		[Embed(source = '/assets/graphics/leftArrow.png')] private static const leftArrowClass:Class;
+		[Embed(source = "/assets/graphics/leftArrow.png")] private static const leftArrowClass:Class;
 		public static function getLeftArrow():Bitmap { return new leftArrowClass() as Bitmap; };
 		public static const leftArrow:Bitmap = getLeftArrow();
 		
-		[Embed(source = '/assets/graphics/rightArrow.png')] private static const rightArrowClass:Class;
+		[Embed(source = "/assets/graphics/rightArrow.png")] private static const rightArrowClass:Class;
 		public static function getRightArrow():Bitmap { return new rightArrowClass() as Bitmap; };
 		public static const rightArrow:Bitmap = getRightArrow();
 		
-		[Embed(source = '/assets/graphics/bottomButtonTile.png')] private static const bottomButtonTileClass:Class;
+		[Embed(source = "/assets/graphics/bottomButtonTile.png")] private static const bottomButtonTileClass:Class;
 		public static function getBottomButtonTile():Bitmap { return new bottomButtonTileClass() as Bitmap; };
 		public static const bottomButtonTile:Bitmap = getBottomButtonTile();
 		
-		[Embed(source = '/assets/graphics/bottomEdgeMask.png')] private static const bottomEdgeMaskClass:Class;
+		[Embed(source = "/assets/graphics/bottomEdgeMask.png")] private static const bottomEdgeMaskClass:Class;
 		public static function getBottomEdgeMask():Bitmap { return new bottomEdgeMaskClass() as Bitmap; };
 		public static const bottomEdgeMask:Bitmap = getBottomEdgeMask();
 		
-		[Embed(source = '/assets/graphics/buttonBackground.png')] private static const buttonBackgroundClass:Class;
+		[Embed(source = "/assets/graphics/buttonBackground.png")] private static const buttonBackgroundClass:Class;
 		public static function getButtonBackground():Bitmap { return new buttonBackgroundClass() as Bitmap; };
 		public static const buttonBackground:Bitmap = getButtonBackground();
 		
 
 
-		[Embed(source = '/assets/graphics/leftButtonTile.png')] private static const leftButtonTileClass:Class;
+		[Embed(source = "/assets/graphics/leftButtonTile.png")] private static const leftButtonTileClass:Class;
 		public static function getLeftButtonTile():Bitmap { return new leftButtonTileClass() as Bitmap; };
 		public static const leftButtonTile:Bitmap = getLeftButtonTile();
 		
-		[Embed(source = '/assets/graphics/leftEdgeMask.png')] private static const leftEdgeMaskClass:Class;
+		[Embed(source = "/assets/graphics/leftEdgeMask.png")] private static const leftEdgeMaskClass:Class;
 		public static function getLeftEdgeMask():Bitmap { return new leftEdgeMaskClass() as Bitmap; };
 		public static const leftEdgeMask:Bitmap = getLeftEdgeMask();		
 		
-		[Embed(source = '/assets/graphics/portraitPlaceholder.png')] private static const portraitPlaceholderClass:Class;
+		[Embed(source = "/assets/graphics/portraitPlaceholder.png")] private static const portraitPlaceholderClass:Class;
 		public static function getPortraitPlaceholder():Bitmap { return new portraitPlaceholderClass() as Bitmap; };
 		public static const portraitPlaceholder:Bitmap = getPortraitPlaceholder();
 
 		// TODO get rid of this?
-		[Embed(source = '/assets/graphics/bubblePerimeter.png')] private static const bubblePerimeterClass:Class;
+		[Embed(source = "/assets/graphics/bubblePerimeter.png")] private static const bubblePerimeterClass:Class;
 		public static function getBubblePerimeter():Bitmap { return new bubblePerimeterClass() as Bitmap; };
 		public static const bubblePerimeter:Bitmap = getBubblePerimeter();
 		
-		[Embed(source = '/assets/graphics/bubbleBackground.png')] private static const bubbleBackgroundClass:Class;
+		[Embed(source = "/assets/graphics/bubbleBackground.png")] private static const bubbleBackgroundClass:Class;
 		public static function getBubbleBackground():Bitmap { return new bubbleBackgroundClass() as Bitmap; };
 		public static const bubbleBackground:Bitmap = getBubbleBackground();
 		
-		[Embed(source = '/assets/graphics/circleBackground.png')] private static const circleBackgroundClass:Class;
+		[Embed(source = "/assets/graphics/circleBackground.png")] private static const circleBackgroundClass:Class;
 		public static function getCircleBackground():Bitmap { return new circleBackgroundClass() as Bitmap; };
 		public static const circleBackground:Bitmap = getCircleBackground();
 		
-		[Embed(source = '/assets/graphics/circlePerimeter.png')] private static const circlePerimeterClass:Class;
+		[Embed(source = "/assets/graphics/circlePerimeter.png")] private static const circlePerimeterClass:Class;
 		public static function getCirclePerimeter():Bitmap { return new circlePerimeterClass() as Bitmap; };
 		public static const circlePerimeter:Bitmap = getCirclePerimeter();
 
@@ -284,84 +284,84 @@ package com.civildebatewall {
 		
 		// Wallsaver
 		// New Title Sequence
-		[Embed(source = '/assets/graphics/titleChevron.png')] private static const titleChevronClass:Class;
+		[Embed(source = "/assets/graphics/titleChevron.png")] private static const titleChevronClass:Class;
 		public static function getTitleChevron():Bitmap { return new titleChevronClass() as Bitmap; };
 		public static const titleChevron:Bitmap = getTitleChevron();
 		
-		[Embed(source = '/assets/graphics/wallText.png')] private static const wallTextClass:Class;
+		[Embed(source = "/assets/graphics/wallText.png")] private static const wallTextClass:Class;
 		public static function getWallText():Bitmap { return new wallTextClass() as Bitmap; };
 		public static const wallText:Bitmap = getWallText();
 		
-		[Embed(source = '/assets/graphics/theText.png')] private static const theTextClass:Class;
+		[Embed(source = "/assets/graphics/theText.png")] private static const theTextClass:Class;
 		public static function getTheText():Bitmap { return new theTextClass() as Bitmap; };
 		public static const theText:Bitmap = getTheText();
 		
-		[Embed(source = '/assets/graphics/taglineText.png')] private static const taglineTextClass:Class;
+		[Embed(source = "/assets/graphics/taglineText.png")] private static const taglineTextClass:Class;
 		public static function getTaglineText():Bitmap { return new taglineTextClass() as Bitmap; };
 		public static const taglineText:Bitmap = getTaglineText();
 		
 		
 		// Quotation Marks
-		[Embed(source = '/assets/graphics/quoteNoClose.png')] private static const quoteNoCloseClass:Class;
+		[Embed(source = "/assets/graphics/quoteNoClose.png")] private static const quoteNoCloseClass:Class;
 		public static function getQuoteNoClose():Bitmap { return new quoteNoCloseClass() as Bitmap; };
 		public static const quoteNoClose:Bitmap = getQuoteNoClose();
 		
-		[Embed(source = '/assets/graphics/quoteYesClose.png')] private static const quoteYesCloseClass:Class;
+		[Embed(source = "/assets/graphics/quoteYesClose.png")] private static const quoteYesCloseClass:Class;
 		public static function getQuoteYesClose():Bitmap { return new quoteYesCloseClass() as Bitmap; };
 		public static const quoteYesClose:Bitmap = getQuoteYesClose();
 		
-		[Embed(source = '/assets/graphics/quoteYesOpen.png')] private static const quoteYesOpenClass:Class;
+		[Embed(source = "/assets/graphics/quoteYesOpen.png")] private static const quoteYesOpenClass:Class;
 		public static function getQuoteYesOpen():Bitmap { return new quoteYesOpenClass() as Bitmap; };
 		public static const quoteYesOpen:Bitmap = getQuoteYesOpen();
 		
-		[Embed(source = '/assets/graphics/quoteNoOpen.png')] private static const quoteNoOpenClass:Class;
+		[Embed(source = "/assets/graphics/quoteNoOpen.png")] private static const quoteNoOpenClass:Class;
 		public static function getQuoteNoOpen():Bitmap { return new quoteNoOpenClass() as Bitmap; };
 		public static const quoteNoOpen:Bitmap = getQuoteNoOpen();
 		
 		
 		// Calls To Action
-		[Embed(source = '/assets/graphics/touchToBeginText.png')] private static const touchToBeginTextClass:Class;
+		[Embed(source = "/assets/graphics/touchToBeginText.png")] private static const touchToBeginTextClass:Class;
 		public static function getTouchToBeginText():Bitmap { return new touchToBeginTextClass() as Bitmap; };
 		public static const touchToBeginText:Bitmap = getTouchToBeginText();
 		
-		[Embed(source = '/assets/graphics/joinTheDebateText.png')] private static const joinTheDebateTextClass:Class;
+		[Embed(source = "/assets/graphics/joinTheDebateText.png")] private static const joinTheDebateTextClass:Class;
 		public static function getJoinTheDebateText():Bitmap { return new joinTheDebateTextClass() as Bitmap; };
 		public static const joinTheDebateText:Bitmap = getJoinTheDebateText();
 		
 		// Graph Labels
-		[Embed(source = '/assets/graphics/graphLabelNo.png')] private static const graphLabelNoClass:Class;
+		[Embed(source = "/assets/graphics/graphLabelNo.png")] private static const graphLabelNoClass:Class;
 		public static function getGraphLabelNo():Bitmap { return new graphLabelNoClass() as Bitmap; };
 		public static const graphLabelNo:Bitmap = getGraphLabelNo();
 		
-		[Embed(source = '/assets/graphics/graphLabelYes.png')] private static const graphLabelYesClass:Class;
+		[Embed(source = "/assets/graphics/graphLabelYes.png")] private static const graphLabelYesClass:Class;
 		public static function getGraphLabelYes():Bitmap { return new graphLabelYesClass() as Bitmap; };
 		public static const graphLabelYes:Bitmap = getGraphLabelYes();
 		
 		// TODO REMOVE BELOW
 		// Sample Kiosks		
-		[Embed(source = '/assets/graphics/sampleKiosk1.jpg')] private static const sampleKiosk1Class:Class;
+		[Embed(source = "/assets/graphics/sampleKiosk1.jpg")] private static const sampleKiosk1Class:Class;
 		public static function getSampleKiosk1():Bitmap { return new sampleKiosk1Class() as Bitmap; };
 		public static const sampleKiosk1:Bitmap = getSampleKiosk1();
 		
-		[Embed(source = '/assets/graphics/sampleKiosk2.jpg')] private static const sampleKiosk2Class:Class;
+		[Embed(source = "/assets/graphics/sampleKiosk2.jpg")] private static const sampleKiosk2Class:Class;
 		public static function getSampleKiosk2():Bitmap { return new sampleKiosk2Class() as Bitmap; };
 		public static const sampleKiosk2:Bitmap = getSampleKiosk2();		
 		
 		
 		// Sample Portraits
-		[Embed(source = '/assets/graphics/samplePortrait1.jpg')] private static const samplePortrait1Class:Class;
+		[Embed(source = "/assets/graphics/samplePortrait1.jpg")] private static const samplePortrait1Class:Class;
 		public static function getSamplePortrait1():Bitmap { return new samplePortrait1Class() as Bitmap; };
 		public static const samplePortrait1:Bitmap = getSamplePortrait1();
 		
-		[Embed(source = '/assets/graphics/samplePortrait2.jpg')] private static const samplePortrait2Class:Class;
+		[Embed(source = "/assets/graphics/samplePortrait2.jpg")] private static const samplePortrait2Class:Class;
 		public static function getSamplePortrait2():Bitmap { return new samplePortrait2Class() as Bitmap; };
 		public static const samplePortrait2:Bitmap = getSamplePortrait2();
 		
-		[Embed(source = '/assets/graphics/samplePortrait3.jpg')] private static const samplePortrait3Class:Class;
+		[Embed(source = "/assets/graphics/samplePortrait3.jpg")] private static const samplePortrait3Class:Class;
 		public static function getSamplePortrait3():Bitmap { return new samplePortrait3Class() as Bitmap; };
 		public static const samplePortrait3:Bitmap = getSamplePortrait3();
 		
-		[Embed(source = '/assets/graphics/samplePortrait4.jpg')] private static const samplePortrait4Class:Class;
+		[Embed(source = "/assets/graphics/samplePortrait4.jpg")] private static const samplePortrait4Class:Class;
 		public static function getSamplePortrait4():Bitmap { return new samplePortrait4Class() as Bitmap; };
 		public static const samplePortrait4:Bitmap = getSamplePortrait4();
 		// TODO REMOVE ABOVE
@@ -369,26 +369,26 @@ package com.civildebatewall {
 		
 		
 		// Fonts
-		[Embed(source='/assets/fonts/fonts.swf', symbol='RockwellLight')] public static const FontLight:Class;
-		public static const FONT_LIGHT:String = 'Rockwell Std Light';		
+		[Embed(source="/assets/fonts/fonts.swf", symbol="RockwellLight")] public static const FontLight:Class;
+		public static const FONT_LIGHT:String = "Rockwell Std Light";		
 		
-		[Embed(source='/assets/fonts/fonts.swf', symbol='RockwellRegular')] public static const FontRegular:Class;
-		public static const FONT_REGULAR:String = 'Rockwell Std';
+		[Embed(source="/assets/fonts/fonts.swf", symbol="RockwellRegular")] public static const FontRegular:Class;
+		public static const FONT_REGULAR:String = "Rockwell Std";
 		
-		[Embed(source='/assets/fonts/fonts.swf', symbol='RockwellBold')] public static const FontBold:Class;
-		public static const FONT_BOLD:String = 'Rockwell Std'; // Gets bolded through textfield		
+		[Embed(source="/assets/fonts/fonts.swf", symbol="RockwellBold")] public static const FontBold:Class;
+		public static const FONT_BOLD:String = "Rockwell Std"; // Gets bolded through textfield		
 		
-		[Embed(source='/assets/fonts/fonts.swf', symbol='RockwellExtraBold')] public static const FontHeavy:Class;		
-		public static const FONT_HEAVY:String = 'Rockwell Std Extra Bold';		
+		[Embed(source="/assets/fonts/fonts.swf", symbol="RockwellExtraBold")] public static const FontHeavy:Class;		
+		public static const FONT_HEAVY:String = "Rockwell Std Extra Bold";		
 		
-		[Embed(source='/assets/fonts/fonts.swf', symbol='RockwellLightItalic')] public static const FontLightItalic:Class;
-		public static const FONT_LIGHT_ITALIC:String = 'Rockwell Std'; // gets italicized in textfield?	
+		[Embed(source="/assets/fonts/fonts.swf", symbol="RockwellLightItalic")] public static const FontLightItalic:Class;
+		public static const FONT_LIGHT_ITALIC:String = "Rockwell Std"; // gets italicized in textfield?	
 		
-		[Embed(source='/assets/fonts/fonts.swf', symbol='RockwellItalic')] public static const FontRegularItalic:Class;
-		public static const FONT_REGULAR_ITALIC:String = 'Rockwell Std Italic';
+		[Embed(source="/assets/fonts/fonts.swf", symbol="RockwellItalic")] public static const FontRegularItalic:Class;
+		public static const FONT_REGULAR_ITALIC:String = "Rockwell Std Italic";
 		
-		[Embed(source='/assets/fonts/fonts.swf', symbol='RockwellBoldItalic')] public static const FontBoldItalic:Class;
-		public static const FONT_BOLD_ITALIC:String = 'Rockwell Std'; // gets bolded and italicized in textfield?		
+		[Embed(source="/assets/fonts/fonts.swf", symbol="RockwellBoldItalic")] public static const FontBoldItalic:Class;
+		public static const FONT_BOLD_ITALIC:String = "Rockwell Std"; // gets bolded and italicized in textfield?		
 
 		
 		// Colors

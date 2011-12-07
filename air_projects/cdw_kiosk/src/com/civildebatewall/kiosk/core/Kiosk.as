@@ -8,7 +8,7 @@ package com.civildebatewall.kiosk.core {
 	import com.civildebatewall.kiosk.camera.*;
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -48,7 +48,7 @@ package com.civildebatewall.kiosk.core {
 		}
 		
 		private function onInactive(e:InactivityEvent):void {
-			MonsterDebugger.trace(this, "inactive!");
+			trace("inactive!");
 			view.inactivityOverlayView();
 		}
 		

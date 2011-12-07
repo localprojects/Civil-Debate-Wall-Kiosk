@@ -1,7 +1,7 @@
 package com.civildebatewall {
 	
 	import com.adobe.serialization.json.JSON;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	import com.kitschpatrol.futil.utilitites.PlatformUtil;
@@ -28,7 +28,7 @@ package com.civildebatewall {
 				throw new Error("Error detecting system type when loading settings.");
 			}
 			
-			MonsterDebugger.trace(null, "Settings path: " + settingsPath);			
+			trace("Settings path: " + settingsPath);			
 			
 			var settingsString:String = FileUtil.loadString(settingsPath);
 
@@ -39,11 +39,11 @@ package com.civildebatewall {
 			
 			// Use the "Mac" or "Windows" settings depending on detected platform
 			if (PlatformUtil.isWindows) {
-				MonsterDebugger.trace(null, "Loading Windows Settings");
+				trace("Loading Windows Settings");
 				settings = ObjectUtil.mergeObjects(settings , rawSettings.windows);
 			}
 			else if (PlatformUtil.isMac) {
-				MonsterDebugger.trace(null, "Loading Mac Settings");
+				trace("Loading Mac Settings");
 				settings  = ObjectUtil.mergeObjects(settings , rawSettings.mac);				
 			}
 			else {

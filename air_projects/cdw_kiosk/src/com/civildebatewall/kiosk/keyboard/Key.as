@@ -63,7 +63,7 @@ package com.civildebatewall.kiosk.keyboard {
 			paddingTopBottom = 12;
 			paddingRightLeft = 7;
 			
-			if (letter == 'SPACE') letter = ' ';
+			if (letter == "SPACE") letter = " ";
 						
 			// prep activity overlay
 			keyCap = new Shape();
@@ -146,7 +146,7 @@ package com.civildebatewall.kiosk.keyboard {
 				repeatDelayTimer.stop();
 				repeatIntervalTimer.stop();
 				
-				if (!active && letter == 'SHIFT') {
+				if (!active && letter == "SHIFT") {
 					active = true;
 				}
 				else {

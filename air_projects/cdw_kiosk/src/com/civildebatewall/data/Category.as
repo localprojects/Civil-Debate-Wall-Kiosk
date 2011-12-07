@@ -6,8 +6,8 @@ package com.civildebatewall.data {
 		private var _name:String;
 		
 		public function Category(jsonObject:Object) {
-			_id = jsonObject['id'];
-			_name = jsonObject['name']; 
+			_id = jsonObject["id"];
+			_name = jsonObject["name"]; 
 		}
 		
 		public function get id():String {	return _id;	}

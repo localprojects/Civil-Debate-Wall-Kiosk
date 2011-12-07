@@ -3,7 +3,7 @@ package com.civildebatewall {
 	import com.adobe.crypto.SHA1;
 	import com.adobe.serialization.json.*;
 	import com.civildebatewall.kiosk.core.Kiosk;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.DateUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
@@ -79,7 +79,7 @@ package com.civildebatewall {
 				onComplete();
 			});
 			
-			MonsterDebugger.trace(null, 'loading image from ' + file.url);
+			trace("loading image from " + file.url);
 			imageLoader.load(new URLRequest(file.url));
 		}
 
@@ -88,13 +88,13 @@ package com.civildebatewall {
 		
 		// Hmmm....
 		public static function traceObject(o:Object):void {
-			MonsterDebugger.trace(null, JSON.encode(o));
+			trace(JSON.encode(o));
 		}
 																			 
 		
 		// like post request, but automatically digests JSON
 		public static function postRequestJSON(url:String, payload:Object, callback:Function):void {
-			MonsterDebugger.trace(null, "posting json to " + url);
+			trace("posting json to " + url);
 			postRequest(url, payload, function(r:Object):void { callback(JSON.decode(r.toString()))	}); 
 		}		
 		
@@ -110,11 +110,11 @@ package com.civildebatewall {
 			// Security header
 			request.requestHeaders.push(new URLRequestHeader("X-Auth-Token", CivilDebateWall.settings.secretKeyHash));
 			
-			MonsterDebugger.trace(null, 'sending variables: ' + variables.toString());
+			trace("sending variables: " + variables.toString());
 			
 			// Handlers
 			loader.addEventListener(Event.COMPLETE, function(e:Event):void { callback(e.target.data); });
-			loader.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent):void { MonsterDebugger.trace(null, 'HTTP Status: ' + e.status); });
+			loader.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent):void { trace("HTTP Status: " + e.status); });
 			
 			loader.load(request);	
 		}
@@ -157,14 +157,14 @@ package com.civildebatewall {
 
 		public static function shortenName(s:String):String {
 			// Capitalized First word 
-			return StringUtil.capitalize(StringUtil.trim(s.split(' ')[0]))			
+			return StringUtil.capitalize(StringUtil.trim(s.split(" ")[0]))			
 		}
 		
 		public static function createFolderIfNecessary(path:String):void {
 			var directory:File = new File(path);
 			
 			if (!directory.exists) {
-				MonsterDebugger.trace(null, 'Directory "' + path + '" does not exist. Creating it.');
+				trace("Directory \"" + path + "\" does not exist. Creating it.");
 				directory.createDirectory();
 			}
 		}
@@ -205,8 +205,8 @@ package com.civildebatewall {
 			
 			// TODO abort safety
 			while (!scaledSourceBounds.containsRect(targetBounds)) {
-				MonsterDebugger.trace(null, "Scaling... " + scaledSourceBounds);
-				MonsterDebugger.trace(null, "To fit within: " + targetBounds);
+				trace("Scaling... " + scaledSourceBounds);
+				trace("To fit within: " + targetBounds);
 				scaledSourceBounds.width += 1  * aspectRatio;
 				scaledSourceBounds.x -= (scaledSourceCenter.x / originalWidth) * aspectRatio;
 				
@@ -217,12 +217,12 @@ package com.civildebatewall {
 			var totalScaleX:Number = scaledSourceBounds.width / sourceBitmap.width;
 			var totalScaleY:Number = scaledSourceBounds.height / sourceBitmap.height;			
 			
-			MonsterDebugger.trace(null, "Scaled: " + totalScaleX + " x " + totalScaleY);
+			trace("Scaled: " + totalScaleX + " x " + totalScaleY);
 			
 			// TODO set some kind of scale threshold
 			
 			// now it fits, we have the the bounds of the final rectangle
-			MonsterDebugger.trace(null, "This fits: " + scaledSourceBounds);
+			trace("This fits: " + scaledSourceBounds);
 			
 			// draw the face cropped image it into a bitmap
 			var portraitBitmap:Bitmap = new Bitmap(new BitmapData(1080, 1920), PixelSnapping.NEVER, true);

@@ -4,7 +4,7 @@ package com.civildebatewall.kiosk.camera {
 	import ObjectDetection.ObjectDetectorOptions;
 	
 	import com.civildebatewall.CivilDebateWall;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	
@@ -110,8 +110,8 @@ package com.civildebatewall.kiosk.camera {
 		
 		public function searchBitmap(photo:BitmapData):void {
 			// resize
-			MonsterDebugger.trace(this, "maxSourceWidth" + maxSourceWidth);
-			MonsterDebugger.trace(this, "maxSourceHeight"  + maxSourceHeight);
+			trace("maxSourceWidth" + maxSourceWidth);
+			trace("maxSourceHeight"  + maxSourceHeight);
 			photo = BitmapUtil.scaleDataToFit(photo, maxSourceWidth, maxSourceHeight);
 			sourceCenter = new Point(photo.width / 2, photo.height / 2);
 			detector.detect(photo);

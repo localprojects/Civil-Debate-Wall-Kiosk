@@ -15,11 +15,11 @@ package com.civildebatewall.data {
 		
 		
 		
-		public static const ORIGIN_KIOSK:String = 'kiosk';
-		public static const ORIGIN_WEB:String = 'web';
+		public static const ORIGIN_KIOSK:String = "kiosk";
+		public static const ORIGIN_WEB:String = "web";
 		
-		public static const STANCE_YES:String = 'yes';
-		public static const STANCE_NO:String = 'no';	
+		public static const STANCE_YES:String = "yes";
+		public static const STANCE_NO:String = "no";	
 		
 		private var _id:String;
 		private var _likes:uint;
@@ -49,19 +49,19 @@ package com.civildebatewall.data {
 		// link back to thread, too?
 		
 		public function Post(jsonObject:Object, parentThread:Thread = null)	{
-			_id = jsonObject['id'];
+			_id = jsonObject["id"];
 		
-			_stance = jsonObject['yesNo'] ? STANCE_YES : STANCE_NO;
-			_flags = jsonObject['flags'];
-			_likes = jsonObject['likes'];
-			_text = jsonObject['text'];
+			_stance = jsonObject["yesNo"] ? STANCE_YES : STANCE_NO;
+			_flags = jsonObject["flags"];
+			_likes = jsonObject["likes"];
+			_text = jsonObject["text"];
 			_origin = ORIGIN_KIOSK; // todo support other origins
 			_user = null;
-			_created = DateUtil.parseJsonDate(jsonObject['created']);
+			_created = DateUtil.parseJsonDate(jsonObject["created"]);
 			_thread = parentThread;
-			_userID = jsonObject['author']['id']; // for later
+			_userID = jsonObject["author"]["id"]; // for later
 			
-			responseToID = jsonObject['responseTo'];
+			responseToID = jsonObject["responseTo"];
 			
 
 			
@@ -91,7 +91,7 @@ package com.civildebatewall.data {
 				stanceColorHighlight = Assets.COLOR_NO_HIGHLIGHT;				
 			}
 			
-			stanceFormatted = _stance.toUpperCase() + '!';			
+			stanceFormatted = _stance.toUpperCase() + "!";			
 			
 			// anything else? capitalization... dates
 		}
@@ -110,8 +110,8 @@ package com.civildebatewall.data {
 		public function get text():String{ return _text; }
 		public function get textAt():String{ 
 			if (responseTo != null) {
-				trace ('TEXT iS AT!!!');
-				return '@' + responseTo.user.usernameFormatted + ' ' +  _text;
+				trace ("TEXT iS AT!!!");
+				return "@" + responseTo.user.usernameFormatted + " " +  _text;
 			}
 			return 	_text;
 		

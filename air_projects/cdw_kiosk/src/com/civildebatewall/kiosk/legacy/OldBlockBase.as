@@ -58,13 +58,13 @@ package com.civildebatewall.kiosk.legacy {
 		}
 		
 		
-		public static const CENTER:String = 'center';
-		public static const OFF_TOP_EDGE:String = 'offTopEdge';		
-		public static const OFF_RIGHT_EDGE:String = 'offRightEdge';
-		public static const OFF_BOTTOM_EDGE:String = 'offBottomEdge';		
-		public static const OFF_LEFT_EDGE:String = 'offLeftEdge';
+		public static const CENTER:String = "center";
+		public static const OFF_TOP_EDGE:String = "offTopEdge";		
+		public static const OFF_RIGHT_EDGE:String = "offRightEdge";
+		public static const OFF_BOTTOM_EDGE:String = "offBottomEdge";		
+		public static const OFF_LEFT_EDGE:String = "offLeftEdge";
 		
-		// gives us custom shortcuts like 'center' in the parameter list
+		// gives us custom shortcuts like "center" in the parameter list
 		// note that it works on a COPY of the parameters so that they can
 		// be re-calculated as the program progresses
 		// could do something similar with the dynaprop plugin...
@@ -74,12 +74,12 @@ package com.civildebatewall.kiosk.legacy {
 			for (var key:String in params) {
 				// look for any special shortcuts
 				// TODO wrap these in animation plugin
-				if ((key == 'x') && (params[key] == CENTER)) Math.round(newParams[key] = (stage.stageWidth / 2) - (width / 2));
-				if ((key == 'y') && (params[key] == CENTER)) Math.round(newParams[key] = (stage.stageHeight / 2) - (height / 2));
-				if ((key == 'x') && (params[key] == OFF_LEFT_EDGE)) newParams[key] = -width - 10;
-				if ((key == 'x') && (params[key] == OFF_RIGHT_EDGE)) newParams[key] = stage.stageWidth + 10;
-				if ((key == 'y') && (params[key] == OFF_TOP_EDGE)) newParams[key] = -height - 10;								
-				if ((key == 'y') && (params[key] == OFF_BOTTOM_EDGE))	newParams[key] = stage.stageHeight + 10;
+				if ((key == "x") && (params[key] == CENTER)) Math.round(newParams[key] = (stage.stageWidth / 2) - (width / 2));
+				if ((key == "y") && (params[key] == CENTER)) Math.round(newParams[key] = (stage.stageHeight / 2) - (height / 2));
+				if ((key == "x") && (params[key] == OFF_LEFT_EDGE)) newParams[key] = -width - 10;
+				if ((key == "x") && (params[key] == OFF_RIGHT_EDGE)) newParams[key] = stage.stageWidth + 10;
+				if ((key == "y") && (params[key] == OFF_TOP_EDGE)) newParams[key] = -height - 10;								
+				if ((key == "y") && (params[key] == OFF_BOTTOM_EDGE))	newParams[key] = stage.stageHeight + 10;
 			}
 			
 			return ObjectUtil.mergeObjects(params, newParams);

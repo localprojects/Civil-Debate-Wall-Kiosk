@@ -7,7 +7,7 @@ package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.kiosk.buttons.BigGrayButton;
 	import com.civildebatewall.kiosk.buttons.StanceToggle;
 	import com.civildebatewall.kiosk.keyboard.Keyboard;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockShape;
@@ -488,20 +488,20 @@ package com.civildebatewall.kiosk.overlays {
 			
 			
 			if (errors) {
-				MonsterDebugger.trace(null, "Errors! Won't submit.");
+				trace("Errors! Won't submit.");
 								
 			}
 			else {
-				MonsterDebugger.trace(null, "Looks fine, submitting.");
+				trace("submitting.");
 				CivilDebateWall.state.userOpinion = opinionField.text;
 				CivilDebateWall.state.userName = nameField.text;
 				
 				if (CivilDebateWall.state.userImage == null) {
-					MonsterDebugger.trace(null, "No user image, going to photo booth view.");
+					trace("going to photo booth view.");
 					CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.photoBoothView);
 				}
 				else {
-					MonsterDebugger.trace(null, "Have user image, must be editing. going to opinion review view.");
+					trace("must be editing. going to opinion review view.");
 					CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.opinionReviewView);					
 				}
 			}
@@ -521,7 +521,7 @@ package com.civildebatewall.kiosk.overlays {
 //		CivilDebateWall.data.createUser(CivilDebateWall.state.userName, CivilDebateWall.state.userPhoneNumber, onUserCreated);
 //		
 //		private function onUserCreated(r:Object):void {
-//			if (r['error'] == null) {
+//			if (r["error"] == null) {
 //				// It worked!
 //				var tempUser:User = new User(r);
 //				CivilDebateWall.state.userID = tempUser.id;
