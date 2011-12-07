@@ -36,7 +36,7 @@ package com.civildebatewall.kiosk.elements.question_text {
 			super({
 				backgroundColor: 0xffffff,
 				backgroundAlpha: 0.85,
-				text: 'Waiting for question from server',
+				text: "Waiting for question from server",
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
 				textColor: 0x000000,

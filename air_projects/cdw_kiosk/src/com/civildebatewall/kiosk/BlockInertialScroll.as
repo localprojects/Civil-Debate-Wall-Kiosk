@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk {
 	
 	import com.civildebatewall.kiosk.camera.FaceDetector;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Quart;
@@ -209,7 +209,7 @@ package com.civildebatewall.kiosk {
 					}
 				
 					if ((Math.abs(velocity) > wiggleVelocityThreshold) || (mouseTravel > wiggleTravelThreshold)) {
-						MonsterDebugger.trace(this, "Not a click.")
+						trace("Not a click.")
 						disableChildren(content);
 						isButtonPress = false;
 					}
@@ -268,8 +268,8 @@ package com.civildebatewall.kiosk {
 				
 				// Restore child mouse functionality
 				enableChildren(content);
-				// MonsterDebugger.trace(this, "Throw velocity was: " + xVelocity + " / " + yVelocity);
-				// MonsterDebugger.trace(this, "Mouse travel was: " + mouseTravel);
+				// trace("Throw velocity was: " + xVelocity + " / " + yVelocity);
+				// trace("Mouse travel was: " + mouseTravel);
 			}
 		}
 		

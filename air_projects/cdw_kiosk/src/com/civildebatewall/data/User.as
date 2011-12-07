@@ -2,7 +2,7 @@ package com.civildebatewall.data {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.ImageLoader;
 	import com.greensock.loading.LoaderMax;
@@ -27,18 +27,18 @@ package com.civildebatewall.data {
 		// TODO more photo sizes
 		
 		public function User(jsonObject:Object) 	{
-			_username = jsonObject['username'];
-			_phoneNumber = jsonObject['phoneNumber']
-			_id = jsonObject['id'];
+			_username = jsonObject["username"];
+			_phoneNumber = jsonObject["phoneNumber"]
+			_id = jsonObject["id"];
 			_photo = Assets.portraitPlaceholder;
 			
 			// try to load portrait 
 			// then load at leisure, "data" is all here
-			var imageFile:File = new File(CivilDebateWall.settings.imagePath + "kiosk/" + _id + '.jpg');
+			var imageFile:File = new File(CivilDebateWall.settings.imagePath + "kiosk/" + _id + ".jpg");
 			
 			if (imageFile.exists) {
 				// load the portrait, estimate it at 150k
-				MonsterDebugger.trace(null, 'Loading image from file for ' + _username + "\t(" + _id + ")");
+				trace("Loading image from file for " + _username + "\t(" + _id + ")");
 				// TEMP off for performance
 				
 				CivilDebateWall.data.photoQueue.append(new ImageLoader(imageFile.url, {name: _id, estimatedBytes: 15000, onComplete: onImageLoaded}) );
@@ -47,13 +47,13 @@ package com.civildebatewall.data {
 				
 			}
 			else {
-				trace('Using placeholder for ' + _username + "\t(" + _id + ")");
+				trace("Using placeholder for " + _username + "\t(" + _id + ")");
 			}
 		}
 		
 		//private function onImageLoaded(e:LoaderEvent):void {
 		private function onImageLoaded(e:LoaderEvent):void {
-			MonsterDebugger.trace(null, "Loaded image for " + _username + "\t(" + _id + ")");
+			trace("Loaded image for " + _username + "\t(" + _id + ")");
 			_photo = new Bitmap(((LoaderMax.getContent(_id) as ContentDisplay).rawContent as Bitmap).bitmapData, PixelSnapping.AUTO, true);
 			//_photo = b;
 			
@@ -81,12 +81,12 @@ package com.civildebatewall.data {
 //			// web full
 //			var webFull:Bitmap = new Bitmap(new BitmapData(550, 650, false));
 //			webFull.bitmapData.copyPixels(BitmapUtil.scaleDataToFill(_photo.bitmapData, 550, 978), new Rectangle(0, 51, 550, 650), new Point(0, 0));
-//			FileUtil.saveJpeg(webFull, CivilDebateWall.settings.imagePath + "web/", _id + '.jpg');
+//			FileUtil.saveJpeg(webFull, CivilDebateWall.settings.imagePath + "web/", _id + ".jpg");
 //			
 //			// web thumb
 //			var webThumb:Bitmap = new Bitmap(new BitmapData(71, 96, false));
 //			webThumb.bitmapData.copyPixels(BitmapUtil.scaleDataToFill(_photo.bitmapData, 118, 210), new Rectangle(24, 35, 71, 96), new Point(0, 0));
-//			FileUtil.saveJpeg(webThumb, CivilDebateWall.settings.imagePath + "thumbnails/", _id + '.jpg');			
+//			FileUtil.saveJpeg(webThumb, CivilDebateWall.settings.imagePath + "thumbnails/", _id + ".jpg");			
 		}
 		
 		

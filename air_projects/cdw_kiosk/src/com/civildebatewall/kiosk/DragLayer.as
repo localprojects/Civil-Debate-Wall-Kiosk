@@ -2,7 +2,7 @@ package com.civildebatewall.kiosk {
 	
 	import com.civildebatewall.*;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
@@ -100,7 +100,7 @@ package com.civildebatewall.kiosk {
 				
 				var vxAverage:Number = ArrayUtil.average(vxSamples);
 				
-				MonsterDebugger.trace(this, 'Mouse up. Velocity average: ' + vxAverage);
+				trace("Mouse up. Velocity average: " + vxAverage);
 
 				// see if we need to transition
 				if ((CivilDebateWall.state.nextThread != null) &&(vxAverage < -vxThreshold) || (leftEdge < (stage.stageWidth / -2))) {

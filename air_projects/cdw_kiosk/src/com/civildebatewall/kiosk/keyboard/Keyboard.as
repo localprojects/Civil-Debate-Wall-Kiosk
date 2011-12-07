@@ -5,7 +5,7 @@ package com.civildebatewall.kiosk.keyboard {
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
 	
@@ -41,15 +41,15 @@ package com.civildebatewall.kiosk.keyboard {
 			
 			// extra white space describes how many multiples of the keywidth it should be
 			var layout:Array = [
-//				['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-'],
-//				['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-//				['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-//				['z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.'],
-//				[' SHIFT ', '   SPACE   ', ' DELETE ']
-					['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-					['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-					['z', 'x', 'c', 'v', 'b', 'n', 'm'],
-					[' SHIFT ', '   SPACE   ', ' DELETE ']				
+//				["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-"],
+//				["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+//				["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+//				["z", "x", "c", "v", "b", "n", "m", ",", "."],
+//				[" SHIFT ", "   SPACE   ", " DELETE "]
+					["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+					["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+					["z", "x", "c", "v", "b", "n", "m"],
+					[" SHIFT ", "   SPACE   ", " DELETE "]				
 			];
 
 			keys = [];
@@ -96,17 +96,17 @@ package com.civildebatewall.kiosk.keyboard {
 			}
 
 			// customize certain keys
-			keys['DELETE'].repeats = true;			
+			keys["DELETE"].repeats = true;			
 		}
 
 
 		public function showSpacebar(b:Boolean):void {
 			if (b) {
-				keys[' '].visible = true;
-				TweenMax.to(keys[' '], 0.25, {alpha: 1});				
+				keys[" "].visible = true;
+				TweenMax.to(keys[" "], 0.25, {alpha: 1});				
 			}
 			else {
-				TweenMax.to(keys[' '], 0.25, {alpha: 0, onComplete: function():void { keys[' '].visible = false; }});
+				TweenMax.to(keys[" "], 0.25, {alpha: 0, onComplete: function():void { keys[" "].visible = false; }});
 			}
 		}
 		
@@ -135,7 +135,7 @@ package com.civildebatewall.kiosk.keyboard {
 		private function onKeyPressed(e:MouseEvent):void {
 			//Assets.clickSound.play();
 			
-			if (e.target.letter == 'SHIFT') {
+			if (e.target.letter == "SHIFT") {
 				shift = e.target.active;
 				
 				if (shift) {
@@ -147,7 +147,7 @@ package com.civildebatewall.kiosk.keyboard {
 					lowerCase();					
 				}
 			}
-			else if (e.target.letter == 'DELETE') {
+			else if (e.target.letter == "DELETE") {
 				// backspace
 				if (this.stage.focus is TextField) {
 					var tf:TextField = this.stage.focus as TextField;
@@ -177,19 +177,19 @@ package com.civildebatewall.kiosk.keyboard {
 						
 					}
 					else {
-						MonsterDebugger.trace(this, "nothing to delete");
+						trace("nothing to delete");
 					}
 					
 //					// TODO FIX THIS, check if selection is at the end?
 //					if (tf.selectionBeginIndex == tf.selectionEndIndex) {
 //						// insertion edits
-//						MonsterDebugger.trace(this, 'insertion');
+//						trace("insertion");
 //						tf.text = tf.text.substring(0, tf.selectionBeginIndex - 1) + tf.text.substr(tf.selectionEndIndex);
 //						tf.setSelection(tf.selectionBeginIndex - 1, tf.selectionBeginIndex - 1);						
 //					}
 //					else {
 //						// block edits
-//						MonsterDebugger.trace(this, 'block');
+//						trace("block");
 //						tf.text = tf.text.substring(0, tf.selectionBeginIndex - 1) + tf.text.substring(tf.selectionEndIndex);
 //						tf.setSelection(tf.selectionBeginIndex - 1, tf.selectionBeginIndex - 1);
 //					}
@@ -214,9 +214,9 @@ package com.civildebatewall.kiosk.keyboard {
 				// unstick the shift button if we're shifted
 
 				if (shift) {
-					keys['SHIFT'].removeEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
-					keys['SHIFT'].dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP, false));
-					keys['SHIFT'].addEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
+					keys["SHIFT"].removeEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
+					keys["SHIFT"].dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP, false));
+					keys["SHIFT"].addEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
 					lowerCase();
 				}
 			}
@@ -230,7 +230,7 @@ package com.civildebatewall.kiosk.keyboard {
 			
 		}
 		
-		// returns the number of 'cells' a row of keys takes up
+		// returns the number of "cells" a row of keys takes up
 		// by factoring in larger than average keys
 		// multiply by keyWidth to get the full length of the row
 		private function getRowGridCount(a:Array):Number {
@@ -248,14 +248,14 @@ package com.civildebatewall.kiosk.keyboard {
 			
 			// leading white space
 			var left:int = 0;
-			while (s.charAt(left) == ' ') {
+			while (s.charAt(left) == " ") {
 				spaceCount++;
 				left++;
 			}
 			
 			// trailing white space
 			var right:int = s.length - 1;
-			while (s.charAt(right) == ' ') {
+			while (s.charAt(right) == " ") {
 				spaceCount++;
 				right--;
 			}

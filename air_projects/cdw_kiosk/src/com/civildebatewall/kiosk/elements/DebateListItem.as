@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.data.Post;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -58,9 +58,9 @@ package com.civildebatewall.kiosk.elements {
 			
 			// author and date\
 			var name:String = StringUtil.capitalize(_post.user.usernameFormatted, true);
-			var date:String =  NumberUtil.zeroPad(_post.created.month, 2) + '/' + NumberUtil.zeroPad(_post.created.date, 2) + '/' + (_post.created.fullYear - 2000); 
-			var ampm:String = (_post.created.hours < 12) ? 'am' : 'pm';
-			var time:String = (_post.created.hours % 12) + '.' + _post.created.minutes + ampm;			
+			var date:String =  NumberUtil.zeroPad(_post.created.month, 2) + "/" + NumberUtil.zeroPad(_post.created.date, 2) + "/" + (_post.created.fullYear - 2000); 
+			var ampm:String = (_post.created.hours < 12) ? "am" : "pm";
+			var time:String = (_post.created.hours % 12) + "." + _post.created.minutes + ampm;			
 			
 			author = new BlockText();
 			author.textFont = Assets.FONT_BOLD;
@@ -100,7 +100,7 @@ package com.civildebatewall.kiosk.elements {
 		private var backTween:TweenMax = null;
 		
 		private function onDown(...args):void {
-			MonsterDebugger.trace(this, "down " + _itemIndex);
+			trace("down " + _itemIndex);
 			backgroundColor = _post.stanceColorMedium;
 			horizontalRule.backgroundColor = 0xffffff;
 			numberLabel.textColor = 0xffffff;

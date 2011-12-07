@@ -8,9 +8,9 @@ package com.civildebatewall.data {
 		private var _category:Category;
 		
 		public function Question(jsonObject:Object)	{
-			_text = jsonObject['text'];
-			_id = jsonObject['id'];
-			_category = CivilDebateWall.data.getCategoryById(jsonObject['category']['id']);
+			_text = jsonObject["text"];
+			_id = jsonObject["id"];
+			_category = CivilDebateWall.data.getCategoryById(jsonObject["category"]["id"]);
 		}
 		
 		public function get text():String {	return _text;	}

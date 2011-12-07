@@ -4,7 +4,7 @@ package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.data.Post;
 	import com.civildebatewall.kiosk.buttons.BigGrayButton;
 	import com.civildebatewall.kiosk.elements.ProgressBar;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;

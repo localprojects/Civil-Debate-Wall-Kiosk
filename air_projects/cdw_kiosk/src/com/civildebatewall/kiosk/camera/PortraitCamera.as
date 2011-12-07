@@ -6,7 +6,7 @@ package com.civildebatewall.kiosk.camera {
 	import com.civildebatewall.Settings;
 	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.easing.*;
 	import com.kitschpatrol.futil.Math2;
 	
@@ -85,7 +85,7 @@ package com.civildebatewall.kiosk.camera {
 				video.attachCamera(camera);			
 				addChild(video);
 				
-				MonsterDebugger.trace(null, "Set up webcam.");		
+				trace("Set up webcam.");		
 			}
 			else {
 				// No webcam, just use placeholder

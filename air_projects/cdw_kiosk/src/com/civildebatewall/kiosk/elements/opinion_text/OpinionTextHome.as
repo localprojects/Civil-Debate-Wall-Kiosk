@@ -3,7 +3,7 @@ package com.civildebatewall.kiosk.elements.opinion_text
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
@@ -24,7 +24,7 @@ package com.civildebatewall.kiosk.elements.opinion_text
 		
 		
 		private function onActiveDebateChange(e:Event):void {
-			MonsterDebugger.trace(this, "debate change!");
+			trace("debate change!");
 			
 			setPost(CivilDebateWall.state.activeThread.firstPost);
 			

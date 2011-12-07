@@ -3,7 +3,7 @@ package com.civildebatewall.data {
 	import com.adobe.serialization.json.JSON;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.kiosk.core.Kiosk;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.DataLoader;
 	import com.greensock.loading.LoaderMax;
@@ -20,7 +20,7 @@ package com.civildebatewall.data {
 		
 		
 		public function Thread(jsonObject:Object)	{
-			_id = jsonObject['id'];
+			_id = jsonObject["id"];
 			_posts = []; // load later
 		}
 		
@@ -36,7 +36,7 @@ package com.civildebatewall.data {
 
 		// sets a bunch of convenience variables after the posts are loaded
 		public function init():void {
-			_posts.sortOn('created', Array.NUMERIC);			
+			_posts.sortOn("created", Array.NUMERIC);			
 			_firstPost = posts[0];
 			_firstPost.isThreadStarter = true;
 			_created = _firstPost.created;
@@ -56,7 +56,7 @@ package com.civildebatewall.data {
 			
 		//			
 		//			
-		//			MonsterDebugger.trace(this, "Posts: " + _posts.length);
+		//			trace("Posts: " + _posts.length);
 		//			
 		//			_created = _posts[0].created; // use the first post as the created date...
 		//			createdRaw = _created.time;
@@ -65,7 +65,7 @@ package com.civildebatewall.data {
 		//			_firstPost.isThreadStarter = true;
 		//			
 		//			// sort by date, newest last
-		//			_posts.sortOn('created');		
+		//			_posts.sortOn("created");		
 		//			
 		//			_postCount = _posts.length;
 		//			

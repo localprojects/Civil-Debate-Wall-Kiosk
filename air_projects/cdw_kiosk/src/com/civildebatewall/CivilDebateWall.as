@@ -1,5 +1,4 @@
 package com.civildebatewall {
-	import com.adobe.crypto.SHA1;
 	import com.bit101.components.FPSMeter;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.kiosk.buttons.*;
@@ -8,7 +7,7 @@ package com.civildebatewall {
 	import com.civildebatewall.kiosk.elements.*;
 	import com.civildebatewall.kiosk.keyboard.*;
 	import com.civildebatewall.wallsaver.core.WallSaver;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.*;
 	import com.greensock.easing.*;
 	import com.greensock.plugins.*;
@@ -16,11 +15,7 @@ package com.civildebatewall {
 	import com.kitschpatrol.flashspan.events.CustomMessageEvent;
 	import com.kitschpatrol.flashspan.events.FlashSpanEvent;
 	import com.kitschpatrol.flashspan.events.FrameSyncEvent;
-	import com.kitschpatrol.futil.tweenPlugins.BackgroundColorPlugin;
 	import com.kitschpatrol.futil.tweenPlugins.FutilBlockPlugin;
-	import com.kitschpatrol.futil.tweenPlugins.NamedXPlugin;
-	import com.kitschpatrol.futil.tweenPlugins.NamedYPlugin;
-	import com.kitschpatrol.futil.tweenPlugins.TextColorPlugin;
 	import com.kitschpatrol.futil.utilitites.PlatformUtil;
 	
 	import flash.display.*;
@@ -31,9 +26,15 @@ package com.civildebatewall {
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
+	
 	// Main entry point for the app.
 	// Manages display of Interactive Kiosk and Wallsaver modes.
 	public class CivilDebateWall extends Sprite	{
+		
+		private static const logger:ILogger = getLogger(CivilDebateWall);		
+		
 		public static var flashSpan:FlashSpan;		
 		public static var data:Data;
 		public static var state:State;
@@ -56,6 +57,13 @@ package com.civildebatewall {
 		public function CivilDebateWall(commandLineArgs:Array = null)	{
 			self = this;
 			this.commandLineArgs = commandLineArgs;
+			
+			if (commandLineArgs.length > 0) {
+				logger.info("Command line args: " + commandLineArgs);
+			}
+			else {
+				logger.info("No command line args passed at startup");				
+			}
 			
 			// Greensock plugins
 			TweenPlugin.activate([ThrowPropsPlugin]);			
@@ -87,7 +95,7 @@ package com.civildebatewall {
 			// these can ovveride settings
 			// TODO genereic command line settings override system?
 			if (commandLineArgs.length > 0) {
-				MonsterDebugger.trace(this, "Args: " + commandLineArgs);
+				trace("Args: " + commandLineArgs);
 				settings.kioskNumber = commandLineArgs[0];
 				settings.localMultiScreenTest = true;
 				settings.useSLR = false;
@@ -173,7 +181,7 @@ package com.civildebatewall {
 			// TODO put IP based screen ID in settings here
 			if (PlatformUtil.isWindows) {
 				// get ID from IP
-				MonsterDebugger.trace(this, "Getting kiosk ID from IP.");				
+				trace("Getting kiosk ID from IP.");				
 				flashSpan = new FlashSpan(-1, settings.flashSpanConfigPath);
 			}
 			else {
@@ -221,7 +229,7 @@ package com.civildebatewall {
 		
 		
 		private function onInactive(e:InactivityEvent):void {
-			MonsterDebugger.trace(this, "inactive!");
+			logger.info("Inactivity Event Fired");
 			CivilDebateWall.state.clearUser();			
 			CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.inactivityOverlayView);
 		}		
@@ -247,8 +255,8 @@ package com.civildebatewall {
 		// Wallsaver control abstraction... these get broadcast to everyone through flashspan
 		
 		// message headers
-		private const PLAY_SEQUENCE_A:String = 'a';
-		private const PLAY_SEQUENCE_B:String = 'b';
+		private const PLAY_SEQUENCE_A:String = "a";
+		private const PLAY_SEQUENCE_B:String = "b";
 		
 		
 		private function onSyncStart(e:FlashSpanEvent):void {
@@ -274,12 +282,12 @@ package com.civildebatewall {
 
 		private function onCustomMessageReceived(e:CustomMessageEvent):void {
 			if (e.header == PLAY_SEQUENCE_A) {
-				MonsterDebugger.trace(this, "Playing Sequence A");
+				trace("Playing Sequence A");
 				wallSaver.cueSequenceA();
 				flashSpan.frameCount = 0;
 			}
 			else if (e.header == PLAY_SEQUENCE_B) {
-				MonsterDebugger.trace(this, "Playing Sequence B");
+				trace("Playing Sequence B");
 				wallSaver.cueSequenceB();
 				flashSpan.frameCount = 0;
 			}

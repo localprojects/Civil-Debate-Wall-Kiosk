@@ -421,7 +421,7 @@ package com.kitschpatrol.flashspan
 		}
 		
 		// sends a custom message to everyone, including self
-		public function broadcastCustomMessage(header:String, message:String = ''):void {
+		public function broadcastCustomMessage(header:String, message:String = ""):void {
 			for each (var screen:NetworkedScreen in settings.screens) {
 				send(screen, CUSTOM_MESSAGE_HEADER + header + "," + message); 
 			}

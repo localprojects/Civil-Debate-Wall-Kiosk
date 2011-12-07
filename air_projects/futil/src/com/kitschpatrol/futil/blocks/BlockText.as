@@ -468,22 +468,22 @@ package com.kitschpatrol.futil.blocks {
 			
 			if (BlockText.sizeMaps.hasOwnProperty(cacheKey)) {
 				//trace("In the cache, load that: " + cacheKey);
-				sizeMap = BlockText.sizeMaps[cacheKey]['sizeMap'];
-				maxTextPixelSize = BlockText.sizeMaps[cacheKey]['maxTextPixelSize'];
+				sizeMap = BlockText.sizeMaps[cacheKey]["sizeMap"];
+				maxTextPixelSize = BlockText.sizeMaps[cacheKey]["maxTextPixelSize"];
 			}
 			else {
 				//trace("Not cached! Generating: " + cacheKey);
 				// rebuilds size set maping pixel sizes to flash TextField sizes
 				// height is maximum character height (in pixels) for a given internal size
 				BlockText.sizeMaps[cacheKey] = {};
-				BlockText.sizeMaps[cacheKey]['sizeMap'] = new Vector.<TextSize>(maxTextSize);
+				BlockText.sizeMaps[cacheKey]["sizeMap"] = new Vector.<TextSize>(maxTextSize);
 				
 				var glyphCanvas:BitmapData;
 				var testField:TextField;
 				var bounds:Rectangle;
 				var pixelHeight:int;
 				
-				BlockText.sizeMaps[cacheKey]['sizeMap'][0] = new TextSize(); // zeros in the first position
+				BlockText.sizeMaps[cacheKey]["sizeMap"][0] = new TextSize(); // zeros in the first position
 				
 				// key: pixel size, value: field size
 				for(var i:int = 1; i < maxTextSize; i++) {
@@ -504,7 +504,7 @@ package com.kitschpatrol.futil.blocks {
 					pixelHeight = bounds.height;
 					//trace(bounds);
 					
-					BlockText.sizeMaps[cacheKey]['sizeMap'][pixelHeight] = new TextSize(pixelHeight, i, bounds.y, glyphCanvas.width - bounds.width - bounds.x, glyphCanvas.height - bounds.y - bounds.height, bounds.x);
+					BlockText.sizeMaps[cacheKey]["sizeMap"][pixelHeight] = new TextSize(pixelHeight, i, bounds.y, glyphCanvas.width - bounds.width - bounds.x, glyphCanvas.height - bounds.y - bounds.height, bounds.x);
 					
 					//trace("Pixel Height: " + pixelHeight + " Field Size: " + i);
 					
@@ -515,18 +515,18 @@ package com.kitschpatrol.futil.blocks {
 				
 				// fill holes
 				for(i = 1; i < maxTextPixelSize; i++) {
-					if (BlockText.sizeMaps[cacheKey]['sizeMap'][i] == null) {
+					if (BlockText.sizeMaps[cacheKey]["sizeMap"][i] == null) {
 						//trace("Hole at " + i);
 						// TODO implement lerp for this, for now just use last
-						BlockText.sizeMaps[cacheKey]['sizeMap'][i] = BlockText.sizeMaps[cacheKey]['sizeMap'][i - 1]; 
+						BlockText.sizeMaps[cacheKey]["sizeMap"][i] = BlockText.sizeMaps[cacheKey]["sizeMap"][i - 1]; 
 					}
 				}
 					
 				
 				// Cache it
 				//TextBlock.sizeMaps[cacheKey] = newSizeMap;
-				sizeMap = BlockText.sizeMaps[cacheKey]['sizeMap'];
-				BlockText.sizeMaps[cacheKey]['maxTextPixelSize'] = maxTextPixelSize;
+				sizeMap = BlockText.sizeMaps[cacheKey]["sizeMap"];
+				BlockText.sizeMaps[cacheKey]["maxTextPixelSize"] = maxTextPixelSize;
 			}
 			
 			// make sure it sticks

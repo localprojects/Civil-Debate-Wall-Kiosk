@@ -14,11 +14,11 @@ package com.kitschpatrol.futil.utilitites {
 		
 		public static function formatPhoneNumber(s:String):String {
 			// remove country code
-			s = s.replace('+1', '');
+			s = s.replace("+1", "");
 			
 			// put it into US format...
-		//return '(' + s.substr(0, 3) + ') ' + s.substr(3, 3) + '-' + s.substr(6);
-			return s.substr(0, 3) + '-' + s.substr(3, 3) + '-' + s.substr(6);			
+		//return "(" + s.substr(0, 3) + ") " + s.substr(3, 3) + "-" + s.substr(6);
+			return s.substr(0, 3) + "-" + s.substr(3, 3) + "-" + s.substr(6);			
 		}		
 		
 		
@@ -41,7 +41,7 @@ package com.kitschpatrol.futil.utilitites {
 		
 		public static function formatDynamicPhoneNumber(number:String):String {
 			// format the phone number intelligently as it builds. similar to the iPhone's dial pad.
-			var bareNumber:String = number.replace(/[^\d]/gs, ''); 
+			var bareNumber:String = number.replace(/[^\d]/gs, ""); 
 			
 			if (bareNumber.length >= 8) {
 				return "(" + bareNumber.substr(0, 3) + ") " + bareNumber.substr(3, 3) + "-" + bareNumber.substr(6);				

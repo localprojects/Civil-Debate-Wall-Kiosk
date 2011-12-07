@@ -6,7 +6,7 @@ package com.civildebatewall {
 	import com.civildebatewall.data.TextMessage;
 	import com.civildebatewall.data.Thread;
 	import com.civildebatewall.kiosk.core.Kiosk;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
 	
 	import flash.display.Bitmap;
@@ -81,8 +81,8 @@ package com.civildebatewall {
 		
 		// for persistence accross reloads
 		// TODO ditch this?
-		public var activeThreadID:String = '';		
-		public var activePostID:String = '';		
+		public var activeThreadID:String = "";		
+		public var activePostID:String = "";		
 		
 
 		// stats
@@ -146,16 +146,16 @@ package com.civildebatewall {
 		
 		
 		// scratch user... TODO wrap this up in the object
-		public var userStance:String = 'yes';
-		public var userName:String = '';
-		public var userOpinion:String = '';
+		public var userStance:String = "yes";
+		public var userName:String = "";
+		public var userOpinion:String = "";
 		public var userPhoneNumber:String = "";
-		public var userID:String = '';
-		public var userThreadID:String = '';
-		public var userPostID:String = '';		
+		public var userID:String = "";
+		public var userThreadID:String = "";
+		public var userPostID:String = "";		
 		public var userImage:Bitmap = null;
 		public var userImageFull:Bitmap = null;		
-		public var userStanceText:String = ''; // add exclamation point		
+		public var userStanceText:String = ""; // add exclamation point		
 		public var userRespondingTo:Post; // which post we're debating
 		
 		public function setHighlightWord(word:String, color:uint = 0x000000):void {
@@ -200,27 +200,27 @@ package com.civildebatewall {
 			
 			// sort the debate list
 			
-			MonsterDebugger.trace(this, "sorting by " + sortMode);
+			trace("sorting by " + sortMode);
 			
 			switch (sortMode) {
 				case SORT_BY_RECENT:
-					CivilDebateWall.data.threads.sortOn('created', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?                   
+					CivilDebateWall.data.threads.sortOn("created", Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?                   
 					break;
 				
 				case SORT_BY_YES:
-					CivilDebateWall.data.threads.sortOn('firstStance', Array.DESCENDING); // newest first // Is this working?                   
+					CivilDebateWall.data.threads.sortOn("firstStance", Array.DESCENDING); // newest first // Is this working?                   
 					break;
 				
 				case SORT_BY_NO:
-					CivilDebateWall.data.threads.sortOn('firstStance'); // newest first // Is this working?                 
+					CivilDebateWall.data.threads.sortOn("firstStance"); // newest first // Is this working?                 
 					break;              
 				
 				case SORT_BY_MOST_DEBATED:
-					CivilDebateWall.data.threads.sortOn('postCount', Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?                 
+					CivilDebateWall.data.threads.sortOn("postCount", Array.DESCENDING | Array.NUMERIC); // newest first // Is this working?                 
 					break;              
 				
 				default:
-					MonsterDebugger.trace(this, "invalid sort type");
+					trace("invalid sort type");
 			}
 			
 			
@@ -233,12 +233,12 @@ package com.civildebatewall {
 		
  
 		public function clearUser():void {
-			userID = '';
-			userName = '';
+			userID = "";
+			userName = "";
 			if (userImage != null) userImage.bitmapData.dispose();
 			userImage = null;
-			userPhoneNumber = '';
-			userOpinion = '';
+			userPhoneNumber = "";
+			userOpinion = "";
 			userIsDebating = false;
 			if (userImageFull != null) userImageFull.bitmapData.dispose();
 			userImageFull = null;
@@ -249,9 +249,9 @@ package com.civildebatewall {
 		public function setUserStance(s:String):void {
 			userStance = s;
 			
-			userStanceText = userStance.toUpperCase() + '!';	
+			userStanceText = userStance.toUpperCase() + "!";	
 			
-			if (userStance == 'yes') {
+			if (userStance == "yes") {
 				userStanceColorLight = Assets.COLOR_YES_LIGHT;
 				userStanceColorMedium = Assets.COLOR_YES_MEDIUM;
 				userStanceColorDark = Assets.COLOR_YES_DARK;
@@ -298,20 +298,20 @@ package com.civildebatewall {
 
 
 			// logs backwards... ugh
-			// CivilDebateWall.dashboard.log('---------------------------------');			
+			// CivilDebateWall.dashboard.log("---------------------------------");			
 			
 			if (activeThread != null) {
 				for (var i:uint = activeThread.posts.length - 1; i > 0; i--) {
-					MonsterDebugger.trace(this, i);
+					trace(i);
 				// CivilDebateWall.dashboard.log(activeThread.posts[i].id);
 				}
 			}
 			// CivilDebateWall.dashboard.log(activeThread.posts[0].id);
 			
-			// CivilDebateWall.dashboard.log('Posts:');			
+			// CivilDebateWall.dashboard.log("Posts:");			
 			// CivilDebateWall.dashboard.log("Active thread:\n\t" + activeThread.id);			
 			
-			// CivilDebateWall.dashboard.log('---------------------------------');			
+			// CivilDebateWall.dashboard.log("---------------------------------");			
 			
 			// funky overrides for big-jump transitions
 			if (overridePrevious != null) {
@@ -328,9 +328,9 @@ package com.civildebatewall {
 				nextThread = getNextThread();
 			}
 
-			MonsterDebugger.trace(this, "Prev: " + previousThread);
-			MonsterDebugger.trace(this, "Active: " + activeThread);
-			MonsterDebugger.trace(this, "Next: " + nextThread);
+			trace("Prev: " + previousThread);
+			trace("Active: " + activeThread);
+			trace("Next: " + nextThread);
 			
 			if (activeThread != null) {
 				this.dispatchEvent(new Event(ACTIVE_THREAD_CHANGE));

@@ -5,7 +5,7 @@ package com.civildebatewall.kiosk.buttons {
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.data.Post;
-	import com.demonsters.debugger.MonsterDebugger;
+
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Back;
 	import com.greensock.easing.Elastic;
@@ -40,7 +40,7 @@ package com.civildebatewall.kiosk.buttons {
 
 			// Numeric counter
 			counter = new BlockText({
-				text: '0',
+				text: "0",
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
 				textSize: 18,
@@ -75,7 +75,7 @@ package com.civildebatewall.kiosk.buttons {
 			
 			// "Like" label
 			label = new BlockText({
-				text: 'Like',
+				text: "Like",
 				textFont: Assets.FONT_REGULAR,
 				textSize: 18,
 				textColor: 0xffffff,
@@ -104,7 +104,7 @@ package com.civildebatewall.kiosk.buttons {
 		}
 		
 		private function onLike(e:Event):void {
-			MonsterDebugger.trace(this, "got event");
+			trace("got event");
 			counter.text = _targetPost.likes.toString();
 			label.text = StringUtil.plural("Like", _targetPost.likes);
 		}
