@@ -55,7 +55,7 @@ package com.civildebatewall {
 		public static var flashSpan:FlashSpan;		
 		public static var data:Data;
 		public static var state:State;
-		public static var settings:Object;
+		public static var settings:Settings;
 		public static var self:CivilDebateWall;
 		
 		public static var wallSaver:WallSaver;
@@ -275,12 +275,14 @@ package com.civildebatewall {
 		}		
 		
 		public function PlaySequenceA():void {
+			if (wallSaver.timeline.active) wallSaver.timeline.stop();
 			flashSpan.stop();
 			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_A);
 			TweenMax.delayedCall(1, flashSpan.start);  // wait for messages to land before starting
 		}
 		
 		public function PlaySequenceB():void {
+			if (wallSaver.timeline.active) wallSaver.timeline.stop();
 			flashSpan.stop();
 			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_B);
 			TweenMax.delayedCall(1, flashSpan.start); // wait for messages to land before starting

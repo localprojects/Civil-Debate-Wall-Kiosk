@@ -244,37 +244,15 @@ package com.civildebatewall {
 			userRespondingTo = null;
 		}		
 		
-		public function getNextThread():Thread {
-			var grabNext:Boolean;
-			
-			// walk the object
-			for each (var thread:Thread in CivilDebateWall.data.threads) {
-				if (grabNext) {
-					return thread;
-				}
-				
-				if (thread.id == activeThread.id) {
-					grabNext = true;
-				}
-			}
-			
-			return null;
+		public function getRightThread():Thread {
+			var activeThreadIndex:int = CivilDebateWall.data.threads.indexOf(CivilDebateWall.state.activeThread);
+			return (activeThreadIndex == CivilDebateWall.data.threads.length - 1) ? null : CivilDebateWall.data.threads[activeThreadIndex + 1]; 
 		}
 		
-		public function getPreviousThread():Thread {
-			var lastThread:Thread = null;
-			
-			// walk the object
-			for each (var thread:Thread in CivilDebateWall.data.threads) {
-				if (thread.id == activeThread.id) {
-					return lastThread;
-				}
-				else {
-					lastThread = thread;
-				}
-			}
-			
-			return null;
+		public function getLeftThread():Thread {
+			var activeThreadIndex:int = CivilDebateWall.data.threads.indexOf(CivilDebateWall.state.activeThread);
+			//logger.info("Active thread index is: " + activeThreadIndex);
+			return (activeThreadIndex == 0) ? null : CivilDebateWall.data.threads[activeThreadIndex - 1];
 		}		
 		
 		// LOGGING HELPERS =======================================================================================================================
@@ -304,6 +282,16 @@ package com.civildebatewall {
 			out += varToString("updateTotalTime");
 			return out;
 		}		
+		
+		
+//		public function getFunctionName(f:Function):String {
+//			//if (CivilDebateWall.kiosk.viewNameLookupTable.hasOwnProperty(f)) {
+//				return CivilDebateWall.kiosk.viewNameLookupTable[f];
+//			//}
+//			//else {
+//			//	return "Function"
+//			//}
+//		}
 		
 		public function getUpdateTimeString():String {
 			return "Question: " + updateQuestionTime + " Threads: " + updateThreadsTime + " Posts and Users:" + updatePostsAndUsersTime +  " Stats:" + updateStatsTime + " Total:" + updateTotalTime; 			

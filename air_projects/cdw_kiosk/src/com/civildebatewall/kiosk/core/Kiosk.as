@@ -18,7 +18,9 @@ package com.civildebatewall.kiosk.core {
 	import com.civildebatewall.kiosk.buttons.HomeFlagButton;
 	import com.civildebatewall.kiosk.buttons.HomeLikeButton;
 	import com.civildebatewall.kiosk.buttons.LowerMenuButton;
-	import com.civildebatewall.kiosk.buttons.NavArrow;
+	import com.civildebatewall.kiosk.buttons.NavArrowBase;
+	import com.civildebatewall.kiosk.buttons.NavArrowLeft;
+	import com.civildebatewall.kiosk.buttons.NavArrowRight;
 	import com.civildebatewall.kiosk.buttons.NoButton;
 	import com.civildebatewall.kiosk.buttons.RespondButton;
 	import com.civildebatewall.kiosk.buttons.RetakePhotoButton;
@@ -73,6 +75,24 @@ package com.civildebatewall.kiosk.core {
 		
 		private static var logger:ILogger = getLogger(Kiosk);
 		
+		// Logging helper allows logging of function names, this is ugly
+		// Doesn't work?
+//		public const viewNameLookupTable:Object = {
+//			homeView: "homeView",
+//			inactivityOverlayView: "inactivityOverlayView",
+//			cameraCalibrationOverlayView: "cameraCalibrationOverlayView",
+//			debateStancePickerView: "debateStancePickerView",
+//			debateTypePickerView: "debateTypePickerView",
+//			flagOverlayView: "flagOverlayView",
+//			photoBoothView: "photoBoothView",
+//			opinionReviewView: "opinionReviewView",
+//			smsPromptView: "smsPromptView",
+//			statsView: "statsView",
+//			termsAndConditionsView: "termsAndConditionsView",
+//			threadsView: "threadsView",
+//			opinionEntryView: "opinionEntryView"
+//		}		
+		
 		// convenience
 		public const stageWidth:Number = 1080;
 		public const stageHeight:Number = 1920;
@@ -84,8 +104,8 @@ package com.civildebatewall.kiosk.core {
 		private var likeButton:HomeLikeButton;
 		private var viewCommentsButton:ViewCommentsButton;
 		private var flagButton:HomeFlagButton;
-		private var leftArrow:NavArrow;
-		private var rightArrow:NavArrow;
+		private var leftArrow:NavArrowLeft;
+		private var rightArrow:NavArrowRight;
 		private var bigButton:BigButton; // TODO migrate to Futil?
 		private var statsButton:StatsButton;
 		private var debateStripUnderlay:BlockBase;
@@ -196,12 +216,12 @@ package com.civildebatewall.kiosk.core {
 			flagButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 1341});
 			addChild(flagButton);
 
-			leftArrow = new NavArrow({bitmap: Assets.getLeftCaratBig()});
+			leftArrow = new NavArrowLeft();
 			leftArrow.setDefaultTweenIn(1, {x: 0, y: 907});
 			leftArrow.setDefaultTweenOut(1, {x: -100, y: 907});
 			addChild(leftArrow);
 			
-			rightArrow = new NavArrow({bitmap: Assets.getRightCaratBig()});
+			rightArrow = new NavArrowRight();
 			rightArrow.setDefaultTweenIn(1, {x: 980, y: 907});
 			rightArrow.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT, y: 907});
 			addChild(rightArrow);
@@ -646,7 +666,8 @@ package com.civildebatewall.kiosk.core {
 		// ================================================================================================================================================		
 		
 		public function opinionEntryView(...args):void {
-			CivilDebateWall.data.photoQueue.pause(); // does this mess with the picture taking process?
+			
+			CivilDebateWall.data.photoQueue.pause(); // does this mess with the picture taking process?			
 			
 			markAllInactive();
 			
@@ -656,12 +677,13 @@ package com.civildebatewall.kiosk.core {
 			}			
 			
 			CivilDebateWall.inactivityTimer.arm();
-			CivilDebateWall.state.backDestination = CivilDebateWall.state.lastView;
+			
 			
 			opinionEntryOverlay.tweenIn();
 			
 			tweenOutInactive();			
 		}
+		
 		
 		// ================================================================================================================================================		
 		

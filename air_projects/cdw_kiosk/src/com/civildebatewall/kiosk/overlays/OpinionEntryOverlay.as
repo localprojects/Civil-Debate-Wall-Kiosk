@@ -352,11 +352,11 @@ package com.civildebatewall.kiosk.overlays {
 				backgroundRadiusBottomLeft: 12,
 				backgroundRadiusBottomRight: 12,
 				maxSizeBehavior: BlockBase.MAX_SIZE_CLIPS,
-				padding: 30,
+				padding: 0,
 				width: 1022,
-				height: 495 - 79,
+				height: 416,
 				visible: true,
-				alignmentX: 0.5
+				alignmentPoint: Alignment.CENTER
 			});
 
 			keyboardContainer.x = 0;
@@ -367,7 +367,7 @@ package com.civildebatewall.kiosk.overlays {
 			keyboard.setColor(ColorUtil.gray(77));
 			keyboard.setBackgroundColor(ColorUtil.gray(77));
 			keyboard.visible = true;
-			keyboard.x = -7; // compensate for key padding
+			//keyboard.x = -7; // compensate for key padding
 			keyboardContainer.addChild(keyboard);
 
 			// Events
@@ -503,8 +503,9 @@ package com.civildebatewall.kiosk.overlays {
 		
 		override protected function beforeTweenIn():void {
 			super.beforeTweenIn();
-			CivilDebateWall.state.backDestination = CivilDebateWall.state.lastView;
+			CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.debateStancePickerView;
 			stage.focus = nameField.textField;
+		
 			
 			// Prepopulate fields
 			nameField.text = CivilDebateWall.state.userName;

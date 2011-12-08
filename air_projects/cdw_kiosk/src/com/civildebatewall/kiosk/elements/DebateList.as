@@ -109,7 +109,7 @@ package com.civildebatewall.kiosk.elements {
 			// nothing is selected? make the first one
 			if (!containsSuperlativePost) {
 				CivilDebateWall.state.setSuperlativePost((getChildAt(0) as DebateListItem).post);
-				item.activate();
+				(getChildAt(0) as DebateListItem).activate();
 			}
 		}
 		

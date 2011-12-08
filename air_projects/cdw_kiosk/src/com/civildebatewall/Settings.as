@@ -34,7 +34,7 @@ package com.civildebatewall {
 		public var logToFile:Boolean;
 		public var logFilePath:String;
 		public var localMultiScreenTest:Boolean;
-		public var halfSize:Number;
+		public var halfSize:Boolean;
 		public var startFullScreen:Boolean;
 		public var logFullHTTP:Boolean = true; // Log full responses from server
 		

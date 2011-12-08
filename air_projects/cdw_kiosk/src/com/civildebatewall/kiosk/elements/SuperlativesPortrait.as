@@ -30,7 +30,7 @@ package com.civildebatewall.kiosk.elements {
 			// TODO fix block bitmap tweening...
 			portrait = new PortraitBase();
 			portrait.visible = true;
-			portrait.setImage(BitmapUtil.scaleToFill(Assets.getPortraitPlaceholder(), width, height), true);
+			portrait.setImage(BitmapUtil.scaleToFill(Assets.getPortraitPlaceholder(), 504, 845), true);
 			addChild(portrait);
 		
 			opinionText = new OpinionTextSuperlative();
@@ -69,7 +69,7 @@ package com.civildebatewall.kiosk.elements {
 			goToDebateButton.y = opinionText.bottom + 14;
 			
 			// fade in portrait
-			portrait.setImage(BitmapUtil.scaleToFill(post.user.photo, width, height));
+			portrait.setImage(BitmapUtil.scaleToFill(post.user.photo, 504, 845));
 		}
 		
 	}
