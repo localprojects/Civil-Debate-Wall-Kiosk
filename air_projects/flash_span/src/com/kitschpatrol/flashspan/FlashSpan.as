@@ -39,7 +39,7 @@ package com.kitschpatrol.flashspan {
 		private var udpSocket:DatagramSocket = new DatagramSocket();
 		private var packetsInWaiting:Vector.<CertifiedPacket> = new Vector.<CertifiedPacket>(0);		
 		
-		private var connectionCheckTimer:Timer; // not used
+		private var connectionCheckTimer:Timer;
 		
 		// server stuff
 		private var isServer:Boolean = false;
@@ -104,15 +104,15 @@ package com.kitschpatrol.flashspan {
 			udpSocket.receive();
 			
 			logger.info("...Bound to: " + udpSocket.localAddress + ":" + udpSocket.localPort);
-			
-			// Check for existing servers
 				
-			// Start checking for who is connected
-			// not needed?
-//			settings.thisScreen.connected = true; // obviously we're connected
-//			connectionCheckTimer = new Timer(500); // check every 500ms?
-//			connectionCheckTimer.addEventListener(TimerEvent.TIMER, connectionCheck);
-//			connectionCheckTimer.start();
+			// Start checking for who is connected. TODO Make this optional via config
+			if (isServer) {
+				logger.info("Checking for connections every second since we're the server");
+				settings.thisScreen.connected = true; // obviously we're connected
+				connectionCheckTimer = new Timer(5000); // check every second?
+				connectionCheckTimer.addEventListener(TimerEvent.TIMER, connectionCheck);
+				connectionCheckTimer.start();
+			}
 		}
 		
 		// For Time Sync Mode
@@ -123,7 +123,7 @@ package com.kitschpatrol.flashspan {
 		
 		// heartbeat
 		private function connectionCheck(e:TimerEvent):void {
-			logger.info("Pinging for connection");
+			//logger.info("Pinging for connection");
 			broadcastPing();
 		}
 				
@@ -150,7 +150,11 @@ package com.kitschpatrol.flashspan {
 		}
 		
 		public function start():void {
-			if (isServer) {			
+			if (isServer) {		
+				
+				// disable pinging to save bandwidth
+				connectionCheckTimer.stop();
+				
 				// start syncing
 				if (settings.syncMode == Settings.SYNC_FRAMES) {
 					startFrameSync();	
@@ -212,6 +216,10 @@ package com.kitschpatrol.flashspan {
 					
 					// dispatch stop event locally
 					dispatchStopEvent();
+					
+					// restart connection check
+					connectionCheckTimer.reset();
+					connectionCheckTimer.start();
 				}
 				else {
 					// send to server
@@ -351,7 +359,7 @@ package com.kitschpatrol.flashspan {
 		}
 		
 		protected function onTimeout(packet:CertifiedPacket):void {
-			logger.warn("Packet send timed out: " + packet);
+			logger.warn("Packet sent to screen " + packet.destination.id + " timed out: " + packet.toMessage());
 			
 			// mark non-respondent as disconnected
 			packet.destination.connected = false;			
@@ -478,9 +486,7 @@ package com.kitschpatrol.flashspan {
 			
 			return ips;
 		}		
-		
-		
-		// TODO put this into FlashSpan, returns screen index, or -1 if it's in the gutter or off the screen
+
 		public function pointIsOnScreen(p:Point):int {
 			for (var i:int = 0; i < settings.screenCount; i++) {
 				if (settings.screens[i].containsPoint(p)) return i;
@@ -488,7 +494,6 @@ package com.kitschpatrol.flashspan {
 			return -1;
 		}
 		
-		// TODO put this in flashspan, too
 		public function pointIsNearScreen(p:Point):int {
 			var onScreen:int = pointIsOnScreen(p);
 			

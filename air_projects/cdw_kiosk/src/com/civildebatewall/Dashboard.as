@@ -12,7 +12,12 @@ package com.civildebatewall {
 	import flash.events.Event;
 	import flash.system.System;
 	
+	import org.as3commons.logging.api.ILogger;
+	import org.as3commons.logging.api.getLogger;
+	
 	public class Dashboard extends Window	{
+
+		private static const logger:ILogger = getLogger(Dashboard);
 		
 		private var randomOpinionToggle:CheckBox;
 		private var wallsaverFrameLabel:Label;
@@ -34,8 +39,8 @@ package com.civildebatewall {
 			this.hasMinimizeButton = true;
 			this.minimized = true;
 			
-			new PushButton(this, 5, 5, "Play Sequence A", function():void { CivilDebateWall.self.PlaySequenceA(); });
-			new PushButton(this, 110, 5, "Play Sequence B", function():void { CivilDebateWall.self.PlaySequenceB(); });
+			new PushButton(this, 5, 5, "Play Sequence A", function():void { CivilDebateWall.self.playSequenceA(); });
+			new PushButton(this, 110, 5, "Play Sequence B", function():void { CivilDebateWall.self.playSequenceB(); });
 			new PushButton(this, 5, 55, "Slow", function():void { CoreUtil.sleep(1000); });
 			new PushButton(this, 110, 55, "Update Data", function():void { CivilDebateWall.data.update(); });
 			new PushButton(this, 110, 30, "Test Image Save", function():void {
@@ -78,9 +83,9 @@ package com.civildebatewall {
 				
 			stateTextArea.text = CivilDebateWall.state.stateLog();
 			
-			var armedString:String = CivilDebateWall.inactivityTimer.armed ? "(ARMED)" : "(DISARMED)";
+			var armedString:String = CivilDebateWall.state.inactivityOverlayArmed ? "(ARMED)" : "(DISARMED)";
 			
-			inactivityLabel.text = "Inactivity: " + CivilDebateWall.inactivityTimer.secondsInactive + " / " + CivilDebateWall.settings.inactivityTimeout + " " + armedString;
+			inactivityLabel.text = "Inactivity: " + CivilDebateWall.state.secondsInactive + " / " + CivilDebateWall.settings.inactivityTimeout + " " + armedString;
 		}
 		
 	}

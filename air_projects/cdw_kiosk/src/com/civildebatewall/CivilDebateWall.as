@@ -4,6 +4,7 @@ package com.civildebatewall {
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.kiosk.core.Kiosk;
 	import com.civildebatewall.wallsaver.core.WallSaver;
+	import com.civildebatewall.wallsaver.core.WallSaverTimer;
 	import com.demonsters.debugger.MonsterDebugger;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
@@ -19,6 +20,7 @@ package com.civildebatewall {
 	import com.greensock.plugins.TransformAroundPointPlugin;
 	import com.greensock.plugins.TweenPlugin;
 	import com.kitschpatrol.flashspan.FlashSpan;
+	import com.kitschpatrol.flashspan.NetworkedScreen;
 	import com.kitschpatrol.flashspan.events.CustomMessageEvent;
 	import com.kitschpatrol.flashspan.events.FlashSpanEvent;
 	import com.kitschpatrol.flashspan.events.FrameSyncEvent;
@@ -59,11 +61,16 @@ package com.civildebatewall {
 		public static var self:CivilDebateWall;
 		
 		public static var wallSaver:WallSaver;
+		
 		public static var kiosk:Kiosk;
 		public static var dashboard:Dashboard;
 		
-		public static var inactivityTimer:InactivityTimer;		
+			
+		public static var userActivityMonitor:UserActivityMonitor;
 
+		public static var wallSaverTimer:WallSaverTimer;
+		public static var randomDebateTimer:RandomDebateTimer;
+		
 		private var commandLineArgs:Array;
 		public var fpsMeter:FPSMeter;
 		
@@ -197,13 +204,13 @@ package com.civildebatewall {
 			
 			if (settings.startFullScreen)	toggleFullScreen();
 			
-			// inactivity timer
-			inactivityTimer = new InactivityTimer(stage, settings.inactivityTimeout);
-			inactivityTimer.addEventListener(InactivityEvent.INACTIVE, onInactive);			
+						
 			
 			// Set up the wall data stores
 			data = new Data();
 			state = new State();
+			
+			userActivityMonitor = new UserActivityMonitor(stage);
 			
 			// Interactive kiosk
 			kiosk = new Kiosk();
@@ -232,19 +239,22 @@ package com.civildebatewall {
 			wallSaver.x = -flashSpan.settings.thisScreen.x; // shift content left
 			addChild(wallSaver);
 			
+			wallSaverTimer = new WallSaverTimer();
+			randomDebateTimer = new RandomDebateTimer();
+			
 			// Load the data, which fills up everything through binding callbacks
 			CivilDebateWall.state.firstLoad = true;
 			data.load();
 
 			// dashboard goes on top... or add when active? 
-			addChild(dashboard);			
+			addChild(dashboard);
+			
+			// tell thew world we've gone active
+			userActivityMonitor.onActive();
+			
 		}
 		
-		private function onInactive(e:InactivityEvent):void {
-			logger.info("Inactivity Event Fired");
-			CivilDebateWall.state.clearUser();			
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.inactivityOverlayView);
-		}		
+
 				
 		public function toggleFullScreen():void {		
 			if (stage.displayState == StageDisplayState.NORMAL) {
@@ -265,40 +275,121 @@ package com.civildebatewall {
 		// message headers
 		private const PLAY_SEQUENCE_A:String = "a";
 		private const PLAY_SEQUENCE_B:String = "b";
+		private const ACTIVITY:String = "c";
+		private const INACTIVITY:String = "d";
 		
 		private function onSyncStart(e:FlashSpanEvent):void {
 			//wallSaver.timeline.play();
+			
+		}
+
+		
+		public function broadcastActivity():void {
+			flashSpan.broadcastCustomMessage(ACTIVITY, settings.kioskNumber.toString());
+		}
+		
+		public function broadcastInactivity():void {
+			flashSpan.broadcastCustomMessage(INACTIVITY, settings.kioskNumber.toString());
 		}
 		
 		private function onSyncStop(e:FlashSpanEvent):void {
 			if (wallSaver.timeline.active) wallSaver.endSequence();
+			if ((settings.kioskNumber == 0) && (everyoneInactive)) wallSaverTimer.start();
+			if (!state.userActive) CivilDebateWall.randomDebateTimer.start(); // keep shuffling debates
+			
+
 		}		
 		
-		public function PlaySequenceA():void {
+		public function playSequenceA():void {
+			if (settings.kioskNumber == 0) wallSaverTimer.stop();
 			if (wallSaver.timeline.active) wallSaver.timeline.stop();
 			flashSpan.stop();
-			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_A);
+			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_A); // this cues
 			TweenMax.delayedCall(1, flashSpan.start);  // wait for messages to land before starting
 		}
 		
-		public function PlaySequenceB():void {
+		public function playSequenceB():void {
+			if (settings.kioskNumber == 0) wallSaverTimer.stop();
 			if (wallSaver.timeline.active) wallSaver.timeline.stop();
 			flashSpan.stop();
-			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_B);
+			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_B); // this cues
 			TweenMax.delayedCall(1, flashSpan.start); // wait for messages to land before starting
 		}
 		
+
+		
+		
+		
+		// keep a screen-indexed array of activity status
+		// disconnected screens are null
+		private var everyoneInactive:Boolean;
+		private var activeScreens:Array = [];
+		
+		// set missing screens to null
+		private function updateScreenActivityStatus():void {
+			for (var i:int = 0; i < flashSpan.settings.screens.length; i++) {
+				
+				if (!flashSpan.settings.screens[i].connected) activeScreens[i] = null;
+			}
+		}
+		
+		private function isEveryoneInactive():Boolean {
+			for (var i:int = 0; i < activeScreens.length; i++) {
+				if ((activeScreens[i] != null) && (activeScreens[i])) {
+					return false;	
+				}
+			}
+			return true;
+		}
+		
+		
 		private function onCustomMessageReceived(e:CustomMessageEvent):void {
 			if (e.header == PLAY_SEQUENCE_A) {
+				CivilDebateWall.randomDebateTimer.stop();
 				logger.info("Playing Sequence A");
 				wallSaver.cueSequenceA();
 				flashSpan.frameCount = 0;
 			}
 			else if (e.header == PLAY_SEQUENCE_B) {
+				CivilDebateWall.randomDebateTimer.stop();
 				logger.info("Playing Sequence B");
 				wallSaver.cueSequenceB();
 				flashSpan.frameCount = 0;
 			}
+			else if ((e.header == ACTIVITY) || (e.header == INACTIVITY)) {
+				
+				// Only the server (leftmost screen, 0) cares about this
+				if (settings.kioskNumber == 0) {
+					var fromScreen:NetworkedScreen = flashSpan.settings.screens[int(e.message)];
+					updateScreenActivityStatus();
+	
+					trace(activeScreens);	
+					
+					if (e.header == ACTIVITY) {
+						logger.info("Received activity notice from screen " + fromScreen.id);
+						activeScreens[fromScreen.id] = true;
+						everyoneInactive = false;
+					}
+					else if (e.header == INACTIVITY) {
+						logger.info("Received inctivity notice from screen " + fromScreen.id);
+						activeScreens[fromScreen.id] = false;
+
+						
+						if (settings.kioskNumber == 0) wallSaverTimer.stop();						
+						
+						everyoneInactive = isEveryoneInactive(); 
+						
+						if (everyoneInactive) {
+							logger.info("All screens inactive. Starting wallsaver");
+							playSequenceA();
+						}
+					}
+				}
+			}		
+			else {
+				logger.error("Received unknown custom packet: " + e.header + "," + e.message);
+			}
+
 		}
 
 		private function onFrameSync(e:FrameSyncEvent):void {

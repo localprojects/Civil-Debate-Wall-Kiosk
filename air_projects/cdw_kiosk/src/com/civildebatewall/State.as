@@ -47,7 +47,13 @@ package com.civildebatewall {
 		public var updateTotalTime:int;
 		public var photoLoadTime:int;		
 		
+		
 		// ACTUAL STATE (THAT MATTERS) ========================================================================
+		
+		// user activity
+		public var userActive:Boolean = true;
+		public var secondsInactive:int = 0;
+		public var inactivityOverlayArmed:Boolean = true;
 		
 		// navigation
 		public var activeQuestion:Question;

@@ -65,11 +65,11 @@ package com.civildebatewall {
 		}
 		
 		private static function onDemoSequenceAContextMenuSelect(e:ContextMenuEvent):void {
-			CivilDebateWall.self.PlaySequenceA();
+			CivilDebateWall.self.playSequenceA();
 		}
 		
 		private static function onDemoSequenceBContextMenuSelect(e:ContextMenuEvent):void {
-			CivilDebateWall.self.PlaySequenceB();			
+			CivilDebateWall.self.playSequenceB();			
 		}		
 		
 		private static function onAlignTop(e:ContextMenuEvent):void {
