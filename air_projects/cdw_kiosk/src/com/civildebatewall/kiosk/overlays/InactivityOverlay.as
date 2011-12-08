@@ -10,6 +10,8 @@ package com.civildebatewall.kiosk.overlays {
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
 	
+	import flash.events.Event;
+	
 	public class InactivityOverlay extends BlockBase {
 		
 		private var timerBar:ProgressBar;		
@@ -51,24 +53,27 @@ package com.civildebatewall.kiosk.overlays {
 			message.setDefaultTweenOut(1, {y: Alignment.OFF_STAGE_LEFT});
 			addChild(message);
 			
-			timerBar = new ProgressBar({width: 880, height: 1, duration: 10});
+			timerBar = new ProgressBar({width: 880, height: 1, duration: CivilDebateWall.settings.presenceCountdownTime});
 			timerBar.x = 100;
 			timerBar.setDefaultTweenIn(1, {x: 100, y: 964});
 			timerBar.setDefaultTweenOut(1, {x: 100, y: Alignment.OFF_STAGE_TOP});
-			timerBar.onProgressComplete.push(goHome);
+			timerBar.onProgressComplete.push(userMissing);
 			addChild(timerBar);
 			
-			yesButton.onButtonUp.push(closeOverlay);
+			yesButton.onButtonUp.push(userPresent);
 		}
 		
-		private function goHome(...args):void {
-			closeOverlay();		
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.homeView);
+		private function userMissing(...args):void {
+			// time is up
+			timerBar.pause();
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.homeView);			
 		}
 		
-		private function closeOverlay(...args):void {
+		private function userPresent(...args):void {
+			// user confirmed they're still there
 			timerBar.pause();
 			CivilDebateWall.state.setView(CivilDebateWall.state.lastView);
+			CivilDebateWall.userActivityMonitor.onActivity(new Event(Event.ACTIVATE)); // reset the inactivity timer
 		}
 		
 		override protected function beforeTweenIn():void {

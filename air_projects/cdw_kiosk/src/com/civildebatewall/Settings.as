@@ -4,11 +4,15 @@ package com.civildebatewall {
 	public class Settings	{
 		
 		// Container for strict type checking of settings
+		// These are fileld in at startup with values from a JSON file via SettingsLoader.as
 		
 		// Basic
 		public var characterLimit:int;
-		public var inactivityTimeout:Number;
-		public var wallsaverTimein:Number;
+		public var inactivityTimeout:int;
+		public var randomDebateInterval:int; // If inactive, portrait cycles every X seconds
+		public var wallsaverTimein:int = 10; // Seconds after inactivity to start wallsaver TODO unused
+		public var wallsaverInterval:int; // Seconds to show the random thread between wallsaver runs 
+		public var presenceCountdownTime:int;
 		
 		// Network
 		public var secretKey:String;
@@ -36,7 +40,7 @@ package com.civildebatewall {
 		public var localMultiScreenTest:Boolean;
 		public var halfSize:Boolean;
 		public var startFullScreen:Boolean;
-		public var logFullHTTP:Boolean = true; // Log full responses from server
+		public var logFullHTTP:Boolean; // Log full responses from server
 		
 		// Generated Settings
 		public var kioskNumber:int;

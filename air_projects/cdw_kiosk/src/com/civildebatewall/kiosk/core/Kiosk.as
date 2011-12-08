@@ -498,7 +498,8 @@ package com.civildebatewall.kiosk.core {
 			markAllInactive();
 			
 			// mutations
-			CivilDebateWall.inactivityTimer.disarm();
+			
+			CivilDebateWall.state.inactivityOverlayArmed = false;
 			portrait.setImage(Assets.portraitPlaceholder);
 			bigButton.y = 1470;
 			bigButton.setText("ADD YOUR OPINION");
@@ -528,7 +529,7 @@ package com.civildebatewall.kiosk.core {
 				TweenMax.delayedCall(3, CivilDebateWall.data.photoQueue.resume);
 			}
 			
-			CivilDebateWall.inactivityTimer.disarm();
+			CivilDebateWall.state.inactivityOverlayArmed = false;
 						
 			bigButton.y = 1470;			
 			bigButton.setText("JOIN THE DEBATE"); // TODO move to listener?
@@ -596,7 +597,7 @@ package com.civildebatewall.kiosk.core {
 		
 		public function threadView(...args):void {			
 			markAllInactive();
-			CivilDebateWall.inactivityTimer.arm();
+			CivilDebateWall.state.inactivityOverlayArmed = true;
 			
 			// Do this on event callback instead?
 			debateThisButton.targetPost = CivilDebateWall.state.activeThread.firstPost;
@@ -628,7 +629,7 @@ package com.civildebatewall.kiosk.core {
 		
 		public function debateTypePickerView(...args):void {
 			markAllInactive(); 
-			CivilDebateWall.inactivityTimer.arm();
+			CivilDebateWall.state.inactivityOverlayArmed = true;
 			CivilDebateWall.state.backDestination = homeView;  
 			
 			portrait.tweenIn(1, {alpha: 0.45});
@@ -645,7 +646,7 @@ package com.civildebatewall.kiosk.core {
 		
 		public function debateStancePickerView(...args):void {
 			markAllInactive();
-			CivilDebateWall.inactivityTimer.arm();
+			CivilDebateWall.state.inactivityOverlayArmed = true;
 			
 			if (CivilDebateWall.data.threads.length == 0) {
 				CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.noOpinionView;			
@@ -676,7 +677,7 @@ package com.civildebatewall.kiosk.core {
 				CivilDebateWall.data.photoQueue.pause();
 			}			
 			
-			CivilDebateWall.inactivityTimer.arm();
+			CivilDebateWall.state.inactivityOverlayArmed = true;
 			
 			
 			opinionEntryOverlay.tweenIn();
@@ -691,7 +692,7 @@ package com.civildebatewall.kiosk.core {
 		
 		public function photoBoothView(...args):void {			
 			markAllInactive();
-			CivilDebateWall.inactivityTimer.arm();			
+			CivilDebateWall.state.inactivityOverlayArmed = true;			
 			
 			// behaviors
 			countdownButton.setOnFinish(onCountdownFinish);
@@ -798,7 +799,7 @@ package com.civildebatewall.kiosk.core {
 		
 		public function opinionReviewView(...args):void {
 			markAllInactive();
-			CivilDebateWall.inactivityTimer.arm();
+			CivilDebateWall.state.inactivityOverlayArmed = true;
 			CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.opinionEntryView;			
 			
 			bigButton.setOnClick(function():void {
@@ -838,7 +839,7 @@ package com.civildebatewall.kiosk.core {
 			
 			portrait.tweenIn();
 			questionHeaderHome.tweenIn()			
-			CivilDebateWall.inactivityTimer.arm();
+			CivilDebateWall.state.inactivityOverlayArmed = true;
 			termsAndConditionsUnderlay.tweenIn();
 			termsAndConditionsText.tweenIn();
 			closeTermsButton.tweenIn();
@@ -849,7 +850,7 @@ package com.civildebatewall.kiosk.core {
 		// ================================================================================================================================================		
 		
 		public function smsPromptView(...args):void {
-			CivilDebateWall.inactivityTimer.disarm();
+			CivilDebateWall.state.inactivityOverlayArmed = false;
 			markAllInactive();
 			portrait.tweenIn(); // TODO, just use black?	
 			smsOverlay.tweenIn();
@@ -859,7 +860,7 @@ package com.civildebatewall.kiosk.core {
 		// ================================================================================================================================================
 		
 		public function flagOverlayView(...args):void {
-			CivilDebateWall.inactivityTimer.arm();			
+			CivilDebateWall.state.inactivityOverlayArmed = true;			
 			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
 			CivilDebateWall.state.activeView = flagOverlayView;
 			flagOverlay.tweenIn();
@@ -877,13 +878,13 @@ package com.civildebatewall.kiosk.core {
 		
 		public function inactivityOverlayView(...args):void {
 			// tween a bunch of stuff out	
-			CivilDebateWall.inactivityTimer.disarm();			
+			CivilDebateWall.state.inactivityOverlayArmed = false;			
 			inactivityOverlay.tweenIn();
 		}
 		
 		
 		public function cameraCalibrationOverlayView(...args):void {
-			CivilDebateWall.inactivityTimer.disarm();
+			CivilDebateWall.state.inactivityOverlayArmed = false;
 			cameraCalibrationOverlay= new CameraCalibrationOverlay();
 			addChild(cameraCalibrationOverlay);
 		}
@@ -900,7 +901,7 @@ package com.civildebatewall.kiosk.core {
 		// =========================================================================
 		
 		public function statsView(...args):void {
-			CivilDebateWall.inactivityTimer.arm();			
+			CivilDebateWall.state.inactivityOverlayArmed = true;			
 			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
 			CivilDebateWall.state.activeView = statsView;	
 			markAllInactive();
