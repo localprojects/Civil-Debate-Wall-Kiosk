@@ -480,7 +480,7 @@ package com.civildebatewall.kiosk.overlays {
 			}
 			
 			if (errors) {
-				logger.info("...Validation errors, won't submit");
+				logger.info("...Validation problems, won't submit");
 			}
 			else {
 				logger.info("...submission looks OK, continuing");
