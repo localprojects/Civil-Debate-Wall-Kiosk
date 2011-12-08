@@ -411,6 +411,7 @@ package com.civildebatewall.kiosk.overlays {
 		
 		private function onNameFieldInput(e:Event):void {
 			// update the character countdown
+			nameField.text = nameField.text.replace(" ", ""); // strip spaces
 			nameCharacterCount.text = nameField.charsLeft + StringUtil.plural(" Char", nameField.charsLeft);
 		}
 		
