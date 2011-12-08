@@ -2,6 +2,7 @@ package com.civildebatewall.kiosk.overlays {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.State;
 	import com.civildebatewall.data.Word;
 	import com.civildebatewall.kiosk.buttons.WordButton;
 	import com.civildebatewall.kiosk.elements.ClearTagButton;
@@ -186,6 +187,11 @@ package com.civildebatewall.kiosk.overlays {
 			wordCloud.deselect();
 			onWordDeselected(new Event(ClearTagButton.CLEAR_TAG_EVENT));
 			wordCloudTitle.clearTagButton.tweenOut(0); // start off screen
+			
+			// reset the superlatives
+			CivilDebateWall.state.setStatsView(State.VIEW_MOST_DEBATED);
+			CivilDebateWall.state.setSuperlativePost(CivilDebateWall.data.stats.mostDebatedThreads[0].firstPost);					
+			
 			super.beforeTweenIn();
 		}
 		

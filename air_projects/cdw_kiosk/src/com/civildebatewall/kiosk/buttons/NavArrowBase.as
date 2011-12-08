@@ -9,9 +9,9 @@ package com.civildebatewall.kiosk.buttons {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
-	public class NavArrow extends BlockBitmap {
+	public class NavArrowBase extends BlockBitmap {
 		
-		public function NavArrow(params:Object = null) {
+		public function NavArrowBase(params:Object = null) {
 			super(params);
 			buttonMode = true;
 			
@@ -24,6 +24,7 @@ package com.civildebatewall.kiosk.buttons {
 			backgroundAlpha = 0;
 		
 			CivilDebateWall.state.addEventListener(State.ACTIVE_THREAD_CHANGE, onActiveDebateChange);
+			CivilDebateWall.state.addEventListener(State.SORT_CHANGE, onActiveDebateChange);
 		}
 		
 		override protected function beforeTweenIn():void {
@@ -31,7 +32,7 @@ package com.civildebatewall.kiosk.buttons {
 			super.beforeTweenIn();
 		}
 		
-		private function onActiveDebateChange(e:Event):void {
+		protected function onActiveDebateChange(e:Event):void {
 			if (CivilDebateWall.state.activeThread != null) {
 				TweenMax.to(this, 1, {colorMatrixFilter:{colorize: CivilDebateWall.state.activeThread.firstPost.stanceColorLight, amount: 1}});
 			}
@@ -41,7 +42,7 @@ package com.civildebatewall.kiosk.buttons {
 			TweenMax.to(this, 0, {colorMatrixFilter:{colorize: CivilDebateWall.state.activeThread.firstPost.stanceColorDark, amount: 1}});
 		}
 				
-		private function up(e:MouseEvent):void {
+		protected function up(e:MouseEvent):void {
 			TweenMax.to(this, 0.5, {colorMatrixFilter:{colorize: CivilDebateWall.state.activeThread.firstPost.stanceColorLight, amount: 1}});			
 		}
 

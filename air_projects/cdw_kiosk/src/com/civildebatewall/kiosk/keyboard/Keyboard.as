@@ -1,5 +1,6 @@
 package com.civildebatewall.kiosk.keyboard {
 	
+	import com.adobe.utils.StringUtil;
 	import com.civildebatewall.kiosk.legacy.OldBlockBase;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.Math2;
@@ -23,45 +24,57 @@ package com.civildebatewall.kiosk.keyboard {
 		private function init():void {
 			// background
 			this.graphics.beginFill(0xffffff);
-			this.graphics.drawRect(0, 0, 798, 356); // add padding
+			this.graphics.drawRect(0, 0, 798, 320); // add padding
 			this.graphics.endFill();
+			
+			keys = [];			
 			
 			shift = false;
 			
 			// extra white space describes how many multiples of the keywidth it should be
 			var layout:Array = [
-//				["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-"],
-//				["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-//				["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-//				["z", "x", "c", "v", "b", "n", "m", ",", "."],
-//				[" SHIFT ", "   SPACE   ", " DELETE "]
-					["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-					["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-					["z", "x", "c", "v", "b", "n", "m"],
-					[" SHIFT ", "   SPACE   ", " DELETE "]				
+				["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", " DELETE "],
+				["a", "s", "d", "f", "g", "h", "j", "k", "l", [":", ";"], ["'", "\""]],
+				["z", "x", "c", "v", "b", "n", "m", ",", ".", ["?", "!"]],
+				[" SHIFT1 ", "  SPACE   ", " SHIFT2 "]
 			];
-
-			keys = [];
 			
-			// find key width, it's the width of the keyboard divided by the longest row of keys
-			var keyWidth:Number = width / maxLength(layout);
+			var capWidth:Number = 67; 
+			var capHeight:Number = 67;			
+			var keyPaddingVertical:Number = 12;
+			var keyPaddingHorizontal:Number = 7
 			
-			// key height is the height of the keyboard divided by the number of rows 
-			var keyHeight:Number = height / layout.length;			
+			var rowOffsets:Array = [
+				0,
+				40,
+				80,
+				120
+			]			
 			
 			// make the keys
 			for (var row:int = 0; row < layout.length; row++) {
-				var xPos:Number = (width - (getRowGridCount(layout[row]) * keyWidth)) / 2;
-				
-				//if (row == 3) xPos += (keyWidth / 2);
+				// var xPos:Number = (width - (getRowGridCount(layout[row]) * keyWidth)) / 2;
+				var xPos:Number = rowOffsets[row];
 				
 				for (var col:int = 0; col < layout[row].length; col++) {
-					var letter:String = layout[row][col];
+					var letter:String
+					var shiftLetter:String;
+					
+					// Allow passing in an array of two strings to override default shift letter
+					if (layout[row][col] is Array) {
+						letter = layout[row][col][0];
+						shiftLetter = layout[row][col][1];
+					}
+					else {
+						letter = layout[row][col];
+						shiftLetter = null;
+					}
+					
 					var widthFactor:int = getWidthFactor(letter);
-					var key:Key = new Key(letter, keyWidth * widthFactor, keyHeight);
+					var key:Key = new Key((capWidth * widthFactor) + ((widthFactor - 1) * (keyPaddingHorizontal * 2)), capHeight, keyPaddingVertical, keyPaddingHorizontal, letter, shiftLetter);
 					
 					key.x = xPos;
-					key.y = row * keyHeight;
+					key.y = row * key.height;
 					
 					// accuumulate width
 					xPos += key.width;
@@ -70,46 +83,55 @@ package com.civildebatewall.kiosk.keyboard {
 					key.addEventListener(MouseEvent.MOUSE_DOWN, key.onMouseDown);
 					key.addEventListener(MouseEvent.MOUSE_UP, key.onMouseUp);
 					key.addEventListener(MouseEvent.MOUSE_OVER, key.onMouseOver);
-					key.addEventListener(MouseEvent.MOUSE_OUT, key.onMouseOut);
-					//key.addEventListener(TouchEvent.TOUCH_BEGIN, key.onMouseDown);					
+					key.addEventListener(MouseEvent.MOUSE_OUT, key.onMouseOut);					
 
 					// events global to the keyboard
 					key.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);					
-					key.addEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
-					//key.addEventListener(TouchEvent.TOUCH_BEGIN, onMouseDown);					
+					key.addEventListener(MouseEvent.MOUSE_UP, onKeyPressed);					
 					
-					keys[key.letter] = key;
-					
+					keys[StringUtil.trim(letter)] = key;
+
 					addChild(key);
 				}
 			}
 
 			// customize certain keys
 			keys["DELETE"].repeats = true;			
+			
+			// Two keys... become one
+			keys["SHIFT1"].addEventListener(MouseEvent.MOUSE_OVER, keys["SHIFT2"].onMouseOver);
+			keys["SHIFT1"].addEventListener(MouseEvent.MOUSE_OUT, keys["SHIFT2"].onMouseOut);
+			keys["SHIFT1"].addEventListener(MouseEvent.MOUSE_DOWN, keys["SHIFT2"].onMouseDown);
+			keys["SHIFT1"].addEventListener(MouseEvent.MOUSE_UP, keys["SHIFT2"].onMouseUp);			
+			
+			keys["SHIFT2"].addEventListener(MouseEvent.MOUSE_OVER, keys["SHIFT1"].onMouseOver);
+			keys["SHIFT2"].addEventListener(MouseEvent.MOUSE_OUT, keys["SHIFT1"].onMouseOut);
+			keys["SHIFT2"].addEventListener(MouseEvent.MOUSE_DOWN, keys["SHIFT1"].onMouseDown);
+			keys["SHIFT2"].addEventListener(MouseEvent.MOUSE_UP, keys["SHIFT1"].onMouseUp);
 		}
 
 		public function showSpacebar(b:Boolean):void {
 			if (b) {
-				keys[" "].visible = true;
-				TweenMax.to(keys[" "], 0.25, {alpha: 1});				
+				keys["SPACE"].visible = true;
+				TweenMax.to(keys["SPACE"], 0.25, {alpha: 1});				
 			}
 			else {
-				TweenMax.to(keys[" "], 0.25, {alpha: 0, onComplete: function():void { keys[" "].visible = false; }});
+				TweenMax.to(keys["SPACE"], 0.25, {alpha: 0, onComplete: function():void { keys["SPACE"].visible = false; }});
 			}
 		}
 		
 		private function upperCase():void {
 			for each (var key:Key in keys) {
-				if (key.letter.length == 1 && (key.letter.charCodeAt(0) >= 97) && (key.letter.charCodeAt(0) <= 122)) {
-					key.setLetter(key.letter.toUpperCase());
+				if (key.letter.length == 1) {
+					key.setLetter(key.shiftLetter);
 				}
 			}
 		}
 		
 		private function lowerCase():void {
 			for each (var key:Key in keys) {
-				if (key.letter.length == 1 && (key.letter.charCodeAt(0) >= 65) && (key.letter.charCodeAt(0) <= 90)) {
-					key.setLetter(key.letter.toLowerCase());
+				if (key.letter.length == 1) {
+					key.setLetter(key.letter);
 				}
 			}			
 		}
@@ -124,10 +146,10 @@ package com.civildebatewall.kiosk.keyboard {
 			
 			if (e.target.letter == "SHIFT") {
 				shift = e.target.active;
-				
+
 				if (shift) {
 					// switch key caps to uppercase
-					upperCase();
+					upperCase();				
 				}
 				else {
 					// back to lowercase
@@ -177,16 +199,17 @@ package com.civildebatewall.kiosk.keyboard {
 					// watch character limit since appending to the string
 					// directly bypasses the flash-native max character checks
 					if (tf1.text.length < tf1.maxChars) {					
-						tf1.text = tf1.text.substring(0, tf1.selectionBeginIndex) + e.target.letter + tf1.text.substring(tf1.selectionEndIndex);
+						tf1.text = tf1.text.substring(0, tf1.selectionBeginIndex) + e.target.activeLetter + tf1.text.substring(tf1.selectionEndIndex);
 						tf1.setSelection(tf1.selectionBeginIndex + 1, tf1.selectionBeginIndex + 1);
 					}
 				}
 
 				// unstick the shift button if we're shifted
 				if (shift) {
-					keys["SHIFT"].removeEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
-					keys["SHIFT"].dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP, false));
-					keys["SHIFT"].addEventListener(MouseEvent.MOUSE_UP, onKeyPressed);
+					keys["SHIFT1"].onMouseUp(new MouseEvent(MouseEvent.MOUSE_UP));
+					keys["SHIFT2"].onMouseUp(new MouseEvent(MouseEvent.MOUSE_UP));
+					keys["SHIFT1"].active = false;
+					keys["SHIFT2"].active = false;					
 					lowerCase();
 				}
 			}
