@@ -144,9 +144,12 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 			// tween the scroll view to the active item
-			scrollToX = (tempThumb == null) ? 0 : Math2.clamp(scrollToX - (width / 2) + (tempThumb.width / 2), minScrollX, maxScrollX);
-			timeline.insert(TweenMax.to(this, 1, {scrollX: scrollToX, ease: Quart.easeInOut}), .25);
-
+//			scrollToX = (tempThumb == null) ? 0 : Math2.clamp(scrollToX - (width / 2) + (tempThumb.width / 2), minScrollX, maxScrollX);
+//			timeline.insert(TweenMax.to(this, 1, {scrollX: scrollToX, ease: Quart.easeInOut}), .25);
+			
+			// scroll to start instead, per ticket #217
+			timeline.insert(TweenMax.to(this, 1, {scrollX: 0, ease: Quart.easeInOut}));
+			
 			// fade the (Correct) dots back in
 			for (i = 0; i < content.numChildren; i++) {
 				if (content.getChildAt(i) is ThumbnailButton) {
@@ -162,7 +165,7 @@ package com.civildebatewall.kiosk.elements {
 						timeline.insert(TweenMax.to(tempThumb.rightDot, 0.25, {alpha: 1}), 1.25);						
 					}
 				}
-			}
+			};	
 			
 			timeline.play();
 		}
