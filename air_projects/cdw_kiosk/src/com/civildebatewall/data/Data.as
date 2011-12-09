@@ -34,7 +34,7 @@ package com.civildebatewall.data {
 		public static const FLAG_UPDATE_SERVER:String = "flagUpdateServer";		
 		
 		// the data
-		public var badWords:Vector.<String>;
+		public var badWords:Array;
 		public var boringWords:Vector.<String>;
 		public var categories:Array;
 		public var questions:Array;
@@ -126,13 +126,12 @@ package com.civildebatewall.data {
 		
 		private function loadBadWords(onLoad:Function = null):void {
 			logger.info("Loading bad words...");
-			// TODO get this from back end!
-			var response:Array = [];
-			badWords = new Vector.<String>();
-			for each (var badWord:String in response) badWords.push(badWord);			
-			badWords.fixed = true;
-			logger.info("...Loaded " + badWords.length + " bad words");
-			(onLoad != null) ? onLoad() :	loadBoringWords();
+			Utilities.getRequestJSON("http://beta.civildebatewall.com/api/utils/badwords", function(response:Object):void {
+				badWords = [];
+				for each (var badWord:String in response["words"]) badWords.push(badWord);
+				logger.info("...Loaded " + badWords.length + " bad words");
+				(onLoad != null) ? onLoad() :	loadBoringWords();
+			});
 		}
 		
 		private function loadBoringWords(onLoad:Function = null):void {

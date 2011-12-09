@@ -388,7 +388,7 @@ package com.civildebatewall.kiosk.overlays {
 		
 		private function onInput(e:Event):void {
 			// check for profanity
-			if (StringUtil.isProfane(nameField.text + " " + opinionField.text)) {
+			if (StringUtil.containsWord(nameField.text + " " + opinionField.text, CivilDebateWall.data.badWords)) {
 				errors = true;
 				logger.info("Bad words: " + nameField.text + " " + opinionField.text);
 				
