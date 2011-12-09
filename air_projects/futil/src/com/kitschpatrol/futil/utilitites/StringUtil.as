@@ -14,6 +14,16 @@ package com.kitschpatrol.futil.utilitites {
 			return false;
 		}
 		
+		public static function containsWord(text:String, searchList:Array):Boolean {
+			var testString:String = stripLinebreaks(text);
+
+			for (var i:int = 0; i < searchList.length; i++) {
+				var regex:RegExp = new RegExp(/\b/.source + searchList[i] +  /\b/.source, "g");
+				if (testString.search(regex) > -1) return true;
+			}			
+			return false;
+		}
+		
 		// replaces long strings of spaces with a single space
 		public static function stripSerialSpaces(text:String):String {
 			return text.replace(/\s{2,}/g, " ");
