@@ -144,8 +144,8 @@ package com.civildebatewall.kiosk.elements {
 			}
 			
 			// tween the scroll view to the active item
-//			scrollToX = (tempThumb == null) ? 0 : Math2.clamp(scrollToX - (width / 2) + (tempThumb.width / 2), minScrollX, maxScrollX);
-//			timeline.insert(TweenMax.to(this, 1, {scrollX: scrollToX, ease: Quart.easeInOut}), .25);
+			// scrollToX = (tempThumb == null) ? 0 : Math2.clamp(scrollToX - (width / 2) + (tempThumb.width / 2), minScrollX, maxScrollX);
+			// timeline.insert(TweenMax.to(this, 1, {scrollX: scrollToX, ease: Quart.easeInOut}), .25);
 			
 			// scroll to start instead, per ticket #217
 			timeline.insert(TweenMax.to(this, 1, {scrollX: 0, ease: Quart.easeInOut}));

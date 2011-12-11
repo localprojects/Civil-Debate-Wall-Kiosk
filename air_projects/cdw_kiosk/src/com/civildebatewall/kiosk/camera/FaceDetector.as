@@ -73,9 +73,9 @@ package com.civildebatewall.kiosk.camera {
 				}
 				else {
 					// find the rectangle that's closest to the 2
-					var closesDistancetIndex:int = 0;
+					var closestDistancetIndex:int = 0;
 					var closestDistance:Number = Number.MAX_VALUE;
-					
+
 					var largestAreaIndex:int = 0;				
 					var largestArea:Number = Number.MIN_VALUE;
 					
@@ -84,20 +84,20 @@ package com.civildebatewall.kiosk.camera {
 							
 							if (distance < closestDistance) {
 								closestDistance = distance;
-								closesDistancetIndex = i;
+								closestDistancetIndex = i;
 							}
 							
 							var area:Number = e.rects[i].width * e.rects[i].height;
 							
 							if (area > largestArea) {
 								largestArea = area;
-								largestAreaIndex = i;
+							largestAreaIndex = i;
 							}						
 					}
 					
 					// choose by distance, or area?
-					// faceRect = e.rects[closestIndex];
-					faceRect = e.rects[largestAreaIndex];
+					faceRect = e.rects[closestDistancetIndex];
+					// faceRect = e.rects[largestAreaIndex];
 				}
 			}
 			else {
