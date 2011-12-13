@@ -97,21 +97,22 @@ package com.civildebatewall.kiosk.elements.opinion_text {
 		}
 
 		private function drawHighlightRange(start:int, end:int):void {
-			var existingText:String = text;
 			var highlightArea:Rectangle = new Rectangle();
-
+			
 			var startBounds:Rectangle = textField.getCharBoundaries(start);
 			var endBounds:Rectangle = textField.getCharBoundaries(end);
 			
-			highlightArea.x = startBounds.x + contentCropLeft - _highlightPadding.left;
-			highlightArea.y = startBounds.y - _highlightPadding.top;
-			highlightArea.width = endBounds.x - startBounds.x + _highlightPadding.horizontal;
-			highlightArea.height = textSize + _highlightPadding.vertical;
-			
-			// draw the hilite
-			highlightLayer.graphics.beginFill(_highlightColor);
-			highlightLayer.graphics.drawRect(highlightArea.x, highlightArea.y, highlightArea.width, highlightArea.height);
-			highlightLayer.graphics.endFill();
+			if (startBounds != null && endBounds != null) {
+				highlightArea.x = startBounds.x + contentCropLeft - _highlightPadding.left;
+				highlightArea.y = startBounds.y - _highlightPadding.top;
+				highlightArea.width = endBounds.x - startBounds.x + _highlightPadding.horizontal;
+				highlightArea.height = textSize + _highlightPadding.vertical;
+				
+				// draw the hilite
+				highlightLayer.graphics.beginFill(_highlightColor);
+				highlightLayer.graphics.drawRect(highlightArea.x, highlightArea.y, highlightArea.width, highlightArea.height);
+				highlightLayer.graphics.endFill();
+			}
 		}
 
 		public function get highlightColor():uint {
