@@ -80,8 +80,8 @@ There are a number of supporting projects in the `air_projects` directory:
 ### Dependencies
 
 #### Application Software
-- Flash Builder Professional 4.5
-- Flash Authoring Tool CS5
+- Flash Builder Professional 4.6
+- Flash Authoring Tool CS5 (For font embedding.)
 
 #### Libraries
 - AS3 Core Lib (JSON)
@@ -103,6 +103,8 @@ Maintaining ant build files and working directly with the Flash / AIR compilers 
 For testing and development on the Mac, make sure your Flash Builder workspace is pointed to `/lp-cdw/air_projects`. Import the `cdw_kiosk`, `object_detection`, and `futil` folders as Flash Builder Projects. Use Flash Builder to compile and run `cdw_kiosk` in debug mode. You will need to make sure there is a database / web server either locally or remotely for the app to communicate with. (See the web portion of the CDW project for more info.)
 
 There is no support for SLR control on the Mac —- for testing purposes, the app will use a web cam for both framing and the final photograph. Testing the actual SLR requires running the project in Flash Builder on a Windows machine.
+
+NOTE: Due to a bug in Flash Builder 4.6, developers on Mac OS 10.7.2 on certain MacBook Pros will run into a crash when attempting to launch the application unless dynamic graphics card switching is disabled. This may be disabled through the Energy Saver system preferences panel, or (more conveniently) with a third party application such as [gfxCardStatus](http://codykrieger.com/gfxCardStatus). Adobe is [working on the issue](http://forums.adobe.com/message/4056447?tstart=0), but as of December 2011 they're talking about the timeline for a fix in terms of "months".
 
 #### Native Code: SLR Control
 
