@@ -1,6 +1,6 @@
 package com.civildebatewall {
 	
-	import com.adobe.serialization.json.JSON;
+
 	import com.kitschpatrol.futil.utilitites.FileUtil;
 	import com.kitschpatrol.futil.utilitites.ObjectUtil;
 	import com.kitschpatrol.futil.utilitites.PlatformUtil;
@@ -25,7 +25,7 @@ package com.civildebatewall {
 			}
 			
 			var settingsString:String = FileUtil.loadString(settingsPath);
-			var rawSettings:Object = JSON.decode(settingsString); // Raw settings from file
+			var rawSettings:Object = JSON.parse(settingsString); // Raw settings from file
 			
 			var settings:Settings = new Settings(); // Holds final settings
 			

@@ -1,7 +1,5 @@
 package com.civildebatewall {
-	
-	import com.adobe.serialization.json.JSON;
-	import com.adobe.serialization.json.JSONParseError;
+
 	import com.kitschpatrol.futil.utilitites.GeomUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
@@ -139,9 +137,9 @@ package com.civildebatewall {
 				var jsonResponse:Object;
 					
 				try	{
-					jsonResponse = JSON.decode(r.toString());
+					jsonResponse = JSON.parse(r.toString());
 				} 
-				catch (error:JSONParseError) {
+				catch (error:Error) {
 					logger.error("JSON Parse Error: " + error.message);
 					// TODO fail gracefully
 				}
@@ -160,9 +158,9 @@ package com.civildebatewall {
 				var jsonResponse:Object;
 				
 				try	{
-					jsonResponse = JSON.decode(r.toString());
+					jsonResponse = JSON.parse(r.toString());
 				} 
-				catch (error:JSONParseError) {
+				catch (error:Error) {
 					logger.error("JSON Parse Error: " + error.message);
 					// TODO fail gracefully
 				}				
