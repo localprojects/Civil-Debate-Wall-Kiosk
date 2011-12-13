@@ -2,7 +2,7 @@ package com.civildebatewall.wallsaver.sequences {
 	
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.containers.Post;
 	import com.civildebatewall.wallsaver.elements.GridPortrait;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;

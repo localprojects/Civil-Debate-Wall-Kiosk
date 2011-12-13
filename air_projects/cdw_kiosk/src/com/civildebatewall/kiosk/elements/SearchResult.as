@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk.elements {
 	
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.containers.Post;
 	import com.civildebatewall.kiosk.buttons.GoToDebateButton;
 	
 	public class SearchResult extends Comment {

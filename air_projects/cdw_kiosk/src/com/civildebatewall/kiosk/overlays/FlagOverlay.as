@@ -2,7 +2,7 @@ package com.civildebatewall.kiosk.overlays {
 
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.containers.Post;
 	import com.civildebatewall.kiosk.buttons.BigGrayButton;
 	import com.civildebatewall.kiosk.elements.ProgressBar;
 	import com.greensock.TweenMax;

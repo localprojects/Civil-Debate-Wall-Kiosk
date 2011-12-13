@@ -20,6 +20,11 @@ package com.civildebatewall.data {
 	
 	import org.as3commons.logging.api.ILogger;
 	import org.as3commons.logging.api.getLogger;
+	import com.civildebatewall.data.containers.Category;
+	import com.civildebatewall.data.containers.Post;
+	import com.civildebatewall.data.containers.Question;
+	import com.civildebatewall.data.containers.Thread;
+	import com.civildebatewall.data.containers.User;
 	
 	public class Data extends EventDispatcher {
 		
@@ -84,8 +89,6 @@ package com.civildebatewall.data {
 			CivilDebateWall.state.firstLoad = false;
 			
 			loadImages();
-			
-
 		}
 
 		public function update():void {

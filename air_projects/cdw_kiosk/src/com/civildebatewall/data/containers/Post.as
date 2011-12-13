@@ -1,4 +1,4 @@
-package com.civildebatewall.data {
+package com.civildebatewall.data.containers {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;

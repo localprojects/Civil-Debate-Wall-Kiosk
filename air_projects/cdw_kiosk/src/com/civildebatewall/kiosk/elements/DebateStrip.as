@@ -3,7 +3,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.data.User;
+	import com.civildebatewall.data.containers.User;
 	import com.civildebatewall.kiosk.BlockInertialScroll;
 	import com.civildebatewall.kiosk.buttons.ThumbnailButton;
 	import com.greensock.TimelineMax;
