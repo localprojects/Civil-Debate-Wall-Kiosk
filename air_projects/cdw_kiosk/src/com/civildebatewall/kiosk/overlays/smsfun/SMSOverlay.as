@@ -1,7 +1,7 @@
 package com.civildebatewall.kiosk.overlays.smsfun {
 	
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.containers.Post;
 	import com.civildebatewall.kiosk.buttons.WhiteButton;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;

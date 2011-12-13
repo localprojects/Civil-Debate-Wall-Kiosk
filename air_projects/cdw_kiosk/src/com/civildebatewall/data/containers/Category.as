@@ -1,4 +1,4 @@
-package com.civildebatewall.data {
+package com.civildebatewall.data.containers {
 	
 	public class Category	{
 		

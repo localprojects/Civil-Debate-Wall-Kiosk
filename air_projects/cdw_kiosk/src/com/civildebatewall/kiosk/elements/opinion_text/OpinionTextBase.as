@@ -1,6 +1,6 @@
 package com.civildebatewall.kiosk.elements.opinion_text {
 	import com.civildebatewall.Assets;
-	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.containers.Post;
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Char;

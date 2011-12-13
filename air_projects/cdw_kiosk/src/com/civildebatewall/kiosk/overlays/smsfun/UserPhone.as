@@ -2,7 +2,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
-	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.containers.Post;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;

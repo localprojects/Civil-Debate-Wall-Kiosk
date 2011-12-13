@@ -3,7 +3,7 @@ package com.civildebatewall.kiosk.buttons {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.Data;
-	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.containers.Post;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Back;
 	import com.kitschpatrol.futil.blocks.BlockBase;

@@ -3,7 +3,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
-	import com.civildebatewall.data.Post;
+	import com.civildebatewall.data.containers.Post;
 	import com.civildebatewall.kiosk.buttons.BalloonButton;
 	import com.civildebatewall.kiosk.buttons.GoToDebateButton;
 	import com.civildebatewall.kiosk.elements.opinion_text.OpinionTextSuperlative;
