@@ -254,3 +254,4 @@ The NAS is structured as follows:
 * `/cdwmedia/var/kiosk_log` Syncs Local --> S3, app log files
 * `/cdwmedia/media/images` Syncs S3 <--> Local, user portraits from the kiosk and the web
 
+
