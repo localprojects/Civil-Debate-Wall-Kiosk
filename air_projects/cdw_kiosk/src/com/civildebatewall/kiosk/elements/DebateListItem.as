@@ -6,6 +6,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.kitschpatrol.futil.blocks.BlockBase;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
+	import com.kitschpatrol.futil.utilitites.DateUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
 	import com.kitschpatrol.futil.utilitites.StringUtil;
 	
@@ -54,11 +55,11 @@ package com.civildebatewall.kiosk.elements {
 			});
 			addChild(numberLabel);
 			
-			// author and date\
-			var name:String = StringUtil.capitalize(_post.user.usernameFormatted, true);
-			var date:String =  NumberUtil.zeroPad(_post.created.month, 2) + "/" + NumberUtil.zeroPad(_post.created.date, 2) + "/" + (_post.created.fullYear - 2000); 
-			var ampm:String = (_post.created.hours < 12) ? "am" : "pm";
-			var time:String = (_post.created.hours % 12) + "." + _post.created.minutes + ampm;			
+			// author and date
+			var nameString:String = StringUtil.capitalize(_post.user.usernameFormatted, true);
+			var dateString:String =  NumberUtil.zeroPad(_post.created.month, 2) + "/" + NumberUtil.zeroPad(_post.created.date, 2) + "/" + DateUtil.getShortYear(_post.created); 
+			var timeString:String = DateUtil.getShortHour(_post.created) + ":" + NumberUtil.zeroPad(_post.created.minutes, 2) + DateUtil.getAMPM(_post.created).toLowerCase();
+			
 			
 			author = new BlockText({
 				textFont: Assets.FONT_BOLD,
@@ -67,7 +68,7 @@ package com.civildebatewall.kiosk.elements {
 				height: 12,			
 				x: 86,
 				y: 26,
-				text: name + " : " + date + ", " + time,
+				text: nameString + " : " + dateString + ", " + timeString,
 				visible: true,
 				backgroundAlpha: 0			
 			});

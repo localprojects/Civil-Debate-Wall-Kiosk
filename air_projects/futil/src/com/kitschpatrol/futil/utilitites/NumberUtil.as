@@ -4,13 +4,14 @@ package com.kitschpatrol.futil.utilitites {
 	public class NumberUtil {
 		
 		
-		
+		// adds zeros to the right
 		public static function zeroPad(number:*, width:int):String {
 			var ret:String = ""+ number.toString();
 			while( ret.length < width )
-				ret="0" + ret;
+				ret= "0" + ret;
 			return ret;
 		}
+		
 		
 		public static function formatPhoneNumber(s:String):String {
 			// remove country code

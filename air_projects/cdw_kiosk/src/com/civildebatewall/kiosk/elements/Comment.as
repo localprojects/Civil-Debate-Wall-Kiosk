@@ -1,5 +1,6 @@
 package com.civildebatewall.kiosk.elements {
 	
+	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.data.containers.Post;
 	import com.civildebatewall.kiosk.buttons.BalloonButton;
@@ -9,12 +10,13 @@ package com.civildebatewall.kiosk.elements {
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Char;
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
+	import com.kitschpatrol.futil.utilitites.DateUtil;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	import com.kitschpatrol.futil.utilitites.NumberUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.Shape;
-	import flash.display.Sprite;	
+	import flash.display.Sprite;
 
 	public class Comment extends BlockBase {
 		
@@ -111,10 +113,11 @@ package com.civildebatewall.kiosk.elements {
 			});
 			addChild(byline);
 			
+			
 			// date posted
-			var timeString:String = NumberUtil.zeroPad(post.created.hours, 2) + NumberUtil.zeroPad(_post.created.minutes, 2);
-			var dateString:String = NumberUtil.zeroPad(post.created.month, 2) + NumberUtil.zeroPad(_post.created.date, 2) + (post.created.fullYear - 2000);
-			var timestamp:String = "Posted at " + timeString + " hours on " + dateString;			
+			var timeString:String =  DateUtil.getShortHour(post.created) + ":" + NumberUtil.zeroPad(post.created.minutes, 2) + DateUtil.getAMPM(post.created).toLowerCase();
+			var dateString:String =  NumberUtil.zeroPad(post.created.month, 2) + "/" + NumberUtil.zeroPad(post.created.date, 2) + "/" + DateUtil.getShortYear(post.created);
+			var timestamp:String = "Posted at " + timeString + " on " + dateString;			
 			
 			var datePosted:BlockText = new BlockText({
 				maxWidth: 222,
