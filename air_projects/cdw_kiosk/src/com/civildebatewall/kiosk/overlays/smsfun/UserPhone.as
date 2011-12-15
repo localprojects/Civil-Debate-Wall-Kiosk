@@ -38,13 +38,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		private var invalid:Boolean;		
 		public var phoneNumber:String;
 		
-		public function UserPhone()	{
-			// temp set color
-			var type:int = (CivilDebateWall.state.userStance == Post.STANCE_YES) ? Phone.YES : Phone.NO;
-			//CivilDebateWall.state.userStanceColorLight = Assets.COLOR_YES_LIGHT;
-			//CivilDebateWall.state.userStanceColorDark = Assets.COLOR_YES_DARK;				
-			
-			//var type:int = (CivilDebateWall.state.userStance == Post.STANCE_YES) ? YES : NO;			
+		public function UserPhone(type:int)	{
 			super(type);
 			
 			// special success bubble
@@ -75,6 +69,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			
 			instructions = new BlockText({
 				width: screenWidth,
+				padding: 30,
 				height: screenHeight,
 				textFont: Assets.FONT_BOLD,
 				textBold: true,
@@ -86,7 +81,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 				backgroundAlpha: 0,
 				alignmentPoint: Alignment.CENTER,
 				visible:true,
-				padding: 30,				
 				y: screenHeight
 			});
 			screen.addChild(instructions);
@@ -166,11 +160,11 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		public function showKeypad():void {
 			// show instructions
 			TweenMax.to(instructions, 0.5, {y: 0});
-			TweenMax.to(instructions, 0.5, {y: -screenHeight, delay: 4});	
-			TweenMax.to(numberRequest, 0.5, {y: (screenHeight / 2) - (numberRequest.height / 2), delay: 4});
-			TweenMax.to(numberRequest, 0.5, {y: 0, delay: 6});
-			TweenMax.to(keypad, 0.5, {y: (screenHeight - keypad.height) + 3, delay: 6});
-			TweenMax.to(horizontalRule, 0.5, {alpha: 1, delay: 6.5});		
+			TweenMax.to(instructions, 0.5, {y: -screenHeight, delay: 3});	
+			TweenMax.to(numberRequest, 0.5, {y: (screenHeight / 2) - (numberRequest.height / 2), delay: 3});
+			TweenMax.to(numberRequest, 0.5, {y: 0, delay: 5});
+			TweenMax.to(keypad, 0.5, {y: (screenHeight - keypad.height) + 3, delay: 5});
+			TweenMax.to(horizontalRule, 0.5, {alpha: 1, delay: 5.5});		
 		}
 		
 		public function clearKeypad():void {

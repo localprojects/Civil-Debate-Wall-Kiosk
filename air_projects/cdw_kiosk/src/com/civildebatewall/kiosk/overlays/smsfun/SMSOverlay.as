@@ -1,8 +1,10 @@
 package com.civildebatewall.kiosk.overlays.smsfun {
 	
+	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.data.containers.Post;
 	import com.civildebatewall.kiosk.buttons.WhiteButton;
+	import com.civildebatewall.kiosk.overlays.smsfun.Phone;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenAlign;
 	import com.greensock.TweenMax;
@@ -72,80 +74,91 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			addChild(smsSkipButton);
 		}
 		
+		
+		// Helper for grid creation, flips phone type back and forth based on starting type
+		private var startingPhoneType:int;
+		
+		private function get alternatingPhoneType():int {
+			startingPhoneType = (startingPhoneType + 1) % 2;
+			return startingPhoneType;
+		}
+		
+		
+
+		
+		private const cellWidth:int = 158;
+		private const cellHeight:int = 298;
+		private const cols:int = 3;
+		private const rows:int = 5;
+		private const stepX:int = cellWidth + ((1080 - (cellWidth * cols)) / (cols + 1)); // round this for crisp pixels
+		private const stepY:int = cellHeight + ((1920 - (cellHeight * rows)) / (rows + 1)); // round this for crisp pixels		
+		
+		private function gridToPoint(col:int, row:int):Point {
+			return new Point((col * stepX) - (cellWidth / 2), (row * stepY) - (cellHeight / 2));
+		}
+		
 		private function init():void {
 			GraphicsUtil.removeChildren(phoneGrid);
+			
+			
 			
 			connections = new Connection();
 			phones = new Vector.<Phone>(0);			
 			
-			// build the grid
-			var gridCols:int = 3;
-			var gridRows:int = 5;
-
-			var cellWidth:int = 158;
-			var cellHeight:int = 298; // - 20; // pad it a bit
+			startingPhoneType = (CivilDebateWall.state.userStance == Post.STANCE_YES) ? Phone.YES : Phone.NO;
 			
-			var gridStepX:Number = (cellWidth) + ((width - (cellWidth * gridCols)) / (gridCols + 1));
-			var gridStepY:Number = (cellHeight) + ((height - (cellHeight * gridRows)) / (gridRows + 1));	
-			
-			var gridYOffset:Number = 0; //-55; // zoomed in phone is not perfectly centered... but no need since the skip button disappears?
-			var centerPoint:Point;
-			
-			for (var y:Number = 0; y < gridRows; y++) {
-				for (var x:Number = 0; x < gridCols; x++) {
-					// fill the grid with phones (center is special);					
-					var tempPhone:*;
-					
-					if ((y == Math.floor(gridRows / 2)) && (x == Math.floor(gridCols / 2))) {
-						// center
-						tempPhone = new UserPhone();
-						userPhone = tempPhone;
-					}
-					else {
-						// other
-						if (CivilDebateWall.state.userStance == Post.STANCE_YES) {
-							tempPhone = new Phone(phones.length % 2);
-						}
-						else {
-							tempPhone = new Phone((phones.length + 1) % 2);							
-						}
-						
-						if (y == (Math.floor(gridRows / 2) - 1) && (x == Math.floor(gridCols / 2))) {
-							// north phone, just above user center
-							northPhone = tempPhone;
-						}
-					}
-					
-					tempPhone.position = new Point(((x + 1) * gridStepX) - (cellWidth / 2), ((y + 1) * gridStepY) - (cellHeight / 2) + gridYOffset);
-					tempPhone.scaleX = 0;
-					tempPhone.scaleY = 0;
-					phoneGrid.addChild(tempPhone);
-					phones.push(tempPhone); 
-				}
-			}
+			// a "Z" pattern
+			phones.push(phoneGrid.addChild(new Phone(alternatingPhoneType).setPosition(gridToPoint(1, 1)).setScale(0)));
+			phones.push(phoneGrid.addChild(new Phone(alternatingPhoneType).setPosition(gridToPoint(2, 1)).setScale(0)));
+			northPhone = phones[phones.push(phoneGrid.addChild(new Phone(alternatingPhoneType).setPosition(gridToPoint(2, 2)).setScale(0))) - 1]; // North phone (needs to fade on zoom)
+			userPhone = phones[phones.push(phoneGrid.addChild(new UserPhone(alternatingPhoneType).setPosition(gridToPoint(2, 3)).setScale(0))) - 1] as UserPhone; // User phone
+			phones.push(phoneGrid.addChild(new Phone(alternatingPhoneType).setPosition(gridToPoint(2, 4)).setScale(0)));
+			phones.push(phoneGrid.addChild(new Phone(alternatingPhoneType).setPosition(gridToPoint(2, 5)).setScale(0)));
+			phones.push(phoneGrid.addChild(new Phone(alternatingPhoneType).setPosition(gridToPoint(3, 5)).setScale(0)));
 			
 			// curve settings
-			var curveOvershoot:Number = 70; // how far past the end of the phone row to go
+			var curveOvershoot:Number = 120; // how far past the end of the phone row to go
 			var curveRadius:Number = 90;	
 			
+			var evenColorA:uint = (CivilDebateWall.state.userStance == Post.STANCE_YES) ? Assets.COLOR_NO_LIGHT : Assets.COLOR_YES_LIGHT;
+			var evenColorB:uint = (CivilDebateWall.state.userStance == Post.STANCE_YES) ? Assets.COLOR_NO_DARK : Assets.COLOR_YES_DARK;
+			var oddColorA:uint  = (CivilDebateWall.state.userStance == Post.STANCE_YES) ? Assets.COLOR_YES_LIGHT : Assets.COLOR_NO_LIGHT;
+			var oddColorB:uint  = (CivilDebateWall.state.userStance == Post.STANCE_YES) ? Assets.COLOR_YES_DARK : Assets.COLOR_NO_DARK;
+			
+			
 			// describe dashed line path
+			connections.setColors(oddColorA, oddColorB);
 			connections.path.moveTo(0, phones[0].position.y);
+			connections.path.lineToPoint(phones[0].position);
+			
+			connections.setColors(evenColorA, evenColorB);
+			connections.path.lineToPoint(phones[1].position);			
+			
+			connections.setColors(oddColorA, oddColorB);
+			turnRight(connections.path, phones[1].position, phones[2].position, curveOvershoot, curveRadius);
 			connections.path.lineToPoint(phones[2].position);
-			turnRight(connections.path, phones[2].position, phones[5].position, curveOvershoot, curveRadius);	
+			
+			connections.setColors(evenColorA, evenColorB);			
+			turnLeft(connections.path, phones[2].position, phones[3].position, curveOvershoot, curveRadius);
 			connections.path.lineToPoint(phones[3].position);
-			turnLeft(connections.path, phones[3].position, phones[6].position, curveOvershoot, curveRadius);
-			connections.path.lineToPoint(phones[8].position);
-			turnRight(connections.path, phones[8].position, phones[11].position, curveOvershoot, curveRadius);				
-			connections.path.lineToPoint(phones[9].position);
-			turnLeft(connections.path, phones[9].position, phones[12].position, curveOvershoot, curveRadius);			
-			connections.path.lineTo(width, phones[14].position.y);			
+			
+			connections.setColors(oddColorA, oddColorB);
+			turnRight(connections.path, phones[3].position, phones[4].position, curveOvershoot, curveRadius);
+			connections.path.lineToPoint(phones[4].position);
+			
+			connections.setColors(evenColorA, evenColorB);		
+			turnLeft(connections.path, phones[4].position, phones[5].position, curveOvershoot, curveRadius);
+			connections.path.lineToPoint(phones[5].position);
+			
+			connections.setColors(oddColorA, oddColorB);			
+			connections.path.lineTo(width, phones[6].position.y);			
 			
 			connections.visible = false;
 			phoneGrid.addChildAt(connections, 0); // lines go below phones
 			
 			// animation
 			timeline = new TimelineMax({onComplete: submitPost, onReverseComplete: submitPost});			
-			timeline.append(new TweenMax(connections, 4.5, {step: 0.5, ease: Linear.easeNone, delay: 0}));
+			timeline.append(new TweenMax(connections, 3.5, {step: 0.49285714285714327, ease: Linear.easeNone, delay: 0})); // 0.49285714285714327 derrived from looking at the connections step when the user phone pops 
 			
 			timeline.appendMultiple([
 				new TweenMax(northPhone, 1, {alpha: 0, ease: Quart.easeInOut}),
@@ -159,7 +172,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 				new TweenMax(phoneGrid, 1.5, {transformAroundPoint:{point: userPhone.position, scale: 1}, ease: Quart.easeInOut})
 			], 0, TweenAlign.START);
 			
-			timeline.append(new TweenMax(connections, 4.5, {step: 1, ease: Linear.easeNone, delay: -.5}));						
+			timeline.append(new TweenMax(connections, 3.5, {step: 1, ease: Linear.easeNone, delay: -.5}));						
 			
 			var phoneTweens:Array = new Array();
 			for (var i:int = 0; i < phones.length; i++) {
@@ -274,6 +287,9 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			for (var i:int = 0; i < phones.length; i++) {
 				if (!phones[i].popped && (Point.distance(phones[i].position, connections.penPosition) < distanceThreshold)) {
 
+					// see which step we are on, useful for setting up the timeline for the connections
+					logger.debug("Pop Step: " + connections.step);					
+					
 					// pop everyone else's message bubble
 					for (var j:int = 0; j < phones.length; j++) {
 						if (phones[j].popped) {

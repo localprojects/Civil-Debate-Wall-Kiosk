@@ -62,7 +62,6 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 			screenMask.y = screen.y;
 			addChild(screenMask);
 			screen.mask = screenMask;
-
 			
 			// TODO start with message that matches type
 			yesBubble = Assets.getYesBubble();
@@ -117,6 +116,19 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		public function set position(point:Point):void {
 			x = point.x;
 			y = point.y;
+		}
+		
+		// for chaining
+		public function setPosition(point:Point):Phone {
+			position = point;
+			return this;
+		}
+		
+		// for chaining
+		public function setScale(value:Number):Phone {
+			scaleX = value;
+			scaleY = value;
+			return this;
 		}
 		
 	}
