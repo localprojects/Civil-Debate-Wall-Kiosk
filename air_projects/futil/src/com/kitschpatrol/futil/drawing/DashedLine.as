@@ -4,6 +4,7 @@ package com.kitschpatrol.futil.drawing {
 	import flash.display.Graphics;
 	import flash.display.LineScaleMode;
 	import flash.display.Sprite;
+	import flash.text.ReturnKeyLabel;
 
 	public class DashedLine extends Sprite	{ // could be shape...
 		// Builds on Senocular's Path class to make a tweenable, progressively drawing, color alternating dashed line
@@ -25,6 +26,9 @@ package com.kitschpatrol.futil.drawing {
 		private var activeColor:uint;
 		private var lineScaleMode:String;
 		
+		// TODO set more line style params? Thickness, etc?
+		private var colorChanges:Vector.<DashedLineColor>;
+		
 		public function DashedLine(thickness:Number, onLength:Number, offLength:Number, colorA:uint, colorB:uint, caps:String = CapsStyle.NONE, lineScaleMode:String = LineScaleMode.NORMAL) {
 			path = new Path();
 			_step = 0;
@@ -36,6 +40,14 @@ package com.kitschpatrol.futil.drawing {
 			this.colorB = colorB;
 			this.caps = caps;
 			this.lineScaleMode = lineScaleMode;
+			
+			colorChanges = new Vector.<DashedLineColor>();
+			
+		}
+		
+		// quick hack for CDW... this should really be on Path.as instead...
+		public function setColors(colorA:uint, colorB:uint):void {
+			colorChanges.push(new DashedLineColor(colorA, colorB, path.length));
 		}
 		
 		
@@ -44,6 +56,7 @@ package com.kitschpatrol.futil.drawing {
 			onStepSize = onLength / path.length; 
 			offStepSize = offLength / path.length;						
 			
+			
 			graphics.clear();
 				
 			// draw each dash
@@ -51,6 +64,19 @@ package com.kitschpatrol.futil.drawing {
 			for (var penStep:Number = 0; penStep < _step; penStep += (onStepSize + offStepSize)) {
 				
 				// cycle colors
+				var currentLength:Number = penStep * path.length;
+				
+				// look up the color (optional)
+				for (var i:int = 0; i < colorChanges.length; i++) {
+					if (colorChanges[i].length > currentLength) {
+						break;
+					}
+					else {
+						colorA = colorChanges[i].colorA;
+						colorB = colorChanges[i].colorB;
+					}
+				}
+				
 				activeColor = (alternator++ % 2 == 0) ? colorA : colorB; 
 				graphics.lineStyle(thickness, activeColor, 1.0, false, lineScaleMode, caps);				
 				

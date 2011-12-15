@@ -43,6 +43,7 @@
     <classEntry path="com.kitschpatrol.futil.utilitites.PointUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.CoreUtil"/>
     <classEntry path="com.kitschpatrol.futil.utilitites.DepthUtil"/>
+    <classEntry path="com.kitschpatrol.futil.drawing.DashedLineColor"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

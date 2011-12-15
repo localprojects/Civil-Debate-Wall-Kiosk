@@ -88,6 +88,7 @@ package com.civildebatewall.data {
 			this.dispatchEvent(new Event(Data.DATA_UPDATE_EVENT));
 			
 			CivilDebateWall.state.setView(CivilDebateWall.kiosk.homeView);
+			//CivilDebateWall.state.setView(CivilDebateWall.kiosk.smsPromptView);			
 			CivilDebateWall.state.firstLoad = false;
 			
 			loadImages();
