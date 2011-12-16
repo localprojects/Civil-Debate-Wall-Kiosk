@@ -45,7 +45,7 @@ package com.civildebatewall.kiosk.buttons {
 			onButtonCancel.push(onCancel);
 			onButtonDown.push(onDown);
 			onStageUp.push(onUp);
-			CivilDebateWall.state.addEventListener(State.USER_STANCE_CHANGE, onUserStanceChange);
+			CivilDebateWall.state.addEventListener(State.USER_STANCE_CHANGE_EVENT, onUserStanceChange);
 		}
 		
 		private function onDown(e:MouseEvent):void {

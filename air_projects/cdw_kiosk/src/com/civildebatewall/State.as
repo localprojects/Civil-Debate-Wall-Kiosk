@@ -5,6 +5,7 @@ package com.civildebatewall {
 	import com.civildebatewall.data.containers.Question;
 	import com.civildebatewall.data.containers.Thread;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
+	import com.kitschpatrol.futil.utilitites.NumberUtil;
 	
 	import flash.display.Bitmap;
 	import flash.events.Event;
@@ -21,7 +22,7 @@ package com.civildebatewall {
 		// events
 		public static const VIEW_CHANGE:String = "viewChange";
 		public static const ACTIVE_THREAD_CHANGE:String = "activeThreadChange";
-		public static const USER_STANCE_CHANGE:String = "userStanceChange";
+		public static const USER_STANCE_CHANGE_EVENT:String = "userStanceChange";
 		public static const SORT_CHANGE:String = "sortChange";
 		public static const SUPERLATIVE_POST_CHANGE:String = "superlativePostChange";
 		public static const ON_STATS_VIEW_CHANGE:String = "onStatsViewChange";
@@ -37,7 +38,7 @@ package com.civildebatewall {
 		
 		// stat superlative types
 		public static const VIEW_MOST_DEBATED:int = 0;
-		public static const VIEW_MOST_LIKED:int = 1;		
+		public static const VIEW_MOST_LIKED:int = 1;
 		
 		// network performance, TODO put on dashboard
 		public var updateQuestionTime:int;
@@ -56,10 +57,11 @@ package com.civildebatewall {
 		public var inactivityOverlayArmed:Boolean = true;
 		
 		// navigation
+		private static const VIEW_HISTORY_DEPTH:int = 10;		
+		
+		public var lastView:Function; // need this because back button pops off history
 		public var activeQuestion:Question;
-		public var activeView:Function;
-		public var lastView:Function;
-		public var backDestination:Function;
+		public var viewHistory:Array = []; // for back button, newest at front, oldest aty back
 		public var firstLoad:Boolean;
 		public var lastThread:Thread = null;		
 		public var activeThread:Thread = null;
@@ -100,8 +102,8 @@ package com.civildebatewall {
 		private function onDataPreUpdate(e:Event):void {
 			CivilDebateWall.data.removeEventListener(Data.DATA_UPDATE_EVENT, onDataPreUpdate);	
 			// Initialize some stuff. only runs once at startup.
-			CivilDebateWall.state.activeView = CivilDebateWall.kiosk.homeView;
 			CivilDebateWall.state.setActiveThread(ArrayUtil.randomElement(CivilDebateWall.data.threads));
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.homeView);
 		}				
 		
 		// SETTERS (with event dispatching) ================================================================================================================
@@ -180,61 +182,86 @@ package com.civildebatewall {
 				logger.error("Invalid user stance '" + userStance + "'");
 			}
 			
-			this.dispatchEvent(new Event(USER_STANCE_CHANGE));
+			this.dispatchEvent(new Event(USER_STANCE_CHANGE_EVENT));
 		}
 		
-		public function setView(view:Function):void {
-			// clear the highlighting if unless we're coming from the stats page 
-			if ((highlightWord != null) && (highlightWord != "")) {
-				if (lastView != CivilDebateWall.kiosk.statsView) {
+		public function setView(view:Function, overrideLast:Function = null):void {
+			if (view == activeView) {
+				logger.warn("Already on view " + getViewName(activeView) + ", no need to change");			
+			}
+			else {
+				// special case to pass in last view from back function
+				if (overrideLast != null) {
+					lastView = overrideLast;
+				}
+				else {
+					lastView = activeView;
+				}
+				
+				viewHistory.unshift(view); // keep track of where we've been
+				
+				logger.info("Changing view: " + getViewName(lastView) + " --> " + getViewName(view));		
+				
+				while (viewHistory.length > VIEW_HISTORY_DEPTH) viewHistory.pop(); // clear old history
+			
+				//logger.info(getHistoryLog());
+			
+				// clear the highlighting unless we're coming from the stats page 
+				if ((highlightWord != null) && (highlightWord != "") && (lastView != CivilDebateWall.kiosk.statsView)) {
 					logger.info("Clearing highlight");
 					setHighlightWord("");
 				}
-			}			
-			
-			lastView = activeView;
-			activeView = view;
-			
-			logger.info("Changing view: " + lastView + " --> " + activeView);			
-			dispatchEvent(new Event(VIEW_CHANGE));
+				
+				dispatchEvent(new Event(VIEW_CHANGE));
+			}
 		}
 		
-		public function setActiveThread(thread:Thread, overridePrevious:Thread = null, overrideNext:Thread = null):void {
-			lastThread = activeThread;
-			activeThread = thread;
-			
-			logger.info("Setting active thread to " + activeThread.id);
-			
-			// clear the highlighting if unless we're coming from the stats page 
-			if ((highlightWord != null) && (highlightWord != "")) {
-				if (activeView != CivilDebateWall.kiosk.statsView) {
+		public function setActiveThread(thread:Thread):void {
+			if (activeThread == thread) {
+				logger.warn("Already on thread " + thread.id + ", no need to change");
+			}
+			else {
+				logger.info("Setting active thread to " + thread.id);			
+				
+				lastThread = activeThread;
+				activeThread = thread;
+
+				// clear the highlighting if unless we're coming from the stats page 
+				if ((highlightWord != null) && (highlightWord != "") && (activeView != CivilDebateWall.kiosk.statsView)) {
 					setHighlightWord("");
 				}
+	
+				if (activeThread != null) {
+					this.dispatchEvent(new Event(ACTIVE_THREAD_CHANGE));
+				}			
 			}
-
-			// funky overrides for big-jump transitions
-			/*
-			if (overridePrevious != null) {
-				previousThread = overridePrevious; 
-			}
-			else {
-				previousThread = getPreviousThread();
-			}					
-			
-			if (overrideNext != null) {
-				nextThread =overrideNext; 
-			}
-			else {
-				nextThread = getNextThread();
-			}
-			*/
-
-			if (activeThread != null) {
-				this.dispatchEvent(new Event(ACTIVE_THREAD_CHANGE));
-			}			
 		}
 		
 		// HELPERS =======================================================================================================================		
+		
+		// convenience for grabbing from the top of the view history
+		public function get activeView():Function { return viewHistory[0]; }
+		//public function get lastView():Function { return viewHistory[1]; } 
+	
+		
+		
+		
+		// should really move to controller
+		public function goBack():void  {
+
+		//logger.info(getHistoryLog());
+			
+			// manages history
+			if (viewHistory.length == 0) {
+				logger.error("Empty view history");
+			}
+			else {
+				var overrideLast:Function = activeView;
+				logger.info("Going back from " + getViewName(activeView) + " to " + getViewName(viewHistory[1]));
+				viewHistory.shift() // clear current
+				setView(viewHistory.shift(), overrideLast);
+			}
+		}
 		
 		public function clearUser():void {
 			logger.info("Clearing user");
@@ -287,17 +314,25 @@ package com.civildebatewall {
 			out += varToString("updateStatsTime");
 			out += varToString("updateTotalTime");
 			return out;
-		}		
+		}
 		
-		
-//		public function getFunctionName(f:Function):String {
-//			//if (CivilDebateWall.kiosk.viewNameLookupTable.hasOwnProperty(f)) {
-//				return CivilDebateWall.kiosk.viewNameLookupTable[f];
-//			//}
-//			//else {
-//			//	return "Function"
-//			//}
-//		}
+		public function getHistoryLog():String {
+			var maxDigits:int = viewHistory.length.toString().length;
+			var out:String = "History stack:";
+
+			if (viewHistory.length == 0) {
+				out += " EMPTY";
+			}
+			else {
+				out += "\n";
+				for (var i:int = 0; i < viewHistory.length; i++) {
+					out += NumberUtil.zeroPad(i, maxDigits)  + ". " + getViewName(viewHistory[i]);
+					if (i < viewHistory.length - 1) out += "\n";
+				}
+			}
+
+			return out;
+		}
 		
 		public function getUpdateTimeString():String {
 			return "Question: " + updateQuestionTime + " Threads: " + updateThreadsTime + " Posts and Users:" + updatePostsAndUsersTime +  " Stats:" + updateStatsTime + " Total:" + updateTotalTime; 			
@@ -321,6 +356,26 @@ package com.civildebatewall {
 			out += target + "\n";
 			return out;
 		}
+		
+		
+		// Logging helper allows logging of function names, this is ugly
+		// views should be objects instead
+		public function getViewName(f:Function):String {
+			if (f == CivilDebateWall.kiosk.homeView) return "home";
+			if (f == CivilDebateWall.kiosk.inactivityOverlayView) return "inactivityOverlay";
+			if (f == CivilDebateWall.kiosk.cameraCalibrationOverlayView) return "cameraCalibrationOverlay";
+			if (f == CivilDebateWall.kiosk.debateStancePickerView) return "debateStancePicker";
+			if (f == CivilDebateWall.kiosk.debateTypePickerView) return "debateTypePicker";
+			if (f == CivilDebateWall.kiosk.flagOverlayView) return "flagOverlay";
+			if (f == CivilDebateWall.kiosk.photoBoothView) return "photoBooth";
+			if (f == CivilDebateWall.kiosk.opinionReviewView) return "opinionReview";
+			if (f == CivilDebateWall.kiosk.smsPromptView) return "smsPrompt";
+			if (f == CivilDebateWall.kiosk.statsView) return "stats";
+			if (f == CivilDebateWall.kiosk.termsAndConditionsView) return "termsAndConditions";
+			if (f == CivilDebateWall.kiosk.threadView) return "thread";
+			if (f == CivilDebateWall.kiosk.opinionEntryView) return "opinionEntry";
+			return "Unknown View";
+		}				
 		
 	}
 }

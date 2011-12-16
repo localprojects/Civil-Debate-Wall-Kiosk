@@ -55,28 +55,27 @@ package com.civildebatewall.kiosk.buttons {
 			TweenMax.to(this, 0, {backgroundColor: CivilDebateWall.state.activeThread.firstPost.stanceColorLight});			
 		}
 		
-		private function onUp(e:MouseEvent):void {
+		private function onUp(e:MouseEvent, instant:Boolean = false):void {
 			TweenMax.to(this, 0.5, {backgroundColor: CivilDebateWall.state.activeThread.firstPost.stanceColorMedium});
 			//CivilDebateWall.state.setView(CivilDebateWall.kiosk.view.homeView); // TODO dynamically go back to stats as well?
 			
 			if (!lowered) {
 				lowered = true;
-				TweenMax.to(this, 0.5, {text: "Raise Menu"})
-				TweenMax.to(icon, 0.50, {transformAroundCenter:{scaleY: -1}, ease: Quart.easeInOut});								
-					
-				CivilDebateWall.kiosk.statsOverlay.lowerMenu();
+				TweenMax.to(this, instant ? 0 : 0.5, {text: "Raise Menu"})
+				TweenMax.to(icon, instant ? 0 : 0.50, {transformAroundCenter:{scaleY: -1}, ease: Quart.easeInOut});								
+				CivilDebateWall.kiosk.statsOverlay.lowerMenu(instant);
 			}
 			else {
 				lowered = false;
-				TweenMax.to(this, 0.5, {text: "Lower Menu"})
-				TweenMax.to(icon, 0.50, {transformAroundCenter:{scaleY: 1}, ease: Quart.easeInOut});													
-				CivilDebateWall.kiosk.statsOverlay.raiseMenu();					
+				TweenMax.to(this, instant ? 0 : 0.5, {text: "Lower Menu"})
+				TweenMax.to(icon, instant ? 0 : 0.50, {transformAroundCenter:{scaleY: 1}, ease: Quart.easeInOut});													
+				CivilDebateWall.kiosk.statsOverlay.raiseMenu(instant);					
 			}
 			
 		}
 		
-		public function toggle():void {
-			onUp(new MouseEvent(MouseEvent.MOUSE_UP));
+		public function toggle(instant:Boolean = false):void {
+			onUp(new MouseEvent(MouseEvent.MOUSE_UP), instant);
 		}
 		
 	}

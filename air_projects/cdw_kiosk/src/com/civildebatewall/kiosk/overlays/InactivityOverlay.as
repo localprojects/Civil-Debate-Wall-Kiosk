@@ -72,7 +72,7 @@ package com.civildebatewall.kiosk.overlays {
 		private function userPresent(...args):void {
 			// user confirmed they're still there
 			timerBar.pause();
-			CivilDebateWall.state.setView(CivilDebateWall.state.lastView);
+			CivilDebateWall.state.goBack();
 			CivilDebateWall.userActivityMonitor.onActivity(new Event(Event.ACTIVATE)); // reset the inactivity timer
 		}
 		

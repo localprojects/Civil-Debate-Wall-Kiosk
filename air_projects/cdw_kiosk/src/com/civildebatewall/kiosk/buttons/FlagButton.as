@@ -2,6 +2,7 @@ package com.civildebatewall.kiosk.buttons {
 
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.State;
 	import com.civildebatewall.data.containers.Post;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Quart;
@@ -69,13 +70,12 @@ package com.civildebatewall.kiosk.buttons {
 		
 		private function onUp(e:MouseEvent):void {
 			if (mouseEnabled) {
-				
 				// confimation overlay...
-				CivilDebateWall.kiosk.flagOverlay.targetPost = _targetPost;				
-				CivilDebateWall.kiosk.flagOverlayView();
-				
-				//CivilDebateWall.data.flag(_targetPost);
+				CivilDebateWall.kiosk.flagOverlay.targetPost = _targetPost;
+				CivilDebateWall.state.setView(CivilDebateWall.kiosk.flagOverlayView);
 			
+			
+				
 				// Spin animation
 				TweenMax.to(icon, 0.8, {transformAroundCenter:{rotation: 360}, ease: Quart.easeInOut});				
 				TweenMax.to(icon, 0.4, {transformAroundCenter:{scaleX: 2, scaleY: 2}, alpha: 0.75, ease: Quart.easeIn});

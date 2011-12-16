@@ -8,17 +8,16 @@ package com.civildebatewall.kiosk.core {
 	import com.civildebatewall.Utilities;
 	import com.civildebatewall.kiosk.DragLayer;
 	import com.civildebatewall.kiosk.buttons.BackButton;
-	import com.civildebatewall.kiosk.buttons.BalloonButton;
 	import com.civildebatewall.kiosk.buttons.BigBackButton;
 	import com.civildebatewall.kiosk.buttons.CancelButton;
 	import com.civildebatewall.kiosk.buttons.CloseTermsButton;
 	import com.civildebatewall.kiosk.buttons.DebateButton;
 	import com.civildebatewall.kiosk.buttons.DebateStripNavArrow;
+	import com.civildebatewall.kiosk.buttons.DebateThisButton;
 	import com.civildebatewall.kiosk.buttons.EditNameOrOpinionButton;
 	import com.civildebatewall.kiosk.buttons.HomeFlagButton;
 	import com.civildebatewall.kiosk.buttons.HomeLikeButton;
 	import com.civildebatewall.kiosk.buttons.LowerMenuButton;
-	import com.civildebatewall.kiosk.buttons.NavArrowBase;
 	import com.civildebatewall.kiosk.buttons.NavArrowLeft;
 	import com.civildebatewall.kiosk.buttons.NavArrowRight;
 	import com.civildebatewall.kiosk.buttons.NoButton;
@@ -75,23 +74,6 @@ package com.civildebatewall.kiosk.core {
 		
 		private static var logger:ILogger = getLogger(Kiosk);
 		
-		// Logging helper allows logging of function names, this is ugly
-		// Doesn't work?
-//		public const viewNameLookupTable:Object = {
-//			homeView: "homeView",
-//			inactivityOverlayView: "inactivityOverlayView",
-//			cameraCalibrationOverlayView: "cameraCalibrationOverlayView",
-//			debateStancePickerView: "debateStancePickerView",
-//			debateTypePickerView: "debateTypePickerView",
-//			flagOverlayView: "flagOverlayView",
-//			photoBoothView: "photoBoothView",
-//			opinionReviewView: "opinionReviewView",
-//			smsPromptView: "smsPromptView",
-//			statsView: "statsView",
-//			termsAndConditionsView: "termsAndConditionsView",
-//			threadsView: "threadsView",
-//			opinionEntryView: "opinionEntryView"
-//		}		
 		
 		// convenience
 		public const stageWidth:Number = 1080;
@@ -118,7 +100,7 @@ package com.civildebatewall.kiosk.core {
 		// comment thread view
 		private var questionHeaderThread:QuestionHeaderThread;
 		private var opinionUnderlay:BlockBase;
-		private var debateThisButton:BalloonButton;
+		private var debateThisButton:DebateThisButton;
 		private var bigBackButton:BigBackButton;
 		public var threadOverlayBrowser:ThreadBrowser;
 		
@@ -190,8 +172,8 @@ package com.civildebatewall.kiosk.core {
 			
 			// home view
 			portrait = new PortraitMain();
-			portrait.setDefaultTweenIn(1, {alpha: 1});
-			portrait.setDefaultTweenOut(1, {alpha: 0});			
+			portrait.setDefaultTweenIn(1, {alpha: 1, overlayAlpha: 0});
+			portrait.setDefaultTweenOut(1, {alpha: 0, overlayAlpha: 0});			
 			addChild(portrait);
 			
 			questionHeaderHome = new QuestionHeaderHome();
@@ -283,7 +265,7 @@ package com.civildebatewall.kiosk.core {
 			opinionHome.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT, y: 945});
 			addChild(opinionHome);			
 			
-			debateThisButton = new BalloonButton();
+			debateThisButton = new DebateThisButton();
 			debateThisButton.setDefaultTweenIn(1, {x: 919});
 			debateThisButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_RIGHT});
 			addChild(debateThisButton);
@@ -603,7 +585,8 @@ package com.civildebatewall.kiosk.core {
 			debateThisButton.targetPost = CivilDebateWall.state.activeThread.firstPost;
 			
 			// position the main opinion for a non-diagonal tween in
-			if (CivilDebateWall.state.lastView == CivilDebateWall.kiosk.statsView) {
+			if ((CivilDebateWall.state.lastView == CivilDebateWall.kiosk.statsView) ||
+					(CivilDebateWall.state.lastView == CivilDebateWall.kiosk.opinionEntryView)) {
 				opinionHome.y = 327;
 			}
 			
@@ -630,9 +613,12 @@ package com.civildebatewall.kiosk.core {
 		public function debateTypePickerView(...args):void {
 			markAllInactive(); 
 			CivilDebateWall.state.inactivityOverlayArmed = true;
-			CivilDebateWall.state.backDestination = homeView;  
 			
-			portrait.tweenIn(1, {alpha: 0.45});
+			portrait.active = true;
+			
+			CivilDebateWall.kiosk.portrait.setImage(CivilDebateWall.state.userRespondingTo.user.photo);			
+			
+			portrait.tweenIn(-1, {overlayAlpha: 0.65});
 			backButton.tweenIn();
 			questionHeaderDecision.tweenIn();
 			respondButton.tweenIn();
@@ -646,16 +632,16 @@ package com.civildebatewall.kiosk.core {
 		
 		public function debateStancePickerView(...args):void {
 			markAllInactive();
-			CivilDebateWall.state.inactivityOverlayArmed = true;
+			CivilDebateWall.state.inactivityOverlayArmed = true;			
 			
-			if (CivilDebateWall.data.threads.length == 0) {
-				CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.noOpinionView;			
-			}
-			else {
-				CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.debateTypePickerView;
-			}
+			portrait.active = true;
 			
-			portrait.tweenIn(1, {alpha: 0.15});
+			
+			CivilDebateWall.kiosk.portrait.setImage(Assets.portraitPlaceholder);			
+			
+
+			
+			portrait.tweenIn(-1, {overlayAlpha: 0.85});
 			backButton.tweenIn();
 			questionHeaderDecision.tweenIn();
 			yesButton.tweenIn();
@@ -679,9 +665,21 @@ package com.civildebatewall.kiosk.core {
 			
 			CivilDebateWall.state.inactivityOverlayArmed = true;
 			
-			
+			if (CivilDebateWall.state.lastView == debateStancePickerView) {
+				portrait.tweenIn(-1, {overlayAlpha: 1});				
+			}
+			else {
+				portrait.tweenIn(-1, {alpha: 0, overlayAlpha: 1});				
+			}
+						
 			opinionEntryOverlay.tweenIn();
 			
+			// make sure opinion does not tween out diagonally
+			opinionHome.tweenOut(-1, {y: opinionHome.y});			
+			
+			
+			
+
 			tweenOutInactive();			
 		}
 		
@@ -799,8 +797,7 @@ package com.civildebatewall.kiosk.core {
 		
 		public function opinionReviewView(...args):void {
 			markAllInactive();
-			CivilDebateWall.state.inactivityOverlayArmed = true;
-			CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.opinionEntryView;			
+			CivilDebateWall.state.inactivityOverlayArmed = true;			
 			
 			bigButton.setOnClick(function():void {
 				CivilDebateWall.state.setView(smsPromptView);			
@@ -860,16 +857,8 @@ package com.civildebatewall.kiosk.core {
 		// ================================================================================================================================================
 		
 		public function flagOverlayView(...args):void {
-			CivilDebateWall.state.inactivityOverlayArmed = true;			
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = flagOverlayView;
+			CivilDebateWall.state.inactivityOverlayArmed = false;			
 			flagOverlay.tweenIn();
-		}
-		
-		public function removeFlagOverlayView(...args):void {
-			CivilDebateWall.state.activeView = CivilDebateWall.state.lastView; // revert the view, since it was just an overlay
-			CivilDebateWall.state.lastView = flagOverlayView;
-			flagOverlay.tweenOut();	
 		}
 		
 		
@@ -883,6 +872,9 @@ package com.civildebatewall.kiosk.core {
 		}
 		
 		
+		// ================================================================================================================================================		
+		
+		// the camera calibration view is the only exception to the state-based view management system
 		public function cameraCalibrationOverlayView(...args):void {
 			CivilDebateWall.state.inactivityOverlayArmed = false;
 			cameraCalibrationOverlay= new CameraCalibrationOverlay();
@@ -902,8 +894,6 @@ package com.civildebatewall.kiosk.core {
 		
 		public function statsView(...args):void {
 			CivilDebateWall.state.inactivityOverlayArmed = true;			
-			CivilDebateWall.state.lastView = CivilDebateWall.state.activeView;
-			CivilDebateWall.state.activeView = statsView;	
 			markAllInactive();
 			
 			bigBackButton.width = 770;
@@ -915,6 +905,7 @@ package com.civildebatewall.kiosk.core {
 			statsOverlay.tweenIn();
 			tweenOutInactive();
 		}
+
 		
 		
 		

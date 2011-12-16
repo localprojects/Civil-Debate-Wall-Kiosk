@@ -359,7 +359,7 @@ package com.kitschpatrol.flashspan {
 		}
 		
 		protected function onTimeout(packet:CertifiedPacket):void {
-			logger.warn("Packet sent to screen " + packet.destination.id + " timed out: " + packet.toMessage());
+			//logger.warn("Packet sent to screen " + packet.destination.id + " timed out: " + packet.toMessage());
 			
 			// mark non-respondent as disconnected
 			packet.destination.connected = false;			

@@ -178,7 +178,6 @@ package com.civildebatewall.kiosk.keyboard {
 		
 		public function onMouseOver(e:MouseEvent):void {
 			// are we dragging over?
-			trace("over");
 			if (e.buttonDown) drawOver();
 		}
 		

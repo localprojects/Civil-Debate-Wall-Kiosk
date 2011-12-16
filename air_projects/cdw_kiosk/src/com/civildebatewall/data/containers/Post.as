@@ -85,7 +85,8 @@ package com.civildebatewall.data.containers {
 		public function get likes():uint {	return _likes; }
 		public function set likes(n:uint):void { _likes = n; }
 		public function get flags():uint { return _flags; }
-		public function get stance():String { return _stance;	}		
+		public function get stance():String { return _stance;	}
+		public function get opposingStance():String { return (_stance == Post.STANCE_YES) ? Post.STANCE_NO : Post.STANCE_YES; }
 		public function get origin():String { return _origin; }				
 		public function get text():String { return _text; }
 		public function get user():User {	return _user;	}

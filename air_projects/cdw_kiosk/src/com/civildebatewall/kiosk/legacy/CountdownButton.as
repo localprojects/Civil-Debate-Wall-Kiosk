@@ -98,7 +98,7 @@ package com.civildebatewall.kiosk.legacy {
 			addChild(arrow);
 			resetArrow();
 			
-			CivilDebateWall.state.addEventListener(State.USER_STANCE_CHANGE, onUserStanceChange);
+			CivilDebateWall.state.addEventListener(State.USER_STANCE_CHANGE_EVENT, onUserStanceChange);
 		}
 		
 		private function resetArrow():void {
