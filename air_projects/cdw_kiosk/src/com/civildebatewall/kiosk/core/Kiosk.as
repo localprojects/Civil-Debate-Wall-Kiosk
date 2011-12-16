@@ -847,7 +847,7 @@ package com.civildebatewall.kiosk.core {
 		// ================================================================================================================================================		
 		
 		public function smsPromptView(...args):void {
-			CivilDebateWall.state.inactivityOverlayArmed = false;
+			CivilDebateWall.state.inactivityOverlayArmed = true;
 			markAllInactive();
 			portrait.tweenIn(); // TODO, just use black?	
 			smsOverlay.tweenIn();
