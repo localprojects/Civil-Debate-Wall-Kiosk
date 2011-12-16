@@ -75,7 +75,7 @@ package com.civildebatewall.kiosk.overlays {
 		
 		private function closeOverlay(...args):void {
 			timerBar.pause();
-			CivilDebateWall.kiosk.removeFlagOverlayView();
+			CivilDebateWall.state.goBack();
 		}
 		
 		private function flagItem(e:MouseEvent):void {			

@@ -4,7 +4,7 @@ package com.civildebatewall.kiosk.elements {
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.State;
 	import com.civildebatewall.data.containers.Post;
-	import com.civildebatewall.kiosk.buttons.BalloonButton;
+	import com.civildebatewall.kiosk.buttons.DebateThisButton;
 	import com.civildebatewall.kiosk.buttons.GoToDebateButton;
 	import com.civildebatewall.kiosk.elements.opinion_text.OpinionTextSuperlative;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -17,7 +17,7 @@ package com.civildebatewall.kiosk.elements {
 		private var post:Post;
 		private var opinionText:OpinionTextSuperlative;
 		public var portrait:PortraitBase;
-		private var debateButton:BalloonButton;
+		private var debateButton:DebateThisButton;
 		private var goToDebateButton:GoToDebateButton;
 		
 		public function SuperlativesPortrait(params:Object = null) {
@@ -39,7 +39,7 @@ package com.civildebatewall.kiosk.elements {
 			opinionText.y = 469;
 			addChild(opinionText);
 			
-			debateButton = new BalloonButton();
+			debateButton = new DebateThisButton();
 			debateButton.x = 362;
 			debateButton.y = 345;
 			debateButton.visible = true;

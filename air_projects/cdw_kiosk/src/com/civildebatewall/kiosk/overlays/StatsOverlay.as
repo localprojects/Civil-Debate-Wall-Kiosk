@@ -129,33 +129,37 @@ package com.civildebatewall.kiosk.overlays {
 		}
 		
 		// TODO not relative!
-		public function lowerMenu():void {
-			TweenMax.to(filler, duration, {height:  924, ease: Quart.easeInOut});
+		public function lowerMenu(instant:Boolean = false):void {
+			var localDuration:Number = instant ? 0 : duration;
+			
+			TweenMax.to(filler, localDuration, {height:  924, ease: Quart.easeInOut});
 
-			TweenMax.to(wordCloudTitle, duration, {y: 234 + menuLowerDistance, ease: Quart.easeInOut});			
-			TweenMax.to(wordCloud, duration, {y: 312 + menuLowerDistance, ease: Quart.easeInOut});
-			TweenMax.to(searchResultsTitle, duration, {y: 625 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
-			TweenMax.to(superlativesTitle, duration, {y: 625 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
-			TweenMax.to(superlativesPortrait, duration, {y: 703 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
-			TweenMax.to(debateList, duration, {y: 703 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
-			TweenMax.to(searchResults, duration, {y: 703 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
+			TweenMax.to(wordCloudTitle, localDuration, {y: 234 + menuLowerDistance, ease: Quart.easeInOut});			
+			TweenMax.to(wordCloud, localDuration, {y: 312 + menuLowerDistance, ease: Quart.easeInOut});
+			TweenMax.to(searchResultsTitle, localDuration, {y: 625 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
+			TweenMax.to(superlativesTitle, localDuration, {y: 625 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
+			TweenMax.to(superlativesPortrait, localDuration, {y: 703 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
+			TweenMax.to(debateList, localDuration, {y: 703 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
+			TweenMax.to(searchResults, localDuration, {y: 703 + menuLowerDistance, alpha: 0, ease: Quart.easeInOut});
 		}
 		
-		public function raiseMenu():void {
-			TweenMax.to(filler, duration, {height:  0, ease: Quart.easeInOut});			
-			TweenMax.to(wordCloudTitle, duration, {y: 234, alpha: 1, ease: Quart.easeInOut});			
-			TweenMax.to(wordCloud, duration, {y: 312, alpha: 1, ease: Quart.easeInOut});
-			TweenMax.to(searchResultsTitle, duration, {y: 625, alpha: 1, ease: Quart.easeInOut});
+		public function raiseMenu(instant:Boolean = false):void {
+			var localDuration:Number = instant ? 0 : duration;
+			
+			TweenMax.to(filler, localDuration, {height:  0, ease: Quart.easeInOut});			
+			TweenMax.to(wordCloudTitle, localDuration, {y: 234, alpha: 1, ease: Quart.easeInOut});			
+			TweenMax.to(wordCloud, localDuration, {y: 312, alpha: 1, ease: Quart.easeInOut});
+			TweenMax.to(searchResultsTitle, localDuration, {y: 625, alpha: 1, ease: Quart.easeInOut});
 			
 			// only fade the superlative title back in if we don't have an active word
 			if (wordCloud.activeWord == null) {	
-				TweenMax.to(superlativesTitle, duration, {alpha: 1, ease: Quart.easeInOut});
+				TweenMax.to(superlativesTitle, localDuration, {alpha: 1, ease: Quart.easeInOut});
 			}
-			TweenMax.to(superlativesTitle, duration, {y: 625, ease: Quart.easeInOut});			
+			TweenMax.to(superlativesTitle, localDuration, {y: 625, ease: Quart.easeInOut});			
 			
-			TweenMax.to(superlativesPortrait, duration, {y: 703, alpha: 1, ease: Quart.easeInOut});
-			TweenMax.to(debateList, duration, {y: 703, alpha: 1, ease: Quart.easeInOut});	
-			TweenMax.to(searchResults, duration, {y: 703, alpha: 1, ease: Quart.easeInOut});	
+			TweenMax.to(superlativesPortrait, localDuration, {y: 703, alpha: 1, ease: Quart.easeInOut});
+			TweenMax.to(debateList, localDuration, {y: 703, alpha: 1, ease: Quart.easeInOut});	
+			TweenMax.to(searchResults, localDuration, {y: 703, alpha: 1, ease: Quart.easeInOut});	
 		}
 		
 		private function onWordSelected(e:Event):void {
@@ -184,34 +188,37 @@ package com.civildebatewall.kiosk.overlays {
 		}
 		
 		override protected function beforeTweenIn():void {
-			wordCloud.deselect();
-			onWordDeselected(new Event(ClearTagButton.CLEAR_TAG_EVENT));
-			wordCloudTitle.clearTagButton.tweenOut(0); // start off screen
 			
-			// reset the superlatives
-			CivilDebateWall.state.setStatsView(State.VIEW_MOST_DEBATED);
-			CivilDebateWall.state.setSuperlativePost(CivilDebateWall.data.stats.mostDebatedThreads[0].firstPost);					
+			// reset if we're coming from home
+			if (CivilDebateWall.state.lastView == CivilDebateWall.kiosk.homeView) {
+				wordCloud.deselect();
+				onWordDeselected(new Event(ClearTagButton.CLEAR_TAG_EVENT), true); // closes cloud
+				wordCloudTitle.clearTagButton.tweenOut(0); // start off screen
+				
+				// reset the superlatives
+				CivilDebateWall.state.setStatsView(State.VIEW_MOST_DEBATED);
+				CivilDebateWall.state.setSuperlativePost(CivilDebateWall.data.stats.mostDebatedThreads[0].firstPost);
+			}
 			
 			super.beforeTweenIn();
 		}
 		
-		private function raiseMenuThroughButton():void {
+		private function raiseMenuThroughButton(instant:Boolean = false):void {
 			if (CivilDebateWall.kiosk.lowerMenuButton.lowered) {
-				CivilDebateWall.kiosk.lowerMenuButton.toggle();				
+				CivilDebateWall.kiosk.lowerMenuButton.toggle(instant);				
 			}
 		}
-		
-		private function onWordDeselected(e:Event):void {
-			raiseMenuThroughButton();			
-			wordCloud.activeWord = null;
-			
+
+		private function onWordDeselected(e:Event, instant:Boolean = false):void {
+			wordCloud.activeWord = null;			
 			CivilDebateWall.state.setHighlightWord(null);			
 			
-			TweenMax.to(superlativesTitle, 0.5, {alpha: 1});
-			debateList.tweenIn();
-			superlativesPortrait.tweenIn();
-			searchResults.tweenOut();
-			wordCloudTitle.clearTagButton.tweenOut();
+			raiseMenuThroughButton(instant);
+			superlativesTitle.tween(instant ? 0 : 0.5, {alpha: 1});
+			debateList.tweenIn(instant ? 0 : -1);
+			superlativesPortrait.tweenIn(instant ? 0 : -1);
+			searchResults.tweenOut(instant ? 0 : -1);
+			wordCloudTitle.clearTagButton.tweenOut(instant ? 0 : -1);
 		}		
 
 	}

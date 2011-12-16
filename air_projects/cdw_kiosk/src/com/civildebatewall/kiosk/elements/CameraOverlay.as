@@ -35,7 +35,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			this.cacheAsBitmap = true;
 			
-			CivilDebateWall.state.addEventListener(State.USER_STANCE_CHANGE, onUserStanceChange);
+			CivilDebateWall.state.addEventListener(State.USER_STANCE_CHANGE_EVENT, onUserStanceChange);
 		}
 		
 		private function draw():void {

@@ -361,9 +361,7 @@ package com.civildebatewall {
 				// Only the server (leftmost screen, 0) cares about this
 				if (settings.kioskNumber == 0) {
 					var fromScreen:NetworkedScreen = flashSpan.settings.screens[int(e.message)];
-					updateScreenActivityStatus();
-	
-					trace(activeScreens);	
+					updateScreenActivityStatus();	
 					
 					if (e.header == ACTIVITY) {
 						logger.info("Received activity notice from screen " + fromScreen.id);

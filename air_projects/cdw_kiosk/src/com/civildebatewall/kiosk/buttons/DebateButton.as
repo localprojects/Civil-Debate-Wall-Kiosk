@@ -45,7 +45,8 @@ package com.civildebatewall.kiosk.buttons {
 			drawUp();
 			
 			CivilDebateWall.state.userIsDebating = true;
-			CivilDebateWall.state.setView(CivilDebateWall.kiosk.debateStancePickerView);
+			CivilDebateWall.state.setUserStance(CivilDebateWall.state.userRespondingTo.opposingStance);
+			CivilDebateWall.state.setView(CivilDebateWall.kiosk.opinionEntryView);
 		}
 		
 		private function drawUp():void {

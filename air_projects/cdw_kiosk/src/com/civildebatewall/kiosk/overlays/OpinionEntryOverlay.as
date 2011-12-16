@@ -2,6 +2,7 @@ package com.civildebatewall.kiosk.overlays {
 
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.CivilDebateWall;
+	import com.civildebatewall.State;
 	import com.civildebatewall.data.Data;
 	import com.civildebatewall.kiosk.BlockInertialScroll;
 	import com.civildebatewall.kiosk.buttons.BackButton;
@@ -383,8 +384,13 @@ package com.civildebatewall.kiosk.overlays {
 			opinionField.onBlur.push(onFieldBlur);
 			submitButton.onButtonUp.push(onSubmit);
 			
+			// CivilDebateWall.state.addEventListener(State.USER_STANCE_CHANGE_EVENT, onUserStanceChange);
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 		}
+		
+		// private function onUserStanceChange(event:Event):void {
+		// 	keyboard.setColor(CivilDebateWall.state.userStanceColorLight);
+		// }	
 		
 		private function onInput(e:Event):void {
 			// check for profanity
@@ -504,7 +510,6 @@ package com.civildebatewall.kiosk.overlays {
 		
 		override protected function beforeTweenIn():void {
 			super.beforeTweenIn();
-			CivilDebateWall.state.backDestination = CivilDebateWall.kiosk.debateStancePickerView;
 			stage.focus = nameField.textField;
 		
 			

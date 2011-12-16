@@ -3,7 +3,7 @@ package com.civildebatewall.kiosk.elements {
 	
 	import com.civildebatewall.Assets;
 	import com.civildebatewall.data.containers.Post;
-	import com.civildebatewall.kiosk.buttons.BalloonButton;
+	import com.civildebatewall.kiosk.buttons.DebateThisButton;
 	import com.civildebatewall.kiosk.buttons.FlagButton;
 	import com.civildebatewall.kiosk.elements.opinion_text.BlockTextOpinion;
 	import com.kitschpatrol.futil.blocks.BlockBase;
@@ -96,7 +96,6 @@ package com.civildebatewall.kiosk.elements {
 			addChild(postNumber);
 			
 			// add the byline
-			var authorText:String = postNumberString + _post.user.usernameFormatted.toUpperCase() + Char.APOSTROPHE + "s RESPONSE";
 			var byline:BlockText = new BlockText({
 				maxWidth: 350,
 				height: 12, 
@@ -175,7 +174,7 @@ package com.civildebatewall.kiosk.elements {
 			addChild(opinion);
 			
 			// Add the debate me button
-			var debateButton:BalloonButton = new BalloonButton();
+			var debateButton:DebateThisButton = new DebateThisButton();
 			debateButton.targetPost = _post;
 			debateButton.x = 860;
 			debateButton.y = 60;
