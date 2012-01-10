@@ -11,7 +11,7 @@
 		"dataUpdateInterval": 12,		
 		"slrTimeout": 10,
 		"secretKey": "secretkey",
-		"localMultiScreenTest": false,
+		"localMultiScreenTest": true,
 		"webCamFocalLength": 1.2,
 		"webCamUndersampleFactor": 2,
 		"slrWaitTime": 1,
