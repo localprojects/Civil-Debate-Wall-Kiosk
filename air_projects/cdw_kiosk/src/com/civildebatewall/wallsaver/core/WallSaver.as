@@ -80,15 +80,19 @@ package com.civildebatewall.wallsaver.core {
 			if (timeline.active) timeline.stop();
 			if (TweenMax.isTweening(canvas)) TweenMax.killTweensOf(canvas);
 			
-			// Clean up
+			// Clean up	
 			GraphicsUtil.removeChildren(canvas);
+			canvas.removeChildren();
+			
+			removeChild(canvas);
+			canvas = new Sprite();
+			canvas.alpha = 0;
+			canvas.visible = false;
+			addChild(canvas);					
 			
 			// Clear the timeline
 			timeline = new TimelineMax({useFrames: true, onComplete: onTimelineComplete});
 			
-			// Restore the canvas
-			canvas.alpha = 1;
-			canvas.visible = true;
 			
 			// watch for touches
 			canvas.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
@@ -145,6 +149,10 @@ package com.civildebatewall.wallsaver.core {
 			timeline.goto(timeline.totalDuration); 
 			timeline.goto(0);			
 			timeline.stop();
+			
+			// Restore the canvas
+			canvas.alpha = 1;
+			canvas.visible = true;			
 		}
 		
 		// Ends the sequence early, usually when someone touches the screen... move this to parent?
@@ -157,7 +165,7 @@ package com.civildebatewall.wallsaver.core {
 		}
 		
 		public function endSequence():void {
-			TweenMax.to(canvas, 0.5, {alpha: 0, onComplete: postAnimationTasks});
+			TweenMax.to(canvas, 0.5, {alpha: 0, onComplete: postAnimationTasks});			
 		}
 		
 		private function postAnimationTasks():void {
