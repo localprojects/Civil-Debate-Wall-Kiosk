@@ -21,13 +21,16 @@ package com.civildebatewall {
 			// set up a full screen option in the context menu
 			var myContextMenu:ContextMenu = new ContextMenu();
 
-			var demoSequenceAItem:ContextMenuItem = new ContextMenuItem("Demo Sequence A");
-			myContextMenu.customItems.push(demoSequenceAItem);
-			demoSequenceAItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onDemoSequenceAContextMenuSelect);
-			
-			var demoSequenceBItem:ContextMenuItem = new ContextMenuItem("Demo Sequence B");
-			myContextMenu.customItems.push(demoSequenceBItem);
-			demoSequenceBItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onDemoSequenceBContextMenuSelect);			
+			if (CivilDebateWall.settings.kioskNumber == 0) {
+				// only the server can cue demo sequences
+				var demoSequenceAItem:ContextMenuItem = new ContextMenuItem("Demo Sequence A");
+				myContextMenu.customItems.push(demoSequenceAItem);
+				demoSequenceAItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onDemoSequenceAContextMenuSelect);
+				
+				var demoSequenceBItem:ContextMenuItem = new ContextMenuItem("Demo Sequence B");
+				myContextMenu.customItems.push(demoSequenceBItem);
+				demoSequenceBItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onDemoSequenceBContextMenuSelect);
+			}
 			
 			var fullScreenItem:ContextMenuItem = new ContextMenuItem("Toggle Full Screen");
 			myContextMenu.customItems.push(fullScreenItem);

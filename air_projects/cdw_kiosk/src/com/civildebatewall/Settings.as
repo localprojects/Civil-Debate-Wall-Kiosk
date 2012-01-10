@@ -10,9 +10,9 @@ package com.civildebatewall {
 		public var characterLimit:int;
 		public var inactivityTimeout:int;
 		public var randomDebateInterval:int; // If inactive, portrait cycles every X seconds
-		public var wallsaverTimein:int = 10; // Seconds after inactivity to start wallsaver TODO unused
 		public var wallsaverInterval:int; // Seconds to show the random thread between wallsaver runs 
 		public var presenceCountdownTime:int;
+		public var dataUpdateInterval:int; 
 		
 		// Network
 		public var secretKey:String;

@@ -1,5 +1,6 @@
 package com.civildebatewall {
 	
+	import com.greensock.TweenMax;
 	import com.kitschpatrol.flashspan.FlashSpan;
 	
 	import flash.display.Stage;
@@ -78,13 +79,22 @@ package com.civildebatewall {
 		public function onActive():void {
 			CivilDebateWall.state.userActive = true;
 			CivilDebateWall.randomDebateTimer.stop();
+			CivilDebateWall.dataUpdateTimer.stop();
 			CivilDebateWall.self.broadcastActivity();
 		} 
 				
 		private function onInactive():void {
 			CivilDebateWall.state.userActive = false;
 			CivilDebateWall.randomDebateTimer.start();
-			CivilDebateWall.self.broadcastInactivity();
+			CivilDebateWall.dataUpdateTimer.start();			
+			
+			// update
+			logger.info("Pulling update due to inactivity");
+			CivilDebateWall.data.update();
+			
+			// tell everyone else a bit later
+			//TweenMax.delayedCall(5, CivilDebateWall.self.broadcastInactivity);
+			CivilDebateWall.self.broadcastInactivity();			
 		}
 		
 	}

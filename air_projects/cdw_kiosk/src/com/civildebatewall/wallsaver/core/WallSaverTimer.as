@@ -1,12 +1,11 @@
 package com.civildebatewall.wallsaver.core {
-	import com.kitschpatrol.flashspan.Random;
+	import com.civildebatewall.CivilDebateWall;
 	
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
 	import org.as3commons.logging.api.ILogger;
 	import org.as3commons.logging.api.getLogger;
-	import com.civildebatewall.CivilDebateWall;
 
 	// Runs wallsaver automatically during inactivity
 	public class WallSaverTimer extends Timer	{

@@ -147,7 +147,7 @@ package com.civildebatewall.data {
 			boringWords = new Vector.<String>();
 			for each (var boringWord:String in response) boringWords.push(boringWord);
 			boringWords.fixed = true;
-			logger.info("...Loaded " + boringWord.length + " boring words");
+			logger.info("...Loaded " + boringWords.length + " boring words");
 			(onLoad != null) ? onLoad() :	loadCategories();
 		}
 		
