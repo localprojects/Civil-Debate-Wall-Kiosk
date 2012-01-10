@@ -80,19 +80,12 @@ package com.civildebatewall.wallsaver.core {
 			if (timeline.active) timeline.stop();
 			if (TweenMax.isTweening(canvas)) TweenMax.killTweensOf(canvas);
 			
-			// Clean up	
+			// Clean up
 			GraphicsUtil.removeChildren(canvas);
 			canvas.removeChildren();
 			
-			removeChild(canvas);
-			canvas = new Sprite();
-			canvas.alpha = 0;
-			canvas.visible = false;
-			addChild(canvas);					
-			
 			// Clear the timeline
 			timeline = new TimelineMax({useFrames: true, onComplete: onTimelineComplete});
-			
 			
 			// watch for touches
 			canvas.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
