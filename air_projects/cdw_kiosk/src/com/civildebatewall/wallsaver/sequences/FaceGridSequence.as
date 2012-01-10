@@ -142,11 +142,8 @@ package com.civildebatewall.wallsaver.sequences {
 		
 		public function getTimeline():TimelineMax {
 			var timeline:TimelineMax = new TimelineMax({useFrames: true});
-
-			timeline.append(TweenMax.to(this, 0, {visible: true}));			
 			timeline.append(getTimelineIn());
 			timeline.append(getTimelineOut());
-			timeline.append(TweenMax.to(this, 0, {visible: false}));			
 			return timeline;
 		}		
 		
