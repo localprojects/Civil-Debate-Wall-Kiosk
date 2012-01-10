@@ -70,6 +70,7 @@ package com.civildebatewall {
 
 		public static var wallSaverTimer:WallSaverTimer;
 		public static var randomDebateTimer:RandomDebateTimer;
+		public static var dataUpdateTimer:DataUpdateTimer;		
 		
 		private var commandLineArgs:Array;
 		public var fpsMeter:FPSMeter;
@@ -241,6 +242,7 @@ package com.civildebatewall {
 			
 			wallSaverTimer = new WallSaverTimer();
 			randomDebateTimer = new RandomDebateTimer();
+			dataUpdateTimer = new DataUpdateTimer();
 			
 			// Load the data, which fills up everything through binding callbacks
 			CivilDebateWall.state.firstLoad = true;
@@ -251,7 +253,6 @@ package com.civildebatewall {
 			
 			// tell thew world we've gone active
 			userActivityMonitor.onActive();
-			
 		}
 		
 
@@ -296,8 +297,7 @@ package com.civildebatewall {
 			if (wallSaver.timeline.active) wallSaver.endSequence();
 			if ((settings.kioskNumber == 0) && (everyoneInactive)) wallSaverTimer.start();
 			if (!state.userActive) CivilDebateWall.randomDebateTimer.start(); // keep shuffling debates
-			
-
+			if (!state.userActive) CivilDebateWall.dataUpdateTimer.start(); // keep updating
 		}		
 		
 		public function playSequenceA():void {
@@ -305,7 +305,7 @@ package com.civildebatewall {
 			if (wallSaver.timeline.active) wallSaver.timeline.stop();
 			flashSpan.stop();
 			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_A); // this cues
-			TweenMax.delayedCall(1, flashSpan.start);  // wait for messages to land before starting
+			TweenMax.delayedCall(2, flashSpan.start);  // wait for messages to land before starting
 		}
 		
 		public function playSequenceB():void {
@@ -313,12 +313,8 @@ package com.civildebatewall {
 			if (wallSaver.timeline.active) wallSaver.timeline.stop();
 			flashSpan.stop();
 			flashSpan.broadcastCustomMessage(PLAY_SEQUENCE_B); // this cues
-			TweenMax.delayedCall(1, flashSpan.start); // wait for messages to land before starting
+			TweenMax.delayedCall(2, flashSpan.start); // wait for messages to land before starting
 		}
-		
-
-		
-		
 		
 		// keep a screen-indexed array of activity status
 		// disconnected screens are null
@@ -328,7 +324,6 @@ package com.civildebatewall {
 		// set missing screens to null
 		private function updateScreenActivityStatus():void {
 			for (var i:int = 0; i < flashSpan.settings.screens.length; i++) {
-				
 				if (!flashSpan.settings.screens[i].connected) activeScreens[i] = null;
 			}
 		}
@@ -346,12 +341,14 @@ package com.civildebatewall {
 		private function onCustomMessageReceived(e:CustomMessageEvent):void {
 			if (e.header == PLAY_SEQUENCE_A) {
 				CivilDebateWall.randomDebateTimer.stop();
+				CivilDebateWall.dataUpdateTimer.stop();				
 				logger.info("Playing Sequence A");
 				wallSaver.cueSequenceA();
 				flashSpan.frameCount = 0;
 			}
 			else if (e.header == PLAY_SEQUENCE_B) {
 				CivilDebateWall.randomDebateTimer.stop();
+				CivilDebateWall.dataUpdateTimer.stop();			
 				logger.info("Playing Sequence B");
 				wallSaver.cueSequenceB();
 				flashSpan.frameCount = 0;
@@ -367,19 +364,17 @@ package com.civildebatewall {
 						logger.info("Received activity notice from screen " + fromScreen.id);
 						activeScreens[fromScreen.id] = true;
 						everyoneInactive = false;
+						wallSaverTimer.stop();
 					}
 					else if (e.header == INACTIVITY) {
 						logger.info("Received inctivity notice from screen " + fromScreen.id);
 						activeScreens[fromScreen.id] = false;
 
-						
-						if (settings.kioskNumber == 0) wallSaverTimer.stop();						
-						
 						everyoneInactive = isEveryoneInactive(); 
 						
 						if (everyoneInactive) {
-							logger.info("All screens inactive. Starting wallsaver");
-							playSequenceA();
+							logger.info("All screens inactive. Starting wallsaver timer");
+							wallSaverTimer.start()
 						}
 					}
 				}

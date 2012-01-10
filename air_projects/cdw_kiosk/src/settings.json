@@ -4,19 +4,19 @@
 		"kioskNumber": 0,
 		"characterLimit": 140,
 		"flipWebcamVertical": true,	
-		"inactivityTimeout": 120,
-		"wallsaverTimein": 5,
-		"wallsaverInterval": 30,
+		"inactivityTimeout": 10,
+		"wallsaverInterval": 30,		
 		"randomDebateInterval": 10,
+		"presenceCountdownTime": 10,
+		"dataUpdateInterval": 12,		
 		"slrTimeout": 10,
 		"secretKey": "secretkey",
 		"localMultiScreenTest": false,
 		"webCamFocalLength": 1.2,
 		"webCamUndersampleFactor": 2,
 		"slrWaitTime": 1,
-		"logFullHTTP": true,
-		"presenceCountdownTime": 10
-	}, 
+		"logFullHTTP": false
+	},
 	
 	"windows": {
 		"halfSize": true,
@@ -36,12 +36,12 @@
 	"mac": {
 		"halfSize": true,
 		"startFullScreen": false,
-		"useWebcam": true,	
+		"useWebcam": false,	
 		"useSLR": false,
 		"imagePath": "/Users/Mika/Desktop/CDWImages/",		
 		"serverPath": "http://beta.civildebatewall.com",
 		"flashSpanConfigPath":  "/Users/Mika/Code/CivilDebateWall/lp-cdw/air_projects/cdw_kiosk/bin-debug/flash_span_settings.xml",
-		"logToTrace": true,
+		"logToTrace": false,
 		"logToMonster": false,
 		"logToFile": true,
 		"logFilePath": "/Users/Mika/Desktop/CDWLogs"
