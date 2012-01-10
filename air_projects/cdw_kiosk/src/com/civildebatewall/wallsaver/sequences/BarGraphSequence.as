@@ -53,6 +53,9 @@ package com.civildebatewall.wallsaver.sequences {
 		
 		private function onDataUpdate(e:Event):void {
 			
+			// clear
+			removeChildren();
+			
 			// Settings
 			scrollVelocity = 30;
 			

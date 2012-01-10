@@ -386,7 +386,10 @@ package com.civildebatewall {
 		}
 
 		private function onFrameSync(e:FrameSyncEvent):void {
-			wallSaver.timeline.gotoAndPlay(e.frameCount);
+			
+			if (e.frameCount < wallSaver.timeline.duration) {
+				wallSaver.timeline.gotoAndPlay(e.frameCount);
+			}
 		}
 		
 	}
