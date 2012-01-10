@@ -26,7 +26,9 @@ package com.civildebatewall {
 		private var framesRenderedLabel:Label;
 		private var imagesLoadedLabel:Label;
 		private var latencyLabel:Label; 
-		private var inactivityLabel:Label;
+		private var inactivityTimerLabel:Label;
+		private var randomDebateTimerLabel:Label;
+		private var dataUpdateTimerLabel:Label;
 		private var stateTextArea:TextArea;
 		private var framesRendered:uint;		
 		private var memory:int;
@@ -52,12 +54,14 @@ package com.civildebatewall {
 			new PushButton(this, 5, 30, "Calibrate Camera", function():void { CivilDebateWall.kiosk.cameraCalibrationOverlayView(); });
 
 			wallsaverFrameLabel = new Label(this, 5, 100, "Sync Frame Number:");
-			imagesLoadedLabel = new Label(this, 5, 115, "Images: ");
-			frameRateLabel = new Label(this, 5, 125, "Frame Rate:");
-			memoryUsageLabel = new Label(this, 5, 135, "Memory Usage:");
-			framesRenderedLabel = new Label(this, 5, 150, "Frames Rendered:");
-			latencyLabel = new Label(this, 5, 175, "Latency: ");
-			inactivityLabel = new Label(this, 5, 162, "Inactivity:");
+			imagesLoadedLabel = new Label(this, 5, 110, "Images loaded:");
+			frameRateLabel = new Label(this, 5, 120, "Frame Rate:");
+			memoryUsageLabel = new Label(this, 5, 130, "Memory Usage:");
+			framesRenderedLabel = new Label(this, 5, 140, "Frames Rendered:");
+			inactivityTimerLabel = new Label(this, 5, 150, "Inactivity Timer:");
+			randomDebateTimerLabel = new Label(this, 5, 160, "Random Debate Timer:");
+			dataUpdateTimerLabel = new Label(this, 5, 170, "Data Update Timer:");
+			latencyLabel = new Label(this, 5, 180, "Latency: ");
 			
 			stateTextArea = new TextArea(this, 5, 200, "State")
 			stateTextArea.width = 240;
@@ -68,24 +72,24 @@ package com.civildebatewall {
 		
 		private function onEnterFrame(e:Event):void {
 			// TODO stop these when hidden
-			wallsaverFrameLabel.text = "Frame Number: " + CivilDebateWall.flashSpan.frameCount;
-			frameRateLabel.text = "Frame Rate: " + CivilDebateWall.self.fpsMeter.fps;
-			framesRenderedLabel.text = "Frames Rendered: " + framesRendered++;
-			latencyLabel.text = "Latency: " + CivilDebateWall.flashSpan.settings.thisScreen.latency;
-			
+			wallsaverFrameLabel.text = "Sync Frame Number: " + CivilDebateWall.flashSpan.frameCount;
 			if (CivilDebateWall.data.photoQueue != null) {			
 				imagesLoadedLabel.text = "Images loaded: " + CivilDebateWall.data.photoQueue.bytesLoaded + " / " + CivilDebateWall.data.photoQueue.bytesTotal;
-			}
+			}		
+			frameRateLabel.text = "Frame Rate: " + CivilDebateWall.self.fpsMeter.fps;
 			
 			memory = Math.round(System.totalMemory / 1024 / 1024)
 			maxMemory = Math.max(memory, maxMemory);
-			memoryUsageLabel.text = "Memory Usage: " + memory + " MB \tMax: " + maxMemory + " MB"; 
-				
+			memoryUsageLabel.text = "Memory Usage: " + memory + " MB \tMax: " + maxMemory + " MB";
+			
+			framesRenderedLabel.text = "Frames Rendered: " + framesRendered++;	
+			
+			inactivityTimerLabel.text = "Inactivity Timer: " + CivilDebateWall.state.secondsInactive + " / " + CivilDebateWall.settings.inactivityTimeout + " " + (CivilDebateWall.state.inactivityOverlayArmed ? "(ARMED)" : "(DISARMED)");
+			randomDebateTimerLabel.text = "Random Debate Timer: " + CivilDebateWall.randomDebateTimer.currentCount + " " + (CivilDebateWall.randomDebateTimer.running ? "(RUNNING)" : "(STOPPED)");
+			dataUpdateTimerLabel.text = "Data Update Timer: " + CivilDebateWall.dataUpdateTimer.currentCount + " " + (CivilDebateWall.dataUpdateTimer.running ? "(RUNNING)" : "(STOPPED)");			
+			latencyLabel.text = "Latency: " + CivilDebateWall.flashSpan.settings.thisScreen.latency;
+			
 			stateTextArea.text = CivilDebateWall.state.stateLog();
-			
-			var armedString:String = CivilDebateWall.state.inactivityOverlayArmed ? "(ARMED)" : "(DISARMED)";
-			
-			inactivityLabel.text = "Inactivity: " + CivilDebateWall.state.secondsInactive + " / " + CivilDebateWall.settings.inactivityTimeout + " " + armedString;
 		}
 		
 	}

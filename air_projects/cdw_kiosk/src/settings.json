@@ -11,7 +11,7 @@
 		"dataUpdateInterval": 12,		
 		"slrTimeout": 10,
 		"secretKey": "secretkey",
-		"localMultiScreenTest": true,
+		"localMultiScreenTest": false,
 		"webCamFocalLength": 1.2,
 		"webCamUndersampleFactor": 2,
 		"slrWaitTime": 1,
@@ -34,7 +34,7 @@
 	},
 	
 	"mac": {
-		"halfSize": true,
+		"halfSize": false,
 		"startFullScreen": false,
 		"useWebcam": false,	
 		"useSLR": false,
