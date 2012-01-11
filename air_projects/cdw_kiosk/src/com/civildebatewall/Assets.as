@@ -244,6 +244,10 @@ package com.civildebatewall {
 		[Embed(source = "/assets/graphics/portraitPlaceholder.png")] private static const portraitPlaceholderClass:Class;
 		public static function getPortraitPlaceholder():Bitmap { return new portraitPlaceholderClass() as Bitmap; };
 		public static const portraitPlaceholder:Bitmap = getPortraitPlaceholder();
+		
+		[Embed(source = '/assets/graphics/areYouStillThereText.png')] private static const areYouStillThereTextClass:Class;
+		public static function getAreYouStillThereText():Bitmap { return new areYouStillThereTextClass() as Bitmap; };
+		public static const areYouStillThereText:Bitmap = getAreYouStillThereText();
 
 		// TODO get rid of this?
 		[Embed(source = "/assets/graphics/bubblePerimeter.png")] private static const bubblePerimeterClass:Class;
