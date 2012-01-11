@@ -6,17 +6,22 @@ package com.civildebatewall.kiosk.overlays {
 	import com.civildebatewall.kiosk.elements.ProgressBar;
 	import com.greensock.TweenMax;
 	import com.kitschpatrol.futil.blocks.BlockBase;
+	import com.kitschpatrol.futil.blocks.BlockBitmap;
 	import com.kitschpatrol.futil.blocks.BlockText;
 	import com.kitschpatrol.futil.constants.Alignment;
 	import com.kitschpatrol.futil.utilitites.ColorUtil;
+	import com.kitschpatrol.futil.utilitites.GeomUtil;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
+	import flash.display.Bitmap;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	
 	public class InactivityOverlay extends BlockBase {
 		
 		private var timerBar:ProgressBar;		
 		private var yesButton:BigGrayButton;
-		private var message:BlockText;		
+		private var message:BlockBitmap;	
 		
 		public function InactivityOverlay(params:Object = null)	{
 			
@@ -34,20 +39,14 @@ package com.civildebatewall.kiosk.overlays {
 			yesButton.setDefaultTweenOut(1, {x: Alignment.OFF_STAGE_LEFT});	
 			addChild(yesButton);
 			
-			// text set on tween in
-			message = new BlockText({
+			message = new BlockBitmap({
+				bitmap: Assets.getAreYouStillThereText(),
 				width: 880,
 				height: 64,
-				text: "ARE YOU STILL THERE?",
+				alignmentPoint: Alignment.CENTER,
 				backgroundColor: 0xffffff,
-				textAlignmentMode: Alignment.TEXT_CENTER,
-				textFont: Assets.FONT_BOLD,
-				textBold: true,
-				textSize: 18,
-				textColor: ColorUtil.gray(77),
-				alignmentPoint: Alignment.CENTER
+				x: 100
 			});
-			message.x = 100;		
 			
 			message.setDefaultTweenIn(1, {y: 982});
 			message.setDefaultTweenOut(1, {y: Alignment.OFF_STAGE_LEFT});
