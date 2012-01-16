@@ -11,7 +11,7 @@ package com.civildebatewall.wallsaver.sequences {
 	import com.kitschpatrol.flashspan.Settings;
 	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
 	
-	import fl.motion.BezierSegment;
+	import com.civildebatewall.BezierSegment;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
