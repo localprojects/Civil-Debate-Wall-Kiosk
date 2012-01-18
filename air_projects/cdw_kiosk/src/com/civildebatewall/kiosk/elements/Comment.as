@@ -115,7 +115,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			// date posted
 			var timeString:String =  DateUtil.getShortHour(post.created) + ":" + NumberUtil.zeroPad(post.created.minutes, 2) + DateUtil.getAMPM(post.created).toLowerCase();
-			var dateString:String =  NumberUtil.zeroPad(post.created.month, 2) + "/" + NumberUtil.zeroPad(post.created.date, 2) + "/" + DateUtil.getShortYear(post.created);
+			var dateString:String =  NumberUtil.zeroPad(post.created.month + 1, 2) + "/" + NumberUtil.zeroPad(post.created.date, 2) + "/" + DateUtil.getShortYear(post.created);
 			var timestamp:String = "Posted at " + timeString + " on " + dateString;			
 			
 			var datePosted:BlockText = new BlockText({

@@ -57,7 +57,7 @@ package com.civildebatewall.kiosk.elements {
 			
 			// author and date
 			var nameString:String = StringUtil.capitalize(_post.user.usernameFormatted, true);
-			var dateString:String =  NumberUtil.zeroPad(_post.created.month, 2) + "/" + NumberUtil.zeroPad(_post.created.date, 2) + "/" + DateUtil.getShortYear(_post.created); 
+			var dateString:String =  NumberUtil.zeroPad(_post.created.month + 1, 2) + "/" + NumberUtil.zeroPad(_post.created.date, 2) + "/" + DateUtil.getShortYear(_post.created); 
 			var timeString:String = DateUtil.getShortHour(_post.created) + ":" + NumberUtil.zeroPad(_post.created.minutes, 2) + DateUtil.getAMPM(_post.created).toLowerCase();
 			
 			
