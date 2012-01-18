@@ -143,7 +143,11 @@ package com.civildebatewall.data {
 		private function loadBoringWords(onLoad:Function = null):void {
 			logger.info("Loading boring words...");
 			// TODO get this from back end!
-			var response:Array = ["not", "for", "this", "and", "are", "but", "your", "has", "have", "the", "that", "they", "with", "its", "it's", "this", "them"];
+			var response:Array = ["not", "for", "this", "and", "are", "but", "your", "has",
+														"have", "the", "that", "they", "with", "its", "it's", "this",
+														"them", "our", "you", "had", "who", "will", "was", "too",
+														"what", "their", "were", "from", "most", "about", "does",
+														"while", "one", "there"];
 			boringWords = new Vector.<String>();
 			for each (var boringWord:String in response) boringWords.push(boringWord);
 			boringWords.fixed = true;
