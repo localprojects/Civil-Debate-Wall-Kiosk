@@ -65,7 +65,6 @@ package com.civildebatewall.kiosk.elements {
 				default:
 					logger.error("Invalid stats view");
 			}
-			
 		}
 		
 		// Takes a list of posts
@@ -82,7 +81,7 @@ package com.civildebatewall.kiosk.elements {
 				// What to call out?
 				switch (CivilDebateWall.state.statsView) {
 					case State.VIEW_MOST_DEBATED:
-						item.callout.text = item.post.thread.postCount + " " + StringUtil.plural("Response", item.post.thread.postCount);
+						item.callout.text = item.post.thread.responseCount + " " + StringUtil.plural("Response", item.post.thread.responseCount);
 						break;
 					case State.VIEW_MOST_LIKED:
 						item.callout.text = item.post.likes + " " + StringUtil.plural("Like", item.post.likes);

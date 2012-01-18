@@ -5,6 +5,11 @@ package com.civildebatewall.data {
 	import com.adobe.crypto.SHA1;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.Utilities;
+	import com.civildebatewall.data.containers.Category;
+	import com.civildebatewall.data.containers.Post;
+	import com.civildebatewall.data.containers.Question;
+	import com.civildebatewall.data.containers.Thread;
+	import com.civildebatewall.data.containers.User;
 	import com.greensock.events.LoaderEvent;
 	import com.greensock.loading.LoaderMax;
 	import com.kitschpatrol.futil.utilitites.ArrayUtil;
@@ -22,11 +27,6 @@ package com.civildebatewall.data {
 	
 	import org.as3commons.logging.api.ILogger;
 	import org.as3commons.logging.api.getLogger;
-	import com.civildebatewall.data.containers.Category;
-	import com.civildebatewall.data.containers.Post;
-	import com.civildebatewall.data.containers.Question;
-	import com.civildebatewall.data.containers.Thread;
-	import com.civildebatewall.data.containers.User;
 	
 	public class Data extends EventDispatcher {
 		
@@ -142,12 +142,11 @@ package com.civildebatewall.data {
 		
 		private function loadBoringWords(onLoad:Function = null):void {
 			logger.info("Loading boring words...");
+			
 			// TODO get this from back end!
-			var response:Array = ["not", "for", "this", "and", "are", "but", "your", "has",
-														"have", "the", "that", "they", "with", "its", "it's", "this",
-														"them", "our", "you", "had", "who", "will", "was", "too",
-														"what", "their", "were", "from", "most", "about", "does",
-														"while", "one", "there"];
+			var response:Array = ["about", "above", "after", "again", "all", "and", "any", "are", "aren't", "been", "before", "being", "below", "between", "but", "could", "couldn't", "did", "didn't", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i'd", "i'll", "i'm", "i've", "into", "isn't", "it's", "its", "itself", "let's", "more", "most", "mustn't", "myself", "nor", "not", "off", "once", "one", "only", "other", "ought", "our", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "too", "under", "until", "very", "was", "wasn't", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "will", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"];
+			
+			
 			boringWords = new Vector.<String>();
 			for each (var boringWord:String in response) boringWords.push(boringWord);
 			boringWords.fixed = true;
@@ -330,6 +329,8 @@ package com.civildebatewall.data {
 				threads.push(newThreads[i]);
 			}
 			
+			
+			
 			CivilDebateWall.state.updateThreadsTime = getTimer() - updateIntermediateTime;
 			updatePostsAndUsers();
 		}
@@ -416,6 +417,8 @@ package com.civildebatewall.data {
 			
 			stats.mostLikedPosts = [];
 			posts.sortOn("likes", Array.DESCENDING | Array.NUMERIC);
+			
+			
 			for (var i:int = 0; i < Math.min(posts.length, 5); i++) {
 				stats.mostLikedPosts.push(posts[i]);
 			}

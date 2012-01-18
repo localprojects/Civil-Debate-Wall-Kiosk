@@ -37,6 +37,7 @@ package com.civildebatewall.data.containers {
 		public function get firstPost():Post { return _firstPost;	}
 		public function get firstStance():String { return _firstPost.stance }
 		public function get postCount():uint { return _postCount; }
+		public function get responseCount():uint { return _postCount - 1; }		
 		public function get created():Date { return _created; }	
 		public function get createdRaw():uint { return _createdRaw; }		
 		
