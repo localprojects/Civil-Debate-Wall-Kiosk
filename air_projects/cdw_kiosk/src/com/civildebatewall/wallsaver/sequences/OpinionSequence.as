@@ -38,7 +38,7 @@ package com.civildebatewall.wallsaver.sequences {
 			
 			// Settings
 			scrollVelocity = 14;
-			maxQuotes = 15;
+			maxQuotes = 8;
 			
 			CivilDebateWall.data.addEventListener(Data.DATA_UPDATE_EVENT, onDataUpdate);
 		}
