@@ -46,7 +46,7 @@ package com.civildebatewall.data.containers {
 			_flags = jsonObject["flags"];
 			_likes = jsonObject["likes"];
 			_text = jsonObject["text"];
-			_origin = ORIGIN_KIOSK; // TODO support other origins
+			_origin = jsonObject["origin"];
 			_user = null;
 			_created = DateUtil.parseJsonDate(jsonObject["created"]);
 			_thread = parentThread;
