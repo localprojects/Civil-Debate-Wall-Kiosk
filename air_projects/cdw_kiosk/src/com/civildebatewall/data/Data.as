@@ -1,7 +1,5 @@
 package com.civildebatewall.data {
 
-	
-	
 	import com.adobe.crypto.SHA1;
 	import com.civildebatewall.CivilDebateWall;
 	import com.civildebatewall.Utilities;
@@ -132,7 +130,7 @@ package com.civildebatewall.data {
 		
 		private function loadBadWords(onLoad:Function = null):void {
 			logger.info("Loading bad words...");
-			Utilities.getRequestJSON("http://beta.civildebatewall.com/api/utils/badwords", function(response:Object):void {
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/utils/badwords", function(response:Object):void {
 				badWords = [];
 				for each (var badWord:String in response["words"]) badWords.push(badWord);
 				logger.info("...Loaded " + badWords.length + " bad words");
