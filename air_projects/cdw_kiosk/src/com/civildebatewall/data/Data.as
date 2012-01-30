@@ -188,7 +188,7 @@ package com.civildebatewall.data {
 		// depends on active question
 		private function loadThreads(onLoad:Function = null):void {
 			logger.info("Loading threads...");
-			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/questions/" + CivilDebateWall.state.activeQuestion.id + "/threads", function(response:Object):void {
+			Utilities.getRequestJSON(CivilDebateWall.settings.serverPath + "/api/questions/" + CivilDebateWall.state.activeQuestion.id + "/threads?amt=9999", function(response:Object):void {
 				threads = [];
 				for each (var thread:Object in response) threads.push(new Thread(thread));
 				logger.info("...Loaded " + threads.length + " threads");
@@ -222,7 +222,7 @@ package com.civildebatewall.data {
 		private function onThreadPostsLoaded(response:Object, thread:Thread):void {
 			threadsLoaded++;
 
-			logger.info("Loaded thread post " + threadsLoaded + " / " + threads.length + " (" + thread.id + ")");
+			logger.info("Loaded thread posts " + threadsLoaded + " / " + threads.length + " (" + thread.id + ")");
 			
 			for each (var jsonPost:Object in response["posts"]) {
 				// create post
@@ -252,6 +252,9 @@ package com.civildebatewall.data {
 
 		// last batch, images load in background
 		private function onLoadUsersAndPosts():void {
+			
+			logger.info("Loaded " + posts.length + " total posts");			
+			
 			calculateStats();
 			onLoadComplete();
 		}	

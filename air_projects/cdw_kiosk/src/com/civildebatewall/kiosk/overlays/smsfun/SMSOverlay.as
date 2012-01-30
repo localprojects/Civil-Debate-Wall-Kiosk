@@ -34,7 +34,7 @@ package com.civildebatewall.kiosk.overlays.smsfun {
 		private var phones:Vector.<Phone>; 		
 		private var userPhone:UserPhone;		
 		private var northPhone:Phone; // just above the user, needs to fade out?
-		private var distanceThreshold:Number = 30; // when to fire a phone when the dashed line moves past
+		private var distanceThreshold:Number = 60; // when to fire a phone when the dashed line moves past
 		private var phoneGrid:Sprite; // contains phones (so skip button doesn't zoom out of view)
 		private var timeline:TimelineMax;
 		
