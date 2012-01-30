@@ -30,8 +30,10 @@
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
-      <libraryPathEntry kind="1" linkType="1" path="libs"/>
-      <libraryPathEntry kind="3" linkType="1" path="/futil/bin/futil.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="2" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/futil/bin/Futil.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="2" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/libs/as3commons-logging-2.7.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="2" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/libs/jpegdecoder.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="2" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/libs/jpegencoder_10092010.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -45,8 +47,9 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="default">
-      <airSettings airCertificatePath="" airTimestamp="true" version="1">
+      <airSettings airCertificatePath="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/cdw_kiosk/certificate/lpcert.p12" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes/>
+        <anePaths/>
       </airSettings>
       <actionScriptSettings version="1"/>
     </buildTarget>

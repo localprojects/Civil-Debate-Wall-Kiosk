@@ -41,7 +41,7 @@
 				<math result="xOffset" operand1="${screenWidth}" operation="*" operand2="${zeroIndex}" datatype="int" />			
 				
 				<!-- Copy and revise app file to have unique ID, title, and tiled position on screen -->
-				<xmltask source="${DEBUG_DIR}/Main-app.xml" dest="${DEBUG_DIR}/Main-app-@{i}.xml" failWithoutMatch="true"> 
+				<xmltask source="${DEBUG_DIR}/KioskApp-app.xml" dest="${DEBUG_DIR}/KioskApp-app-@{i}.xml" failWithoutMatch="true"> 
 					<replace path="/:application/:id/text()" withText="Cnet.localprojects.CivilDebateWall@{i}" />
 					<replace path="/:application/:initialWindow/:x/text()" withText="${xOffset}" />
 					<replace path="/:application/:initialWindow/:width/text()" withText="${screenWidth}" />
@@ -57,17 +57,21 @@
 	<target name="launch" description="Launches all the screens via ADL.">
 		<echo message="Launching" />
 		
-	    <for param="i" begin="1" end="${SCREEN_COUNT}">
-	    	<sequential>
-				<math result="zeroIndex" operand1="@{i}" operation="-" operand2="1" datatype="int" />	    
-				<echo message="Launching Screen @{i} on index ${zeroIndex}" />	    
-				<exec executable="${ADL}" spawn="true">
-					<arg value="${DEBUG_DIR}/Main-app-@{i}.xml" />
-					<arg value="--" />
-					<arg value="${zeroIndex}" />
-				</exec>
-			</sequential>		
-		</for>	
+        
+       <for param="i" begin="1" end="${SCREEN_COUNT}">
+           <sequential>
+               <math result="zeroIndex" operand1="@{i}" operation="-" operand2="1" datatype="int" />     
+               <echo message="Launching Screen @{i} on index ${zeroIndex}" />        
+						<exec executable="${ADL}" spawn="true">
+							<arg value="${DEBUG_DIR}/KioskApp-app-@{i}.xml" />
+							<arg value="--" />
+							<arg value="${zeroIndex}" />
+							<arg value="${screenWidth}" />
+							<arg value="${TOTAL_HEIGHT}" />				
+						</exec>		
+           </sequential>     
+       </for>
+
 		
 	</target>
      

@@ -1,3 +1,22 @@
+/*------------------------------------------------------------------------------
+Copyright (c) 2012 Local Projects. All rights reserved.
+
+This file is part of The Civil Debate Wall.
+
+The Civil Debate Wall is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+The Civil Debate Wall is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with The Civil Debate Wall.  If not, see <http://www.gnu.org/licenses/>.
+------------------------------------------------------------------------------*/
+
 package faceCropTool.faceImage {
 
 	import com.kitschpatrol.futil.utilitites.BitmapUtil;
@@ -57,7 +76,7 @@ package faceCropTool.faceImage {
 		private function onImageLoad(b:Bitmap, name:String):void {
 			var image:FaceImage = new FaceImage();
 			image.originalBitmap = new Bitmap(b.bitmapData.clone(), "auto", true);
-			image.cropBitmap = new Bitmap(BitmapUtil.scaleToFill(b.bitmapData.clone(), State.targetWidth, State.targetHeight), PixelSnapping.AUTO, true);
+			image.cropBitmap = new Bitmap(BitmapUtil.scaleDataToFill(b.bitmapData.clone(), State.targetWidth, State.targetHeight), PixelSnapping.AUTO, true);
 			
 			image.fileName = name;
 			trace("Loaded " + name);			
@@ -120,15 +139,12 @@ package faceCropTool.faceImage {
 			// Cache row is in format "name,x,y,w,h"			
 			//var hash:String = MD5.hashBinary(searchingFace.originalBitmap.bitmapData.getPixels(searchingFace.originalBitmap.bitmapData.rect));
 			// Too slow!
-			
-			
-			
+						
 			faceCache.push(searchingFace.fileName + "," + searchingFace.faceRect.x + "," + searchingFace.faceRect.y + "," + searchingFace.faceRect.width + "," + searchingFace.faceRect.height);			
 			
 			// keep going, kind ugly and GOTO ish...
 			detectFaces();
 		}				
 
-		
 	}
 }

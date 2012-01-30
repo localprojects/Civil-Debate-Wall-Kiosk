@@ -60,10 +60,12 @@ package com.civildebatewall {
 		public static var settings:Settings;
 		public static var self:CivilDebateWall;
 		
+
+		
 		public static var wallSaver:WallSaver;
 		
 		public static var kiosk:Kiosk;
-		public static var dashboard:Dashboard;
+		public static var	dashboard:Dashboard;
 		
 			
 		public static var userActivityMonitor:UserActivityMonitor;
@@ -108,7 +110,11 @@ package com.civildebatewall {
 			// In local multi-screen debug mode, kiosk number is set via command line args instead of IP-based introspection
 			// TODO genereic command line settings override system?
 			if (commandLineArgs.length > 0) {
+				trace("CLA:");
+				trace(commandLineArgs);
 				settings.kioskNumber = commandLineArgs[0];
+				settings.testWidth = commandLineArgs[1];
+				settings.testHeight = commandLineArgs[2];	
 				settings.localMultiScreenTest = true;
 				settings.useSLR = false;
 				settings.useWebcam = false;
@@ -162,7 +168,9 @@ package com.civildebatewall {
 			// three possible window modes
 			if (settings.localMultiScreenTest) {			
 				// dimensions come from app.xml
-				stage.scaleMode = StageScaleMode.EXACT_FIT;				
+				stage.scaleMode = StageScaleMode.EXACT_FIT;
+				stage.nativeWindow.width = settings.testWidth;
+				stage.nativeWindow.height = settings.testHeight;				
 			}
 			else if (settings.halfSize) {
 				// temporarily squish screen for laptop development (half size)				
