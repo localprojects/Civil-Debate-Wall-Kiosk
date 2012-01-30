@@ -31,7 +31,7 @@ package com.civildebatewall {
 		
 		// Screen Sync (Flash Span)
 		public var flashSpanConfigPath:String;
-		
+
 		// Logging and Debug
 		public var logToTrace:Boolean;
 		public var logToMonster:Boolean;
@@ -47,6 +47,10 @@ package com.civildebatewall {
 		public var settingsPath:String;
 		public var secretKeyHash:String;
 		public var computerName:String;
+		
+		// Local FlashSpan Testing
+		public var testWidth:int;
+		public var testHeight:int;					
 		
 		// Fixed settings (Not passed in from file)
 		public var targetFaceRectangle:Rectangle = new Rectangle(294, 352, 494, 576);

@@ -20,17 +20,13 @@
 		<height>1920</height>
 		<x>0</x>
 		<y>0</y>
+		<autoOrients>false</autoOrients>
 	</initialWindow>
-
-	<supportedProfiles>extendedDesktop</supportedProfiles>
-
-	<!-- The subpath of the standard default installation location to use. Optional. -->
-	<!-- <installFolder></installFolder> -->
 	
-	<!-- The subpath of the Programs menu to use. (Ignored on operating systems without a Programs menu.) Optional. -->
-	<!-- <programMenuFolder></programMenuFolder> -->
+	<supportedProfiles>extendedDesktop</supportedProfiles>
 	
 	<icon>
 		<image128x128>assets/graphics/appIcon.png</image128x128>
 	</icon>
+	
 </application>

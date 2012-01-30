@@ -1,17 +1,22 @@
-package {	
+package {		
 	
 	import com.civildebatewall.CivilDebateWall;
 	
 	import flash.desktop.NativeApplication;
-	import flash.display.Sprite;
 	import flash.events.InvokeEvent;
 	
-	[SWF(width="1080", height="1920", frameRate="60")]
-	public class Main extends Sprite	{
+	import spark.core.SpriteVisualElement;
+	
+	public class Main extends SpriteVisualElement	{
 
 		public function Main() {		
+			// set up SpriteVisualElement
+			percentWidth = 100;
+			percentHeight = 100;
+			
 			// catch command line args
-			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvoke);									
+			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvoke);
+			//this.addEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);
 		}
 		
 		private function onInvoke(e:InvokeEvent):void {
