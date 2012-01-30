@@ -9,25 +9,25 @@
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/core.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
-      <libraryPathEntry kind="3" linkType="1" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/libs/MinimalComps_0_9_10.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/libs/as3commons-logging-2.7.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/libs/as3corelib.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/libs/MonsterDebugger.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry applicationDomain="default" forceLoad="true" kind="3" linkType="4" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/libs/object_detection.swc" useDefaultLinkType="false">
+      <libraryPathEntry kind="3" linkType="1" path="libs/MinimalComps_0_9_10.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/as3commons-logging-2.7.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/as3corelib.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/MonsterDebugger.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry applicationDomain="default" forceLoad="true" kind="3" linkType="4" path="libs/object_detection.swc" useDefaultLinkType="false">
         <crossDomainRsls>
           <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="object_detection.swf"/>
         </crossDomainRsls>
       </libraryPathEntry>
-      <libraryPathEntry applicationDomain="default" forceLoad="true" kind="3" linkType="4" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/libs/greensock.swc" useDefaultLinkType="false">
+      <libraryPathEntry applicationDomain="default" forceLoad="true" kind="3" linkType="4" path="libs/greensock.swc" useDefaultLinkType="false">
         <crossDomainRsls>
           <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="greensock.swf"/>
         </crossDomainRsls>
       </libraryPathEntry>
-      <libraryPathEntry kind="3" linkType="1" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/futil/bin/Futil.swc" sourcepath="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/futil/src" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/flash_span/bin/flash_span.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/Futil.swc" sourcepath="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/futil/src" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/flash_span.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath>
-      <sourceAttachmentPathEntry kind="3" linkType="1" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/futil/bin/Futil.swc" sourcepath="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/futil/src" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="libs/Futil.swc" sourcepath="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/futil/src" useDefaultLinkType="false"/>
     </sourceAttachmentPath>
   </compiler>
   <applications>
