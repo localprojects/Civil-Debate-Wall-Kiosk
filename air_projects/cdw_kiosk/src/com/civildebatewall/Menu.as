@@ -47,10 +47,19 @@ package com.civildebatewall {
 				myContextMenu.customItems.push(demoSequenceAItem);
 				demoSequenceAItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onDemoSequenceAContextMenuSelect);
 				
+				var recordSequenceAItem:ContextMenuItem = new ContextMenuItem("record Sequence A");
+				myContextMenu.customItems.push(recordSequenceAItem);
+				recordSequenceAItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onRecordSequenceAContextMenuSelect);				
+				
 				var demoSequenceBItem:ContextMenuItem = new ContextMenuItem("Demo Sequence B");
 				myContextMenu.customItems.push(demoSequenceBItem);
 				demoSequenceBItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onDemoSequenceBContextMenuSelect);
 			}
+			
+			
+			var screenshotItem:ContextMenuItem = new ContextMenuItem("Take Screenshot");
+			myContextMenu.customItems.push(screenshotItem);
+			screenshotItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onTakeScreenshotContextMenuSelect);
 			
 			var fullScreenItem:ContextMenuItem = new ContextMenuItem("Toggle Full Screen");
 			myContextMenu.customItems.push(fullScreenItem);
@@ -127,6 +136,14 @@ package com.civildebatewall {
 		private static function onQuitAllSelect(e:ContextMenuEvent):void {
 			logger.info("Qutting all screens intentionally");
 			CivilDebateWall.flashSpan.quitAll();
+		}
+		
+		private static function onTakeScreenshotContextMenuSelect(event:ContextMenuEvent):void {
+			CivilDebateWall.self.takeScreenshot();
+		}
+		
+		private static function onRecordSequenceAContextMenuSelect(event:ContextMenuEvent):void {
+			CivilDebateWall.self.recordSequenceA();			
 		}
 		
 	}
