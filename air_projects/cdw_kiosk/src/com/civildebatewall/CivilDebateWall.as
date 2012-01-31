@@ -26,6 +26,7 @@ package com.civildebatewall {
 	import com.civildebatewall.wallsaver.core.WallSaver;
 	import com.civildebatewall.wallsaver.core.WallSaverTimer;
 	import com.demonsters.debugger.MonsterDebugger;
+	import com.greensock.TimelineMax;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Cubic;
 	import com.greensock.easing.FastEase;
@@ -34,6 +35,7 @@ package com.civildebatewall {
 	import com.greensock.easing.Quart;
 	import com.greensock.easing.Quint;
 	import com.greensock.easing.Strong;
+	import com.greensock.events.TweenEvent;
 	import com.greensock.plugins.CacheAsBitmapPlugin;
 	import com.greensock.plugins.ThrowPropsPlugin;
 	import com.greensock.plugins.TransformAroundCenterPlugin;
@@ -45,9 +47,14 @@ package com.civildebatewall {
 	import com.kitschpatrol.flashspan.events.FlashSpanEvent;
 	import com.kitschpatrol.flashspan.events.FrameSyncEvent;
 	import com.kitschpatrol.futil.tweenPlugins.FutilBlockPlugin;
+	import com.kitschpatrol.futil.utilitites.BitmapUtil;
 	import com.kitschpatrol.futil.utilitites.FileUtil;
+	import com.kitschpatrol.futil.utilitites.GraphicsUtil;
+	import com.kitschpatrol.futil.utilitites.NumberUtil;
 	import com.kitschpatrol.futil.utilitites.PlatformUtil;
 	
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.display.StageDisplayState;
 	import flash.display.StageQuality;
@@ -328,6 +335,41 @@ package com.civildebatewall {
 			if (!state.userActive) CivilDebateWall.dataUpdateTimer.start(); // keep updating
 		}		
 		
+		
+		public function recordSequenceA():void {
+			wallSaver.cueSequenceA();
+			wallSaver.timeline.timeScale = 2.0;
+			wallSaver.timeline.addEventListener(TweenEvent.UPDATE, function(e:TweenEvent):void {
+				takeScreenshot();
+			});
+			logger.info("recording sequence A");
+			
+			// add placeholders
+			var screen1:Bitmap = Assets.sampleScreen1;
+			var screen2:Bitmap = Assets.sampleScreen2;
+			var screen3:Bitmap = Assets.sampleScreen3;
+			var screen4:Bitmap = Assets.sampleScreen4;
+			var screen5:Bitmap = Assets.sampleScreen5;			
+			
+			screen1.x = CivilDebateWall.flashSpan.settings.screens[0].x;			
+			screen2.x = CivilDebateWall.flashSpan.settings.screens[1].x;
+			screen3.x = CivilDebateWall.flashSpan.settings.screens[2].x;				
+			screen4.x = CivilDebateWall.flashSpan.settings.screens[3].x;
+			screen5.x = CivilDebateWall.flashSpan.settings.screens[4].x;
+			
+			var wallSaverIndex:int = getChildIndex(wallSaver);
+			
+			this.addChildAt(screen1, wallSaverIndex);
+			this.addChildAt(screen2, wallSaverIndex);
+			this.addChildAt(screen3, wallSaverIndex);
+			this.addChildAt(screen4, wallSaverIndex);
+			this.addChildAt(screen5, wallSaverIndex);			
+			
+			CivilDebateWall.randomDebateTimer.stop();
+			CivilDebateWall.dataUpdateTimer.stop();		
+			wallSaver.timeline.play();			
+		}
+		
 		public function playSequenceA():void {
 			if (settings.kioskNumber == 0) wallSaverTimer.stop();
 			if (wallSaver.timeline.active) wallSaver.timeline.stop();
@@ -364,6 +406,9 @@ package com.civildebatewall {
 			}
 			return true;
 		}
+		
+		
+		
 		
 		
 		private function onCustomMessageReceived(e:CustomMessageEvent):void {
@@ -418,6 +463,22 @@ package com.civildebatewall {
 			if (e.frameCount < wallSaver.timeline.duration) {
 				wallSaver.timeline.gotoAndPlay(e.frameCount);
 			}
+		}
+		
+		
+		private var screenshotIndex:int = 0;
+		
+		
+		// This actually takes a psuedo-five screen screenshot
+		public function takeScreenshot():void {
+
+			
+			// Take Photo
+			var screen:Bitmap = new Bitmap(new BitmapData(CivilDebateWall.flashSpan.settings.totalWidth, CivilDebateWall.flashSpan.settings.totalHeight, false, 0xffffff), "auto", true);
+			
+			screen.bitmapData.draw(this.stage);
+			FileUtil.saveJpeg(screen, "C:\\Screenshots\\", "frame-" + NumberUtil.zeroPad(screenshotIndex++, 5) + ".jpg", 70);			
+		
 		}
 		
 	}
