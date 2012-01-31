@@ -27,8 +27,8 @@
 		"tempImagePath": "C:/temp/",
 		"serverPath": "http://www.civildebatewall.com",
 		"flashSpanConfigPath": "flash_span_settings.xml",
-		"logToTrace": true,
-		"logToMonster": true,
+		"logToTrace": false,
+		"logToMonster": false,
 		"logToFile": true,
 		"logFilePath": "C:/CDWLogs/",
 		"screenshotPath": "C:/screenshots/"	
