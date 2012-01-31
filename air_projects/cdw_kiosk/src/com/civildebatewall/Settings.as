@@ -70,7 +70,8 @@ package com.civildebatewall {
 		
 		// Local FlashSpan Testing
 		public var testWidth:int;
-		public var testHeight:int;					
+		public var testHeight:int;
+		public var screenshotPath:String;
 		
 		// Fixed settings (Not passed in from file)
 		public var targetFaceRectangle:Rectangle = new Rectangle(294, 352, 494, 576);

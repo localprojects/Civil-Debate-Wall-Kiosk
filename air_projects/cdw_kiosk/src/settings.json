@@ -20,17 +20,18 @@
 	
 	"windows": {
 		"halfSize": true,
-		"startFullScreen": true,
-		"useWebcam": true,
-		"useSLR": true,
-		"imagePath": "",
+		"startFullScreen": false,
+		"useWebcam": false,
+		"useSLR": false,
+		"imagePath": "C:/CDWImages/",
 		"tempImagePath": "C:/temp/",
-		"serverPath": "http://ec2-184-73-127-164.compute-1.amazonaws.com",
-		"flashSpanConfigPath": "e:/conf/flash_span_settings.xml",
+		"serverPath": "http://www.civildebatewall.com",
+		"flashSpanConfigPath": "flash_span_settings.xml",
 		"logToTrace": true,
 		"logToMonster": true,
 		"logToFile": true,
-		"logFilePath": ""	
+		"logFilePath": "C:/CDWLogs/",
+		"screenshotPath": "C:/screenshots/"	
 	},
 	
 	"mac": {
@@ -44,6 +45,7 @@
 		"logToTrace": true,
 		"logToMonster": false,
 		"logToFile": false,
-		"logFilePath": "/Users/Mika/Desktop/CDWLogs"
+		"logFilePath": "/Users/Mika/Desktop/CDWLogs",
+		"screenshotPath": "/Users/Mika/Desktop/Screenshots/"		
 	}
 }
