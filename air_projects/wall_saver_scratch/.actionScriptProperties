@@ -31,7 +31,7 @@
         </excludedEntries>
       </libraryPathEntry>
       <libraryPathEntry kind="3" linkType="1" path="/futil/bin/futil.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="1" linkType="1" path="libs"/>
+      <libraryPathEntry kind="1" linkType="1" path="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/libs"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -45,8 +45,9 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="default">
-      <airSettings airCertificatePath="/Users/Mika/Documents/Local Projects/Civil Debate Wall/Signing Certificate/LocalProjectsCert.p12" airTimestamp="true" version="1">
+      <airSettings airCertificatePath="/Users/Mika/Documents/Local Projects/Civil Debate Wall/Signing Certificate/LocalProjectsCert.p12" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes/>
+        <anePaths/>
       </airSettings>
       <actionScriptSettings version="1"/>
     </buildTarget>
