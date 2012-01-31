@@ -477,7 +477,7 @@ package com.civildebatewall {
 			var screen:Bitmap = new Bitmap(new BitmapData(CivilDebateWall.flashSpan.settings.totalWidth, CivilDebateWall.flashSpan.settings.totalHeight, false, 0xffffff), "auto", true);
 			
 			screen.bitmapData.draw(this.stage);
-			FileUtil.saveJpeg(screen, "C:\\Screenshots\\", "frame-" + NumberUtil.zeroPad(screenshotIndex++, 5) + ".jpg", 70);			
+			FileUtil.saveJpeg(screen, settings.screenshotPath, "frame-" + NumberUtil.zeroPad(screenshotIndex++, 5) + ".jpg", 70);
 		
 		}
 		
