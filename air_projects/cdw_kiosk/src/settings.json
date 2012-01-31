@@ -39,7 +39,7 @@
 		"useWebcam": false,	
 		"useSLR": false,
 		"imagePath": "/Users/Mika/Desktop/CDWImages/",		
-		"serverPath": "http://staging.civildebatewall.com",
+		"serverPath": "http://www.civildebatewall.com",
 		"flashSpanConfigPath":  "/Users/Mika/Code/CivilDebateWall/lp-cdw/air_projects/cdw_kiosk/bin-debug/flash_span_settings.xml",
 		"logToTrace": true,
 		"logToMonster": false,

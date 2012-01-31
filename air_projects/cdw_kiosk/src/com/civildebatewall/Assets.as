@@ -346,6 +346,30 @@ package com.civildebatewall {
 		public static function getGraphLabelYes():Bitmap { return new graphLabelYesClass() as Bitmap; };
 		public static const graphLabelYes:Bitmap = getGraphLabelYes();
 		
+		
+		// Sample Screens
+		[Embed(source = "/assets/graphics/sampleScreen1.jpg")] private static const sampleScreen1Class:Class;
+		public static function getsampleScreen1():Bitmap { return new sampleScreen1Class() as Bitmap; };
+		public static const sampleScreen1:Bitmap = getsampleScreen1();
+	
+		[Embed(source = "/assets/graphics/sampleScreen2.jpg")] private static const sampleScreen2Class:Class;
+		public static function getsampleScreen2():Bitmap { return new sampleScreen2Class() as Bitmap; };
+		public static const sampleScreen2:Bitmap = getsampleScreen2();		
+		
+		
+		[Embed(source = "/assets/graphics/sampleScreen3.jpg")] private static const sampleScreen3Class:Class;
+		public static function getsampleScreen3():Bitmap { return new sampleScreen3Class() as Bitmap; };
+		public static const sampleScreen3:Bitmap = getsampleScreen3();
+		
+		[Embed(source = "/assets/graphics/sampleScreen4.jpg")] private static const sampleScreen4Class:Class;
+		public static function getsampleScreen4():Bitmap { return new sampleScreen4Class() as Bitmap; };
+		public static const sampleScreen4:Bitmap = getsampleScreen4();		
+		
+		[Embed(source = "/assets/graphics/sampleScreen5.jpg")] private static const sampleScreen5Class:Class;
+		public static function getsampleScreen5():Bitmap { return new sampleScreen5Class() as Bitmap; };
+		public static const sampleScreen5:Bitmap = getsampleScreen5();				
+		
+
 		// Fonts
 		[Embed(source="/assets/fonts/fonts.swf", symbol="RockwellLight")] public static const FontLight:Class;
 		public static const FONT_LIGHT:String = "Rockwell Std Light";		

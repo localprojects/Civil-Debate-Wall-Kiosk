@@ -69,6 +69,7 @@ package com.civildebatewall {
 				CivilDebateWall.kiosk.portraitCamera.takePhoto();
 				FileUtil.saveJpeg(CivilDebateWall.kiosk.portraitCamera.cameraBitmap, CivilDebateWall.settings.imagePath, "test-image.jpg");			
 			});
+			new PushButton(this, 110, 80, "Take screenshot", function():void { CivilDebateWall.self.takeScreenshot(); });			
 			
 			new PushButton(this, 5, 80, "Inactive", function():void { CivilDebateWall.state.setView(CivilDebateWall.kiosk.inactivityOverlayView) });			
 			new PushButton(this, 5, 30, "Calibrate Camera", function():void { CivilDebateWall.kiosk.cameraCalibrationOverlayView(); });
