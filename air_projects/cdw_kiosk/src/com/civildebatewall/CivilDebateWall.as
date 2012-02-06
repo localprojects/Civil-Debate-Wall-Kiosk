@@ -254,8 +254,8 @@ package com.civildebatewall {
 
 			if (PlatformUtil.isWindows) {
 				logger.info("Getting Kiosk Number from IP");
-				//flashSpan = new FlashSpan(-1, settings.flashSpanConfigPath);
-				flashSpan = new FlashSpan(settings.kioskNumber, File.applicationDirectory.nativePath + "/flash_span_settings.xml");
+				flashSpan = new FlashSpan(-1, settings.flashSpanConfigPath); // For production
+				//flashSpan = new FlashSpan(settings.kioskNumber, File.applicationDirectory.nativePath + "/flash_span_settings.xml"); // For testing
 			}
 			else {
 				flashSpan = new FlashSpan(settings.kioskNumber, File.applicationDirectory.nativePath + "/flash_span_settings.xml");

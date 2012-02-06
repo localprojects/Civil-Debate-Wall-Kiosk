@@ -67,15 +67,21 @@ package com.civildebatewall.kiosk.camera {
 				
 				var cameras:Array = Camera.names;
 			
+				logger.info("Cameras: " + cameras);				
+				
 				// always pick last camera to skip isight on the mac				
 				if (cameras.length > 1) {
-					camera = Camera.getCamera(cameras[cameras.length - 1])
+					logger.info("Found more than one camera... choosing the last one: " + (cameras[cameras.length - 1]));					
+					camera = Camera.getCamera(cameras[cameras.length - 1]);
 				}
 				else {
 					camera = Camera.getCamera();
 				}
+				
+				logger.info("Using camera: " + camera.name);				
 
 				camera.setMode(cameraWidth, cameraHeight, 30);
+				
 				video = new Video(cameraWidth, cameraHeight);
 			
 				// rotate and crop
