@@ -1,0 +1,88 @@
+#!/bin/bash
+
+##
+# Synchronize log files up to S3
+##
+
+#------------------------------------------------
+# Configuration
+#------------------------------------------------
+# Application name
+APPNAME="civildebatewall"
+
+# Email recipients. Blank list to disable email sending
+# Comma-delimited list to be sent to mailx
+RECIPIENTS=
+# Logfile path MUST exist 
+RUN_PATH="/var/run/$APPNAME"
+pidfile="/$RUN_PATH/sync_logs.pid"
+
+LOG_PATH="/var/log/$APPNAME"
+LOGFILE="$LOG_PATH/sync_logs.log"
+PROCESS_SUBJECT="CDW Logs Sync Status"
+
+S3_BUCKET="$APPNAME"
+MEDIA_STORE_PATH=/c/home/cdwmedia
+S3CFG_FILE=/etc/cdw.s3cfg
+#------------------------------------------------
+
+usage() {
+  echo "$0 "
+}
+
+notify() {
+    TIMESTAMP=`date -u +%Y%m%d%H%M%S`
+    echo -e "($TIMESTAMP) $1" >> $LOGFILE
+    # Tell someone that there's something going on
+    if [ ! -z "$RECIPIENTS" ];then
+        echo -e "$1" | mailx -s "$PROCESS_SUBJECT" $RECIPIENTS
+    fi
+}
+
+initialize() { 
+    # Create a process-file so that we don't run the process multiple times
+    if [ -e $pidfile ]; then
+        pid=`cat $pidfile`
+        if kill -0 &>1 > /dev/null $pid; then
+            echo "Already running"
+            exit 1
+        else
+            rm $pidfile
+        fi
+    fi
+    echo $$ > $pidfile
+}
+
+run_sync() { 
+    notify "STARTED: Synchronizing media from $src to $dst"
+    s3cmd --config=$S3CFG_FILE --acl-private --no-delete-removed --recursive --rexclude="Thumbs.db" --rexclude=".AppleDouble" --rexclude=".DS_Store" sync $src $dst >> $LOGFILE
+    notify "FINISHED: Synchronizing files from $src to $dst"    
+
+    # Force set everything to private
+    s3cmd --config=$S3CFG_FILE --acl-private --recursive setacl $dst >> $LOGFILE
+    notify "FINISHED: Setting permissions to private on $src"    
+}
+
+cleanup() {
+    rm $pidfile
+}
+
+sanity_check() {
+    # Check that the log folder exists
+    if [ ! -d "$LOG_PATH" ];then
+        mkdir -p $LOG_PATH
+    fi
+    if [ ! -d "$RUN_PATH" ];then
+        mkdir -p $RUN_PATH
+    fi
+}
+
+sanity_check
+initialize
+
+# Then pull content from S3
+src="$MEDIA_STORE_PATH/var/"
+dst="s3://$S3_BUCKET/var/"
+run_sync
+
+cleanup

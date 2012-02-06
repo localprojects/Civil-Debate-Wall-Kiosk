@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="false" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="com.kitschpatrol.futil.DefaultAssets"/>
+    <classEntry path="com.kitschpatrol.futil.blocks.Padding"/>
+    <classEntry path="com.kitschpatrol.futil.blocks.TextSize"/>
+    <classEntry path="com.kitschpatrol.futil.Math2"/>
+    <classEntry path="com.kitschpatrol.futil.blocks.BlockBase"/>
+    <classEntry path="com.kitschpatrol.futil.blocks.BlockShape"/>
+    <classEntry path="com.kitschpatrol.futil.constants.Alignment"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.AlignmentPointPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.constants.Char"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.BackgroundColorPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.FutilBlockPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.BaseColorPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.TextColorPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.LipsumUtil"/>
+    <classEntry path="com.kitschpatrol.futil.easing.EaseMap"/>
+    <classEntry path="com.kitschpatrol.futil.easing.Ease"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.ArrayUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.BitmapUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.GeomUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.NumberUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.GraphicsUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.VectorUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.ColorUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.NetUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.DateUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.ObjectUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.StringUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.FunctionUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.PlatformUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.FileUtil"/>
+    <classEntry path="com.kitschpatrol.futil.jpeg.JPEGEncoder"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.NamedYPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.NamedXPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.blocks.BlockBitmap"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.BlockBitmapPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.tweenPlugins.BitmapDataPlugin"/>
+    <classEntry path="com.kitschpatrol.futil.Random"/>
+    <classEntry path="com.kitschpatrol.futil.drawing.Path"/>
+    <classEntry path="com.kitschpatrol.futil.drawing.DashedLine"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.PointUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.CoreUtil"/>
+    <classEntry path="com.kitschpatrol.futil.utilitites.DepthUtil"/>
+    <classEntry path="com.kitschpatrol.futil.drawing.DashedLineColor"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

@@ -1,6 +1,16 @@
-.DS_Store
-*.pyc
-.pydevproject
-.project
-*.sqlite3
-cdw-weblog
+# Mac
+/.DS_Store
+*.DS_Store
+
+# Flash
+/bin-debug
+bin-debug/
+*.air
+*.dmg
+*.exe
+
+!deploy_tools/*.exe
+
+air_projects/cdw_kiosk/build.properties
+org.eclipse.ltk.core.refactoring.prefs
+air_projects/.metadata/

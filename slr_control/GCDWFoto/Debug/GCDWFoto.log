@@ -1,0 +1,22 @@
+﻿Build started 8/1/2011 10:35:33 AM.
+     1>Project "C:\Users\Local Projects\Documents\Visual Studio 2010\Projects\GCDWFoto\GCDWFoto\GCDWFoto.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\GCDWFoto.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+         All outputs are up-to-date.
+       Link:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Local Projects\Documents\Visual Studio 2010\Projects\GCDWFoto\Debug\GCDWFoto.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Local Projects\Documents\Visual Studio 2010\Projects\GCDWFoto\GCDWFoto\Library" EDSDK.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\GCDWFoto.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Local Projects\Documents\Visual Studio 2010\Projects\GCDWFoto\Debug\GCDWFoto.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Local Projects\Documents\Visual Studio 2010\Projects\GCDWFoto\Debug\GCDWFoto.lib" /MACHINE:X86 Debug\GCDWFoto.obj
+         Debug\stdafx.obj
+     1>GCDWFoto.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
+         GCDWFoto.vcxproj -> C:\Users\Local Projects\Documents\Visual Studio 2010\Projects\GCDWFoto\Debug\GCDWFoto.exe
+       Manifest:
+         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\Local Projects\Documents\Visual Studio 2010\Projects\GCDWFoto\Debug\GCDWFoto.exe;#1" /manifest Debug\GCDWFoto.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Debug\GCDWFoto.unsuccessfulbuild".
+         Touching "Debug\GCDWFoto.lastbuildstate".
+     1>Done Building Project "C:\Users\Local Projects\Documents\Visual Studio 2010\Projects\GCDWFoto\GCDWFoto\GCDWFoto.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.53

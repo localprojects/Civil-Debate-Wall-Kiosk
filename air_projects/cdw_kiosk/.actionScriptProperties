@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<actionScriptProperties analytics="false" mainApplicationPath="KioskApp.mxml" projectUUID="7cb6c991-82ec-46d8-abc9-b56adffbbcd3" version="10">
+  <compiler additionalCompilerArguments="-locale en_US" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="true" useDebugRSLSwfs="false" verifyDigests="false" warn="true">
+    <compilerSourcePath/>
+    <libraryPath defaultLinkType="3">
+      <libraryPathEntry kind="4" path="">
+        <excludedEntries>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/core.swc" useDefaultLinkType="false"/>
+        </excludedEntries>
+      </libraryPathEntry>
+      <libraryPathEntry kind="3" linkType="1" path="libs/MinimalComps_0_9_10.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/as3commons-logging-2.7.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/as3corelib.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/MonsterDebugger.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry applicationDomain="default" forceLoad="true" kind="3" linkType="4" path="libs/object_detection.swc" useDefaultLinkType="false">
+        <crossDomainRsls>
+          <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="object_detection.swf"/>
+        </crossDomainRsls>
+      </libraryPathEntry>
+      <libraryPathEntry applicationDomain="default" forceLoad="true" kind="3" linkType="4" path="libs/greensock.swc" useDefaultLinkType="false">
+        <crossDomainRsls>
+          <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="greensock.swf"/>
+        </crossDomainRsls>
+      </libraryPathEntry>
+      <libraryPathEntry kind="3" linkType="1" path="libs/Futil.swc" sourcepath="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/futil/src" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/flash_span.swc" useDefaultLinkType="false"/>
+    </libraryPath>
+    <sourceAttachmentPath>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="libs/Futil.swc" sourcepath="/Users/mika/Code/CivilDebateWall/lp-cdw/air_projects/futil/src" useDefaultLinkType="false"/>
+    </sourceAttachmentPath>
+  </compiler>
+  <applications>
+    <application path="KioskApp.mxml">
+      <airExcludes/>
+    </application>
+  </applications>
+  <modules/>
+  <buildCSSFiles/>
+  <flashCatalyst validateFlashCatalystCompatibility="false"/>
+  <buildTargets>
+    <buildTarget buildTargetName="default">
+      <airSettings airCertificatePath="" airTimestamp="true" anePathSet="true" version="1">
+        <airExcludes/>
+        <anePaths/>
+      </airSettings>
+      <actionScriptSettings version="1"/>
+    </buildTarget>
+  </buildTargets>
+</actionScriptProperties>

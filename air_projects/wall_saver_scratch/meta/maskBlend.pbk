@@ -1,0 +1,76 @@
+<languageVersion : 1.0;>
+
+kernel maskBlend
+<   namespace: "com.adobe.devnet.pixelbender";
+    vendor: "Local Projects";
+    version: 1;
+    description: "Takes a white input with alpha and sets it to the target color over white backgrounds.";
+>
+
+{
+    input image4 background;
+    input image4 foreground;
+    output pixel4 dst;
+    parameter float4 targetColor
+    <
+        minValue: float4(0.0, 0.0, 0.0, 1.0);
+        maxValue: float4(1.0, 1.0, 1.0, 1.0);
+        defaultValue: float4(0.0, 0.0, 0.0, 1.0);
+        description: "The color the overlay should ignore when it's over, and turn into when it's over white.";
+    >;
+
+    void evaluatePixel() {
+        float4 backPixel = sampleNearest(background, outCoord());
+        float4 forePixel = sampleNearest(foreground, outCoord());
+
+        if (forePixel.a == 0.0) {
+            // background is transparent, just let the background through
+            dst = backPixel;
+        }
+        else if (backPixel.r == 1.0 && backPixel.g == 1.0 && backPixel.b == 1.0) {
+            // background is white, convert to foreground to target color and do a normal blend
+            dst.r = targetColor.r + backPixel.r * (1.0 - forePixel.a);
+            dst.g = targetColor.g + backPixel.g * (1.0 - forePixel.a);
+            dst.b = targetColor.b + backPixel.b * (1.0 - forePixel.a);
+        }
+        else if (distance(backPixel, targetColor) < 0.0001) {
+            // background matches target color, just do a normal blend
+            dst.r = forePixel.r + backPixel.r * (1.0 - forePixel.a);
+            dst.g = forePixel.g + backPixel.g * (1.0 - forePixel.a);
+            dst.b = forePixel.b + backPixel.b * (1.0 - forePixel.a);
+        }
+        else {
+            // background color is neither white nor target, must be some kind of anti-aliasing
+            // so we infer the alpha from the brightness of the background relative to the target
+            // and use this to create a similarly anti-aliased overlay
+            // figure out alpha by dividing
+
+            // derrive alpha from largest channel
+            float backAlpha;
+
+            // figure out which channel to use, don't want 1 or 0
+            if ((backPixel.r > 0.0) && (backPixel.r < 1.0) && (targetColor.r > 0.0) && (targetColor.r < 1.0)) {
+                // use red
+                backAlpha = targetColor.r / backPixel.r;
+            }
+            if ((backPixel.g > 0.0) && (backPixel.g < 1.0) && (targetColor.g > 0.0) && (targetColor.g < 1.0)) {
+                // use green
+                backAlpha = targetColor.g / backPixel.g;
+            }
+            else {
+                // use blue, i guess
+                backAlpha = targetColor.b / backPixel.b;
+            }
+
+            // completely ridiculous magic numbers to "invert" the alpha
+            backAlpha = 1.2 - (backAlpha * backAlpha * backAlpha);
+
+            dst.r = (targetColor.r * backAlpha) + 1.0 * (1.0 - backAlpha);
+            dst.g = (targetColor.g * backAlpha) + 1.0 * (1.0 - backAlpha);
+            dst.b = (targetColor.b * backAlpha) + 1.0 * (1.0 - backAlpha);
+        }
+
+        // final alpha is always 1, since this is a blend (right?)
+        dst.a = 1.0;
+    }
+}

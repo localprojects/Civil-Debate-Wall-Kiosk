@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<settings>
+    <server>auto</server>
+    <syncMode>frame</syncMode>
+    <bezelWidth>120</bezelWidth>
+    <screenWidth>1080</screenWidth>
+	<screenHeight>1920</screenHeight>
+	<frameRate>60</frameRate>
+	<frameSyncInterval>10</frameSyncInterval>
+    <networkMap>
+        <screen>
+            <id>0</id>
+            <ip>127.0.0.1</ip>
+            <port>63644</port>
+        </screen>
+        <screen>
+            <id>1</id>
+            <ip>127.0.0.1</ip>
+            <port>63645</port>
+        </screen>
+        <screen>
+            <id>2</id>
+            <ip>127.0.0.1</ip>
+            <port>63646</port>
+        </screen>
+        <screen>
+            <id>3</id>
+            <ip>127.0.0.1</ip>
+            <port>63647</port>
+        </screen>        
+        <screen>
+            <id>4</id>
+            <ip>127.0.0.1</ip>
+            <port>63648</port>
+        </screen>
+    </networkMap>
+</settings>

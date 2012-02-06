@@ -1,0 +1,78 @@
+<?xml version="1.0"?> 
+<project name="CDW Kiosk" basedir="." default="main">
+     
+    <property file="multiScreenTest.properties" />      
+	<property name="ADL" value="${SDK_HOME}/bin/adl" />     
+     
+	<!-- Ant Contrib -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+	    <pathelement location="${basedir}/build-resources/ant-contrib-1.0b3.jar" />
+	  </classpath>
+	</taskdef>
+	
+	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" onerror="fail">
+		<classpath>
+			<pathelement location="${basedir}/build-resources/ant-contrib-1.0b3.jar" />
+		</classpath>
+	</taskdef>
+	
+	<!-- XML Task http://today.java.net/pub/a/today/2006/11/01/xml-manipulation-using-xmltask.html -->
+	<!-- Note ":" namespace weirdness in xpaths -->
+	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" onerror="fail">
+		<classpath>
+			<pathelement location="${basedir}/build-resources/xmltask.jar" />
+		</classpath>
+	</taskdef>     
+     
+    
+	<target name="main" depends="create-app-xml, launch">
+		<echo message="Launching multiple screens. Debug gets built first by Eclipse." />
+	</target>	
+		
+		
+	<target name="create-app-xml" description="Copies and modifies the app xml file to allow for multiple instances of the same app on one machine.">	
+		<echo message="Copying App XML" />
+		<math result="screenWidth" operand1="${TOTAL_WIDTH}" operation="/" operand2="${SCREEN_COUNT}" datatype="int" />		
+		
+	    <for param="i" begin="1" end="${SCREEN_COUNT}"> 
+			<sequential>
+				<math result="zeroIndex" operand1="@{i}" operation="-" operand2="1" datatype="int" />
+				<math result="xOffset" operand1="${screenWidth}" operation="*" operand2="${zeroIndex}" datatype="int" />			
+				
+				<!-- Copy and revise app file to have unique ID, title, and tiled position on screen -->
+				<xmltask source="${DEBUG_DIR}/KioskApp-app.xml" dest="${DEBUG_DIR}/KioskApp-app-@{i}.xml" failWithoutMatch="true"> 
+					<replace path="/:application/:id/text()" withText="Cnet.localprojects.CivilDebateWall@{i}" />
+					<replace path="/:application/:initialWindow/:x/text()" withText="${xOffset}" />
+					<replace path="/:application/:initialWindow/:width/text()" withText="${screenWidth}" />
+					<replace path="/:application/:initialWindow/:height/text()" withText="${TOTAL_HEIGHT}" />	
+				</xmltask>					
+					
+			</sequential>		
+		</for>
+				
+	</target>
+	
+	
+	<target name="launch" description="Launches all the screens via ADL.">
+		<echo message="Launching" />
+		
+        
+       <for param="i" begin="1" end="${SCREEN_COUNT}">
+           <sequential>
+               <math result="zeroIndex" operand1="@{i}" operation="-" operand2="1" datatype="int" />     
+               <echo message="Launching Screen @{i} on index ${zeroIndex}" />        
+						<exec executable="${ADL}" spawn="true">
+							<arg value="${DEBUG_DIR}/KioskApp-app-@{i}.xml" />
+							<arg value="--" />
+							<arg value="${zeroIndex}" />
+							<arg value="${screenWidth}" />
+							<arg value="${TOTAL_HEIGHT}" />				
+						</exec>		
+           </sequential>     
+       </for>
+
+		
+	</target>
+     
+</project>
