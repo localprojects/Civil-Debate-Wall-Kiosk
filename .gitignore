@@ -14,3 +14,17 @@ bin-debug/
 air_projects/cdw_kiosk/build.properties
 org.eclipse.ltk.core.refactoring.prefs
 air_projects/.metadata/
+
+# GPL Release
+air_projects/face_crop_tool
+air_projects/futil_demo
+air_projects/object_detection
+air_projects/wall_saver_scratch
+slr_control
+air_projects/libs/framework.swc
+air_projects/libs/greensock.swc
+air_projects/libs/textLayout.swc
+air_projects/cdw_kiosk/libs/greensock.swc
+air_projects/cdw_kiosk/libs/MonsterDebugger.swc
+air_projects/cdw_kiosk/bin-debug
+air_projects/cdw_kiosk/certificate
